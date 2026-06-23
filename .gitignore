@@ -1,0 +1,13 @@
+# Rust / Odra build
+target/
+**/target/
+*.wasm
+# Node
+node_modules/
+dist/
+# Env & secrets
+.env
+.env.*
+# OS / editor
+.DS_Store
+*.log
