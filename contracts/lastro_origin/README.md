@@ -1,6 +1,6 @@
 # Lastro Origin Contracts
 
-Skeleton Odra/Casper para a Camada 1 do Lastro. No Bloco 1 ele mantém o contrato de exemplo `Flipper` apenas para provar que o toolchain Odra está funcional; no Bloco 2 será substituído/evoluído para `ProofOfOrigin`.
+Skeleton Odra/Casper para a Camada 1 do Lastro. No Bloco 2 o contrato de exemplo `Flipper` foi substituído pelo contrato `ProofOfOrigin`, que registra selos de referência de ativos e atesta a origem comparando o selo fornecido com o selo "bom".
 
 ## Testar
 
@@ -8,4 +8,4 @@ Skeleton Odra/Casper para a Camada 1 do Lastro. No Bloco 1 ele mantém o contrat
 cargo odra test
 ```
 
-Resultado do Bloco 1: `flipper::tests::flipping ... ok`.
+Resultado do Bloco 2: os 4 testes de `proof_of_origin::tests` passam (`ok`).
