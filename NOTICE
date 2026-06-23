@@ -1,12 +1,8 @@
 Lastro — Proof-of-Provenance for Tokenized Real-World Assets
-Copyright 2026 Felix Rodrigues (General Rock)
+Copyright 2026 Lastro contributors
 
 Built for the Casper Agentic Buildathon 2026.
 
-Hybrid licensing:
-- contracts/      — Apache License, Version 2.0 (see LICENSE).
-- agent/sealer/   — the deterministic provenance sealing module — will be
-                    licensed under the Business Source License 1.1 (BUSL-1.1)
-                    as proprietary technology of the author.
+Licensed under the Business Source License 1.1 (BUSL-1.1). See LICENSE.
 
-The deterministic offline provenance seal is original technology by the author.
+The deterministic offline provenance seal and on-chain proof-of-origin workflow are part of the Lastro protocol. Public samples and demos must use only fictional data.

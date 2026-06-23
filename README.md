@@ -22,11 +22,11 @@ Casper · Odra/Rust → WASM · x402 (HTTP-402 micropayments) · offline sealer 
 Early prototype for the Casper Agentic Buildathon 2026. Demo data is fictional ("Mineradora Vale do Ouro"). Not audited; not for production use.
 
 ## Layout
-- `contracts/` — Odra/Rust smart contracts (Apache-2.0)
+- `contracts/` — Odra/Rust smart contracts (BUSL-1.1)
 - `agent/` — TypeScript orchestration (sealer + x402)
 - `web/` — landing & demo
 - `samples/` — fictional sample data
 - `docs/` — architecture, roadmap, progress
 
 ## License
-Hybrid — see `LICENSE` and `NOTICE`. Contracts: Apache-2.0 · Sealer: BUSL-1.1.
+BUSL-1.1 — see `LICENSE` and `NOTICE`.
