@@ -1654,8 +1654,10 @@ version = "0.1.0"
 dependencies = [
  "odra",
  "odra-build",
+ "odra-casper-livenet-env",
  "odra-cli",
  "odra-test",
+ "serde_json",
 ]
 
 [[package]]

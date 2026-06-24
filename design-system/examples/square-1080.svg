@@ -1,0 +1,85 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Lastro square ad template — Invalid is proof too</title>
+  <desc id="desc">Editable 1080x1080 advertising template for Lastro showing both Valid and Invalid as recorded on-chain proof.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#070A0D"/>
+      <stop offset="0.58" stop-color="#151D26"/>
+      <stop offset="1" stop-color="#22303D"/>
+    </linearGradient>
+    <radialGradient id="glowProof" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 250) rotate(60) scale(560 520)">
+      <stop stop-color="#2FD394" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#2FD394" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowSignal" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(860 880) rotate(20) scale(420 360)">
+      <stop stop-color="#FF6B5E" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#FF6B5E" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.34"/>
+    </filter>
+    <style>
+      .display { font-family: 'Space Grotesk', Inter, system-ui, sans-serif; font-weight: 700; letter-spacing: -0.05em; }
+      .body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+      .mono { font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace; }
+      .paper { fill: #F8F4EA; }
+      .muted { fill: #A8B3C1; }
+      .proof { fill: #2FD394; }
+      .seal { fill: #E9B949; }
+      .signal { fill: #FF6B5E; }
+    </style>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <rect width="1080" height="1080" fill="url(#glowProof)"/>
+  <rect width="1080" height="1080" fill="url(#glowSignal)"/>
+
+  <!-- eyebrow -->
+  <g transform="translate(72 84)">
+    <rect width="300" height="46" rx="23" fill="rgba(47, 211, 148, 0.13)" stroke="rgba(116, 224, 178, 0.32)"/>
+    <circle cx="26" cy="23" r="6" fill="#2FD394"/>
+    <text x="48" y="30" class="body proof" font-size="18" font-weight="700" letter-spacing="0.08em">RWA PROVENANCE LAYER</text>
+  </g>
+
+  <!-- headline -->
+  <text x="72" y="276" class="display paper" font-size="104">
+    <tspan x="72" dy="0">Invalid is</tspan>
+    <tspan x="72" dy="104">proof too.</tspan>
+  </text>
+  <text x="72" y="500" class="body muted" font-size="30" font-weight="500">
+    <tspan x="72" dy="0">Lastro records both Valid and Invalid</tspan>
+    <tspan x="72" dy="42">provenance on Casper — rejection is</tspan>
+    <tspan x="72" dy="42">permanent evidence, not a hidden error.</tspan>
+  </text>
+
+  <!-- verdict pair -->
+  <g transform="translate(72 640)" filter="url(#softShadow)">
+    <rect width="452" height="300" rx="24" fill="rgba(13, 18, 24, 0.86)" stroke="rgba(47, 211, 148, 0.4)"/>
+    <circle cx="46" cy="62" r="20" fill="rgba(47, 211, 148, 0.16)" stroke="#2FD394" stroke-width="2"/>
+    <path d="M38 62l6 6 12-13" stroke="#2FD394" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <text x="84" y="56" class="display paper" font-size="34">Valid</text>
+    <text x="84" y="86" class="mono muted" font-size="15">seal == reference</text>
+    <text x="36" y="150" class="mono proof" font-size="16">accepted_count += 1</text>
+    <text x="36" y="196" class="mono muted" font-size="15">attestation stored on-chain</text>
+    <text x="36" y="250" class="mono muted" font-size="15">verdict: Valid</text>
+  </g>
+  <g transform="translate(556 640)" filter="url(#softShadow)">
+    <rect width="452" height="300" rx="24" fill="rgba(13, 18, 24, 0.86)" stroke="rgba(255, 107, 94, 0.42)"/>
+    <circle cx="46" cy="62" r="20" fill="rgba(255, 107, 94, 0.16)" stroke="#FF6B5E" stroke-width="2"/>
+    <path d="M39 55l14 14M53 55l-14 14" stroke="#FF6B5E" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <text x="84" y="56" class="display paper" font-size="34">Invalid</text>
+    <text x="84" y="86" class="mono muted" font-size="15">seal != reference</text>
+    <text x="36" y="150" class="mono signal" font-size="16">rejected_count += 1</text>
+    <text x="36" y="196" class="mono muted" font-size="15">rejection stored on-chain</text>
+    <text x="36" y="250" class="mono muted" font-size="15">verdict: Invalid</text>
+  </g>
+
+  <!-- footer -->
+  <g transform="translate(72 992)">
+    <path d="M24 0L45 12V36L24 48L3 36V12L24 0Z" stroke="#2FD394" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M24 10L36 17V31L24 38L12 31V17L24 10Z" stroke="#E9B949" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="24" cy="24" r="4" fill="#7DD3FC"/>
+    <text x="66" y="32" class="display paper" font-size="30" letter-spacing="-0.03em">Lastro</text>
+  </g>
+  <text x="1008" y="1024" text-anchor="end" class="mono muted" font-size="14">Demo uses fictional data · Not investment material</text>
+</svg>

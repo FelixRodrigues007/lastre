@@ -1,0 +1,70 @@
+:root {
+  /* Lastro advertising tokens — generated manually from lastro-ads.tokens.json */
+  --lastro-color-obsidian-950: #070a0d;
+  --lastro-color-obsidian-900: #0d1218;
+  --lastro-color-obsidian-800: #151d26;
+  --lastro-color-obsidian-700: #22303d;
+  --lastro-color-paper-50: #f8f4ea;
+  --lastro-color-paper-100: #efe7d6;
+  --lastro-color-paper-200: #d9cdb8;
+  --lastro-color-provenance-300: #74e0b2;
+  --lastro-color-provenance-400: #2fd394;
+  --lastro-color-provenance-500: #12b981;
+  --lastro-color-provenance-700: #0d7f5c;
+  --lastro-color-seal-300: #f7d982;
+  --lastro-color-seal-400: #e9b949;
+  --lastro-color-seal-500: #c58a24;
+  --lastro-color-signal-400: #ff6b5e;
+  --lastro-color-signal-500: #f04438;
+  --lastro-color-signal-700: #b42318;
+  --lastro-color-sky-300: #7dd3fc;
+  --lastro-color-sky-500: #0ea5e9;
+  --lastro-color-neutral-0: #ffffff;
+  --lastro-color-neutral-100: #e7ecf2;
+  --lastro-color-neutral-300: #a8b3c1;
+  --lastro-color-neutral-500: #65758a;
+  --lastro-color-neutral-700: #334155;
+  --lastro-color-neutral-900: #111827;
+
+  --lastro-bg-primary: var(--lastro-color-obsidian-950);
+  --lastro-bg-panel: var(--lastro-color-obsidian-900);
+  --lastro-bg-elevated: var(--lastro-color-obsidian-800);
+  --lastro-text-primary: var(--lastro-color-paper-50);
+  --lastro-text-secondary: var(--lastro-color-neutral-300);
+  --lastro-text-muted: var(--lastro-color-neutral-500);
+  --lastro-brand-proof: var(--lastro-color-provenance-400);
+  --lastro-brand-seal: var(--lastro-color-seal-400);
+  --lastro-brand-signal: var(--lastro-color-signal-400);
+  --lastro-brand-network: var(--lastro-color-sky-300);
+  --lastro-border-subtle: rgba(248, 244, 234, 0.14);
+  --lastro-border-strong: rgba(248, 244, 234, 0.32);
+
+  --lastro-font-display: "Space Grotesk", Inter, system-ui, sans-serif;
+  --lastro-font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+  --lastro-font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --lastro-weight-regular: 400;
+  --lastro-weight-medium: 500;
+  --lastro-weight-semibold: 600;
+  --lastro-weight-bold: 700;
+
+  --lastro-space-1: 4px;
+  --lastro-space-2: 8px;
+  --lastro-space-3: 12px;
+  --lastro-space-4: 16px;
+  --lastro-space-6: 24px;
+  --lastro-space-8: 32px;
+  --lastro-space-10: 40px;
+  --lastro-space-12: 48px;
+  --lastro-space-16: 64px;
+  --lastro-space-20: 80px;
+  --lastro-radius-sm: 8px;
+  --lastro-radius-md: 16px;
+  --lastro-radius-lg: 28px;
+  --lastro-radius-pill: 999px;
+}
+
+.lastro-ad-surface {
+  color: var(--lastro-text-primary);
+  background: linear-gradient(135deg, #070a0d 0%, #151d26 58%, #22303d 100%);
+  font-family: var(--lastro-font-body);
+}
