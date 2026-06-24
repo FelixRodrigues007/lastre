@@ -9,6 +9,7 @@ export {
   encodePaymentPayload,
   signMockPayment,
   type Facilitator,
+  type FacilitatorMode,
   type PaymentPayload,
   type PaymentRequirements,
   type PaymentVerification,

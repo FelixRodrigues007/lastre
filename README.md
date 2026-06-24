@@ -18,6 +18,22 @@ Lastro is a proof-of-provenance protocol for tokenized Real-World Assets (RWA) o
 ## Stack
 Casper · Odra/Rust → WASM · x402 (HTTP-402 micropayments) · offline sealer · TypeScript agent.
 
+## x402 payment verification (mock facilitator)
+The x402 paid-verification flow is implemented, but payment is handled by a
+**mock facilitator** (`MockFacilitator`): it does **not** talk to the Casper
+network and does **not** move real CSPR. It validates the `X-PAYMENT` header with
+a local SHA-256 mock signature (nonce, amount, anti-replay) and returns a synthetic
+settlement `txHash`. This is intentional for the prototype, and there is **no
+real Casper facilitator in this repo yet**.
+
+All payment behavior sits behind a single seam — the `Facilitator` interface in
+`agent/x402/src/facilitator.ts`. Swapping the mock for a real Casper facilitator
+is **one implementation** of that interface, injected via
+`createLastroX402Server({ facilitator })`; the server code does not change. The
+exact swap points are marked with `TODO(casper-facilitator)` in
+`agent/x402/src/facilitator.ts` and `agent/x402/src/server.ts`, and documented in
+`agent/x402/README.md`.
+
 ## Status
 Early prototype for the Casper Agentic Buildathon 2026. Demo data is fictional ("Mineradora Vale do Ouro"). Not audited; not for production use.
 

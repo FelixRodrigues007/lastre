@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-/** Campos x402 que o servidor entrega no HTTP 402 Payment Required. */
+/** x402 fields returned by the server in the HTTP 402 Payment Required response. */
 export type PaymentRequirements = {
   scheme: "exact";
   network: "casper-test";
@@ -12,7 +12,7 @@ export type PaymentRequirements = {
   description: "Lastro provenance verification";
 };
 
-/** Payload mock enviado pelo cliente no header X-PAYMENT. */
+/** Mock payload sent by the client in the X-PAYMENT header. */
 export type PaymentPayload = {
   nonce: string;
   amount: number;
@@ -29,12 +29,39 @@ export type Settlement = {
 };
 
 /**
- * Interface que espelha o papel de um facilitator x402.
+ * Identifies which facilitator implementation is active.
  *
- * No Bloco 4a, usamos `MockFacilitator`. No Bloco 4b, um facilitator Casper
- * real poderá implementar os mesmos dois métodos sem reescrever o servidor.
+ * - `"mock"`   — deterministic local facilitator (no network, no Casper).
+ * - `"casper"` — reserved for a real Casper facilitator that does NOT exist yet.
+ *
+ * This lets the server and observability layers report when they are running
+ * against the mock.
+ */
+export type FacilitatorMode = "mock" | "casper";
+
+/**
+ * x402 payment seam (the single replacement point).
+ *
+ * This interface is the ONLY boundary between the Lastro server and payment
+ * verification/settlement. Today the only implementation is `MockFacilitator`
+ * (a local mock). Replacing it with a real Casper facilitator must be ONE
+ * implementation of this interface, without rewriting `server.ts`.
+ *
+ * INTEGRATION SEAM — where the real facilitator would fit:
+ * TODO(casper-facilitator): implement `class CasperFacilitator implements
+ * Facilitator` in its own file (for example, `casper-facilitator.ts`) that:
+ *   - `verifyPayment`: verifies the x402 payment for real
+ *     (network, asset, amount, nonce, signature) via the real facilitator /
+ *     on-chain checks instead of the local SHA-256 mock signature.
+ *   - `settlePayment`: settles the payment for real and returns the real txHash.
+ * Then inject it with `createLastroX402Server({ facilitator: new CasperFacilitator(...) })`.
+ * Do NOT add an empty stub here — the real implementation should enter only
+ * when it actually exists.
  */
 export interface Facilitator {
+  /** Implementation label. `MockFacilitator` returns `"mock"`. */
+  readonly mode: FacilitatorMode;
+
   verifyPayment(
     payment: PaymentPayload,
     requirements: PaymentRequirements,
@@ -43,10 +70,32 @@ export interface Facilitator {
   settlePayment(payment: PaymentPayload, requirements: PaymentRequirements): Promise<Settlement>;
 }
 
+/**
+ * MOCK secret. This is not a real key: it only lets the mock sign/validate the
+ * X-PAYMENT header locally and deterministically.
+ */
 export const MOCK_PAYMENT_SECRET = "lastro-local-x402-mock-secret";
 
-/** Facilitator local: sem rede, sem Casper, determinístico e com proteção anti-replay. */
+/**
+ * ============================ MOCK ============================
+ * MockFacilitator — FAKE FACILITATOR implementation (MOCK).
+ *
+ * It does NOT talk to Casper and does NOT move CSPR. It is a deterministic
+ * local stand-in with anti-replay protection, used to exercise the x402 flow
+ * (402 -> payment -> verification) without network access.
+ *
+ * `verifyPayment` validates a local SHA-256 mock signature (not an on-chain
+ * signature), and `settlePayment` returns a synthetic SHA-256 txHash (not a
+ * real transaction).
+ *
+ * For production, do NOT edit this class: create a new `Facilitator`
+ * implementation (see "INTEGRATION SEAM" above) and inject it into the server.
+ * =============================================================
+ */
 export class MockFacilitator implements Facilitator {
+  /** Explicit label: this implementation is a MOCK. */
+  readonly mode: FacilitatorMode = "mock";
+
   private readonly settledNonces = new Set<string>();
 
   async verifyPayment(
@@ -137,7 +186,7 @@ export function decodePaymentHeader(headerValue: string): PaymentPayload | null 
   }
 }
 
-/** Helper de teste/demo: cria o X-PAYMENT que um cliente mock enviaria. */
+/** Test/demo helper: creates the X-PAYMENT header that a mock client would send. */
 export function createMockPaymentHeader(
   requirements: PaymentRequirements,
   options: { from?: string; amount?: number } = {},

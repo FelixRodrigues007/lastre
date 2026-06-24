@@ -24,12 +24,16 @@ type CreateServerOptions = {
   nonceFactory?: () => string;
 };
 
-/** Cria o servidor HTTP x402 do Lastro usando apenas node:http. */
+/** Creates the Lastro x402 HTTP server using node:http only. */
 export function createLastroX402Server(options: CreateServerOptions = {}): {
   server: Server;
   facilitator: Facilitator;
 } {
   const facilitator = options.facilitator ?? new MockFacilitator();
+  // INTEGRATION SEAM (x402 facilitator): by default we use the local MOCK.
+  // TODO(casper-facilitator): for production, inject a real Casper facilitator
+  // via `createLastroX402Server({ facilitator: new CasperFacilitator(...) })`.
+  // The server depends only on the `Facilitator` interface, so nothing below changes.
   const nonceFactory = options.nonceFactory ?? randomUUID;
   const issuedRequirements = new Map<string, PaymentRequirements>();
 
