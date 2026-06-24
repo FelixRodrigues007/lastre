@@ -1,0 +1,12 @@
+{
+  "assetId": "MINA-VALEDOURO-LOTE-001",
+  "origin": {
+    "lat": -20.123456,
+    "lng": -43.987654,
+    "site": "Mina Vale do Ouro - Frente Norte"
+  },
+  "frameHash": "96e69d1a25f714b03dbe5e7ac8102654f921d16b8c71e1ecae15384a3a9989a4",
+  "massGrams": 125000,
+  "capturedAtISO": "2026-06-23T18:30:00.000Z",
+  "operator": "Mineradora Vale do Ouro"
+}
