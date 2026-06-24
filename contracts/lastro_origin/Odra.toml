@@ -1,2 +1,5 @@
 [[contracts]]
 fqn = "proof_of_origin::ProofOfOrigin"
+
+[[contracts]]
+fqn = "mint_gate::MintGate"

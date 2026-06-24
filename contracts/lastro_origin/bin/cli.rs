@@ -2,9 +2,7 @@
 
 use lastro_contracts::proof_of_origin::ProofOfOrigin;
 use odra::host::{HostEnv, NoArgs};
-use odra_cli::{
-    deploy::DeployScript, DeployedContractsContainer, DeployerExt, OdraCli,
-};
+use odra_cli::{deploy::DeployScript, DeployedContractsContainer, DeployerExt, OdraCli};
 
 /// Deploya o contrato `ProofOfOrigin` e o registra no container da Odra CLI.
 pub struct ProofOfOriginDeployScript;

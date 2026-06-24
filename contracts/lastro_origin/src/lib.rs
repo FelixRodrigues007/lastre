@@ -3,3 +3,5 @@
 extern crate alloc;
 
 pub mod proof_of_origin;
+
+pub mod mint_gate;
