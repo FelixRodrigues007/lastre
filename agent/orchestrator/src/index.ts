@@ -1,5 +1,5 @@
 export { Agent } from "./agent.js";
-export { LlmDecider, RuleDecider } from "./decider.js";
+export { LlmDecider, RuleDecider, type LlmDeciderOptions } from "./decider.js";
 export { LocalGateway } from "./gateway.js";
 export { MockOriginChain, createOriginChainWithReferences } from "./origin_chain.js";
 export { createDemoArtifacts, createDemoReferenceArtifacts, type DemoArtifacts } from "./samples.js";

@@ -10,7 +10,7 @@ import type {
 } from "./types.js";
 import { DEFAULT_LIMITS } from "./types.js";
 
-/** Orquestrador Lastro: decide ação, paga/verifica quando necessário e registra na chain mock. */
+/** Lastro orchestrator: decides the action, pays/verifies when needed, and records in the mock chain. */
 export class Agent {
   private readonly auditLog: AuditRecord[] = [];
 
@@ -41,6 +41,9 @@ export class Agent {
       return record;
     }
 
+    // Critical invariant: the Decider (rule or LLM) chose only the ACTION.
+    // The Valid/Invalid VERDICT is produced here by the paid verification path,
+    // which recomputes the deterministic SHA-256 seal. The LLM never overwrites it.
     const verification = await this.gateway.verifyAndSettle(artifact.assetId, artifact);
     const onChainResult = this.originChain.attest(artifact.assetId, verification.seal);
     const outcome: Outcome = verification.verdict === "Valid" ? "tokenizable" : "rejected";

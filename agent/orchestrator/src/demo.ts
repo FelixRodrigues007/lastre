@@ -6,13 +6,8 @@ import { createDemoArtifacts, createDemoReferenceArtifacts } from "./samples.js"
 import type { AuditRecord, BatchResult, Decider } from "./types.js";
 
 async function main(): Promise<void> {
-  await runDemo("RuleDecider determinístico", new RuleDecider());
-
-  if (process.env.OPENROUTER_API_KEY) {
-    await runDemo("LlmDecider via OpenRouter", new LlmDecider());
-  } else {
-    console.log("\nOPENROUTER_API_KEY não definido; demo LLM real pulado com segurança.");
-  }
+  await runDemo("Deterministic RuleDecider", new RuleDecider());
+  await runDemo("LlmDecider (OpenRouter when configured, rule fallback otherwise)", new LlmDecider());
 }
 
 async function runDemo(title: string, decider: Decider): Promise<void> {
@@ -29,18 +24,18 @@ async function runDemo(title: string, decider: Decider): Promise<void> {
     artifacts.outOfRegion,
   ]);
 
-  // 1) Visão "bonita" e legível por humano (o que um revisor lê primeiro).
+  // 1) Human-readable view for reviewers.
   console.log(renderAuditLog(title, result));
-  // 2) JSON completo logo abaixo, para inspeção detalhada/máquina.
-  console.log(`\n--- ${title}: JSON completo ---`);
+  // 2) Complete JSON for detailed inspection and machine parsing.
+  console.log(`\n--- ${title}: complete JSON ---`);
   console.log(JSON.stringify(result, null, 2));
 }
 
 /**
- * Formata o log de auditoria de forma amigável para o console.
+ * Formats the audit log for console output.
  *
- * É apenas apresentação: não altera nenhum dado do batch, só monta uma string
- * legível a partir do BatchResult já calculado pelo Agent.
+ * Presentation only: it does not change any batch data, it only renders the
+ * BatchResult already computed by the Agent.
  */
 function renderAuditLog(title: string, result: BatchResult): string {
   const line = "═".repeat(64);
@@ -48,7 +43,7 @@ function renderAuditLog(title: string, result: BatchResult): string {
 
   lines.push("");
   lines.push(line);
-  lines.push(` LASTRO — Log de Auditoria (${title})`);
+  lines.push(` LASTRO — Audit Log (${title})`);
   lines.push(line);
 
   result.records.forEach((record, index) => {
@@ -58,7 +53,7 @@ function renderAuditLog(title: string, result: BatchResult): string {
 
   const s = result.summary;
   lines.push(
-    ` Resumo:   tokenizable=${s.tokenizable}  rejected=${s.rejected}  ` +
+    ` Summary:  tokenizable=${s.tokenizable}  rejected=${s.rejected}  ` +
       `skipped=${s.skipped}  escalated=${s.escalated}`,
   );
   lines.push(` On-chain: accepted=${s.onChainAccepted}  rejected=${s.onChainRejected}`);
@@ -67,29 +62,29 @@ function renderAuditLog(title: string, result: BatchResult): string {
   return lines.join("\n");
 }
 
-/** Renderiza um único registro do log; mostra pagamento/on-chain só quando houve verificação. */
+/** Renders one audit record; payment/on-chain details appear only after verification. */
 function renderRecord(record: AuditRecord, position: number): string[] {
   const lines: string[] = [];
 
   lines.push(` ${position}. ${record.assetId}`);
-  lines.push(`    decisão:   ${record.decision.action}  (por: ${record.decision.decidedBy})`);
-  lines.push(`    motivo:    ${record.decision.reasoning}`);
+  lines.push(`    decision:  ${record.decision.action}  (by: ${record.decision.decidedBy})`);
+  lines.push(`    reason:    ${record.decision.reasoning}`);
 
   if (record.verification && record.onChain) {
-    // Lote pago: mostra o veredito do selo, o txHash curto e o estado on-chain.
-    lines.push(`    pagamento: tx ${shortHash(record.onChain.txHash)} (verificação paga)`);
-    lines.push(`    selo:      ${record.verification.verdict} (recomputado vs. referenceSeal)`);
+    // Paid lot: show the seal verdict, the short txHash, and the on-chain state.
+    lines.push(`    payment:   tx ${shortHash(record.onChain.txHash)} (paid verification)`);
+    lines.push(`    seal:      ${record.verification.verdict} (recomputed vs. referenceSeal)`);
     lines.push(`    on-chain:  ${record.onChain.verdict}`);
   } else {
-    // Lote skip/escalate: nunca paga nem verifica, então não há prova on-chain.
-    lines.push(`    pagamento: — (não pago)`);
+    // Skipped/escalated lots are never paid or verified, so there is no on-chain proof.
+    lines.push("    payment:   — (not paid)");
   }
 
-  lines.push(`    resultado: ${record.outcome}`);
+  lines.push(`    outcome:   ${record.outcome}`);
   return lines;
 }
 
-/** Encurta um hash para caber na visão de console sem perder a referência. */
+/** Shortens a hash for compact console output while preserving traceability. */
 function shortHash(hash: string): string {
   return hash.length > 12 ? `${hash.slice(0, 8)}…${hash.slice(-4)}` : hash;
 }

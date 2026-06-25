@@ -1,6 +1,11 @@
 import type { Decider, Decision, DecisionContext } from "./types.js";
 
-/** Decider determinístico usado nos testes e como fallback seguro do LLM. */
+const DEFAULT_OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
+const DEFAULT_OPENROUTER_MODEL = "openrouter/auto";
+
+type LlmLogger = (message: string) => void;
+
+/** Deterministic decider used in tests and as the safe LLM fallback. */
 export class RuleDecider implements Decider {
   async decide(context: DecisionContext): Promise<Decision> {
     const { artifact, alreadyAttested, limits } = context;
@@ -8,7 +13,7 @@ export class RuleDecider implements Decider {
     if (alreadyAttested) {
       return {
         action: "skip",
-        reasoning: "O assetId já foi atestado antes; pular evita pagar e registrar a mesma verificação novamente.",
+        reasoning: "The assetId was already attested; skipping avoids paying for and recording the same verification twice.",
         decidedBy: "rule",
       };
     }
@@ -17,7 +22,7 @@ export class RuleDecider implements Decider {
     if (missingField) {
       return {
         action: "escalate",
-        reasoning: `Campo obrigatório vazio ou inválido (${missingField}); o lote precisa de revisão humana antes de qualquer pagamento.`,
+        reasoning: `Required field is empty or invalid (${missingField}); the lot needs human review before any payment.`,
         decidedBy: "rule",
       };
     }
@@ -27,7 +32,7 @@ export class RuleDecider implements Decider {
     if (lat < minLat || lat > maxLat || lng < minLng || lng > maxLng) {
       return {
         action: "escalate",
-        reasoning: "Geolocalização fora do perímetro conhecido da mina; escalar para humano antes de verificar.",
+        reasoning: "Geolocation is outside the known mine perimeter; escalate to a human before verification.",
         decidedBy: "rule",
       };
     }
@@ -36,40 +41,63 @@ export class RuleDecider implements Decider {
     if (artifact.massGrams <= minExclusive || artifact.massGrams > maxInclusive) {
       return {
         action: "escalate",
-        reasoning: "Massa fora da faixa plausível do lote; escalar para humano antes de pagar pela verificação.",
+        reasoning: "Mass is outside the plausible range for the lot; escalate to a human before paying for verification.",
         decidedBy: "rule",
       };
     }
 
     return {
       action: "pay",
-      reasoning: "Metadados básicos estão completos, dentro do perímetro e em faixa de massa plausível; pagar para verificar o selo determinístico.",
+      reasoning: "Basic metadata is complete, within the perimeter, and in a plausible mass range; pay to verify the deterministic seal.",
       decidedBy: "rule",
     };
   }
 }
 
-type LlmDeciderOptions = {
+export type LlmDeciderOptions = {
   apiKey?: string;
   model?: string;
+  baseUrl?: string;
   fallback?: RuleDecider;
+  logger?: LlmLogger;
 };
 
 /**
- * Decider via OpenRouter para o demo.
+ * OpenRouter-backed decider for operational actions.
  *
- * Importante: ele só decide a AÇÃO operacional. O veredito Valid/Invalid nunca
- * vem daqui; depois da decisão, o LocalGateway recomputa o selo SHA-256.
+ * Critical invariant: the LLM decides only the operational ACTION
+ * (`pay`, `skip`, or `escalate`). It never decides, changes, or overwrites the
+ * provenance VERDICT (`Valid` / `Invalid`). The verdict is produced later by
+ * recomputing the deterministic SHA-256 seal and comparing it with the
+ * reference seal.
  */
 export class LlmDecider implements Decider {
   private readonly apiKey?: string;
   private readonly model: string;
+  private readonly baseUrl: string;
+  private readonly chatCompletionsUrl: string;
   private readonly fallback: RuleDecider;
+  private readonly logger: LlmLogger;
 
   constructor(options: LlmDeciderOptions = {}) {
-    this.apiKey = options.apiKey ?? process.env.OPENROUTER_API_KEY;
-    this.model = options.model ?? process.env.OPENROUTER_MODEL ?? "openrouter/auto";
+    this.apiKey = options.apiKey?.trim() ?? process.env.OPENROUTER_API_KEY?.trim();
+    this.model = firstNonEmpty(options.model, process.env.OPENROUTER_MODEL) ?? DEFAULT_OPENROUTER_MODEL;
+    this.baseUrl = firstNonEmpty(options.baseUrl, process.env.OPENROUTER_BASE_URL) ?? DEFAULT_OPENROUTER_BASE_URL;
+    this.chatCompletionsUrl = buildChatCompletionsUrl(this.baseUrl);
     this.fallback = options.fallback ?? new RuleDecider();
+    this.logger = options.logger ?? ((message) => console.info(message));
+
+    if (this.apiKey) {
+      this.logger(
+        `[Lastro] LlmDecider active: OpenRouter LLM path (model=${this.model}, endpoint=${this.chatCompletionsUrl}). ` +
+          "The LLM decides ACTION only; the deterministic SHA-256 seal decides VERDICT.",
+      );
+    } else {
+      this.logger(
+        "[Lastro] LlmDecider active: rule fallback because OPENROUTER_API_KEY is absent. " +
+          "The fallback/LLM decides ACTION only; the deterministic SHA-256 seal decides VERDICT.",
+      );
+    }
   }
 
   async decide(context: DecisionContext): Promise<Decision> {
@@ -78,7 +106,7 @@ export class LlmDecider implements Decider {
     }
 
     try {
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      const response = await fetch(this.chatCompletionsUrl, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${this.apiKey}`,
@@ -92,11 +120,12 @@ export class LlmDecider implements Decider {
             {
               role: "system",
               content: [
-                "Você é o decider operacional do Lastro.",
-                "Você escolhe somente uma ação: pay, skip ou escalate.",
-                "Você NUNCA decide se o lote é Valid ou Invalid.",
-                "O veredito de validade será decidido depois por um selo SHA-256 determinístico.",
-                "Responda somente JSON estrito no formato {\"action\":\"pay|skip|escalate\",\"reasoning\":\"...\"}.",
+                "You are Lastro's operational decider.",
+                "Choose only one action: pay, skip, or escalate.",
+                "You NEVER decide whether a lot is Valid or Invalid.",
+                "You NEVER overwrite a verdict.",
+                "The Valid/Invalid verdict is decided later only by the deterministic SHA-256 seal comparison.",
+                "Return strict JSON only: {\"action\":\"pay|skip|escalate\",\"reasoning\":\"...\"}.",
               ].join(" "),
             },
             {
@@ -108,7 +137,7 @@ export class LlmDecider implements Decider {
       });
 
       if (!response.ok) {
-        return this.fallback.decide(context);
+        return this.decideWithRuleFallback(context, `OpenRouter returned HTTP ${response.status}`);
       }
 
       const body = (await response.json()) as OpenRouterResponse;
@@ -116,16 +145,24 @@ export class LlmDecider implements Decider {
       const parsed = parseDecisionContent(content);
 
       if (!parsed) {
-        return this.fallback.decide(context);
+        return this.decideWithRuleFallback(context, "OpenRouter response did not contain a valid action JSON object");
       }
 
       return {
         ...parsed,
         decidedBy: "llm",
       };
-    } catch {
-      return this.fallback.decide(context);
+    } catch (error) {
+      return this.decideWithRuleFallback(
+        context,
+        `OpenRouter request failed: ${error instanceof Error ? error.message : "unknown error"}`,
+      );
     }
+  }
+
+  private async decideWithRuleFallback(context: DecisionContext, reason: string): Promise<Decision> {
+    this.logger(`[Lastro] LlmDecider using rule fallback: ${reason}.`);
+    return this.fallback.decide(context);
   }
 }
 
@@ -169,6 +206,27 @@ function stripJsonFence(value: string): string {
     .replace(/^```\s*/u, "")
     .replace(/\s*```$/u, "")
     .trim();
+}
+
+function firstNonEmpty(...values: Array<string | undefined>): string | undefined {
+  for (const value of values) {
+    const trimmed = value?.trim();
+    if (trimmed) {
+      return trimmed;
+    }
+  }
+
+  return undefined;
+}
+
+function buildChatCompletionsUrl(baseUrl: string): string {
+  const trimmed = baseUrl.trim().replace(/\/+$/u, "");
+
+  if (trimmed.endsWith("/chat/completions")) {
+    return trimmed;
+  }
+
+  return `${trimmed}/chat/completions`;
 }
 
 function findMissingRequiredField(artifact: DecisionContext["artifact"]): string | null {
