@@ -1,0 +1,67 @@
+{
+  "perimeter": {
+    "label": "Vale do Ouro — fictional mine perimeter (DEMONSTRATION)",
+    "center": { "lat": -30.05, "lng": -53.20 },
+    "polygon": [
+      { "lat": -29.98, "lng": -53.30 },
+      { "lat": -29.98, "lng": -53.10 },
+      { "lat": -30.12, "lng": -53.10 },
+      { "lat": -30.12, "lng": -53.30 }
+    ]
+  },
+  "assets": [
+    {
+      "assetId": "MINA-VALEDOURO-LOTE-001",
+      "name": "Lote 001 — Vale do Ouro",
+      "mineralType": "Gold ore (simulated)",
+      "origin": { "lat": -30.01, "lng": -53.27, "label": "Sector A (fictional)" },
+      "custodyPath": [
+        { "lat": -30.01, "lng": -53.27, "step": "origin" },
+        { "lat": -30.04, "lng": -53.22, "step": "measurement" },
+        { "lat": -30.05, "lng": -53.20, "step": "anchored" }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Invalid",
+      "note": "Tampered seal demo — rejected on-chain, permanent proof."
+    },
+    {
+      "assetId": "MINA-VALEDOURO-LOTE-002",
+      "name": "Lote 002 — Vale do Ouro",
+      "mineralType": "Gold ore (simulated)",
+      "origin": { "lat": -30.08, "lng": -53.15, "label": "Sector B (fictional)" },
+      "custodyPath": [
+        { "lat": -30.08, "lng": -53.15, "step": "origin" },
+        { "lat": -30.06, "lng": -53.18, "step": "measurement" },
+        { "lat": -30.05, "lng": -53.20, "step": "anchored" }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Valid",
+      "note": "Genuine seal — agent-driven attest, accepted on-chain."
+    },
+    {
+      "assetId": "MINA-VALEDOURO-LOTE-003",
+      "name": "Lote 003 — Vale do Ouro",
+      "mineralType": "Iron ore (simulated)",
+      "origin": { "lat": -30.10, "lng": -53.24, "label": "Sector C (fictional)" },
+      "custodyPath": [
+        { "lat": -30.10, "lng": -53.24, "step": "origin" },
+        { "lat": -30.07, "lng": -53.22, "step": "measurement" },
+        { "lat": -30.05, "lng": -53.20, "step": "anchored" }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Unverified",
+      "note": "Available — use this one to attest LIVE in the video."
+    },
+    {
+      "assetId": "SANDBOX-OPEN-001",
+      "name": "Sandbox lot — public",
+      "mineralType": "Generic ore (simulated)",
+      "origin": { "lat": -30.03, "lng": -53.19, "label": "Sandbox sector (fictional)" },
+      "custodyPath": [],
+      "referenceRegistered": true,
+      "expectedOnChain": "Unverified",
+      "note": "Public sandbox target — local compute open to all; on-chain anchor rate-limited."
+    }
+  ],
+  "disclaimer": "DEMONSTRATION — simulated assets, no investment offered."
+}

@@ -120,8 +120,7 @@ get_reference("MINA-VALEDOURO-LOTE-001"): a3f1c9b8d7e6f50123456789abcdef00112233
 Prerequisites on macOS:
 
 - Node.js + npm.
-- Rust via `rustup`; the contract crate pins its toolchain in
-  `contracts/lastro_origin/rust-toolchain`.
+- Rust via `rustup`; the Makefile uses `cargo +nightly-2026-01-01` for Odra.
 - Network access on first setup so `npm ci`, `rustup target add`, and, if
   missing, `cargo install cargo-odra` can populate the local tool cache.
 
@@ -137,13 +136,13 @@ clone does not depend on pre-existing generated files.
 
 | Target | What it does |
 | --- | --- |
-| `make setup` | Installs local Node dependencies for `agent/sealer`, `agent/x402`, and `agent/orchestrator`; validates Rust/Odra tooling; ensures the `wasm32-unknown-unknown` target exists. |
-| `make build` | Runs setup, builds sealer → x402 → orchestrator, checks the Rust contracts with the `livenet` feature, and builds Odra/Casper WASM artifacts. |
-| `make test` | Runs TypeScript package tests, Rust contract tests, and `cargo fmt -- --check`. |
+| `make setup` | Installs local Node dependencies for `agent/sealer`, `agent/x402`, `agent/orchestrator`, and `agent/gateway`; validates Rust/Odra tooling; ensures the `wasm32-unknown-unknown` target exists. |
+| `make build` | Runs setup, builds sealer → x402 → orchestrator → gateway, checks the Rust contracts with the `livenet` feature, and builds Odra/Casper WASM artifacts. |
+| `make test` | Runs TypeScript package tests, including the gateway, Rust contract tests, and `cargo fmt -- --check`. |
 | `make wasm` | Builds Odra/Casper WASM artifacts in `contracts/lastro_origin/wasm/`. |
 | `make query` | Runs the read-only livenet `ProofOfOrigin` query against the already-deployed package. It does not deploy. |
 | `make demo` | Builds the local TypeScript stack and runs the orchestrator demo. |
-| Gateway + Web Demo | `cd agent/gateway && npm run dev` → open http://localhost:3456/demo (full Marketplace, Sandbox, Spot-the-Fraud, live /proof). |
+| `make gateway` | Builds the sealer, compiled livenet `query`/`attest` binaries, and starts the Lastro gateway at `http://localhost:3456`. |
 
 ## x402 status: mock facilitator
 
@@ -170,10 +169,11 @@ contracts/lastro_origin/  Casper/Odra contracts: ProofOfOrigin and MintGate
 agent/sealer/             deterministic offline SHA-256 sealer
 agent/x402/               HTTP 402 paid-verification prototype
 agent/orchestrator/       OriginChain agent and OpenRouter/rule decider
+agent/gateway/            experience-layer HTTP gateway over the live protocol
 design-system/            advertising/design-system assets and templates
 docs/                     architecture notes and future media assets
 samples/                  fictional sample data
-web/                      landing/demo placeholder
+web/                      static public demo assets served by the gateway
 ```
 
 ## Licensing

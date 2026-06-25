@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lastro — Proof Before Token (Demo)</title>
+  <style>
+    :root { --gold: #d4af37; --dark: #0b1f3a; --green: #10b981; --red: #ef4444; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 0; line-height: 1.5; }
+    .banner { background: #450a0a; color: #fecaca; padding: 8px 16px; text-align: center; font-weight: 600; font-size: 14px; position: sticky; top: 0; z-index: 100; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    h1 { font-size: 2.5rem; margin: 0 0 8px; color: var(--gold); }
+    h2 { color: var(--gold); border-bottom: 1px solid #334155; padding-bottom: 8px; }
+    .section { margin-bottom: 48px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: #1e2937; border: 1px solid #334155; border-radius: 12px; padding: 16px; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+    .badge-unverified { background: #475569; color: #e2e8f0; }
+    .badge-valid { background: #052e16; color: var(--green); }
+    .badge-invalid { background: #450a0a; color: var(--red); }
+    button { background: var(--gold); color: #0b1f3a; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .verdict { font-size: 1.1rem; font-weight: 700; margin: 8px 0; }
+    .mono { font-family: ui-monospace, monospace; font-size: 13px; word-break: break-all; }
+    .disclaimer { font-size: 12px; color: #94a3b8; }
+    .live { color: var(--green); font-weight: 600; }
+    .package { background: #1e2937; padding: 8px; border-radius: 6px; font-size: 12px; }
+    input, select { background: #1e2937; border: 1px solid #475569; color: white; padding: 8px; border-radius: 6px; }
+    .proof-stats { display: flex; gap: 24px; font-size: 1.4rem; }
+    .game { display: flex; gap: 12px; align-items: center; }
+    .seal { font-family: monospace; background: #0f172a; padding: 4px 8px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    DEMONSTRATION — simulated assets, no investment offered. All verdicts read live from Casper Testnet.
+  </div>
+
+  <div class="container">
+    <h1>Lastro</h1>
+    <p><strong>Proof before token.</strong> Deterministic offline SHA-256 seal decides provenance. Both Valid and Invalid are permanent on-chain.</p>
+    
+    <div class="package">
+      <strong>Package:</strong> <span class="mono">hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561</span><br>
+      <a href="https://testnet.cspr.live/contract/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561" target="_blank">View on cspr.live →</a>
+    </div>
+
+    <!-- MARKETPLACE -->
+    <div class="section">
+      <h2>Marketplace — Live Verdicts from Chain</h2>
+      <div id="marketplace" class="card-grid"></div>
+      <button onclick="loadMarketplace()">Refresh Live Verdicts</button>
+    </div>
+
+    <!-- SANDBOX -->
+    <div class="section">
+      <h2>Provenance Sandbox — Prove the Thesis</h2>
+      <div class="card">
+        <p>Select a lot and compute the seal locally (free, instant). Tamper a value → see the verdict flip.</p>
+        
+        <div style="margin:12px 0;">
+          <label>Lot:</label>
+          <select id="sandbox-asset">
+            <option value="MINA-VALEDOURO-LOTE-003">LOTE-003 (live demo)</option>
+            <option value="SANDBOX-OPEN-001">SANDBOX-OPEN-001</option>
+            <option value="MINA-VALEDOURO-LOTE-001">LOTE-001 (tampered example)</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Mass (grams):</label>
+          <input id="mass" type="number" value="125000">
+        </div>
+        <div>
+          <label>Captured At:</label>
+          <input id="captured" type="text" value="2026-06-23T18:30:00.000Z">
+        </div>
+
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button onclick="computeSeal()">Compute Seal (Local)</button>
+          <button onclick="tamperAndCompute()">Tamper + Compute (shows Invalid)</button>
+          <button onclick="anchorOnChain()">Anchor on-chain (SANDBOX only)</button>
+        </div>
+
+        <div id="sandbox-result" style="margin-top:16px; min-height:80px;"></div>
+      </div>
+    </div>
+
+    <!-- PROOF / TRANSPARENCY -->
+    <div class="section">
+      <h2>/proof — Live Transparency</h2>
+      <div id="proof" class="card">
+        <div class="proof-stats">
+          <div><span id="accepted">—</span> <small>Accepted</small></div>
+          <div><span id="rejected">—</span> <small>Rejected</small></div>
+        </div>
+        <div id="proof-recent" style="margin-top:12px;"></div>
+        <button onclick="loadProof()">Refresh Counters</button>
+      </div>
+    </div>
+
+    <!-- SPOT THE FRAUD -->
+    <div class="section">
+      <h2>Spot-the-Fraud (The Thesis as a Game)</h2>
+      <div class="card">
+        <p>Two seals for the same lot. One is genuine. One is tampered by 1 gram. Pick the Invalid one.</p>
+        <div class="game">
+          <button onclick="playSpotFraud(0)">Seal A: a3f1c9b8d7e6f5...00 (genuine)</button>
+          <button onclick="playSpotFraud(1)">Seal B: a3f1c9b8d7e6f5...11 (tampered)</button>
+        </div>
+        <div id="fraud-result" style="margin-top:12px; font-weight:700;"></div>
+      </div>
+    </div>
+
+    <p class="disclaimer">All data is fictional. Verdicts come from real on-chain ProofOfOrigin attestations. This is a demonstration only.</p>
+  </div>
+
+  <script>
+    const GATEWAY = 'http://localhost:3456';
+    const PACKAGE = 'hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561';
+
+    const CATALOG = [
+      { assetId: "MINA-VALEDOURO-LOTE-001", name: "Lote 001", note: "Tampered demo" },
+      { assetId: "MINA-VALEDOURO-LOTE-002", name: "Lote 002", note: "Valid demo" },
+      { assetId: "MINA-VALEDOURO-LOTE-003", name: "Lote 003", note: "Live in video" },
+      { assetId: "SANDBOX-OPEN-001", name: "Sandbox", note: "Public test" }
+    ];
+
+    async function loadMarketplace() {
+      const container = document.getElementById('marketplace');
+      container.innerHTML = '';
+      for (const item of CATALOG) {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+          <strong>${item.name}</strong> — ${item.assetId}<br>
+          <span class="disclaimer">${item.note}</span><br><br>
+          <div><span id="v-${item.assetId}">Loading...</span></div>
+          <button onclick="verifyFromMarket('${item.assetId}')">Verify provenance</button>
+          <div id="detail-${item.assetId}" style="margin-top:8px;font-size:12px;"></div>
+        `;
+        container.appendChild(div);
+        fetchVerdict(item.assetId, `v-${item.assetId}`, `detail-${item.assetId}`);
+      }
+    }
+
+    async function fetchVerdict(assetId, badgeId, detailId) {
+      try {
+        const res = await fetch(`${GATEWAY}/verdict/${assetId}`);
+        const data = await res.json();
+        const badge = document.getElementById(badgeId);
+        const detail = document.getElementById(detailId);
+        const v = data.verdict;
+        let cls = 'badge-unverified';
+        if (v === 'Valid') cls = 'badge-valid';
+        if (v === 'Invalid') cls = 'badge-invalid';
+        badge.innerHTML = `<span class="badge ${cls}">${v}</span>`;
+        detail.innerHTML = `Live from ProofOfOrigin @ <span class="mono">${data.packageHash?.slice(0,16)}...</span><br>Seal: <span class="mono">${(data.seal||'').slice(0,12)}...</span>`;
+      } catch(e) {
+        document.getElementById(badgeId).innerHTML = '<span class="badge badge-unverified">Offline</span>';
+      }
+    }
+
+    async function verifyFromMarket(assetId) {
+      const res = await fetch(`${GATEWAY}/verdict/${assetId}`);
+      const data = await res.json();
+      alert(`Verdict for ${assetId}: ${data.verdict}\nPackage: ${data.packageHash}\nSeal: ${data.seal}\nRead live from Casper Testnet.`);
+    }
+
+    async function computeSeal(tamper = false) {
+      const assetId = document.getElementById('sandbox-asset').value;
+      let mass = parseInt(document.getElementById('mass').value);
+      const captured = document.getElementById('captured').value;
+      if (tamper) mass += 1;
+
+      const body = {
+        assetId,
+        measurement: {
+          massGrams: mass,
+          capturedAtISO: captured,
+          origin: { lat: -30.1, lng: -53.2, site: "Demo sector" }
+        }
+      };
+
+      const res = await fetch(`${GATEWAY}/sandbox/compute`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+      const data = await res.json();
+      const el = document.getElementById('sandbox-result');
+      const color = data.verdict === 'Valid' ? 'var(--green)' : 'var(--red)';
+      el.innerHTML = `
+        <div class="verdict" style="color:${color}">VERDICT: ${data.verdict}</div>
+        <div>Computed seal: <span class="mono">${data.computedSeal}</span></div>
+        <div>Reference: <span class="mono">${data.referenceSeal || 'not registered yet'}</span></div>
+        <div class="disclaimer">Computed locally with deterministic SHA-256. No chain involved.</div>
+      `;
+    }
+
+    function tamperAndCompute() { computeSeal(true); }
+
+    async function anchorOnChain() {
+      const assetId = document.getElementById('sandbox-asset').value;
+      // Use a simple seal for demo
+      const seal = document.getElementById('sandbox-result')?.textContent?.match(/[a-f0-9]{64}/)?.[0] || "a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00";
+      const res = await fetch(`${GATEWAY}/sandbox/anchor`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({assetId, seal}) });
+      const data = await res.json();
+      alert(`Anchored! Tx: ${data.txHash}\nVerdict: ${data.verdict}\nCheck cspr.live`);
+      loadProof();
+    }
+
+    async function loadProof() {
+      try {
+        const res = await fetch(`${GATEWAY}/proof`);
+        const data = await res.json();
+        document.getElementById('accepted').textContent = data.accepted ?? '?';
+        document.getElementById('rejected').textContent = data.rejected ?? '?';
+        document.getElementById('proof-recent').innerHTML = `
+          Package: <span class="mono">${data.packageHash}</span><br>
+          <small>Live counters from ProofOfOrigin on Casper Testnet. Recent events visible on explorer.</small>
+        `;
+      } catch(e) {
+        document.getElementById('accepted').textContent = '—';
+        document.getElementById('rejected').textContent = '—';
+      }
+    }
+
+    let fraudRevealed = false;
+    function playSpotFraud(choice) {
+      const result = document.getElementById('fraud-result');
+      if (choice === 1) {
+        result.innerHTML = `✅ Correct. Seal B is tampered. On-chain verdict would be <span style="color:var(--red)">Invalid</span>.`;
+        result.style.color = 'var(--green)';
+      } else {
+        result.innerHTML = `❌ Seal A is the genuine one. Tampering by 1 gram flips the verdict on-chain.`;
+        result.style.color = 'var(--red)';
+      }
+      setTimeout(() => { result.innerHTML += '<br><small>This is exactly how Lastro works in production.</small>'; }, 800);
+    }
+
+    // Boot
+    window.onload = () => {
+      loadMarketplace();
+      loadProof();
+      // Auto load one sandbox example
+      setTimeout(() => {
+        const el = document.getElementById('sandbox-result');
+        if (el) el.innerHTML = '<small>Try the Compute button above — then tamper the mass by 1 gram.</small>';
+      }, 800);
+    };
+  </script>
+</body>
+</html>

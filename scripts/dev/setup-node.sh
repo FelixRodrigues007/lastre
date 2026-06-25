@@ -34,3 +34,4 @@ require_cmd npm
 install_package "$ROOT_DIR/agent/sealer"
 install_package "$ROOT_DIR/agent/x402"
 install_package "$ROOT_DIR/agent/orchestrator"
+install_package "$ROOT_DIR/agent/gateway"
