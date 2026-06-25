@@ -8,5 +8,8 @@
     "build": "tsc",
     "test": "npm run build && node --test test/*.test.mjs",
     "demo": "npm run build && node dist/demo.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
   }
 }

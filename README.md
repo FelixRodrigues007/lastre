@@ -18,6 +18,35 @@ Lastro is a proof-of-provenance protocol for tokenized Real-World Assets (RWA) o
 ## Stack
 Casper · Odra/Rust → WASM · x402 (HTTP-402 micropayments) · offline sealer · TypeScript agent.
 
+## Build from a clean clone
+The repository is set up so a fresh checkout can rebuild the generated
+artifacts that are intentionally ignored by git, including `agent/sealer/dist`
+before `agent/x402` imports it.
+
+Prerequisites on macOS:
+- Node.js + npm.
+- Rust via `rustup`; the contract crate pins its toolchain in
+  `contracts/lastro_origin/rust-toolchain`.
+- Network access on the first run so `npm ci`, `rustup target add`, and, if
+  missing, `cargo install cargo-odra` can populate the local tool cache.
+
+```bash
+git clone https://github.com/FelixRodrigues007/lastro.git
+cd lastro
+make
+```
+
+`make` defaults to `make build`.
+
+| Target | What it does |
+| --- | --- |
+| `make setup` | Installs local Node dependencies for `agent/sealer`, `agent/x402`, and `agent/orchestrator`; validates Rust/Odra tooling; ensures the `wasm32-unknown-unknown` target exists. |
+| `make build` | Runs `setup`, builds `agent/sealer` first, then `agent/x402`, then `agent/orchestrator`, checks the Rust contracts with the `livenet` feature, and builds Odra/Casper WASM artifacts. |
+| `make test` | Runs the TypeScript package tests and Rust contract tests/format check. |
+| `make wasm` | Builds the Odra/Casper WASM artifacts in `contracts/lastro_origin/wasm/`. |
+| `make query` | Runs the read-only livenet `ProofOfOrigin` query against the already-deployed package. It requires the standard Odra livenet environment (`ODRA_CASPER_LIVENET_NODE_ADDRESS`, `ODRA_CASPER_LIVENET_CHAIN_NAME`, and any local Odra credentials/config needed by your machine); it does not deploy. |
+| `make demo` | Builds the local TypeScript stack and runs the orchestrator demo. If `OPENROUTER_API_KEY` is unset, the `LlmDecider` logs and uses the deterministic rule fallback. |
+
 ## x402 payment verification (mock facilitator)
 The x402 paid-verification flow is implemented, but payment is handled by a
 **mock facilitator** (`MockFacilitator`): it does **not** talk to the Casper
