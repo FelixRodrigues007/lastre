@@ -3,17 +3,17 @@
   <desc id="desc">Editable advertising template for Lastro showing an offline seal, Casper attestation, and recorded verdict.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="627" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#070A0D"/>
-      <stop offset="0.58" stop-color="#151D26"/>
-      <stop offset="1" stop-color="#22303D"/>
+      <stop stop-color="#121407"/>
+      <stop offset="0.58" stop-color="#262916"/>
+      <stop offset="1" stop-color="#30331e"/>
     </linearGradient>
     <radialGradient id="glowProof" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(940 150) rotate(127) scale(420 360)">
-      <stop stop-color="#2FD394" stop-opacity="0.28"/>
-      <stop offset="1" stop-color="#2FD394" stop-opacity="0"/>
+      <stop stop-color="#9ab84a" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#9ab84a" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="glowSeal" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(710 468) rotate(18) scale(330 240)">
-      <stop stop-color="#E9B949" stop-opacity="0.18"/>
-      <stop offset="1" stop-color="#E9B949" stop-opacity="0"/>
+      <stop stop-color="#fef16f" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#fef16f" stop-opacity="0"/>
     </radialGradient>
     <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
       <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.32"/>
@@ -22,12 +22,12 @@
       .display { font-family: 'Space Grotesk', Inter, system-ui, sans-serif; font-weight: 700; letter-spacing: -0.055em; }
       .body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
       .mono { font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace; }
-      .paper { fill: #F8F4EA; }
-      .muted { fill: #A8B3C1; }
-      .proof { fill: #2FD394; }
-      .seal { fill: #E9B949; }
-      .network { fill: #7DD3FC; }
-      .signal { fill: #FF6B5E; }
+      .paper { fill: #e7e6d0; }
+      .muted { fill: #c5c7b0; }
+      .proof { fill: #9ab84a; }
+      .seal { fill: #fef16f; }
+      .network { fill: #c5c7b0; }
+      .signal { fill: #d9603f; }
     </style>
   </defs>
 
@@ -37,17 +37,17 @@
 
   <!-- background proof grid -->
   <g opacity="0.14">
-    <path d="M70 96H1130" stroke="#F8F4EA"/>
-    <path d="M70 532H1130" stroke="#F8F4EA"/>
-    <path d="M70 96V532" stroke="#F8F4EA"/>
-    <path d="M1130 96V532" stroke="#F8F4EA"/>
-    <path d="M630 96V532" stroke="#F8F4EA"/>
+    <path d="M70 96H1130" stroke="#e7e6d0"/>
+    <path d="M70 532H1130" stroke="#e7e6d0"/>
+    <path d="M70 96V532" stroke="#e7e6d0"/>
+    <path d="M1130 96V532" stroke="#e7e6d0"/>
+    <path d="M630 96V532" stroke="#e7e6d0"/>
   </g>
 
   <!-- eyebrow -->
   <g transform="translate(72 64)">
-    <rect width="286" height="42" rx="21" fill="rgba(47, 211, 148, 0.13)" stroke="rgba(116, 224, 178, 0.32)"/>
-    <circle cx="24" cy="21" r="6" fill="#2FD394"/>
+    <rect width="286" height="42" rx="21" fill="rgba(154, 184, 74, 0.13)" stroke="rgba(154, 184, 74, 0.32)"/>
+    <circle cx="24" cy="21" r="6" fill="#9ab84a"/>
     <text x="44" y="27" class="body proof" font-size="17" font-weight="700" letter-spacing="0.08em">RWA PROVENANCE LAYER</text>
   </g>
 
@@ -63,32 +63,32 @@
 
   <!-- guardrail -->
   <g transform="translate(72 470)">
-    <rect width="448" height="48" rx="24" fill="rgba(233, 185, 73, 0.12)" stroke="rgba(233, 185, 73, 0.38)"/>
+    <rect width="448" height="48" rx="24" fill="rgba(254, 241, 111, 0.12)" stroke="rgba(254, 241, 111, 0.38)"/>
     <text x="24" y="31" class="mono seal" font-size="16" font-weight="700">Seal decides verdict · LLM decides action</text>
   </g>
 
   <!-- proof card -->
   <g filter="url(#softShadow)" transform="translate(676 78)">
-    <rect width="446" height="416" rx="28" fill="rgba(13, 18, 24, 0.86)" stroke="rgba(248, 244, 234, 0.16)"/>
+    <rect width="446" height="416" rx="28" fill="rgba(24, 27, 12, 0.86)" stroke="rgba(231, 230, 208, 0.16)"/>
     <text x="34" y="56" class="body paper" font-size="24" font-weight="700">Proof trail</text>
     <text x="34" y="86" class="mono muted" font-size="14">MINA-VALEDOURO-LOTE-001 · fictional demo</text>
 
     <g transform="translate(34 126)">
-      <circle cx="18" cy="18" r="18" fill="rgba(233, 185, 73, 0.16)" stroke="#E9B949" stroke-width="2"/>
+      <circle cx="18" cy="18" r="18" fill="rgba(254, 241, 111, 0.16)" stroke="#fef16f" stroke-width="2"/>
       <text x="50" y="15" class="body paper" font-size="19" font-weight="700">Offline seal</text>
       <text x="50" y="42" class="mono muted" font-size="13">SHA-256 · deterministic</text>
     </g>
-    <path d="M52 178V218" stroke="#E9B949" stroke-width="3" stroke-linecap="round"/>
+    <path d="M52 178V218" stroke="#fef16f" stroke-width="3" stroke-linecap="round"/>
 
     <g transform="translate(34 224)">
-      <circle cx="18" cy="18" r="18" fill="rgba(125, 211, 252, 0.14)" stroke="#7DD3FC" stroke-width="2"/>
+      <circle cx="18" cy="18" r="18" fill="rgba(197, 199, 176, 0.14)" stroke="#c5c7b0" stroke-width="2"/>
       <text x="50" y="15" class="body paper" font-size="19" font-weight="700">Casper attestation</text>
       <text x="50" y="42" class="mono muted" font-size="13">ProofOfOrigin · on-chain</text>
     </g>
-    <path d="M52 276V316" stroke="#7DD3FC" stroke-width="3" stroke-linecap="round"/>
+    <path d="M52 276V316" stroke="#c5c7b0" stroke-width="3" stroke-linecap="round"/>
 
     <g transform="translate(34 322)">
-      <circle cx="18" cy="18" r="18" fill="rgba(47, 211, 148, 0.14)" stroke="#2FD394" stroke-width="2"/>
+      <circle cx="18" cy="18" r="18" fill="rgba(154, 184, 74, 0.14)" stroke="#9ab84a" stroke-width="2"/>
       <text x="50" y="15" class="body paper" font-size="19" font-weight="700">Recorded verdict</text>
       <text x="50" y="42" class="mono muted" font-size="13">Valid and Invalid are both evidence</text>
     </g>
@@ -96,9 +96,9 @@
 
   <!-- footer -->
   <g transform="translate(72 562)">
-    <path d="M24 0L45 12V36L24 48L3 36V12L24 0Z" stroke="#2FD394" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M24 10L36 17V31L24 38L12 31V17L24 10Z" stroke="#E9B949" stroke-width="2" stroke-linejoin="round"/>
-    <circle cx="24" cy="24" r="4" fill="#7DD3FC"/>
+    <path d="M24 0L45 12V36L24 48L3 36V12L24 0Z" stroke="#9ab84a" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M24 10L36 17V31L24 38L12 31V17L24 10Z" stroke="#fef16f" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="24" cy="24" r="4" fill="#c5c7b0"/>
     <text x="66" y="31" class="display paper" font-size="30" letter-spacing="-0.03em">Lastro</text>
     <text x="170" y="31" class="body muted" font-size="18">Proof-of-provenance for RWA workflows</text>
   </g>
