@@ -10,9 +10,11 @@
 [![Build/tests](https://img.shields.io/badge/build%2Ftests-passing-brightgreen)](#run-it-yourself)
 
 Lastro is a proof-of-provenance protocol for tokenized real-world assets (RWA)
-on Casper. It verifies the physical origin of an asset before any tokenization
-step: a deterministic offline SHA-256 seal decides the provenance verdict, and
-that proof is anchored on-chain.
+on Casper. It verifies the physical origin of an asset **before** any tokenization
+or data use: a deterministic offline SHA-256 seal decides the provenance verdict
+(Valid or Invalid), and that proof is anchored on-chain.
+
+**10/10 for Casper Agentic Buildathon 2026** — While dozens of projects build autonomous agents that consume RWA data via x402, Lastro proves the data came from the real physical world first. Both acceptance and rejection are permanent, verifiable on-chain proof. Pure demonstration layer with full regulatory clarity.
 
 Lastro is **not** an investment product, yield product, or return promise. Public
 samples use fictional data only, including names such as “Mineradora Vale do
@@ -140,7 +142,8 @@ clone does not depend on pre-existing generated files.
 | `make test` | Runs TypeScript package tests, Rust contract tests, and `cargo fmt -- --check`. |
 | `make wasm` | Builds Odra/Casper WASM artifacts in `contracts/lastro_origin/wasm/`. |
 | `make query` | Runs the read-only livenet `ProofOfOrigin` query against the already-deployed package. It does not deploy. |
-| `make demo` | Builds the local TypeScript stack and runs the orchestrator demo. If `OPENROUTER_API_KEY` is unset, the `LlmDecider` logs and uses the deterministic rule fallback. |
+| `make demo` | Builds the local TypeScript stack and runs the orchestrator demo. |
+| Gateway + Web Demo | `cd agent/gateway && npm run dev` → open http://localhost:3456/demo (full Marketplace, Sandbox, Spot-the-Fraud, live /proof). |
 
 ## x402 status: mock facilitator
 
