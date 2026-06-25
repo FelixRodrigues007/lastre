@@ -172,7 +172,13 @@ export function createGatewayApp(options: CreateGatewayAppOptions = {}): Express
     }
   });
 
-  app.get("/proof", async (_req, res, next) => {
+  app.get("/proof", async (req, res, next) => {
+    const accept = req.get("accept") ?? "";
+    if (accept.includes("text/html") && !accept.includes("application/json")) {
+      res.sendFile(path.join(webDir, "demo.html"));
+      return;
+    }
+
     try {
       const proof = await dependencies.readProof();
       res.json({ ...proof, packageHash: proof.packageHash || packageHash });

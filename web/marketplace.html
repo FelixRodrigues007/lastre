@@ -3,248 +3,492 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lastro — Proof Before Token (Demo)</title>
+  <title>Lastro — Live Provenance Experience</title>
   <style>
-    :root { --gold: #d4af37; --dark: #0b1f3a; --green: #10b981; --red: #ef4444; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 0; line-height: 1.5; }
-    .banner { background: #450a0a; color: #fecaca; padding: 8px 16px; text-align: center; font-weight: 600; font-size: 14px; position: sticky; top: 0; z-index: 100; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
-    h1 { font-size: 2.5rem; margin: 0 0 8px; color: var(--gold); }
-    h2 { color: var(--gold); border-bottom: 1px solid #334155; padding-bottom: 8px; }
-    .section { margin-bottom: 48px; }
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-    .card { background: #1e2937; border: 1px solid #334155; border-radius: 12px; padding: 16px; }
-    .badge { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
-    .badge-unverified { background: #475569; color: #e2e8f0; }
-    .badge-valid { background: #052e16; color: var(--green); }
-    .badge-invalid { background: #450a0a; color: var(--red); }
-    button { background: var(--gold); color: #0b1f3a; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .verdict { font-size: 1.1rem; font-weight: 700; margin: 8px 0; }
-    .mono { font-family: ui-monospace, monospace; font-size: 13px; word-break: break-all; }
-    .disclaimer { font-size: 12px; color: #94a3b8; }
-    .live { color: var(--green); font-weight: 600; }
-    .package { background: #1e2937; padding: 8px; border-radius: 6px; font-size: 12px; }
-    input, select { background: #1e2937; border: 1px solid #475569; color: white; padding: 8px; border-radius: 6px; }
-    .proof-stats { display: flex; gap: 24px; font-size: 1.4rem; }
-    .game { display: flex; gap: 12px; align-items: center; }
-    .seal { font-family: monospace; background: #0f172a; padding: 4px 8px; border-radius: 4px; }
+    :root {
+      --gold: #d4af37;
+      --dark: #0b1f3a;
+      --ink: #e5edf7;
+      --muted: #9fb0c7;
+      --panel: #172338;
+      --panel-2: #101a2b;
+      --line: #31435f;
+      --green: #10b981;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+      --slate: #64748b;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(212, 175, 55, 0.16), transparent 34rem),
+        linear-gradient(135deg, #081222 0%, #0f172a 48%, #111827 100%);
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.5;
+    }
+    a { color: #f8d86a; }
+    .banner {
+      background: #450a0a;
+      color: #fecaca;
+      padding: 10px 16px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid rgba(254, 202, 202, 0.25);
+    }
+    .container { max-width: 1180px; margin: 0 auto; padding: 28px; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr); gap: 22px; align-items: end; margin-bottom: 28px; }
+    .eyebrow { color: var(--gold); text-transform: uppercase; letter-spacing: 0.16em; font-size: 12px; font-weight: 900; }
+    h1 { font-size: clamp(2.3rem, 7vw, 5.5rem); line-height: 0.92; margin: 8px 0 14px; color: #f5d56a; }
+    h2 { color: #f5d56a; margin: 0 0 14px; }
+    h3 { margin: 0 0 10px; color: #f7e7a1; }
+    .lead { max-width: 840px; color: #dbeafe; font-size: clamp(1rem, 2vw, 1.2rem); }
+    .package {
+      background: rgba(23, 35, 56, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 13px;
+    }
+    nav { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 0; }
+    nav a, .ghost-link {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--ink);
+      text-decoration: none;
+      background: rgba(23, 35, 56, 0.62);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .section { margin: 42px 0; }
+    .section-head { display: flex; justify-content: space-between; gap: 16px; align-items: end; margin-bottom: 16px; }
+    .section-head p { margin: 0; color: var(--muted); max-width: 760px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: 16px; }
+    .card {
+      background: rgba(23, 35, 56, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.20);
+    }
+    .card[data-status="Verified"] { border-color: rgba(16, 185, 129, 0.55); }
+    .card[data-status="Rejected"] { border-color: rgba(239, 68, 68, 0.55); }
+    .card[data-status="Simulated"] { border-style: dashed; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 900; }
+    .badge-verified { background: rgba(16, 185, 129, 0.16); color: #6ee7b7; }
+    .badge-rejected { background: rgba(239, 68, 68, 0.16); color: #fca5a5; }
+    .badge-in-verification { background: rgba(96, 165, 250, 0.16); color: #bfdbfe; }
+    .badge-available { background: rgba(245, 158, 11, 0.16); color: #fcd34d; }
+    .badge-simulated { background: rgba(100, 116, 139, 0.22); color: #cbd5e1; }
+    .badge-loading { background: rgba(212, 175, 55, 0.14); color: #fde68a; }
+    .badge-offline { background: rgba(100, 116, 139, 0.18); color: #cbd5e1; }
+    button {
+      background: var(--gold);
+      color: #0b1f3a;
+      border: 0;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button.secondary { background: #26364f; color: var(--ink); border: 1px solid var(--line); }
+    button.danger { background: #7f1d1d; color: #fee2e2; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; word-break: break-all; }
+    .muted { color: var(--muted); }
+    .small { font-size: 12px; }
+    .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 14px 0; }
+    label { display: block; color: #cbd5e1; font-size: 12px; font-weight: 800; margin-bottom: 5px; }
+    input, select {
+      width: 100%;
+      background: var(--panel-2);
+      border: 1px solid #475569;
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .result-box { min-height: 90px; background: rgba(8, 18, 34, 0.62); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 14px; }
+    .proof-stats { display: flex; gap: 14px; flex-wrap: wrap; }
+    .stat { min-width: 145px; padding: 16px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; }
+    .stat strong { display: block; font-size: 2rem; color: #f8d86a; }
+    .event-list { display: grid; gap: 10px; margin-top: 16px; }
+    .event { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: rgba(8, 18, 34, 0.56); }
+    .honesty-note { border-left: 3px solid var(--gold); padding: 10px 12px; background: rgba(212, 175, 55, 0.08); color: #fde68a; border-radius: 8px; }
+    .footer-note { margin: 52px 0 0; color: var(--muted); font-size: 12px; }
+    @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } .section-head { display: block; } }
   </style>
 </head>
 <body>
-  <div class="banner">
-    DEMONSTRATION — simulated assets, no investment offered. All verdicts read live from Casper Testnet.
+  <div class="banner" role="note">
+    DEMONSTRATION — simulated assets, no investment offered. Public action: Verify provenance.
   </div>
 
-  <div class="container">
-    <h1>Lastro</h1>
-    <p><strong>Proof before token.</strong> Deterministic offline SHA-256 seal decides provenance. Both Valid and Invalid are permanent on-chain.</p>
-    
-    <div class="package">
-      <strong>Package:</strong> <span class="mono">hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561</span><br>
-      <a href="https://testnet.cspr.live/contract/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561" target="_blank">View on cspr.live →</a>
-    </div>
-
-    <!-- MARKETPLACE -->
-    <div class="section">
-      <h2>Marketplace — Live Verdicts from Chain</h2>
-      <div id="marketplace" class="card-grid"></div>
-      <button onclick="loadMarketplace()">Refresh Live Verdicts</button>
-    </div>
-
-    <!-- SANDBOX -->
-    <div class="section">
-      <h2>Provenance Sandbox — Prove the Thesis</h2>
-      <div class="card">
-        <p>Select a lot and compute the seal locally (free, instant). Tamper a value → see the verdict flip.</p>
-        
-        <div style="margin:12px 0;">
-          <label>Lot:</label>
-          <select id="sandbox-asset">
-            <option value="MINA-VALEDOURO-LOTE-003">LOTE-003 (live demo)</option>
-            <option value="SANDBOX-OPEN-001">SANDBOX-OPEN-001</option>
-            <option value="MINA-VALEDOURO-LOTE-001">LOTE-001 (tampered example)</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Mass (grams):</label>
-          <input id="mass" type="number" value="125000">
-        </div>
-        <div>
-          <label>Captured At:</label>
-          <input id="captured" type="text" value="2026-06-23T18:30:00.000Z">
-        </div>
-
-        <div style="margin-top:12px; display:flex; gap:8px;">
-          <button onclick="computeSeal()">Compute Seal (Local)</button>
-          <button onclick="tamperAndCompute()">Tamper + Compute (shows Invalid)</button>
-          <button onclick="anchorOnChain()">Anchor on-chain (SANDBOX only)</button>
-        </div>
-
-        <div id="sandbox-result" style="margin-top:16px; min-height:80px;"></div>
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Live Casper Testnet provenance</div>
+        <h1>Lastro</h1>
+        <p class="lead"><strong>Proof before token.</strong> The deterministic offline SHA-256 seal decides the verdict. The experience layer only reads and writes to the already-live protocol.</p>
+        <nav aria-label="Demo navigation">
+          <a href="#marketplace-section">Marketplace</a>
+          <a href="#sandbox-section">Sandbox</a>
+          <a href="#proof-section">/proof</a>
+        </nav>
       </div>
-    </div>
+      <div class="package">
+        <strong>ProofOfOrigin package</strong><br>
+        <span class="mono" id="package-hash">hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561</span><br>
+        <a href="https://testnet.cspr.live/contract/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561" target="_blank" rel="noreferrer">View package on cspr.live →</a>
+      </div>
+    </section>
 
-    <!-- PROOF / TRANSPARENCY -->
-    <div class="section">
-      <h2>/proof — Live Transparency</h2>
-      <div id="proof" class="card">
+    <section id="marketplace-section" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Marketplace — live provenance badges</h2>
+          <p>Every on-chain candidate is read from <code>/verdict/:assetId</code>. Simulated catalog items stay explicitly labeled as simulated.</p>
+        </div>
+        <button onclick="loadMarketplace()">Refresh live verdicts</button>
+      </div>
+      <div id="marketplace" class="card-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="sandbox-section" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Sandbox — compute locally, anchor only when controlled</h2>
+          <p>Compute is local and instant. Anchor is a protected Testnet write through the gateway and may be disabled unless Felix enables the demo key.</p>
+        </div>
+      </div>
+      <div class="card">
+        <p class="honesty-note">Compute demonstrates the seal mechanism. Only on-chain attestations returned by <code>/verdict</code> are authoritative proof.</p>
+        <div class="field-grid">
+          <div>
+            <label for="sandbox-asset">Lot</label>
+            <select id="sandbox-asset"></select>
+          </div>
+          <div>
+            <label for="mass">Mass (grams)</label>
+            <input id="mass" type="number" value="125000">
+          </div>
+          <div>
+            <label for="captured">Captured at</label>
+            <input id="captured" type="text" value="2026-06-23T18:30:00.000Z">
+          </div>
+          <div>
+            <label for="operator">Operator</label>
+            <input id="operator" type="text" value="Fictional Demo Operator">
+          </div>
+        </div>
+        <div class="actions">
+          <button onclick="computeSeal(false)">Compute seal</button>
+          <button class="secondary" onclick="computeSeal(true)">Tamper + compute</button>
+          <button class="danger" onclick="anchorOnChain()">Anchor on-chain</button>
+        </div>
+        <div id="sandbox-result" class="result-box">Load the catalog, choose a lot, and compute a seal. No chain write happens until the controlled anchor button is used.</div>
+      </div>
+    </section>
+
+    <section id="proof-section" class="section">
+      <div class="section-head">
+        <div>
+          <h2>/proof — live transparency</h2>
+          <p>Counters and recent events are fetched from the gateway. Event transaction hashes link to cspr.live when available.</p>
+        </div>
+        <button onclick="loadProof()">Refresh proof</button>
+      </div>
+      <div class="card">
         <div class="proof-stats">
-          <div><span id="accepted">—</span> <small>Accepted</small></div>
-          <div><span id="rejected">—</span> <small>Rejected</small></div>
+          <div class="stat"><strong id="accepted">—</strong><span>Accepted</span></div>
+          <div class="stat"><strong id="rejected">—</strong><span>Rejected</span></div>
         </div>
-        <div id="proof-recent" style="margin-top:12px;"></div>
-        <button onclick="loadProof()">Refresh Counters</button>
+        <div id="proof-recent" class="event-list" aria-live="polite"></div>
       </div>
-    </div>
+    </section>
 
-    <!-- SPOT THE FRAUD -->
-    <div class="section">
-      <h2>Spot-the-Fraud (The Thesis as a Game)</h2>
+    <section class="section">
       <div class="card">
-        <p>Two seals for the same lot. One is genuine. One is tampered by 1 gram. Pick the Invalid one.</p>
-        <div class="game">
-          <button onclick="playSpotFraud(0)">Seal A: a3f1c9b8d7e6f5...00 (genuine)</button>
-          <button onclick="playSpotFraud(1)">Seal B: a3f1c9b8d7e6f5...11 (tampered)</button>
-        </div>
-        <div id="fraud-result" style="margin-top:12px; font-weight:700;"></div>
+        <h2>Honesty frame</h2>
+        <p>All mine and lot data shown here is fictional. Valid and Invalid verdicts are both written on-chain by the protocol; a rejection is permanent, verifiable proof, not a discarded error.</p>
+        <p class="muted">No screen offers buying, selling, investing, yield, or return. The public action is always: <strong>Verify provenance</strong>.</p>
       </div>
-    </div>
+    </section>
 
-    <p class="disclaimer">All data is fictional. Verdicts come from real on-chain ProofOfOrigin attestations. This is a demonstration only.</p>
-  </div>
+    <p class="footer-note">DEMONSTRATION — simulated assets, no investment offered. The gateway wraps the existing ProofOfOrigin package and adds no new trust logic.</p>
+  </main>
 
   <script>
-    const GATEWAY = 'http://localhost:3456';
-    const PACKAGE = 'hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561';
+    const PACKAGE_HASH = "hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561";
+    const GATEWAY_ORIGIN = window.LASTRO_GATEWAY_URL || window.location.origin || "http://localhost:3456";
+    let catalog = { assets: [] };
+    let lastComputedSeal = null;
+    let lastComputedAssetId = null;
 
-    const CATALOG = [
-      { assetId: "MINA-VALEDOURO-LOTE-001", name: "Lote 001", note: "Tampered demo" },
-      { assetId: "MINA-VALEDOURO-LOTE-002", name: "Lote 002", note: "Valid demo" },
-      { assetId: "MINA-VALEDOURO-LOTE-003", name: "Lote 003", note: "Live in video" },
-      { assetId: "SANDBOX-OPEN-001", name: "Sandbox", note: "Public test" }
-    ];
+    function gatewayUrl(path) {
+      return `${GATEWAY_ORIGIN}${path}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function truncate(value, left = 14, right = 8) {
+      const text = String(value ?? "");
+      if (text.length <= left + right + 3) return text;
+      return `${text.slice(0, left)}…${text.slice(-right)}`;
+    }
+
+    function isSimulatedAsset(asset) {
+      return asset.simulated === true || asset.expectedOnChain === "Simulated";
+    }
+
+    function badgeClass(status) {
+      return `badge-${status.toLowerCase().replaceAll(" ", "-")}`;
+    }
+
+    function statusFromVerdict(asset, verdict) {
+      if (isSimulatedAsset(asset)) return "Simulated";
+      if (verdict === "Valid") return "Verified";
+      if (verdict === "Invalid") return "Rejected";
+      if (asset.referenceRegistered) return "In verification";
+      return "Available";
+    }
+
+    async function loadCatalog() {
+      const response = await fetch(gatewayUrl("/catalog"));
+      if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
+      catalog = await response.json();
+      populateSandboxOptions(catalog.assets || []);
+      return catalog;
+    }
+
+    function populateSandboxOptions(assets) {
+      const select = document.getElementById("sandbox-asset");
+      select.innerHTML = "";
+      for (const asset of assets) {
+        const option = document.createElement("option");
+        option.value = asset.assetId;
+        option.textContent = `${asset.assetId} — ${asset.name || asset.mineralType || "fictional lot"}`;
+        select.appendChild(option);
+      }
+      const sandbox = assets.find((asset) => asset.assetId?.startsWith("SANDBOX-"));
+      if (sandbox) select.value = sandbox.assetId;
+    }
 
     async function loadMarketplace() {
-      const container = document.getElementById('marketplace');
-      container.innerHTML = '';
-      for (const item of CATALOG) {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
-          <strong>${item.name}</strong> — ${item.assetId}<br>
-          <span class="disclaimer">${item.note}</span><br><br>
-          <div><span id="v-${item.assetId}">Loading...</span></div>
-          <button onclick="verifyFromMarket('${item.assetId}')">Verify provenance</button>
-          <div id="detail-${item.assetId}" style="margin-top:8px;font-size:12px;"></div>
-        `;
-        container.appendChild(div);
-        fetchVerdict(item.assetId, `v-${item.assetId}`, `detail-${item.assetId}`);
-      }
-    }
+      const container = document.getElementById("marketplace");
+      container.innerHTML = `<div class="card"><span class="badge badge-loading">Loading catalog</span><p class="muted">Fetching catalog from the gateway.</p></div>`;
 
-    async function fetchVerdict(assetId, badgeId, detailId) {
       try {
-        const res = await fetch(`${GATEWAY}/verdict/${assetId}`);
-        const data = await res.json();
-        const badge = document.getElementById(badgeId);
-        const detail = document.getElementById(detailId);
-        const v = data.verdict;
-        let cls = 'badge-unverified';
-        if (v === 'Valid') cls = 'badge-valid';
-        if (v === 'Invalid') cls = 'badge-invalid';
-        badge.innerHTML = `<span class="badge ${cls}">${v}</span>`;
-        detail.innerHTML = `Live from ProofOfOrigin @ <span class="mono">${data.packageHash?.slice(0,16)}...</span><br>Seal: <span class="mono">${(data.seal||'').slice(0,12)}...</span>`;
-      } catch(e) {
-        document.getElementById(badgeId).innerHTML = '<span class="badge badge-unverified">Offline</span>';
+        const liveCatalog = await loadCatalog();
+        const assets = liveCatalog.assets || [];
+        container.innerHTML = "";
+        for (const asset of assets) {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.id = `asset-${asset.assetId}`;
+          card.dataset.status = "Loading";
+          card.innerHTML = renderAssetCard(asset, "Loading", null);
+          container.appendChild(card);
+
+          if (isSimulatedAsset(asset)) {
+            updateAssetCard(asset, { verdict: "Unverified", packageHash: PACKAGE_HASH, seal: null, referenceSeal: null }, "Simulated");
+          } else {
+            fetchVerdictForAsset(asset);
+          }
+        }
+      } catch (error) {
+        container.innerHTML = `<div class="card"><span class="badge badge-offline">Gateway offline</span><p>${escapeHtml(error.message)}</p><p class="honesty-note">No verdict is displayed when the gateway cannot be reached.</p></div>`;
       }
     }
 
-    async function verifyFromMarket(assetId) {
-      const res = await fetch(`${GATEWAY}/verdict/${assetId}`);
-      const data = await res.json();
-      alert(`Verdict for ${assetId}: ${data.verdict}\nPackage: ${data.packageHash}\nSeal: ${data.seal}\nRead live from Casper Testnet.`);
-    }
+    function renderAssetCard(asset, status, verdict) {
+      const explorer = verdict?.attestationTx ? `https://testnet.cspr.live/transaction/${verdict.attestationTx}` : null;
+      const proofLine = isSimulatedAsset(asset)
+        ? "Simulated catalog item — no on-chain verdict claimed."
+        : verdict
+          ? `Authoritative read from ProofOfOrigin at ${escapeHtml(truncate(verdict.packageHash || PACKAGE_HASH))}.`
+          : "Awaiting live gateway verdict.";
 
-    async function computeSeal(tamper = false) {
-      const assetId = document.getElementById('sandbox-asset').value;
-      let mass = parseInt(document.getElementById('mass').value);
-      const captured = document.getElementById('captured').value;
-      if (tamper) mass += 1;
-
-      const body = {
-        assetId,
-        measurement: {
-          massGrams: mass,
-          capturedAtISO: captured,
-          origin: { lat: -30.1, lng: -53.2, site: "Demo sector" }
-        }
-      };
-
-      const res = await fetch(`${GATEWAY}/sandbox/compute`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-      const data = await res.json();
-      const el = document.getElementById('sandbox-result');
-      const color = data.verdict === 'Valid' ? 'var(--green)' : 'var(--red)';
-      el.innerHTML = `
-        <div class="verdict" style="color:${color}">VERDICT: ${data.verdict}</div>
-        <div>Computed seal: <span class="mono">${data.computedSeal}</span></div>
-        <div>Reference: <span class="mono">${data.referenceSeal || 'not registered yet'}</span></div>
-        <div class="disclaimer">Computed locally with deterministic SHA-256. No chain involved.</div>
+      return `
+        <div class="badge ${badgeClass(status)}">${escapeHtml(status)}</div>
+        <h3>${escapeHtml(asset.name || asset.assetId)}</h3>
+        <p class="muted">${escapeHtml(asset.mineralType || asset.mineral || "Fictional mineral lot")}</p>
+        <p><strong>Asset:</strong> <span class="mono">${escapeHtml(asset.assetId)}</span></p>
+        <p><strong>Origin:</strong> ${escapeHtml(asset.origin?.label || "fictional origin")}</p>
+        <p class="small">${escapeHtml(asset.note || "Fictional demo asset.")}</p>
+        <p class="honesty-note small">${proofLine}</p>
+        ${verdict?.seal ? `<p class="small"><strong>Seal:</strong> <span class="mono">${escapeHtml(truncate(verdict.seal, 18, 10))}</span></p>` : ""}
+        ${verdict?.referenceSeal ? `<p class="small"><strong>Reference:</strong> <span class="mono">${escapeHtml(truncate(verdict.referenceSeal, 18, 10))}</span></p>` : ""}
+        ${explorer ? `<a class="ghost-link" href="${explorer}" target="_blank" rel="noreferrer">View attestation transaction</a>` : ""}
+        <div class="actions"><button onclick="verifyFromMarket('${escapeHtml(asset.assetId)}')">Verify provenance</button></div>
       `;
     }
 
-    function tamperAndCompute() { computeSeal(true); }
+    async function fetchVerdictForAsset(asset) {
+      const response = await fetch(gatewayUrl(`/verdict/${encodeURIComponent(asset.assetId)}`));
+      if (!response.ok) throw new Error(`Verdict request failed for ${asset.assetId}: ${response.status}`);
+      const verdict = await response.json();
+      const status = statusFromVerdict(asset, verdict.verdict);
+      updateAssetCard(asset, verdict, status);
+    }
+
+    function updateAssetCard(asset, verdict, status) {
+      const card = document.getElementById(`asset-${asset.assetId}`);
+      if (!card) return;
+      card.dataset.status = status;
+      card.innerHTML = renderAssetCard(asset, status, verdict);
+    }
+
+    async function verifyFromMarket(assetId) {
+      const asset = (catalog.assets || []).find((item) => item.assetId === assetId) || { assetId };
+      if (isSimulatedAsset(asset)) {
+        updateAssetCard(asset, { verdict: "Unverified", packageHash: PACKAGE_HASH, seal: null, referenceSeal: null }, "Simulated");
+        return;
+      }
+      try {
+        await fetchVerdictForAsset(asset);
+      } catch (error) {
+        const card = document.getElementById(`asset-${asset.assetId}`);
+        if (card) {
+          card.dataset.status = "Offline";
+          card.innerHTML = `<span class="badge badge-offline">Gateway offline</span><h3>${escapeHtml(asset.assetId)}</h3><p>${escapeHtml(error.message)}</p><p class="honesty-note">No on-chain verdict is shown while the gateway read fails.</p>`;
+        }
+      }
+    }
+
+    function measurementFromForm(tamper) {
+      const selected = document.getElementById("sandbox-asset");
+      const asset = (catalog.assets || []).find((item) => item.assetId === selected.value);
+      const mass = Number.parseInt(document.getElementById("mass").value, 10) + (tamper ? 1 : 0);
+      return {
+        assetId: selected.value,
+        measurement: {
+          assetId: selected.value,
+          massGrams: Number.isFinite(mass) ? mass : 0,
+          capturedAtISO: document.getElementById("captured").value,
+          operator: document.getElementById("operator").value,
+          origin: {
+            lat: asset?.origin?.lat ?? -30.05,
+            lng: asset?.origin?.lng ?? -53.2,
+            site: asset?.origin?.label || "Fictional demo sector"
+          }
+        }
+      };
+    }
+
+    async function computeSeal(tamper = false) {
+      const result = document.getElementById("sandbox-result");
+      const body = measurementFromForm(tamper);
+      result.innerHTML = `<span class="badge badge-loading">Computing</span><p class="muted">Calling the gateway sealer wrapper. No chain write is happening.</p>`;
+
+      try {
+        const response = await fetch(gatewayUrl("/sandbox/compute"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `Compute failed: ${response.status}`);
+        lastComputedSeal = data.computedSeal;
+        lastComputedAssetId = body.assetId;
+        result.innerHTML = `
+          <div class="badge ${data.verdict === "Valid" ? "badge-verified" : "badge-rejected"}">Local verdict: ${escapeHtml(data.verdict)}</div>
+          <p><strong>Computed seal:</strong> <span class="mono">${escapeHtml(data.computedSeal)}</span></p>
+          <p><strong>Reference seal:</strong> <span class="mono">${escapeHtml(data.referenceSeal || "No reference returned by gateway")}</span></p>
+          <p class="honesty-note">This is a local sandbox comparison. The on-chain verdict remains whatever <code>/verdict/${escapeHtml(body.assetId)}</code> returns.</p>
+        `;
+      } catch (error) {
+        lastComputedSeal = null;
+        result.innerHTML = `<span class="badge badge-offline">Compute unavailable</span><p>${escapeHtml(error.message)}</p>`;
+      }
+    }
 
     async function anchorOnChain() {
-      const assetId = document.getElementById('sandbox-asset').value;
-      // Use a simple seal for demo
-      const seal = document.getElementById('sandbox-result')?.textContent?.match(/[a-f0-9]{64}/)?.[0] || "a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00";
-      const res = await fetch(`${GATEWAY}/sandbox/anchor`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({assetId, seal}) });
-      const data = await res.json();
-      alert(`Anchored! Tx: ${data.txHash}\nVerdict: ${data.verdict}\nCheck cspr.live`);
-      loadProof();
+      const result = document.getElementById("sandbox-result");
+      const assetId = document.getElementById("sandbox-asset").value;
+      const seal = lastComputedAssetId === assetId ? lastComputedSeal : null;
+
+      if (!seal) {
+        result.innerHTML = `<span class="badge badge-available">Compute first</span><p>Compute a seal for ${escapeHtml(assetId)} before requesting a controlled anchor.</p>`;
+        return;
+      }
+
+      result.innerHTML = `<span class="badge badge-loading">Submitting controlled anchor</span><p class="muted">The gateway may reject this unless the SANDBOX flag and demo key are enabled.</p>`;
+      try {
+        const response = await fetch(gatewayUrl("/sandbox/anchor"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ assetId, seal })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `Anchor failed: ${response.status}`);
+        const txUrl = data.explorerUrl || `https://testnet.cspr.live/transaction/${data.txHash}`;
+        result.innerHTML = `
+          <span class="badge ${data.verdict === "Valid" ? "badge-verified" : "badge-rejected"}">Anchored: ${escapeHtml(data.verdict)}</span>
+          <p><strong>Transaction:</strong> <a href="${escapeHtml(txUrl)}" target="_blank" rel="noreferrer"><span class="mono">${escapeHtml(data.txHash)}</span></a></p>
+          <p class="honesty-note">This result came back from the gateway write path. Refresh /proof and the marketplace to read the updated state.</p>
+        `;
+        await Promise.all([loadProof(), loadMarketplace()]);
+      } catch (error) {
+        result.innerHTML = `<span class="badge badge-available">Anchor not submitted</span><p>${escapeHtml(error.message)}</p><p class="honesty-note">No on-chain write is claimed when the gateway blocks or fails the request.</p>`;
+      }
     }
 
     async function loadProof() {
+      const recent = document.getElementById("proof-recent");
+      recent.innerHTML = `<div class="event"><span class="badge badge-loading">Loading /proof</span></div>`;
       try {
-        const res = await fetch(`${GATEWAY}/proof`);
-        const data = await res.json();
-        document.getElementById('accepted').textContent = data.accepted ?? '?';
-        document.getElementById('rejected').textContent = data.rejected ?? '?';
-        document.getElementById('proof-recent').innerHTML = `
-          Package: <span class="mono">${data.packageHash}</span><br>
-          <small>Live counters from ProofOfOrigin on Casper Testnet. Recent events visible on explorer.</small>
-        `;
-      } catch(e) {
-        document.getElementById('accepted').textContent = '—';
-        document.getElementById('rejected').textContent = '—';
+        const response = await fetch(gatewayUrl("/proof"));
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `Proof request failed: ${response.status}`);
+        document.getElementById("accepted").textContent = data.accepted ?? "—";
+        document.getElementById("rejected").textContent = data.rejected ?? "—";
+        document.getElementById("package-hash").textContent = data.packageHash || PACKAGE_HASH;
+        const events = data.recentAttestations || [];
+        recent.innerHTML = events.length
+          ? events.map(renderProofEvent).join("")
+          : `<div class="event"><p class="muted">No recent events returned by the gateway.</p></div>`;
+      } catch (error) {
+        document.getElementById("accepted").textContent = "—";
+        document.getElementById("rejected").textContent = "—";
+        recent.innerHTML = `<div class="event"><span class="badge badge-offline">Proof unavailable</span><p>${escapeHtml(error.message)}</p><p class="honesty-note">No counters or events are displayed unless the gateway returns them.</p></div>`;
       }
     }
 
-    let fraudRevealed = false;
-    function playSpotFraud(choice) {
-      const result = document.getElementById('fraud-result');
-      if (choice === 1) {
-        result.innerHTML = `✅ Correct. Seal B is tampered. On-chain verdict would be <span style="color:var(--red)">Invalid</span>.`;
-        result.style.color = 'var(--green)';
-      } else {
-        result.innerHTML = `❌ Seal A is the genuine one. Tampering by 1 gram flips the verdict on-chain.`;
-        result.style.color = 'var(--red)';
-      }
-      setTimeout(() => { result.innerHTML += '<br><small>This is exactly how Lastro works in production.</small>'; }, 800);
+    function renderProofEvent(event) {
+      const txLink = event.tx
+        ? `<a href="https://testnet.cspr.live/transaction/${escapeHtml(event.tx)}" target="_blank" rel="noreferrer"><span class="mono">${escapeHtml(truncate(event.tx, 16, 10))}</span></a>`
+        : `<span class="muted">Transaction hash unavailable from this event payload</span>`;
+      const status = event.verdict === "Valid" ? "Verified" : "Rejected";
+      return `
+        <div class="event">
+          <span class="badge ${badgeClass(status)}">${escapeHtml(event.verdict)}</span>
+          <strong>${escapeHtml(event.assetId)}</strong><br>
+          ${txLink}
+        </div>
+      `;
     }
 
-    // Boot
-    window.onload = () => {
-      loadMarketplace();
-      loadProof();
-      // Auto load one sandbox example
-      setTimeout(() => {
-        const el = document.getElementById('sandbox-result');
-        if (el) el.innerHTML = '<small>Try the Compute button above — then tamper the mass by 1 gram.</small>';
-      }, 800);
-    };
+    window.addEventListener("DOMContentLoaded", async () => {
+      await Promise.allSettled([loadMarketplace(), loadProof()]);
+    });
   </script>
 </body>
 </html>
