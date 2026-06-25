@@ -60,7 +60,7 @@ def lint_svg_copy() -> None:
 
 
 def lint_tokens() -> None:
-    tok = ROOT / "tokens" / "lastro-ads.tokens.json"
+    tok = ROOT / "tokens" / "lastro.tokens.json"
     try:
         data = json.loads(tok.read_text())
     except (OSError, json.JSONDecodeError) as exc:
@@ -91,24 +91,30 @@ def contrast(fg: str, bg: str) -> float:
 
 
 def lint_contrast() -> None:
-    bg = "#070A0D"
-    # (name, hex, min ratio). Body text wants AA 4.5; accents/large >=3.
+    # (label, fg, bg, min ratio). Body text wants AA 4.5; accents/large >=3.
+    dark_bg = "#121407"   # olive-950
+    light_bg = "#E7E6D0"  # cream-200
     pairs = [
-        ("paper", "#F8F4EA", 4.5),
-        ("neutral-300", "#A8B3C1", 4.5),
-        ("provenance-400", "#2FD394", 3.0),
-        ("seal-400", "#E9B949", 3.0),
-        ("signal-400", "#FF6B5E", 3.0),
-        ("sky-300", "#7DD3FC", 3.0),
+        ("text.primary (cream-200)", "#E7E6D0", dark_bg, 4.5),
+        ("text.secondary (sage-300)", "#C5C7B0", dark_bg, 4.5),
+        ("seal-400", "#FEF16F", dark_bg, 3.0),
+        ("valid-400", "#9AB84A", dark_bg, 3.0),
+        ("invalid-400", "#D9603F", dark_bg, 3.0),
+        ("text.primary (olive-950)", "#121407", light_bg, 4.5),
+        ("text.secondary (olive-700)", "#30331E", light_bg, 4.5),
+        ("seal-text (seal-800)", "#6F6410", light_bg, 3.0),
+        ("valid-600", "#577322", light_bg, 3.0),
+        ("invalid-600", "#9E3A22", light_bg, 3.0),
     ]
-    for name, hex_c, minimum in pairs:
-        ratio = contrast(hex_c, bg)
+    for name, fg, bg, minimum in pairs:
+        ratio = contrast(fg, bg)
+        on = "olive-950" if bg == dark_bg else "cream-200"
         status = "ok " if ratio >= minimum else "LOW"
-        line = f"    {status} {name} on obsidian-950: {ratio:.2f}:1 (min {minimum})"
+        line = f"    {status} {name} on {on}: {ratio:.2f}:1 (min {minimum})"
         if ratio >= minimum:
             print(line)
         else:
-            failures.append(f"[contrast] {name}: {ratio:.2f}:1 < {minimum}:1")
+            failures.append(f"[contrast] {name} on {on}: {ratio:.2f}:1 < {minimum}:1")
 
 
 def main() -> int:

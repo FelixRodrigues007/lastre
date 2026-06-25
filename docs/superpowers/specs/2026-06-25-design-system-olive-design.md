@@ -67,11 +67,11 @@ Outputs:
 
 ### seal (brand accent — yellow)
 ```
-300 #fff39a   400 #fef16f   500 #f2df3e   600 #cdb820   700 #9c8c12
+300 #fff39a   400 #fef16f   500 #f2df3e   600 #cdb820   700 #9c8c12   800 #6f6410
 ```
-`seal-600/700` exist for legible accent **text** on light surfaces (raw `#fef16f`
-fails contrast on cream). On both themes, the seal *button* is a yellow fill with
-olive-950 text.
+`seal-800` is the legible accent **text** tone on light surfaces (raw `#fef16f`
+and even `seal-700` fail AA on cream). On both themes, the seal *button* is a
+yellow fill with olive-950 text.
 
 ### Functional (outside the brand palette, olive-harmonized) — Valid/Invalid/error only
 ```
@@ -93,9 +93,9 @@ states (`Valid`, `Invalid`, destructive). Never decorative.
 | `text.secondary` | sage-300 | olive-700 |
 | `text.muted` | olive-400 | olive-500 |
 | `text.inverse` | olive-950 | cream-50 |
-| `brand.seal` | seal-400 | seal-600 (text) / seal-400 (fill) |
-| `status.valid` | valid-400 | valid-500 |
-| `status.invalid` | invalid-400 | invalid-500 |
+| `brand.seal` | seal-400 | seal-800 (text) / seal-400 (fill) |
+| `status.valid` | valid-400 | valid-600 |
+| `status.invalid` | invalid-400 | invalid-600 |
 | `border.subtle` | cream alpha 0.12 | olive alpha 0.12 |
 | `border.strong` | cream alpha 0.28 | olive alpha 0.24 |
 

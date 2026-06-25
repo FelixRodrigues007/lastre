@@ -1,0 +1,111 @@
+{
+  "$schema": "https://tokens.studio/schemas/tokens.json",
+  "meta": {
+    "name": "Lastro Design Tokens",
+    "version": "0.2.0",
+    "status": "candidate",
+    "description": "Single source of truth for Lastro brand, advertising, and product UI. Near-monochromatic olive palette + single seal accent, light & dark themes. All examples must use fictional data and avoid investment/yield language."
+  },
+  "primitive": {
+    "color": {
+      "olive": {
+        "950": { "value": "#121407" },
+        "900": { "value": "#181b0c" },
+        "850": { "value": "#1f2211" },
+        "800": { "value": "#262916" },
+        "700": { "value": "#30331e" },
+        "600": { "value": "#3f4329" },
+        "500": { "value": "#545736" },
+        "400": { "value": "#6e7249" },
+        "300": { "value": "#8c9063" }
+      },
+      "sage": {
+        "400": { "value": "#b3b59c" },
+        "300": { "value": "#c5c7b0" },
+        "200": { "value": "#d3d4c1" }
+      },
+      "cream": {
+        "50": { "value": "#f4f3e6" },
+        "100": { "value": "#efeede" },
+        "200": { "value": "#e7e6d0" },
+        "300": { "value": "#dadbc2" }
+      },
+      "seal": {
+        "300": { "value": "#fff39a" },
+        "400": { "value": "#fef16f" },
+        "500": { "value": "#f2df3e" },
+        "600": { "value": "#cdb820" },
+        "700": { "value": "#9c8c12" },
+        "800": { "value": "#6f6410" }
+      },
+      "valid": {
+        "400": { "value": "#9ab84a" },
+        "500": { "value": "#6f8f2e" },
+        "600": { "value": "#577322" }
+      },
+      "invalid": {
+        "400": { "value": "#d9603f" },
+        "500": { "value": "#c34a2c" },
+        "600": { "value": "#9e3a22" }
+      }
+    },
+    "font": {
+      "family": {
+        "display": { "value": "Space Grotesk, Inter, system-ui, sans-serif" },
+        "body": { "value": "Inter, ui-sans-serif, system-ui, sans-serif" },
+        "mono": { "value": "JetBrains Mono, IBM Plex Mono, ui-monospace, monospace" }
+      },
+      "weight": { "regular": { "value": "400" }, "medium": { "value": "500" }, "semibold": { "value": "600" }, "bold": { "value": "700" } },
+      "size": {
+        "caption": { "value": "14" },
+        "body": { "value": "20" },
+        "eyebrow": { "value": "18" },
+        "headline-sm": { "value": "44" },
+        "headline-md": { "value": "64" },
+        "headline-lg": { "value": "92" },
+        "display": { "value": "124" }
+      },
+      "lineHeight": { "tight": { "value": "0.94" }, "headline": { "value": "1.02" }, "body": { "value": "1.42" }, "caption": { "value": "1.25" } }
+    },
+    "space": { "1": { "value": "4" }, "2": { "value": "8" }, "3": { "value": "12" }, "4": { "value": "16" }, "6": { "value": "24" }, "8": { "value": "32" }, "10": { "value": "40" }, "12": { "value": "48" }, "16": { "value": "64" }, "20": { "value": "80" } },
+    "radius": { "sm": { "value": "8" }, "md": { "value": "16" }, "lg": { "value": "28" }, "pill": { "value": "999" } },
+    "stroke": { "hairline": { "value": "1" }, "rule": { "value": "2" }, "signal": { "value": "4" } }
+  },
+  "semantic": {
+    "color": {
+      "dark": {
+        "background": { "primary": { "value": "{primitive.color.olive.950}" }, "panel": { "value": "{primitive.color.olive.900}" }, "elevated": { "value": "{primitive.color.olive.800}" }, "inverse": { "value": "{primitive.color.cream.200}" } },
+        "text": { "primary": { "value": "{primitive.color.cream.200}" }, "secondary": { "value": "{primitive.color.sage.300}" }, "muted": { "value": "{primitive.color.olive.400}" }, "inverse": { "value": "{primitive.color.olive.950}" } },
+        "brand": { "seal": { "value": "{primitive.color.seal.400}" }, "sealText": { "value": "{primitive.color.seal.400}" } },
+        "status": { "valid": { "value": "{primitive.color.valid.400}" }, "invalid": { "value": "{primitive.color.invalid.400}" } },
+        "border": { "subtle": { "value": "rgba(231, 230, 208, 0.12)" }, "strong": { "value": "rgba(231, 230, 208, 0.28)" } }
+      },
+      "light": {
+        "background": { "primary": { "value": "{primitive.color.cream.200}" }, "panel": { "value": "{primitive.color.cream.100}" }, "elevated": { "value": "{primitive.color.cream.50}" }, "inverse": { "value": "{primitive.color.olive.950}" } },
+        "text": { "primary": { "value": "{primitive.color.olive.950}" }, "secondary": { "value": "{primitive.color.olive.700}" }, "muted": { "value": "{primitive.color.olive.500}" }, "inverse": { "value": "{primitive.color.cream.50}" } },
+        "brand": { "seal": { "value": "{primitive.color.seal.400}" }, "sealText": { "value": "{primitive.color.seal.800}" } },
+        "status": { "valid": { "value": "{primitive.color.valid.600}" }, "invalid": { "value": "{primitive.color.invalid.600}" } },
+        "border": { "subtle": { "value": "rgba(18, 20, 7, 0.12)" }, "strong": { "value": "rgba(18, 20, 7, 0.24)" } }
+      }
+    },
+    "copy": {
+      "tagline": { "value": "Proof before token" },
+      "thesis": { "value": "The chain of proof from land to token, verified offline and anchored on Casper." },
+      "guardrail": { "value": "Seal decides verdict. LLM decides action." }
+    }
+  },
+  "component": {
+    "button": {
+      "primary": { "background": { "value": "{primitive.color.seal.400}" }, "text": { "value": "{primitive.color.olive.950}" } },
+      "secondary": { "background": { "value": "transparent" }, "text": { "value": "{semantic.color.dark.text.primary}" }, "border": { "value": "{semantic.color.dark.border.strong}" } }
+    },
+    "badge": { "background": { "value": "rgba(254, 241, 111, 0.14)" }, "text": { "value": "{primitive.color.seal.400}" }, "border": { "value": "rgba(254, 241, 111, 0.30)" } },
+    "proofRail": { "valid": { "value": "{primitive.color.valid.400}" }, "invalid": { "value": "{primitive.color.invalid.400}" }, "seal": { "value": "{primitive.color.seal.400}" } },
+    "adCard": {
+      "backgroundDark": { "value": "linear-gradient(135deg, #121407 0%, #262916 58%, #30331e 100%)" },
+      "backgroundLight": { "value": "#e7e6d0" },
+      "border": { "value": "{semantic.color.dark.border.subtle}" },
+      "radius": { "value": "{primitive.radius.lg}" }
+    }
+  }
+}
