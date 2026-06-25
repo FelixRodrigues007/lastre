@@ -11,10 +11,10 @@ import {
 import type { VerificationGateway, VerificationResult } from "./types.js";
 
 /**
- * Gateway local de verificação paga.
+ * Local paid-verification gateway.
  *
- * Ele simula o fluxo x402 usando MockFacilitator e, depois do pagamento,
- * decide o veredito exclusivamente comparando seal recomputado com referenceSeal.
+ * It simulates the x402 flow with MockFacilitator and, after payment, decides
+ * the verdict exclusively by comparing the recomputed seal with referenceSeal.
  */
 export class LocalGateway implements VerificationGateway {
   private readonly referenceSeals = new Map<string, string>();
@@ -62,7 +62,7 @@ export class LocalGateway implements VerificationGateway {
     };
   }
 
-  /** Ajuda os testes a provar que skip/escalate não pagam. */
+  /** Helps tests prove that skip/escalate decisions do not pay. */
   paymentCount(): number {
     return this.payments;
   }

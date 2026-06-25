@@ -1,0 +1,41 @@
+<svg width="1280" height="360" viewBox="0 0 1280 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lastro — Proof before token. Provenance verified offline, anchored on Casper.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c2140"/>
+      <stop offset="0.55" stop-color="#0b1f3a"/>
+      <stop offset="1" stop-color="#081628"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#d4af37" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#d4af37" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8c876"/>
+      <stop offset="1" stop-color="#caa12f"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="360" rx="16" fill="url(#bg)"/>
+  <rect x="8" y="8" width="1264" height="344" rx="12" fill="none" stroke="#d4af37" stroke-opacity="0.22" stroke-width="1.5"/>
+
+  <text x="40" y="343" font-family="'SF Mono','Menlo','Consolas',monospace" font-size="15" letter-spacing="2" fill="#d4af37" fill-opacity="0.07">a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00&#160;&#160;·&#160;&#160;SHA-256 SEAL&#160;&#160;·&#160;&#160;VERDICT DECIDED ON-CHAIN&#160;&#160;·&#160;&#160;casper-test</text>
+
+  <g>
+    <circle cx="190" cy="180" r="118" fill="url(#glow)"/>
+    <circle cx="190" cy="180" r="104" fill="none" stroke="#d4af37" stroke-opacity="0.45" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+    <polygon points="190,88 269.7,134 269.7,226 190,272 110.3,226 110.3,134"
+             fill="#d4af37" fill-opacity="0.06" stroke="url(#gold)" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="190,108 252.4,144 252.4,216 190,252 127.6,216 127.6,144"
+             fill="none" stroke="#d4af37" stroke-opacity="0.30" stroke-width="1.2" stroke-linejoin="round"/>
+    <rect x="167" y="117" width="46" height="70" rx="23" fill="none" stroke="url(#gold)" stroke-width="5"/>
+    <rect x="167" y="173" width="46" height="70" rx="23" fill="none" stroke="url(#gold)" stroke-width="5"/>
+  </g>
+
+  <rect x="332" y="92" width="1.5" height="176" fill="#d4af37" fill-opacity="0.20"/>
+
+  <text x="372" y="120" font-family="'SF Mono','Menlo','Consolas',monospace" font-size="17" letter-spacing="4.5" fill="#d4af37">LIVE ON CASPER TESTNET&#160;&#160;·&#160;&#160;PROOF-OF-PROVENANCE PROTOCOL</text>
+  <text x="369" y="206" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="104" letter-spacing="6" fill="#f4f2ec">LASTRO</text>
+  <rect x="372" y="226" width="186" height="4" rx="2" fill="url(#gold)"/>
+  <text x="374" y="270" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="600" font-size="29" fill="#e7ecf2">Proof before token.</text>
+  <text x="374" y="304" font-family="'Helvetica Neue',Arial,sans-serif" font-weight="400" font-size="21" fill="#9bb0c8">The chain of proof from land to token — verified offline, anchored on Casper.</text>
+</svg>

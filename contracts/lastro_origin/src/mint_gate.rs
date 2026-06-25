@@ -1,71 +1,72 @@
+// SPDX-License-Identifier: Apache-2.0
 use crate::proof_of_origin::{Attestation, ProofOfOriginContractRef, Verdict};
 use odra::prelude::*;
 use odra::ContractRef;
 
-/// Erros de negócio do MintGate.
+/// Business errors for MintGate.
 ///
-/// `#[odra::odra_error]` gera a conversão para `OdraError`, permitindo reverts
-/// com nomes legíveis nos testes do OdraVM.
+/// `#[odra::odra_error]` generates the conversion into `OdraError`, allowing
+/// readable revert names in OdraVM tests.
 #[odra::odra_error]
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum MintGateError {
-    /// Apenas o owner pode executar a ação.
+    /// Only the owner may execute the action.
     NotOwner,
-    /// Não existe prova válida no ProofOfOrigin para o lote informado.
+    /// No valid ProofOfOrigin proof exists for the requested lot.
     NoValidProof,
-    /// O lote já foi tokenizado/registrado neste gate.
+    /// The lot has already been tokenized/registered in this gate.
     AlreadyMinted,
 }
 
-/// Evento emitido quando um lote passa pelo gate e é marcado como tokenizado.
+/// Event emitted when a lot passes the gate and is marked as tokenized.
 #[odra::event]
 pub struct LotMinted {
     pub asset_id: String,
     pub minter: Address,
 }
 
-/// Gate on-chain que consome a prova do `ProofOfOrigin`.
+/// On-chain gate that consumes the `ProofOfOrigin` proof.
 ///
-/// Ele não cria um token real ainda; neste bloco, a "mintagem" é simbólica:
-/// registrar que um `asset_id` já passou pelo gate após prova válida.
+/// It does not create a real token yet; in this block, "minting" is symbolic:
+/// it records that an `asset_id` passed the gate after valid proof.
 #[odra::module(events = [LotMinted], errors = MintGateError)]
 pub struct MintGate {
-    /// Dono/admin do gate, definido no `init` como o caller do deploy.
+    /// Gate owner/admin, set in `init` to the deploy caller.
     owner: Var<Address>,
-    /// Endereço do contrato ProofOfOrigin consultado por este gate.
+    /// Address of the ProofOfOrigin contract queried by this gate.
     proof_contract: Var<Address>,
-    /// Controle anti-duplicidade: asset_id -> já tokenizado?
+    /// Anti-duplication control: asset_id -> already tokenized?
     minted: Mapping<String, bool>,
-    /// Total de lotes tokenizados/registrados pelo gate.
+    /// Total lots tokenized/registered by the gate.
     mint_count: Var<u32>,
 }
 
 #[odra::module]
 impl MintGate {
-    /// Construtor Odra.
+    /// Odra constructor.
     ///
-    /// Salva o owner inicial, o endereço do `ProofOfOrigin` e zera o contador.
+    /// Stores the initial owner and `ProofOfOrigin` address, then resets the counter.
     pub fn init(&mut self, proof_contract: Address) {
         self.owner.set(self.env().caller());
         self.proof_contract.set(proof_contract);
         self.mint_count.set(0);
     }
 
-    /// Atualiza o contrato `ProofOfOrigin` consultado por este gate.
+    /// Updates the `ProofOfOrigin` contract queried by this gate.
     ///
-    /// Apenas o owner pode trocar essa dependência.
+    /// Only the owner may change this dependency.
     pub fn set_proof_contract(&mut self, proof_contract: Address) {
         self.ensure_owner();
         self.proof_contract.set(proof_contract);
     }
 
-    /// Tokeniza/registra simbolicamente um lote, somente se houver prova válida.
+    /// Symbolically tokenizes/registers a lot only when valid proof exists.
     ///
-    /// Fluxo:
-    /// 1. bloqueia dupla mintagem (`AlreadyMinted`);
-    /// 2. consulta `ProofOfOrigin.get_attestation(asset_id)` por cross-contract call;
-    /// 3. exige `Some(attestation)` com `verdict == Verdict::Valid`;
-    /// 4. grava `minted`, incrementa contador e emite evento.
+    /// Flow:
+    /// 1. blocks double minting (`AlreadyMinted`);
+    /// 2. queries `ProofOfOrigin.get_attestation(asset_id)` by cross-contract call;
+    /// 3. requires `Some(attestation)` with `verdict == Verdict::Valid`;
+    /// 4. writes `minted`, increments the counter, and emits an event.
     pub fn mint_lot(&mut self, asset_id: String) {
         if self.is_minted(asset_id.clone()) {
             self.env().revert(MintGateError::AlreadyMinted);
@@ -86,39 +87,39 @@ impl MintGate {
         }
     }
 
-    /// Retorna `true` se o lote já foi tokenizado/registrado neste gate.
+    /// Returns `true` if the lot has already been tokenized/registered in this gate.
     pub fn is_minted(&self, asset_id: String) -> bool {
         self.minted.get_or_default(&asset_id)
     }
 
-    /// Total de lotes tokenizados/registrados pelo gate.
+    /// Total lots tokenized/registered by the gate.
     pub fn mint_count(&self) -> u32 {
         self.mint_count.get_or_default()
     }
 
-    /// Owner/admin definido no deploy.
+    /// Owner/admin set at deploy time.
     pub fn get_owner(&self) -> Address {
         self.owner.get().unwrap_or_revert(self)
     }
 
-    /// Endereço atual do contrato `ProofOfOrigin` usado nas consultas.
+    /// Current `ProofOfOrigin` contract address used for queries.
     pub fn get_proof_contract(&self) -> Address {
         self.proof_contract.get().unwrap_or_revert(self)
     }
 
-    /// Helper interno para manter a regra de owner em um só lugar.
+    /// Internal helper that keeps the owner rule in one place.
     fn ensure_owner(&self) {
         if self.env().caller() != self.get_owner() {
             self.env().revert(MintGateError::NotOwner);
         }
     }
 
-    /// Consulta o `ProofOfOrigin` configurado usando o `ContractRef` gerado pelo Odra.
+    /// Queries the configured `ProofOfOrigin` using the `ContractRef` generated by Odra.
     ///
-    /// O macro `#[odra::module]` do contrato `ProofOfOrigin` gera
-    /// `ProofOfOriginContractRef`. No Odra 2.8, esse ref é criado com
-    /// `ProofOfOriginContractRef::new(env, address)`, onde `env` é o ambiente do
-    /// contrato chamador (`self.env()`) e `address` é o endereço salvo em storage.
+    /// The `#[odra::module]` macro on `ProofOfOrigin` generates
+    /// `ProofOfOriginContractRef`. In Odra 2.8, that ref is created with
+    /// `ProofOfOriginContractRef::new(env, address)`, where `env` is the caller
+    /// contract environment (`self.env()`) and `address` is the address saved in storage.
     fn get_origin_attestation(&self, asset_id: String) -> Option<Attestation> {
         let proof = ProofOfOriginContractRef::new(self.env(), self.get_proof_contract());
         proof.get_attestation(asset_id)
@@ -148,10 +149,10 @@ mod tests {
         String::from("fffec9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff11")
     }
 
-    /// Deploy padrão dos dois contratos.
+    /// Default deployment for both contracts.
     ///
-    /// O `MintGate` recebe o endereço do `ProofOfOrigin` no init, exatamente como
-    /// aconteceria on-chain.
+    /// `MintGate` receives the `ProofOfOrigin` address in init, exactly as it
+    /// would on-chain.
     fn deploy_contracts() -> (
         odra::host::HostEnv,
         crate::proof_of_origin::ProofOfOriginHostRef,

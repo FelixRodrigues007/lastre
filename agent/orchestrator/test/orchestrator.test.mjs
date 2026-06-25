@@ -22,7 +22,7 @@ function createHarness() {
   return { agent, gateway, originChain, artifacts };
 }
 
-test("LOTE válido paga, verifica Valid, atesta accepted e fica tokenizable", async () => {
+test("valid lot pays, verifies Valid, attests accepted, and becomes tokenizable", async () => {
   const { agent, originChain, artifacts } = createHarness();
 
   const record = await agent.processLot(artifacts.valid);
@@ -35,7 +35,7 @@ test("LOTE válido paga, verifica Valid, atesta accepted e fica tokenizable", as
   equal(record.outcome, "tokenizable");
 });
 
-test("LOTE adulterado ainda pode pagar, mas o selo gera verdict Invalid e outcome rejected", async () => {
+test("tampered lot can still pay, but the seal yields Invalid and rejected outcome", async () => {
   const { agent, originChain, artifacts } = createHarness();
 
   const record = await agent.processLot(artifacts.tampered);
@@ -48,7 +48,7 @@ test("LOTE adulterado ainda pode pagar, mas o selo gera verdict Invalid e outcom
   equal(record.outcome, "rejected");
 });
 
-test("LOTE duplicado é skip, sem novo pagamento e sem nova atestação", async () => {
+test("duplicate lot is skipped with no new payment or attestation", async () => {
   const { agent, gateway, originChain, artifacts } = createHarness();
   await agent.processLot(artifacts.valid);
   const acceptedBefore = originChain.acceptedCount();
@@ -66,7 +66,7 @@ test("LOTE duplicado é skip, sem novo pagamento e sem nova atestação", async 
   equal(gateway.paymentCount(), paymentsBefore);
 });
 
-test("LOTE fora do perímetro é escalate, sem pagamento e sem atestação", async () => {
+test("out-of-perimeter lot escalates with no payment or attestation", async () => {
   const { agent, gateway, originChain, artifacts } = createHarness();
 
   const record = await agent.processLot(artifacts.outOfRegion);
@@ -80,7 +80,7 @@ test("LOTE fora do perímetro é escalate, sem pagamento e sem atestação", asy
   equal(gateway.paymentCount(), 0);
 });
 
-test("CRÍTICO: decisão pay não decide o veredito; lote adulterado pago continua Invalid pelo selo", async () => {
+test("CRITICAL: pay decision does not decide verdict; paid tampered lot remains Invalid by seal", async () => {
   const { agent, artifacts } = createHarness();
 
   const record = await agent.processLot(artifacts.tampered);
@@ -91,7 +91,7 @@ test("CRÍTICO: decisão pay não decide o veredito; lote adulterado pago contin
   equal(record.outcome, "rejected");
 });
 
-test("todo registro do log de batch tem reasoning não-vazia", async () => {
+test("every batch log record has non-empty reasoning", async () => {
   const { agent, artifacts } = createHarness();
 
   const result = await agent.processBatch([

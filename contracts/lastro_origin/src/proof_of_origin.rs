@@ -1,19 +1,20 @@
+// SPDX-License-Identifier: Apache-2.0
 use odra::prelude::*;
 
-/// Resultado de uma atestação de origem.
+/// Result of an origin attestation.
 ///
-/// `#[odra::odra_type]` gera a serialização necessária para guardar e retornar
-/// este enum em storage/entry points do Odra.
+/// `#[odra::odra_type]` generates the serialization required to store and
+/// return this enum through Odra storage/entry points.
 #[odra::odra_type]
 pub enum Verdict {
     Valid,
     Invalid,
 }
 
-/// Última atestação registrada para um ativo.
+/// Latest attestation recorded for an asset.
 ///
-/// Os campos são `pub` para os testes e consumidores conseguirem ler o retorno
-/// de `get_attestation` diretamente.
+/// Fields are `pub` so tests and consumers can read the `get_attestation`
+/// return value directly.
 #[odra::odra_type]
 pub struct Attestation {
     pub asset_id: String,
@@ -22,9 +23,9 @@ pub struct Attestation {
     pub attester: Address,
 }
 
-/// Erros de negócio do contrato.
+/// Business errors for the contract.
 ///
-/// `#[odra::odra_error]` converte cada variante em um erro Odra revertível.
+/// `#[odra::odra_error]` converts each variant into a revertible Odra error.
 #[odra::odra_error]
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum ProofOfOriginError {
@@ -32,7 +33,7 @@ pub enum ProofOfOriginError {
     UnknownAsset,
 }
 
-/// Evento emitido sempre que uma atestação é gravada on-chain.
+/// Event emitted whenever an attestation is written on-chain.
 #[odra::event]
 pub struct OriginAttested {
     pub asset_id: String,
@@ -40,48 +41,48 @@ pub struct OriginAttested {
     pub attester: Address,
 }
 
-/// Contrato de prova de origem.
+/// Proof-of-origin contract.
 ///
-/// `events` e `errors` informam ao Odra quais eventos e erros fazem parte do
-/// schema público do contrato.
+/// `events` and `errors` tell Odra which events and errors are part of the
+/// contract's public schema.
 #[odra::module(events = [OriginAttested], errors = ProofOfOriginError)]
 pub struct ProofOfOrigin {
-    /// Dono do contrato, definido no `init` como o caller do deploy.
+    /// Contract owner, set in `init` to the deploy caller.
     owner: Var<Address>,
-    /// Selo SHA-256 esperado por ativo: asset_id -> reference_seal.
+    /// Expected SHA-256 seal by asset: asset_id -> reference_seal.
     references: Mapping<String, String>,
-    /// Última atestação registrada por ativo: asset_id -> Attestation.
+    /// Latest attestation recorded by asset: asset_id -> Attestation.
     attestations: Mapping<String, Attestation>,
-    /// Total de atestações aceitas.
+    /// Total accepted attestations.
     accepted: Var<u32>,
-    /// Total de atestações rejeitadas.
+    /// Total rejected attestations.
     rejected: Var<u32>,
 }
 
 #[odra::module]
 impl ProofOfOrigin {
-    /// Construtor Odra.
+    /// Odra constructor.
     ///
-    /// O primeiro caller vira owner, e os contadores começam zerados.
+    /// The first caller becomes the owner, and counters start at zero.
     pub fn init(&mut self) {
         self.owner.set(self.env().caller());
         self.accepted.set(0);
         self.rejected.set(0);
     }
 
-    /// Registra ou substitui o selo de referência de um ativo.
+    /// Registers or replaces an asset reference seal.
     ///
-    /// Apenas o owner pode chamar. Se outro endereço tentar, o contrato reverte
-    /// com `ProofOfOriginError::NotOwner`.
+    /// Only the owner may call this. If another address tries, the contract
+    /// reverts with `ProofOfOriginError::NotOwner`.
     pub fn register_reference(&mut self, asset_id: String, reference_seal: String) {
         self.ensure_owner();
         self.references.set(&asset_id, reference_seal);
     }
 
-    /// Atesta um ativo comparando o selo fornecido com o selo de referência.
+    /// Attests an asset by comparing the provided seal with the reference seal.
     ///
-    /// Importante: tanto o resultado `Valid` quanto `Invalid` são gravados
-    /// on-chain. Uma rejeição também é uma prova permanente.
+    /// Important: both `Valid` and `Invalid` results are written on-chain. A
+    /// rejection is also permanent proof.
     pub fn attest(&mut self, asset_id: String, provided_seal: String) -> Verdict {
         let reference_seal = self
             .references
@@ -114,32 +115,32 @@ impl ProofOfOrigin {
         verdict
     }
 
-    /// Retorna a última atestação de um ativo, se existir.
+    /// Returns the latest attestation for an asset, if any.
     pub fn get_attestation(&self, asset_id: String) -> Option<Attestation> {
         self.attestations.get(&asset_id)
     }
 
-    /// Retorna o selo de referência de um ativo, se ele já foi registrado.
+    /// Returns an asset reference seal, if it has been registered.
     pub fn get_reference(&self, asset_id: String) -> Option<String> {
         self.references.get(&asset_id)
     }
 
-    /// Total de atestações aceitas.
+    /// Total accepted attestations.
     pub fn accepted_count(&self) -> u32 {
         self.accepted.get_or_default()
     }
 
-    /// Total de atestações rejeitadas.
+    /// Total rejected attestations.
     pub fn rejected_count(&self) -> u32 {
         self.rejected.get_or_default()
     }
 
-    /// Endereço do owner definido no deploy.
+    /// Owner address set at deploy time.
     pub fn get_owner(&self) -> Address {
         self.owner.get().unwrap_or_revert(self)
     }
 
-    /// Helper interno para manter a regra de owner em um só lugar.
+    /// Internal helper that keeps the owner rule in one place.
     fn ensure_owner(&self) {
         if self.env().caller() != self.get_owner() {
             self.env().revert(ProofOfOriginError::NotOwner);
@@ -188,9 +189,9 @@ mod tests {
         assert_eq!(attestation.verdict, Verdict::Valid);
         assert_eq!(attestation.attester, attester);
 
-        // O evento OriginAttested deve ter sido emitido on-chain com veredito Valid.
-        // Conferir a emissão é essencial: sem isto, um bug que removesse o
-        // `emit_event` passaria despercebido (a "prova permanente" pedida sumiria).
+        // OriginAttested must be emitted on-chain with a Valid verdict. Checking
+        // the emission is essential: without it, a bug that removed `emit_event`
+        // would go unnoticed and the required "permanent proof" would disappear.
         assert!(env.emitted_event(
             &contract,
             OriginAttested {
@@ -224,8 +225,8 @@ mod tests {
         assert_eq!(attestation.verdict, Verdict::Invalid);
         assert_eq!(attestation.attester, attester);
 
-        // Mesmo na rejeição o evento OriginAttested precisa ser emitido on-chain:
-        // a rejeição também é prova permanente, não apenas um erro descartado.
+        // Even on rejection, OriginAttested must be emitted on-chain: rejection is
+        // also permanent proof, not just a discarded error.
         assert!(env.emitted_event(
             &contract,
             OriginAttested {

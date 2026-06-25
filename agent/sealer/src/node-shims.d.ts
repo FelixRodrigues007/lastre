@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BUSL-1.1
 // Minimal Node type declarations for this small offline demo.
 // This keeps the project dependency-free: no @types/node package is required.
 declare class Buffer extends Uint8Array {

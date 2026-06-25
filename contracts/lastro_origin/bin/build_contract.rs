@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 #![doc = "Binary for building wasm files from odra contracts."]
 #![no_std]
 #![cfg_attr(target_arch = "wasm32", no_main)]

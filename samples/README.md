@@ -1,3 +1,4 @@
-# Samples
+# Lastro Samples
 
-Somente samples fictícios. O Bloco 3 deve adicionar um documento válido e um adulterado para a "Mineradora Vale do Ouro" fictícia.
+Samples are fictional only. They are used to demonstrate one genuine provenance
+artifact and one tampered artifact for the fictional “Mineradora Vale do Ouro”.

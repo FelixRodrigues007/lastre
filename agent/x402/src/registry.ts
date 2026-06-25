@@ -1,19 +1,19 @@
 import { readFileSync } from "node:fs";
 import { computeSeal, type ProvenanceArtifact } from "../../sealer/dist/src/sealer.js";
 
-/** Artifact íntegro usado para popular o registry de referência local. */
+/** Genuine artifact used to populate the local reference registry. */
 const validArtifact = readArtifact("valid.json");
-/** Artifact adulterado vindo do sample do sealer. */
+/** Tampered artifact from the sealer sample. */
 const tamperedRaw = readArtifact("tampered.json");
 
 export const VALID_ASSET_ID = validArtifact.assetId;
 export const TAMPERED_ASSET_ID = `${VALID_ASSET_ID}-TAMPERED`;
 
 /**
- * Para testar a rejeição paga usando apenas GET /verify?assetId=..., expomos o
- * tampered.json sob um assetId de demo próprio. O reference seal desse assetId é
- * calculado a partir do valid.json com o mesmo assetId; a única diferença de
- * procedência relevante continua sendo o campo adulterado (`massGrams`).
+ * To test paid rejection with only GET /verify?assetId=..., we expose
+ * tampered.json under its own demo assetId. The reference seal for that assetId
+ * is computed from valid.json with the same assetId; the only relevant
+ * provenance difference remains the tampered field (`massGrams`).
  */
 const validReferenceForTamperedId: ProvenanceArtifact = {
   ...validArtifact,

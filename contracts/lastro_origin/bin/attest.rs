@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 //! Lastro — OriginChain agent: the real on-chain write path against the
 //! already-deployed `ProofOfOrigin` package on the Casper network.
 //!

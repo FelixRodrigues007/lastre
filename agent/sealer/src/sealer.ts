@@ -1,36 +1,37 @@
+// SPDX-License-Identifier: BUSL-1.1
 import { createHash } from "node:crypto";
 
 /**
- * Versão do formato do passaporte gerado pelo sealer.
+ * Version of the passport format produced by the sealer.
  *
- * Esta versão entra no Passport (metadados), mas o seal é calculado somente a
- * partir do ProvenanceArtifact recebido. Assim, a mesma captura sempre gera o
- * mesmo selo, sem estado externo.
+ * This version is included in the Passport metadata, but the seal is computed
+ * only from the provided ProvenanceArtifact. The same capture therefore always
+ * produces the same seal without external state.
  */
 export const PASSPORT_VERSION = "1.0.0" as const;
 export const SEAL_ALGO = "SHA-256" as const;
 
-/** Captura fictícia de procedência na origem do lote. */
+/** Fictional provenance capture at the lot origin. */
 export type ProvenanceArtifact = {
-  /** Identificador do ativo/lote usado também no contrato. */
+  /** Asset/lot identifier also used by the contract. */
   assetId: string;
-  /** Geolocalização e nome humano do ponto de origem. */
+  /** Geolocation and human-readable name of the origin point. */
   origin: {
     lat: number;
     lng: number;
     site: string;
   };
-  /** Hash do frame de câmera. No demo é simulado, mas preserva a arquitetura futura. */
+  /** Camera-frame hash. Simulated in the demo, but shaped for the future architecture. */
   frameHash: string;
-  /** Massa do lote em gramas. */
+  /** Lot mass in grams. */
   massGrams: number;
-  /** Timestamp da captura como dado de entrada; nunca é gerado automaticamente aqui. */
+  /** Capture timestamp as input data; it is never generated automatically here. */
   capturedAtISO: string;
-  /** Operador responsável pela captura na origem. */
+  /** Operator responsible for the capture at origin. */
   operator: string;
 };
 
-/** Passaporte offline que pode alimentar o contrato e um audit log. */
+/** Offline passport that can feed the contract and an audit log. */
 export type Passport = {
   artifact: ProvenanceArtifact;
   seal: string;
@@ -47,40 +48,40 @@ type CanonicalValue =
   | { [key: string]: CanonicalValue };
 
 /**
- * Hash de um frame bruto de câmera.
+ * Hashes a raw camera frame.
  *
- * Hoje os samples usam um buffer fictício; no futuro, a mesma função pode
- * receber bytes reais de uma câmera sem mudar a arquitetura do sealer.
+ * Today the samples use a fictional buffer; in the future, the same function
+ * can receive real camera bytes without changing the sealer architecture.
  */
 export function hashFrame(buffer: Buffer): string {
   return createHash("sha256").update(buffer).digest("hex");
 }
 
 /**
- * Produz uma string canônica determinística para o artefato.
+ * Produces a deterministic canonical string for the artifact.
  *
- * A função ordena as chaves de todos os objetos recursivamente antes de
- * serializar. Isso evita que a ordem das propriedades no JSON/objeto JavaScript
- * mude o hash final. Não há aleatoriedade, timestamp gerado em runtime, rede ou
- * dependência externa.
+ * The function sorts every object key recursively before serialization. This
+ * prevents JSON/JavaScript object property order from changing the final hash.
+ * There is no randomness, runtime-generated timestamp, network call, or
+ * external dependency.
  *
- * A ordenação usa comparação por unidade de código (UTF-16), e NÃO
- * `localeCompare`. Isso é proposital: `localeCompare` depende de locale/ICU do
- * ambiente e poderia ordenar chaves de forma diferente em outra máquina,
- * quebrando o determinismo ("o mesmo input produz SEMPRE o mesmo hash").
- * A ordenação por code unit é estável e independente de ambiente — a mesma
- * regra usada pelo JSON Canonicalization Scheme (RFC 8785).
+ * Sorting uses code-unit (UTF-16) comparison, NOT `localeCompare`. This is
+ * intentional: `localeCompare` depends on the environment's locale/ICU data and
+ * could order keys differently on another machine, breaking determinism ("the
+ * same input ALWAYS produces the same hash"). Code-unit ordering is stable and
+ * environment-independent — the same rule used by the JSON Canonicalization
+ * Scheme (RFC 8785).
  */
 export function canonicalize(artifact: ProvenanceArtifact): string {
   return canonicalizeValue(artifact as unknown as CanonicalValue);
 }
 
-/** Retorna o SHA-256 hexadecimal da representação canônica do artefato. */
+/** Returns the hexadecimal SHA-256 of the artifact's canonical representation. */
 export function computeSeal(artifact: ProvenanceArtifact): string {
   return createHash("sha256").update(canonicalize(artifact)).digest("hex");
 }
 
-/** Monta o passaporte do lote com o artefato original, selo, algoritmo e versão. */
+/** Builds the lot passport with the original artifact, seal, algorithm, and version. */
 export function buildPassport(artifact: ProvenanceArtifact): Passport {
   return {
     artifact,
@@ -90,7 +91,7 @@ export function buildPassport(artifact: ProvenanceArtifact): Passport {
   };
 }
 
-/** Recalcula o selo e compara com o valor esperado, espelhando a checagem on-chain. */
+/** Recomputes the seal and compares it with the expected value, mirroring the on-chain check. */
 export function verifySeal(artifact: ProvenanceArtifact, expectedSeal: string): boolean {
   return computeSeal(artifact) === expectedSeal;
 }
@@ -114,8 +115,8 @@ function canonicalizeValue(value: CanonicalValue): string {
 }
 
 /**
- * Comparação determinística por unidade de código (UTF-16), independente de
- * locale. Retorna -1, 0 ou 1 para uso em `Array.prototype.sort`.
+ * Deterministic code-unit (UTF-16) comparison, independent of locale. Returns
+ * -1, 0, or 1 for use in `Array.prototype.sort`.
  */
 function compareCodeUnits(left: string, right: string): number {
   if (left < right) {

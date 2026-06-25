@@ -50,7 +50,7 @@ export function createDemoArtifacts(): DemoArtifacts {
   };
 }
 
-/** Lotes íntegros que alimentam os referenceSeal do gateway e da chain mock. */
+/** Genuine lots used to seed the gateway and mock-chain referenceSeals. */
 export function createDemoReferenceArtifacts(): ProvenanceArtifact[] {
   return [cloneArtifact(VALID_ARTIFACT), cloneArtifact(VALID_REFERENCE_FOR_TAMPERED_ID)];
 }

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 use lastro_contracts::proof_of_origin::{ProofOfOrigin, ProofOfOriginHostRef};
 use odra::host::HostRefLoader;
 use odra::prelude::Address;

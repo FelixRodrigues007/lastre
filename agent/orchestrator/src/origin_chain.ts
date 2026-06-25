@@ -2,7 +2,7 @@ import type { ProvenanceArtifact } from "../../sealer/dist/src/sealer.js";
 import { computeSeal } from "../../sealer/dist/src/sealer.js";
 import type { OriginChain, VerificationVerdict } from "./types.js";
 
-/** Mock em memória do contrato ProofOfOrigin. */
+/** In-memory mock of the ProofOfOrigin contract. */
 export class MockOriginChain implements OriginChain {
   private readonly references = new Map<string, string>();
   private readonly attestations = new Map<string, VerificationVerdict>();
@@ -44,7 +44,7 @@ export class MockOriginChain implements OriginChain {
   }
 }
 
-/** Conveniência para demos/testes: registra os referenceSeal conhecidos antes de processar lotes. */
+/** Convenience for demos/tests: registers known referenceSeals before processing lots. */
 export function createOriginChainWithReferences(referenceArtifacts: ProvenanceArtifact[]): MockOriginChain {
   const originChain = new MockOriginChain();
 

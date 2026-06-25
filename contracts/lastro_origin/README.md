@@ -1,11 +1,21 @@
 # Lastro Origin Contracts
 
-Skeleton Odra/Casper para a Camada 1 do Lastro. No Bloco 2 o contrato de exemplo `Flipper` foi substituído pelo contrato `ProofOfOrigin`, que registra selos de referência de ativos e atesta a origem comparando o selo fornecido com o selo "bom".
+Odra/Casper contracts for Lastro's origin-proof layer.
 
-## Testar
+- `ProofOfOrigin` registers reference seals and records origin attestations.
+- `MintGate` consumes valid `ProofOfOrigin` attestations before symbolic minting.
+
+Both `Valid` and `Invalid` attestations are successful on-chain records. A
+rejection is permanent proof, not a discarded error.
+
+## Test
 
 ```bash
-cargo odra test
+cargo test
 ```
 
-Resultado do Bloco 2: os 4 testes de `proof_of_origin::tests` passam (`ok`).
+## Build WASM
+
+```bash
+cargo odra build
+```

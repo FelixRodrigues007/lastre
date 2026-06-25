@@ -1,16 +1,16 @@
 import type { ProvenanceArtifact } from "../../sealer/dist/src/sealer.js";
 
-/** Ação que o agente pode decidir antes de qualquer verificação criptográfica. */
+/** Action the agent can choose before any cryptographic verification. */
 export type Action = "pay" | "skip" | "escalate";
 
-/** Resultado da decisão agêntica: o que fazer e por quê. */
+/** Agentic decision result: what to do and why. */
 export type Decision = {
   action: Action;
   reasoning: string;
   decidedBy: "rule" | "llm";
 };
 
-/** Limites operacionais conhecidos para triagem de metadados. */
+/** Known operational limits for metadata triage. */
 export type KnownLimits = {
   minePerimeter: {
     minLat: number;
@@ -24,7 +24,7 @@ export type KnownLimits = {
   };
 };
 
-/** Contexto entregue ao Decider: fatos operacionais, não veredito de autenticidade. */
+/** Context passed to the Decider: operational facts, not an authenticity verdict. */
 export type DecisionContext = {
   artifact: ProvenanceArtifact;
   alreadyAttested: boolean;
@@ -37,7 +37,7 @@ export interface Decider {
 
 export type VerificationVerdict = "Valid" | "Invalid";
 
-/** Resultado da verificação paga. O veredito vem do selo, nunca do LLM. */
+/** Paid-verification result. The verdict comes from the seal, never from the LLM. */
 export type VerificationResult = {
   verdict: VerificationVerdict;
   seal: string;

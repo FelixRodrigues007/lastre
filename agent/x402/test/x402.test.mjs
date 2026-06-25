@@ -29,7 +29,7 @@ async function getRequirements(baseUrl, assetId = VALID_ASSET_ID) {
   return { response, body, requirements: body.requirements };
 }
 
-test("GET /verify sem pagamento retorna 402 com requirements x402 bem formados", async () => {
+test("GET /verify without payment returns 402 with well-formed x402 requirements", async () => {
   await withServer(async (baseUrl) => {
     const { response, body, requirements } = await getRequirements(baseUrl);
 
@@ -46,7 +46,7 @@ test("GET /verify sem pagamento retorna 402 com requirements x402 bem formados",
   });
 });
 
-test("pagamento válido para lote válido retorna 200 Valid com seal igual ao referenceSeal", async () => {
+test("valid payment for valid lot returns 200 Valid with seal equal to referenceSeal", async () => {
   await withServer(async (baseUrl) => {
     const { requirements } = await getRequirements(baseUrl, VALID_ASSET_ID);
     const payment = createMockPaymentHeader(requirements, { from: "consumer-valid" });
@@ -66,7 +66,7 @@ test("pagamento válido para lote válido retorna 200 Valid com seal igual ao re
   });
 });
 
-test("pagamento válido para lote adulterado retorna 200 Invalid com prova de mismatch", async () => {
+test("valid payment for tampered lot returns 200 Invalid with mismatch proof", async () => {
   await withServer(async (baseUrl) => {
     const { requirements } = await getRequirements(baseUrl, TAMPERED_ASSET_ID);
     const payment = createMockPaymentHeader(requirements, { from: "consumer-tampered" });
@@ -86,7 +86,7 @@ test("pagamento válido para lote adulterado retorna 200 Invalid com prova de mi
   });
 });
 
-test("pagamento com amount insuficiente retorna 402 e não libera verificação", async () => {
+test("payment with insufficient amount returns 402 and does not release verification", async () => {
   await withServer(async (baseUrl) => {
     const { requirements } = await getRequirements(baseUrl, VALID_ASSET_ID);
     const payment = createMockPaymentHeader(requirements, {
@@ -107,7 +107,7 @@ test("pagamento com amount insuficiente retorna 402 e não libera verificação"
   });
 });
 
-test("replay do mesmo nonce/pagamento é rejeitado na segunda tentativa", async () => {
+test("replay of the same nonce/payment is rejected on the second attempt", async () => {
   await withServer(async (baseUrl) => {
     const { requirements } = await getRequirements(baseUrl, VALID_ASSET_ID);
     const payment = createMockPaymentHeader(requirements, { from: "consumer-replay" });

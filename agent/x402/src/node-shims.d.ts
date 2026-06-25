@@ -1,4 +1,4 @@
-// Tipos mínimos de Node para manter este pacote sem dependências externas.
+// Minimal Node types to keep this package free of external dependencies.
 declare const Buffer: {
   from(input: string, encoding?: string): Uint8Array & { toString(encoding?: string): string };
 };

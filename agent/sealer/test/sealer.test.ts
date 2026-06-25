@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BUSL-1.1
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { equal, notEqual } from "node:assert/strict";
@@ -17,16 +18,16 @@ function loadSample(name: string): ProvenanceArtifact {
 const valid = loadSample("valid.json");
 const tampered = loadSample("tampered.json");
 
-// Hash conhecido-bom do valid.json. Fixá-lo transforma o teste de determinismo
-// num golden test: qualquer mudança acidental no algoritmo (ex.: trocar a regra
-// de ordenação de chaves) quebra aqui, em vez de passar silenciosamente.
+// Known-good hash for valid.json. Pinning it turns the determinism test into a
+// golden test: any accidental algorithm change (for example, changing the key
+// ordering rule) breaks here instead of passing silently.
 const VALID_SEAL =
   "472c927a8129dfba4eea2aea00d683d127f8d6387db6fe9d2f779741e4b500f2";
 
 test("computeSeal is deterministic for the same artifact", () => {
-  // (a) mesmo input chamado 2x -> mesmo hash
+  // (a) same input called twice -> same hash
   equal(computeSeal(valid), computeSeal(valid));
-  // (b) e bate com o valor conhecido-bom (estabilidade entre execuções/ambientes)
+  // (b) and it matches the known-good value (stable across executions/environments)
   equal(computeSeal(valid), VALID_SEAL);
 });
 

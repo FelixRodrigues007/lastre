@@ -1,19 +1,22 @@
 # Lastro Architecture
 
-## Tese
+## Thesis
 
-Proof before token: antes de qualquer tokenização ou liberação de dado, o protocolo valida uma cadeia de prova fictícia e ancora uma atestação verificável na Casper.
+Proof before token: before tokenization or data release, Lastro validates a
+fictional chain of proof and anchors a verifiable attestation on Casper.
 
-## Blocos
+## Blocks
 
-1. Fundação: monorepo, BUSL-1.1, skeleton Odra e teste verde.
-2. `ProofOfOrigin`: contrato on-chain para registrar atestação, aceitar selo válido e rejeitar inválido.
-3. Sealer/AuPass: SHA-256 do input fictício, compatível com o contrato.
-4. x402: fluxo `402 -> pagamento -> dado liberado`.
-5. Agente: orquestra ponta a ponta.
-6. Testnet + Web: deploy real, tx no cspr.live e landing.
-7. Empacotamento: demo e README final.
+1. Foundation: monorepo, hybrid licensing, Odra skeleton, green tests.
+2. `ProofOfOrigin`: on-chain contract for registering reference seals and
+   recording both valid and invalid attestations.
+3. Sealer: deterministic SHA-256 over fictional provenance input, compatible
+   with the contract comparison.
+4. x402: HTTP 402 paid-verification flow.
+5. Agent: end-to-end orchestration.
+6. Testnet + web: live deployment, transaction links, and demo surface.
+7. Packaging: demo assets and final README.
 
-## Dados
+## Data
 
-Todos os documentos e exemplos públicos devem ser fictícios.
+All public documents and examples must use fictional data only.
