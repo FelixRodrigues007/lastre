@@ -381,10 +381,11 @@ export function createDefaultDependencies(options: {
   anchorSecretKeyPath: string;
   queryBinary?: string;
 }): GatewayDependencies {
+  const queryBinary = options.queryBinary ?? readOptionalConfig("LASTRO_QUERY_BIN");
   const protocol = createProtocolClient({
     packageHash: options.packageHash,
     contractDir: resolveFromRepo(options.repoRoot, "contracts", "lastro_origin"),
-    queryBinary: options.queryBinary,
+    queryBinary,
     nodeAddress: readConfig("NODE_ADDRESS", readConfig("ODRA_CASPER_LIVENET_NODE_ADDRESS", DEFAULT_NODE_ADDRESS)),
     chainName: readConfig("CHAIN_NAME", readConfig("ODRA_CASPER_LIVENET_CHAIN_NAME", DEFAULT_CHAIN_NAME)),
     sandboxSecretKeyPath: options.anchorSecretKeyPath,
@@ -454,7 +455,9 @@ function resolveRepoRoot(): string {
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
   const portRaw = readConfig("PORT", String(DEFAULT_PORT));
   const port = Number.parseInt(portRaw, 10);
-  const app = createGatewayApp();
+  const app = createGatewayApp({
+    packageHash: readConfig("PACKAGE_HASH", readConfig("LASTRO_PROOF_OF_ORIGIN_PACKAGE_HASH", DEFAULT_PACKAGE_HASH)),
+  });
 
   app.listen(Number.isFinite(port) ? port : DEFAULT_PORT, () => {
     console.log(`Lastro gateway listening on http://localhost:${Number.isFinite(port) ? port : DEFAULT_PORT}`);

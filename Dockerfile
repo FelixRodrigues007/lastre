@@ -77,6 +77,12 @@ ENV SANDBOX_ANCHOR_ENABLED=false
 ENV PACKAGE_HASH=hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
 ENV NODE_ADDRESS=https://node.testnet.casper.network/rpc
 ENV CHAIN_NAME=casper-test
+ENV ODRA_CASPER_LIVENET_NODE_ADDRESS=https://node.testnet.casper.network/rpc
+ENV ODRA_CASPER_LIVENET_CHAIN_NAME=casper-test
+ENV ODRA_CASPER_LIVENET_EVENTS_URL=https://node.testnet.casper.network/events/main
+# NOTE: ODRA_CASPER_LIVENET_SECRET_KEY_PATH is intentionally NOT required here.
+# The /app/bin/query binary self-provisions a throwaway dummy key at runtime
+# (only for read-only verdict/proof paths). Sandbox writes use SANDBOX_SECRET_KEY_PATH.
 
 # Render injects PORT. 10000 is the local container default; 3456 is convenient
 # for local docker run -p 3456:3456 -e PORT=3456.

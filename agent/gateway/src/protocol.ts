@@ -33,6 +33,7 @@ export interface GatewayDependencies {
 
 const DEFAULT_NODE_ADDRESS = "https://node.testnet.casper.network/rpc";
 const DEFAULT_CHAIN_NAME = "casper-test";
+const DEFAULT_EVENTS_URL = "https://node.testnet.casper.network/events/main";
 
 export const DEFAULT_RECENT_ATTESTATIONS: ProofResponse["recentAttestations"] = [
   {
@@ -220,6 +221,7 @@ function buildReadEnv(packageHash: string, nodeAddress: string, chainName: strin
     CHAIN_NAME: chainName,
     ODRA_CASPER_LIVENET_NODE_ADDRESS: nodeAddress,
     ODRA_CASPER_LIVENET_CHAIN_NAME: chainName,
+    ODRA_CASPER_LIVENET_EVENTS_URL: DEFAULT_EVENTS_URL,
   };
 }
 

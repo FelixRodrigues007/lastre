@@ -4,6 +4,9 @@ use odra::host::HostRefLoader;
 use odra::prelude::Address;
 use serde_json::json;
 use std::env;
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
 
 const DEFAULT_PACKAGE_HASH: &str =
     "hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561";
@@ -19,6 +22,7 @@ const CHAIN_NAME_ENV: &str = "CHAIN_NAME";
 const ODRA_NODE_ADDRESS_ENV: &str = "ODRA_CASPER_LIVENET_NODE_ADDRESS";
 const ODRA_CHAIN_NAME_ENV: &str = "ODRA_CASPER_LIVENET_CHAIN_NAME";
 const ODRA_EVENTS_URL_ENV: &str = "ODRA_CASPER_LIVENET_EVENTS_URL";
+const ODRA_SECRET_KEY_ENV: &str = "ODRA_CASPER_LIVENET_SECRET_KEY_PATH";
 
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
@@ -33,7 +37,18 @@ fn main() {
         .or_else(|| env_value(PACKAGE_HASH_ALIAS_ENV))
         .unwrap_or_else(|| DEFAULT_PACKAGE_HASH.to_string());
 
-    ensure_public_livenet_defaults();
+    // Force set the livenet env vars early to prevent panic in odra rpc client
+    let node_address = env_value(NODE_ADDRESS_ENV).unwrap_or_else(|| DEFAULT_NODE_ADDRESS.to_string());
+    let chain_name = env_value(CHAIN_NAME_ENV).unwrap_or_else(|| DEFAULT_CHAIN_NAME.to_string());
+    std::env::set_var(ODRA_NODE_ADDRESS_ENV, &node_address);
+    std::env::set_var(ODRA_CHAIN_NAME_ENV, &chain_name);
+    std::env::set_var(ODRA_EVENTS_URL_ENV, DEFAULT_EVENTS_URL);
+
+    // For read-only query (verdict/proof), the CasperClientConfiguration always
+    // requires a secret key path (even if never used for signing reads).
+    // Self-provision a throwaway dummy key file in /tmp so the binary runs
+    // in any environment (Render, local cargo run, Docker) without external secrets.
+    ensure_readonly_dummy_secret_key();
 
     let env = odra_casper_livenet_env::env();
     let package_address_input: &'static str = Box::leak(package_hash.clone().into_boxed_str());
@@ -119,6 +134,29 @@ fn env_value(key: &str) -> Option<String> {
         .ok()
         .map(|value| value.trim().to_string())
         .filter(|value| !value.is_empty())
+}
+
+/// Self-provision a dummy secret key so odra-casper-rpc-client's CasperClientConfiguration
+/// (which unconditionally calls get_env_variable + SecretKey::from_file in from_env)
+/// does not panic for read-only operations (get_attestation etc).
+/// This key is never used to sign anything in the query path and must not be funded.
+fn ensure_readonly_dummy_secret_key() {
+    if let Some(path) = env_value(ODRA_SECRET_KEY_ENV) {
+        if Path::new(&path).exists() {
+            return;
+        }
+    }
+
+    // Minimal valid Ed25519 private key PEM (throwaway, generated via casper-client keygen).
+    const DUMMY_PEM: &str =
+        "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIDjek9a+YO/aANb+pKuKJtfvRAXwEjgI5dSUpwVBRgTl\n-----END PRIVATE KEY-----\n";
+
+    let tmp_path = std::env::temp_dir().join("lastro_query_dummy_secret_key.pem");
+    if let Ok(mut f) = File::create(&tmp_path) {
+        let _ = f.write_all(DUMMY_PEM.as_bytes());
+        let _ = f.flush();
+    }
+    std::env::set_var(ODRA_SECRET_KEY_ENV, tmp_path.to_string_lossy().as_ref());
 }
 
 fn collect_recent_attestations(
