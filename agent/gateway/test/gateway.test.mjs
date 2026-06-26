@@ -58,6 +58,9 @@ function makeDeps(overrides = {}) {
         recentAttestations: [],
       });
     },
+    readMintStatus() {
+      return Promise.resolve({ isMinted: false, mintTx: null });
+    },
     loadCatalog() {
       return Promise.resolve({ assets: [] });
     },
@@ -249,4 +252,90 @@ describe("lastro-gateway", () => {
     assert.equal(response.body.rejected, 1);
     assert.equal(response.body.recentAttestations[0].assetId, "MINA-VALEDOURO-LOTE-002");
   });
+
+  it("returns a non-transferable provenance credential only for Valid and MintGate-minted assets", async () => {
+    const app = createGatewayApp({
+      packageHash: PACKAGE_HASH,
+      dependencies: makeDeps({
+        readVerdict(assetId) {
+          return Promise.resolve({
+            assetId,
+            verdict: "Valid",
+            seal: VALID_SEAL,
+            referenceSeal: VALID_SEAL,
+            attester: "account-hash-valid-attester",
+            attestationTx: "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4",
+            packageHash: PACKAGE_HASH,
+            readAt: "2026-06-25T00:00:00.000Z",
+          });
+        },
+        readMintStatus(assetId) {
+          assert.equal(assetId, "MINA-VALEDOURO-LOTE-002");
+          return Promise.resolve({
+            isMinted: true,
+            mintTx: "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4",
+          });
+        },
+      }),
+    });
+
+    const response = await request(app, "/certificate/MINA-VALEDOURO-LOTE-002");
+
+    assert.equal(response.status, 200);
+    assert.equal(response.body.type, "ProvenanceCredential");
+    assert.equal(response.body.assetId, "MINA-VALEDOURO-LOTE-002");
+    assert.equal(response.body.verdict, "Valid");
+    assert.equal(response.body.seal, VALID_SEAL);
+    assert.equal(response.body.attester, "account-hash-valid-attester");
+    assert.equal(response.body.attestationTx, "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4");
+    assert.equal(response.body.transferable, false);
+  });
+
+  it("404s certificate requests when the ProofOfOrigin verdict is not Valid", async () => {
+    let mintReads = 0;
+    const app = createGatewayApp({
+      packageHash: PACKAGE_HASH,
+      dependencies: makeDeps({
+        readMintStatus() {
+          mintReads += 1;
+          return Promise.resolve({ isMinted: true, mintTx: "unexpected" });
+        },
+      }),
+    });
+
+    const response = await request(app, "/certificate/MINA-VALEDOURO-LOTE-001");
+
+    assert.equal(response.status, 404);
+    assert.equal(response.body.error, "certificate_not_available");
+    assert.equal(mintReads, 0);
+  });
+
+  it("404s certificate requests when MintGate has not symbolically minted the Valid asset", async () => {
+    const app = createGatewayApp({
+      packageHash: PACKAGE_HASH,
+      dependencies: makeDeps({
+        readVerdict(assetId) {
+          return Promise.resolve({
+            assetId,
+            verdict: "Valid",
+            seal: VALID_SEAL,
+            referenceSeal: VALID_SEAL,
+            attester: "account-hash-valid-attester",
+            attestationTx: null,
+            packageHash: PACKAGE_HASH,
+            readAt: "2026-06-25T00:00:00.000Z",
+          });
+        },
+        readMintStatus() {
+          return Promise.resolve({ isMinted: false, mintTx: null });
+        },
+      }),
+    });
+
+    const response = await request(app, "/certificate/MINA-VALEDOURO-LOTE-002");
+
+    assert.equal(response.status, 404);
+    assert.equal(response.body.error, "certificate_not_available");
+  });
+
 });

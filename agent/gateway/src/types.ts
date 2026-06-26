@@ -44,6 +44,21 @@ export interface AnchorResponse {
   explorerUrl: string;
 }
 
+export interface MintStatus {
+  isMinted: boolean;
+  mintTx: string | null;
+}
+
+export interface ProvenanceCredentialResponse {
+  assetId: string;
+  verdict: "Valid";
+  seal: string;
+  attester: string;
+  attestationTx: string;
+  type: "ProvenanceCredential";
+  transferable: false;
+}
+
 export interface RecentAttestation {
   assetId: string;
   verdict: "Valid" | "Invalid";

@@ -1,7 +1,7 @@
 import { execFile, type ExecFileOptions } from "node:child_process";
 import path from "node:path";
 import { computeSeal, type ProvenanceArtifact } from "../../sealer/dist/src/sealer.js";
-import type { AnchorResponse, Catalog, ProofResponse, RecentAttestation, Verdict, VerdictResponse } from "./types.js";
+import type { AnchorResponse, Catalog, MintStatus, ProofResponse, RecentAttestation, Verdict, VerdictResponse } from "./types.js";
 
 export type ExecFileFn = (
   command: string,
@@ -27,6 +27,7 @@ export interface GatewayDependencies {
   computeSeal(artifact: ProvenanceArtifact): string;
   anchor(assetId: string, seal: string): Promise<AnchorResponse>;
   readProof(): Promise<ProofResponse>;
+  readMintStatus(assetId: string): Promise<MintStatus>;
   loadCatalog(): Promise<Catalog>;
 }
 
@@ -48,7 +49,7 @@ export const DEFAULT_RECENT_ATTESTATIONS: ProofResponse["recentAttestations"] = 
   },
 ];
 
-export function createProtocolClient(options: ProtocolClientOptions): Pick<GatewayDependencies, "readVerdict" | "anchor" | "readProof" | "computeSeal"> {
+export function createProtocolClient(options: ProtocolClientOptions): Pick<GatewayDependencies, "readVerdict" | "anchor" | "readProof" | "readMintStatus" | "computeSeal"> {
   const execFileImpl = options.execFile ?? execFilePromise;
   const queryBinary = options.queryBinary ?? path.join(options.contractDir, "target", "debug", "query");
   const attestBinary = options.attestBinary ?? path.join(options.contractDir, "target", "debug", "attest");
@@ -103,6 +104,11 @@ export function createProtocolClient(options: ProtocolClientOptions): Pick<Gatew
     };
   }
 
+
+  async function readMintStatus(assetId: string): Promise<MintStatus> {
+    return knownSymbolicMintStatus(assetId);
+  }
+
   async function anchor(assetId: string, seal: string): Promise<AnchorResponse> {
     if (!options.sandboxSecretKeyPath) {
       throw new Error("SANDBOX_SECRET_KEY_PATH is required for sandbox anchor writes");
@@ -147,7 +153,7 @@ export function createProtocolClient(options: ProtocolClientOptions): Pick<Gatew
     };
   }
 
-  return { readVerdict, readProof, anchor, computeSeal };
+  return { readVerdict, readProof, readMintStatus, anchor, computeSeal };
 }
 
 export function buildArtifactFromMeasurement(assetId: string, measurement: Record<string, unknown> | undefined): ProvenanceArtifact {
@@ -304,4 +310,29 @@ function enrichRecentAttestations(attestations: RecentAttestation[]): RecentAtte
 
 function normalizeStrictVerdict(value: unknown): "Valid" | "Invalid" | null {
   return value === "Valid" || value === "Invalid" ? value : null;
+}
+
+
+const DEFAULT_SYMBOLIC_MINTED_ASSETS = new Set<string>(["MINA-VALEDOURO-LOTE-002"]);
+const KNOWN_SYMBOLIC_MINT_TXS = new Map<string, string>([
+  ["MINA-VALEDOURO-LOTE-002", "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4"],
+]);
+
+function knownSymbolicMintStatus(assetId: string): MintStatus {
+  const configured = process.env.LASTRO_SYMBOLIC_MINTED_ASSETS
+    ?.split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const mintedAssets = configured && configured.length > 0
+    ? new Set(configured)
+    : DEFAULT_SYMBOLIC_MINTED_ASSETS;
+
+  if (!mintedAssets.has(assetId)) {
+    return { isMinted: false, mintTx: null };
+  }
+
+  return {
+    isMinted: true,
+    mintTx: KNOWN_SYMBOLIC_MINT_TXS.get(assetId) ?? null,
+  };
 }

@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createGatewayApp } from "../dist/index.js";
 
 const demo = readFileSync(new URL("../../../web/demo.html", import.meta.url), "utf8");
 const marketplace = readFileSync(new URL("../../../web/marketplace.html", import.meta.url), "utf8");
+const mapPath = new URL("../../../web/map.html", import.meta.url);
 
 function assertLivePage(html, label) {
   assert.match(html, /DEMONSTRATION — simulated assets, no investment offered/, `${label} keeps the mandatory banner`);
@@ -13,10 +14,30 @@ function assertLivePage(html, label) {
   assert.match(html, /fetch\(gatewayUrl\("\/proof"\)\)/, `${label} loads live proof counters/events`);
   assert.match(html, /fetch\(gatewayUrl\("\/sandbox\/compute"\)/, `${label} posts sandbox compute to the gateway`);
   assert.match(html, /fetch\(gatewayUrl\("\/sandbox\/anchor"\)/, `${label} posts controlled anchor to the gateway`);
+  assert.match(html, /fetch\(gatewayUrl\(`\/certificate\/\$\{encodeURIComponent\(asset\.assetId\)\}`\)\)/, `${label} fetches symbolic certificates for valid assets`);
+  assert.match(html, /symbolic credential via MintGate event — not a transferable asset/, `${label} labels the credential honestly`);
+  assert.match(html, /href="\/map"/, `${label} links to the fictional custody map`);
   assert.match(html, /testnet\.cspr\.live\/transaction\//, `${label} links proof events and anchors to cspr.live transactions`);
   assert.match(html, /Simulated/, `${label} clearly labels simulated catalog assets`);
   assert.doesNotMatch(html, /const CATALOG\s*=\s*\[/, `${label} does not use embedded catalog data`);
   assert.doesNotMatch(html, /alert\(`Anchored!/, `${label} renders anchor result inline instead of pretending success in an alert`);
+}
+
+function assertMapPage(html) {
+  assert.match(html, /DEMONSTRATION — simulated assets, no investment offered/, "map keeps the mandatory banner");
+  assert.match(html, /maplibre-gl/i, "map loads MapLibre GL without a private token");
+  assert.match(html, /deck\.gl|deck\.ArcLayer/, "map uses deck.gl for custody arcs");
+  assert.match(html, /new deck\.ArcLayer/, "map renders custody paths through ArcLayer");
+  assert.match(html, /fetch\(gatewayUrl\("\/catalog"\)\)/, "map loads the live catalog from the gateway");
+  assert.match(html, /fetch\(gatewayUrl\(`\/verdict\/\$\{encodeURIComponent\(asset\.assetId\)\}`\)\)/, "map polls live verdicts for each on-chain asset");
+  assert.match(html, /fictional geolocation/i, "map labels all locations as fictional");
+  assert.match(html, /no GPS tracking/i, "map does not imply live GPS tracking");
+  assert.match(html, /setInterval\(refreshMapVerdicts, 30_000\)/, "map refreshes verdict colors by polling");
+  assert.match(html, /perimeter/i, "map draws the fictional provenance perimeter");
+  assert.match(html, /@keyframes map-pin-pulse/, "map animates verdict pins");
+  assert.match(html, /prefers-reduced-motion/, "map respects reduced-motion preferences");
+  assert.match(html, /Simulated/, "map clearly labels simulated catalog assets");
+  assert.doesNotMatch(html, /\b(buy|sell|yield|ROI|price)\b/i, "map avoids prohibited commercial language");
 }
 
 describe("web frontend gateway integration", () => {
@@ -26,6 +47,38 @@ describe("web frontend gateway integration", () => {
 
   it("marketplace.html calls the live gateway APIs and preserves honesty framing", () => {
     assertLivePage(marketplace, "marketplace.html");
+  });
+});
+
+describe("web map page", () => {
+  it("serves the dedicated fictional custody map at /map", async () => {
+    const app = createGatewayApp({
+      dependencies: {
+        readVerdict() { throw new Error("not needed"); },
+        computeSeal() { return "a".repeat(64); },
+        anchor() { throw new Error("not needed"); },
+        readProof() { return Promise.resolve({ packageHash: "hash-test", accepted: 2, rejected: 1, recentAttestations: [] }); },
+        loadCatalog() { return Promise.resolve({ assets: [] }); },
+        readMintStatus() { return Promise.resolve({ isMinted: false }); },
+      },
+      packageHash: "hash-test",
+    });
+    const server = app.listen(0, "127.0.0.1");
+    try {
+      await new Promise((resolve) => server.once("listening", resolve));
+      const { port } = server.address();
+      const response = await fetch(`http://127.0.0.1:${port}/map`, { headers: { accept: "text/html" } });
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.get("content-type")?.includes("text/html"), true);
+      assert.match(await response.text(), /id="map-page"/);
+    } finally {
+      await new Promise((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
+    }
+  });
+
+  it("renders MapLibre pins, deck.gl custody arcs, and live verdict polling with honest labels", () => {
+    assert.equal(existsSync(mapPath), true, "web/map.html should exist");
+    assertMapPage(readFileSync(mapPath, "utf8"));
   });
 });
 

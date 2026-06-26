@@ -2,7 +2,7 @@ import express, { type Express, type Request, type Response } from "express";
 import cors from "cors";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { AnchorRequest, ComputeRequest } from "./types.js";
+import type { AnchorRequest, ComputeRequest, ProvenanceCredentialResponse } from "./types.js";
 import {
   buildArtifactFromMeasurement,
   createProtocolClient,
@@ -98,6 +98,52 @@ export function createGatewayApp(options: CreateGatewayAppOptions = {}): Express
         packageHash: verdict.packageHash || packageHash,
         readAt: verdict.readAt,
       });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+
+  app.get("/certificate/:assetId", async (req, res, next) => {
+    try {
+      const assetId = req.params.assetId;
+      const verdict = await dependencies.readVerdict(assetId);
+      if (verdict.verdict !== "Valid" || !verdict.seal || !verdict.attester) {
+        res.status(404).json({
+          error: "certificate_not_available",
+          reason: "A symbolic provenance credential requires a Valid ProofOfOrigin verdict.",
+        });
+        return;
+      }
+
+      const mintStatus = await dependencies.readMintStatus(assetId);
+      if (!mintStatus.isMinted) {
+        res.status(404).json({
+          error: "certificate_not_available",
+          reason: "MintGate has not symbolically recorded this lot.",
+        });
+        return;
+      }
+
+      const attestationTx = verdict.attestationTx ?? mintStatus.mintTx;
+      if (!attestationTx) {
+        res.status(404).json({
+          error: "certificate_not_available",
+          reason: "No MintGate or attestation transaction hash is available for this symbolic credential.",
+        });
+        return;
+      }
+
+      const credential: ProvenanceCredentialResponse = {
+        assetId: verdict.assetId,
+        verdict: "Valid",
+        seal: verdict.seal,
+        attester: verdict.attester,
+        attestationTx,
+        type: "ProvenanceCredential",
+        transferable: false,
+      };
+      res.json(credential);
     } catch (error) {
       next(error);
     }
@@ -204,6 +250,9 @@ export function createGatewayApp(options: CreateGatewayAppOptions = {}): Express
   });
   app.get("/marketplace", (_req, res) => {
     res.sendFile(path.join(webDir, "marketplace.html"));
+  });
+  app.get("/map", (_req, res) => {
+    res.sendFile(path.join(webDir, "map.html"));
   });
   app.use(express.static(webDir, { index: false }));
 

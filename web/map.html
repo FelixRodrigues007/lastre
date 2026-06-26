@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lastro — Fictional Provenance Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <style>
+    :root {
+      --gold: #d4af37;
+      --dark: #0b1f3a;
+      --ink: #e5edf7;
+      --muted: #9fb0c7;
+      --panel: #172338;
+      --panel-2: #101a2b;
+      --line: #31435f;
+      --green: #10b981;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+      --slate: #64748b;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 8% 4%, rgba(212, 175, 55, 0.18), transparent 34rem),
+        radial-gradient(circle at 92% 16%, rgba(96, 165, 250, 0.12), transparent 28rem),
+        linear-gradient(135deg, #081222 0%, #0f172a 48%, #111827 100%);
+      line-height: 1.5;
+    }
+
+    a { color: #f8d86a; }
+    button {
+      border: 0;
+      border-radius: 999px;
+      background: var(--gold);
+      color: var(--dark);
+      cursor: pointer;
+      font-weight: 900;
+      padding: 10px 14px;
+    }
+    button.secondary {
+      background: rgba(38, 54, 79, 0.92);
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    .banner {
+      background: #450a0a;
+      border-bottom: 1px solid rgba(254, 202, 202, 0.25);
+      color: #fecaca;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      padding: 10px 16px;
+      position: sticky;
+      text-align: center;
+      top: 0;
+      z-index: 40;
+    }
+
+    .page {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: minmax(0, 1fr);
+      margin: 0 auto;
+      max-width: 1440px;
+      padding: 26px;
+    }
+
+    .hero {
+      align-items: end;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+    }
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    h1 {
+      color: #f5d56a;
+      font-size: clamp(2.4rem, 7vw, 5.6rem);
+      line-height: 0.92;
+      margin: 8px 0 14px;
+    }
+    h2, h3 { color: #f7e7a1; margin: 0 0 10px; }
+    .lead { color: #dbeafe; font-size: clamp(1rem, 2vw, 1.18rem); max-width: 820px; }
+    nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    nav a, .ghost-link {
+      background: rgba(23, 35, 56, 0.62);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 8px 12px;
+      text-decoration: none;
+    }
+
+    .panel {
+      background: rgba(23, 35, 56, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.20);
+      padding: 18px;
+    }
+    .honesty-note {
+      background: rgba(212, 175, 55, 0.08);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px;
+      color: #fde68a;
+      padding: 10px 12px;
+    }
+    .muted { color: var(--muted); }
+    .small { font-size: 12px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; word-break: break-all; }
+
+    .map-shell {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.8fr);
+      min-height: 680px;
+    }
+    .map-frame {
+      background: rgba(8, 18, 34, 0.72);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      min-height: 680px;
+      overflow: hidden;
+      position: relative;
+    }
+    #map {
+      height: 100%;
+      min-height: 680px;
+      width: 100%;
+    }
+    .map-overlay {
+      left: 16px;
+      max-width: min(420px, calc(100% - 32px));
+      position: absolute;
+      top: 16px;
+      z-index: 5;
+    }
+    .map-status {
+      background: rgba(8, 18, 34, 0.84);
+      border: 1px solid rgba(212, 175, 55, 0.42);
+      border-radius: 16px;
+      color: #fde68a;
+      padding: 12px;
+    }
+    .legend {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .legend-item {
+      align-items: center;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      display: inline-flex;
+      font-size: 12px;
+      gap: 6px;
+      padding: 5px 8px;
+    }
+    .dot {
+      border-radius: 50%;
+      display: inline-block;
+      height: 10px;
+      width: 10px;
+    }
+    .maplibregl-popup-content {
+      background: #101a2b;
+      border: 1px solid #31435f;
+      border-radius: 12px;
+      color: #e5edf7;
+      max-width: 280px;
+    }
+    .maplibregl-popup-tip { border-top-color: #31435f; }
+
+    .map-pin {
+      align-items: center;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 999px;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+      display: inline-flex;
+      height: 18px;
+      justify-content: center;
+      position: relative;
+      width: 18px;
+    }
+    .map-pin::after {
+      border: 2px solid currentColor;
+      border-radius: 999px;
+      content: "";
+      inset: -8px;
+      opacity: 0.28;
+      position: absolute;
+      animation: map-pin-pulse 2.4s ease-out infinite;
+    }
+    .map-pin[data-status="Verified"] { background: var(--green); color: var(--green); }
+    .map-pin[data-status="Rejected"] { background: var(--red); color: var(--red); }
+    .map-pin[data-status="In verification"] { background: var(--blue); color: var(--blue); }
+    .map-pin[data-status="Available"] { background: var(--amber); color: var(--amber); }
+    .map-pin[data-status="Simulated"] { background: var(--slate); color: var(--slate); }
+    .map-pin[data-status="Offline"] { background: #94a3b8; color: #94a3b8; }
+
+    @keyframes map-pin-pulse {
+      0% { opacity: 0.34; transform: scale(0.82); }
+      70% { opacity: 0; transform: scale(1.65); }
+      100% { opacity: 0; transform: scale(1.65); }
+    }
+
+    .side-panel {
+      display: grid;
+      gap: 14px;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .asset-list {
+      display: grid;
+      gap: 10px;
+      max-height: 510px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .asset-row {
+      background: rgba(8, 18, 34, 0.56);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .asset-row[data-status="Verified"] { border-color: rgba(16, 185, 129, 0.55); }
+    .asset-row[data-status="Rejected"] { border-color: rgba(239, 68, 68, 0.55); }
+    .asset-row[data-status="Simulated"] { border-style: dashed; }
+    .badge {
+      border-radius: 999px;
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 4px 10px;
+    }
+    .badge-verified { background: rgba(16, 185, 129, 0.16); color: #6ee7b7; }
+    .badge-rejected { background: rgba(239, 68, 68, 0.16); color: #fca5a5; }
+    .badge-in-verification { background: rgba(96, 165, 250, 0.16); color: #bfdbfe; }
+    .badge-available { background: rgba(245, 158, 11, 0.16); color: #fcd34d; }
+    .badge-simulated { background: rgba(100, 116, 139, 0.22); color: #cbd5e1; }
+    .badge-loading, .badge-offline { background: rgba(100, 116, 139, 0.18); color: #cbd5e1; }
+    .footer-note { color: var(--muted); font-size: 12px; margin: 8px 0 0; }
+
+    @media (max-width: 980px) {
+      .hero, .map-shell { grid-template-columns: 1fr; }
+      .map-frame, #map { min-height: 540px; }
+    }
+    @media (max-width: 640px) {
+      .page { padding: 18px; }
+      .map-frame, #map { min-height: 440px; }
+      .map-overlay { left: 10px; top: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .map-pin::after { animation: none; }
+    }
+  </style>
+</head>
+<body id="map-page">
+  <div class="banner" role="note">
+    DEMONSTRATION — simulated assets, no investment offered. Public action: Verify provenance.
+  </div>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Fictional custody map · live verdict colors</div>
+        <h1>Provenance map</h1>
+        <p class="lead">Pins come from the fictional catalog. Live colors come from gateway polling of the existing ProofOfOrigin protocol for on-chain lots; simulated lots remain explicitly labeled.</p>
+        <nav aria-label="Map navigation">
+          <a href="/demo">Demo</a>
+          <a href="/marketplace">Marketplace</a>
+          <a href="/proof">/proof</a>
+          <a href="/map">Map</a>
+        </nav>
+      </div>
+      <div class="panel">
+        <h2>Honesty frame</h2>
+        <p class="honesty-note">All coordinates are fictional geolocation for demonstration only — no GPS tracking and no real-world monitoring is claimed.</p>
+        <p class="muted small">“Real-time” here means a 30-second gateway poll that refreshes verdict colors. The seal decides the verdict; the map only displays readback.</p>
+      </div>
+    </section>
+
+    <section class="map-shell" aria-label="Fictional provenance map">
+      <div class="map-frame">
+        <div id="map" role="img" aria-label="Fictional map of Lastro provenance lots, perimeter, and custody arcs"></div>
+        <div class="map-overlay">
+          <div id="map-status" class="map-status">Loading open tiles, catalog, and live verdicts…</div>
+          <div class="legend" aria-label="Verdict color legend">
+            <span class="legend-item"><span class="dot" style="background:#10b981"></span>Verified</span>
+            <span class="legend-item"><span class="dot" style="background:#ef4444"></span>Rejected</span>
+            <span class="legend-item"><span class="dot" style="background:#60a5fa"></span>In verification</span>
+            <span class="legend-item"><span class="dot" style="background:#f59e0b"></span>Available</span>
+            <span class="legend-item"><span class="dot" style="background:#64748b"></span>Simulated</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side-panel" aria-label="Map asset readout">
+        <div class="panel">
+          <h2>Fictional perimeter and custody arcs</h2>
+          <p class="muted">The perimeter polygon is catalog metadata. The ArcLayer draws custody path segments from fictional origin points toward the demo anchor/archive location.</p>
+          <div class="toolbar">
+            <button onclick="refreshMapVerdicts()">Refresh verdict colors</button>
+            <button class="secondary" onclick="fitMapToCatalog()">Fit catalog</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Lots</h2>
+          <div id="asset-list" class="asset-list" aria-live="polite"></div>
+        </div>
+      </aside>
+    </section>
+
+    <p class="footer-note">DEMONSTRATION — simulated assets, no investment offered. Locations are fictional; on-chain verdicts remain authoritative only when returned by the gateway.</p>
+  </main>
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/deck.gl@9.0.0/dist.min.js"></script>
+  <script>
+    const PACKAGE_HASH = "hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561";
+    const GATEWAY_ORIGIN = window.LASTRO_GATEWAY_URL || window.location.origin || "http://localhost:3456";
+    const OPEN_TILE_STYLE = "https://demotiles.maplibre.org/style.json";
+    const DEFAULT_CENTER = [-53.20, -30.05];
+
+    let catalog = { assets: [] };
+    let map = null;
+    let deckOverlay = null;
+    let markers = new Map();
+    let latestStatuses = new Map();
+    let latestVerdicts = new Map();
+
+    function gatewayUrl(path) {
+      return `${GATEWAY_ORIGIN}${path}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function truncate(value, left = 14, right = 8) {
+      const text = String(value ?? "");
+      if (text.length <= left + right + 3) return text;
+      return `${text.slice(0, left)}…${text.slice(-right)}`;
+    }
+
+    function isSimulatedAsset(asset) {
+      return asset.simulated === true || asset.expectedOnChain === "Simulated";
+    }
+
+    function statusFromVerdict(asset, verdict) {
+      if (isSimulatedAsset(asset)) return "Simulated";
+      if (verdict === "Valid") return "Verified";
+      if (verdict === "Invalid") return "Rejected";
+      if (asset.referenceRegistered) return "In verification";
+      return "Available";
+    }
+
+    function badgeClass(status) {
+      return `badge-${status.toLowerCase().replaceAll(" ", "-")}`;
+    }
+
+    function colorForStatus(status) {
+      const colors = {
+        "Verified": "#10b981",
+        "Rejected": "#ef4444",
+        "In verification": "#60a5fa",
+        "Available": "#f59e0b",
+        "Simulated": "#64748b",
+        "Offline": "#94a3b8",
+        "Loading": "#d4af37"
+      };
+      return colors[status] || colors.Loading;
+    }
+
+    function rgbForStatus(status) {
+      const hex = colorForStatus(status).replace("#", "");
+      return [
+        Number.parseInt(hex.slice(0, 2), 16),
+        Number.parseInt(hex.slice(2, 4), 16),
+        Number.parseInt(hex.slice(4, 6), 16),
+        210
+      ];
+    }
+
+    function assetPosition(asset) {
+      const lat = Number(asset.origin?.lat);
+      const lng = Number(asset.origin?.lng);
+      return Number.isFinite(lat) && Number.isFinite(lng) ? [lng, lat] : DEFAULT_CENTER;
+    }
+
+    function custodyPoints(asset) {
+      const points = Array.isArray(asset.custodyPath) && asset.custodyPath.length > 0
+        ? asset.custodyPath
+        : [asset.origin].filter(Boolean);
+      return points
+        .map((point) => [Number(point.lng), Number(point.lat), point.label || point.step || "fictional waypoint"])
+        .filter(([lng, lat]) => Number.isFinite(lng) && Number.isFinite(lat));
+    }
+
+    function buildArcData(assets) {
+      const arcs = [];
+      for (const asset of assets) {
+        const points = custodyPoints(asset);
+        const status = latestStatuses.get(asset.assetId) || (isSimulatedAsset(asset) ? "Simulated" : "Loading");
+        for (let index = 0; index < points.length - 1; index += 1) {
+          arcs.push({
+            assetId: asset.assetId,
+            status,
+            source: [points[index][0], points[index][1]],
+            target: [points[index + 1][0], points[index + 1][1]],
+            label: `${asset.assetId} custody segment ${index + 1}`
+          });
+        }
+      }
+      return arcs;
+    }
+
+    async function loadCatalogForMap() {
+      setStatus("Loading catalog from the gateway…");
+      const response = await fetch(gatewayUrl("/catalog"));
+      if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
+      catalog = await response.json();
+      for (const asset of catalog.assets || []) {
+        latestStatuses.set(asset.assetId, isSimulatedAsset(asset) ? "Simulated" : "Loading");
+      }
+      initializeMap();
+      renderAssetList();
+      renderMapPins(catalog.assets || []);
+      renderPerimeter();
+      renderCustodyArcs();
+      fitMapToCatalog();
+      await refreshMapVerdicts();
+    }
+
+    function initializeMap() {
+      if (map || !window.maplibregl) {
+        if (!window.maplibregl) setStatus("MapLibre GL did not load. The list still shows catalog and verdict states.");
+        return;
+      }
+
+      map = new maplibregl.Map({
+        container: "map",
+        style: OPEN_TILE_STYLE,
+        center: DEFAULT_CENTER,
+        zoom: 4.25,
+        attributionControl: true
+      });
+      map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "top-right");
+      map.on("load", () => {
+        renderPerimeter();
+        renderMapPins(catalog.assets || []);
+        renderCustodyArcs();
+        fitMapToCatalog();
+      });
+    }
+
+    function renderPerimeter() {
+      if (!map || !map.isStyleLoaded()) return;
+      const polygon = catalog.perimeter?.polygon || [];
+      if (polygon.length < 3) return;
+      const closed = [...polygon, polygon[0]].map((point) => [point.lng, point.lat]);
+      const source = {
+        type: "FeatureCollection",
+        features: [{
+          type: "Feature",
+          properties: { label: catalog.perimeter?.label || "Fictional provenance perimeter" },
+          geometry: { type: "Polygon", coordinates: [closed] }
+        }]
+      };
+
+      if (map.getSource("fictional-perimeter")) {
+        map.getSource("fictional-perimeter").setData(source);
+        return;
+      }
+
+      map.addSource("fictional-perimeter", { type: "geojson", data: source });
+      map.addLayer({
+        id: "fictional-perimeter-fill",
+        type: "fill",
+        source: "fictional-perimeter",
+        paint: { "fill-color": "#d4af37", "fill-opacity": 0.12 }
+      });
+      map.addLayer({
+        id: "fictional-perimeter-line",
+        type: "line",
+        source: "fictional-perimeter",
+        paint: { "line-color": "#d4af37", "line-width": 2.2, "line-dasharray": [2, 1.4] }
+      });
+    }
+
+    function renderMapPins(assets) {
+      if (!map || !window.maplibregl) return;
+      for (const asset of assets) {
+        const status = latestStatuses.get(asset.assetId) || (isSimulatedAsset(asset) ? "Simulated" : "Loading");
+        let marker = markers.get(asset.assetId);
+        if (!marker) {
+          const element = document.createElement("button");
+          element.type = "button";
+          element.className = "map-pin";
+          element.setAttribute("aria-label", `${asset.assetId} fictional geolocation`);
+          marker = new maplibregl.Marker({ element, anchor: "center" })
+            .setLngLat(assetPosition(asset))
+            .addTo(map);
+          markers.set(asset.assetId, marker);
+        }
+        updatePinMarker(asset, status);
+      }
+    }
+
+    function updatePinMarker(asset, status) {
+      const marker = markers.get(asset.assetId);
+      if (!marker) return;
+      const element = marker.getElement();
+      element.dataset.status = status;
+      element.style.background = colorForStatus(status);
+      const verdict = latestVerdicts.get(asset.assetId);
+      const proof = isSimulatedAsset(asset)
+        ? "Simulated catalog item — no on-chain verdict claimed."
+        : verdict?.attestationTx
+          ? `<a href="https://testnet.cspr.live/transaction/${escapeHtml(verdict.attestationTx)}" target="_blank" rel="noreferrer">View attestation ${escapeHtml(truncate(verdict.attestationTx, 12, 8))}</a>`
+          : "No attestation transaction returned yet.";
+      marker.setPopup(new maplibregl.Popup({ offset: 16 }).setHTML(`
+        <strong>${escapeHtml(asset.name || asset.assetId)}</strong>
+        <p><span class="badge ${badgeClass(status)}">${escapeHtml(status)}</span></p>
+        <p class="small">${escapeHtml(asset.origin?.label || "fictional geolocation")}</p>
+        <p class="small">${proof}</p>
+      `));
+    }
+
+    function renderCustodyArcs() {
+      if (!map || !window.deck || !deck.ArcLayer || !deck.MapboxOverlay) return;
+      const layers = [
+        new deck.ArcLayer({
+          id: "fictional-custody-arcs",
+          data: buildArcData(catalog.assets || []),
+          getSourcePosition: (item) => item.source,
+          getTargetPosition: (item) => item.target,
+          getSourceColor: (item) => rgbForStatus(item.status),
+          getTargetColor: (item) => rgbForStatus(item.status),
+          getWidth: 2.6,
+          greatCircle: true,
+          pickable: true,
+          autoHighlight: true
+        })
+      ];
+
+      if (!deckOverlay) {
+        deckOverlay = new deck.MapboxOverlay({ interleaved: false, layers });
+        map.addControl(deckOverlay);
+      } else {
+        deckOverlay.setProps({ layers });
+      }
+    }
+
+    async function refreshMapVerdicts() {
+      const assets = catalog.assets || [];
+      if (assets.length === 0) return;
+      setStatus("Polling live gateway verdicts for map colors…");
+
+      await Promise.all(assets.map(async (asset) => {
+        if (isSimulatedAsset(asset)) {
+          latestStatuses.set(asset.assetId, "Simulated");
+          latestVerdicts.set(asset.assetId, { verdict: "Unverified", packageHash: PACKAGE_HASH });
+          updatePinMarker(asset, "Simulated");
+          return;
+        }
+
+        try {
+          const response = await fetch(gatewayUrl(`/verdict/${encodeURIComponent(asset.assetId)}`));
+          const verdict = await response.json();
+          if (!response.ok) throw new Error(verdict.error || `Verdict request failed: ${response.status}`);
+          const status = statusFromVerdict(asset, verdict.verdict);
+          latestVerdicts.set(asset.assetId, verdict);
+          latestStatuses.set(asset.assetId, status);
+          updatePinMarker(asset, status);
+        } catch (error) {
+          latestStatuses.set(asset.assetId, "Offline");
+          latestVerdicts.set(asset.assetId, { verdict: "Unverified", error: error.message });
+          updatePinMarker(asset, "Offline");
+        }
+      }));
+
+      renderAssetList();
+      renderCustodyArcs();
+      const updatedAt = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      setStatus(`Map colors refreshed at ${updatedAt}. Fictional geolocation only; no GPS tracking.`);
+    }
+
+    function renderAssetList() {
+      const list = document.getElementById("asset-list");
+      const assets = catalog.assets || [];
+      if (assets.length === 0) {
+        list.innerHTML = `<div class="asset-row"><span class="badge badge-loading">Loading</span><p class="muted">Waiting for catalog.</p></div>`;
+        return;
+      }
+
+      list.innerHTML = assets.map((asset) => {
+        const status = latestStatuses.get(asset.assetId) || (isSimulatedAsset(asset) ? "Simulated" : "Loading");
+        const verdict = latestVerdicts.get(asset.assetId);
+        const tx = verdict?.attestationTx
+          ? `<a href="https://testnet.cspr.live/transaction/${escapeHtml(verdict.attestationTx)}" target="_blank" rel="noreferrer"><span class="mono">${escapeHtml(truncate(verdict.attestationTx, 16, 10))}</span></a>`
+          : `<span class="muted">No on-chain transaction displayed</span>`;
+        const proofLine = isSimulatedAsset(asset)
+          ? "Simulated showcase lot — no on-chain verdict claimed."
+          : `Gateway verdict readback: ${escapeHtml(verdict?.verdict || "pending")}.`;
+        return `
+          <article class="asset-row" data-status="${escapeHtml(status)}">
+            <span class="badge ${badgeClass(status)}">${escapeHtml(status)}</span>
+            <h3>${escapeHtml(asset.name || asset.assetId)}</h3>
+            <p class="muted small">${escapeHtml(asset.mineral || asset.mineralType || "Fictional mineral lot")} · ${escapeHtml(asset.operator || "Fictional operator")}</p>
+            <p class="small"><strong>Asset:</strong> <span class="mono">${escapeHtml(asset.assetId)}</span></p>
+            <p class="small"><strong>Origin:</strong> ${escapeHtml(asset.origin?.label || "fictional geolocation")}</p>
+            <p class="honesty-note small">${proofLine}</p>
+            <p class="small"><strong>Tx:</strong> ${tx}</p>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function fitMapToCatalog() {
+      if (!map || !window.maplibregl) return;
+      const bounds = new maplibregl.LngLatBounds();
+      for (const point of catalog.perimeter?.polygon || []) {
+        bounds.extend([point.lng, point.lat]);
+      }
+      for (const asset of catalog.assets || []) {
+        for (const point of custodyPoints(asset)) {
+          bounds.extend([point[0], point[1]]);
+        }
+      }
+      if (!bounds.isEmpty()) {
+        map.fitBounds(bounds, { padding: 58, duration: 900, maxZoom: 8 });
+      }
+    }
+
+    function setStatus(message) {
+      document.getElementById("map-status").textContent = message;
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      try {
+        await loadCatalogForMap();
+        setInterval(refreshMapVerdicts, 30_000);
+      } catch (error) {
+        setStatus(`Map unavailable: ${error.message}. No on-chain or simulated state is displayed beyond this error.`);
+      }
+    });
+  </script>
+</body>
+</html>

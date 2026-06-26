@@ -70,6 +70,18 @@ Safety controls:
 Returns package hash, accepted/rejected counters from the same query path, and
 the public recent attestations used by the demo transparency page.
 
+### `GET /certificate/:assetId`
+
+Returns a symbolic, non-transferable provenance credential only when the
+ProofOfOrigin verdict is `Valid` and the demo MintGate status marks the lot as
+symbolically recorded. It returns `404` for non-Valid or unavailable credentials.
+
+### `GET /map`
+
+Serves the fictional geolocation map. The page uses MapLibre GL with open tiles
+and deck.gl `ArcLayer` custody arcs, then polls `/verdict/:assetId` to recolor
+pins. The map does not claim GPS tracking or real-world monitoring.
+
 ## Configuration
 
 Public defaults target Casper Testnet:
@@ -97,5 +109,5 @@ make gateway
 ```
 
 The target builds the sealer and the livenet Rust binaries first, then serves the
-static `web/` directory (`/demo`, `/marketplace`, `/public/catalog.json`) and the
-JSON API at `http://localhost:3456`.
+static `web/` directory (`/demo`, `/marketplace`, `/map`, `/public/catalog.json`)
+and the JSON API at `http://localhost:3456`.

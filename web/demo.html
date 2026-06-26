@@ -126,6 +126,8 @@
     .event-list { display: grid; gap: 10px; margin-top: 16px; }
     .event { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: rgba(8, 18, 34, 0.56); }
     .honesty-note { border-left: 3px solid var(--gold); padding: 10px 12px; background: rgba(212, 175, 55, 0.08); color: #fde68a; border-radius: 8px; }
+    .credential-card { margin-top: 12px; padding: 12px; border: 1px solid rgba(212, 175, 55, 0.55); border-radius: 14px; background: rgba(212, 175, 55, 0.10); }
+    .credential-card strong { color: #fde68a; }
     .footer-note { margin: 52px 0 0; color: var(--muted); font-size: 12px; }
     @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } .section-head { display: block; } }
   </style>
@@ -145,6 +147,7 @@
           <a href="#marketplace-section">Marketplace</a>
           <a href="#sandbox-section">Sandbox</a>
           <a href="#proof-section">/proof</a>
+          <a href="/map">Map</a>
         </nav>
       </div>
       <div class="package">
@@ -254,6 +257,7 @@
     let catalog = { assets: [] };
     let marketplaceVerdicts = new Map();
     let marketplaceStatuses = new Map();
+    let marketplaceCredentials = new Map();
     let lastComputedSeal = null;
     let lastComputedAssetId = null;
 
@@ -356,6 +360,7 @@
         const assets = liveCatalog.assets || [];
         marketplaceVerdicts = new Map();
         marketplaceStatuses = new Map();
+        marketplaceCredentials = new Map();
         for (const asset of assets) {
           marketplaceStatuses.set(asset.assetId, isSimulatedAsset(asset) ? "Simulated" : "Loading");
         }
@@ -387,12 +392,12 @@
         card.id = `asset-${asset.assetId}`;
         const status = assetStatus(asset);
         card.dataset.status = status;
-        card.innerHTML = renderAssetCard(asset, status, marketplaceVerdicts.get(asset.assetId) || null);
+        card.innerHTML = renderAssetCard(asset, status, marketplaceVerdicts.get(asset.assetId) || null, marketplaceCredentials.get(asset.assetId) || null);
         container.appendChild(card);
       }
     }
 
-    function renderAssetCard(asset, status, verdict) {
+    function renderAssetCard(asset, status, verdict, credential = null) {
       const explorer = verdict?.attestationTx ? `https://testnet.cspr.live/transaction/${verdict.attestationTx}` : null;
       const proofLine = isSimulatedAsset(asset)
         ? "Simulated catalog item — no on-chain verdict claimed."
@@ -411,7 +416,20 @@
         ${verdict?.seal ? `<p class="small"><strong>Seal:</strong> <span class="mono">${escapeHtml(truncate(verdict.seal, 18, 10))}</span></p>` : ""}
         ${verdict?.referenceSeal ? `<p class="small"><strong>Reference:</strong> <span class="mono">${escapeHtml(truncate(verdict.referenceSeal, 18, 10))}</span></p>` : ""}
         ${explorer ? `<a class="ghost-link" href="${explorer}" target="_blank" rel="noreferrer">View attestation transaction</a>` : ""}
+        ${credential ? renderCredentialCard(credential) : ""}
         <div class="actions"><button onclick="verifyFromMarket('${escapeHtml(asset.assetId)}')">Verify provenance</button></div>
+      `;
+    }
+
+    function renderCredentialCard(credential) {
+      const txUrl = `https://testnet.cspr.live/transaction/${escapeHtml(credential.attestationTx)}`;
+      return `
+        <div class="credential-card" data-credential-type="ProvenanceCredential">
+          <strong>ProvenanceCredential</strong>
+          <p class="small">symbolic credential via MintGate event — not a transferable asset</p>
+          <p class="small"><strong>Transferable:</strong> ${credential.transferable === false ? "false" : "unknown"}</p>
+          <p class="small"><strong>Credential tx:</strong> <a href="${txUrl}" target="_blank" rel="noreferrer"><span class="mono">${escapeHtml(truncate(credential.attestationTx, 16, 10))}</span></a></p>
+        </div>
       `;
     }
 
@@ -427,6 +445,11 @@
       } else {
         applyMarketplaceFilters();
       }
+      if (status === "Verified") {
+        fetchCertificateForAsset(asset);
+      } else {
+        marketplaceCredentials.delete(asset.assetId);
+      }
     }
 
     function updateAssetCard(asset, verdict, status) {
@@ -435,7 +458,29 @@
       const card = document.getElementById(`asset-${asset.assetId}`);
       if (!card) return;
       card.dataset.status = status;
-      card.innerHTML = renderAssetCard(asset, status, verdict);
+      card.innerHTML = renderAssetCard(asset, status, verdict, marketplaceCredentials.get(asset.assetId) || null);
+    }
+
+    async function fetchCertificateForAsset(asset) {
+      try {
+        const response = await fetch(gatewayUrl(`/certificate/${encodeURIComponent(asset.assetId)}`));
+        if (response.status === 404) {
+          marketplaceCredentials.delete(asset.assetId);
+          return;
+        }
+        const credential = await response.json();
+        if (!response.ok) throw new Error(credential.error || `Certificate request failed: ${response.status}`);
+        if (credential.type === "ProvenanceCredential" && credential.transferable === false) {
+          marketplaceCredentials.set(asset.assetId, credential);
+          const verdict = marketplaceVerdicts.get(asset.assetId) || null;
+          const status = marketplaceStatuses.get(asset.assetId) || "Verified";
+          if (assetPassesFilters(asset)) {
+            updateAssetCard(asset, verdict, status);
+          }
+        }
+      } catch (error) {
+        marketplaceCredentials.delete(asset.assetId);
+      }
     }
 
     async function verifyFromMarket(assetId) {
