@@ -1,4 +1,9 @@
 import { useRef, type CSSProperties } from "react";
+import {
+  CSPR_PACKAGE_URL,
+  ON_CHAIN_ACCEPTED,
+  ON_CHAIN_REJECTED,
+} from "../../site-links";
 import { Button } from "../ui/Button";
 import { HeroFilmstrip, HeroMedia, HeroUi } from "./HeroMedia";
 import { useHeroParallax } from "./useHeroParallax";
@@ -49,11 +54,16 @@ export function Hero() {
               className="hero__actions reveal"
               style={{ "--reveal-delay": "240ms" } as CSSProperties}
             >
-              <Button href="#demo" trailing={<span aria-hidden="true">→</span>}>
-                Try the live demo
+              <Button href="#proof" trailing={<span aria-hidden="true">→</span>}>
+                Verify proof
               </Button>
-              <Button href="#demo" variant="ghost">
-                Verify on-chain
+              <Button
+                href={CSPR_PACKAGE_URL}
+                variant="ghost"
+                external
+                ariaLabel="View on-chain — opens Casper Testnet explorer"
+              >
+                View on-chain
               </Button>
             </div>
 
@@ -76,6 +86,32 @@ export function Hero() {
         </div>
 
         <div className="shell hero__foot">
+          <p
+            className="hero__proof-rail mono-label reveal"
+            style={{ "--reveal-delay": "360ms" } as CSSProperties}
+          >
+            <span className="hero__proof-stat">
+              <span className="hero__proof-val">{ON_CHAIN_ACCEPTED}</span> accepted
+            </span>
+            <span className="hero__proof-sep" aria-hidden="true">
+              ·
+            </span>
+            <span className="hero__proof-stat">
+              <span className="hero__proof-val">{ON_CHAIN_REJECTED}</span> rejected
+            </span>
+            <span className="hero__proof-sep" aria-hidden="true">
+              ·
+            </span>
+            <a
+              className="hero__proof-link"
+              href={CSPR_PACKAGE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Casper Testnet
+            </a>
+          </p>
+
           <HeroFilmstrip />
           <a className="hero__scroll" href="#problem" aria-label="Scroll to the problem">
             <span>Scroll</span>

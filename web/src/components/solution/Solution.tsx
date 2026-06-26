@@ -69,7 +69,7 @@ const FEATURES: readonly Feature[] = [
     icon: <ReadingIcon />,
     title: "Physical readings, not claims",
     body:
-      "See which sensors, documents, and API responses drive the most proofs — and which origin gaps keep surfacing across every asset class, in real time.",
+      "Field readings from sensors, documents, and APIs are sealed offline at origin — before any model or middleware treats the source as given.",
   },
   {
     key: "seal",
@@ -83,7 +83,7 @@ const FEATURES: readonly Feature[] = [
     icon: <AnchorIcon />,
     title: "The layer everything builds on",
     body:
-      "Agents, escrows, and tokenization finally run on verified origin. Lastro learns from each attestation — building the proof foundation your economy depends on.",
+      "Agents, escrows, and tokenization run on verified origin — a proof layer every downstream action can verify on-chain.",
   },
 ] as const;
 

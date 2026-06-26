@@ -5,7 +5,7 @@ import "./site-nav.css";
 const LINKS = [
   { label: "Protocol", href: "#problem" },
   { label: "How it works", href: "#how" },
-  { label: "Casper", href: "#demo" },
+  { label: "Verify", href: "#proof" },
 ];
 
 type NavTone = "hero" | "dark" | "light";
@@ -15,9 +15,9 @@ const NAV_ZONES: { id: string; tone: NavTone; theme?: "light" }[] = [
   { id: "top", tone: "hero" },
   { id: "problem", tone: "dark" },
   { id: "solution", tone: "dark" },
+  { id: "different", tone: "light", theme: "light" },
   { id: "how", tone: "light", theme: "light" },
   { id: "proof", tone: "dark" },
-  { id: "different", tone: "light", theme: "light" },
   { id: "minerals", tone: "light", theme: "light" },
   { id: "honesty", tone: "dark" },
   { id: "demo", tone: "dark" },
@@ -87,8 +87,8 @@ export function SiteNav() {
         </a>
 
         <div className="site-nav__end">
-          <a className="site-nav__cta" href="#demo">
-            Try the demo
+          <a className="site-nav__cta" href="#proof">
+            Verify proof
           </a>
         </div>
       </div>

@@ -78,7 +78,7 @@ export function Problem() {
 
           <h2 className="section-title reveal-scroll" style={{ "--reveal-delay": "60ms" } as CSSProperties}>
             The agent economy is being built on{" "}
-            <span className="accent-strike">unverified claims</span>.
+            <span className="accent-strike">unverified origin claims</span>.
           </h2>
 
           <p

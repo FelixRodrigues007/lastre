@@ -115,8 +115,8 @@ export function HowItWorks() {
         <header className="section__header section__header--fill how__header">
           <div className="section__header-bar reveal-scroll">
             <p className="kicker">How it works</p>
-            <Button href="#demo" variant="ghost" trailing={<span aria-hidden="true">→</span>}>
-              Try the demo
+            <Button href="#proof" variant="ghost" trailing={<span aria-hidden="true">→</span>}>
+              Verify proof
             </Button>
           </div>
 

@@ -41,8 +41,8 @@ export function Minerals() {
           className="minerals__actions reveal-scroll"
           style={{ "--reveal-delay": "180ms" } as CSSProperties}
         >
-          <Button href="#demo" trailing={<span aria-hidden="true">→</span>}>
-            Try the live demo
+          <Button href="#proof" trailing={<span aria-hidden="true">→</span>}>
+            Verify proof
           </Button>
         </div>
       </div>

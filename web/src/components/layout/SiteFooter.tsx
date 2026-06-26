@@ -63,7 +63,7 @@ export function SiteFooter() {
                 <span className="site-footer__wordmark">Lastro.</span>
               </a>
 
-              <p className="site-footer__tagline">Proof before ownership.</p>
+              <p className="site-footer__tagline">Proof before token.</p>
 
               <p className="site-footer__desc">
                 A provenance trust layer for mineral assets. Simulated demo only — no
@@ -71,7 +71,7 @@ export function SiteFooter() {
               </p>
 
               <a className="site-footer__cta" href="#proof">
-                Try the live demo
+                Verify proof
               </a>
 
               <div className="site-footer__meta">

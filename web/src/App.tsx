@@ -25,9 +25,9 @@ export function App() {
           <Hero />
           <Problem />
           <Solution />
+          <Different />
           <HowItWorks />
           <Proof />
-          <Different />
           <Minerals />
           <Demonstration />
           <FinalCta />

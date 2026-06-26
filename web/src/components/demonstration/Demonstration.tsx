@@ -83,7 +83,7 @@ export function Demonstration() {
               style={{ "--reveal-delay": "180ms" } as CSSProperties}
             >
               <Button href="#proof" trailing={<span aria-hidden="true">→</span>}>
-                Open the demo
+                Verify proof
               </Button>
               <Button href={CSPR_PACKAGE_URL} variant="ghost" external>
                 View on cspr.live

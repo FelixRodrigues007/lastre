@@ -52,7 +52,7 @@ export function FinalCta() {
                   variant="inverse"
                   trailing={<span aria-hidden="true">→</span>}
                 >
-                  Try the live demo
+                  Verify proof
                 </Button>
                 <Button href={GITHUB_URL} variant="ghost" external>
                   GitHub

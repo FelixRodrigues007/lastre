@@ -9,6 +9,8 @@ type ButtonProps = {
   trailing?: ReactNode;
   /** open in a new tab with safe rel attributes */
   external?: boolean;
+  /** accessible name when label alone is insufficient */
+  ariaLabel?: string;
 };
 
 export function Button({
@@ -17,11 +19,13 @@ export function Button({
   variant = "primary",
   trailing,
   external,
+  ariaLabel,
 }: ButtonProps) {
   return (
     <a
       className={`btn btn--${variant}`}
       href={href}
+      {...(ariaLabel ? { "aria-label": ariaLabel } : {})}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       <span className="btn__label">{children}</span>

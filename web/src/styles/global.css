@@ -436,9 +436,9 @@ a {
   border-radius: var(--lastro-radius-pill);
   border: 1px solid transparent;
   transition:
-    color 360ms var(--ease-out-expo),
-    border-color 360ms var(--ease-out-expo),
-    background 360ms var(--ease-out-expo);
+    color 120ms var(--ease-out-expo),
+    border-color 120ms var(--ease-out-expo),
+    background 120ms var(--ease-out-expo);
 }
 
 .status-chip--valid {
