@@ -17,7 +17,7 @@
 
 .hero__depth {
   position: absolute;
-  inset: -14% 0 -10%;
+  inset: -6% 0 -4%;
   overflow: hidden;
 }
 
@@ -25,6 +25,7 @@
   position: absolute;
   inset: 0;
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 .hero__layer-img {
@@ -34,50 +35,22 @@
   object-fit: cover;
   pointer-events: none;
   user-select: none;
+  image-rendering: auto;
 }
 
-.hero__layer-img--back {
-  object-position: 58% 46%;
-  transform: scale(1.16);
+.hero__layer-img--main {
+  object-position: 72% 48%;
 }
 
-.hero__layer--haze {
+.hero__layer--grade {
   background:
     radial-gradient(
-      ellipse 80% 55% at 68% 32%,
-      color-mix(in oklab, var(--lastro-color-seal-400) 18%, transparent) 0%,
-      transparent 62%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--lastro-color-olive-950) 12%, transparent) 0%,
-      transparent 45%
+      ellipse 70% 50% at 70% 30%,
+      color-mix(in oklab, var(--lastro-color-seal-400) 8%, transparent) 0%,
+      transparent 55%
     );
   mix-blend-mode: soft-light;
-}
-
-.hero__layer-img--subject {
-  object-position: 62% 42%;
-}
-
-.hero__layer--dust {
-  mix-blend-mode: screen;
-  opacity: 0.65;
-}
-
-.hero__dust {
-  width: 100%;
-  height: 100%;
-}
-
-.hero__dust-mote {
-  fill: var(--lastro-color-seal-400);
-  opacity: 0.38;
-}
-
-.hero__layer-img--front {
-  object-position: center 100%;
-  opacity: 0.96;
+  pointer-events: none;
 }
 
 /* Left scrim for copy legibility — light touch on the right. */
@@ -87,65 +60,28 @@
   z-index: 1;
   background: linear-gradient(
     90deg,
-    color-mix(in oklab, var(--lastro-color-olive-950) 94%, transparent) 0%,
-    color-mix(in oklab, var(--lastro-color-olive-950) 72%, transparent) 34%,
-    color-mix(in oklab, var(--lastro-color-olive-950) 22%, transparent) 58%,
-    transparent 78%
+    color-mix(in oklab, var(--lastro-color-olive-950) 90%, transparent) 0%,
+    color-mix(in oklab, var(--lastro-color-olive-950) 58%, transparent) 38%,
+    color-mix(in oklab, var(--lastro-color-olive-950) 12%, transparent) 62%,
+    transparent 82%
   );
   pointer-events: none;
 }
 
-/* Dark floor — eases into the Problem section below. */
+/* Dark floor — blends with rocks in the still and eases into Problem. */
 .hero__fade {
   position: absolute;
   inset: auto 0 0;
   z-index: 2;
-  height: 52%;
+  height: 42%;
   background: linear-gradient(
     0deg,
     var(--lastro-color-olive-950) 0%,
-    color-mix(in oklab, var(--lastro-color-olive-950) 92%, transparent) 22%,
-    color-mix(in oklab, var(--lastro-color-olive-950) 48%, transparent) 48%,
+    color-mix(in oklab, var(--lastro-color-olive-950) 88%, transparent) 28%,
+    color-mix(in oklab, var(--lastro-color-olive-950) 35%, transparent) 55%,
     transparent 100%
   );
   pointer-events: none;
-}
-
-.hero__pulse {
-  position: absolute;
-  left: 58%;
-  top: 44%;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--lastro-color-seal-400) 50%, transparent) 0%,
-    transparent 70%
-  );
-  transform: translate(-50%, -50%);
-  animation: hero-pulse 3.4s var(--ease-out-expo) infinite;
-}
-
-.hero__pulse::after {
-  content: "";
-  position: absolute;
-  inset: 30%;
-  border-radius: 50%;
-  border: 1px solid color-mix(in oklab, var(--lastro-color-seal-400) 65%, transparent);
-  box-shadow: 0 0 0 8px color-mix(in oklab, var(--lastro-color-seal-400) 10%, transparent);
-}
-
-@keyframes hero-pulse {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: translate(-50%, -50%) scale(0.94);
-  }
-  50% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.06);
-  }
 }
 
 /* ── content stage over the media ──────────────────────────────────── */
@@ -235,65 +171,12 @@
 .hero__ui {
   position: relative;
   min-height: clamp(14rem, 10rem + 12vw, 20rem);
-}
-
-.hero__link {
-  position: absolute;
-  top: 8%;
-  left: 8%;
-  width: min(72%, 22rem);
-  height: 55%;
-  overflow: visible;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.hero__link-path {
-  fill: none;
-  stroke: var(--lastro-color-seal-400);
-  stroke-width: 1.5;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  opacity: 0.6;
-  vector-effect: non-scaling-stroke;
-  animation: hero-draw 2s var(--ease-out-expo) 0.5s forwards;
-}
-
-.hero__link-node {
-  fill: var(--lastro-color-seal-400);
-  opacity: 0;
-  animation: hero-node 0.5s var(--ease-out-expo) forwards;
-}
-
-.hero__link-node--origin {
-  animation-delay: 0.4s;
-}
-
-.hero__link-node--seal {
-  animation-delay: 1s;
-}
-
-@keyframes hero-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes hero-node {
-  from {
-    opacity: 0;
-    transform: scale(0.4);
-  }
-  to {
-    opacity: 0.9;
-    transform: scale(1);
-  }
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .hero__proof {
-  position: absolute;
-  right: 0;
-  bottom: 0;
   width: min(100%, 21rem);
   will-change: transform;
 }
@@ -392,20 +275,14 @@
     border-bottom: 0;
   }
 
-  .hero__link {
-    display: none;
-  }
-
   .hero__proof {
-    position: relative;
-    right: auto;
-    bottom: auto;
     width: 100%;
     margin-top: var(--lastro-space-4);
   }
 
   .hero__ui {
     min-height: 0;
+    justify-content: stretch;
   }
 
   .hero__foot {
@@ -426,24 +303,15 @@
   }
 
   .hero__ui {
-    align-self: stretch;
-    min-height: 24rem;
-  }
-
-  .hero__proof {
-    right: clamp(0rem, 2vw, 1.5rem);
-    bottom: clamp(1rem, 0rem + 3vw, 2.5rem);
+    align-self: end;
+    min-height: 0;
+    padding-bottom: clamp(0.5rem, 0rem + 2vw, 1.5rem);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__pulse,
-  .hero__link-path,
-  .hero__link-node,
   .hero__scroll svg {
     animation: none;
-    stroke-dashoffset: 0;
-    opacity: 1;
   }
 
   [data-parallax-depth] {

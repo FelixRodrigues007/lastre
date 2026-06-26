@@ -12,7 +12,7 @@ const SIGNALS = [
 
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  useHeroParallax(heroRef, { travel: 180 });
+  useHeroParallax(heroRef, { travel: 90 });
 
   return (
     <section className="hero" id="top" ref={heroRef}>
