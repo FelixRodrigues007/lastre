@@ -1,0 +1,74 @@
+.btn {
+  --btn-shift: 0px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-2);
+  padding: 14px 22px;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid transparent;
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    transform var(--lastro-dur, 220ms) var(--ease-out-expo),
+    background 220ms var(--ease-out-expo),
+    border-color 220ms var(--ease-out-expo),
+    box-shadow 220ms var(--ease-out-expo);
+  will-change: transform;
+}
+
+.btn__trailing {
+  display: inline-flex;
+  transition: transform 260ms var(--ease-out-expo);
+}
+
+.btn:hover .btn__trailing {
+  transform: translateX(3px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Primary — the seal accent. Reserved for the demo CTA. */
+.btn--primary {
+  background: var(--lastro-button-primary-bg);
+  color: var(--lastro-button-primary-text);
+  box-shadow: 0 0 0 0 rgba(254, 241, 111, 0.5);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 32px -12px rgba(254, 241, 111, 0.55),
+    0 0 0 1px rgba(254, 241, 111, 0.4);
+}
+
+/* Inverse — cream fill on dark panels (final CTA). */
+.btn--inverse {
+  background: var(--lastro-color-cream-50);
+  color: var(--lastro-color-olive-950);
+  box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.45);
+}
+
+.btn--inverse:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 18px 36px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+/* Ghost — hairline outline, mono-adjacent. */
+.btn--ghost {
+  background: transparent;
+  color: var(--lastro-text-primary);
+  border-color: var(--lastro-border-strong);
+}
+
+.btn--ghost:hover {
+  transform: translateY(-2px);
+  border-color: var(--lastro-text-secondary);
+  background: rgba(231, 230, 208, 0.04);
+}

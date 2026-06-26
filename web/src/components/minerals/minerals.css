@@ -1,0 +1,68 @@
+/* Minerals — centered editorial + full-bleed illustration */
+
+.minerals {
+  color: var(--lastro-text-primary);
+  background: var(--lastro-bg-primary);
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.minerals.section--band {
+  border-block-end: none;
+}
+
+.minerals__copy {
+  margin-bottom: 0;
+}
+
+.minerals__actions {
+  margin-top: clamp(1.25rem, 0.75rem + 2vw, 1.75rem);
+}
+
+.minerals__actions .btn--primary {
+  box-shadow:
+    0 18px 40px -16px rgba(18, 20, 7, 0.35),
+    0 6px 16px -8px rgba(18, 20, 7, 0.2);
+}
+
+.minerals__actions .btn--primary:hover {
+  box-shadow:
+    0 24px 48px -14px rgba(18, 20, 7, 0.42),
+    0 10px 24px -10px rgba(254, 241, 111, 0.45),
+    0 0 0 1px rgba(254, 241, 111, 0.35);
+}
+
+.minerals__figure {
+  position: relative;
+  margin: clamp(3rem, 1.5rem + 6vw, 5rem) 0 0;
+  width: 100%;
+  line-height: 0;
+}
+
+.minerals__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: clamp(16rem, 10rem + 22vw, 28rem);
+  max-height: 640px;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.minerals__caption {
+  position: absolute;
+  right: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+  bottom: clamp(1rem, 0.5rem + 2vw, 1.75rem);
+  padding: 6px 12px;
+  border-radius: var(--lastro-radius-pill);
+  background: rgba(244, 243, 230, 0.82);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  color: var(--lastro-text-muted);
+  backdrop-filter: blur(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .minerals__actions .btn--primary {
+    box-shadow: 0 8px 20px -12px rgba(18, 20, 7, 0.25);
+  }
+}

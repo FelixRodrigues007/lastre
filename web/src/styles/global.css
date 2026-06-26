@@ -1,0 +1,525 @@
+/* Global base — reset, page atmosphere, and shared primitives.
+ * Palette/space/type come from @design-system/tokens/lastro.css.
+ * Local aliases keep component CSS short and intent-revealing. */
+
+:root {
+  /* page rhythm */
+  --shell-max: 1440px;
+  --shell-pad: clamp(1.25rem, 0.5rem + 4vw, 4rem);
+  --section-gap: clamp(5.5rem, 3.5rem + 8vw, 9.5rem);
+  --section-inner: clamp(2.5rem, 1rem + 5vw, 4rem);
+
+  /* missing token alias used across panels */
+  --lastro-space-5: 20px;
+
+  /* type scale */
+  --text-eyebrow: 0.75rem;
+  --text-body: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  --text-lead: clamp(1.0625rem, 0.95rem + 0.55vw, 1.3125rem);
+  --text-h2: clamp(2rem, 1.1rem + 3.4vw, 3.75rem);
+  --text-h2-editorial: clamp(2.25rem, 1.2rem + 4.2vw, 4.25rem);
+  --text-display: clamp(3.1rem, 0.6rem + 9vw, 8.5rem);
+
+  /* shared surfaces */
+  --panel-pad: clamp(1.75rem, 1rem + 2.5vw, 2.5rem);
+  --panel-shadow:
+    0 40px 80px -40px rgba(0, 0, 0, 0.62),
+    inset 0 1px 0 rgba(231, 230, 208, 0.05);
+  --panel-shadow-light:
+    0 32px 64px -28px rgba(18, 20, 7, 0.22),
+    0 12px 28px -16px rgba(18, 20, 7, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+
+  /* motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-slow: 720ms;
+  --dur-reveal: 840ms;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100dvh;
+  color: var(--lastro-text-primary);
+  background: var(--lastro-bg-primary);
+  font-family: var(--lastro-font-body);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Atmosphere: a single fixed olive radial wash + a faint provenance grid.
+ * Pinned behind everything so scrolling sections read against one field. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(
+      120% 80% at 82% -10%,
+      rgba(254, 241, 111, 0.07) 0%,
+      transparent 46%
+    ),
+    radial-gradient(
+      90% 70% at 0% 0%,
+      rgba(111, 143, 46, 0.08) 0%,
+      transparent 50%
+    );
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(231, 230, 208, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(231, 230, 208, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(
+    120% 90% at 50% 0%,
+    #000 0%,
+    transparent 75%
+  );
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: var(--lastro-stroke-rule) solid var(--lastro-brand-seal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--lastro-brand-seal);
+  color: var(--lastro-color-olive-950);
+}
+
+/* ── shared primitives ───────────────────────────────────────────── */
+
+.shell {
+  width: 100%;
+  max-width: var(--shell-max);
+  margin-inline: auto;
+  padding-inline: var(--shell-pad);
+}
+
+/* Scroll curtain — opaque layer above the sticky footer reveal. */
+.site-curtain {
+  position: relative;
+  z-index: 1;
+  background: var(--lastro-color-olive-950);
+}
+
+.mono-label {
+  font-family: var(--lastro-font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+/* Eyebrow chip — pill with a status dot. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+  padding: 7px 14px 7px 12px;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-badge-border);
+  border-radius: var(--lastro-radius-pill);
+  background: var(--lastro-badge-bg);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lastro-badge-text);
+}
+
+.eyebrow__dot {
+  position: relative;
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lastro-status-valid);
+}
+
+.eyebrow__dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--lastro-status-valid);
+  animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.8;
+  }
+  70%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* Section eyebrow (no chip) — small kicker above headlines. */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+  font-family: var(--lastro-font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lastro-brand-seal-text);
+}
+
+.kicker::before {
+  content: "";
+  width: 28px;
+  height: var(--lastro-stroke-rule);
+  background: var(--lastro-brand-seal);
+}
+
+/* ── section system (shared across all bands) ─────────────────────── */
+
+.section {
+  padding-block: var(--section-gap);
+}
+
+.section--bordered {
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.section--band {
+  border-block: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+}
+
+.section__header {
+  margin-bottom: var(--section-inner);
+}
+
+.section__header--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+/* Full-width section header — kicker bar + fill headline (How, Different) */
+.section__header--fill {
+  margin-bottom: var(--section-inner);
+  max-width: none;
+}
+
+.section__header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lastro-space-6);
+  flex-wrap: wrap;
+}
+
+.section__header--fill .section-title {
+  margin-top: clamp(1.25rem, 0.75rem + 2vw, 2rem);
+}
+
+.section-title {
+  margin-top: var(--lastro-space-6);
+  font-family: var(--lastro-font-display);
+  font-size: var(--text-h2);
+  font-weight: var(--lastro-weight-medium);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--lastro-text-primary);
+  text-wrap: balance;
+}
+
+.section-title--narrow {
+  max-width: 16ch;
+}
+
+.section-title--medium {
+  max-width: 18ch;
+}
+
+.section-title--wide {
+  max-width: 22ch;
+}
+
+/* Full-bleed editorial headline — spans the shell, no ch cap */
+.section-title--fill {
+  max-width: none;
+  width: 100%;
+  font-size: clamp(2.75rem, 1.2rem + 5.5vw, 5.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.section-title--fill-center {
+  max-width: none;
+  width: 100%;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.section-title--editorial {
+  font-size: var(--text-h2-editorial);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+}
+
+.section-title--fill-center.section-title--editorial {
+  font-size: clamp(2.5rem, 1.3rem + 4.8vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.032em;
+}
+
+.section-lead {
+  margin-top: var(--lastro-space-8);
+  max-width: 46ch;
+  font-size: var(--text-lead);
+  line-height: 1.58;
+  color: var(--lastro-text-secondary);
+  text-wrap: pretty;
+}
+
+.section-lead--rule {
+  margin-top: clamp(1.25rem, 0.75rem + 2vw, 1.75rem);
+  padding-left: var(--lastro-space-6);
+  border-left: var(--lastro-stroke-rule) solid var(--lastro-border-subtle);
+}
+
+.section-lead--stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lastro-space-4);
+}
+
+.section-lead--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* Accent treatments — seal underline, invalid strike */
+.accent-underline {
+  position: relative;
+  white-space: nowrap;
+  color: var(--lastro-brand-seal-text);
+}
+
+.accent-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.05em;
+  height: 0.07em;
+  background: var(--lastro-brand-seal);
+  border-radius: var(--lastro-radius-pill);
+  transform-origin: left;
+}
+
+.accent-underline--draw::after {
+  animation: draw-underline 900ms var(--ease-out-expo) 520ms backwards;
+}
+
+.accent-strike {
+  position: relative;
+  color: var(--lastro-text-secondary);
+  white-space: nowrap;
+}
+
+.accent-strike::after {
+  content: "";
+  position: absolute;
+  left: -0.04em;
+  right: -0.04em;
+  top: 54%;
+  height: 0.06em;
+  background: var(--lastro-status-invalid);
+  border-radius: var(--lastro-radius-pill);
+}
+
+.accent-emphasis {
+  color: var(--lastro-text-primary);
+  font-weight: var(--lastro-weight-semibold);
+}
+
+.accent-emphasis--seal {
+  border-bottom: var(--lastro-stroke-rule) solid var(--lastro-brand-seal);
+  padding-bottom: 1px;
+}
+
+.accent-emphasis--invalid {
+  border-bottom: var(--lastro-stroke-rule) solid var(--lastro-status-invalid);
+  padding-bottom: 1px;
+}
+
+@keyframes draw-underline {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Shared panel chrome — problem, proof, hero aside, consoles */
+.panel {
+  padding: var(--panel-pad);
+  border-radius: var(--lastro-radius-lg);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: linear-gradient(
+    150deg,
+    var(--lastro-bg-panel) 0%,
+    var(--lastro-bg-primary) 100%
+  );
+}
+
+.panel--elevated {
+  border-color: var(--lastro-border-strong);
+  background: linear-gradient(
+    150deg,
+    var(--lastro-bg-panel) 0%,
+    var(--lastro-bg-elevated) 100%
+  );
+  box-shadow: var(--panel-shadow);
+}
+
+.panel--light {
+  box-shadow: var(--panel-shadow-light);
+}
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--lastro-space-4);
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+/* Status chip — LIVE, MISMATCH, etc. */
+.status-chip {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--lastro-radius-pill);
+  border: 1px solid transparent;
+  transition:
+    color 360ms var(--ease-out-expo),
+    border-color 360ms var(--ease-out-expo),
+    background 360ms var(--ease-out-expo);
+}
+
+.status-chip--valid {
+  color: var(--lastro-status-valid);
+  border-color: color-mix(in oklab, var(--lastro-status-valid) 40%, transparent);
+}
+
+.status-chip--invalid {
+  color: var(--lastro-status-invalid);
+  border-color: color-mix(in oklab, var(--lastro-status-invalid) 45%, transparent);
+}
+
+/* Two-column editorial grid — copy left, panel right */
+.split-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(3rem, 1rem + 8vw, 6rem);
+  align-items: start;
+}
+
+@media (min-width: 980px) {
+  .split-grid {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  }
+
+  .split-grid__aside--sticky {
+    position: sticky;
+    top: calc(var(--site-nav-height, 64px) + 2.5rem);
+  }
+}
+
+/* Titles and leads fill their column in split layouts */
+.split-grid > :first-child .section-title,
+.split-grid > :first-child .section-lead {
+  max-width: none;
+}
+
+/* Hero load reveal — opacity/transform only (compositor-friendly). */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: reveal var(--dur-slow) var(--ease-out-expo) forwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Scroll reveal — sections below the fold */
+.reveal-scroll {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity var(--dur-reveal) var(--ease-out-expo),
+    transform var(--dur-reveal) var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal-scroll.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal,
+  .reveal-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,525 @@
+/* Section 4 — How it works.
+ * Full-width clear (cream) band: data-theme="light" on .how flips every
+ * --lastro-* token to the light ramp. A sticky panel (heading + step rail +
+ * diagram) holds while four cards scroll past; the card crossing the middle
+ * of the viewport puts its step "in evidence". */
+
+.how {
+  color: var(--lastro-text-primary);
+  background: var(--lastro-bg-primary);
+}
+
+.how__header {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 0.75rem + 2vw, 2rem);
+  margin-bottom: clamp(2rem, 1rem + 3vw, 3rem);
+}
+
+.how__header .section-title {
+  margin-top: 0;
+}
+
+/* ── one bordered panel holds tabs + cards (Superhuman pattern) ────── */
+.how__panel {
+  padding: 0;
+  border-color: var(--lastro-border-strong);
+  background: var(--lastro-bg-panel);
+  overflow: clip;
+}
+
+/* sticky tab bar — first child of the panel, pins below the site nav */
+.how__tabs {
+  position: sticky;
+  top: var(--site-nav-height, 4.5rem);
+  z-index: 30;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--lastro-bg-elevated);
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+}
+
+.how__tab {
+  display: flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+  padding: var(--lastro-space-5, 20px) var(--lastro-space-6);
+  border: 0;
+  border-left: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: transparent;
+  color: var(--lastro-text-secondary);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 360ms var(--ease-out-expo),
+    color 240ms var(--ease-out-expo),
+    box-shadow 240ms var(--ease-out-expo);
+}
+
+.how__tab > svg {
+  flex: none;
+  opacity: 0.55;
+  transition: opacity 240ms var(--ease-out-expo);
+}
+
+.how__tab:first-child {
+  border-left: 0;
+}
+
+.how__tab:hover {
+  background: color-mix(in oklab, var(--lastro-bg-primary) 50%, transparent);
+  color: var(--lastro-text-primary);
+}
+
+.how__tab--active {
+  background: var(--lastro-bg-primary);
+  color: var(--lastro-text-primary);
+  box-shadow: inset 0 -2px 0 var(--lastro-brand-seal);
+}
+
+.how__tab--active > svg {
+  opacity: 1;
+}
+
+.how__tab-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.how__tab-name {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--lastro-space-2);
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-medium);
+  color: currentColor;
+}
+
+.how__tab-index {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.04em;
+  color: var(--lastro-text-muted);
+  transition: color 240ms var(--ease-out-expo);
+}
+
+.how__tab--active .how__tab-index {
+  color: var(--lastro-brand-seal-text);
+}
+
+.how__tab-state {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+/* ── the scrolling card stack ──────────────────────────────────────── */
+.how__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.how__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  scroll-margin-top: calc(var(--site-nav-height, 4.5rem) + 4rem);
+}
+
+/* full-width hatched provenance band between cards */
+.how__card + .how__card {
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+}
+
+.how__card + .how__card::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 12px;
+  z-index: 1;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--lastro-border-subtle) 0 1px,
+    transparent 1px 8px
+  );
+}
+
+.how__card-copy {
+  padding: clamp(1.75rem, 1rem + 3vw, 3rem);
+}
+
+.how__card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+  padding-bottom: var(--lastro-space-4);
+  border-bottom: var(--lastro-stroke-rule) dashed var(--lastro-border-strong);
+}
+
+.how__card-head > svg {
+  flex: none;
+  opacity: 0.85;
+}
+
+.how__card-name {
+  font-family: var(--lastro-font-display);
+  font-size: 1rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+}
+
+.how__card-state {
+  margin-left: auto;
+}
+
+.how__card-index {
+  display: block;
+  margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  color: var(--lastro-brand-seal-text);
+}
+
+.how__headline {
+  margin-top: var(--lastro-space-4);
+  font-family: var(--lastro-font-display);
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.6rem);
+  font-weight: var(--lastro-weight-medium);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--lastro-text-primary);
+  text-wrap: balance;
+}
+
+.how__body {
+  margin-top: var(--lastro-space-6);
+  max-width: 42ch;
+  font-size: var(--text-lead);
+  line-height: 1.6;
+  color: var(--lastro-text-secondary);
+}
+
+/* full-bleed diagram cell — atmospheric wash with the diagram floating on it */
+.how__card-viz {
+  display: grid;
+  place-items: center;
+  padding: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+  background:
+    radial-gradient(
+      120% 90% at 85% 0%,
+      color-mix(in oklab, var(--lastro-brand-seal) 16%, transparent) 0%,
+      transparent 55%
+    ),
+    linear-gradient(
+      150deg,
+      color-mix(in oklab, var(--lastro-color-sage-300) 30%, var(--lastro-bg-elevated)) 0%,
+      var(--lastro-bg-panel) 100%
+    );
+}
+
+/* ── diagram column (shared idiom with the hero ProofPanel) ────────── */
+.viz {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--lastro-space-3);
+  width: 100%;
+  max-width: 380px;
+  padding: var(--lastro-space-8);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-md);
+  background: var(--lastro-bg-primary);
+  box-shadow: 0 24px 50px -30px rgba(18, 20, 7, 0.45);
+}
+
+.viz__flow {
+  display: flex;
+  justify-content: center;
+  color: var(--lastro-text-muted);
+}
+
+.viz__card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: var(--lastro-space-4) var(--lastro-space-6);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-sm);
+  background: var(--lastro-bg-primary);
+}
+
+.viz__card--agent {
+  border-color: var(--lastro-border-strong);
+}
+
+.viz__card-label {
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+}
+
+.viz__card-detail,
+.viz__hash-key,
+.viz__chip-text {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--lastro-text-muted);
+}
+
+.viz__hash {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lastro-space-3);
+  padding: var(--lastro-space-4) var(--lastro-space-6);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+  border-radius: var(--lastro-radius-sm);
+  background: var(--lastro-bg-primary);
+}
+
+.viz__hash-val {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.02em;
+  color: var(--lastro-brand-seal-text);
+}
+
+.viz__foot {
+  margin-top: var(--lastro-space-2);
+  text-align: center;
+}
+
+.viz__node {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--lastro-bg-elevated);
+  border: 2px solid var(--lastro-color-olive-400);
+}
+
+.viz__node--anchor {
+  border-color: var(--lastro-brand-seal);
+  background: color-mix(in oklab, var(--lastro-brand-seal) 28%, transparent);
+}
+
+.viz__node--valid {
+  border-color: var(--lastro-status-valid);
+  background: color-mix(in oklab, var(--lastro-status-valid) 24%, transparent);
+}
+
+.viz__row {
+  display: flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+}
+
+.viz__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+  flex: 1;
+  padding: var(--lastro-space-4);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-sm);
+  background: var(--lastro-bg-primary);
+}
+
+.viz__chip--block {
+  border-color: var(--lastro-border-strong);
+}
+
+.viz__chip .viz__chip-text {
+  font-family: var(--lastro-font-display);
+  font-size: 0.875rem;
+  color: var(--lastro-text-primary);
+  letter-spacing: 0;
+}
+
+.viz__link {
+  flex: none;
+  width: 28px;
+  height: var(--lastro-stroke-rule);
+  background: repeating-linear-gradient(
+    to right,
+    var(--lastro-border-strong) 0 5px,
+    transparent 5px 9px
+  );
+}
+
+.viz__meta {
+  text-align: center;
+}
+
+.viz__gate {
+  display: flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+  padding: var(--lastro-space-4) var(--lastro-space-6);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+  border-radius: var(--lastro-radius-sm);
+  background: var(--lastro-bg-primary);
+}
+
+.viz__gate-text {
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+}
+
+.viz__split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--lastro-space-3);
+  margin-top: var(--lastro-space-2);
+}
+
+.viz__split-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--lastro-space-4);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-sm);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--lastro-text-secondary);
+}
+
+.viz__split-cell--seal {
+  border-color: color-mix(in oklab, var(--lastro-status-valid) 50%, transparent);
+}
+
+.viz__split-key {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.viz__split-cell--seal .viz__split-key {
+  color: var(--lastro-status-valid);
+}
+
+.viz__verdict {
+  display: flex;
+  align-items: center;
+  gap: var(--lastro-space-4);
+  padding: var(--lastro-space-4) var(--lastro-space-6);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-sm);
+  background: var(--lastro-bg-primary);
+}
+
+.viz__verdict-node {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+}
+
+.viz__verdict--valid {
+  border-color: color-mix(in oklab, var(--lastro-status-valid) 45%, transparent);
+}
+
+.viz__verdict--valid .viz__verdict-node {
+  color: var(--lastro-status-valid);
+  background: color-mix(in oklab, var(--lastro-status-valid) 16%, transparent);
+}
+
+.viz__verdict--invalid {
+  border-color: color-mix(in oklab, var(--lastro-status-invalid) 45%, transparent);
+}
+
+.viz__verdict--invalid .viz__verdict-node {
+  color: var(--lastro-status-invalid);
+  background: color-mix(in oklab, var(--lastro-status-invalid) 16%, transparent);
+}
+
+.viz__verdict-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.viz__verdict-label {
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastro-text-primary);
+}
+
+.viz__verdict-detail {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--lastro-text-muted);
+}
+
+/* ── desktop: two-column cards, taller scroll room ─────────────────── */
+@media (min-width: 880px) {
+  .how__card {
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+    align-items: stretch;
+    min-height: 62vh;
+  }
+
+  .how__card-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+  }
+
+  /* dashed head rule rides the top of the copy column */
+  .how__card-head {
+    margin-bottom: auto;
+  }
+
+  .how__card-index {
+    margin-top: clamp(2rem, 1rem + 3vw, 3.5rem);
+  }
+}
+
+/* ── mobile: compact the sticky tab bar so four tabs fit ───────────── */
+@media (max-width: 640px) {
+  .how__tab {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: var(--lastro-space-3) var(--lastro-space-3);
+  }
+
+  .how__tab > svg,
+  .how__tab-state {
+    display: none;
+  }
+
+  .how__tab-name {
+    font-size: 0.8125rem;
+  }
+
+  .how__tab-index {
+    font-size: 0.625rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .viz__split {
+    grid-template-columns: 1fr;
+  }
+}

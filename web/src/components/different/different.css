@@ -1,0 +1,233 @@
+/* Section — Why it's different.
+ * Reference pattern: editorial headline over a 2:1:1 feature grid — one
+ * featured card with a dot-grid field and source strip, two compact detail cards. */
+
+.diff {
+  color: var(--lastro-text-primary);
+  background: var(--lastro-bg-primary);
+}
+
+/* ── 2:1:1 card grid ─────────────────────────────────────────────── */
+.diff__grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--lastro-space-4);
+}
+
+.diff__card {
+  min-height: 0;
+}
+
+.diff__card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+  border-radius: var(--lastro-radius-md);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: var(--lastro-bg-elevated);
+  transition:
+    border-color 320ms var(--ease-out-expo),
+    box-shadow 320ms var(--ease-out-expo),
+    transform 320ms var(--ease-out-expo);
+}
+
+.diff__card:hover .diff__card-inner {
+  border-color: var(--lastro-border-strong);
+  box-shadow: 0 20px 40px -28px rgba(18, 20, 7, 0.18);
+  transform: translateY(-2px);
+}
+
+/* featured card — dot grid + footer strip */
+.diff__card--featured .diff__card-inner {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--lastro-border-strong);
+  background:
+    radial-gradient(
+      80% 60% at 100% 0%,
+      color-mix(in oklab, var(--lastro-brand-seal) 8%, transparent) 0%,
+      transparent 55%
+    ),
+    var(--lastro-bg-panel);
+}
+
+.diff__card--featured .diff__card-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(
+      color-mix(in oklab, var(--lastro-text-muted) 28%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 18px 18px;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 72%);
+  pointer-events: none;
+}
+
+.diff__card-top {
+  position: relative;
+  z-index: 1;
+}
+
+.diff__category {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+}
+
+.diff__icon {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.diff__icon--seal {
+  background: var(--lastro-brand-seal);
+}
+
+.diff__icon--sage {
+  background: var(--lastro-color-olive-500);
+}
+
+.diff__icon--valid {
+  background: var(--lastro-status-valid);
+}
+
+.diff__card-title {
+  margin-top: var(--lastro-space-6);
+  font-family: var(--lastro-font-display);
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+  font-weight: var(--lastro-weight-semibold);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--lastro-text-primary);
+  text-wrap: balance;
+}
+
+.diff__card--featured .diff__card-title {
+  max-width: 18ch;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem);
+  font-weight: var(--lastro-weight-medium);
+  line-height: 1.08;
+}
+
+.diff__card-body {
+  margin-top: var(--lastro-space-4);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--lastro-text-secondary);
+  text-wrap: pretty;
+}
+
+.diff__card-body--featured {
+  position: relative;
+  z-index: 1;
+  max-width: 34ch;
+  margin-top: var(--lastro-space-4);
+  font-size: var(--text-lead);
+}
+
+/* source strip — the featured card's footer */
+.diff__footer {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+}
+
+.diff__card--featured .diff__footer {
+  margin-inline: calc(-1 * clamp(1.5rem, 1rem + 1.5vw, 2rem));
+  margin-bottom: calc(-1 * clamp(1.5rem, 1rem + 1.5vw, 2rem));
+  padding: var(--lastro-space-5, 20px) clamp(1.5rem, 1rem + 1.5vw, 2rem);
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: var(--lastro-bg-elevated);
+}
+
+.diff__sources {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+}
+
+.diff__source {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+}
+
+.diff__source-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--lastro-text-muted) 12%, transparent),
+      transparent 60%
+    ),
+    var(--lastro-bg-panel);
+}
+
+.diff__source:nth-child(1) .diff__source-mark {
+  background:
+    radial-gradient(circle at 50% 62%, var(--lastro-status-valid) 3px, transparent 3.5px),
+    var(--lastro-bg-panel);
+}
+
+.diff__source:nth-child(2) .diff__source-mark {
+  background:
+    linear-gradient(var(--lastro-border-strong) 1px, transparent 1px) 50% 38% / 60% 1px no-repeat,
+    linear-gradient(var(--lastro-border-strong) 1px, transparent 1px) 50% 50% / 72% 1px no-repeat,
+    linear-gradient(var(--lastro-border-strong) 1px, transparent 1px) 50% 62% / 48% 1px no-repeat,
+    var(--lastro-bg-panel);
+}
+
+.diff__source:nth-child(3) .diff__source-mark {
+  background:
+    linear-gradient(90deg, var(--lastro-border-strong) 1px, transparent 1px) 30% 0 / 1px 100% no-repeat,
+    linear-gradient(90deg, var(--lastro-border-strong) 1px, transparent 1px) 70% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--lastro-border-strong) 1px, transparent 1px) 0 35% / 100% 1px no-repeat,
+    linear-gradient(var(--lastro-border-strong) 1px, transparent 1px) 0 65% / 100% 1px no-repeat,
+    var(--lastro-bg-panel);
+}
+
+.diff__source-name {
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-secondary);
+}
+
+/* ── desktop: 2:1:1 asymmetric grid ────────────────────────────────── */
+@media (min-width: 900px) {
+  .diff__grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--lastro-space-4);
+    align-items: stretch;
+  }
+
+  .diff__card--featured .diff__card-inner {
+    min-height: 22rem;
+  }
+
+  .diff__card:not(.diff__card--featured) .diff__card-inner {
+    min-height: 18rem;
+  }
+
+  .diff__card:not(.diff__card--featured) .diff__card-body {
+    margin-top: auto;
+    padding-top: var(--lastro-space-4);
+  }
+}

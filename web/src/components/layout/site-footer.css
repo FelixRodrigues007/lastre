@@ -1,0 +1,279 @@
+/* Site footer — light reveal band, ruled grid, mine scenic + cropped wordmark. */
+
+.site-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 0;
+  color: var(--lastro-text-primary);
+  background: var(--lastro-bg-primary);
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(254, 241, 111, 0.45),
+    transparent
+  );
+  opacity: 0.55;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.site-footer__stage {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(36rem, 24rem + 38vw, 52rem);
+}
+
+/* ── scenic layer ─────────────────────────────────────────────────── */
+
+.site-footer__scenic {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(22rem, 14rem + 28vw, 36rem);
+  pointer-events: none;
+  user-select: none;
+}
+
+.site-footer__scenic::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    var(--lastro-bg-primary) 0%,
+    rgba(231, 230, 208, 0.72) 10%,
+    transparent 26%
+  );
+}
+
+.site-footer__scenic-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+}
+
+/* ── content grid ─────────────────────────────────────────────────── */
+
+.site-footer__body {
+  position: relative;
+  z-index: 2;
+  padding-block: clamp(3rem, 2rem + 4vw, 4.5rem) clamp(1.5rem, 0.75rem + 2vw, 2.5rem);
+}
+
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: var(--lastro-bg-primary);
+}
+
+.site-footer__brand-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--lastro-space-4);
+  max-width: 30rem;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+}
+
+.site-footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+  width: fit-content;
+  color: var(--lastro-text-primary);
+  transition: opacity 220ms var(--ease-out-expo);
+}
+
+.site-footer__brand:hover {
+  opacity: 0.72;
+}
+
+.site-footer__brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  background: var(--lastro-color-olive-950);
+  --seal-mark-outer: var(--lastro-color-cream-200);
+  --seal-mark-accent: var(--lastro-color-seal-400);
+  --seal-mark-lines: var(--lastro-color-cream-200);
+}
+
+.site-footer__wordmark {
+  font-family: var(--lastro-font-display);
+  font-size: 1.125rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.03em;
+}
+
+.site-footer__tagline {
+  font-family: var(--lastro-font-display);
+  font-size: clamp(1.625rem, 1.15rem + 1.8vw, 2.25rem);
+  font-weight: var(--lastro-weight-medium);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  color: var(--lastro-text-primary);
+  max-width: 14ch;
+}
+
+.site-footer__desc {
+  font-size: 0.9375rem;
+  line-height: 1.58;
+  color: var(--lastro-text-secondary);
+  max-width: 36ch;
+}
+
+.site-footer__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--lastro-space-2);
+  padding: 13px 24px;
+  border-radius: var(--lastro-radius-pill);
+  background: var(--lastro-color-olive-950);
+  color: var(--lastro-color-cream-50);
+  font-family: var(--lastro-font-display);
+  font-size: 0.875rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  transition:
+    transform 220ms var(--ease-out-expo),
+    background 220ms var(--ease-out-expo);
+}
+
+.site-footer__cta:hover {
+  transform: translateY(-1px);
+  background: var(--lastro-color-olive-900);
+}
+
+.site-footer__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lastro-space-2);
+  margin-top: auto;
+  padding-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+}
+
+.site-footer__copy,
+.site-footer__note {
+  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+}
+
+.site-footer__nav {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.site-footer__col {
+  padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+}
+
+.site-footer__col + .site-footer__col {
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.site-footer__col-title {
+  color: var(--lastro-text-muted);
+  margin-bottom: var(--lastro-space-4);
+}
+
+.site-footer__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lastro-space-3);
+}
+
+.site-footer__link {
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-secondary);
+  transition: color 220ms var(--ease-out-expo);
+}
+
+.site-footer__link:hover {
+  color: var(--lastro-text-primary);
+}
+
+/* ── giant cropped wordmark ───────────────────────────────────────── */
+
+.site-footer__scenic-wordmark {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 2;
+  transform: translateX(-50%) translateY(18%);
+  width: max-content;
+  font-family: var(--lastro-font-display);
+  font-size: clamp(14rem, 10rem + 30vw, 40rem);
+  font-weight: var(--lastro-weight-medium);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  text-align: center;
+  white-space: nowrap;
+  color: #ffffff;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (min-width: 720px) {
+  .site-footer__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+    align-items: stretch;
+  }
+
+  .site-footer__brand-col {
+    border-right: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+    min-height: 100%;
+  }
+
+  .site-footer__nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: none;
+  }
+
+  .site-footer__col + .site-footer__col {
+    border-top: none;
+    border-left: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  }
+}
+
+@media (min-width: 1080px) {
+  .site-footer__grid {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.6fr);
+  }
+
+  .site-footer__scenic-wordmark {
+    transform: translateX(-50%) translateY(20%);
+    font-size: clamp(16rem, 12rem + 24vw, 44rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer__cta:hover {
+    transform: none;
+  }
+}

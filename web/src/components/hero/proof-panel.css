@@ -1,0 +1,115 @@
+.proof {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lastro-space-6);
+}
+
+/* hairline seal glint along the top edge */
+.proof::before {
+  content: "";
+  position: absolute;
+  inset: 0 var(--lastro-space-8) auto;
+  top: -1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--lastro-brand-seal),
+    transparent
+  );
+  opacity: 0.6;
+}
+
+.proof__head {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.proof__hash {
+  display: flex;
+  align-items: baseline;
+  gap: var(--lastro-space-3);
+  font-family: var(--lastro-font-mono);
+  font-size: 1rem;
+  padding-bottom: var(--lastro-space-6);
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.proof__hash-key {
+  color: var(--lastro-text-muted);
+  font-size: 0.75rem;
+}
+
+.proof__hash-val {
+  color: var(--lastro-brand-seal-text);
+  letter-spacing: 0.02em;
+}
+
+/* ── pipeline ──────────────────────────────────────────────────────── */
+.proof__pipe {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.proof__step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--lastro-space-4);
+  padding-bottom: var(--lastro-space-6);
+}
+
+/* vertical connector between nodes */
+.proof__step:not(:last-child) .proof__node::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 13px;
+  transform: translateX(-50%);
+  width: var(--lastro-stroke-hairline);
+  height: calc(100% + var(--lastro-space-2) - 4px);
+  background: var(--lastro-border-strong);
+}
+
+.proof__node {
+  position: relative;
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--lastro-bg-elevated);
+  border: 2px solid var(--lastro-color-olive-400);
+}
+
+.proof__node--valid {
+  border-color: var(--lastro-status-valid);
+  background: var(--lastro-status-valid);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--lastro-status-valid) 22%, transparent);
+}
+
+.proof__step-label {
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+}
+
+.proof__step--verdict {
+  padding-bottom: 0;
+}
+
+.proof__verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--lastro-font-display);
+  font-size: 1.0625rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.01em;
+  color: var(--lastro-status-valid);
+}
