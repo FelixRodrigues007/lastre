@@ -10,6 +10,7 @@ import {
   resolveFromRepo,
   type GatewayDependencies,
 } from "./protocol.js";
+import { FraudGame, normalizeDifficulty } from "./fraud.js";
 
 export type { GatewayDependencies } from "./protocol.js";
 
@@ -79,6 +80,38 @@ export function createGatewayApp(options: CreateGatewayAppOptions = {}): Express
   const app = express();
   app.use(cors());
   app.use(express.json({ limit: "1mb" }));
+
+  const fraudGame = new FraudGame({ loadCatalog: () => dependencies.loadCatalog() });
+
+  // Shared SANDBOX anchor guard. Both /sandbox/anchor and /fraud/anchor-tampered
+  // must pass exactly the same protections before any on-chain write happens.
+  type AnchorGuard = { ok: true } | { ok: false; status: number; error: string };
+  function guardAnchor(assetId: string, seal: string | null): AnchorGuard {
+    if (!assetId || !seal) {
+      return { ok: false, status: 400, error: "assetId and a valid 64-hex seal are required" };
+    }
+    if (!assetId.startsWith("SANDBOX-") && !allowAnyAnchor) {
+      return { ok: false, status: 403, error: "Public sandbox anchor is restricted to SANDBOX-* asset ids." };
+    }
+    if (!anchorEnabled) {
+      return {
+        ok: false,
+        status: 403,
+        error: "Sandbox anchor is disabled. Set SANDBOX_ANCHOR_ENABLED=true only for a controlled demo run.",
+      };
+    }
+    if (!anchorSecretKeyPath) {
+      return {
+        ok: false,
+        status: 503,
+        error: "SANDBOX_SECRET_KEY_PATH is not configured. Demo keys must come from environment only.",
+      };
+    }
+    if (!anchorLimiter()) {
+      return { ok: false, status: 429, error: "Sandbox anchor rate limit exceeded. Try again later." };
+    }
+    return { ok: true };
+  }
 
   app.get("/health", (_req, res) => {
     res.json({ status: "ok", packageHash, disclaimer: DEMO_DISCLAIMER });
@@ -180,39 +213,98 @@ export function createGatewayApp(options: CreateGatewayAppOptions = {}): Express
       const assetId = body.assetId ?? "";
       const seal = normalizeProvidedSeal(body.seal);
 
-      if (!assetId || !seal) {
-        res.status(400).json({ error: "assetId and a valid 64-hex seal are required" });
+      const guard = guardAnchor(assetId, seal);
+      if (!guard.ok) {
+        res.status(guard.status).json({ error: guard.error });
         return;
       }
 
-      if (!assetId.startsWith("SANDBOX-") && !allowAnyAnchor) {
-        res.status(403).json({
-          error: "Public sandbox anchor is restricted to SANDBOX-* asset ids.",
-        });
-        return;
-      }
-
-      if (!anchorEnabled) {
-        res.status(403).json({
-          error: "Sandbox anchor is disabled. Set SANDBOX_ANCHOR_ENABLED=true only for a controlled demo run.",
-        });
-        return;
-      }
-
-      if (!anchorSecretKeyPath) {
-        res.status(503).json({
-          error: "SANDBOX_SECRET_KEY_PATH is not configured. Demo keys must come from environment only.",
-        });
-        return;
-      }
-
-      if (!anchorLimiter()) {
-        res.status(429).json({ error: "Sandbox anchor rate limit exceeded. Try again later." });
-        return;
-      }
-
-      const anchor = await dependencies.anchor(assetId, seal);
+      const anchor = await dependencies.anchor(assetId, seal as string);
       res.json(anchor);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Spot-the-Fraud: generate a genuine/tampered seal pair for a fictional lot.
+  app.get("/fraud-challenge", async (req, res, next) => {
+    try {
+      const assetIdRaw = req.query.assetId;
+      const assetId = typeof assetIdRaw === "string" && assetIdRaw.length > 0 ? assetIdRaw : undefined;
+      const difficulty = normalizeDifficulty(req.query.difficulty);
+      const result = await fraudGame.createChallenge(assetId, difficulty);
+      if (!result.ok) {
+        const status = result.error === "asset_not_in_catalog" ? 404 : 503;
+        res.status(status).json({ error: result.error, disclaimer: DEMO_DISCLAIMER });
+        return;
+      }
+      res.json(result.value);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Spot-the-Fraud: score a guess. The seal is the sole source of the verdict.
+  app.post("/fraud/guess", (req, res, next) => {
+    try {
+      const body = (req.body ?? {}) as { challengeId?: unknown; userChoice?: unknown; currentStreak?: unknown };
+      const challengeId = typeof body.challengeId === "string" ? body.challengeId : "";
+      const result = fraudGame.resolveGuess(challengeId, body.userChoice, body.currentStreak);
+      if (!result.ok) {
+        const status = result.error === "invalid_choice" ? 400 : result.error === "challenge_not_found" ? 404 : 409;
+        res.status(status).json({ error: result.error });
+        return;
+      }
+      res.json(result.value);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Spot-the-Fraud (optional, controlled): anchor the tampered seal as Invalid.
+  // Reuses the exact SANDBOX anchor guard so no protection can be bypassed.
+  app.post("/fraud/anchor-tampered", async (req, res, next) => {
+    try {
+      const body = (req.body ?? {}) as { challengeId?: unknown; assetId?: unknown };
+      const challengeId = typeof body.challengeId === "string" ? body.challengeId : "";
+      const challenge = fraudGame.getTampered(challengeId);
+      if (!challenge) {
+        res.status(404).json({ error: "challenge_not_found" });
+        return;
+      }
+
+      const assetId = typeof body.assetId === "string" && body.assetId.length > 0 ? body.assetId : challenge.assetId;
+
+      // Spot-the-Fraud anchors a TAMPERED seal, which must land as Invalid.
+      // If sandbox auto-register is enabled, the attest path would register this
+      // very seal as the reference and produce Valid — refuse to avoid that.
+      if (readConfig("SANDBOX_REGISTER_REFERENCE", "false") === "true") {
+        res.status(409).json({
+          error: "Fraud anchoring needs a pre-registered reference. Disable SANDBOX_REGISTER_REFERENCE so the tampered seal records Invalid.",
+        });
+        return;
+      }
+
+      const guard = guardAnchor(assetId, challenge.tamperedSeal);
+      if (!guard.ok) {
+        res.status(guard.status).json({ error: guard.error });
+        return;
+      }
+
+      const anchor = await dependencies.anchor(assetId, challenge.tamperedSeal);
+
+      // Honesty guard: never claim a fraud "rejection" if the chain says Valid.
+      if (anchor.verdict !== "Invalid") {
+        res.status(409).json({
+          error: "tampered_anchor_not_invalid",
+          actualVerdict: anchor.verdict,
+          txHash: anchor.txHash,
+          explorerUrl: anchor.explorerUrl,
+        });
+        return;
+      }
+
+      res.json({ ...anchor, assetId, tamperedSeal: challenge.tamperedSeal });
     } catch (error) {
       next(error);
     }
@@ -253,6 +345,9 @@ export function createGatewayApp(options: CreateGatewayAppOptions = {}): Express
   });
   app.get("/map", (_req, res) => {
     res.sendFile(path.join(webDir, "map.html"));
+  });
+  app.get("/spot-fraud", (_req, res) => {
+    res.sendFile(path.join(webDir, "spot-fraud.html"));
   });
   app.use(express.static(webDir, { index: false }));
 
