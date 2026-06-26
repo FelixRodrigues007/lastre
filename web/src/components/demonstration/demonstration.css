@@ -28,6 +28,11 @@
   align-items: center;
 }
 
+.demonstration__visual {
+  display: grid;
+  gap: var(--lastro-space-6);
+}
+
 .demonstration__actions {
   display: flex;
   flex-wrap: wrap;

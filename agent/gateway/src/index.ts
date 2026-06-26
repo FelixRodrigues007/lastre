@@ -75,10 +75,23 @@ export function createGatewayApp(options: CreateGatewayAppOptions = {}): Express
       repoRoot,
       catalogPath,
       anchorSecretKeyPath,
+      queryBinary: readOptionalConfig("LASTRO_QUERY_BIN"),
     });
 
   const app = express();
-  app.use(cors());
+
+  // Configurable CORS for the separate React landing page (Laurinha on Vercel)
+  const allowedOrigins = parseAllowedOrigins(readConfig("ALLOWED_ORIGINS", ""));
+
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        callback(null, isAllowedCorsOrigin(origin, allowedOrigins));
+      },
+      credentials: true,
+    })
+  );
+
   app.use(express.json({ limit: "1mb" }));
 
   const fraudGame = new FraudGame({ loadCatalog: () => dependencies.loadCatalog() });
@@ -366,10 +379,12 @@ export function createDefaultDependencies(options: {
   repoRoot: string;
   catalogPath: string;
   anchorSecretKeyPath: string;
+  queryBinary?: string;
 }): GatewayDependencies {
   const protocol = createProtocolClient({
     packageHash: options.packageHash,
     contractDir: resolveFromRepo(options.repoRoot, "contracts", "lastro_origin"),
+    queryBinary: options.queryBinary,
     nodeAddress: readConfig("NODE_ADDRESS", readConfig("ODRA_CASPER_LIVENET_NODE_ADDRESS", DEFAULT_NODE_ADDRESS)),
     chainName: readConfig("CHAIN_NAME", readConfig("ODRA_CASPER_LIVENET_CHAIN_NAME", DEFAULT_CHAIN_NAME)),
     sandboxSecretKeyPath: options.anchorSecretKeyPath,
@@ -388,6 +403,47 @@ function normalizeProvidedSeal(value: unknown): string | null {
 
 function readConfig(name: string, fallback: string): string {
   return process.env[name] ?? fallback;
+}
+
+function readOptionalConfig(name: string): string | undefined {
+  const value = process.env[name];
+  return value && value.trim().length > 0 ? value : undefined;
+}
+
+function parseAllowedOrigins(value: string): string[] {
+  return value
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
+function isAllowedCorsOrigin(origin: string | undefined, allowedOrigins: string[]): boolean {
+  // Same-origin/server-to-server requests do not send an Origin header.
+  if (!origin) {
+    return true;
+  }
+
+  // Local dev for Laurinha/Felix: Vite commonly uses 5173, but any localhost
+  // port is allowed so dev servers can move without reconfiguring Render.
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    return true;
+  }
+
+  // If Render has not been configured yet, keep the gateway permissive for
+  // read-only demo usage. Production should set ALLOWED_ORIGINS.
+  if (allowedOrigins.length === 0 || allowedOrigins.includes("*")) {
+    return true;
+  }
+
+  return allowedOrigins.some((allowed) => {
+    if (allowed.includes("*")) {
+      const escaped = allowed
+        .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
+        .replace(/\*/g, ".*");
+      return new RegExp(`^${escaped}$`).test(origin);
+    }
+    return origin === allowed;
+  });
 }
 
 function resolveRepoRoot(): string {

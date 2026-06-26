@@ -3,6 +3,8 @@
  * Local aliases keep component CSS short and intent-revealing. */
 
 :root {
+  --demo-banner-height: 38px;
+
   /* page rhythm */
   --shell-max: 1440px;
   --shell-pad: clamp(1.25rem, 0.5rem + 4vw, 4rem);
@@ -34,6 +36,25 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-slow: 720ms;
   --dur-reveal: 840ms;
+}
+
+.demo-banner {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  min-height: var(--demo-banner-height);
+  display: grid;
+  place-items: center;
+  padding: 0.55rem var(--shell-pad);
+  border-bottom: var(--lastro-stroke-hairline) solid rgba(220, 82, 64, 0.32);
+  background: #450a0a;
+  color: #fecaca;
+  font-family: var(--lastro-font-mono);
+  font-size: clamp(0.68rem, 0.62rem + 0.22vw, 0.78rem);
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 *,

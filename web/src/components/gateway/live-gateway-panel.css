@@ -1,0 +1,103 @@
+.live-gateway {
+  display: grid;
+  gap: var(--lastro-space-5);
+}
+
+.live-gateway__head {
+  align-items: center;
+}
+
+.live-gateway__status {
+  border-radius: var(--lastro-radius-pill);
+  padding: 0.35rem 0.7rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.live-gateway__status--loading {
+  background: rgba(254, 241, 111, 0.12);
+  color: var(--lastro-brand-seal);
+}
+
+.live-gateway__status--ready {
+  background: rgba(76, 175, 126, 0.14);
+  color: var(--lastro-status-valid);
+}
+
+.live-gateway__status--error {
+  background: rgba(220, 82, 64, 0.14);
+  color: var(--lastro-status-invalid);
+}
+
+.live-gateway__url,
+.live-gateway__muted,
+.live-gateway__error,
+.live-gateway__credential {
+  margin: 0;
+  color: var(--lastro-text-muted);
+  font-size: 0.92rem;
+}
+
+.live-gateway__error {
+  color: var(--lastro-status-invalid);
+}
+
+.live-gateway__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--lastro-space-3);
+}
+
+.live-gateway__stats span {
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-lg);
+  padding: var(--lastro-space-4);
+  color: var(--lastro-text-muted);
+  font-size: 0.78rem;
+}
+
+.live-gateway__stats strong {
+  display: block;
+  color: var(--lastro-text-primary);
+  font-family: var(--lastro-font-display);
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.live-gateway__verdicts {
+  display: grid;
+  gap: var(--lastro-space-3);
+}
+
+.live-gateway__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lastro-space-4);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-lg);
+  padding: var(--lastro-space-4);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.78rem;
+}
+
+.live-gateway__row strong[data-verdict="Valid"] {
+  color: var(--lastro-status-valid);
+}
+
+.live-gateway__row strong[data-verdict="Invalid"] {
+  color: var(--lastro-status-invalid);
+}
+
+.live-gateway__credential {
+  border-left: var(--lastro-stroke-rule) solid var(--lastro-brand-seal);
+  padding-left: var(--lastro-space-4);
+}
+
+@media (max-width: 720px) {
+  .live-gateway__stats {
+    grid-template-columns: 1fr;
+  }
+}

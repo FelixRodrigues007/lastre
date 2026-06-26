@@ -19,6 +19,9 @@ export function App() {
 
   return (
     <>
+      <div className="demo-banner" role="note">
+        DEMONSTRATION — simulated assets, no investment offered
+      </div>
       <div className="site-curtain">
         <SiteNav />
         <main>

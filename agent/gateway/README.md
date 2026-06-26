@@ -165,6 +165,10 @@ Public defaults target Casper Testnet:
 - `NODE_ADDRESS` or `ODRA_CASPER_LIVENET_NODE_ADDRESS`
 - `CHAIN_NAME` or `ODRA_CASPER_LIVENET_CHAIN_NAME`
 - `PORT` (default: `3456`)
+- `LASTRO_QUERY_BIN=/app/bin/query` when running the Render Docker image
+- `ALLOWED_ORIGINS=https://your-landing.vercel.app,http://localhost:5173`
+  for the separate React landing page. Localhost origins are always accepted
+  for development; production should set the Vercel URL explicitly.
 - `CASPER_CLIENT_BIN` or `LASTRO_CASPER_CLIENT_BIN`
 - `SANDBOX_ANCHOR_ENABLED=true` for the controlled write demo
 - `SANDBOX_SECRET_KEY_PATH=/path/to/demo-secret-key` for the controlled write demo
@@ -174,6 +178,16 @@ Public defaults target Casper Testnet:
 
 Use a low-balance demo account for `SANDBOX_SECRET_KEY_PATH`. Never use the main
 deployer key in a public gateway process.
+
+The Render Docker image sets safe defaults:
+
+```text
+SANDBOX_ANCHOR_ENABLED=false
+PACKAGE_HASH=hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
+NODE_ADDRESS=https://node.testnet.casper.network/rpc
+CHAIN_NAME=casper-test
+LASTRO_QUERY_BIN=/app/bin/query
+```
 
 ## Run
 

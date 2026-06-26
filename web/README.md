@@ -2,6 +2,9 @@
 
 Static demo assets served by `agent/gateway`.
 
+This directory is also the Vite + React landing page that Laurinha deploys to
+Vercel. It consumes the Render-hosted gateway through `VITE_GATEWAY_URL`.
+
 Pages:
 
 - `/demo` — live provenance demo shell.
@@ -18,3 +21,21 @@ All data is fictional and every screen must show:
 
 The public action is always **Verify provenance**. The experience must avoid
 financial-offer language.
+
+## Vercel
+
+Use `web/` as the Vercel root directory.
+
+```bash
+cd web
+npm install
+npm run build
+vercel link --project lastro-landing
+printf '%s\n' 'https://lastro-gateway.onrender.com' | vercel env add VITE_GATEWAY_URL production
+printf '%s\n' 'https://lastro-gateway.onrender.com' | vercel env add VITE_GATEWAY_URL preview
+vercel --prod
+```
+
+After Render creates the real gateway URL, update `VITE_GATEWAY_URL` in Vercel
+and set Render `ALLOWED_ORIGINS` to the Vercel domain plus localhost origins for
+development.

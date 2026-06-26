@@ -2,6 +2,7 @@ import { useId } from "react";
 import type { CSSProperties } from "react";
 import { CSPR_PACKAGE_URL, GITHUB_URL } from "../../site-links";
 import { Button } from "../ui/Button";
+import { LiveGatewayPanel } from "../gateway/LiveGatewayPanel";
 import { BoundaryVisual } from "./BoundaryVisual";
 import { ExplorerVisual } from "./ExplorerVisual";
 import "./demonstration.css";
@@ -99,6 +100,7 @@ export function Demonstration() {
             style={{ "--reveal-delay": "240ms" } as CSSProperties}
           >
             <ExplorerVisual />
+            <LiveGatewayPanel />
           </div>
         </div>
       </section>

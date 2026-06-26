@@ -338,4 +338,57 @@ describe("lastro-gateway", () => {
     assert.equal(response.body.error, "certificate_not_available");
   });
 
+  it("allows the configured Vercel origin and localhost development origins through CORS", async () => {
+    const previous = process.env.ALLOWED_ORIGINS;
+    process.env.ALLOWED_ORIGINS = "https://lastro-landing.vercel.app";
+    try {
+      const app = createGatewayApp({
+        packageHash: PACKAGE_HASH,
+        dependencies: makeDeps(),
+      });
+
+      const vercel = await request(app, "/health", {
+        headers: { origin: "https://lastro-landing.vercel.app" },
+      });
+      const local = await request(app, "/health", {
+        headers: { origin: "http://localhost:5173" },
+      });
+
+      assert.equal(vercel.status, 200);
+      assert.equal(vercel.headers.get("access-control-allow-origin"), "https://lastro-landing.vercel.app");
+      assert.equal(local.status, 200);
+      assert.equal(local.headers.get("access-control-allow-origin"), "http://localhost:5173");
+    } finally {
+      if (previous === undefined) {
+        delete process.env.ALLOWED_ORIGINS;
+      } else {
+        process.env.ALLOWED_ORIGINS = previous;
+      }
+    }
+  });
+
+  it("does not emit CORS allow-origin for unconfigured browser origins", async () => {
+    const previous = process.env.ALLOWED_ORIGINS;
+    process.env.ALLOWED_ORIGINS = "https://lastro-landing.vercel.app";
+    try {
+      const app = createGatewayApp({
+        packageHash: PACKAGE_HASH,
+        dependencies: makeDeps(),
+      });
+
+      const response = await request(app, "/health", {
+        headers: { origin: "https://example.invalid" },
+      });
+
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.get("access-control-allow-origin"), null);
+    } finally {
+      if (previous === undefined) {
+        delete process.env.ALLOWED_ORIGINS;
+      } else {
+        process.env.ALLOWED_ORIGINS = previous;
+      }
+    }
+  });
+
 });
