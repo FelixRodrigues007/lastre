@@ -1,6 +1,6 @@
 {
   "perimeter": {
-    "label": "Vale do Ouro — fictional mine perimeter (DEMONSTRATION)",
+    "label": "Vale do Ouro fictional provenance perimeter — DEMONSTRATION",
     "center": { "lat": -30.05, "lng": -53.20 },
     "polygon": [
       { "lat": -29.98, "lng": -53.30 },
@@ -12,56 +12,140 @@
   "assets": [
     {
       "assetId": "MINA-VALEDOURO-LOTE-001",
-      "name": "Lote 001 — Vale do Ouro",
-      "mineralType": "Gold ore (simulated)",
-      "origin": { "lat": -30.01, "lng": -53.27, "label": "Sector A (fictional)" },
+      "name": "Vale do Ouro Lot 001",
+      "mineral": "Gold",
+      "mineralType": "Gold ore",
+      "operator": "Mineradora Vale do Ouro Ltda. (fictional)",
+      "origin": { "lat": -30.01, "lng": -53.27, "label": "Vale do Ouro Sector A — fictional origin" },
       "custodyPath": [
-        { "lat": -30.01, "lng": -53.27, "step": "origin" },
-        { "lat": -30.04, "lng": -53.22, "step": "measurement" },
-        { "lat": -30.05, "lng": -53.20, "step": "anchored" }
+        { "lat": -30.01, "lng": -53.27, "step": "origin", "label": "Fictional extraction point" },
+        { "lat": -30.04, "lng": -53.22, "step": "measurement", "label": "Offline seal station" },
+        { "lat": -30.05, "lng": -53.20, "step": "anchored", "label": "Casper Testnet anchor" }
       ],
       "referenceRegistered": true,
       "expectedOnChain": "Invalid",
-      "note": "Tampered seal demo — rejected on-chain, permanent proof."
+      "simulated": false,
+      "note": "On-chain demo lot: the latest attestation is Invalid, proving rejection is permanent proof. Data remains fictional."
     },
     {
       "assetId": "MINA-VALEDOURO-LOTE-002",
-      "name": "Lote 002 — Vale do Ouro",
-      "mineralType": "Gold ore (simulated)",
-      "origin": { "lat": -30.08, "lng": -53.15, "label": "Sector B (fictional)" },
+      "name": "Vale do Ouro Lot 002",
+      "mineral": "Gold",
+      "mineralType": "Gold ore",
+      "operator": "Mineradora Vale do Ouro Ltda. (fictional)",
+      "origin": { "lat": -30.08, "lng": -53.15, "label": "Vale do Ouro Sector B — fictional origin" },
       "custodyPath": [
-        { "lat": -30.08, "lng": -53.15, "step": "origin" },
-        { "lat": -30.06, "lng": -53.18, "step": "measurement" },
-        { "lat": -30.05, "lng": -53.20, "step": "anchored" }
+        { "lat": -30.08, "lng": -53.15, "step": "origin", "label": "Fictional extraction point" },
+        { "lat": -30.06, "lng": -53.18, "step": "measurement", "label": "Offline seal station" },
+        { "lat": -30.05, "lng": -53.20, "step": "anchored", "label": "Casper Testnet anchor" }
       ],
       "referenceRegistered": true,
       "expectedOnChain": "Valid",
-      "note": "Genuine seal — agent-driven attest, accepted on-chain."
+      "simulated": false,
+      "note": "On-chain demo lot: the latest attestation is Valid. Data remains fictional."
     },
     {
-      "assetId": "MINA-VALEDOURO-LOTE-003",
-      "name": "Lote 003 — Vale do Ouro",
-      "mineralType": "Iron ore (simulated)",
-      "origin": { "lat": -30.10, "lng": -53.24, "label": "Sector C (fictional)" },
+      "assetId": "SIM-FERRO-SERRA-AZUL-LOTE-003",
+      "name": "Serra Azul Iron Lot 003",
+      "mineral": "Iron ore",
+      "mineralType": "Iron ore",
+      "operator": "Operadora Serra Azul de Metais Ltda. (fictional)",
+      "origin": { "lat": -19.91, "lng": -43.76, "label": "Serra Azul Bench 4 — fictional origin" },
       "custodyPath": [
-        { "lat": -30.10, "lng": -53.24, "step": "origin" },
-        { "lat": -30.07, "lng": -53.22, "step": "measurement" },
-        { "lat": -30.05, "lng": -53.20, "step": "anchored" }
+        { "lat": -19.91, "lng": -43.76, "step": "origin", "label": "Fictional pit bench" },
+        { "lat": -19.88, "lng": -43.72, "step": "measurement", "label": "Mobile assay station" },
+        { "lat": -19.86, "lng": -43.69, "step": "sealed", "label": "Offline seal archive" }
       ],
-      "referenceRegistered": true,
-      "expectedOnChain": "Unverified",
-      "note": "Available — use this one to attest LIVE in the video."
+      "referenceRegistered": false,
+      "expectedOnChain": "Simulated",
+      "simulated": true,
+      "note": "Simulated showcase asset. No on-chain verdict is claimed."
     },
     {
-      "assetId": "SANDBOX-OPEN-001",
-      "name": "Sandbox lot — public",
-      "mineralType": "Generic ore (simulated)",
-      "origin": { "lat": -30.03, "lng": -53.19, "label": "Sandbox sector (fictional)" },
-      "custodyPath": [],
-      "referenceRegistered": true,
-      "expectedOnChain": "Unverified",
-      "note": "Public sandbox target — local compute open to all; on-chain anchor rate-limited."
+      "assetId": "SIM-NIOBIO-ARAXA-LOTE-004",
+      "name": "Araxá Niobium Lot 004",
+      "mineral": "Niobium",
+      "mineralType": "Niobium concentrate",
+      "operator": "Companhia Fictícia do Nióbio Araxá Ltda. (fictional)",
+      "origin": { "lat": -19.62, "lng": -46.94, "label": "Araxá Ridge N2 — fictional origin" },
+      "custodyPath": [
+        { "lat": -19.62, "lng": -46.94, "step": "origin", "label": "Fictional ridge sample" },
+        { "lat": -19.60, "lng": -46.91, "step": "measurement", "label": "Offline spectroscopy station" },
+        { "lat": -19.58, "lng": -46.88, "step": "sealed", "label": "Provenance archive" }
+      ],
+      "referenceRegistered": false,
+      "expectedOnChain": "Simulated",
+      "simulated": true,
+      "note": "Simulated showcase asset. No on-chain verdict is claimed."
+    },
+    {
+      "assetId": "SIM-LITIO-JEQUITINHONHA-LOTE-005",
+      "name": "Jequitinhonha Lithium Lot 005",
+      "mineral": "Lithium",
+      "mineralType": "Lithium-bearing pegmatite",
+      "operator": "Aurora Mineral Operações Ltda. (fictional)",
+      "origin": { "lat": -16.76, "lng": -42.02, "label": "Jequitinhonha Pegmatite J5 — fictional origin" },
+      "custodyPath": [
+        { "lat": -16.76, "lng": -42.02, "step": "origin", "label": "Fictional pegmatite face" },
+        { "lat": -16.73, "lng": -41.99, "step": "measurement", "label": "Offline mass and frame capture" },
+        { "lat": -16.70, "lng": -41.96, "step": "sealed", "label": "Demo seal record" }
+      ],
+      "referenceRegistered": false,
+      "expectedOnChain": "Simulated",
+      "simulated": true,
+      "note": "Simulated showcase asset. No on-chain verdict is claimed."
+    },
+    {
+      "assetId": "SIM-COBRE-CARAIBA-LOTE-006",
+      "name": "Caraíba Copper Lot 006",
+      "mineral": "Copper",
+      "mineralType": "Copper ore",
+      "operator": "Caraíba Verificação Mineral Ltda. (fictional)",
+      "origin": { "lat": -9.86, "lng": -39.88, "label": "Caraíba Gallery C6 — fictional origin" },
+      "custodyPath": [
+        { "lat": -9.86, "lng": -39.88, "step": "origin", "label": "Fictional underground gallery" },
+        { "lat": -9.83, "lng": -39.84, "step": "measurement", "label": "Offline weighing station" },
+        { "lat": -9.80, "lng": -39.80, "step": "sealed", "label": "Demo seal record" }
+      ],
+      "referenceRegistered": false,
+      "expectedOnChain": "Simulated",
+      "simulated": true,
+      "note": "Simulated showcase asset. No on-chain verdict is claimed."
+    },
+    {
+      "assetId": "SIM-BAUXITA-TROMBETAS-LOTE-007",
+      "name": "Trombetas Bauxite Lot 007",
+      "mineral": "Bauxite",
+      "mineralType": "Bauxite ore",
+      "operator": "Trombetas Origem Mineral Ltda. (fictional)",
+      "origin": { "lat": -1.47, "lng": -56.39, "label": "Trombetas Plateau B7 — fictional origin" },
+      "custodyPath": [
+        { "lat": -1.47, "lng": -56.39, "step": "origin", "label": "Fictional plateau block" },
+        { "lat": -1.44, "lng": -56.35, "step": "measurement", "label": "Offline moisture and mass check" },
+        { "lat": -1.41, "lng": -56.31, "step": "sealed", "label": "Demo seal record" }
+      ],
+      "referenceRegistered": false,
+      "expectedOnChain": "Simulated",
+      "simulated": true,
+      "note": "Simulated showcase asset. No on-chain verdict is claimed."
+    },
+    {
+      "assetId": "SANDBOX-ESTANHO-LOTE-008",
+      "name": "Rondônia Tin Sandbox Lot 008",
+      "mineral": "Tin",
+      "mineralType": "Cassiterite concentrate",
+      "operator": "Rondônia Estanho Verificações Ltda. (fictional)",
+      "origin": { "lat": -10.82, "lng": -63.20, "label": "Rondônia Cassiterite Channel T8 — fictional origin" },
+      "custodyPath": [
+        { "lat": -10.82, "lng": -63.20, "step": "origin", "label": "Fictional channel sample" },
+        { "lat": -10.79, "lng": -63.16, "step": "measurement", "label": "Offline density station" },
+        { "lat": -10.76, "lng": -63.12, "step": "sandbox", "label": "Controlled demo anchor candidate" }
+      ],
+      "referenceRegistered": false,
+      "expectedOnChain": "Simulated",
+      "simulated": true,
+      "note": "Simulated sandbox showcase asset. If Felix registers a reference and anchors it for video, the UI still labels this catalog row as simulated until catalog metadata is intentionally changed."
     }
   ],
-  "disclaimer": "DEMONSTRATION — simulated assets, no investment offered."
+  "disclaimer": "DEMONSTRATION — simulated assets, no investment offered. All operators, origins, and lots are fictional."
 }

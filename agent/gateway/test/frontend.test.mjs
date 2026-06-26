@@ -58,3 +58,66 @@ describe("web proof route", () => {
     }
   });
 });
+
+
+describe("demo catalog", () => {
+  it("contains the complete fictional multi-mineral showcase and required schema", async () => {
+    const { readFile } = await import("node:fs/promises");
+    const catalog = JSON.parse(await readFile(new URL("../../../web/public/catalog.json", import.meta.url), "utf8"));
+    const assets = catalog.assets;
+    assert.ok(Array.isArray(assets));
+
+    const minerals = new Set(assets.map((asset) => asset.mineral));
+    for (const mineral of ["Gold", "Iron ore", "Niobium", "Lithium", "Copper", "Bauxite", "Tin"]) {
+      assert.equal(minerals.has(mineral), true, `missing mineral: ${mineral}`);
+    }
+
+    const lote001 = assets.find((asset) => asset.assetId === "MINA-VALEDOURO-LOTE-001");
+    const lote002 = assets.find((asset) => asset.assetId === "MINA-VALEDOURO-LOTE-002");
+    assert.equal(lote001.expectedOnChain, "Invalid");
+    assert.equal(lote001.simulated, false);
+    assert.equal(lote002.expectedOnChain, "Valid");
+    assert.equal(lote002.simulated, false);
+
+    const simulated = assets.filter((asset) => asset.simulated === true);
+    assert.ok(simulated.length >= 6, "expected at least six simulated mineral lots");
+
+    for (const asset of assets) {
+      assert.equal(typeof asset.assetId, "string", `${asset.assetId} assetId`);
+      assert.equal(typeof asset.mineral, "string", `${asset.assetId} mineral`);
+      assert.equal(typeof asset.operator, "string", `${asset.assetId} operator`);
+      assert.equal(typeof asset.referenceRegistered, "boolean", `${asset.assetId} referenceRegistered`);
+      assert.equal(typeof asset.expectedOnChain, "string", `${asset.assetId} expectedOnChain`);
+      assert.equal(typeof asset.origin?.lat, "number", `${asset.assetId} origin.lat`);
+      assert.equal(typeof asset.origin?.lng, "number", `${asset.assetId} origin.lng`);
+      assert.equal(typeof asset.origin?.label, "string", `${asset.assetId} origin.label`);
+      assert.ok(Array.isArray(asset.custodyPath), `${asset.assetId} custodyPath`);
+      assert.ok(asset.custodyPath.length >= 2, `${asset.assetId} custodyPath length`);
+    }
+  });
+
+  it("marketplace shell exposes mineral/status filters fed by the live catalog", () => {
+    assert.match(demo, /id="mineral-filter"/);
+    assert.match(demo, /id="status-filter"/);
+    assert.match(demo, /applyMarketplaceFilters\(\)/);
+    assert.match(demo, /populateFilterOptions\(catalog\.assets \|\| \[\]\)/);
+    assert.match(marketplace, /id="mineral-filter"/);
+    assert.match(marketplace, /id="status-filter"/);
+  });
+});
+
+describe("DEMO.md", () => {
+  it("documents exact owner registration and fresh attest commands without committing secrets", async () => {
+    const { readFile } = await import("node:fs/promises");
+    const demoMd = await readFile(new URL("../../../DEMO.md", import.meta.url), "utf8");
+    assert.match(demoMd, /casper-client put-transaction package/);
+    assert.match(demoMd, /--session-entry-point register_reference/);
+    assert.match(demoMd, /--session-arg "asset_id:string='SANDBOX-DEMO-LOTE-001'"/);
+    assert.match(demoMd, /--session-arg "reference_seal:string='[a-f0-9]{64}'"/);
+    assert.match(demoMd, /LASTRO_AGENT_ASSET_ID=SANDBOX-DEMO-LOTE-001/);
+    assert.match(demoMd, /LASTRO_AGENT_PROVIDED_SEAL=/);
+    assert.match(demoMd, /cargo \+nightly-2026-01-01 run --features livenet --bin attest/);
+    assert.match(demoMd, /DEMONSTRATION — simulated assets, no investment offered/);
+    assert.doesNotMatch(demoMd, /-----BEGIN .*PRIVATE KEY-----/);
+  });
+});
