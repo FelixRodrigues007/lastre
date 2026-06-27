@@ -16,8 +16,8 @@
   --lastro-text-primary: var(--lastro-color-cream-200);
   --lastro-text-secondary: var(--lastro-color-sage-300);
   --lastro-text-muted: var(--lastro-color-olive-400);
-  --lastro-border-subtle: rgba(231, 230, 208, 0.12);
-  --lastro-border-strong: rgba(231, 230, 208, 0.28);
+  --lastro-border-subtle: rgba(255, 255, 255, 0.07);
+  --lastro-border-strong: rgba(255, 255, 255, 0.14);
 }
 
 /* ── per-section tokens ───────────────────────────────────────────── */
@@ -25,7 +25,7 @@
 .hero {
   --section-bg: var(--lastro-color-olive-950);
   --section-wash-a: rgba(254, 241, 111, 0.09);
-  --section-wash-b: rgba(111, 143, 46, 0.06);
+  --section-wash-b: rgba(255, 255, 255, 0.03);
   --section-kicker: var(--lastro-color-seal-400);
   --section-kicker-bar: var(--lastro-brand-seal);
 }
@@ -41,7 +41,7 @@
 
 .sol {
   --section-bg: var(--lastro-color-olive-850);
-  --section-wash-a: rgba(111, 143, 46, 0.11);
+  --section-wash-a: rgba(255, 255, 255, 0.04);
   --section-wash-b: rgba(254, 241, 111, 0.05);
   --section-kicker: var(--lastro-color-valid-400);
   --section-kicker-bar: var(--lastro-color-valid-500);
@@ -50,7 +50,7 @@
 .how[data-theme="light"] {
   --section-bg: var(--lastro-color-cream-50);
   --section-panel: var(--lastro-color-cream-100);
-  --section-wash-a: rgba(111, 143, 46, 0.07);
+  --section-wash-a: rgba(84, 87, 54, 0.05);
   --section-wash-b: rgba(254, 241, 111, 0.06);
   --section-kicker: var(--lastro-color-olive-700);
   --section-kicker-bar: var(--lastro-color-olive-500);
@@ -68,7 +68,7 @@
   --section-bg: var(--lastro-color-cream-100);
   --section-card: var(--lastro-color-cream-50);
   --section-wash-a: rgba(254, 241, 111, 0.1);
-  --section-wash-b: rgba(111, 143, 46, 0.05);
+  --section-wash-b: rgba(84, 87, 54, 0.04);
   --section-kicker: var(--lastro-color-olive-600);
   --section-kicker-bar: var(--lastro-color-olive-400);
 }
@@ -85,7 +85,7 @@
 .demonstration {
   --section-bg: var(--lastro-color-olive-950);
   --section-wash-a: rgba(254, 241, 111, 0.04);
-  --section-wash-b: rgba(111, 143, 46, 0.06);
+  --section-wash-b: rgba(255, 255, 255, 0.03);
   --section-kicker: var(--lastro-color-sage-300);
   --section-kicker-bar: var(--lastro-color-olive-400);
   --atmo-grid-opacity: 0.038;
@@ -165,7 +165,7 @@
 }
 
 .sol.section--bordered {
-  border-top-color: rgba(111, 143, 46, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 .evidence.section--bordered {

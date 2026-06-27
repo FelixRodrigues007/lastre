@@ -1,0 +1,19 @@
+.escalations-summary {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .escalations-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.escalations-list {
+  display: grid;
+  gap: 0.875rem;
+  width: 100%;
+}

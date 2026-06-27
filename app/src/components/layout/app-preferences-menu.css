@@ -1,0 +1,111 @@
+.app-prefs {
+  position: relative;
+}
+
+.app-prefs__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem 0.35rem 0.45rem;
+  border: none;
+  border-radius: var(--app-radius-pill);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 80%, transparent);
+  box-shadow: inset 0 0 0 0.5px var(--app-stroke-divider);
+  color: var(--lastro-text-secondary);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition:
+    background var(--dur-fast) var(--ease-spring),
+    color var(--dur-fast) var(--ease-spring);
+}
+
+.app-prefs__trigger:hover,
+.app-prefs--open .app-prefs__trigger {
+  background: var(--app-fill-hover);
+  color: var(--lastro-text-primary);
+}
+
+.app-prefs__trigger-label {
+  min-width: 1.1rem;
+  text-align: center;
+}
+
+.app-prefs__chevron {
+  opacity: 0.75;
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+
+.app-prefs--open .app-prefs__chevron {
+  transform: rotate(180deg);
+}
+
+.app-prefs__menu {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  z-index: 60;
+  display: grid;
+  gap: 0.75rem;
+  min-width: 11.5rem;
+  padding: 0.75rem;
+  border-radius: var(--app-radius-control);
+  background: var(--lastro-bg-elevated);
+  box-shadow:
+    inset 0 0 0 0.5px var(--app-stroke-divider),
+    0 8px 24px -8px rgba(0, 0, 0, 0.45);
+}
+
+.app-prefs--sidebar .app-prefs__menu {
+  right: auto;
+  left: 0;
+  width: 100%;
+}
+
+.app-prefs__field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.app-prefs__field-label {
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.02em;
+  color: var(--lastro-text-muted);
+}
+
+.app-prefs__select {
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  border: none;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent);
+  box-shadow: inset 0 0 0 0.5px var(--app-stroke-divider);
+  color: var(--lastro-text-primary);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--lastro-text-muted) 50%),
+    linear-gradient(135deg, var(--lastro-text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) calc(50% + 1px),
+    calc(100% - 9px) calc(50% + 1px);
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 1.75rem;
+}
+
+.app-prefs__select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--lastro-brand-seal) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.app-prefs--sidebar .app-prefs__trigger {
+  width: 100%;
+  justify-content: center;
+}

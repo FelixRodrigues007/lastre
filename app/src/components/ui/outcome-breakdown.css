@@ -1,0 +1,66 @@
+.outcome-breakdown {
+  display: grid;
+  gap: 0.875rem;
+  padding: 1rem 1.125rem;
+  border-radius: var(--panel-radius);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent);
+  box-shadow: var(--app-shadow-panel);
+}
+
+.outcome-breakdown__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.outcome-breakdown__total {
+  font-family: var(--lastro-font-display);
+  font-size: 1.125rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+}
+
+.outcome-breakdown__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+}
+
+@media (min-width: 640px) {
+  .outcome-breakdown__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.outcome-breakdown__cell {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.outcome-breakdown__cell-label {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.outcome-breakdown__cell-value {
+  font-family: var(--lastro-font-display);
+  font-size: 1.25rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.outcome-breakdown__cell--valid .outcome-breakdown__cell-value {
+  color: var(--lastro-status-valid);
+}
+
+.outcome-breakdown__cell--invalid .outcome-breakdown__cell-value {
+  color: var(--lastro-status-invalid);
+}

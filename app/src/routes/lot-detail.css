@@ -1,0 +1,87 @@
+.lot-detail-hero {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .lot-detail-hero {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.lot-detail-hero__verdict {
+  display: grid;
+  gap: 0.5rem;
+  align-content: center;
+}
+
+.lot-detail-hero__badge {
+  display: flex;
+}
+
+.lot-detail {
+  display: grid;
+  gap: 0.875rem;
+  width: 100%;
+}
+
+.lot-detail__section--wide {
+  grid-column: 1 / -1;
+}
+
+.lot-detail__match {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  color: var(--lastro-status-valid);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lot-detail__mismatch {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  color: var(--lastro-status-invalid);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lot-detail__explorer {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: var(--text-small);
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+}
+
+.lot-detail__explorer:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.lot-detail__seals {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.lot-detail__empty {
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+}
+
+.lot-detail__back {
+  margin-top: 1.5rem;
+}
+
+.lot-detail__json {
+  overflow-x: auto;
+  padding: 1rem;
+  border-radius: var(--lastro-radius-sm);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 50%, transparent);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--lastro-text-secondary);
+}

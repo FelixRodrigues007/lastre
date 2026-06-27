@@ -1,19 +1,35 @@
 /* Lastro App — base styles. Tokens from @design-system/tokens/lastro.css */
 
 :root {
-  --app-shell-max: 1280px;
+  --app-shell-max: 1180px;
   --app-shell-pad: clamp(1rem, 0.5rem + 2vw, 2rem);
-  --app-nav-height: 3.5rem;
-  --app-banner-height: 2.5rem;
+  --app-nav-height: 3.25rem;
+  --app-banner-height: 2.35rem;
+  --app-radius-control: 10px;
+  --app-radius-card: 14px;
+  --app-radius-pill: 999px;
 
-  --text-page-title: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
-  --text-section: 1.125rem;
+  --app-bg-canvas: var(--lastro-bg-primary);
+  --app-bg-sidebar: color-mix(in srgb, var(--lastro-bg-panel) 96%, #000);
+  --app-stroke-divider: color-mix(in srgb, #fff 7%, transparent);
+  --app-stroke-active: color-mix(in srgb, var(--lastro-brand-seal) 18%, transparent);
+  --app-fill-hover: color-mix(in srgb, #fff 4%, transparent);
+  --app-fill-active: color-mix(in srgb, #fff 6%, var(--lastro-bg-elevated));
+
+  --app-shadow-panel:
+    0 0 0 0.5px var(--app-stroke-divider),
+    0 1px 2px rgba(0, 0, 0, 0.28),
+    0 12px 32px -16px rgba(0, 0, 0, 0.55);
+
+  --text-page-title: clamp(1.625rem, 1.1rem + 1.8vw, 2.125rem);
+  --text-section: 1.0625rem;
   --text-small: 0.8125rem;
 
-  --panel-pad: clamp(1.25rem, 1rem + 1vw, 1.75rem);
-  --panel-radius: var(--lastro-radius-md);
+  --panel-pad: clamp(1.125rem, 0.9rem + 0.8vw, 1.5rem);
+  --panel-radius: var(--app-radius-card);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast: 180ms;
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 160ms;
 }
 
 *,
@@ -32,11 +48,12 @@ body {
   color: var(--lastro-text-primary);
   background: var(--lastro-bg-primary);
   font-family: var(--lastro-font-body);
-  font-size: 1rem;
-  line-height: 1.55;
+  font-size: 0.9375rem;
+  line-height: 1.5;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -64,82 +81,90 @@ button {
 }
 
 .page {
-  padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  padding-block: clamp(1.25rem, 0.75rem + 1.5vw, 2rem);
 }
 
 .page__head {
-  margin-bottom: clamp(1.25rem, 0.75rem + 1.5vw, 2rem);
+  margin-bottom: clamp(1.125rem, 0.65rem + 1.25vw, 1.75rem);
 }
 
 .page__kicker {
-  margin-bottom: 0.5rem;
-}
-
-.page__title-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
 }
 
 .page__title {
   font-family: var(--lastro-font-display);
   font-size: var(--text-page-title);
   font-weight: var(--lastro-weight-semibold);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
 }
 
-.page__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.page__lead {
+  margin-top: 0.5rem;
+  max-width: 52ch;
+  color: var(--lastro-text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
 }
 
 .route-cta {
   display: inline-flex;
   align-items: center;
-  padding: 0.55rem 1rem;
-  border-radius: var(--lastro-radius-sm);
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.125rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--app-radius-control);
+  border: none;
   background: var(--lastro-button-primary-bg, var(--lastro-brand-seal));
   color: var(--lastro-button-primary-text, var(--lastro-text-inverse));
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: var(--lastro-weight-semibold);
-  transition: filter var(--dur-fast) var(--ease-out);
+  letter-spacing: -0.01em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 1px 2px rgba(0, 0, 0, 0.16);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    filter var(--dur-fast) var(--ease-spring),
+    background var(--dur-fast) var(--ease-spring);
 }
 
 .route-cta:hover {
-  filter: brightness(1.05);
+  filter: brightness(1.04);
+}
+
+.route-cta:active {
+  filter: brightness(0.96);
+  transform: scale(0.99);
 }
 
 .route-cta--ghost {
-  background: transparent;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 55%, transparent);
+  border: 0.5px solid var(--app-stroke-divider);
   color: var(--lastro-text-primary);
+  box-shadow: none;
 }
 
 .route-cta--ghost:hover {
   filter: none;
-  background: color-mix(in srgb, var(--lastro-text-primary) 6%, transparent);
-}
-
-.page__lead {
-  margin-top: 0.75rem;
-  max-width: 52ch;
-  color: var(--lastro-text-secondary);
-  font-size: var(--text-section);
+  background: var(--app-fill-hover);
 }
 
 .panel {
-  background: var(--lastro-bg-panel);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 90%, transparent);
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   border-radius: var(--panel-radius);
   padding: var(--panel-pad);
+  box-shadow: var(--app-shadow-panel);
 }
 
 .panel--elevated {
-  background: var(--lastro-bg-elevated);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 94%, transparent);
 }
 
 .panel__head {
@@ -147,9 +172,9 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  margin-bottom: 0.875rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 0.5px solid var(--app-stroke-divider);
 }
 
 .placeholder-grid {
@@ -183,4 +208,11 @@ button {
 .placeholder-card__hint {
   color: var(--lastro-text-secondary);
   font-size: var(--text-small);
+}
+
+:root[data-theme="light"] {
+  --app-shadow-panel:
+    0 0 0 0.5px color-mix(in srgb, var(--lastro-text-inverse) 8%, transparent),
+    0 1px 2px rgba(18, 20, 7, 0.06),
+    0 10px 28px -14px rgba(18, 20, 7, 0.12);
 }

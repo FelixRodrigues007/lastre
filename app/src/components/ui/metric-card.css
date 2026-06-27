@@ -1,0 +1,61 @@
+.metric-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.125rem;
+  border-radius: var(--panel-radius);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent);
+  box-shadow: var(--app-shadow-panel);
+}
+
+.metric-card--accent {
+  background: color-mix(in srgb, var(--lastro-brand-seal) 6%, var(--lastro-bg-panel));
+}
+
+.metric-card__label {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.metric-card__value {
+  font-family: var(--lastro-font-display);
+  font-size: 1.75rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-card--lg .metric-card__value {
+  font-size: 2.25rem;
+}
+
+.metric-card__value--valid {
+  color: var(--lastro-status-valid);
+}
+
+.metric-card__value--invalid {
+  color: var(--lastro-status-invalid);
+}
+
+.metric-card__value--accent {
+  color: var(--lastro-brand-seal);
+}
+
+.metric-card__hint {
+  font-size: 0.75rem;
+  color: var(--lastro-text-secondary);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+
+.metric-card__hint a {
+  color: var(--lastro-brand-seal);
+}
+
+.metric-card__hint a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,40 @@
+.seal-chip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--lastro-radius-sm);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 55%, transparent);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.seal-chip__label {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.seal-chip__value {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.8125rem;
+  color: var(--lastro-brand-seal);
+}
+
+.seal-chip__copy {
+  margin-left: auto;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: transparent;
+  color: var(--lastro-text-secondary);
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.seal-chip__copy:hover {
+  color: var(--lastro-text-primary);
+  border-color: var(--lastro-border-strong);
+}

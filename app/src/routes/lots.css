@@ -1,0 +1,133 @@
+.lots-summary {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .lots-summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.lots-grid {
+  display: grid;
+  gap: 0.875rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .lots-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.lot-card {
+  display: grid;
+  gap: 0.65rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.lot-card::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  background: color-mix(in srgb, var(--lastro-text-muted) 40%, transparent);
+}
+
+.lot-card--valid::before {
+  background: var(--lastro-status-valid);
+}
+
+.lot-card--invalid::before {
+  background: var(--lastro-status-invalid);
+}
+
+.lot-card--pending::before {
+  background: color-mix(in srgb, var(--lastro-brand-seal) 55%, transparent);
+}
+
+.lot-card:hover {
+  border-color: var(--lastro-border-strong);
+}
+
+.lot-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.lot-card__mass {
+  font-family: var(--lastro-font-display);
+  font-size: 1.375rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.lot-card__unit {
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-muted);
+}
+
+.lot-card__title {
+  margin-top: 0.2rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.lot-card__title a:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.lot-card__role {
+  font-size: var(--text-small);
+  color: var(--lastro-text-secondary);
+  line-height: 1.45;
+}
+
+.lot-card__meta {
+  display: grid;
+  gap: 0.4rem;
+  padding-top: 0.35rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.lot-card__meta div {
+  display: grid;
+  grid-template-columns: 4.75rem 1fr;
+  gap: 0.5rem;
+  font-size: var(--text-small);
+}
+
+.lot-card__meta dt {
+  color: var(--lastro-text-muted);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.lot-card__meta dd {
+  color: var(--lastro-text-secondary);
+}
+
+.lot-card__seal {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-brand-seal);
+}
+
+.lot-card__mismatch {
+  color: var(--lastro-status-invalid);
+}

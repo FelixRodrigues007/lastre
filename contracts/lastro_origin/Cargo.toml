@@ -51,6 +51,12 @@ required-features = ["livenet"]
 test = false
 
 [[bin]]
+name = "query_snapshot"
+path = "bin/query_snapshot.rs"
+required-features = ["livenet"]
+test = false
+
+[[bin]]
 name = "attest"
 path = "bin/attest.rs"
 required-features = ["livenet"]

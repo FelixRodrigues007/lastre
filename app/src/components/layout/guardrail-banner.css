@@ -1,43 +1,61 @@
 .guardrail {
   position: sticky;
-  top: var(--app-nav-height);
   z-index: 40;
   min-height: var(--app-banner-height);
   display: flex;
   align-items: center;
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 92%, var(--lastro-brand-seal) 8%);
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: 0.5px solid var(--app-stroke-divider);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 78%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .guardrail__inner {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding-block: 0.5rem;
+  gap: 0.625rem;
+  width: min(var(--app-shell-max), 100% - var(--app-shell-pad) * 2);
+  margin-inline: auto;
+  padding-block: 0.55rem;
+}
+
+.guardrail__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 6px;
+  color: var(--lastro-brand-seal);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
+  flex-shrink: 0;
 }
 
 .guardrail__chip {
-  flex-shrink: 0;
-  padding: 0.2rem 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.35rem;
+  padding: 0.12rem 0.45rem;
   border-radius: var(--lastro-radius-pill);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 18%, transparent);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 14%, transparent);
   font-family: var(--lastro-font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: var(--lastro-weight-semibold);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--lastro-brand-seal);
 }
 
 .guardrail__text {
-  font-size: var(--text-small);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
   color: var(--lastro-text-secondary);
-  line-height: 1.4;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
 }
 
 @media (max-width: 640px) {
   .guardrail__text {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
   }
 }

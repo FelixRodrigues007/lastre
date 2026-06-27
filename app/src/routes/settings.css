@@ -1,0 +1,119 @@
+.settings-layout {
+  display: grid;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.settings-status {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .settings-status {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.settings-grid {
+  display: grid;
+  gap: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .settings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.settings-card--wide {
+  grid-column: 1 / -1;
+}
+
+.settings-card {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.settings-card__title {
+  font-family: var(--lastro-font-display);
+  font-size: 1rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+}
+
+.settings-card__hint {
+  font-size: var(--text-small);
+  color: var(--lastro-text-secondary);
+  line-height: 1.45;
+}
+
+.settings-card__hint code,
+.settings-card__status {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+}
+
+.settings-card__status {
+  color: var(--lastro-status-valid);
+}
+
+.settings-card__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.settings-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  font-size: 0.875rem;
+  color: var(--lastro-text-secondary);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.settings-radio:has(input:checked) {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
+  color: var(--lastro-text-primary);
+}
+
+.settings-limits {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.settings-limits div {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  gap: 0.75rem;
+  font-size: var(--text-small);
+  padding: 0.5rem 0;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.settings-limits div:last-child {
+  border-bottom: none;
+}
+
+.settings-limits dt {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--lastro-text-muted);
+}
+
+.settings-limits dd {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.8125rem;
+  color: var(--lastro-text-secondary);
+}

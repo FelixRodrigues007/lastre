@@ -5,18 +5,18 @@
  * values — hierarchy otherwise comes from type, scale, and space. */
 :root {
   /* ── primitive · color ─────────────────────────────────────────── */
-  --lastro-color-olive-950: #121407;
-  --lastro-color-olive-900: #181b0c;
-  --lastro-color-olive-850: #1f2211;
-  --lastro-color-olive-800: #262916;
-  --lastro-color-olive-700: #30331e;
-  --lastro-color-olive-600: #3f4329;
-  --lastro-color-olive-500: #545736;
-  --lastro-color-olive-400: #6e7249;
-  --lastro-color-olive-300: #8c9063;
-  --lastro-color-sage-400: #b3b59c;
-  --lastro-color-sage-300: #c5c7b0;
-  --lastro-color-sage-200: #d3d4c1;
+  --lastro-color-olive-950: #070708;
+  --lastro-color-olive-900: #0c0c0e;
+  --lastro-color-olive-850: #111114;
+  --lastro-color-olive-800: #16161a;
+  --lastro-color-olive-700: #1f1f24;
+  --lastro-color-olive-600: #2a2a30;
+  --lastro-color-olive-500: #3a3a42;
+  --lastro-color-olive-400: #56565f;
+  --lastro-color-olive-300: #72727c;
+  --lastro-color-sage-400: #9b9ba3;
+  --lastro-color-sage-300: #b4b4bc;
+  --lastro-color-sage-200: #c8c8d0;
   --lastro-color-cream-50: #f4f3e6;
   --lastro-color-cream-100: #efeede;
   --lastro-color-cream-200: #e7e6d0;
@@ -73,8 +73,8 @@
   --lastro-brand-seal-text: var(--lastro-color-seal-400);
   --lastro-status-valid: var(--lastro-color-valid-400);
   --lastro-status-invalid: var(--lastro-color-invalid-400);
-  --lastro-border-subtle: rgba(231, 230, 208, 0.12);
-  --lastro-border-strong: rgba(231, 230, 208, 0.28);
+  --lastro-border-subtle: rgba(255, 255, 255, 0.07);
+  --lastro-border-strong: rgba(255, 255, 255, 0.14);
 
   /* ── component ─────────────────────────────────────────────────── */
   --lastro-button-primary-bg: var(--lastro-color-seal-400);
@@ -82,7 +82,7 @@
   --lastro-badge-bg: rgba(254, 241, 111, 0.14);
   --lastro-badge-text: var(--lastro-color-seal-400);
   --lastro-badge-border: rgba(254, 241, 111, 0.30);
-  --lastro-adcard-bg: linear-gradient(135deg, #121407 0%, #262916 58%, #30331e 100%);
+  --lastro-adcard-bg: linear-gradient(135deg, #070708 0%, #111114 58%, #16161a 100%);
 }
 
 /* ── semantic · LIGHT override ───────────────────────────────────── */

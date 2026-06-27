@@ -84,9 +84,13 @@ demo: setup build-sealer build-x402 build-orchestrator
 	@printf '%s\n' "==> Running local agent demo"
 	cd "$(ORCHESTRATOR_DIR)" && npm run demo
 
-app-dev: setup-node
-	@printf '%s\n' "==> Starting Lastro app dev server"
+app-dev: setup-node build-sealer build-x402 build-orchestrator build-query-snapshot
+	@printf '%s\n' "==> Starting Lastro app (API :3001 + UI :5174)"
 	cd "$(APP_DIR)" && npm run dev
+
+build-query-snapshot: setup-rust
+	@printf '%s\n' "==> Building query_snapshot (Casper testnet read)"
+	cd "$(CONTRACT_DIR)" && cargo build --features livenet --bin query_snapshot
 
 app-build: setup-node
 	@printf '%s\n' "==> Building Lastro app"

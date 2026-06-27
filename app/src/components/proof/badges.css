@@ -1,0 +1,55 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge--muted {
+  color: var(--lastro-text-muted);
+}
+
+.badge--verdict-valid {
+  color: var(--lastro-status-valid);
+  border-color: color-mix(in srgb, var(--lastro-status-valid) 35%, transparent);
+  background: color-mix(in srgb, var(--lastro-status-valid) 12%, transparent);
+}
+
+.badge--verdict-invalid {
+  color: var(--lastro-status-invalid);
+  border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, transparent);
+  background: color-mix(in srgb, var(--lastro-status-invalid) 12%, transparent);
+}
+
+.badge--action-pay {
+  color: var(--lastro-brand-seal);
+}
+
+.badge--action-skip {
+  color: var(--lastro-text-secondary);
+}
+
+.badge--action-escalate {
+  color: var(--lastro-color-sage-400);
+}
+
+.badge--outcome-tokenizable {
+  color: var(--lastro-status-valid);
+}
+
+.badge--outcome-rejected {
+  color: var(--lastro-status-invalid);
+}
+
+.badge--outcome-skipped,
+.badge--outcome-escalated {
+  color: var(--lastro-text-secondary);
+}

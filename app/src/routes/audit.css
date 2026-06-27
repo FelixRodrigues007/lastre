@@ -1,0 +1,108 @@
+.audit-empty {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.audit-empty__title {
+  font-family: var(--lastro-font-display);
+  font-size: 1.0625rem;
+  font-weight: var(--lastro-weight-semibold);
+}
+
+.audit-empty__hint {
+  color: var(--lastro-text-secondary);
+  font-size: var(--text-small);
+  max-width: 42ch;
+  line-height: 1.5;
+}
+
+.audit-export-error {
+  margin-bottom: 1rem;
+  font-size: var(--text-small);
+  color: var(--lastro-status-invalid);
+}
+
+.audit-table-wrap {
+  overflow-x: auto;
+  padding: 0;
+  width: 100%;
+}
+
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.audit-table th,
+.audit-table td {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  vertical-align: middle;
+}
+
+.audit-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.audit-table tbody tr:hover {
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 35%, transparent);
+}
+
+.audit-table th {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
+}
+
+.audit-table__index {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+  width: 2.5rem;
+}
+
+.audit-table td:nth-child(2) {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+}
+
+.audit-table a:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.audit-table__mono {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+.audit-cards {
+  display: none;
+  grid-template-columns: 1fr;
+  gap: 0.875rem;
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .audit-table-wrap {
+    display: none;
+  }
+
+  .audit-cards {
+    display: grid;
+  }
+}
+
+@media (min-width: 768px) {
+  .audit-cards {
+    display: none;
+  }
+}

@@ -1,27 +1,21 @@
-import { NavLink } from "react-router-dom";
-
-const TABS = [
-  { to: "/", label: "Home", end: true as const },
-  { to: "/lots", label: "Lots", end: false as const },
-  { to: "/process", label: "Run", end: false as const },
-  { to: "/audit", label: "Audit", end: false as const },
-  { to: "/escalations", label: "Queue", end: false as const },
-] as const;
+import { MOBILE_NAV } from "../../lib/navigation";
+import { useLocaleContext } from "../../context/LocaleContext";
+import { NavItem } from "./NavItem";
 
 export function MobileTabBar() {
+  const { t } = useLocaleContext();
+
   return (
     <nav className="mobile-tab-bar" aria-label="Mobile">
-      {TABS.map(({ to, label, end }) => (
-        <NavLink
-          key={to}
-          to={to}
-          end={end}
-          className={({ isActive }) =>
-            `mobile-tab-bar__link${isActive ? " mobile-tab-bar__link--active" : ""}`
-          }
-        >
-          {label}
-        </NavLink>
+      {MOBILE_NAV.map((item) => (
+        <NavItem
+          key={item.to}
+          to={item.to}
+          label={t(item.mobileLabelKey ?? item.labelKey)}
+          icon={item.icon}
+          end={item.end}
+          variant="mobile"
+        />
       ))}
     </nav>
   );

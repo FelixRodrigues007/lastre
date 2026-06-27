@@ -1,0 +1,78 @@
+.audit-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.audit-card--compact {
+  gap: 0.75rem;
+}
+
+.audit-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.audit-card__index {
+  margin-bottom: 0.25rem;
+}
+
+.audit-card__title {
+  font-family: var(--lastro-font-display);
+  font-size: 1rem;
+  font-weight: var(--lastro-weight-semibold);
+}
+
+.audit-card__title a:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.audit-card__section {
+  display: grid;
+  gap: 0.45rem;
+  padding-top: 0.75rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.audit-card__section-label {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.audit-card__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.audit-card__meta {
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+}
+
+.audit-card__reason {
+  font-size: var(--text-small);
+  color: var(--lastro-text-secondary);
+  line-height: 1.5;
+}
+
+.audit-card__seals {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.audit-card__empty {
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+}
+
+.audit-card__tx {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  color: var(--lastro-text-secondary);
+}

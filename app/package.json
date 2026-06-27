@@ -4,10 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:api": "tsx server/index.ts",
+    "dev:web": "vite",
+    "dev": "concurrently -k -n api,web -c blue,green \"npm run dev:api\" \"npm run dev:web\"",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit && tsc -p server/tsconfig.json --noEmit"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -20,6 +22,8 @@
     "@types/react-dom": "^19.1.0",
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.7.2",
-    "vite": "^6.0.7"
+    "vite": "^6.0.7",
+    "concurrently": "^9.2.0",
+    "tsx": "^4.20.3"
   }
 }

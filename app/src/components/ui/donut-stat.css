@@ -1,0 +1,75 @@
+.donut-stat {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.donut-stat__ring {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.donut-stat__ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.donut-stat__ring-track {
+  fill: none;
+  stroke: color-mix(in srgb, var(--lastro-text-muted) 22%, transparent);
+  stroke-width: 6;
+}
+
+.donut-stat__ring-fill {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 600ms var(--ease-out);
+}
+
+.donut-stat__ring-fill--valid {
+  stroke: var(--lastro-status-valid);
+}
+
+.donut-stat__ring-fill--accent {
+  stroke: var(--lastro-brand-seal);
+}
+
+.donut-stat__ring-fill--neutral {
+  stroke: var(--lastro-text-secondary);
+}
+
+.donut-stat__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--lastro-font-display);
+  font-size: 1rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.donut-stat__copy {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.donut-stat__label {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.donut-stat__sublabel {
+  font-size: 0.8125rem;
+  color: var(--lastro-text-secondary);
+  line-height: 1.4;
+}

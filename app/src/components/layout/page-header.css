@@ -1,0 +1,19 @@
+.page__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+}
+
+.page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page__head {
+  padding-bottom: 0.25rem;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}

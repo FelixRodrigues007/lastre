@@ -1,13 +1,19 @@
+import { useLocaleContext } from "../../context/LocaleContext";
+import { Icon } from "../ui/Icon";
 import "./guardrail-banner.css";
 
 export function GuardrailBanner() {
+  const { t } = useLocaleContext();
+
   return (
     <aside className="guardrail" aria-label="Demo guardrails">
-      <div className="shell guardrail__inner">
-        <span className="guardrail__chip">Demo</span>
+      <div className="guardrail__inner">
+        <span className="guardrail__icon" aria-hidden="true">
+          <Icon name="shield" size={15} />
+        </span>
         <p className="guardrail__text">
-          Fictional data only · Seal decides verdict · LLM decides action · Not
-          investment or token sale
+          <span className="guardrail__chip">{t("guardrail.demo")}</span>
+          {t("guardrail.text")}
         </p>
       </div>
     </aside>

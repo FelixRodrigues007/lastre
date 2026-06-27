@@ -4,7 +4,7 @@ import type { MapData } from "dotted-map/without-countries";
 import mapJson from "../../data/trust-globe-map.json";
 
 /** Muted olive grid + seal pins on major mineral / data origin regions. */
-const MAP_BG = "#121407";
+const MAP_BG = "#070708";
 const DOT_COLOR = "#3f4329";
 const PIN_COLOR = "#fef16f";
 

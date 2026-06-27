@@ -1,0 +1,10 @@
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-icon__glyph {
+  display: inline-flex;
+  opacity: 0.92;
+}
