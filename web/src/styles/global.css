@@ -1,6 +1,6 @@
 /* Global base — reset, page atmosphere, and shared primitives.
- * Palette/space/type come from @design-system/tokens/lastro.css.
- * Local aliases keep component CSS short and intent-revealing. */
+ * Palette/space/type come from src/styles/lastro-tokens.css (local copy
+ * of design-system tokens for reliable Vercel sub-directory builds). */
 
 :root {
   --demo-banner-height: 38px;

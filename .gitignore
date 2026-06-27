@@ -13,3 +13,4 @@ dist/
 # OS / editor
 .DS_Store
 *.log
+.vercel
