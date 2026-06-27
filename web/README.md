@@ -5,6 +5,10 @@ Static demo assets served by `agent/gateway`.
 This directory is also the Vite + React landing page that Laurinha deploys to
 Vercel. It consumes the Render-hosted gateway through `VITE_GATEWAY_URL`.
 
+Laura-facing frontend handoff:
+
+- [`docs/LAURA_FRONTEND_SYSTEM_DESIGN.md`](../docs/LAURA_FRONTEND_SYSTEM_DESIGN.md)
+
 Pages:
 
 - `/demo` — live provenance demo shell.
