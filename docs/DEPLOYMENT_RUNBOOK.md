@@ -62,13 +62,31 @@ NODE_ADDRESS=https://node.testnet.casper.network/rpc
 CHAIN_NAME=casper-test
 LASTRO_QUERY_BIN=/app/bin/query
 SANDBOX_ANCHOR_ENABLED=false
-ALLOWED_ORIGINS=https://lastre.io,https://www.lastre.io,http://localhost:5173,http://localhost:3000
+ALLOWED_ORIGINS=https://lastre.io,https://www.lastre.io,https://*.vercel.app,http://localhost:5173,http://localhost:3000
 ```
 
 Do not set any secret key in the public gateway unless Felix is running a
 controlled SANDBOX anchor demo with a low-balance demo account.
 
+Keep `https://*.vercel.app` while Vercel preview/temporary production URLs are
+used. Remove it later only after `lastre.io` is the only public URL being tested.
+
 ## 4. Smoke tests
+
+Fast full-chain diagnostic:
+
+```bash
+make doctor FRONTEND=https://lastre.io
+```
+
+For a temporary Vercel production URL:
+
+```bash
+make doctor FRONTEND=https://lastro-l1g9rtsj2-iaxperiencebr-gmailcoms-projects.vercel.app
+```
+
+The doctor checks the exact failure modes in order: Vercel auth wall, wrong or
+stale bundle, gateway reachability, and CORS for the exact frontend origin.
 
 Gateway:
 
@@ -129,8 +147,9 @@ Render:
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Vercel build cannot find `package.json` | Root directory mismatch | Root `vercel.json` should run `cd web && npm install` |
+| Vercel build cannot find `/vercel/path0/package.json` | Deploying an old commit before the root `vercel.json`, or Vercel ignored it | Redeploy latest `main`; root `vercel.json` must run `cd web && npm install` |
 | Incognito shows Vercel login | Deployment Protection enabled | Disable for public production demo |
+| DevTools Network shows `0` gateway requests | The React bundle did not run: wrong URL, Vercel auth wall, stale bundle, or user opened Network after the one-shot load | Run `make doctor FRONTEND=<current-url>`; ensure the page has `API: https://lastro.onrender.com` and click `Refresh live verdicts` |
 | Network shows CORS error | Missing Vercel domain in Render `ALLOWED_ORIGINS` | Add exact origin and redeploy/restart Render |
 | UI stays loading | Render cold start or blocked gateway | Click refresh; check `/health` |
 | Certificate 404 | Lot has no symbolic credential | Hide credential card; not a failure |

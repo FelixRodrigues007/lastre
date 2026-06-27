@@ -50,7 +50,7 @@ vercel --prod
 Render should allow the public domain:
 
 ```text
-ALLOWED_ORIGINS=https://lastre.io,https://www.lastre.io,http://localhost:5173,http://localhost:3000
+ALLOWED_ORIGINS=https://lastre.io,https://www.lastre.io,https://*.vercel.app,http://localhost:5173,http://localhost:3000
 ```
 
 If `api.lastre.io` is later mapped to Render, update `VITE_GATEWAY_URL` to

@@ -163,6 +163,7 @@ clone does not depend on pre-existing generated files.
 | `make query` | Runs the read-only livenet `ProofOfOrigin` query against the already-deployed package. It does not deploy. |
 | `make demo` | Builds the local TypeScript stack and runs the orchestrator demo. |
 | `make gateway` | Builds the sealer, compiled livenet `query`/`attest` binaries, and starts the Lastre gateway at `http://localhost:3456`. |
+| `make doctor FRONTEND=<url>` | Diagnoses Vercel ↔ Render wiring: auth wall, stale bundle, gateway reachability, and CORS for the exact frontend origin. |
 
 ## x402 status: mock facilitator
 

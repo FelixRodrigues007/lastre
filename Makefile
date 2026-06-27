@@ -15,7 +15,8 @@ SETUP_RUST := $(ROOT_DIR)/scripts/dev/setup-rust.sh
 .PHONY: help setup build test wasm query demo gateway \
 	setup-node setup-rust \
 	build-sealer build-x402 build-orchestrator build-gateway build-contract-bins build-contracts \
-	test-sealer test-x402 test-orchestrator test-gateway test-contracts
+	test-sealer test-x402 test-orchestrator test-gateway test-contracts \
+	doctor
 
 help:
 	@printf '%s\n' "Lastro developer targets:"
@@ -26,6 +27,7 @@ help:
 	@printf '%s\n' "  make query  - run the livenet read-only ProofOfOrigin query"
 	@printf '%s\n' "  make demo   - run the local agent demo"
 	@printf '%s\n' "  make gateway - run the Lastro experience gateway"
+	@printf '%s\n' "  make doctor FRONTEND=<url> [GATEWAY=<url>] - diagnose Vercel<->Render wiring"
 
 setup: setup-node setup-rust
 
@@ -101,3 +103,14 @@ query: setup-rust build-contracts
 demo: setup build-sealer build-x402 build-orchestrator
 	@printf '%s\n' "==> Running local agent demo"
 	cd "$(ORCHESTRATOR_DIR)" && npm run demo
+
+# Deploy doctor: proves WHERE the Vercel<->Render chain breaks (stale bundle,
+# auth wall, gateway down, or CORS) instead of guessing from screenshots.
+#   make doctor FRONTEND=https://lastre.io
+#   make doctor FRONTEND=https://lastro-xxxx.vercel.app GATEWAY=https://lastro.onrender.com
+doctor:
+	@if [ -z "$(FRONTEND)" ]; then \
+		printf '%s\n' "Usage: make doctor FRONTEND=<frontend-url> [GATEWAY=<gateway-url>]"; \
+		exit 2; \
+	fi
+	node "$(ROOT_DIR)/scripts/diag/check-deploy.mjs" "$(FRONTEND)" $(GATEWAY)

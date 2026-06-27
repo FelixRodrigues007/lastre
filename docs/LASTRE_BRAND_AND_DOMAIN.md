@@ -63,11 +63,11 @@ VITE_GATEWAY_URL=https://api.lastre.io
 Until custom API domain is ready:
 
 ```text
-ALLOWED_ORIGINS=https://lastre.io,https://www.lastre.io,http://localhost:5173,http://localhost:3000
+ALLOWED_ORIGINS=https://lastre.io,https://www.lastre.io,https://*.vercel.app,http://localhost:5173,http://localhost:3000
 ```
 
-If Vercel preview deployments are used, add the exact preview domain while
-reviewing, or use a controlled preview allow-list policy.
+Keep `https://*.vercel.app` while temporary Vercel production/preview URLs are
+used. Remove it only after `lastre.io` is the sole public testing surface.
 
 ## SEO baseline
 

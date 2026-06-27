@@ -391,4 +391,66 @@ describe("lastro-gateway", () => {
     }
   });
 
+  it("allows rotating Vercel deploy URLs via a https://*.vercel.app wildcard", async () => {
+    // Vercel mints a new domain on every deploy (e.g.
+    // https://lastro-l1g9rtsj2-...-projects.vercel.app). A static lastre.io
+    // allowlist would silently reject those, producing failed CORS requests in
+    // the browser. The wildcard entry must keep the demo reachable.
+    const previous = process.env.ALLOWED_ORIGINS;
+    process.env.ALLOWED_ORIGINS = "https://lastre.io,https://*.vercel.app";
+    try {
+      const app = createGatewayApp({
+        packageHash: PACKAGE_HASH,
+        dependencies: makeDeps(),
+      });
+
+      const rotating = await request(app, "/proof", {
+        headers: {
+          origin: "https://lastro-l1g9rtsj2-iaxperiencebr-gmailcoms-projects.vercel.app",
+        },
+      });
+      const apex = await request(app, "/proof", {
+        headers: { origin: "https://lastre.io" },
+      });
+
+      assert.equal(rotating.status, 200);
+      assert.equal(
+        rotating.headers.get("access-control-allow-origin"),
+        "https://lastro-l1g9rtsj2-iaxperiencebr-gmailcoms-projects.vercel.app",
+      );
+      assert.equal(apex.status, 200);
+      assert.equal(apex.headers.get("access-control-allow-origin"), "https://lastre.io");
+    } finally {
+      if (previous === undefined) {
+        delete process.env.ALLOWED_ORIGINS;
+      } else {
+        process.env.ALLOWED_ORIGINS = previous;
+      }
+    }
+  });
+
+  it("does not let the *.vercel.app wildcard match a lookalike attacker domain", async () => {
+    const previous = process.env.ALLOWED_ORIGINS;
+    process.env.ALLOWED_ORIGINS = "https://*.vercel.app";
+    try {
+      const app = createGatewayApp({
+        packageHash: PACKAGE_HASH,
+        dependencies: makeDeps(),
+      });
+
+      const spoof = await request(app, "/proof", {
+        headers: { origin: "https://evil.vercel.app.attacker.com" },
+      });
+
+      assert.equal(spoof.status, 200);
+      assert.equal(spoof.headers.get("access-control-allow-origin"), null);
+    } finally {
+      if (previous === undefined) {
+        delete process.env.ALLOWED_ORIGINS;
+      } else {
+        process.env.ALLOWED_ORIGINS = previous;
+      }
+    }
+  });
+
 });
