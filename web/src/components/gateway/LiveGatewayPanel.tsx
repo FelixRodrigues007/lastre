@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   LASTRO_GATEWAY_URL,
   fetchGatewayJson,
@@ -19,10 +19,21 @@ interface GatewaySnapshot {
 }
 
 const LIVE_ASSETS = ["MINA-VALEDOURO-LOTE-001", "MINA-VALEDOURO-LOTE-002"];
+const CERTIFICATE_ASSET = "MINA-VALEDOURO-LOTE-002";
+
+// Render's free tier sleeps idle services; the first request after a cold
+// start can take tens of seconds. Bound each load so the panel fails with a
+// clear, retryable message instead of hanging on "Loading" forever.
+const REQUEST_TIMEOUT_MS = 45_000;
+
+function formatClock(date: Date) {
+  return date.toLocaleTimeString("en-US", { hour12: false });
+}
 
 export function LiveGatewayPanel() {
   const [state, setState] = useState<LoadState>("loading");
   const [error, setError] = useState<string | null>(null);
+  const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
   const [snapshot, setSnapshot] = useState<GatewaySnapshot>({
     proof: null,
     catalog: null,
@@ -30,50 +41,85 @@ export function LiveGatewayPanel() {
     certificate: null,
   });
 
-  useEffect(() => {
-    let cancelled = false;
+  // Identifies the most recent load so a superseded run (manual refresh or
+  // unmount) never writes stale results into state.
+  const latestRun = useRef(0);
+  const mounted = useRef(true);
+  const controllerRef = useRef<AbortController | null>(null);
 
-    async function loadGateway() {
-      setState("loading");
-      setError(null);
+  const loadGateway = useCallback(async () => {
+    const runId = ++latestRun.current;
+    controllerRef.current?.abort(); // cancel any prior run's pending fetches
+    const controller = new AbortController();
+    controllerRef.current = controller;
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-      try {
-        const [proof, catalog, verdicts] = await Promise.all([
-          fetchGatewayJson<ProofResponse>("/proof"),
-          fetchGatewayJson<CatalogResponse>("/catalog"),
-          Promise.all(
-            LIVE_ASSETS.map((assetId) =>
-              fetchGatewayJson<VerdictResponse>(`/verdict/${encodeURIComponent(assetId)}`),
-            ),
-          ),
-        ]);
+    setState("loading");
+    setError(null);
 
-        let certificate: CertificateResponse | null = null;
-        try {
-          certificate = await fetchGatewayJson<CertificateResponse>(
-            "/certificate/MINA-VALEDOURO-LOTE-002",
-          );
-        } catch {
-          certificate = null;
-        }
+    const get = <T,>(path: string) =>
+      fetchGatewayJson<T>(path, { signal: controller.signal });
 
-        if (!cancelled) {
-          setSnapshot({ proof, catalog, verdicts, certificate });
-          setState("ready");
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Gateway unavailable");
-          setState("error");
-        }
-      }
+    // allSettled: a single slow or failed endpoint (common on a cold-started
+    // backend) must not blank the whole panel — render whatever resolved.
+    const [coreResults, verdictResults] = await Promise.all([
+      Promise.allSettled([get<ProofResponse>("/proof"), get<CatalogResponse>("/catalog")]),
+      Promise.allSettled(
+        LIVE_ASSETS.map((assetId) =>
+          get<VerdictResponse>(`/verdict/${encodeURIComponent(assetId)}`),
+        ),
+      ),
+    ]);
+    clearTimeout(timeout);
+
+    // Drop results from an unmounted component or a superseded refresh.
+    if (!mounted.current || runId !== latestRun.current) return;
+
+    const [proofResult, catalogResult] = coreResults;
+    const proof = proofResult.status === "fulfilled" ? proofResult.value : null;
+    const catalog = catalogResult.status === "fulfilled" ? catalogResult.value : null;
+    const verdicts = verdictResults
+      .filter((r): r is PromiseFulfilledResult<VerdictResponse> => r.status === "fulfilled")
+      .map((r) => r.value);
+
+    if (!proof && !catalog && verdicts.length === 0) {
+      setSnapshot({ proof: null, catalog: null, verdicts: [], certificate: null });
+      setUpdatedAt(new Date());
+      setError(
+        controller.signal.aborted
+          ? "Gateway timed out — the demo backend may be waking up. Try Refresh."
+          : proofResult.status === "rejected" && proofResult.reason instanceof Error
+            ? proofResult.reason.message
+            : "Gateway unavailable",
+      );
+      setState("error");
+      return;
     }
 
-    loadGateway();
-    return () => {
-      cancelled = true;
-    };
+    // Certificate is best-effort: a 404 for a non-Valid lot is expected.
+    let certificate: CertificateResponse | null = null;
+    try {
+      certificate = await get<CertificateResponse>(
+        `/certificate/${encodeURIComponent(CERTIFICATE_ASSET)}`,
+      );
+    } catch {
+      certificate = null;
+    }
+    if (!mounted.current || runId !== latestRun.current) return;
+
+    setSnapshot({ proof, catalog, verdicts, certificate });
+    setUpdatedAt(new Date());
+    setState("ready");
   }, []);
+
+  useEffect(() => {
+    mounted.current = true;
+    void loadGateway();
+    return () => {
+      mounted.current = false;
+      controllerRef.current?.abort();
+    };
+  }, [loadGateway]);
 
   const onChainAssets = snapshot.catalog?.assets.filter((asset) => asset.simulated !== true).length ?? 0;
 
@@ -81,12 +127,27 @@ export function LiveGatewayPanel() {
     <aside className="live-gateway panel panel--elevated reveal-scroll" aria-live="polite">
       <header className="panel__head live-gateway__head">
         <span className="mono-label">Live gateway</span>
-        <span className={`live-gateway__status live-gateway__status--${state}`}>
-          {state === "loading" ? "Loading" : state === "ready" ? "Connected" : "Unavailable"}
-        </span>
+        <div className="live-gateway__head-actions">
+          <span className={`live-gateway__status live-gateway__status--${state}`}>
+            {state === "loading" ? "Loading" : state === "ready" ? "Connected" : "Unavailable"}
+          </span>
+          <button
+            type="button"
+            className="live-gateway__refresh"
+            onClick={() => void loadGateway()}
+            disabled={state === "loading"}
+          >
+            {state === "loading" ? "Refreshing…" : "Refresh live verdicts"}
+          </button>
+        </div>
       </header>
 
-      <p className="live-gateway__url">API: {LASTRO_GATEWAY_URL}</p>
+      <p className="live-gateway__url">
+        API: {LASTRO_GATEWAY_URL}
+        {updatedAt ? (
+          <span className="live-gateway__timestamp"> · updated {formatClock(updatedAt)}</span>
+        ) : null}
+      </p>
 
       {state === "error" ? (
         <p className="live-gateway__error">

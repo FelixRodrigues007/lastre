@@ -7,6 +7,41 @@
   align-items: center;
 }
 
+.live-gateway__head-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+}
+
+.live-gateway__refresh {
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-pill);
+  background: transparent;
+  color: var(--lastro-text-primary);
+  padding: 0.35rem 0.7rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    border-color 240ms var(--ease-out-expo, ease),
+    color 240ms var(--ease-out-expo, ease);
+}
+
+.live-gateway__refresh:hover:not(:disabled) {
+  border-color: var(--lastro-brand-seal);
+  color: var(--lastro-brand-seal);
+}
+
+.live-gateway__refresh:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.live-gateway__timestamp {
+  color: var(--lastro-text-muted);
+}
+
 .live-gateway__status {
   border-radius: var(--lastro-radius-pill);
   padding: 0.35rem 0.7rem;
