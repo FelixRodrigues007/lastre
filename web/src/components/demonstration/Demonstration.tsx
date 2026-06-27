@@ -1,19 +1,20 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 import type { CSSProperties } from "react";
-import { CSPR_PACKAGE_URL, GITHUB_URL } from "../../site-links";
+import { CSPR_EXPLORER_EMBED, CSPR_PACKAGE_URL, GITHUB_URL } from "../../site-links";
+import { useSite } from "../../context/SiteContext";
 import { Button } from "../ui/Button";
 import { BoundaryVisual } from "./BoundaryVisual";
 import { ExplorerVisual } from "./ExplorerVisual";
 import "./demonstration.css";
+import "../content/content-sections.css";
 
-/** Sections 8–9 — Honesty by design, then live testnet proof. Z-pattern editorial
- *  rows on the dark band: copy ↔ product console, ending in verifiable CTAs. */
 export function Demonstration() {
   const baseId = useId();
+  const { t } = useSite();
+  const [showEmbed, setShowEmbed] = useState(false);
 
   return (
     <div className="demonstration section--band">
-      {/* Section 8 — A demonstration, by design */}
       <section
         className="demonstration__row"
         id="honesty"
@@ -22,6 +23,7 @@ export function Demonstration() {
         <div className="shell split-grid demonstration__grid">
           <div className="demonstration__copy">
             <p className="kicker reveal-scroll">A demonstration, by design</p>
+            <p className="section-intro">Honesty is part of the protocol boundary.</p>
 
             <h2
               id={`${baseId}-honesty-title`}
@@ -32,13 +34,12 @@ export function Demonstration() {
             </h2>
 
             <p
-              className="section-lead section-lead--rule reveal-scroll"
+              className="section-lead section-lead--rule reveal-scroll body-max-ch"
               style={{ "--reveal-delay": "120ms" } as CSSProperties}
             >
               Everything here uses simulated assets and offers no investment, no
               token sale, and no yield. Lastro is a proof layer — it confers no
-              ownership and no financial right. Knowing exactly where that line
-              sits is part of the protocol.
+              ownership and no financial right.
             </p>
           </div>
 
@@ -51,7 +52,6 @@ export function Demonstration() {
         </div>
       </section>
 
-      {/* Section 9 — Verify it yourself */}
       <section
         className="demonstration__row demonstration__row--reverse"
         id="demo"
@@ -70,27 +70,27 @@ export function Demonstration() {
             </h2>
 
             <p
-              className="section-lead section-lead--rule reveal-scroll"
+              className="section-lead section-lead--rule reveal-scroll body-max-ch"
               style={{ "--reveal-delay": "120ms" } as CSSProperties}
             >
               The contract is deployed. Real attestations — accepted and rejected
-              — sit on-chain right now. Open the explorer, read the verdicts, run
-              the sandbox. Nothing here asks for your trust; all of it earns it.
+              — sit on-chain right now.
             </p>
 
             <div
-              className="demonstration__actions reveal-scroll"
+              className="demonstration__actions btn-row reveal-scroll"
               style={{ "--reveal-delay": "180ms" } as CSSProperties}
             >
-              <Button href="#proof" trailing={<span aria-hidden="true">→</span>}>
-                Verify proof
-              </Button>
-              <Button href={CSPR_PACKAGE_URL} variant="ghost" external>
+              <Button href="#proof">{t("tryTamperDemo")}</Button>
+              <Button href={CSPR_PACKAGE_URL} variant="secondary" external>
                 View on cspr.live
               </Button>
-              <Button href={GITHUB_URL} variant="ghost" external>
-                Read the code on GitHub
+              <Button href={GITHUB_URL} variant="tertiary" external>
+                Read the code
               </Button>
+              <button type="button" className="btn btn--secondary btn--sm" onClick={() => setShowEmbed((v) => !v)}>
+                {showEmbed ? "Hide" : "Show"} live explorer
+              </button>
             </div>
           </div>
 
@@ -98,7 +98,26 @@ export function Demonstration() {
             className="demonstration__visual reveal-scroll"
             style={{ "--reveal-delay": "240ms" } as CSSProperties}
           >
-            <ExplorerVisual />
+            {showEmbed ? (
+              <>
+                <iframe
+                  className="expl__embed"
+                  src={CSPR_EXPLORER_EMBED}
+                  title="Casper Testnet explorer — ProofOfOrigin package"
+                  sandbox="allow-scripts allow-same-origin allow-popups"
+                  loading="lazy"
+                />
+                <p className="expl__embed-fallback">
+                  If the embed is blocked,{" "}
+                  <a href={CSPR_PACKAGE_URL} target="_blank" rel="noopener noreferrer">
+                    open cspr.live directly
+                  </a>
+                  .
+                </p>
+              </>
+            ) : (
+              <ExplorerVisual />
+            )}
           </div>
         </div>
       </section>

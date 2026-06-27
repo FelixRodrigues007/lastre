@@ -41,13 +41,15 @@ export function Minerals() {
           className="minerals__actions reveal-scroll"
           style={{ "--reveal-delay": "180ms" } as CSSProperties}
         >
-          <Button href="#proof" trailing={<span aria-hidden="true">→</span>}>
-            Verify proof
-          </Button>
+          <Button href="#proof">Verify proof</Button>
         </div>
       </div>
 
-      <figure className="minerals__figure reveal-scroll" style={{ "--reveal-delay": "240ms" } as CSSProperties}>
+      <figure
+        className="minerals__figure reveal-scroll reveal-scroll--clip"
+        style={{ "--reveal-delay": "200ms" } as CSSProperties}
+        data-scroll-shift="0.05"
+      >
         <MineVisual />
         <figcaption className="minerals__caption mono-label">
           Shown with simulated assets for demonstration.

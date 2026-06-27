@@ -1,74 +1,146 @@
+/* ── Lastro buttons — single serious system ─────────────────────────── */
+
 .btn {
-  --btn-shift: 0px;
+  --btn-height: 2.5rem;
+  --btn-pad-x: 1.125rem;
+  --btn-radius: 6px;
+
   display: inline-flex;
   align-items: center;
-  gap: var(--lastro-space-2);
-  padding: 14px 22px;
-  border-radius: var(--lastro-radius-pill);
-  border: var(--lastro-stroke-hairline) solid transparent;
+  justify-content: center;
+  gap: 0.375rem;
+  min-height: var(--btn-height);
+  padding: 0 calc(var(--btn-pad-x) - 1px);
+  border-radius: var(--btn-radius);
+  border: 1px solid transparent;
   font-family: var(--lastro-font-display);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: var(--lastro-weight-medium);
-  letter-spacing: -0.01em;
+  line-height: 1;
+  letter-spacing: -0.012em;
+  text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
+  user-select: none;
   transition:
-    transform var(--lastro-dur, 220ms) var(--ease-out-expo),
-    background 220ms var(--ease-out-expo),
-    border-color 220ms var(--ease-out-expo),
-    box-shadow 220ms var(--ease-out-expo);
-  will-change: transform;
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
 }
 
-.btn__trailing {
-  display: inline-flex;
-  transition: transform 260ms var(--ease-out-expo);
+.btn:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--lastro-brand-seal) 70%, white);
+  outline-offset: 2px;
 }
 
-.btn:hover .btn__trailing {
-  transform: translateX(3px);
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
-.btn:active {
-  transform: translateY(1px);
+.btn--sm {
+  --btn-height: 2.25rem;
+  --btn-pad-x: 0.875rem;
+  font-size: 0.8125rem;
 }
 
-/* Primary — the seal accent. Reserved for the demo CTA. */
+/* Primary — one filled action per block */
 .btn--primary {
-  background: var(--lastro-button-primary-bg);
-  color: var(--lastro-button-primary-text);
-  box-shadow: 0 0 0 0 rgba(254, 241, 111, 0.5);
+  background: var(--lastro-brand-seal);
+  color: var(--lastro-color-olive-950);
+  border-color: color-mix(in oklab, var(--lastro-color-olive-950) 12%, transparent);
 }
 
 .btn--primary:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 14px 32px -12px rgba(254, 241, 111, 0.55),
-    0 0 0 1px rgba(254, 241, 111, 0.4);
+  background: color-mix(in oklab, var(--lastro-brand-seal) 92%, var(--lastro-color-olive-950));
 }
 
-/* Inverse — cream fill on dark panels (final CTA). */
-.btn--inverse {
+.btn--primary:active {
+  background: color-mix(in oklab, var(--lastro-brand-seal) 85%, var(--lastro-color-olive-950));
+}
+
+/* Inverted primary on dark surfaces */
+.btn--on-dark.btn--primary,
+.on-dark .btn--primary {
   background: var(--lastro-color-cream-50);
   color: var(--lastro-color-olive-950);
-  box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.45);
+  border-color: color-mix(in oklab, var(--lastro-color-cream-50) 80%, transparent);
 }
 
-.btn--inverse:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 18px 36px -12px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.25);
+.btn--on-dark.btn--primary:hover,
+.on-dark .btn--primary:hover {
+  background: color-mix(in oklab, var(--lastro-color-cream-50) 92%, white);
 }
 
-/* Ghost — hairline outline, mono-adjacent. */
-.btn--ghost {
+/* Secondary — outline, same weight as primary */
+.btn--secondary {
   background: transparent;
   color: var(--lastro-text-primary);
   border-color: var(--lastro-border-strong);
 }
 
-.btn--ghost:hover {
-  transform: translateY(-2px);
-  border-color: var(--lastro-text-secondary);
-  background: rgba(231, 230, 208, 0.04);
+.btn--secondary:hover {
+  background: color-mix(in oklab, var(--lastro-text-primary) 5%, transparent);
+  border-color: color-mix(in oklab, var(--lastro-text-primary) 35%, transparent);
+}
+
+.btn--on-dark.btn--secondary,
+.on-dark .btn--secondary {
+  color: var(--lastro-color-cream-200);
+  border-color: color-mix(in oklab, var(--lastro-color-cream-200) 32%, transparent);
+}
+
+.btn--on-dark.btn--secondary:hover,
+.on-dark .btn--secondary:hover {
+  background: color-mix(in oklab, var(--lastro-color-cream-200) 8%, transparent);
+  border-color: color-mix(in oklab, var(--lastro-color-cream-200) 45%, transparent);
+}
+
+/* Tertiary — text action, no chrome */
+.btn--tertiary {
+  min-height: auto;
+  padding: 0.25rem 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--lastro-text-secondary);
+  font-size: 0.875rem;
+}
+
+.btn--tertiary:hover {
+  color: var(--lastro-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.btn--on-dark.btn--tertiary,
+.on-dark .btn--tertiary {
+  color: color-mix(in oklab, var(--lastro-color-cream-200) 72%, transparent);
+}
+
+.btn--on-dark.btn--tertiary:hover,
+.on-dark .btn--tertiary:hover {
+  color: var(--lastro-color-cream-50);
+}
+
+/* Layout helpers */
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.btn-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 1.25rem;
+  margin-top: 0.625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
 }

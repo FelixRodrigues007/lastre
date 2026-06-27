@@ -1,0 +1,141 @@
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: var(--lastro-color-olive-950);
+  transition:
+    opacity 680ms cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 680ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-loader--done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-loader__mark {
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.page-loader__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in oklab, var(--lastro-brand-seal) 35%, transparent);
+  border-top-color: var(--lastro-brand-seal);
+  animation: loader-spin 900ms linear infinite;
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.premium-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.premium-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 9989;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 90% at 50% 40%,
+    transparent 55%,
+    color-mix(in oklab, var(--lastro-color-olive-950) 28%, transparent) 100%
+  );
+}
+
+.premium-cursor {
+  display: none;
+}
+
+@media (pointer: fine) {
+  html.premium,
+  html.premium body {
+    cursor: none;
+  }
+
+  html.premium a,
+  html.premium button,
+  html.premium .btn,
+  html.premium input,
+  html.premium textarea {
+    cursor: none;
+  }
+
+  .premium-cursor {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+  }
+
+  .premium-cursor__dot,
+  .premium-cursor__ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    will-change: transform;
+  }
+
+  .premium-cursor__dot {
+    width: 6px;
+    height: 6px;
+    background: var(--lastro-brand-seal);
+  }
+
+  .premium-cursor__ring {
+    width: 36px;
+    height: 36px;
+    margin: -18px 0 0 -18px;
+    border: 1px solid color-mix(in oklab, var(--lastro-brand-seal) 45%, transparent);
+    transition:
+      width 280ms cubic-bezier(0.16, 1, 0.3, 1),
+      height 280ms cubic-bezier(0.16, 1, 0.3, 1),
+      margin 280ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 280ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html[data-cursor="hover"] .premium-cursor__ring {
+    width: 52px;
+    height: 52px;
+    margin: -26px 0 0 -26px;
+    border-color: color-mix(in oklab, var(--lastro-brand-seal) 70%, transparent);
+  }
+
+  html[data-cursor="down"] .premium-cursor__ring {
+    width: 28px;
+    height: 28px;
+    margin: -14px 0 0 -14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader,
+  .page-loader__ring {
+    animation: none;
+    transition: none;
+  }
+
+  .premium-grain {
+    display: none;
+  }
+}

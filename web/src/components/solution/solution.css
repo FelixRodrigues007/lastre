@@ -4,7 +4,10 @@
   position: relative;
   overflow: hidden;
   color: var(--lastro-text-primary);
-  background: var(--lastro-bg-primary);
+  background:
+    radial-gradient(100% 75% at 20% 0%, var(--section-wash-a) 0%, transparent 55%),
+    radial-gradient(80% 60% at 100% 80%, var(--section-wash-b) 0%, transparent 50%),
+    var(--section-bg);
 }
 
 /* ── split header ──────────────────────────────────────────────────── */
@@ -37,6 +40,7 @@
   border-radius: 50%;
   background: var(--lastro-status-valid);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--lastro-status-valid) 28%, transparent);
+  animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
 }
 
 .sol__title {
@@ -49,6 +53,23 @@
   letter-spacing: -0.035em;
   color: var(--lastro-text-primary);
   text-wrap: balance;
+}
+
+.sol__title--split {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08em;
+  max-width: none;
+}
+
+.sol__title-line {
+  display: block;
+}
+
+.sol__title-line--accent {
+  color: var(--lastro-text-secondary);
+  font-size: 0.82em;
+  letter-spacing: -0.03em;
 }
 
 .sol__aside {
@@ -66,6 +87,10 @@
     gap: clamp(2rem, 1rem + 5vw, 5rem);
   }
 
+  .sol__title--split {
+    max-width: 16ch;
+  }
+
   .sol__aside {
     justify-self: end;
     padding-bottom: 0.35rem;
@@ -76,6 +101,11 @@
 
 .sol__showcase-wrap {
   margin-bottom: clamp(3rem, 2rem + 5vw, 5.5rem);
+  --sol-progress: 0;
+  --sol-window-y: 48px;
+  --sol-window-scale: 0.92;
+  --sol-scenery-scale: 1.08;
+  perspective: 1200px;
 }
 
 .sol-showcase {
@@ -92,50 +122,53 @@
 .sol-showcase__scenery {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--lastro-color-olive-950) 20%, transparent) 0%,
-      color-mix(in oklab, var(--lastro-color-olive-950) 55%, transparent) 100%
-    ),
-    radial-gradient(
-      90% 70% at 72% 18%,
-      color-mix(in oklab, var(--lastro-color-seal-400) 18%, transparent) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      80% 60% at 18% 72%,
-      color-mix(in oklab, var(--lastro-color-valid-500) 22%, transparent) 0%,
-      transparent 58%
-    ),
-    linear-gradient(
-      165deg,
-      #1a2214 0%,
-      #2a3520 28%,
-      #3d4a2e 48%,
-      #5a6b42 62%,
-      #8a9a6e 78%,
-      #c4b89a 92%,
-      #d4c8ae 100%
-    );
-  filter: saturate(0.92) brightness(0.88);
+  overflow: hidden;
+  transform: scale(var(--sol-scenery-scale, 1));
+  transform-origin: 50% 40%;
+  will-change: transform;
+}
+
+.sol-showcase__scenery-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 68% 42%;
+  filter: saturate(0.88) brightness(0.72);
 }
 
 .sol-showcase__scenery::before {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   background:
-    linear-gradient(12deg, transparent 42%, rgba(18, 20, 7, 0.35) 100%),
-    radial-gradient(ellipse 120% 80% at 50% 100%, rgba(18, 20, 7, 0.55) 0%, transparent 62%);
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--lastro-color-olive-950) 15%, transparent) 0%,
+      color-mix(in oklab, var(--lastro-color-olive-950) 65%, transparent) 100%
+    ),
+    radial-gradient(
+      90% 70% at 72% 18%,
+      color-mix(in oklab, var(--lastro-color-seal-400) 22%, transparent) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      80% 60% at 18% 72%,
+      color-mix(in oklab, var(--lastro-color-valid-500) 18%, transparent) 0%,
+      transparent 58%
+    );
+  pointer-events: none;
 }
 
 .sol-showcase__scenery::after {
   content: "";
   position: absolute;
   inset: 0;
-  backdrop-filter: blur(1px);
-  background: rgba(18, 20, 7, 0.12);
+  z-index: 2;
+  backdrop-filter: blur(0.5px);
+  background: rgba(18, 20, 7, 0.18);
+  pointer-events: none;
 }
 
 /* ── floating product window ───────────────────────────────────────── */
@@ -145,12 +178,20 @@
   z-index: 1;
   width: min(100%, 58rem);
   border-radius: 14px;
-  border: var(--lastro-stroke-hairline) solid rgba(255, 255, 255, 0.1);
-  background: color-mix(in oklab, #0f0f0f 88%, var(--lastro-color-olive-900));
+  border: var(--lastro-stroke-hairline) solid rgba(231, 230, 208, 0.12);
+  background: color-mix(
+    in oklab,
+    var(--lastro-color-olive-950) 92%,
+    var(--lastro-color-olive-800)
+  );
   box-shadow:
-    0 48px 96px -32px rgba(0, 0, 0, 0.72),
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    0 64px 128px -40px rgba(0, 0, 0, 0.82),
+    0 0 0 1px rgba(231, 230, 208, 0.05) inset;
   overflow: hidden;
+  transform: translate3d(0, var(--sol-window-y, 0px), 0) scale(var(--sol-window-scale, 1));
+  transform-origin: 50% 60%;
+  will-change: transform;
+  opacity: calc(0.55 + var(--sol-progress, 0) * 0.45);
 }
 
 .sol-showcase__toolbar {
@@ -159,17 +200,17 @@
   justify-content: space-between;
   gap: var(--lastro-space-4);
   padding: 12px 16px;
-  border-bottom: var(--lastro-stroke-hairline) solid rgba(255, 255, 255, 0.08);
-  background: color-mix(in oklab, #141414 90%, transparent);
+  border-bottom: var(--lastro-stroke-hairline) solid rgba(231, 230, 208, 0.1);
+  background: color-mix(in oklab, var(--lastro-color-olive-900) 92%, transparent);
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--lastro-color-sage-300);
 }
 
 .sol-showcase__brand {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--lastro-color-cream-200);
 }
 
 .sol-showcase__channel {
@@ -182,19 +223,29 @@
   align-items: center;
   gap: 10px;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--lastro-color-olive-400);
+}
+
+.sol-showcase__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--lastro-color-sage-300);
+}
+
+.sol-showcase__live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lastro-status-valid);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--lastro-status-valid) 30%, transparent);
+  animation: pulse-ring 2s var(--ease-out-expo) infinite;
 }
 
 .sol-showcase__toolbar-divider {
   width: 1px;
   height: 14px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.sol-showcase__toolbar-search {
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(231, 230, 208, 0.14);
 }
 
 .sol-showcase__body {
@@ -205,21 +256,21 @@
 
 .sol-showcase__feed {
   padding: 16px 18px 20px;
-  border-bottom: var(--lastro-stroke-hairline) solid rgba(255, 255, 255, 0.06);
+  border-bottom: var(--lastro-stroke-hairline) solid rgba(231, 230, 208, 0.08);
 }
 
 .sol-showcase__thread {
   display: none;
   padding: 14px 16px 18px;
-  border-left: var(--lastro-stroke-hairline) solid rgba(255, 255, 255, 0.06);
-  background: color-mix(in oklab, #0c0c0c 70%, transparent);
+  border-left: var(--lastro-stroke-hairline) solid rgba(231, 230, 208, 0.08);
+  background: color-mix(in oklab, var(--lastro-color-olive-950) 75%, transparent);
 }
 
 .sol-showcase__thread-head {
   margin-bottom: 14px;
   font-size: 0.9375rem;
   font-weight: var(--lastro-weight-semibold);
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--lastro-color-cream-200);
 }
 
 /* ── messages ──────────────────────────────────────────────────────── */
@@ -269,55 +320,68 @@
 
 .sol-showcase__author {
   font-weight: var(--lastro-weight-semibold);
-  color: rgba(255, 255, 255, 0.94);
+  color: var(--lastro-color-cream-200);
 }
 
 .sol-showcase__msg-head time {
   font-size: 0.6875rem;
-  color: rgba(255, 255, 255, 0.38);
+  color: var(--lastro-color-olive-400);
 }
 
 .sol-showcase__agent-tag {
   padding: 1px 6px;
   border-radius: 4px;
-  border: var(--lastro-stroke-hairline) solid rgba(255, 255, 255, 0.18);
+  border: var(--lastro-stroke-hairline) solid rgba(231, 230, 208, 0.16);
   font-size: 0.5625rem;
   font-weight: var(--lastro-weight-semibold);
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--lastro-color-sage-300);
 }
 
 .sol-showcase__msg-body p {
   font-size: 0.8125rem;
   line-height: 1.55;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--lastro-color-sage-300);
 }
 
 .sol-showcase__mention {
-  color: rgba(120, 168, 255, 0.95);
+  color: var(--lastro-color-seal-400);
   font-weight: var(--lastro-weight-medium);
 }
 
-.sol-showcase__skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 2px 0 8px;
+.sol-showcase__typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 0;
 }
 
-.sol-showcase__skeleton span {
-  display: block;
-  height: 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
+.sol-showcase__typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  animation: sol-typing 1.4s var(--ease-out-expo) infinite;
 }
 
-.sol-showcase__skeleton span:nth-child(1) {
-  width: 92%;
+.sol-showcase__typing span:nth-child(2) {
+  animation-delay: 0.18s;
 }
 
-.sol-showcase__skeleton span:nth-child(2) {
-  width: 78%;
+.sol-showcase__typing span:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+@keyframes sol-typing {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
 }
 
 .sol-showcase__reactions {
@@ -330,6 +394,10 @@
   border: var(--lastro-stroke-hairline) solid rgba(255, 255, 255, 0.1);
   font-size: 0.6875rem;
   color: rgba(255, 255, 255, 0.55);
+}
+
+.sol-showcase__reactions svg {
+  color: rgba(254, 120, 120, 0.85);
 }
 
 .sol-showcase__divider {
@@ -411,6 +479,17 @@
   margin: 0;
 }
 
+.sol__feature {
+  padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border-radius: var(--lastro-radius-md);
+  border: var(--lastro-stroke-hairline) solid transparent;
+}
+
+.sol__feature:hover {
+  border-color: var(--lastro-border-subtle);
+  background: color-mix(in oklab, var(--lastro-bg-panel) 45%, transparent);
+}
+
 .sol__feature-icon {
   display: inline-flex;
   align-items: center;
@@ -422,6 +501,16 @@
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   background: color-mix(in oklab, var(--lastro-bg-panel) 70%, transparent);
   color: var(--lastro-text-secondary);
+  transition:
+    transform var(--dur-interact) var(--ease-out-expo),
+    color var(--dur-interact) var(--ease-out-expo),
+    border-color var(--dur-interact) var(--ease-out-expo);
+}
+
+.sol__feature:hover .sol__feature-icon {
+  transform: scale(1.06);
+  color: var(--lastro-brand-seal-text);
+  border-color: var(--lastro-border-strong);
 }
 
 .sol__feature-title {
@@ -469,8 +558,22 @@
     padding: 1rem;
     min-height: 20rem;
   }
+}
 
-  .sol-showcase__toolbar-search {
-    display: none;
+@media (prefers-reduced-motion: reduce) {
+  .sol__showcase-wrap {
+    perspective: none;
+  }
+
+  .sol-showcase__scenery,
+  .sol-showcase__window {
+    transform: none;
+    opacity: 1;
+  }
+
+  .sol-showcase__typing span,
+  .sol__badge-dot,
+  .sol-showcase__live-dot {
+    animation: none;
   }
 }

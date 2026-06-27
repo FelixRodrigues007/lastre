@@ -1,12 +1,11 @@
-/** Decorative panel for section 9 — a read-only snapshot of the live Casper
- *  Testnet contract state. Counts and verdicts match README / make query output. */
+import { useCountUp } from "../../hooks/useCountUp";
+import { useOnChainStats } from "../../hooks/useOnChainStats";
+import { CONTRACT_PACKAGE_HASH } from "../../site-links";
+
 const ATTESTATIONS = [
   { asset: "MINA-VALEDOURO-LOTE-001", verdict: "invalid" as const },
   { asset: "MINA-VALEDOURO-LOTE-002", verdict: "valid" as const },
 ] as const;
-
-const PACKAGE_HASH =
-  "hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561";
 
 function truncateHash(hash: string) {
   return `${hash.slice(0, 12)}…${hash.slice(-8)}`;
@@ -41,6 +40,10 @@ function VerdictGlyph({ verdict }: { verdict: "valid" | "invalid" }) {
 }
 
 export function ExplorerVisual() {
+  const stats = useOnChainStats();
+  const accepted = useCountUp(stats.accepted);
+  const rejected = useCountUp(stats.rejected);
+
   return (
     <div className="expl__stage" aria-hidden="true">
       <div className="expl">
@@ -49,24 +52,6 @@ export function ExplorerVisual() {
             <i /> <i /> <i />
           </span>
           <span className="expl__url">
-            <svg width="9" height="11" viewBox="0 0 10 12" aria-hidden="true">
-              <rect
-                x="1.5"
-                y="5"
-                width="7"
-                height="5.5"
-                rx="1.2"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              />
-              <path
-                d="M3 5V3.4A2 2 0 0 1 7 3.4V5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              />
-            </svg>
             testnet.cspr.live
           </span>
         </div>
@@ -77,22 +62,24 @@ export function ExplorerVisual() {
               <p className="expl__eyebrow mono-label">ProofOfOrigin</p>
               <p className="expl__network">Casper Testnet · casper-test</p>
             </div>
-            <span className="expl__live">LIVE</span>
+            <span className="expl__live" aria-live="polite">
+              {stats.live ? "LIVE" : "SYNC"}
+            </span>
           </header>
 
           <p className="expl__package">
             <span className="expl__package-key">Package</span>
-            <span className="expl__package-val">{truncateHash(PACKAGE_HASH)}</span>
+            <span className="expl__package-val">{truncateHash(CONTRACT_PACKAGE_HASH)}</span>
           </p>
 
-          <dl className="expl__counts">
+          <dl className="expl__counts tabular-nums">
             <div className="expl__count">
               <dt>Accepted</dt>
-              <dd>2</dd>
+              <dd>{accepted}</dd>
             </div>
             <div className="expl__count expl__count--reject">
               <dt>Rejected</dt>
-              <dd>1</dd>
+              <dd>{rejected}</dd>
             </div>
           </dl>
 

@@ -34,6 +34,8 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-slow: 720ms;
   --dur-reveal: 840ms;
+  --dur-stagger: 72ms;
+  --dur-interact: 260ms;
 }
 
 *,
@@ -59,10 +61,10 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Atmosphere: a single fixed olive radial wash + a faint provenance grid.
- * Pinned behind everything so scrolling sections read against one field. */
+/* Atmosphere: faint wash for footer reveal only — sections own their fields. */
 body::before {
   content: "";
   position: fixed;
@@ -71,14 +73,15 @@ body::before {
   background:
     radial-gradient(
       120% 80% at 82% -10%,
-      rgba(254, 241, 111, 0.07) 0%,
+      rgba(254, 241, 111, 0.035) 0%,
       transparent 46%
     ),
     radial-gradient(
       90% 70% at 0% 0%,
-      rgba(111, 143, 46, 0.08) 0%,
+      rgba(111, 143, 46, 0.04) 0%,
       transparent 50%
     );
+  opacity: 0.65;
 }
 
 body::after {
@@ -87,14 +90,15 @@ body::after {
   inset: 0;
   z-index: -1;
   background-image:
-    linear-gradient(rgba(231, 230, 208, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(231, 230, 208, 0.025) 1px, transparent 1px);
+    linear-gradient(rgba(231, 230, 208, var(--atmo-grid-opacity, 0.018)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(231, 230, 208, var(--atmo-grid-opacity, 0.018)) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(
     120% 90% at 50% 0%,
     #000 0%,
     transparent 75%
   );
+  opacity: 0.5;
 }
 
 a {
@@ -126,6 +130,7 @@ a {
 .site-curtain {
   position: relative;
   z-index: 1;
+  isolation: isolate;
   background: var(--lastro-color-olive-950);
 }
 
@@ -351,6 +356,18 @@ a {
   animation: draw-underline 900ms var(--ease-out-expo) 520ms backwards;
 }
 
+/* Scroll-triggered draw — class added by initScrollEffects */
+.accent-underline--scroll::after {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 900ms var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 120ms);
+}
+
+.accent-underline--scroll.is-drawn::after {
+  transform: scaleX(1);
+}
+
 .accent-strike {
   position: relative;
   color: var(--lastro-text-secondary);
@@ -366,6 +383,18 @@ a {
   height: 0.06em;
   background: var(--lastro-status-invalid);
   border-radius: var(--lastro-radius-pill);
+}
+
+.accent-strike--scroll::after {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 900ms var(--ease-out-expo);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 280ms);
+}
+
+.reveal-scroll.is-visible .accent-strike--scroll::after,
+.is-visible .accent-strike--scroll::after {
+  transform: scaleX(1);
 }
 
 .accent-emphasis {
@@ -506,6 +535,98 @@ a {
   transform: none;
 }
 
+/* Directional variants */
+.reveal-scroll--left {
+  transform: translateX(-28px);
+}
+
+.reveal-scroll--right {
+  transform: translateX(28px);
+}
+
+.reveal-scroll--scale {
+  transform: scale(0.96);
+}
+
+.reveal-scroll--clip {
+  clip-path: inset(0 0 100% 0);
+  transform: none;
+}
+
+.reveal-scroll--clip.is-visible {
+  clip-path: inset(0 0 0 0);
+  transition:
+    opacity var(--dur-reveal) var(--ease-out-expo),
+    clip-path calc(var(--dur-reveal) + 120ms) var(--ease-out-expo);
+}
+
+/* Stagger groups — parent gets is-visible, children animate in sequence */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity var(--dur-reveal) var(--ease-out-expo),
+    transform var(--dur-reveal) var(--ease-out-expo);
+}
+
+.reveal-stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-stagger.is-visible > *:nth-child(1) { transition-delay: calc(var(--reveal-delay, 0ms) + 0 * var(--dur-stagger)); }
+.reveal-stagger.is-visible > *:nth-child(2) { transition-delay: calc(var(--reveal-delay, 0ms) + 1 * var(--dur-stagger)); }
+.reveal-stagger.is-visible > *:nth-child(3) { transition-delay: calc(var(--reveal-delay, 0ms) + 2 * var(--dur-stagger)); }
+.reveal-stagger.is-visible > *:nth-child(4) { transition-delay: calc(var(--reveal-delay, 0ms) + 3 * var(--dur-stagger)); }
+.reveal-stagger.is-visible > *:nth-child(5) { transition-delay: calc(var(--reveal-delay, 0ms) + 4 * var(--dur-stagger)); }
+.reveal-stagger.is-visible > *:nth-child(6) { transition-delay: calc(var(--reveal-delay, 0ms) + 5 * var(--dur-stagger)); }
+
+/* Scroll-linked vertical shift — set by initScrollEffects */
+[data-scroll-shift] {
+  transform: translate3d(0, var(--scroll-shift-y, 0px), 0);
+  will-change: transform;
+}
+
+/* Interactive lift — cards, lanes, feature tiles */
+.interactive-lift {
+  transition:
+    transform var(--dur-interact) var(--ease-out-expo),
+    border-color var(--dur-interact) var(--ease-out-expo),
+    box-shadow var(--dur-interact) var(--ease-out-expo),
+    background var(--dur-interact) var(--ease-out-expo);
+}
+
+.interactive-lift:hover {
+  transform: translateY(-3px);
+}
+
+/* Link underline grow — nav + footer */
+.link-grow {
+  position: relative;
+  display: inline-flex;
+  transition: color var(--dur-interact) var(--ease-out-expo);
+}
+
+.link-grow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-interact) var(--ease-out-expo);
+  opacity: 0.55;
+}
+
+.link-grow:hover::after,
+.link-grow--active::after,
+.site-nav__link--active::after {
+  transform: scaleX(1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -518,8 +639,13 @@ a {
     transition-duration: 0.001ms !important;
   }
   .reveal,
-  .reveal-scroll {
+  .reveal-scroll,
+  .reveal-stagger > * {
     opacity: 1;
     transform: none;
+    clip-path: none;
+  }
+  [data-scroll-shift] {
+    transform: none !important;
   }
 }

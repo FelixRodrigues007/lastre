@@ -1,0 +1,203 @@
+.app-shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--app-nav-height);
+  display: flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--lastro-bg-primary) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.app-nav__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.app-nav__wordmark {
+  font-family: var(--lastro-font-display);
+  font-size: 1rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.app-nav__suffix {
+  color: var(--lastro-text-muted);
+  font-weight: var(--lastro-weight-medium);
+}
+
+.app-nav__links {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.app-nav__link {
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--lastro-radius-sm);
+  font-size: 0.875rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.app-nav__link:hover {
+  color: var(--lastro-text-primary);
+  background: color-mix(in srgb, var(--lastro-text-primary) 6%, transparent);
+}
+
+.app-nav__link--active {
+  color: var(--lastro-text-primary);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 12%, transparent);
+}
+
+.app-nav__end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.app-nav__settings {
+  display: none;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--lastro-radius-sm);
+  font-size: 0.875rem;
+  color: var(--lastro-text-secondary);
+}
+
+.app-nav__settings:hover {
+  color: var(--lastro-text-primary);
+}
+
+.app-nav__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lastro-text-secondary);
+  white-space: nowrap;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.app-nav__status:hover {
+  border-color: var(--lastro-border-strong);
+  color: var(--lastro-text-primary);
+}
+
+.app-nav__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--lastro-status-valid);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastro-status-valid) 25%, transparent);
+}
+
+.app-main {
+  flex: 1;
+}
+
+@media (min-width: 900px) {
+  .app-nav__links,
+  .app-nav__settings {
+    display: flex;
+  }
+}
+
+@media (max-width: 899px) {
+  .app-nav__inner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .app-nav__links {
+    display: none;
+  }
+
+  .app-main .shell {
+    padding-bottom: 4.5rem;
+  }
+
+  .app-main::after {
+    content: "";
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 45;
+    height: 3.75rem;
+    pointer-events: none;
+    background: linear-gradient(to top, var(--lastro-bg-primary) 40%, transparent);
+  }
+}
+
+/* Mobile bottom nav — compact access to primary routes */
+@media (max-width: 899px) {
+  .app-shell::after {
+    content: "";
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 46;
+    height: 3.25rem;
+    border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+    background: color-mix(in srgb, var(--lastro-bg-panel) 94%, transparent);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.mobile-tab-bar {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .mobile-tab-bar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 47;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: 3.25rem;
+    padding-inline: 0.25rem;
+  }
+
+  .mobile-tab-bar__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    font-weight: var(--lastro-weight-medium);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--lastro-text-muted);
+  }
+
+  .mobile-tab-bar__link--active {
+    color: var(--lastro-brand-seal);
+  }
+}

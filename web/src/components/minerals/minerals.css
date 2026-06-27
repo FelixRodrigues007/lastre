@@ -2,7 +2,14 @@
 
 .minerals {
   color: var(--lastro-text-primary);
-  background: var(--lastro-bg-primary);
+  background:
+    radial-gradient(80% 60% at 50% 0%, var(--section-wash-b) 0%, transparent 55%),
+    radial-gradient(100% 80% at 100% 100%, var(--section-wash-a) 0%, transparent 50%),
+    linear-gradient(
+      180deg,
+      var(--section-bg-top) 0%,
+      var(--section-bg-bottom) 100%
+    );
   padding-bottom: 0;
   overflow: hidden;
 }
@@ -19,24 +26,27 @@
   margin-top: clamp(1.25rem, 0.75rem + 2vw, 1.75rem);
 }
 
-.minerals__actions .btn--primary {
-  box-shadow:
-    0 18px 40px -16px rgba(18, 20, 7, 0.35),
-    0 6px 16px -8px rgba(18, 20, 7, 0.2);
-}
-
-.minerals__actions .btn--primary:hover {
-  box-shadow:
-    0 24px 48px -14px rgba(18, 20, 7, 0.42),
-    0 10px 24px -10px rgba(254, 241, 111, 0.45),
-    0 0 0 1px rgba(254, 241, 111, 0.35);
-}
-
 .minerals__figure {
   position: relative;
   margin: clamp(3rem, 1.5rem + 6vw, 5rem) 0 0;
   width: 100%;
   line-height: 0;
+}
+
+.minerals__figure::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 55%, var(--section-bg-bottom) 100%),
+    radial-gradient(80% 50% at 50% 100%, rgba(84, 87, 54, 0.14) 0%, transparent 70%);
+}
+
+.minerals__figure .minerals__svg {
+  transform: translate3d(0, var(--scroll-shift-y, 0px), 0);
+  will-change: transform;
 }
 
 .minerals__svg {

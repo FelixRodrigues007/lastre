@@ -1,97 +1,150 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SealMark } from "../ui/SealMark";
+import { useSite } from "../../context/SiteContext";
+import { APP_URL, DOCS_URL } from "../../site-links";
 import "./site-nav.css";
 
-const LINKS = [
+const NAV_LINKS = [
   { label: "Protocol", href: "#problem" },
-  { label: "How it works", href: "#how" },
-  { label: "Verify", href: "#proof" },
+  { label: "How", href: "#how" },
+  { label: "Proof", href: "#proof" },
+  { label: "Demo", href: "#demo" },
+] as const;
+
+const SECONDARY_LINKS: { label: string; href: string; external?: boolean }[] = [
+  { label: "FAQ", href: "#faq" },
+  { label: "App", href: APP_URL },
+  { label: "Docs", href: DOCS_URL, external: true },
 ];
 
-type NavTone = "hero" | "dark" | "light";
+function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const { locale, setLocale, t } = useSite();
 
-/** DOM order — must match App.tsx section sequence for correct tone sync. */
-const NAV_ZONES: { id: string; tone: NavTone; theme?: "light" }[] = [
-  { id: "top", tone: "hero" },
-  { id: "problem", tone: "dark" },
-  { id: "solution", tone: "dark" },
-  { id: "different", tone: "light", theme: "light" },
-  { id: "how", tone: "light", theme: "light" },
-  { id: "proof", tone: "dark" },
-  { id: "minerals", tone: "light", theme: "light" },
-  { id: "honesty", tone: "dark" },
-  { id: "demo", tone: "dark" },
-  { id: "cta", tone: "dark" },
-  { id: "footer", tone: "light", theme: "light" },
-];
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-function resolveNavZone() {
-  const navLine = document.querySelector<HTMLElement>(".site-nav")?.offsetHeight ?? 64;
-  let active = NAV_ZONES[0];
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open, onClose]);
 
-  for (const zone of NAV_ZONES) {
-    const el = document.getElementById(zone.id);
-    if (el && el.getBoundingClientRect().top <= navLine) active = zone;
-  }
+  if (!open) return null;
 
-  return active;
+  return (
+    <>
+      <button type="button" className="site-nav__overlay" onClick={onClose} aria-label="Close menu" />
+      <div
+        className="site-nav__drawer"
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+      >
+        <div className="site-nav__drawer-head">
+          <a className="site-nav__drawer-brand" href="#top" onClick={onClose}>
+            <SealMark size={20} />
+            <span>Lastre</span>
+          </a>
+          <button type="button" className="site-nav__drawer-close" onClick={onClose} aria-label="Close">
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <path
+                d="M2 2l10 10M12 2L2 12"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <nav aria-label="Site">
+          <ul className="site-nav__drawer-links">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <a className="site-nav__drawer-link" href={link.href} onClick={onClose}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <ul className="site-nav__drawer-secondary">
+            {SECONDARY_LINKS.map((link) => (
+              <li key={link.href + link.label}>
+                <a
+                  className="site-nav__drawer-secondary-link"
+                  href={link.href}
+                  onClick={onClose}
+                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <button
+            type="button"
+            className="site-nav__drawer-locale"
+            onClick={() => setLocale(locale === "en" ? "pt" : "en")}
+          >
+            {t("locale")}
+          </button>
+        </nav>
+      </div>
+    </>
+  );
 }
 
 export function SiteNav() {
-  const [tone, setTone] = useState<NavTone>("hero");
-  const [theme, setTheme] = useState<"light" | undefined>(undefined);
-
-  useEffect(() => {
-    let frame = 0;
-
-    const sync = () => {
-      frame = 0;
-      const zone = resolveNavZone();
-      setTone(zone.tone);
-      setTheme(zone.theme);
-    };
-
-    const onScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(sync);
-    };
-
-    sync();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (frame) cancelAnimationFrame(frame);
-    };
-  }, []);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header
-      className={`site-nav site-nav--${tone}`}
-      data-theme={theme}
-    >
-      <div className="shell site-nav__inner">
-        <nav className="site-nav__start" aria-label="Primary">
-          {LINKS.map((link) => (
-            <a key={link.href} className="site-nav__link" href={link.href}>
-              {link.label}
+    <>
+      <header className="site-nav">
+        <div className="shell site-nav__inner">
+          <div className="site-nav__start">
+            <a className="site-nav__brand" href="#top" aria-label="Lastre — home">
+              <SealMark size={20} />
+              <span className="site-nav__wordmark">Lastre</span>
             </a>
-          ))}
-        </nav>
 
-        <a className="site-nav__brand" href="#top" aria-label="Lastro — home">
-          <SealMark size={28} />
-          <span className="site-nav__wordmark">Lastro</span>
-        </a>
+            <nav className="site-nav__links" aria-label="Primary">
+              {NAV_LINKS.map((link) => (
+                <a key={link.href} className="site-nav__link" href={link.href}>
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+          </div>
 
-        <div className="site-nav__end">
-          <a className="site-nav__cta" href="#proof">
-            Verify proof
-          </a>
+          <div className="site-nav__end">
+            <a className="site-nav__action" href={APP_URL}>
+              App
+            </a>
+            <button
+              type="button"
+              className="site-nav__menu-btn"
+              aria-expanded={menuOpen}
+              aria-label="Open menu"
+              onClick={() => setMenuOpen(true)}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 4h12M2 8h12M2 12h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <NavMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+    </>
   );
 }

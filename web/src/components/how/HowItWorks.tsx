@@ -81,6 +81,10 @@ export function HowItWorks() {
   const baseId = useId();
   const cardRefs = useRef<Array<HTMLElement | null>>([]);
 
+  const goToStep = (index: number) => {
+    cardRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   /** The card crossing the middle 10% band of the viewport is the active one. */
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -89,6 +93,10 @@ export function HowItWorks() {
           if (entry.isIntersecting) {
             const index = Number((entry.target as HTMLElement).dataset.index);
             setActive(index);
+            const key = STEPS[index]?.key;
+            if (key && !window.location.hash.includes("how")) {
+              history.replaceState(null, "", `#how/${key}`);
+            }
           }
         });
       },
@@ -100,9 +108,14 @@ export function HowItWorks() {
     return () => observer.disconnect();
   }, []);
 
-  const goToStep = (index: number) => {
-    cardRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  useEffect(() => {
+    const hash = window.location.hash.replace("#how/", "");
+    const idx = STEPS.findIndex((s) => s.key === hash);
+    if (idx >= 0) {
+      setActive(idx);
+      requestAnimationFrame(() => goToStep(idx));
+    }
+  }, []);
 
   return (
     <section
@@ -111,12 +124,15 @@ export function HowItWorks() {
       data-theme="light"
       aria-labelledby={`${baseId}-title`}
     >
+      <span className="section-number mono-label" aria-hidden="true">
+        03
+      </span>
       <div className="shell">
         <header className="section__header section__header--fill how__header">
           <div className="section__header-bar reveal-scroll">
             <p className="kicker">How it works</p>
-            <Button href="#proof" variant="ghost" trailing={<span aria-hidden="true">→</span>}>
-              Verify proof
+            <Button href="#proof" variant="secondary" size="sm">
+              Try tamper demo
             </Button>
           </div>
 
@@ -164,7 +180,7 @@ export function HowItWorks() {
                 ref={(el) => {
                   cardRefs.current[i] = el;
                 }}
-                id={`${baseId}-card-${step.key}`}
+                id={`how-${step.key}`}
                 data-index={i}
                 className={`how__card${i === active ? " how__card--active" : ""}`}
               >

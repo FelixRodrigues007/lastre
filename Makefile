@@ -6,14 +6,16 @@ ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 SEALER_DIR := $(ROOT_DIR)/agent/sealer
 X402_DIR := $(ROOT_DIR)/agent/x402
 ORCHESTRATOR_DIR := $(ROOT_DIR)/agent/orchestrator
+APP_DIR := $(ROOT_DIR)/app
 CONTRACT_DIR := $(ROOT_DIR)/contracts/lastro_origin
 SETUP_NODE := $(ROOT_DIR)/scripts/dev/setup-node.sh
 SETUP_RUST := $(ROOT_DIR)/scripts/dev/setup-rust.sh
 
 .PHONY: help setup build test wasm query demo \
 	setup-node setup-rust \
-	build-sealer build-x402 build-orchestrator build-contracts \
-	test-sealer test-x402 test-orchestrator test-contracts
+	build-sealer build-x402 build-orchestrator build-contracts build-app \
+	test-sealer test-x402 test-orchestrator test-contracts \
+	app-dev app-build
 
 help:
 	@printf '%s\n' "Lastro developer targets:"
@@ -23,6 +25,7 @@ help:
 	@printf '%s\n' "  make wasm   - build Odra/Casper WASM artifacts"
 	@printf '%s\n' "  make query  - run the livenet read-only ProofOfOrigin query"
 	@printf '%s\n' "  make demo   - run the local agent demo"
+	@printf '%s\n' "  make app-dev   - run the Lastro product console (Vite on :5174)"
 
 setup: setup-node setup-rust
 
@@ -80,3 +83,11 @@ query: setup-rust build-contracts
 demo: setup build-sealer build-x402 build-orchestrator
 	@printf '%s\n' "==> Running local agent demo"
 	cd "$(ORCHESTRATOR_DIR)" && npm run demo
+
+app-dev: setup-node
+	@printf '%s\n' "==> Starting Lastro app dev server"
+	cd "$(APP_DIR)" && npm run dev
+
+app-build: setup-node
+	@printf '%s\n' "==> Building Lastro app"
+	cd "$(APP_DIR)" && npm run build

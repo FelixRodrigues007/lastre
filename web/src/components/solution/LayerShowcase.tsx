@@ -2,7 +2,24 @@
 export function LayerShowcase() {
   return (
     <div className="sol-showcase" aria-hidden="true">
-      <div className="sol-showcase__scenery" />
+      <div className="sol-showcase__scenery">
+        <picture>
+          <source
+            srcSet="/media/hero/hero-origin-1920.webp 1920w, /media/hero/hero-origin-2560.webp 2560w"
+            sizes="100vw"
+            type="image/webp"
+          />
+          <img
+            className="sol-showcase__scenery-img"
+            src="/media/hero/hero-origin-1920.png"
+            alt=""
+            width={2560}
+            height={1428}
+            decoding="async"
+            draggable={false}
+          />
+        </picture>
+      </div>
 
       <div className="sol-showcase__window">
         <header className="sol-showcase__toolbar">
@@ -20,26 +37,34 @@ export function LayerShowcase() {
             <span className="sol-showcase__channel">#proof-layer</span>
           </span>
           <span className="sol-showcase__toolbar-meta">
-            <span>4</span>
+            <span className="sol-showcase__live">
+              <span className="sol-showcase__live-dot" aria-hidden="true" />
+              Live
+            </span>
             <span className="sol-showcase__toolbar-divider" />
-            <span className="sol-showcase__toolbar-search">Search</span>
+            <span>128 sealed</span>
           </span>
         </header>
 
         <div className="sol-showcase__body">
           <div className="sol-showcase__feed">
-            <article className="sol-showcase__msg sol-showcase__msg--agent">
+            <article className="sol-showcase__msg sol-showcase__msg--agent sol-showcase__msg--typing">
               <span className="sol-showcase__avatar sol-showcase__avatar--agent" />
               <div className="sol-showcase__msg-body">
                 <header className="sol-showcase__msg-head">
                   <span className="sol-showcase__author">Lastro</span>
                   <span className="sol-showcase__agent-tag">AGENT</span>
                 </header>
-                <div className="sol-showcase__skeleton" aria-hidden="true">
-                  <span /><span /><span style={{ width: "72%" }} />
+                <div className="sol-showcase__typing" aria-hidden="true">
+                  <span /><span /><span />
                 </div>
                 <footer className="sol-showcase__reactions">
-                  <span>👍</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                    <path
+                      d="M1 5.5c0-2 1.5-3.5 3.5-3.5.8 0 1.5.3 2 .8.5-.5 1.2-.8 2-.8 2 0 3.5 1.5 3.5 3.5 0 2.2-3.5 5-5.5 6.5C4.5 10.5 1 7.7 1 5.5z"
+                      fill="currentColor"
+                    />
+                  </svg>
                   <span>1</span>
                 </footer>
               </div>

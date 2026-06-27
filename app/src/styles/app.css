@@ -1,0 +1,186 @@
+/* Lastro App — base styles. Tokens from @design-system/tokens/lastro.css */
+
+:root {
+  --app-shell-max: 1280px;
+  --app-shell-pad: clamp(1rem, 0.5rem + 2vw, 2rem);
+  --app-nav-height: 3.5rem;
+  --app-banner-height: 2.5rem;
+
+  --text-page-title: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  --text-section: 1.125rem;
+  --text-small: 0.8125rem;
+
+  --panel-pad: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --panel-radius: var(--lastro-radius-md);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 180ms;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  color: var(--lastro-text-primary);
+  background: var(--lastro-bg-primary);
+  font-family: var(--lastro-font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.shell {
+  width: min(var(--app-shell-max), 100% - var(--app-shell-pad) * 2);
+  margin-inline: auto;
+}
+
+.mono-label {
+  font-family: var(--lastro-font-mono);
+  font-size: var(--text-small);
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.page {
+  padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+}
+
+.page__head {
+  margin-bottom: clamp(1.25rem, 0.75rem + 1.5vw, 2rem);
+}
+
+.page__kicker {
+  margin-bottom: 0.5rem;
+}
+
+.page__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.page__title {
+  font-family: var(--lastro-font-display);
+  font-size: var(--text-page-title);
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.route-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  border-radius: var(--lastro-radius-sm);
+  background: var(--lastro-button-primary-bg, var(--lastro-brand-seal));
+  color: var(--lastro-button-primary-text, var(--lastro-text-inverse));
+  font-size: 0.875rem;
+  font-weight: var(--lastro-weight-semibold);
+  transition: filter var(--dur-fast) var(--ease-out);
+}
+
+.route-cta:hover {
+  filter: brightness(1.05);
+}
+
+.route-cta--ghost {
+  background: transparent;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+  color: var(--lastro-text-primary);
+}
+
+.route-cta--ghost:hover {
+  filter: none;
+  background: color-mix(in srgb, var(--lastro-text-primary) 6%, transparent);
+}
+
+.page__lead {
+  margin-top: 0.75rem;
+  max-width: 52ch;
+  color: var(--lastro-text-secondary);
+  font-size: var(--text-section);
+}
+
+.panel {
+  background: var(--lastro-bg-panel);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--panel-radius);
+  padding: var(--panel-pad);
+}
+
+.panel--elevated {
+  background: var(--lastro-bg-elevated);
+}
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.placeholder-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .placeholder-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.placeholder-card {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.placeholder-card__label {
+  font-family: var(--lastro-font-mono);
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+}
+
+.placeholder-card__value {
+  font-family: var(--lastro-font-display);
+  font-size: 1.5rem;
+  font-weight: var(--lastro-weight-semibold);
+}
+
+.placeholder-card__hint {
+  color: var(--lastro-text-secondary);
+  font-size: var(--text-small);
+}

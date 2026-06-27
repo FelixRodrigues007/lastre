@@ -53,6 +53,40 @@
   pointer-events: none;
 }
 
+/* Animated loop overlay — lightweight hero motion (#2) */
+.hero__loop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    110deg,
+    transparent 40%,
+    color-mix(in oklab, var(--lastro-brand-seal) 6%, transparent) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: hero-loop 14s linear infinite;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+@keyframes hero-loop {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.hero__filmstrip-link {
+  color: inherit;
+}
+
+.hero__copy-contract {
+  margin-left: 0.5rem;
+}
+
 /* Left scrim for copy legibility — light touch on the right. */
 .hero__scrim {
   position: absolute;
@@ -356,6 +390,11 @@
 @media (prefers-reduced-motion: reduce) {
   .hero__scroll svg {
     animation: none;
+  }
+
+  .hero__loop {
+    animation: none;
+    opacity: 0;
   }
 
   [data-parallax-depth] {

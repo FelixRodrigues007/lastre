@@ -1,0 +1,203 @@
+/* Section atmosphere — tonal stepping through the olive ramp.
+ * Each band owns its field; seal accent is reserved for hero, minerals, CTA. */
+
+:root {
+  --atmo-grid-opacity: 0.025;
+}
+
+/* Dark bands — light text regardless of scroll atmosphere zone */
+.hero,
+.problem,
+.sol,
+.evidence,
+.demonstration,
+.final-cta,
+.partners,
+.pull-quote {
+  --lastro-text-primary: var(--lastro-color-cream-200);
+  --lastro-text-secondary: var(--lastro-color-sage-300);
+  --lastro-text-muted: var(--lastro-color-olive-400);
+  --lastro-border-subtle: rgba(231, 230, 208, 0.12);
+  --lastro-border-strong: rgba(231, 230, 208, 0.28);
+}
+
+/* ── per-section tokens ───────────────────────────────────────────── */
+
+.hero {
+  --section-bg: var(--lastro-color-olive-950);
+  --section-wash-a: rgba(254, 241, 111, 0.09);
+  --section-wash-b: rgba(111, 143, 46, 0.06);
+  --section-kicker: var(--lastro-color-seal-400);
+  --section-kicker-bar: var(--lastro-brand-seal);
+}
+
+.problem {
+  --section-bg: var(--lastro-color-olive-900);
+  --section-wash-a: rgba(197, 199, 176, 0.07);
+  --section-wash-b: rgba(195, 74, 44, 0.05);
+  --section-kicker: var(--lastro-color-sage-300);
+  --section-kicker-bar: var(--lastro-color-sage-400);
+  --section-border: rgba(231, 230, 208, 0.1);
+}
+
+.sol {
+  --section-bg: var(--lastro-color-olive-850);
+  --section-wash-a: rgba(111, 143, 46, 0.11);
+  --section-wash-b: rgba(254, 241, 111, 0.05);
+  --section-kicker: var(--lastro-color-valid-400);
+  --section-kicker-bar: var(--lastro-color-valid-500);
+}
+
+.how[data-theme="light"] {
+  --section-bg: var(--lastro-color-cream-50);
+  --section-panel: var(--lastro-color-cream-100);
+  --section-wash-a: rgba(111, 143, 46, 0.07);
+  --section-wash-b: rgba(254, 241, 111, 0.06);
+  --section-kicker: var(--lastro-color-olive-700);
+  --section-kicker-bar: var(--lastro-color-olive-500);
+}
+
+.evidence {
+  --section-bg: var(--lastro-color-olive-800);
+  --section-wash-a: rgba(254, 241, 111, 0.05);
+  --section-wash-b: rgba(195, 74, 44, 0.07);
+  --section-kicker: var(--lastro-color-sage-400);
+  --section-kicker-bar: var(--lastro-color-sage-300);
+}
+
+.diff[data-theme="light"] {
+  --section-bg: var(--lastro-color-cream-100);
+  --section-card: var(--lastro-color-cream-50);
+  --section-wash-a: rgba(254, 241, 111, 0.1);
+  --section-wash-b: rgba(111, 143, 46, 0.05);
+  --section-kicker: var(--lastro-color-olive-600);
+  --section-kicker-bar: var(--lastro-color-olive-400);
+}
+
+.minerals[data-theme="light"] {
+  --section-bg-top: var(--lastro-color-cream-200);
+  --section-bg-bottom: var(--lastro-color-cream-300);
+  --section-wash-a: rgba(84, 87, 54, 0.09);
+  --section-wash-b: rgba(254, 241, 111, 0.06);
+  --section-kicker: var(--lastro-color-seal-700);
+  --section-kicker-bar: var(--lastro-color-seal-600);
+}
+
+.demonstration {
+  --section-bg: var(--lastro-color-olive-950);
+  --section-wash-a: rgba(254, 241, 111, 0.04);
+  --section-wash-b: rgba(111, 143, 46, 0.06);
+  --section-kicker: var(--lastro-color-sage-300);
+  --section-kicker-bar: var(--lastro-color-olive-400);
+  --atmo-grid-opacity: 0.038;
+}
+
+.final-cta {
+  --section-bg: var(--lastro-color-olive-900);
+  --section-panel: var(--lastro-color-olive-950);
+  --section-wash-a: rgba(254, 241, 111, 0.12);
+  --section-wash-b: rgba(111, 143, 46, 0.1);
+  --section-kicker: var(--lastro-color-seal-400);
+  --section-kicker-bar: var(--lastro-brand-seal);
+}
+
+/* ── kicker restraint — seal only on minerals + vault CTA ─────────── */
+
+.problem .kicker,
+.sol .kicker,
+.how .kicker,
+.evidence .kicker,
+.diff .kicker,
+.demonstration .kicker {
+  color: var(--section-kicker);
+}
+
+.problem .kicker::before,
+.sol .kicker::before,
+.how .kicker::before,
+.evidence .kicker::before,
+.diff .kicker::before,
+.demonstration .kicker::before {
+  background: var(--section-kicker-bar);
+}
+
+.minerals .kicker {
+  color: var(--section-kicker);
+}
+
+.minerals .kicker::before {
+  background: var(--section-kicker-bar);
+}
+
+/* ── contextual panel recipes ─────────────────────────────────────── */
+
+.problem .panel--elevated {
+  background: linear-gradient(
+    165deg,
+    var(--lastro-color-olive-900) 0%,
+    var(--lastro-color-olive-850) 100%
+  );
+  border-color: rgba(197, 199, 176, 0.14);
+  box-shadow:
+    0 40px 80px -40px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(197, 199, 176, 0.06);
+}
+
+.evidence .panel--elevated {
+  background: linear-gradient(
+    150deg,
+    var(--lastro-color-olive-800) 0%,
+    var(--lastro-color-olive-900) 100%
+  );
+  border-color: color-mix(
+    in oklab,
+    var(--lastro-status-invalid) 22%,
+    var(--lastro-border-subtle)
+  );
+  box-shadow:
+    0 36px 72px -36px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(254, 241, 111, 0.04);
+}
+
+.how[data-theme="light"] .how__panel {
+  background: var(--section-panel);
+  border-color: color-mix(
+    in oklab,
+    var(--lastro-color-olive-500) 18%,
+    var(--lastro-border-strong)
+  );
+}
+
+/* ── section border rhythm ────────────────────────────────────────── */
+
+.problem.section--bordered {
+  border-top-color: rgba(197, 199, 176, 0.14);
+}
+
+.sol.section--bordered {
+  border-top-color: rgba(111, 143, 46, 0.2);
+}
+
+.evidence.section--bordered {
+  border-top-color: color-mix(
+    in oklab,
+    var(--lastro-status-invalid) 25%,
+    var(--lastro-border-subtle)
+  );
+}
+
+.how[data-theme="light"].section--band {
+  border-block-color: rgba(84, 87, 54, 0.16);
+}
+
+.diff[data-theme="light"].section--band {
+  border-block-color: rgba(111, 100, 16, 0.14);
+}
+
+.minerals[data-theme="light"].section--band {
+  border-block-start-color: rgba(84, 87, 54, 0.12);
+}
+
+.demonstration.section--band {
+  border-block-start-color: rgba(254, 241, 111, 0.1);
+}

@@ -6,18 +6,29 @@
     <meta name="color-scheme" content="dark" />
     <meta
       name="description"
-      content="Lastro is the trust layer for real-world assets and autonomous agents. It verifies physical origin offline and deterministically, then anchors the verdict on Casper — before any token or agent acts on the data."
+      content="Lastro verifies physical origin offline with deterministic SHA-256 seals, then anchors Valid or Invalid verdicts on Casper — before any token or agent acts on the data."
     />
     <meta name="theme-color" content="#121407" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Lastro — Proof before token." />
+    <meta
+      property="og:description"
+      content="Offline deterministic provenance seals. On-chain verdicts on Casper Testnet. Interactive tamper demo."
     />
+    <meta property="og:image" content="/media/hero/hero-origin-1920.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lastro — Proof before token." />
+    <meta
+      name="twitter:description"
+      content="Trust layer for RWAs and autonomous agents. Proof before token."
+    />
+    <meta name="twitter:image" content="/media/hero/hero-origin-1920.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
@@ -26,12 +37,40 @@
     <link
       rel="preload"
       as="image"
-      href="/media/hero/hero-origin-1920.webp"
+      href="/media/hero/hero-origin-1280.webp"
       type="image/webp"
-      imagesrcset="/media/hero/hero-origin-1280.webp 1280w, /media/hero/hero-origin-1920.webp 1920w, /media/hero/hero-origin-2560.webp 2560w"
-      imagesizes="100vw"
+      media="(max-width: 767px)"
       fetchpriority="high"
     />
+    <link
+      rel="preload"
+      as="image"
+      href="/media/hero/hero-origin-1920.webp"
+      type="image/webp"
+      media="(min-width: 768px)"
+      fetchpriority="high"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "Lastro",
+            "url": "https://lastro.dev",
+            "description": "Provenance trust layer for mineral assets and autonomous agents."
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Lastro ProofOfOrigin",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Web",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

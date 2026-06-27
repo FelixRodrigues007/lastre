@@ -1,0 +1,250 @@
+/* Studio layer — editorial restraint, Apple-grade rhythm & materials */
+
+:root {
+  --studio-nav-height: 3.25rem;
+  --studio-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --studio-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --studio-blur: saturate(180%) blur(20px);
+  --studio-max-copy: 28rem;
+  --studio-display: clamp(2.75rem, 1.4rem + 5.5vw, 5.5rem);
+}
+
+/* ── Global rhythm ─────────────────────────────────────────────────── */
+
+.site-curtain {
+  --shell-pad: clamp(1.5rem, 1rem + 3vw, 3.5rem);
+}
+
+body {
+  letter-spacing: -0.011em;
+}
+
+/* Hide power-user chrome on the marketing surface */
+.section-toc,
+.scroll-progress,
+.proof-rail,
+.cmd-hint {
+  display: none !important;
+}
+
+/* ── Hero — cinematic editorial ──────────────────────────────────── */
+
+.hero__stage {
+  padding-block: calc(var(--site-nav-height, 3.25rem) + 2rem) 2.5rem;
+}
+
+.hero__copy {
+  max-width: var(--studio-max-copy);
+}
+
+.hero__eyebrow {
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  color: color-mix(in oklab, var(--lastro-text-primary) 65%, transparent);
+  text-transform: none;
+}
+
+.hero__eyebrow-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--lastro-status-valid);
+  vertical-align: 0.1em;
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--lastro-status-valid) 40%, transparent);
+  animation: studio-pulse 2.8s var(--studio-ease-out) infinite;
+}
+
+@keyframes studio-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--lastro-status-valid) 35%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+.hero__headline {
+  margin-top: 1.125rem;
+  font-size: var(--studio-display);
+  font-weight: var(--lastro-weight-semibold);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.hero__headline-accent {
+  color: var(--lastro-brand-seal-text);
+}
+
+.hero__subhead {
+  margin-top: 1.25rem;
+  max-width: 26rem;
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem);
+  line-height: 1.5;
+  letter-spacing: -0.014em;
+  color: color-mix(in oklab, var(--lastro-text-primary) 78%, transparent);
+}
+
+.hero__actions {
+  margin-top: 2rem;
+}
+
+.hero__meta-link {
+  font-size: inherit;
+  vertical-align: baseline;
+}
+
+.hero__meta {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-size: 0.75rem;
+  letter-spacing: -0.01em;
+  color: color-mix(in oklab, var(--lastro-text-primary) 45%, transparent);
+}
+
+.hero__meta-val {
+  color: color-mix(in oklab, var(--lastro-text-primary) 85%, transparent);
+  font-weight: var(--lastro-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.hero__scrim {
+  background:
+    linear-gradient(
+      105deg,
+      color-mix(in oklab, var(--lastro-color-olive-950) 92%, transparent) 0%,
+      color-mix(in oklab, var(--lastro-color-olive-950) 72%, transparent) 32%,
+      color-mix(in oklab, var(--lastro-color-olive-950) 28%, transparent) 58%,
+      color-mix(in oklab, var(--lastro-color-olive-950) 8%, transparent) 78%,
+      transparent 100%
+    ),
+    linear-gradient(0deg, var(--lastro-color-olive-950) 0%, transparent 38%);
+}
+
+.hero__loop {
+  display: none;
+}
+
+.hero__ui {
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.hero__proof {
+  width: min(100%, 17.5rem);
+}
+
+.hero__proof .proof {
+  padding: 1.125rem 1.25rem;
+  border-radius: 1.25rem;
+  background: color-mix(in oklab, var(--lastro-color-olive-900) 42%, transparent);
+  backdrop-filter: var(--studio-blur);
+  -webkit-backdrop-filter: var(--studio-blur);
+  border: 1px solid color-mix(in oklab, var(--lastro-color-cream-200) 12%, transparent);
+  box-shadow:
+    0 24px 48px -20px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 color-mix(in oklab, var(--lastro-color-cream-200) 10%, transparent);
+}
+
+.hero__foot {
+  grid-template-columns: 1fr auto;
+  padding-top: 2rem;
+  border-top: 1px solid color-mix(in oklab, var(--lastro-color-cream-200) 8%, transparent);
+}
+
+.hero__scroll {
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--lastro-text-primary) 40%, transparent);
+}
+
+.hero__scroll span:first-child {
+  display: none;
+}
+
+/* ── Proof widget — minimal ────────────────────────────────────────── */
+
+.proof__head {
+  padding-bottom: 0.75rem;
+}
+
+.proof__hash {
+  font-size: 0.8125rem;
+  padding-bottom: 0.875rem;
+}
+
+.proof__step-label {
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-regular);
+}
+
+.proof__verdict {
+  font-size: 0.9375rem;
+}
+
+.proof-timeline {
+  margin: 0.5rem 0 0.25rem;
+}
+
+/* ── Sections — breathing room ─────────────────────────────────────── */
+
+.section {
+  padding-block: clamp(6rem, 4rem + 10vw, 10rem);
+}
+
+.section-title {
+  letter-spacing: -0.038em;
+}
+
+.section-number {
+  display: none;
+}
+
+.partners.section--compact {
+  padding-block: 2rem;
+  opacity: 0.7;
+}
+
+.sticky-mobile-cta {
+  padding-bottom: calc(0.625rem + env(safe-area-inset-bottom));
+  background: color-mix(in oklab, var(--lastro-color-olive-950) 88%, transparent);
+  backdrop-filter: var(--studio-blur);
+  -webkit-backdrop-filter: var(--studio-blur);
+  border-top: 1px solid color-mix(in oklab, var(--lastro-color-cream-200) 8%, transparent);
+}
+
+.sticky-mobile-cta__btn {
+  width: 100%;
+}
+
+.toast {
+  border-radius: 980px;
+  padding: 0.625rem 1.125rem;
+  backdrop-filter: var(--studio-blur);
+  -webkit-backdrop-filter: var(--studio-blur);
+}
+
+@media (min-width: 980px) {
+  .hero__layout {
+    grid-template-columns: minmax(0, 0.52fr) minmax(0, 0.48fr);
+    align-items: center;
+    min-height: calc(100dvh - var(--studio-nav-height) - 5rem);
+  }
+
+  .hero__layer-img--main {
+    object-position: 68% 42%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__eyebrow-dot {
+    animation: none;
+  }
+}

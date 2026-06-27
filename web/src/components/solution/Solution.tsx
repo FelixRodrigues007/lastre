@@ -103,10 +103,13 @@ export function Solution() {
 
             <h2
               id={`${baseId}-title`}
-              className="sol__title"
+              className="sol__title sol__title--split"
               style={{ "--reveal-delay": "60ms" } as CSSProperties}
             >
-              Lastro proves the origin before any token or agent touches the data.
+              <span className="sol__title-line">Lastro proves the origin</span>
+              <span className="sol__title-line sol__title-line--accent">
+                before any token or agent touches the data.
+              </span>
             </h2>
           </div>
 
@@ -120,20 +123,17 @@ export function Solution() {
           </p>
         </header>
 
-        <div
-          className="sol__showcase-wrap reveal-scroll"
-          style={{ "--reveal-delay": "180ms" } as CSSProperties}
-        >
+        <div className="sol__showcase-wrap" data-scroll-shift="0.06">
           <LayerShowcase />
         </div>
 
         <ul
-          className="sol__features reveal-scroll"
-          style={{ "--reveal-delay": "240ms" } as CSSProperties}
+          className="sol__features reveal-stagger"
+          style={{ "--reveal-delay": "120ms" } as CSSProperties}
           aria-label="What the proof layer delivers"
         >
           {FEATURES.map((feature) => (
-            <li key={feature.key} className="sol__feature">
+            <li key={feature.key} className="sol__feature interactive-lift">
               <span className="sol__feature-icon" aria-hidden="true">
                 {feature.icon}
               </span>

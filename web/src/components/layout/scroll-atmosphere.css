@@ -1,0 +1,104 @@
+.scroll-atmo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scroll-atmo__base {
+  position: absolute;
+  inset: 0;
+  background: var(--atmo-base, var(--lastro-color-olive-950));
+  transition: background-color 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-atmo__wash {
+  position: absolute;
+  inset: -20%;
+  opacity: 0;
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  background: radial-gradient(
+    80% 70% at var(--wash-pos, 50% 50%),
+    var(--wash-color, transparent) 0%,
+    transparent 70%
+  );
+}
+
+.scroll-atmo__wash--hero {
+  --wash-color: rgba(254, 241, 111, 0.14);
+  --wash-pos: 82% -8%;
+}
+
+.scroll-atmo__wash--depth {
+  --wash-color: rgba(197, 199, 176, 0.12);
+  --wash-pos: 12% 0%;
+}
+
+.scroll-atmo__wash--origin {
+  --wash-color: rgba(111, 143, 46, 0.16);
+  --wash-pos: 88% 12%;
+}
+
+.scroll-atmo__wash--light {
+  --wash-color: rgba(111, 143, 46, 0.1);
+  --wash-pos: 8% 24%;
+}
+
+.scroll-atmo__wash--proof {
+  --wash-color: rgba(195, 74, 44, 0.1);
+  --wash-pos: 50% 0%;
+}
+
+.scroll-atmo__wash--vault {
+  --wash-color: rgba(254, 241, 111, 0.1);
+  --wash-pos: 72% 0%;
+}
+
+.scroll-atmo__wash--cream {
+  --wash-color: rgba(254, 241, 111, 0.14);
+  --wash-pos: 50% 100%;
+}
+
+html[data-atmo="hero"] .scroll-atmo__wash--hero,
+html[data-atmo="depth"] .scroll-atmo__wash--depth,
+html[data-atmo="origin"] .scroll-atmo__wash--origin,
+html[data-atmo="light"] .scroll-atmo__wash--light,
+html[data-atmo="proof"] .scroll-atmo__wash--proof,
+html[data-atmo="vault"] .scroll-atmo__wash--vault,
+html[data-atmo="cream"] .scroll-atmo__wash--cream {
+  opacity: 1;
+}
+
+.scroll-atmo__mesh {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background:
+    radial-gradient(at var(--atmo-wash-pos-a, 80% -10%), var(--atmo-wash-a, transparent) 0%, transparent 50%),
+    radial-gradient(at var(--atmo-wash-pos-b, 0% 0%), var(--atmo-wash-b, transparent) 0%, transparent 55%);
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Tone sync — background only. Text tokens live on each section via
+ * default dark palette or [data-theme="light"]; never flip globally on scroll. */
+html[data-atmo-tone="light"] {
+  --lastro-bg-primary: var(--lastro-color-cream-50);
+}
+
+html[data-atmo-tone="dark"] {
+  --lastro-bg-primary: var(--lastro-color-olive-950);
+}
+
+.site-curtain > main {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-atmo__base,
+  .scroll-atmo__wash,
+  .scroll-atmo__mesh {
+    transition: none;
+  }
+}

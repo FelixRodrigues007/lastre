@@ -73,36 +73,41 @@ export function Problem() {
   return (
     <section className="problem section section--bordered" id="problem">
       <div className="shell problem__layout">
-        <header className="problem__header">
-          <p className="kicker reveal-scroll">The trust gap</p>
+        <div className="problem__cinematic">
+          <div className="problem__pin">
+            <header className="problem__header">
+              <p className="kicker reveal-scroll">The trust gap</p>
 
-          <h2 className="section-title reveal-scroll" style={{ "--reveal-delay": "60ms" } as CSSProperties}>
-            The agent economy is being built on{" "}
-            <span className="accent-strike">unverified origin claims</span>.
-          </h2>
+              <h2 className="section-title reveal-scroll" style={{ "--reveal-delay": "60ms" } as CSSProperties}>
+                The agent economy is being built on{" "}
+                <span className="accent-strike accent-strike--scroll">unverified origin claims</span>.
+              </h2>
 
-          <p
-            className="problem__subtitle reveal-scroll"
-            style={{ "--reveal-delay": "90ms" } as CSSProperties}
-          >
-            One smart network for agents and assets — close to users, far from
-            proof.
-          </p>
-        </header>
+              <p
+                className="problem__subtitle reveal-scroll"
+                style={{ "--reveal-delay": "90ms" } as CSSProperties}
+              >
+                One smart network for agents and assets — close to users, far from
+                proof.
+              </p>
+            </header>
 
-        <div
-          className="problem__globe reveal-scroll"
-          style={{ "--reveal-delay": "120ms" } as CSSProperties}
-        >
-          <TrustGlobeVisual />
+            <div
+              className="problem__globe reveal-scroll reveal-scroll--scale"
+              style={{ "--reveal-delay": "120ms" } as CSSProperties}
+              data-scroll-shift="0.12"
+            >
+              <TrustGlobeVisual />
+            </div>
+          </div>
         </div>
 
         <div
-          className="problem__lanes reveal-scroll"
-          style={{ "--reveal-delay": "150ms" } as CSSProperties}
+          className="problem__lanes reveal-stagger"
+          style={{ "--reveal-delay": "80ms" } as CSSProperties}
         >
           {LANES.map((lane) => (
-            <article key={lane.title} className="problem__lane">
+            <article key={lane.title} className="problem__lane interactive-lift">
               <span className="problem__lane-icon" aria-hidden="true">
                 <LaneIcon kind={lane.icon} />
               </span>
@@ -138,7 +143,7 @@ export function Problem() {
           >
             <span className="mono-label problem__panel-title">Without proof</span>
 
-            <ol className="gap">
+            <ol className="gap gap--animate">
               <li className="gap__step">
                 <span className="gap__node" aria-hidden="true" />
                 <span className="gap__body">

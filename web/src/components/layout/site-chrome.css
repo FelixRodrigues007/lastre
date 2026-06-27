@@ -1,0 +1,204 @@
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: var(--shell-pad);
+  z-index: 200;
+  padding: 0.75rem 1rem;
+  background: var(--lastro-brand-seal);
+  color: var(--lastro-color-olive-950);
+  font-weight: var(--lastro-weight-semibold);
+  border-radius: var(--lastro-radius-sm);
+  transition: top 200ms var(--ease-out-expo);
+}
+
+.skip-link:focus {
+  top: var(--lastro-space-4);
+}
+
+.scroll-progress {
+  position: fixed;
+  right: clamp(1rem, 2vw, 1.5rem);
+  bottom: clamp(5rem, 8vh, 6.5rem);
+  z-index: 45;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.scroll-progress__ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.scroll-progress__track,
+.scroll-progress__fill {
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.scroll-progress__track {
+  stroke: var(--lastro-border-subtle);
+}
+
+.scroll-progress__fill {
+  stroke: var(--lastro-brand-seal);
+  stroke-dasharray: 100;
+  transition: stroke-dashoffset 120ms linear;
+}
+
+.scroll-progress__pct {
+  position: absolute;
+  font-size: 0.5625rem;
+  color: var(--lastro-text-secondary);
+}
+
+.proof-rail {
+  position: fixed;
+  top: calc(var(--site-nav-height, 4.5rem) + 0.5rem);
+  left: 50%;
+  z-index: 40;
+  transform: translateX(-50%) translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 320ms var(--ease-out-expo),
+    transform 320ms var(--ease-out-expo);
+}
+
+.proof-rail[data-visible="true"] {
+  opacity: 1;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.proof-rail__list {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  list-style: none;
+  padding: 0.45rem 0.85rem;
+  margin: 0;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in oklab, var(--lastro-color-olive-950) 92%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.proof-rail__link {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lastro-text-secondary);
+}
+
+.proof-rail__sep {
+  color: var(--lastro-text-muted);
+  font-size: 0.625rem;
+}
+
+.section-toc {
+  display: none;
+  position: fixed;
+  left: max(1rem, calc((100vw - var(--shell-max)) / 2 - 11rem));
+  top: calc(var(--site-nav-height, 4.5rem) + 3rem);
+  z-index: 30;
+  width: 9rem;
+}
+
+@media (min-width: 1280px) {
+  .section-toc {
+    display: block;
+  }
+}
+
+.section-toc__title {
+  margin-bottom: var(--lastro-space-3);
+}
+
+.section-toc__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section-toc__link {
+  font-size: 0.8125rem;
+  color: var(--lastro-text-muted);
+}
+
+.toast-stack {
+  position: fixed;
+  bottom: var(--lastro-space-6);
+  left: 50%;
+  z-index: 120;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--lastro-space-4);
+  padding: 0.75rem 1rem;
+  border-radius: var(--lastro-radius-md);
+  background: var(--lastro-bg-elevated);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+  box-shadow: var(--panel-shadow);
+  font-size: 0.875rem;
+}
+
+.toast__dismiss {
+  border: 0;
+  background: transparent;
+  color: var(--lastro-text-muted);
+  cursor: pointer;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.sticky-mobile-cta {
+  display: none;
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 55;
+  padding: 0.75rem var(--shell-pad) calc(0.75rem + env(safe-area-inset-bottom));
+  background: linear-gradient(0deg, var(--lastro-color-olive-950) 70%, transparent);
+}
+
+@media (max-width: 859px) {
+  .sticky-mobile-cta {
+    display: block;
+  }
+}
+
+.sticky-mobile-cta__btn {
+  width: 100%;
+}
+
+.page-entrance {
+  animation: page-in 220ms var(--ease-out-expo);
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-entrance {
+    animation: none;
+  }
+}
