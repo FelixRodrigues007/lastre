@@ -10,7 +10,6 @@ import { Different } from "./components/different/Different";
 import { Proof } from "./components/proof/Proof";
 import { HowItWorks } from "./components/how/HowItWorks";
 import { Demonstration } from "./components/demonstration/Demonstration";
-import { FinalCta } from "./components/cta/FinalCta";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { Faq } from "./components/content/ContentSections";
 
@@ -36,7 +35,6 @@ export function App() {
           <Different />
           <Demonstration />
           <Faq />
-          <FinalCta />
         </main>
       </div>
       <SiteFooter />

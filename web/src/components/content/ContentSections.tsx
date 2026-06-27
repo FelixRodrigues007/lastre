@@ -2,46 +2,12 @@ import { useId, useState } from "react";
 import { useSite } from "../../context/SiteContext";
 import { sha256Hex } from "../../lib/cryptoSeal";
 import { MEDIA } from "../../site-media";
+import { DEMO_TERMINAL_CMD } from "../../site-links";
 import "./content-sections.css";
 import "../ui/media-card.css";
 
-const FAQ_ITEMS = [
-  {
-    q: "Who decides Valid or Invalid?",
-    a: "The deterministic SHA-256 seal — never an LLM. The agent only decides pay, skip, or escalate.",
-  },
-  {
-    q: "Is this a token sale or investment?",
-    a: "No. Lastro is a proof layer. The public demo uses fictional assets only.",
-  },
-  {
-    q: "Testnet vs mainnet?",
-    a: "The live contract is on Casper Testnet. Mainnet deployment will be announced via protocol updates only.",
-  },
-  {
-    q: "What is an attestation?",
-    a: "A permanent on-chain record of whether a submitted reading matches the anchored reference seal.",
-  },
-  {
-    q: "Why record Invalid on-chain?",
-    a: "Rejections are evidence. Hiding failure breaks auditability for compliance and evaluators.",
-  },
-  {
-    q: "Can I verify without trusting Lastro?",
-    a: "Yes. Open the Casper explorer, read verdicts, and run make demo from the repository.",
-  },
-  {
-    q: "What data does the demo use?",
-    a: "Simulated mineral lots with fictional origin IDs and masses — no real assets or PII.",
-  },
-  {
-    q: "How do agents interact?",
-    a: "Agents submit readings; the seal compares hashes. The LLM never overrides the verdict.",
-  },
-] as const;
-
 export function Faq() {
-  const { t } = useSite();
+  const { t, content } = useSite();
   const baseId = useId();
   const [open, setOpen] = useState<number | null>(0);
 
@@ -52,7 +18,7 @@ export function Faq() {
           {t("faq")}
         </h2>
         <div className="faq__list">
-          {FAQ_ITEMS.map((item, i) => {
+          {content.faq.items.map((item, i) => {
             const expanded = open === i;
             return (
               <div key={item.q} className="faq__item">
@@ -76,34 +42,18 @@ export function Faq() {
   );
 }
 
-const USE_CASES = [
-  {
-    key: "minerals",
-    label: "Minerals",
-    title: "Legal supply chain",
-    body: "Trace licensed origin from mine to export with anchored seals at each handoff.",
-    image: MEDIA.footerMine,
-  },
-  {
-    key: "agents",
-    label: "Agents",
-    title: "Agent guardrails",
-    body: "Autonomous agents act only after origin is verified — never on raw API claims.",
-    image: MEDIA.layerSubject,
-  },
-  {
-    key: "compliance",
-    label: "Compliance",
-    title: "Audit trail",
-    body: "Permanent Valid and Invalid records for regulators and internal reviewers.",
-    image: MEDIA.depthBack,
-  },
-] as const;
-
 export function UseCases() {
-  const { t } = useSite();
-  const [tab, setTab] = useState<(typeof USE_CASES)[number]["key"]>("minerals");
-  const active = USE_CASES.find((u) => u.key === tab)!;
+  const { t, content } = useSite();
+  const tabs = content.useCases.tabs;
+  type TabKey = (typeof tabs)[number]["key"];
+  const [tab, setTab] = useState<TabKey>(tabs[0]?.key ?? "minerals");
+  const active = tabs.find((u) => u.key === tab) ?? tabs[0]!;
+
+  const images = {
+    minerals: MEDIA.footerMine,
+    agents: MEDIA.layerSubject,
+    compliance: MEDIA.depthBack,
+  } as const;
 
   return (
     <section className="use-cases section" id="use-cases" aria-labelledby="use-cases-title">
@@ -112,7 +62,7 @@ export function UseCases() {
           {t("useCases")}
         </h2>
         <div className="use-cases__tabs" role="tablist">
-          {USE_CASES.map((u) => (
+          {tabs.map((u) => (
             <button
               key={u.key}
               type="button"
@@ -130,7 +80,7 @@ export function UseCases() {
           role="tabpanel"
         >
           <div className="use-cases__panel-media" aria-hidden="true">
-            <img key={active.key} src={active.image} alt="" loading="lazy" />
+            <img key={active.key} src={images[active.key]} alt="" loading="lazy" />
           </div>
           <div className="use-cases__panel-copy">
             <h3 className="use-cases__title">{active.title}</h3>
@@ -142,38 +92,30 @@ export function UseCases() {
   );
 }
 
-const ROWS = [
-  { label: "Verdict source", lastro: "Deterministic seal", oracle: "External attestor", api: "Provider claim" },
-  { label: "Offline proof", lastro: "Yes", oracle: "Partial", api: "No" },
-  { label: "Invalid on-chain", lastro: "Permanent", oracle: "Rare", api: "Hidden" },
-  { label: "LLM decides truth", lastro: "Never", oracle: "Sometimes", api: "Often" },
-] as const;
-
 export function ComparisonTable() {
-  const { t } = useSite();
+  const { t, content } = useSite();
+  const c = content.compare;
+
   return (
     <section className="compare section section--band" id="compare" data-theme="light">
       <div className="shell">
         <div className="compare__layout">
           <div className="compare__intro">
             <h2 className="section-title">{t("compare")}</h2>
-            <p className="compare__lede">
-              Lastro proves origin before any agent acts. Oracles and API attestations assume the
-              source is already trustworthy.
-            </p>
+            <p className="compare__lede">{c.lede}</p>
           </div>
           <div className="compare__wrap panel panel--elevated">
             <table className="compare__table">
               <thead>
                 <tr>
                   <th scope="col" />
-                  <th scope="col">Lastro</th>
-                  <th scope="col">Oracle</th>
-                  <th scope="col">API attestation</th>
+                  <th scope="col">{c.columns.lastro}</th>
+                  <th scope="col">{c.columns.oracle}</th>
+                  <th scope="col">{c.columns.api}</th>
                 </tr>
               </thead>
               <tbody>
-                {ROWS.map((row) => (
+                {c.rows.map((row) => (
                   <tr key={row.label}>
                     <th scope="row">{row.label}</th>
                     <td>{row.lastro}</td>
@@ -191,17 +133,13 @@ export function ComparisonTable() {
 }
 
 export function ChangelogWidget() {
-  const { t } = useSite();
-  const entries = [
-    { date: "2026-06", text: "Proof panel tamper demo + Casper Testnet counts in hero." },
-    { date: "2026-05", text: "Deterministic seal separation documented in README." },
-    { date: "2026-04", text: "ProofOfOrigin contract deployed to testnet." },
-  ];
+  const { t, content } = useSite();
+
   return (
     <aside className="changelog panel panel--light" aria-label={t("changelog")}>
       <h3 className="changelog__title mono-label">{t("changelog")}</h3>
       <ol className="changelog__list">
-        {entries.map((e) => (
+        {content.changelog.entries.map((e) => (
           <li key={e.date}>
             <span className="changelog__date mono-label">{e.date}</span>
             <span>{e.text}</span>
@@ -213,14 +151,10 @@ export function ChangelogWidget() {
 }
 
 export function WhatWeAreNot() {
-  const { t } = useSite();
+  const { t, content } = useSite();
+  const c = content.whatWeAreNot;
   const [open, setOpen] = useState(false);
-  const items = [
-    "Not an investment product or token sale",
-    "Not a yield or ownership instrument",
-    "Not a replacement for legal due diligence",
-    "Not a wallet or payment product",
-  ];
+
   return (
     <section className="not section" id="not" aria-labelledby="not-title">
       <div className="shell">
@@ -228,11 +162,11 @@ export function WhatWeAreNot() {
           {t("whatWeAreNot")}
         </h2>
         <button type="button" className="not__toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-          {open ? "Hide" : "Expand"} guardrails
+          {open ? c.hide : c.expand}
         </button>
         {open ? (
           <ul className="not__list">
-            {items.map((item) => (
+            {c.items.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
@@ -281,38 +215,47 @@ export function WaitlistForm() {
 }
 
 export function TerminalSnippet() {
+  const { content } = useSite();
+  const c = content.terminal;
+
   return (
     <div className="terminal panel panel--elevated" id="terminal">
-      <div className="terminal__head mono-label">Terminal</div>
+      <div className="terminal__head mono-label">{c.label}</div>
       <pre className="terminal__code">
-        <code>$ make demo{"\n"}→ Processing fictional lot…{"\n"}→ Verdict: Valid | Invalid on Casper</code>
+        <code>
+          $ {DEMO_TERMINAL_CMD}
+          {"\n"}
+          {c.output}
+        </code>
       </pre>
       <button
         type="button"
         className="btn btn--secondary btn--sm"
         onClick={() => {
-          navigator.clipboard.writeText("make demo");
+          navigator.clipboard.writeText(DEMO_TERMINAL_CMD);
         }}
       >
-        Copy command
+        {c.copy}
       </button>
     </div>
   );
 }
 
 export function SandboxSeal() {
+  const { content } = useSite();
+  const c = content.sandbox;
   const [input, setInput] = useState('{"massGrams":125000}');
   const [hash, setHash] = useState("");
 
   return (
     <div className="sandbox panel panel--light">
-      <p className="mono-label">Sandbox — seal any JSON locally</p>
+      <p className="mono-label">{c.label}</p>
       <textarea
         className="sandbox__input"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         rows={3}
-        aria-label="JSON reading"
+        aria-label={c.jsonLabel}
       />
       <button
         type="button"
@@ -321,7 +264,7 @@ export function SandboxSeal() {
           setHash(await sha256Hex(input));
         }}
       >
-        Compute SHA-256
+        {c.compute}
       </button>
       {hash ? (
         <p className="sandbox__hash mono-label">

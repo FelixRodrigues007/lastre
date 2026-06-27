@@ -39,16 +39,8 @@ export function ScrollProgress() {
   );
 }
 
-const RAIL_STEPS = [
-  { label: "Physical", href: "#problem" },
-  { label: "Seal", href: "#how/seal" },
-  { label: "Action", href: "#how/attest" },
-  { label: "Verdict", href: "#proof" },
-  { label: "Casper", href: "#demo" },
-] as const;
-
 export function ProofRail() {
-  const { t, scrollDepth } = useSite();
+  const { t, scrollDepth, content } = useSite();
 
   return (
     <nav
@@ -57,8 +49,8 @@ export function ProofRail() {
       data-visible={scrollDepth > 0.08 ? "true" : "false"}
     >
       <ol className="proof-rail__list">
-        {RAIL_STEPS.map((step, i) => (
-          <li key={step.label} className="proof-rail__item">
+        {content.chrome.proofRail.map((step, i) => (
+          <li key={step.href} className="proof-rail__item">
             {i > 0 ? <span className="proof-rail__sep" aria-hidden="true">→</span> : null}
             <a className="proof-rail__link link-grow" href={step.href}>
               {step.label}
@@ -70,23 +62,15 @@ export function ProofRail() {
   );
 }
 
-const TOC = [
-  { id: "problem", label: "Trust gap" },
-  { id: "solution", label: "Origin proof" },
-  { id: "how", label: "How it works" },
-  { id: "proof", label: "Tamper demo" },
-  { id: "different", label: "Different" },
-  { id: "minerals", label: "Minerals" },
-  { id: "demo", label: "Live demo" },
-  { id: "faq", label: "FAQ" },
-] as const;
-
 export function SectionToc() {
+  const { content } = useSite();
+  const c = content.chrome;
+
   return (
-    <nav className="section-toc" aria-label="On this page">
-      <p className="section-toc__title mono-label">On this page</p>
+    <nav className="section-toc" aria-label={c.tocAria}>
+      <p className="section-toc__title mono-label">{c.tocTitle}</p>
       <ol className="section-toc__list">
-        {TOC.map((item) => (
+        {c.toc.map((item) => (
           <li key={item.id}>
             <a className="section-toc__link link-grow" href={`#${item.id}`}>
               {item.label}

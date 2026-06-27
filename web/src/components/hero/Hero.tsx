@@ -8,7 +8,7 @@ import { HeroMedia, HeroUi } from "./HeroMedia";
 import "./hero.css";
 
 export function Hero() {
-  const { t } = useSite();
+  const { t, content } = useSite();
   const stats = useOnChainStats();
   const accepted = useCountUp(stats.accepted);
   const rejected = useCountUp(stats.rejected);
@@ -20,7 +20,7 @@ export function Hero() {
       <div className="hero__stage">
         <div className="shell hero__layout">
           <div className="hero__copy">
-            <p className="hero__eyebrow mono-label">Casper Testnet</p>
+            <p className="hero__eyebrow mono-label">{content.hero.eyebrow}</p>
 
             <h1 className="hero__headline">{t("heroHeadline")}</h1>
 
@@ -64,8 +64,8 @@ export function Hero() {
         </div>
 
         <div className="shell hero__foot">
-          <a className="hero__scroll" href="#problem" aria-label="Scroll to learn more">
-            Explore
+          <a className="hero__scroll" href="#problem" aria-label={content.hero.scrollLabel}>
+            {content.hero.scrollExplore}
             <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
               <path
                 d="M7 2V12M7 12L3 8M7 12L11 8"

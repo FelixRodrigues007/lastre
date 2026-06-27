@@ -564,8 +564,7 @@
 }
 
 .h1-display-only .section-title,
-.h1-display-only .sol__title,
-.h1-display-only .final-cta__headline {
+.h1-display-only .sol__title {
   font-family: var(--lastro-font-body);
   font-weight: var(--lastro-weight-semibold);
 }

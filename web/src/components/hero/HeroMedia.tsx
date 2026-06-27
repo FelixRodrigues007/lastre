@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSite } from "../../context/SiteContext";
 import { ProofPanel } from "./ProofPanel";
 import "./proof-panel.css";
 
@@ -66,13 +67,14 @@ function HeroPicture({
 /** Full-bleed hero still — single sharp plane + light parallax on scroll. */
 export function HeroMedia() {
   const mobile = useIsMobile();
+  const { content } = useSite();
 
   return (
     <div className="hero__media">
       <div className="hero__depth" aria-hidden="true">
         <div className="hero__layer hero__layer--main" data-parallax-depth={mobile ? "0.15" : "0.38"}>
           <HeroPicture
-            alt="Open-pit mineral mine at dawn: field workers and haul trucks at a licensed extraction site used in Lastro's fictional provenance demo."
+            alt={content.hero.mediaAlt}
             className="hero__layer-img hero__layer-img--main"
             priority
             mobile={mobile}

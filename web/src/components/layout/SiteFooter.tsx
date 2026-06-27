@@ -14,51 +14,39 @@ import { useSite } from "../../context/SiteContext";
 import "./site-footer.css";
 import "../content/content-sections.css";
 
+const FOOTER_HREFS: readonly (readonly { href: string; external?: boolean }[])[] = [
+  [
+    { href: "#problem" },
+    { href: "#solution" },
+    { href: "#how" },
+    { href: "#proof" },
+    { href: "#demo" },
+    { href: "#faq" },
+  ],
+  [
+    { href: APP_URL },
+    { href: "#use-cases" },
+    { href: "#compare" },
+    { href: TRUST_URL },
+  ],
+  [
+    { href: DOCS_URL, external: true },
+    { href: GITHUB_URL, external: true },
+    { href: CASE_STUDY_URL, external: true },
+    { href: CSPR_PACKAGE_URL, external: true },
+    { href: "#honesty" },
+  ],
+  [
+    { href: LICENSE_URL, external: true },
+    { href: "#honesty" },
+    { href: "#not" },
+  ],
+];
+
 type FooterColumn = {
   title: string;
   links: { label: string; href: string; external?: boolean }[];
 };
-
-const COLUMNS: readonly FooterColumn[] = [
-  {
-    title: "Protocol",
-    links: [
-      { label: "The trust gap", href: "#problem" },
-      { label: "Origin proof", href: "#solution" },
-      { label: "How it works", href: "#how" },
-      { label: "Tamper demo", href: "#proof" },
-      { label: "Live demo", href: "#demo" },
-      { label: "FAQ", href: "#faq" },
-    ],
-  },
-  {
-    title: "Product",
-    links: [
-      { label: "App console", href: APP_URL },
-      { label: "Use cases", href: "#use-cases" },
-      { label: "Comparison", href: "#compare" },
-      { label: "Trust center", href: TRUST_URL },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Documentation", href: DOCS_URL, external: true },
-      { label: "GitHub", href: GITHUB_URL, external: true },
-      { label: "Case study", href: CASE_STUDY_URL, external: true },
-      { label: "Casper Testnet", href: CSPR_PACKAGE_URL, external: true },
-      { label: "Honesty policy", href: "#honesty" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "License", href: LICENSE_URL, external: true },
-      { label: "Demo disclaimer", href: "#honesty" },
-      { label: "What we are not", href: "#not" },
-    ],
-  },
-];
 
 function FooterColumnBlock({ col }: { col: FooterColumn }) {
   const [open, setOpen] = useState(false);
@@ -92,19 +80,31 @@ function FooterColumnBlock({ col }: { col: FooterColumn }) {
   );
 }
 
-/** Site footer — light reveal band with link grid and mine exploration scenic. */
 export function SiteFooter() {
   const year = new Date().getFullYear();
-  const { t } = useSite();
+  const { t, content } = useSite();
+  const f = content.footer;
+
+  const columns: FooterColumn[] = f.columns.map((col, colIndex) => ({
+    title: col.title,
+    links: col.links.map((label, linkIndex) => {
+      const meta = FOOTER_HREFS[colIndex]?.[linkIndex];
+      return {
+        label,
+        href: meta?.href ?? "#",
+        external: meta?.external,
+      };
+    }),
+  }));
 
   return (
     <footer className="site-footer" id="footer" data-theme="light">
       <nav className="shell site-footer__breadcrumb mono-label" aria-label="Breadcrumb">
-        <a href="#top">Home</a>
+        <a href="#top">{f.breadcrumbHome}</a>
         <span aria-hidden="true"> / </span>
-        <a href="#proof">Proof demo</a>
+        <a href="#proof">{f.breadcrumbProof}</a>
         <span aria-hidden="true"> / </span>
-        <span>Footer</span>
+        <span>{f.breadcrumbFooter}</span>
       </nav>
 
       <div className="site-footer__stage">
@@ -130,12 +130,9 @@ export function SiteFooter() {
                 <span className="site-footer__wordmark">Lastre.</span>
               </a>
 
-              <p className="site-footer__tagline">Proof before token.</p>
+              <p className="site-footer__tagline">{f.tagline}</p>
 
-              <p className="site-footer__desc body-max-ch">
-                A provenance trust layer for mineral assets. Simulated demo only — no
-                investment, no token sale, no financial rights.
-              </p>
+              <p className="site-footer__desc body-max-ch">{f.desc}</p>
 
               <a className="site-footer__cta" href={APP_URL}>
                 {t("openApp")}
@@ -145,16 +142,14 @@ export function SiteFooter() {
 
               <div className="site-footer__meta">
                 <p className="site-footer__copy mono-label">
-                  © {year} Lastre contributors. All rights reserved.
+                  © {year} {f.copy}
                 </p>
-                <p className="site-footer__note mono-label">
-                  RWA provenance trust layer · Demo uses fictional data
-                </p>
+                <p className="site-footer__note mono-label">{f.note}</p>
               </div>
             </div>
 
             <nav className="site-footer__nav" aria-label="Footer">
-              {COLUMNS.map((col) => (
+              {columns.map((col) => (
                 <FooterColumnBlock key={col.title} col={col} />
               ))}
             </nav>

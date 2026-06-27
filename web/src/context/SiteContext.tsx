@@ -8,12 +8,14 @@ import {
   type ReactNode,
 } from "react";
 import { translations, type Locale, type TranslationKey } from "../i18n/translations";
+import { getContent, type SiteContent } from "../i18n/content";
 
 type Toast = { id: number; message: string };
 
 type SiteContextValue = {
   locale: Locale;
   setLocale: (locale: Locale) => void;
+  content: SiteContent;
   t: (key: TranslationKey) => string;
   highContrast: boolean;
   toggleHighContrast: () => void;
@@ -44,6 +46,9 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     setLocaleState(next);
     localStorage.setItem("lastro-locale", next);
     document.documentElement.lang = next === "pt" ? "pt-BR" : "en";
+    const meta = getContent(next).meta;
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
   }, []);
 
   const toggleHighContrast = useCallback(() => {
@@ -57,7 +62,10 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const meta = getContent(locale).meta;
     document.documentElement.lang = locale === "pt" ? "pt-BR" : "en";
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
     if (localStorage.getItem("lastro-contrast") === "high") {
       document.documentElement.dataset.contrast = "high";
       setHighContrast(true);
@@ -68,6 +76,8 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     (key: TranslationKey) => translations[locale][key] ?? translations.en[key],
     [locale],
   );
+
+  const siteContent = useMemo(() => getContent(locale), [locale]);
 
   const toast = useCallback((message: string) => {
     const id = Date.now();
@@ -87,6 +97,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     () => ({
       locale,
       setLocale,
+      content: siteContent,
       t,
       highContrast,
       toggleHighContrast,
@@ -101,6 +112,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
     [
       locale,
       setLocale,
+      siteContent,
       t,
       highContrast,
       toggleHighContrast,

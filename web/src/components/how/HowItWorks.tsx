@@ -1,91 +1,24 @@
 import { useEffect, useId, useRef, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties } from "react";
 import { Button } from "../ui/Button";
 import { SealMark } from "../ui/SealMark";
+import { useSite } from "../../context/SiteContext";
 import { StepVisual } from "./StepVisual";
 import "./how.css";
 
-/** Section 4 — How it works, in the Superhuman pattern: one bordered panel
- *  holding a sticky tab bar and a stack of step cards. The card crossing the
- *  viewport's middle band lights up its tab — the step "in evidence". Each
- *  card pairs padded copy (left) with a full-bleed diagram (right). */
-type Step = {
-  key: "seal" | "anchor" | "attest" | "verdict";
-  index: string;
-  tab: string;
-  state: string;
-  headline: string;
-  body: ReactNode;
-};
-
-const STEPS: readonly Step[] = [
-  {
-    key: "seal",
-    index: "01",
-    tab: "Seal",
-    state: "Offline",
-    headline: "Seal the origin, offline.",
-    body: (
-      <>
-        A canonical SHA-256 of the field reading. Same reading, same seal —{" "}
-        <span className="accent-emphasis">anywhere, with no network and no server</span>.
-      </>
-    ),
-  },
-  {
-    key: "anchor",
-    index: "02",
-    tab: "Anchor",
-    state: "On-chain",
-    headline: "Register the reference, on-chain.",
-    body: (
-      <>
-        The genuine seal is anchored to the asset on{" "}
-        <span className="accent-emphasis">Casper</span> — the reference every future
-        reading is measured against.
-      </>
-    ),
-  },
-  {
-    key: "attest",
-    index: "03",
-    tab: "Attest",
-    state: "Agent",
-    headline: "The agent attests.",
-    body: (
-      <>
-        An autonomous agent submits a reading. The seal decides the verdict —
-        the agent, and its LLM, only decide{" "}
-        <span className="accent-emphasis">what to do next</span>. Never the truth.
-      </>
-    ),
-  },
-  {
-    key: "verdict",
-    index: "04",
-    tab: "Verdict",
-    state: "Permanent",
-    headline: "Valid or Invalid, both permanent.",
-    body: (
-      <>
-        A match is accepted, a mismatch is rejected, and both are written to
-        Casper forever. A rejection is{" "}
-        <span className="accent-emphasis">proof, not a deleted error</span>.
-      </>
-    ),
-  },
-] as const;
+const STEP_KEYS = ["seal", "anchor", "attest", "verdict"] as const;
 
 export function HowItWorks() {
   const [active, setActive] = useState(0);
   const baseId = useId();
   const cardRefs = useRef<Array<HTMLElement | null>>([]);
+  const { content, t } = useSite();
+  const c = content.how;
 
   const goToStep = (index: number) => {
     cardRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  /** The card crossing the middle 10% band of the viewport is the active one. */
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -93,7 +26,7 @@ export function HowItWorks() {
           if (entry.isIntersecting) {
             const index = Number((entry.target as HTMLElement).dataset.index);
             setActive(index);
-            const key = STEPS[index]?.key;
+            const key = STEP_KEYS[index];
             if (key && !window.location.hash.includes("how")) {
               history.replaceState(null, "", `#how/${key}`);
             }
@@ -110,7 +43,7 @@ export function HowItWorks() {
 
   useEffect(() => {
     const hash = window.location.hash.replace("#how/", "");
-    const idx = STEPS.findIndex((s) => s.key === hash);
+    const idx = STEP_KEYS.findIndex((s) => s === hash);
     if (idx >= 0) {
       setActive(idx);
       requestAnimationFrame(() => goToStep(idx));
@@ -130,9 +63,9 @@ export function HowItWorks() {
       <div className="shell">
         <header className="section__header section__header--fill how__header">
           <div className="section__header-bar reveal-scroll">
-            <p className="kicker">How it works</p>
+            <p className="kicker">{c.kicker}</p>
             <Button href="#proof" variant="secondary" size="sm">
-              Try tamper demo
+              {t("tryTamperDemo")}
             </Button>
           </div>
 
@@ -141,20 +74,17 @@ export function HowItWorks() {
             className="section-title section-title--fill reveal-scroll"
             style={{ "--reveal-delay": "60ms" } as CSSProperties}
           >
-            From a physical reading to a permanent verdict.
+            {c.title}
           </h2>
         </header>
 
         <div className="how__panel panel panel--light reveal-scroll" style={{ "--reveal-delay": "160ms" } as CSSProperties}>
-          <nav
-            className="how__tabs"
-            aria-label="The four steps of the provenance loop"
-          >
-            {STEPS.map((step, i) => {
+          <nav className="how__tabs" aria-label={c.tabsAria}>
+            {c.steps.map((step, i) => {
               const isActive = i === active;
               return (
                 <button
-                  key={step.key}
+                  key={STEP_KEYS[i]}
                   type="button"
                   aria-current={isActive ? "step" : undefined}
                   className={`how__tab${isActive ? " how__tab--active" : ""}`}
@@ -163,7 +93,7 @@ export function HowItWorks() {
                   <SealMark size={18} />
                   <span className="how__tab-text">
                     <span className="how__tab-name">
-                      <span className="how__tab-index">{step.index}</span>
+                      <span className="how__tab-index">{String(i + 1).padStart(2, "0")}</span>
                       {step.tab}
                     </span>
                     <span className="how__tab-state">{step.state}</span>
@@ -174,13 +104,13 @@ export function HowItWorks() {
           </nav>
 
           <ol className="how__cards">
-            {STEPS.map((step, i) => (
+            {c.steps.map((step, i) => (
               <li
-                key={step.key}
+                key={STEP_KEYS[i]}
                 ref={(el) => {
                   cardRefs.current[i] = el;
                 }}
-                id={`how-${step.key}`}
+                id={`how-${STEP_KEYS[i]}`}
                 data-index={i}
                 className={`how__card${i === active ? " how__card--active" : ""}`}
               >
@@ -191,13 +121,19 @@ export function HowItWorks() {
                     <span className="how__card-state mono-label">{step.state}</span>
                   </div>
 
-                  <span className="how__card-index mono-label">Step {step.index}</span>
+                  <span className="how__card-index mono-label">
+                    {c.stepLabel} {String(i + 1).padStart(2, "0")}
+                  </span>
                   <h3 className="how__headline">{step.headline}</h3>
-                  <p className="how__body">{step.body}</p>
+                  <p className="how__body">
+                    {step.bodyLead}
+                    <span className="accent-emphasis">{step.bodyEmphasis}</span>
+                    {step.bodyTail}
+                  </p>
                 </div>
 
                 <div className="how__card-viz" aria-hidden="true">
-                  <StepVisual step={step.key} />
+                  <StepVisual step={STEP_KEYS[i] ?? "seal"} />
                 </div>
               </li>
             ))}

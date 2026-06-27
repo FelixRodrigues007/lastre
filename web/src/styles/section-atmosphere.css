@@ -11,7 +11,6 @@
 .sol,
 .evidence,
 .demonstration,
-.final-cta,
 .partners,
 .pull-quote {
   --lastro-text-primary: var(--lastro-color-cream-200);
@@ -90,15 +89,6 @@
   --section-kicker: var(--lastro-color-sage-300);
   --section-kicker-bar: var(--lastro-color-olive-400);
   --atmo-grid-opacity: 0.038;
-}
-
-.final-cta {
-  --section-bg: var(--lastro-color-olive-900);
-  --section-panel: var(--lastro-color-olive-950);
-  --section-wash-a: rgba(254, 241, 111, 0.12);
-  --section-wash-b: rgba(111, 143, 46, 0.1);
-  --section-kicker: var(--lastro-color-seal-400);
-  --section-kicker-bar: var(--lastro-brand-seal);
 }
 
 /* ── kicker restraint — seal only on minerals + vault CTA ─────────── */

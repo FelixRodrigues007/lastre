@@ -24,41 +24,24 @@ export function PartnersBar() {
   );
 }
 
-const PERSONAS = [
-  {
-    title: "Technical evaluator",
-    body: "Run the end-to-end demo and inspect audit output in under five minutes.",
-    image: MEDIA.heroMiner,
-    label: "Evaluator",
-  },
-  {
-    title: "RWA builder",
-    body: "See how a lot moves from artifact → decision → on-chain attestation.",
-    image: MEDIA.layerFront,
-    label: "Builder",
-  },
-  {
-    title: "Compliance reviewer",
-    body: "Trace rejected lots and permanent Invalid records — not hidden failures.",
-    image: MEDIA.footerMine,
-    label: "Compliance",
-  },
-] as const;
+const PERSONA_IMAGES = [MEDIA.heroMiner, MEDIA.layerFront, MEDIA.footerMine] as const;
 
 export function Personas() {
-  const { t } = useSite();
+  const { t, content } = useSite();
+  const c = content.trust;
+
   return (
     <section className="personas section section--bordered" id="personas" aria-labelledby="personas-title">
       <div className="shell">
         <p className="kicker reveal-scroll">{t("builtFor")}</p>
         <h2 id="personas-title" className="section-title section-title--narrow reveal-scroll">
-          Built for the people who verify — not speculate.
+          {c.personasTitle}
         </h2>
         <ul className="card-grid card-grid--3 reveal-stagger" style={{ marginTop: "var(--lastro-space-8)" }}>
-          {PERSONAS.map((p) => (
+          {c.personas.map((p, i) => (
             <li key={p.title}>
               <MediaCard
-                image={p.image}
+                image={PERSONA_IMAGES[i] ?? MEDIA.heroMiner}
                 alt=""
                 label={p.label}
                 title={p.title}
@@ -73,13 +56,9 @@ export function Personas() {
 }
 
 export function SecurityPosture() {
-  const { t } = useSite();
-  const items = [
-    "Deterministic seal — no LLM verdict",
-    "Invalid is permanent proof on Casper",
-    "Simulated assets only in public demo",
-    "No investment or token sale language",
-  ];
+  const { t, content } = useSite();
+  const c = content.trust;
+
   return (
     <section className="security section section--band" id="trust" data-theme="light">
       <div className="shell">
@@ -91,16 +70,16 @@ export function SecurityPosture() {
           <div>
             <h2 className="section-title">{t("security")}</h2>
             <ul className="security__list">
-              {items.map((item) => (
+              {c.securityItems.map((item) => (
                 <li key={item} className="security__item">
                   {item}
                 </li>
               ))}
             </ul>
             <div className="compliance-chips">
-              {["EU critical raw materials", "OECD due diligence", "Offline chain-of-custody"].map((c) => (
-                <span key={c} className="compliance-chip mono-label">
-                  {c}
+              {c.complianceChips.map((chip) => (
+                <span key={chip} className="compliance-chip mono-label">
+                  {chip}
                 </span>
               ))}
             </div>
@@ -112,50 +91,43 @@ export function SecurityPosture() {
 }
 
 export function GitHubStats() {
-  const { t } = useSite();
+  const { t, content } = useSite();
+  const c = content.trust;
+
   return (
     <div className="gh-stats panel panel--elevated" aria-label={t("githubStats")}>
       <div className="gh-stats__row">
-        <span className="mono-label">License</span>
+        <span className="mono-label">{c.ghLicense}</span>
         <span>Apache-2.0</span>
       </div>
       <div className="gh-stats__row">
-        <span className="mono-label">Stack</span>
+        <span className="mono-label">{c.ghStack}</span>
         <span>Rust · Casper · TypeScript</span>
       </div>
       <div className="gh-stats__row">
-        <span className="mono-label">Demo</span>
-        <span>Fictional lots only</span>
+        <span className="mono-label">{c.ghDemo}</span>
+        <span>{c.ghDemoVal}</span>
       </div>
     </div>
   );
 }
 
-const QUOTES = [
-  {
-    text: "The seal vs. action separation clicked immediately — Invalid as proof is the insight.",
-    role: "Simulated protocol evaluator",
-    image: MEDIA.heroMiner,
-  },
-  {
-    text: "Finally a demo that shows rejection on-chain instead of hiding failures.",
-    role: "Simulated compliance reviewer",
-    image: MEDIA.depthFront,
-  },
-] as const;
+const QUOTE_IMAGES = [MEDIA.heroMiner, MEDIA.depthFront] as const;
 
 export function Testimonials() {
-  const { t } = useSite();
+  const { t, content } = useSite();
+  const c = content.trust;
+
   return (
-    <section className="testimonials section" id="testimonials" aria-label="Evaluator feedback">
+    <section className="testimonials section" id="testimonials" aria-label={c.testimonialsAria}>
       <div className="shell">
         <p className="kicker">{t("simulatedOnly")}</p>
         <ul className="card-grid card-grid--2">
-          {QUOTES.map((q) => (
+          {c.quotes.map((q, i) => (
             <li key={q.role}>
               <blockquote className="testimonials__card panel panel--light">
                 <div className="testimonials__card-media" aria-hidden="true">
-                  <img src={q.image} alt="" loading="lazy" />
+                  <img src={QUOTE_IMAGES[i] ?? MEDIA.heroMiner} alt="" loading="lazy" />
                 </div>
                 <p className="testimonials__quote">"{q.text}"</p>
                 <cite className="testimonials__cite mono-label">{q.role}</cite>
@@ -169,14 +141,14 @@ export function Testimonials() {
 }
 
 export function PullQuote() {
+  const { content } = useSite();
+
   return (
-    <aside className="pull-quote pull-quote--media shell" id="quote" aria-label="Highlight">
+    <aside className="pull-quote pull-quote--media shell" id="quote" aria-label={content.trust.pullQuoteAria}>
       <div className="pull-quote__bg" aria-hidden="true">
         <img src={MEDIA.heroOriginWide} alt="" loading="lazy" />
       </div>
-      <p className="pull-quote__text">
-        "When the data is wrong, the entire stack runs on fiction — unless origin is proven first."
-      </p>
+      <p className="pull-quote__text">"{content.trust.pullQuote}"</p>
     </aside>
   );
 }

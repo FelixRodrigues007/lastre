@@ -10,7 +10,8 @@ import "../content/content-sections.css";
 
 export function Demonstration() {
   const baseId = useId();
-  const { t } = useSite();
+  const { t, content } = useSite();
+  const c = content.demonstration;
   const [showEmbed, setShowEmbed] = useState(false);
 
   return (
@@ -22,24 +23,22 @@ export function Demonstration() {
       >
         <div className="shell split-grid demonstration__grid">
           <div className="demonstration__copy">
-            <p className="kicker reveal-scroll">A demonstration, by design</p>
-            <p className="section-intro">Honesty is part of the protocol boundary.</p>
+            <p className="kicker reveal-scroll">{c.honestyKicker}</p>
+            <p className="section-intro">{c.honestyIntro}</p>
 
             <h2
               id={`${baseId}-honesty-title`}
               className="section-title reveal-scroll"
               style={{ "--reveal-delay": "60ms" } as CSSProperties}
             >
-              We verify provenance. We don't sell anything.
+              {c.honestyTitle}
             </h2>
 
             <p
               className="section-lead section-lead--rule reveal-scroll body-max-ch"
               style={{ "--reveal-delay": "120ms" } as CSSProperties}
             >
-              Everything here uses simulated assets and offers no investment, no
-              token sale, and no yield. Lastro is a proof layer — it confers no
-              ownership and no financial right.
+              {c.honestyLead}
             </p>
           </div>
 
@@ -59,22 +58,21 @@ export function Demonstration() {
       >
         <div className="shell split-grid demonstration__grid demonstration__grid--reverse">
           <div className="demonstration__copy">
-            <p className="kicker reveal-scroll">Verify it yourself</p>
+            <p className="kicker reveal-scroll">{c.liveKicker}</p>
 
             <h2
               id={`${baseId}-live-title`}
               className="section-title reveal-scroll"
               style={{ "--reveal-delay": "60ms" } as CSSProperties}
             >
-              Live on Casper Testnet. Provable by anyone.
+              {c.liveTitle}
             </h2>
 
             <p
               className="section-lead section-lead--rule reveal-scroll body-max-ch"
               style={{ "--reveal-delay": "120ms" } as CSSProperties}
             >
-              The contract is deployed. Real attestations — accepted and rejected
-              — sit on-chain right now.
+              {c.liveLead}
             </p>
 
             <div
@@ -83,13 +81,13 @@ export function Demonstration() {
             >
               <Button href="#proof">{t("tryTamperDemo")}</Button>
               <Button href={CSPR_PACKAGE_URL} variant="secondary" external>
-                View on cspr.live
+                {c.viewExplorer}
               </Button>
               <Button href={GITHUB_URL} variant="tertiary" external>
-                Read the code
+                {c.readCode}
               </Button>
               <button type="button" className="btn btn--secondary btn--sm" onClick={() => setShowEmbed((v) => !v)}>
-                {showEmbed ? "Hide" : "Show"} live explorer
+                {showEmbed ? c.hideExplorer : c.showExplorer}
               </button>
             </div>
           </div>
@@ -103,14 +101,14 @@ export function Demonstration() {
                 <iframe
                   className="expl__embed"
                   src={CSPR_EXPLORER_EMBED}
-                  title="Casper Testnet explorer — ProofOfOrigin package"
+                  title={c.embedTitle}
                   sandbox="allow-scripts allow-same-origin allow-popups"
                   loading="lazy"
                 />
                 <p className="expl__embed-fallback">
-                  If the embed is blocked,{" "}
+                  {c.embedFallback}{" "}
                   <a href={CSPR_PACKAGE_URL} target="_blank" rel="noopener noreferrer">
-                    open cspr.live directly
+                    {c.embedFallbackLink}
                   </a>
                   .
                 </p>

@@ -65,7 +65,7 @@
 .problem__globe {
   position: relative;
   width: 100%;
-  max-width: 56rem;
+  max-width: min(72rem, 100%);
   margin-inline: auto;
 }
 
@@ -81,19 +81,25 @@
   box-shadow:
     0 40px 80px -48px rgba(0, 0, 0, 0.75),
     inset 0 1px 0 rgba(231, 230, 208, 0.06);
-  min-height: clamp(280px, 22rem + 12vw, 420px);
+  min-height: clamp(320px, 24rem + 14vw, 480px);
   aspect-ratio: 16 / 9;
+  background: var(--lastro-color-olive-950);
 }
 
-.trust-globe__photo {
+.trust-globe__map {
   position: absolute;
   inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.trust-globe__map svg {
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 42%;
-  filter: saturate(0.82) brightness(0.62);
+  width: 108%;
+  height: auto;
+  max-height: none;
+  opacity: 0.92;
 }
 
 .trust-globe__veil {
@@ -102,8 +108,8 @@
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(90% 80% at 46% 54%, transparent 30%, rgba(18, 20, 7, 0.72) 100%),
-    linear-gradient(180deg, rgba(18, 20, 7, 0.25) 0%, transparent 30%, transparent 70%, rgba(18, 20, 7, 0.45) 100%);
+    radial-gradient(88% 72% at 50% 48%, transparent 42%, rgba(18, 20, 7, 0.55) 100%),
+    linear-gradient(180deg, rgba(18, 20, 7, 0.35) 0%, transparent 28%, transparent 72%, rgba(18, 20, 7, 0.5) 100%);
 }
 
 /* callout */

@@ -10,28 +10,30 @@ import { useSite } from "../../context/SiteContext";
 import { trackEvent } from "../../lib/analytics";
 import "./command-palette.css";
 
-type Action = { id: string; label: string; href: string; external?: boolean };
-
-const ACTIONS: Action[] = [
-  { id: "demo", label: "Try tamper demo", href: "#proof" },
-  { id: "app", label: "Open app console", href: APP_URL },
-  { id: "how-seal", label: "Jump to Seal step", href: "#how/seal" },
-  { id: "docs", label: "Read documentation", href: DOCS_URL, external: true },
-  { id: "github", label: "GitHub repository", href: GITHUB_URL, external: true },
-  { id: "explorer", label: "Casper Testnet explorer", href: CSPR_PACKAGE_URL, external: true },
-  { id: "terminal", label: `Run ${DEMO_TERMINAL_CMD}`, href: "#terminal" },
-];
+const ACTION_HREFS: Record<string, { href: string; external?: boolean }> = {
+  demo: { href: "#proof" },
+  app: { href: APP_URL },
+  "how-seal": { href: "#how/seal" },
+  docs: { href: DOCS_URL, external: true },
+  github: { href: GITHUB_URL, external: true },
+  explorer: { href: CSPR_PACKAGE_URL, external: true },
+  terminal: { href: "#terminal" },
+};
 
 /** Keyboard-only palette — no visible chrome (⌘K). */
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useSite();
+  const { toast, content } = useSite();
+  const c = content.cmd;
 
-  const filtered = ACTIONS.filter((a) =>
-    a.label.toLowerCase().includes(query.toLowerCase()),
-  );
+  const actions = c.actions.map((action) => ({
+    ...action,
+    ...ACTION_HREFS[action.id],
+  }));
+
+  const filtered = actions.filter((a) => a.label.toLowerCase().includes(query.toLowerCase()));
 
   const close = useCallback(() => {
     setOpen(false);
@@ -57,7 +59,7 @@ export function CommandPalette() {
 
   if (!open) return null;
 
-  const run = (action: Action) => {
+  const run = (action: (typeof actions)[number]) => {
     close();
     if (action.id === "terminal") {
       navigator.clipboard.writeText(DEMO_TERMINAL_CMD);
@@ -73,16 +75,16 @@ export function CommandPalette() {
   };
 
   return (
-    <div className="cmd-overlay" role="dialog" aria-modal="true" aria-label="Quick actions">
-      <button type="button" className="cmd-overlay__backdrop" onClick={close} aria-label="Close" />
+    <div className="cmd-overlay" role="dialog" aria-modal="true" aria-label={c.ariaLabel}>
+      <button type="button" className="cmd-overlay__backdrop" onClick={close} aria-label={c.close} />
       <div className="cmd-panel">
         <input
           ref={inputRef}
           className="cmd-panel__input"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search…"
-          aria-label="Search actions"
+          placeholder={c.search}
+          aria-label={c.searchAria}
         />
         <ul className="cmd-panel__list">
           {filtered.map((action) => (

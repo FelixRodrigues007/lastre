@@ -1,16 +1,4 @@
-/** Decorative panel for section 8 — the protocol boundary: what Lastro is and
- *  explicitly is not. Fictional demo scope only; no financial claims. */
-const IN_SCOPE = [
-  "Deterministic provenance seal",
-  "On-chain Valid / Invalid verdict",
-  "Simulated demo assets",
-] as const;
-
-const OUT_OF_SCOPE = [
-  "Investment or yield",
-  "Token sale or ownership",
-  "Financial rights of any kind",
-] as const;
+import { useSite } from "../../context/SiteContext";
 
 function CheckGlyph() {
   return (
@@ -41,19 +29,22 @@ function CrossGlyph() {
 }
 
 export function BoundaryVisual() {
+  const { content } = useSite();
+  const c = content.boundary;
+
   return (
     <div className="bound__stage" aria-hidden="true">
       <div className="bound">
         <header className="bound__head">
-          <span className="mono-label">Protocol boundary</span>
-          <span className="bound__chip">DEMO ONLY</span>
+          <span className="mono-label">{c.title}</span>
+          <span className="bound__chip">{c.chip}</span>
         </header>
 
         <div className="bound__cols">
           <div className="bound__col">
-            <p className="bound__col-label">In scope</p>
+            <p className="bound__col-label">{c.inScopeLabel}</p>
             <ul className="bound__list">
-              {IN_SCOPE.map((item) => (
+              {c.inScope.map((item) => (
                 <li key={item} className="bound__item bound__item--in">
                   <span className="bound__mark">
                     <CheckGlyph />
@@ -65,9 +56,9 @@ export function BoundaryVisual() {
           </div>
 
           <div className="bound__col">
-            <p className="bound__col-label">Out of scope</p>
+            <p className="bound__col-label">{c.outScopeLabel}</p>
             <ul className="bound__list">
-              {OUT_OF_SCOPE.map((item) => (
+              {c.outScope.map((item) => (
                 <li key={item} className="bound__item bound__item--out">
                   <span className="bound__mark">
                     <CrossGlyph />
@@ -81,9 +72,7 @@ export function BoundaryVisual() {
 
         <footer className="bound__foot">
           <span className="bound__foot-rule" aria-hidden="true" />
-          <p className="bound__foot-text">
-            Lastro confers proof, not ownership. The line is part of the protocol.
-          </p>
+          <p className="bound__foot-text">{c.foot}</p>
         </footer>
       </div>
     </div>

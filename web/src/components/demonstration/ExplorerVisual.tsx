@@ -1,5 +1,6 @@
 import { useCountUp } from "../../hooks/useCountUp";
 import { useOnChainStats } from "../../hooks/useOnChainStats";
+import { useSite } from "../../context/SiteContext";
 import { CONTRACT_PACKAGE_HASH } from "../../site-links";
 
 const ATTESTATIONS = [
@@ -43,6 +44,8 @@ export function ExplorerVisual() {
   const stats = useOnChainStats();
   const accepted = useCountUp(stats.accepted);
   const rejected = useCountUp(stats.rejected);
+  const { content } = useSite();
+  const c = content.explorer;
 
   return (
     <div className="expl__stage" aria-hidden="true">
@@ -51,34 +54,32 @@ export function ExplorerVisual() {
           <span className="expl__dots">
             <i /> <i /> <i />
           </span>
-          <span className="expl__url">
-            testnet.cspr.live
-          </span>
+          <span className="expl__url">testnet.cspr.live</span>
         </div>
 
         <div className="expl__body">
           <header className="expl__head">
             <div>
               <p className="expl__eyebrow mono-label">ProofOfOrigin</p>
-              <p className="expl__network">Casper Testnet · casper-test</p>
+              <p className="expl__network">{c.network}</p>
             </div>
             <span className="expl__live" aria-live="polite">
-              {stats.live ? "LIVE" : "SYNC"}
+              {stats.live ? c.live : c.sync}
             </span>
           </header>
 
           <p className="expl__package">
-            <span className="expl__package-key">Package</span>
+            <span className="expl__package-key">{c.package}</span>
             <span className="expl__package-val">{truncateHash(CONTRACT_PACKAGE_HASH)}</span>
           </p>
 
           <dl className="expl__counts tabular-nums">
             <div className="expl__count">
-              <dt>Accepted</dt>
+              <dt>{c.accepted}</dt>
               <dd>{accepted}</dd>
             </div>
             <div className="expl__count expl__count--reject">
-              <dt>Rejected</dt>
+              <dt>{c.rejected}</dt>
               <dd>{rejected}</dd>
             </div>
           </dl>
@@ -89,7 +90,7 @@ export function ExplorerVisual() {
                 <span className="expl__asset">{row.asset}</span>
                 <span className={`expl__verdict expl__verdict--${row.verdict}`}>
                   <VerdictGlyph verdict={row.verdict} />
-                  {row.verdict === "valid" ? "Valid" : "Invalid"}
+                  {row.verdict === "valid" ? c.valid : c.invalid}
                 </span>
               </li>
             ))}

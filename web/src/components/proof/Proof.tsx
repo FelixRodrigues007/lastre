@@ -43,7 +43,7 @@ function CheckGlyph() {
 }
 
 function CopyButton({ text, label }: { text: string; label: string }) {
-  const { toast, t } = useSite();
+  const { toast, t, content } = useSite();
   return (
     <button
       type="button"
@@ -55,16 +55,16 @@ function CopyButton({ text, label }: { text: string; label: string }) {
         trackEvent("copy_hash");
       }}
     >
-      Copy
+      {content.proof.copy}
     </button>
   );
 }
 
-/** Section — The proof: tamper fields and the seal diverges. */
 export function Proof() {
   const [field, setField] = useState<TamperField>("none");
   const [history, setHistory] = useState<HistoryRow[]>([]);
-  const { markTamperCompleted } = useSite();
+  const { markTamperCompleted, content, locale } = useSite();
+  const c = content.proof;
   const baseId = useId();
 
   const tampered = field !== "none";
@@ -72,7 +72,8 @@ export function Proof() {
   const origin = field === "origin" ? TAMPERED_ORIGIN : REFERENCE_ORIGIN;
   const seal =
     field === "mass" ? SEALS.tamperedMass : field === "origin" ? SEALS.tamperedOrigin : SEALS.valid;
-  const verdict = tampered ? "Invalid" : "Valid";
+  const verdict = tampered ? c.invalid : c.valid;
+  const numberLocale = locale === "pt" ? "pt-BR" : "en-US";
 
   const applyTamper = (next: TamperField) => {
     setField(next);
@@ -83,8 +84,8 @@ export function Proof() {
         [
           {
             field: next,
-            verdict: "Invalid",
-            at: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            verdict: c.invalid,
+            at: new Date().toLocaleTimeString(numberLocale, { hour: "2-digit", minute: "2-digit" }),
           },
           ...h,
         ].slice(0, 5),
@@ -105,15 +106,15 @@ export function Proof() {
       </span>
       <div className="shell split-grid">
         <div className="evidence__lead">
-          <p className="kicker reveal-scroll">The proof</p>
-          <p className="section-intro">Interactive tamper test — change one field, watch the seal diverge.</p>
+          <p className="kicker reveal-scroll">{c.kicker}</p>
+          <p className="section-intro">{c.intro}</p>
 
           <h2
             id={`${baseId}-title`}
             className="section-title reveal-scroll"
             style={{ "--reveal-delay": "60ms" } as CSSProperties}
           >
-            Change one gram, and the network rejects it.
+            {c.title}
           </h2>
 
           <div
@@ -121,16 +122,17 @@ export function Proof() {
             style={{ "--reveal-delay": "120ms" } as CSSProperties}
           >
             <p>
-              Tamper with a single value and the entire seal changes. The chain records{" "}
+              {c.lead1Prefix}
               <span className="accent-emphasis" style={{ color: "var(--lastro-status-invalid)" }}>
-                Invalid
-              </span>{" "}
-              — permanently, verifiably, by anyone.
+                {c.lead1Invalid}
+              </span>
+              {c.lead1Suffix}
             </p>
             <p>
-              Most systems hide a failure. Lastro{" "}
-              <span className="accent-emphasis accent-emphasis--seal">carves it into the ledger</span> as{" "}
-              <GlossaryTerm term="evidence" definition="A permanent on-chain attestation record, Valid or Invalid." />.
+              {c.lead2Prefix}
+              <span className="accent-emphasis accent-emphasis--seal">{c.lead2Emphasis}</span>
+              {c.lead2Suffix}
+              <GlossaryTerm term={c.evidenceTerm} definition={c.evidenceDef} />.
             </p>
           </div>
         </div>
@@ -138,15 +140,15 @@ export function Proof() {
         <aside
           className="evidence__panel panel panel--elevated split-grid__aside--sticky reveal-scroll"
           style={{ "--reveal-delay": "180ms" } as CSSProperties}
-          aria-label="Tamper demo: changing a field breaks the seal and records Invalid on-chain"
+          aria-label={c.panelAria}
         >
           <header className="panel__head evidence__panel-head">
-            <span className="mono-label">Tamper test</span>
+            <span className="mono-label">{c.tamperTest}</span>
             <span
               className={`status-chip${tampered ? " status-chip--invalid" : " status-chip--valid"}`}
-              title={tampered ? "Seal hash mismatch — deterministic rejection" : "Submitted seal matches reference"}
+              title={tampered ? c.mismatchTitle : c.liveTitle}
             >
-              {tampered ? "MISMATCH" : "LIVE"}
+              {tampered ? c.mismatch : c.live}
             </span>
           </header>
 
@@ -181,7 +183,7 @@ export function Proof() {
                 className={`evidence__reading-val tabular-nums${field === "mass" ? " evidence__reading-val--changed" : ""}`}
                 aria-live="polite"
               >
-                {mass.toLocaleString("en-US")}
+                {mass.toLocaleString(numberLocale)}
               </span>
             </div>
 
@@ -200,7 +202,7 @@ export function Proof() {
                 aria-pressed={field === "origin"}
                 onClick={() => applyTamper(field === "origin" ? "none" : "origin")}
               >
-                Swap origin
+                {c.swapOrigin}
               </button>
               <button
                 type="button"
@@ -210,33 +212,33 @@ export function Proof() {
                   setHistory([]);
                 }}
               >
-                Restore
+                {c.restore}
               </button>
             </div>
           </div>
 
           <div className="evidence__seals">
             <p className="evidence__seal-row">
-              <span className="evidence__seal-key">Reference</span>
+              <span className="evidence__seal-key">{c.reference}</span>
               <span className="evidence__seal-val">{truncateHash(SEALS.valid, 12, 4)}</span>
-              <CopyButton text={SEALS.valid} label="Copy reference SHA-256" />
-              <span className="evidence__seal-note">anchored on Casper</span>
+              <CopyButton text={SEALS.valid} label={c.copyReference} />
+              <span className="evidence__seal-note">{c.anchored}</span>
             </p>
             <p className="evidence__seal-row evidence__seal-row--submit">
-              <span className="evidence__seal-key">Submitted</span>
+              <span className="evidence__seal-key">{c.submitted}</span>
               <span
                 className={`evidence__seal-val${tampered ? " evidence__seal-val--changed" : ""}`}
                 aria-live="polite"
               >
                 {truncateHash(seal, 12, 4)}
               </span>
-              <CopyButton text={seal} label="Copy submitted SHA-256" />
-              <span className="evidence__seal-note">{tampered ? "seal diverged" : "matches reference"}</span>
+              <CopyButton text={seal} label={c.copySubmitted} />
+              <span className="evidence__seal-note">{tampered ? c.diverged : c.matches}</span>
             </p>
           </div>
 
           <div
-            className={`evidence__verdict evidence__verdict--${verdict.toLowerCase()}`}
+            className={`evidence__verdict evidence__verdict--${tampered ? "invalid" : "valid"}`}
             aria-live="polite"
           >
             <span className="evidence__verdict-node" aria-hidden="true">
@@ -245,9 +247,7 @@ export function Proof() {
             <span className="evidence__verdict-text">
               {verdict}
               <span className="evidence__verdict-detail">
-                {tampered
-                  ? "written to Casper · permanent proof"
-                  : "match accepted · tokenization permitted"}
+                {tampered ? c.invalidDetail : c.validDetail}
               </span>
             </span>
           </div>
@@ -258,11 +258,11 @@ export function Proof() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Verify on Casper →
+            {c.verifyLink}
           </a>
 
           {history.length ? (
-            <div className="proof-history" aria-label="Recent tamper history">
+            <div className="proof-history" aria-label={c.historyAria}>
               {history.map((row, i) => (
                 <div key={`${row.at}-${i}`} className="proof-history__row">
                   <span>{row.field}</span>

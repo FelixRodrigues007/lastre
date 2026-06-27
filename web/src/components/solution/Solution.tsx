@@ -1,14 +1,10 @@
 import { useId } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { useSite } from "../../context/SiteContext";
 import { LayerShowcase } from "./LayerShowcase";
 import "./solution.css";
 
-type Feature = {
-  key: string;
-  icon: ReactNode;
-  title: string;
-  body: string;
-};
+const FEATURE_ICONS = ["reading", "seal", "layer"] as const;
 
 function ReadingIcon() {
   return (
@@ -63,33 +59,16 @@ function AnchorIcon() {
   );
 }
 
-const FEATURES: readonly Feature[] = [
-  {
-    key: "reading",
-    icon: <ReadingIcon />,
-    title: "Physical readings, not claims",
-    body:
-      "Field readings from sensors, documents, and APIs are sealed offline at origin — before any model or middleware treats the source as given.",
-  },
-  {
-    key: "seal",
-    icon: <SealIcon />,
-    title: "Verdicts nothing can fake",
-    body:
-      "Lastro seals readings offline with deterministic cryptography. No cloud, no clock, no LLM deciding the outcome — only a chain-judged Valid or Invalid.",
-  },
-  {
-    key: "layer",
-    icon: <AnchorIcon />,
-    title: "The layer everything builds on",
-    body:
-      "Agents, escrows, and tokenization run on verified origin — a proof layer every downstream action can verify on-chain.",
-  },
-] as const;
+const ICONS: Record<(typeof FEATURE_ICONS)[number], ReactNode> = {
+  reading: <ReadingIcon />,
+  seal: <SealIcon />,
+  layer: <AnchorIcon />,
+};
 
-/** Section 3 — Split masthead, cinematic proof feed, and three-column value grid. */
 export function Solution() {
   const baseId = useId();
+  const { content } = useSite();
+  const c = content.solution;
 
   return (
     <section className="sol section section--bordered" id="solution" aria-labelledby={`${baseId}-title`}>
@@ -98,7 +77,7 @@ export function Solution() {
           <div className="sol__header-main reveal-scroll">
             <span className="sol__badge">
               <span className="sol__badge-dot" aria-hidden="true" />
-              Origin proof
+              {c.badge}
             </span>
 
             <h2
@@ -106,10 +85,8 @@ export function Solution() {
               className="sol__title sol__title--split"
               style={{ "--reveal-delay": "60ms" } as CSSProperties}
             >
-              <span className="sol__title-line">Lastro proves the origin</span>
-              <span className="sol__title-line sol__title-line--accent">
-                before any token or agent touches the data.
-              </span>
+              <span className="sol__title-line">{c.titleLine1}</span>
+              <span className="sol__title-line sol__title-line--accent">{c.titleLine2}</span>
             </h2>
           </div>
 
@@ -117,9 +94,7 @@ export function Solution() {
             className="sol__aside reveal-scroll"
             style={{ "--reveal-delay": "120ms" } as CSSProperties}
           >
-            Lastro sits beneath the agent economy. It turns physical readings into
-            chain-judged proof, so tokens and agents act on verified origin — never
-            on unverified claims.
+            {c.aside}
           </p>
         </header>
 
@@ -130,12 +105,12 @@ export function Solution() {
         <ul
           className="sol__features reveal-stagger"
           style={{ "--reveal-delay": "120ms" } as CSSProperties}
-          aria-label="What the proof layer delivers"
+          aria-label={c.featuresAria}
         >
-          {FEATURES.map((feature) => (
-            <li key={feature.key} className="sol__feature interactive-lift">
+          {c.features.map((feature, i) => (
+            <li key={FEATURE_ICONS[i] ?? feature.title} className="sol__feature interactive-lift">
               <span className="sol__feature-icon" aria-hidden="true">
-                {feature.icon}
+                {ICONS[FEATURE_ICONS[i] ?? "reading"]}
               </span>
               <h3 className="sol__feature-title">{feature.title}</h3>
               <p className="sol__feature-body">{feature.body}</p>

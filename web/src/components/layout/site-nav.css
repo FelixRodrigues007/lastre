@@ -82,6 +82,46 @@
   flex-shrink: 0;
 }
 
+.site-nav__locale {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.1875rem;
+  border-radius: var(--lastro-radius-pill);
+  background: color-mix(in oklab, var(--lastro-color-cream-200) 6%, transparent);
+}
+
+.site-nav__locale-btn {
+  margin: 0;
+  padding: 0.3125rem 0.5rem;
+  border: 0;
+  border-radius: var(--lastro-radius-pill);
+  background: transparent;
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: 0.04em;
+  color: color-mix(in oklab, var(--lastro-color-cream-200) 48%, transparent);
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+.site-nav__locale-btn:hover {
+  color: color-mix(in oklab, var(--lastro-color-cream-200) 78%, transparent);
+}
+
+.site-nav__locale-btn[data-active] {
+  color: var(--lastro-color-olive-950);
+  background: var(--lastro-color-cream-200);
+}
+
+.site-nav__locale--drawer {
+  margin-top: auto;
+  padding-top: 2rem;
+  align-self: flex-start;
+}
+
 .site-nav__action {
   display: none;
   font-size: 0.8125rem;
@@ -235,23 +275,6 @@
 
 .site-nav__drawer-secondary-link:hover {
   color: var(--lastro-color-cream-200);
-}
-
-.site-nav__drawer-locale {
-  margin-top: auto;
-  padding-top: 2rem;
-  border: 0;
-  background: transparent;
-  font-size: 0.75rem;
-  font-weight: var(--lastro-weight-medium);
-  letter-spacing: -0.01em;
-  color: color-mix(in oklab, var(--lastro-color-cream-200) 45%, transparent);
-  cursor: pointer;
-  text-align: left;
-}
-
-.site-nav__drawer-locale:hover {
-  color: color-mix(in oklab, var(--lastro-color-cream-200) 75%, transparent);
 }
 
 @media (min-width: 860px) {
