@@ -1,9 +1,9 @@
-# Lastro Frontend System Design — Laura Handoff
+# Lastre Frontend System Design — Laura Handoff
 
 This document is the product/frontend contract for building a polished React
-experience on top of the already-running Lastro backend.
+experience on top of the already-running Lastre backend.
 
-Lastro is a provenance trust layer:
+Lastre is a provenance trust layer:
 
 > Proof before token — the chain of proof from land to token, verified offline
 > and anchored on Casper.
@@ -17,18 +17,25 @@ There are two public surfaces:
 
 | Surface | URL | Responsibility |
 |---|---|---|
-| Vercel landing/frontend | Project `lastro` | The polished React experience Laura builds. |
+| Vercel landing/frontend | `https://lastre.io` | The polished React experience Laura builds. |
 | Render gateway/backend | `https://lastro.onrender.com` | JSON API, live protocol reads, controlled sandbox writes, and legacy static demo shells. |
 
 The frontend should consume Render as an API:
 
 ```text
 VITE_GATEWAY_URL=https://lastro.onrender.com
+VITE_PUBLIC_SITE_URL=https://lastre.io
 ```
 
 Do not treat Render static pages as the final UI. URLs such as
 `https://lastro.onrender.com/proof#proof-section` are backend-served demo shells.
 The final user experience should live on Vercel and call Render through `fetch`.
+
+When `api.lastre.io` is mapped to Render, switch `VITE_GATEWAY_URL` to:
+
+```text
+VITE_GATEWAY_URL=https://api.lastre.io
+```
 
 ## 2. Non-negotiable product rules
 
@@ -55,7 +62,7 @@ Hard rules:
 
 ## 3. Visual direction
 
-Lastro should feel like **forensic infrastructure**:
+Lastre should feel like **forensic infrastructure**:
 
 - precise, grounded, and verifiable;
 - physical origin plus cryptographic proof;
@@ -575,7 +582,7 @@ running the web build internally.
 Use this as the implementation brief:
 
 ```text
-Build the Lastro frontend as a Vite + React + TypeScript app on Vercel.
+Build the Lastre frontend as a Vite + React + TypeScript app on Vercel.
 Use https://lastro.onrender.com as the gateway through VITE_GATEWAY_URL.
 The frontend must show the fixed banner:
 "DEMONSTRATION — simulated assets, no investment offered".

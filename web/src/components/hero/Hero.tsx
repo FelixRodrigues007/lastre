@@ -40,7 +40,7 @@ export function Hero() {
               className="hero__subhead reveal"
               style={{ "--reveal-delay": "160ms" } as CSSProperties}
             >
-              Lastro is the trust layer for real-world assets and autonomous agents.
+              Lastre is the trust layer for real-world assets and autonomous agents.
               It verifies physical origin offline and deterministically, then anchors
               the verdict on Casper — before any token or agent acts on the data.
             </p>

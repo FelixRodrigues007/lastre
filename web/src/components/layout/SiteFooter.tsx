@@ -56,18 +56,18 @@ export function SiteFooter() {
         <div className="shell site-footer__body">
           <div className="site-footer__grid">
             <div className="site-footer__brand-col">
-              <a className="site-footer__brand" href="#top" aria-label="Lastro — home">
+              <a className="site-footer__brand" href="#top" aria-label="Lastre — home">
                 <span className="site-footer__brand-mark" aria-hidden="true">
                   <SealMark size={22} />
                 </span>
-                <span className="site-footer__wordmark">Lastro.</span>
+                <span className="site-footer__wordmark">Lastre.</span>
               </a>
 
-              <p className="site-footer__tagline">Proof before ownership.</p>
+              <p className="site-footer__tagline">Proof before token.</p>
 
               <p className="site-footer__desc">
-                A provenance trust layer for mineral assets. Simulated demo only — no
-                investment, no token sale, no financial rights.
+                A provenance trust layer for mineral assets. Simulated demo only —
+                proof layer, not an asset offer.
               </p>
 
               <a className="site-footer__cta" href="#proof">
@@ -76,7 +76,7 @@ export function SiteFooter() {
 
               <div className="site-footer__meta">
                 <p className="site-footer__copy mono-label">
-                  © {year} Lastro contributors. All rights reserved.
+                  © {year} Lastre contributors. All rights reserved.
                 </p>
                 <p className="site-footer__note mono-label">
                   RWA provenance trust layer · Demo uses fictional data
@@ -110,7 +110,7 @@ export function SiteFooter() {
         </div>
 
         <p className="site-footer__scenic-wordmark" aria-hidden="true">
-          Lastro
+          Lastre
         </p>
       </div>
     </footer>

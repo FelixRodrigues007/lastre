@@ -1,11 +1,11 @@
-# `/design-sync` Workflow for Lastro Advertising Materials
+# `/design-sync` Workflow for Lastre Advertising Materials
 
-Use this workflow when asking Claude/Codex/Fugu to create or review Lastro advertising assets.
+Use this workflow when asking Claude/Codex/Fugu to create or review Lastre advertising assets.
 
 ## Recommended prompt
 
 ```text
-/design-sync Create an advertising asset for Lastro using design-system/.
+/design-sync Create an advertising asset for Lastre using design-system/.
 Goal: [launch post | display ad | demo thumbnail | ecosystem announcement]
 Platform/format: [LinkedIn 1200x627 | square 1080x1080 | story 1080x1920 | X 1600x900]
 Angle: [Proof before token | Invalid is proof too | LLM is not truth | Casper-native anchoring]

@@ -81,9 +81,9 @@ export function SiteNav() {
           ))}
         </nav>
 
-        <a className="site-nav__brand" href="#top" aria-label="Lastro — home">
+        <a className="site-nav__brand" href="#top" aria-label="Lastre — home">
           <SealMark size={28} />
-          <span className="site-nav__wordmark">Lastro</span>
+          <span className="site-nav__wordmark">Lastre</span>
         </a>
 
         <div className="site-nav__end">

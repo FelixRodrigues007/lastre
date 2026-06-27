@@ -76,14 +76,14 @@ const FEATURES: readonly Feature[] = [
     icon: <SealIcon />,
     title: "Verdicts nothing can fake",
     body:
-      "Lastro seals readings offline with deterministic cryptography. No cloud, no clock, no LLM deciding the outcome — only a chain-judged Valid or Invalid.",
+      "Lastre seals readings offline with deterministic cryptography. No cloud, no clock, no LLM deciding the outcome — only a chain-judged Valid or Invalid.",
   },
   {
     key: "layer",
     icon: <AnchorIcon />,
     title: "The layer everything builds on",
     body:
-      "Agents, escrows, and tokenization finally run on verified origin. Lastro learns from each attestation — building the proof foundation your economy depends on.",
+      "Agents, escrows, and tokenization finally run on verified origin. Lastre learns from each attestation — building the proof foundation your economy depends on.",
   },
 ] as const;
 
@@ -106,7 +106,7 @@ export function Solution() {
               className="sol__title"
               style={{ "--reveal-delay": "60ms" } as CSSProperties}
             >
-              Lastro proves the origin before any token or agent touches the data.
+              Lastre proves the origin before any token or agent touches the data.
             </h2>
           </div>
 
@@ -114,7 +114,7 @@ export function Solution() {
             className="sol__aside reveal-scroll"
             style={{ "--reveal-delay": "120ms" } as CSSProperties}
           >
-            Lastro sits beneath the agent economy. It turns physical readings into
+            Lastre sits beneath the agent economy. It turns physical readings into
             chain-judged proof, so tokens and agents act on verified origin — never
             on unverified claims.
           </p>

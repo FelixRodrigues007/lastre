@@ -69,7 +69,7 @@ export function Proof() {
               verifiably, by anyone.
             </p>
             <p>
-              Most systems hide a failure. Lastro{" "}
+              Most systems hide a failure. Lastre{" "}
               <span className="accent-emphasis accent-emphasis--seal">carves it into the ledger</span>{" "}
               as evidence.
             </p>

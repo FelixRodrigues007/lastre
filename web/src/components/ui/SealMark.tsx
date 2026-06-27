@@ -5,7 +5,7 @@ type SealMarkProps = {
 };
 
 /**
- * Lastro seal mark — a hexagonal proof seal anchored to a chain node,
+ * Lastre seal mark — a hexagonal proof seal anchored to a chain node,
  * recolored to the olive palette. Outer hex = the lot, inner hex = the
  * deterministic seal, center node = the on-chain anchor.
  */

@@ -1,15 +1,15 @@
-# Lastro Design System — Olive Palette (v0.2)
+# Lastre Design System — Olive Palette (v0.2)
 
 **Status:** spec / awaiting review
 **Date:** 2026-06-25
-**Scope:** Reskin the single source-of-truth token system for Lastro around a new
+**Scope:** Reskin the single source-of-truth token system for Lastre around a new
 5-color olive palette, with intentional light + dark themes. Serves both
 advertising assets and the future app/site UI.
 
 ## Goal
 
 Replace the current obsidian/multi-hue ad tokens with a disciplined,
-near-monochromatic **olive + single accent** system that matches the Lastro
+near-monochromatic **olive + single accent** system that matches the Lastre
 thesis ("land → proof → token"). One token source feeds ads and product UI to
 prevent drift.
 

@@ -1,17 +1,17 @@
-# Product Marketing Context — Lastro
+# Product Marketing Context — Lastre
 
 *Last updated: 2026-06-24*
 
 ## Product Overview
-**One-liner:** Lastro is a proof-of-provenance protocol for tokenized real-world assets on Casper.
+**One-liner:** Lastre is a proof-of-provenance protocol for tokenized real-world assets on Casper.
 
-**What it does:** Lastro creates a deterministic chain of proof from physical origin to tokenization. An offline SHA-256 provenance seal is generated from a fictional provenance artifact, anchored on Casper through `ProofOfOrigin`, and later used by the agentic workflow to decide whether a lot is tokenizable or rejected.
+**What it does:** Lastre creates a deterministic chain of proof from physical origin to tokenization. An offline SHA-256 provenance seal is generated from a fictional provenance artifact, anchored on Casper through `ProofOfOrigin`, and later used by the agentic workflow to decide whether a lot is tokenizable or rejected.
 
 **Product category:** RWA provenance infrastructure / trust layer / proof-of-origin protocol.
 
 **Product type:** Protocol prototype and developer-facing infrastructure demo.
 
-**Business model:** Not defined. Do not present Lastro as an investment product, yield product, marketplace, or financial return opportunity.
+**Business model:** Not defined. Do not present Lastre as an investment product, yield product, marketplace, or financial return opportunity.
 
 ## Target Audience
 **Target companies:** RWA builders, tokenization teams, compliance-minded blockchain teams, Casper ecosystem builders, hackathon judges, and technical evaluators.
@@ -67,7 +67,7 @@
 - Both Valid and Invalid results are written on-chain.
 - Built as a Casper-native prototype with Odra/Rust contracts.
 
-**How we do it differently:** Lastro separates verification from orchestration: deterministic seals decide provenance validity; agents decide whether to pay, skip, or escalate.
+**How we do it differently:** Lastre separates verification from orchestration: deterministic seals decide provenance validity; agents decide whether to pay, skip, or escalate.
 
 **Why that's better:** It avoids turning an LLM into a truth oracle and makes rejection auditable.
 
@@ -76,7 +76,7 @@
 ## Objections
 | Objection | Response |
 |---|---|
-| “Is this a financial product?” | No. Lastro is a proof/provenance layer. Avoid investment, yield, ROI, or return language. |
+| “Is this a financial product?” | No. Lastre is a proof/provenance layer. Avoid investment, yield, ROI, or return language. |
 | “Does the LLM decide whether something is valid?” | No. The deterministic seal decides the verdict; the LLM only decides the action. |
 | “Is this production-ready?” | No. It is an early prototype/demo using fictional data. |
 | “Are these real mining/company records?” | No. All public samples are fictional. |
@@ -139,7 +139,7 @@
 | Casper-native | Odra/Rust contract deployed to Casper Testnet |
 
 ## Goals
-**Business goal:** Communicate Lastro clearly as RWA provenance infrastructure.
+**Business goal:** Communicate Lastre clearly as RWA provenance infrastructure.
 
 **Conversion action:** Get technical audiences to review the repo/demo, understand the architecture, and engage with the prototype.
 

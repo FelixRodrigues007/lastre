@@ -1,4 +1,4 @@
-# Lastro Progress
+# Lastre Progress
 
 > Thesis: *Proof before token — the chain of proof from land to token, verified offline and anchored on Casper.*
 
@@ -36,7 +36,7 @@
 
 **Differentiation vs leaders** (Phoenix Zero, Custodian, helios, Vouch, VeriFeed, OutcomePay, CasperFlow, GrantFlow AI):
 - Competitors: AI agents consuming RWA/DeFi data via x402 + MCP.
-- Lastro: Prove the *physical origin* of the asset **before** any data or token. Offline deterministic seal + on-chain rejection of fakes.
+- Lastre: Prove the *physical origin* of the asset **before** any data or token. Offline deterministic seal + on-chain rejection of fakes.
 - Additional edges: Pure demonstration (no investment claims), Spot-the-Fraud interactive moment, full transparency package hash + live counters.
 
 ### Phase 1 Delivered at Competition Level

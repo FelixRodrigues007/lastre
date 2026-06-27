@@ -1,10 +1,10 @@
-# Lastro — Demo Runbook
+# Lastre — Demo Runbook
 
-This runbook is for the local Lastro demo experience. All lot, operator, and origin data is fictional.
+This runbook is for the local Lastre demo experience. All lot, operator, and origin data is fictional.
 
 > DEMONSTRATION — simulated assets, no investment offered.
 
-Lastro is a provenance trust layer. The public action is **Verify provenance**. Do not present this demo as buying, selling, investing, yield, return, or price discovery.
+Lastre is a provenance trust layer. The public action is **Verify provenance**. Do not present this demo as buying, selling, investing, yield, return, or price discovery.
 
 ## Live protocol reference
 

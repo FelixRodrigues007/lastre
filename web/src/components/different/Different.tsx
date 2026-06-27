@@ -45,7 +45,7 @@ function CategoryIcon({ accent }: { accent: Card["accent"] }) {
   return <span className={`diff__icon diff__icon--${accent}`} aria-hidden="true" />;
 }
 
-/** Section — Why it's different: a 2:1:1 feature grid that contrasts Lastro's
+/** Section — Why it's different: a 2:1:1 feature grid that contrasts Lastre's
  *  physical proof model with the industry's agent-first consumption pattern. */
 export function Different() {
   const baseId = useId();
@@ -67,7 +67,7 @@ export function Different() {
           >
             Others build agents that consume real-world data.{" "}
             <span className="accent-emphasis">
-              Lastro proves the data came from reality first.
+              Lastre proves the data came from reality first.
             </span>
           </h2>
         </header>
@@ -75,7 +75,7 @@ export function Different() {
         <ul
           className="diff__grid reveal-scroll"
           style={{ "--reveal-delay": "140ms" } as CSSProperties}
-          aria-label="What makes Lastro different"
+          aria-label="What makes Lastre different"
         >
           {CARDS.map((card) => (
             <li

@@ -1,6 +1,6 @@
-# Lastro Gateway
+# Lastre Gateway
 
-Express HTTP gateway with CORS enabled for the Lastro experience layer. It wraps the already-live
+Express HTTP gateway with CORS enabled for the Lastre experience layer. It wraps the already-live
 ProofOfOrigin protocol and adds no new trust logic: the deterministic SHA-256
 seal decides the verdict; the UI and gateway only present reads and controlled
 demo actions.

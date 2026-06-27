@@ -1,4 +1,4 @@
-/** Decorative panel for section 8 — the protocol boundary: what Lastro is and
+/** Decorative panel for section 8 — the protocol boundary: what Lastre is and
  *  explicitly is not. Fictional demo scope only; no financial claims. */
 const IN_SCOPE = [
   "Deterministic provenance seal",
@@ -7,9 +7,9 @@ const IN_SCOPE = [
 ] as const;
 
 const OUT_OF_SCOPE = [
-  "Investment or yield",
-  "Token sale or ownership",
-  "Financial rights of any kind",
+  "Asset offer",
+  "Transfer claim",
+  "Revenue claim",
 ] as const;
 
 function CheckGlyph() {
@@ -82,7 +82,7 @@ export function BoundaryVisual() {
         <footer className="bound__foot">
           <span className="bound__foot-rule" aria-hidden="true" />
           <p className="bound__foot-text">
-            Lastro confers proof, not ownership. The line is part of the protocol.
+            Lastre presents proof only. The boundary is part of the protocol.
           </p>
         </footer>
       </div>

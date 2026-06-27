@@ -31,7 +31,7 @@ export function Minerals() {
           className="section-lead section-lead--center reveal-scroll"
           style={{ "--reveal-delay": "120ms" } as CSSProperties}
         >
-          From gold to lithium to niobium, Lastro traces a lot from a licensed,
+          From gold to lithium to niobium, Lastre traces a lot from a licensed,
           authorized, cleared origin — mine, processing, transport, export — and
           anchors the proof at every step. The trust layer for a legal mineral
           supply chain.

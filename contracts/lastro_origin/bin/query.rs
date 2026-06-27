@@ -38,7 +38,8 @@ fn main() {
         .unwrap_or_else(|| DEFAULT_PACKAGE_HASH.to_string());
 
     // Force set the livenet env vars early to prevent panic in odra rpc client
-    let node_address = env_value(NODE_ADDRESS_ENV).unwrap_or_else(|| DEFAULT_NODE_ADDRESS.to_string());
+    let node_address =
+        env_value(NODE_ADDRESS_ENV).unwrap_or_else(|| DEFAULT_NODE_ADDRESS.to_string());
     let chain_name = env_value(CHAIN_NAME_ENV).unwrap_or_else(|| DEFAULT_CHAIN_NAME.to_string());
     std::env::set_var(ODRA_NODE_ADDRESS_ENV, &node_address);
     std::env::set_var(ODRA_CHAIN_NAME_ENV, &chain_name);

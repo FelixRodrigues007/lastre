@@ -5,7 +5,7 @@ import "./final-cta.css";
 
 const TRUST_ITEMS = [
   "Simulated assets only",
-  "No investment or token sale",
+  "No asset offer",
   "Valid and Invalid on-chain",
   "Seal decides verdict",
 ] as const;

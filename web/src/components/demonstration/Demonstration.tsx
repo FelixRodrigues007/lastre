@@ -36,10 +36,9 @@ export function Demonstration() {
               className="section-lead section-lead--rule reveal-scroll"
               style={{ "--reveal-delay": "120ms" } as CSSProperties}
             >
-              Everything here uses simulated assets and offers no investment, no
-              token sale, and no yield. Lastro is a proof layer — it confers no
-              ownership and no financial right. Knowing exactly where that line
-              sits is part of the protocol.
+              Everything here uses simulated assets. Lastre is a proof layer,
+              not an asset offer. Knowing exactly where that line sits is part
+              of the protocol.
             </p>
           </div>
 

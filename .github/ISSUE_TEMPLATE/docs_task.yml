@@ -1,0 +1,26 @@
+name: Documentation task
+description: Improve Lastre documentation
+title: "docs: "
+labels: ["documentation"]
+body:
+  - type: textarea
+    id: doc
+    attributes:
+      label: Document or section
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Requested change
+    validations:
+      required: true
+  - type: checkboxes
+    id: quality
+    attributes:
+      label: Quality checks
+      options:
+        - label: The wording remains professional English.
+          required: true
+        - label: The wording preserves the Lastre demonstration guardrails.
+          required: true

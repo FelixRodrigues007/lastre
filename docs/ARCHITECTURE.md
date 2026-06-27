@@ -1,8 +1,8 @@
-# Lastro Architecture
+# Lastre Architecture
 
 ## Thesis
 
-Proof before token: before tokenization or data release, Lastro validates a
+Proof before token: before tokenization or data release, Lastre validates a
 fictional chain of proof and anchors a verifiable attestation on Casper.
 
 ## Blocks
