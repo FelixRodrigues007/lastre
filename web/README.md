@@ -31,8 +31,8 @@ cd web
 npm install
 npm run build
 vercel link --project lastro-landing
-printf '%s\n' 'https://lastro-gateway.onrender.com' | vercel env add VITE_GATEWAY_URL production
-printf '%s\n' 'https://lastro-gateway.onrender.com' | vercel env add VITE_GATEWAY_URL preview
+printf '%s\n' 'https://lastro.onrender.com' | vercel env add VITE_GATEWAY_URL production
+printf '%s\n' 'https://lastro.onrender.com' | vercel env add VITE_GATEWAY_URL preview
 vercel --prod
 ```
 

@@ -1,4 +1,4 @@
-const DEFAULT_GATEWAY_URL = "https://lastro-gateway.onrender.com";
+const DEFAULT_GATEWAY_URL = "https://lastro.onrender.com";
 
 export const LASTRO_GATEWAY_URL = normalizeGatewayUrl(
   import.meta.env.VITE_GATEWAY_URL || DEFAULT_GATEWAY_URL,
