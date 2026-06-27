@@ -25,6 +25,12 @@
   color: var(--lastro-status-invalid);
 }
 
+.audit-no-match {
+  padding: 1rem 0;
+  color: var(--lastro-text-muted);
+  font-size: var(--text-small);
+}
+
 .audit-table-wrap {
   overflow-x: auto;
   padding: 0;

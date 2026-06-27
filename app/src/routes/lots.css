@@ -18,6 +18,24 @@
   width: 100%;
 }
 
+.lots-view--table .lots-grid {
+  display: none;
+}
+
+.lots-view--cards .lots-table-wrap {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .lots-view--table .lots-table-wrap {
+    display: none;
+  }
+
+  .lots-view--table .lots-grid {
+    display: grid;
+  }
+}
+
 @media (min-width: 768px) {
   .lots-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -130,4 +148,81 @@
 
 .lot-card__mismatch {
   color: var(--lastro-status-invalid);
+}
+
+.lots-table-wrap {
+  overflow-x: auto;
+  padding: 0;
+  width: 100%;
+}
+
+.lots-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.lots-table th,
+.lots-table td {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  vertical-align: middle;
+}
+
+.lots-table th {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.lots-table__num {
+  text-align: right;
+  font-family: var(--lastro-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.lots-table th.lots-table__num {
+  text-align: right;
+}
+
+.lots-table tbody tr:hover {
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 35%, transparent);
+}
+
+.lots-table td:first-child {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+}
+
+.lots-table td:first-child a:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.lots-table__role {
+  display: block;
+  margin-top: 0.15rem;
+  font-family: var(--lastro-font-body);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+.lots-table__row--valid td:first-child {
+  box-shadow: inset 3px 0 0 var(--lastro-status-valid);
+}
+
+.lots-table__row--invalid td:first-child {
+  box-shadow: inset 3px 0 0 var(--lastro-status-invalid);
+}
+
+.lots-table__row--pending td:first-child {
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastro-brand-seal) 55%, transparent);
+}
+
+@media (max-width: 767px) {
+  .lots-table-wrap {
+    display: none;
+  }
 }

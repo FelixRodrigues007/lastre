@@ -12,12 +12,15 @@ initLocale();
 
 import { App } from "./App";
 import { LocaleProvider } from "./context/LocaleContext";
+import { NavCountsProvider } from "./context/NavCountsContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <LocaleProvider>
-        <App />
+        <NavCountsProvider>
+          <App />
+        </NavCountsProvider>
       </LocaleProvider>
     </BrowserRouter>
   </StrictMode>,

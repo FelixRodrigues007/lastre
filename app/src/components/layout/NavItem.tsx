@@ -9,9 +9,10 @@ type NavItemProps = {
   icon: IconName;
   end?: boolean;
   variant?: "sidebar" | "mobile";
+  badge?: number;
 };
 
-export function NavItem({ to, label, icon, end, variant = "sidebar" }: NavItemProps) {
+export function NavItem({ to, label, icon, end, variant = "sidebar", badge }: NavItemProps) {
   return (
     <NavLink
       to={to}
@@ -24,6 +25,11 @@ export function NavItem({ to, label, icon, end, variant = "sidebar" }: NavItemPr
         <Icon name={icon} size={variant === "mobile" ? 20 : 17} />
       </span>
       <span className="nav-item__label">{label}</span>
+      {badge && badge > 0 ? (
+        <span className="nav-item__badge" aria-label={`${badge} pending`}>
+          {badge > 99 ? "99+" : badge}
+        </span>
+      ) : null}
     </NavLink>
   );
 }

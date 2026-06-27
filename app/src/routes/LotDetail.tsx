@@ -6,6 +6,7 @@ import { ArtifactPanel } from "../components/lots/ArtifactPanel";
 import { VerdictBadge } from "../components/proof/Badges";
 import { ProofRail, proofStepFromLot } from "../components/proof/ProofRail";
 import { SealChip } from "../components/proof/SealChip";
+import { Breadcrumbs } from "../components/ui/Breadcrumbs";
 import { MetricCard } from "../components/ui/MetricCard";
 import { getLot } from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
@@ -22,50 +23,51 @@ export function LotDetail() {
 
   return (
     <div className="page">
+      <Breadcrumbs
+        items={[
+          { label: "Lots", to: "/lots" },
+          { label: assetId || "Unknown lot" },
+        ]}
+      />
+
       <PageHeader
         kicker="Lot detail"
         title={assetId || "Unknown lot"}
         lead={data?.demoRole ?? "Artifact fields, computed seal, reference seal, and proof rail."}
       />
 
-      <StatePanel loading={lot.loading} error={lot.error} onRetry={lot.reload}>
+      <StatePanel loading={lot.loading} error={lot.error} skeleton="detail" onRetry={lot.reload}>
         {data ? (
-          <>
-            <div className="lot-detail-hero">
-              <MetricCard
-                label="Mass"
-                value={`${data.artifact.massGrams.toLocaleString()} g`}
-                size="lg"
-              />
-              <MetricCard
-                label="Proof step"
-                value={`${proofStep + 1} / 5`}
-                hint="Chain of proof progress"
-                tone="accent"
-              />
-              <MetricCard
-                label="Attested"
-                value={data.attested ? "Yes" : "No"}
-                hint={
-                  data.auditRecord ? (
-                    <Link to={`/audit/${encodeURIComponent(data.artifact.assetId)}`}>
-                      View audit record
-                    </Link>
-                  ) : (
-                    "Not yet processed"
-                  )
-                }
-                tone={data.attested ? "valid" : "default"}
-              />
-              <div className="lot-detail-hero__verdict panel">
-                <p className="mono-label">Latest verdict</p>
-                <div className="lot-detail-hero__badge">
-                  <VerdictBadge verdict={data.latestVerdict} />
-                </div>
+          <div className="lot-detail-layout">
+            <div className="lot-detail-main">
+              <div className="lot-detail-hero">
+                <MetricCard
+                  label="Mass"
+                  value={`${data.artifact.massGrams.toLocaleString()} g`}
+                  size="lg"
+                />
+                <MetricCard
+                  label="Proof step"
+                  value={`${proofStep + 1} / 5`}
+                  hint="Chain of proof progress"
+                  tone="accent"
+                />
+                <MetricCard
+                  label="Attested"
+                  value={data.attested ? "Yes" : "No"}
+                  hint={
+                    data.auditRecord ? (
+                      <Link to={`/audit/${encodeURIComponent(data.artifact.assetId)}`}>
+                        View audit record
+                      </Link>
+                    ) : (
+                      "Not yet processed"
+                    )
+                  }
+                  tone={data.attested ? "valid" : "default"}
+                />
               </div>
-            </div>
 
-            <div className="lot-detail">
               <section className="panel lot-detail__section lot-detail__section--wide">
                 <header className="panel__head">
                   <span className="mono-label">Proof rail</span>
@@ -127,15 +129,27 @@ export function LotDetail() {
                 </section>
               ) : null}
             </div>
-          </>
+
+            <aside className="lot-detail-rail panel">
+              <p className="mono-label">Status</p>
+              <div className="lot-detail-rail__verdict">
+                <VerdictBadge verdict={data.latestVerdict} />
+              </div>
+              <p className="lot-detail-rail__role">{data.demoRole}</p>
+              <dl className="lot-detail-rail__meta">
+                <div>
+                  <dt>Operator</dt>
+                  <dd>{data.artifact.operator}</dd>
+                </div>
+                <div>
+                  <dt>Site</dt>
+                  <dd>{data.artifact.origin.site}</dd>
+                </div>
+              </dl>
+            </aside>
+          </div>
         ) : null}
       </StatePanel>
-
-      <p className="lot-detail__back">
-        <Link className="route-cta route-cta--ghost" to="/lots">
-          All lots
-        </Link>
-      </p>
     </div>
   );
 }

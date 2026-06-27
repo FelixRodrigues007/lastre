@@ -1,0 +1,34 @@
+.search-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.125rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--app-radius-control);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.search-input:focus-within {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+}
+
+.search-input__icon {
+  flex-shrink: 0;
+  color: var(--lastro-text-muted);
+}
+
+.search-input__field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--lastro-text-primary);
+  font-size: 0.8125rem;
+  outline: none;
+}
+
+.search-input__field::placeholder {
+  color: var(--lastro-text-muted);
+}

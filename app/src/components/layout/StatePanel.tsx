@@ -1,20 +1,44 @@
 import type { ReactNode } from "react";
+import {
+  SkeletonDashboard,
+  SkeletonDetail,
+  SkeletonSplit,
+  SkeletonTable,
+} from "../ui/Skeleton";
 import "./state-panel.css";
+
+export type SkeletonVariant = "dashboard" | "table" | "split" | "detail";
 
 type StatePanelProps = {
   loading?: boolean;
   error?: string | null;
   onRetry?: () => void;
+  skeleton?: SkeletonVariant;
   children: ReactNode;
 };
 
-export function StatePanel({ loading, error, onRetry, children }: StatePanelProps) {
+function SkeletonForVariant({ variant }: { variant: SkeletonVariant }) {
+  switch (variant) {
+    case "table":
+      return <SkeletonTable />;
+    case "split":
+      return <SkeletonSplit />;
+    case "detail":
+      return <SkeletonDetail />;
+    default:
+      return <SkeletonDashboard />;
+  }
+}
+
+export function StatePanel({
+  loading,
+  error,
+  onRetry,
+  skeleton = "dashboard",
+  children,
+}: StatePanelProps) {
   if (loading) {
-    return (
-      <div className="panel state-panel">
-        <p className="state-panel__text">Loading…</p>
-      </div>
-    );
+    return <SkeletonForVariant variant={skeleton} />;
   }
 
   if (error) {

@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { SealMark } from "../ui/SealMark";
 import { useLocaleContext } from "../../context/LocaleContext";
-import { AppPreferencesMenu } from "./AppPreferencesMenu";
 import { AppSidebar } from "./AppSidebar";
+import { CommandPalette, useCommandPalette } from "./CommandPalette";
 import { GuardrailBanner } from "./GuardrailBanner";
 import { MobileTabBar } from "./MobileTabBar";
 import "./app-shell.css";
@@ -17,6 +17,7 @@ type AppShellProps = {
 
 export function AppShell({ children }: AppShellProps) {
   const { t } = useLocaleContext();
+  const { open, setOpen, close } = useCommandPalette();
 
   return (
     <div className="app-shell">
@@ -30,7 +31,14 @@ export function AppShell({ children }: AppShellProps) {
               <span className="app-topbar__wordmark">{t("brand.console")}</span>
             </NavLink>
             <div className="app-topbar__end">
-              <AppPreferencesMenu variant="topbar" />
+              <button
+                type="button"
+                className="app-topbar__cmd"
+                onClick={() => setOpen(true)}
+                aria-label="Open command palette"
+              >
+                <kbd>⌘K</kbd>
+              </button>
               <a
                 className="app-topbar__status"
                 href={CSPR_PACKAGE_URL}
@@ -52,6 +60,8 @@ export function AppShell({ children }: AppShellProps) {
           <MobileTabBar />
         </div>
       </div>
+
+      <CommandPalette open={open} onClose={close} />
     </div>
   );
 }

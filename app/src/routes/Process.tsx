@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { PageHeader } from "../components/layout/PageHeader";
 import { StatePanel } from "../components/layout/StatePanel";
 import { BatchStepper } from "../components/process/BatchStepper";
+import { ProcessPipelineStrip, ProcessStickySummary } from "../components/process/ProcessPipeline";
 import { OutcomeBreakdown } from "../components/ui/OutcomeBreakdown";
 import { SectionHead } from "../components/ui/SectionHead";
+import { useNavCounts } from "../context/NavCountsContext";
 import { getProcessDefaults, processBatch } from "../lib/api";
 import type { AuditRecord, BatchSummary, DeciderMode } from "../lib/types";
 import { useAsyncData } from "../hooks/useAsyncData";
@@ -38,6 +40,7 @@ function summaryFromRecords(records: AuditRecord[]): BatchSummary {
 
 export function Process() {
   const defaults = useAsyncData(getProcessDefaults);
+  const { reload: reloadNavCounts } = useNavCounts();
   const [selected, setSelected] = useState<string[]>([]);
   const [decider, setDecider] = useState<DeciderMode>("rule");
   const [running, setRunning] = useState(false);
@@ -72,6 +75,13 @@ export function Process() {
         ? 100
         : 0;
 
+  const pipelineStep =
+    running && currentIndex !== null
+      ? Math.min(4, Math.floor((currentIndex / Math.max(selected.length, 1)) * 4))
+      : displayed.length > 0 && !running
+        ? 4
+        : 0;
+
   const batchSummary = useMemo(() => summaryFromRecords(displayed), [displayed]);
 
   function toggleAsset(assetId: string) {
@@ -98,6 +108,7 @@ export function Process() {
       }
 
       setCurrentIndex(result.records.length);
+      reloadNavCounts();
     } catch (err) {
       setRunError(err instanceof Error ? err.message : "Batch failed");
     } finally {
@@ -113,7 +124,9 @@ export function Process() {
         lead="Triage, mock payment, seal verification, and on-chain verdict — one lot at a time."
       />
 
-      <StatePanel loading={defaults.loading} error={defaults.error} onRetry={defaults.reload}>
+      <ProcessPipelineStrip activeStep={pipelineStep} />
+
+      <StatePanel loading={defaults.loading} error={defaults.error} skeleton="split" onRetry={defaults.reload}>
         <div className="process-layout">
           <aside className="panel process-picker">
             <header className="process-picker__head">
@@ -222,13 +235,16 @@ export function Process() {
       </StatePanel>
 
       {displayed.length > 0 && !running ? (
-        <OutcomeBreakdown
-          title="Batch result"
-          tokenizable={batchSummary.tokenizable}
-          rejected={batchSummary.rejected}
-          skipped={batchSummary.skipped}
-          escalated={batchSummary.escalated}
-        />
+        <>
+          <ProcessStickySummary summary={batchSummary} total={displayed.length} />
+          <OutcomeBreakdown
+            title="Batch result"
+            tokenizable={batchSummary.tokenizable}
+            rejected={batchSummary.rejected}
+            skipped={batchSummary.skipped}
+            escalated={batchSummary.escalated}
+          />
+        </>
       ) : null}
     </div>
   );

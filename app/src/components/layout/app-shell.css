@@ -72,6 +72,29 @@
   flex-shrink: 0;
 }
 
+.app-topbar__cmd {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--app-radius-control);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 60%, transparent);
+  color: var(--lastro-text-muted);
+  cursor: pointer;
+}
+
+.app-topbar__cmd kbd {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.app-topbar__cmd:hover {
+  border-color: var(--lastro-border-strong);
+  color: var(--lastro-text-secondary);
+}
+
 .app-topbar__dot {
   width: 0.4rem;
   height: 0.4rem;

@@ -1,9 +1,11 @@
 import { MOBILE_NAV } from "../../lib/navigation";
 import { useLocaleContext } from "../../context/LocaleContext";
+import { useNavCounts } from "../../context/NavCountsContext";
 import { NavItem } from "./NavItem";
 
 export function MobileTabBar() {
   const { t } = useLocaleContext();
+  const { auditTotal, escalations } = useNavCounts();
 
   return (
     <nav className="mobile-tab-bar" aria-label="Mobile">
@@ -15,6 +17,13 @@ export function MobileTabBar() {
           icon={item.icon}
           end={item.end}
           variant="mobile"
+          badge={
+            item.to === "/audit"
+              ? auditTotal
+              : item.to === "/escalations"
+                ? escalations
+                : undefined
+          }
         />
       ))}
     </nav>

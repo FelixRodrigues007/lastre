@@ -15,7 +15,8 @@ export type IconName =
   | "download"
   | "refresh"
   | "globe"
-  | "chevron-down";
+  | "chevron-down"
+  | "search";
 
 type IconProps = SVGProps<SVGSVGElement> & {
   name: IconName;
@@ -188,6 +189,13 @@ export function Icon({ name, size = 18, className, ...props }: IconProps) {
       return (
         <svg {...common}>
           <path d="M5 8L10 13L15 8" stroke="currentColor" strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case "search":
+      return (
+        <svg {...common}>
+          <circle cx="9" cy="9" r="4.75" stroke="currentColor" strokeWidth={STROKE} />
+          <path d="M12.75 12.75L16 16" stroke="currentColor" strokeWidth={STROKE} strokeLinecap="round" />
         </svg>
       );
     default:

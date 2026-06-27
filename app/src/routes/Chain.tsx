@@ -21,7 +21,7 @@ export function Chain() {
         lead="Live read-only snapshot from ProofOfOrigin on casper-test. Invalid attestations are permanent proof."
       />
 
-      <StatePanel loading={chain.loading} error={chain.error} onRetry={chain.reload}>
+      <StatePanel loading={chain.loading} error={chain.error} skeleton="split" onRetry={chain.reload}>
         {chain.data ? (
           <div className="chain-layout">
             <section className="chain-metrics panel">

@@ -1,0 +1,40 @@
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border-radius: var(--app-radius-control);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+  width: fit-content;
+  max-width: 100%;
+}
+
+.tab {
+  min-height: 1.875rem;
+  padding: 0.3rem 0.75rem;
+  border: none;
+  border-radius: calc(var(--app-radius-control) - 2px);
+  background: transparent;
+  color: var(--lastro-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.tab:hover {
+  color: var(--lastro-text-primary);
+}
+
+.tab--active {
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 90%, transparent);
+  color: var(--lastro-text-primary);
+  box-shadow: inset 0 0 0 0.5px var(--lastro-border-subtle);
+}
+
+.tabs-panel {
+  margin-top: 1rem;
+}

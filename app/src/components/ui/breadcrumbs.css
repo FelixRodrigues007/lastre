@@ -1,0 +1,35 @@
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+}
+
+.breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--lastro-text-muted);
+}
+
+.breadcrumbs__item a {
+  color: var(--lastro-text-secondary);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.breadcrumbs__item a:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.breadcrumbs__item--current {
+  color: var(--lastro-text-primary);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+}
+
+.breadcrumbs__sep {
+  color: var(--lastro-text-muted);
+  opacity: 0.6;
+}

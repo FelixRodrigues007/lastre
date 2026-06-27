@@ -71,4 +71,32 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-item__badge {
+  margin-left: auto;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 0.3rem;
+  border-radius: var(--lastro-radius-pill);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 18%, transparent);
+  color: var(--lastro-brand-seal);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.5625rem;
+  font-weight: var(--lastro-weight-semibold);
+  line-height: 1.125rem;
+  text-align: center;
+}
+
+.nav-item--mobile .nav-item__badge {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.35rem;
+  margin-left: 0;
+}
+
+.nav-item--mobile {
+  position: relative;
 }

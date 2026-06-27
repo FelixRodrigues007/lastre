@@ -1,0 +1,32 @@
+.empty-state {
+  display: grid;
+  gap: 0.65rem;
+  justify-items: start;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  text-align: left;
+}
+
+.empty-state__icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  color: var(--lastro-text-muted);
+}
+
+.empty-state__title {
+  font-family: var(--lastro-font-display);
+  font-size: 1.0625rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+}
+
+.empty-state__hint {
+  max-width: 42ch;
+  color: var(--lastro-text-secondary);
+  font-size: var(--text-small);
+  line-height: 1.5;
+}

@@ -1,0 +1,45 @@
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.875rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: transparent;
+  color: var(--lastro-text-secondary);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.filter-pill:hover {
+  border-color: var(--lastro-border-strong);
+  color: var(--lastro-text-primary);
+}
+
+.filter-pill--active {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
+  color: var(--lastro-text-primary);
+}
+
+.filter-pill__count {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+}
+
+.filter-pill--active .filter-pill__count {
+  color: var(--lastro-brand-seal);
+}

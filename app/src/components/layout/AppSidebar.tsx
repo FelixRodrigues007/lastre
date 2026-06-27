@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { useLocaleContext } from "../../context/LocaleContext";
-import { CSPR_PACKAGE_URL, SETTINGS_NAV, WORKSPACE_NAV } from "../../lib/navigation";
+import { useNavCounts } from "../../context/NavCountsContext";
+import { CSPR_PACKAGE_URL, WORKSPACE_NAV } from "../../lib/navigation";
 import { Icon } from "../ui/Icon";
 import { SealMark } from "../ui/SealMark";
-import { AppPreferencesMenu } from "./AppPreferencesMenu";
+import { SidebarPreferencesMenu } from "./AppPreferencesMenu";
 import { NavItem } from "./NavItem";
 import "./app-sidebar.css";
 
@@ -11,6 +12,7 @@ export { WORKSPACE_NAV as SIDEBAR_NAV } from "../../lib/navigation";
 
 export function AppSidebar() {
   const { t } = useLocaleContext();
+  const { auditTotal, escalations } = useNavCounts();
 
   return (
     <aside className="app-sidebar" aria-label="Console navigation">
@@ -30,19 +32,26 @@ export function AppSidebar() {
           <ul className="app-sidebar__list">
             {WORKSPACE_NAV.map((item) => (
               <li key={item.to}>
-                <NavItem to={item.to} label={t(item.labelKey)} icon={item.icon} end={item.end} />
+                <NavItem
+                  to={item.to}
+                  label={t(item.labelKey)}
+                  icon={item.icon}
+                  end={item.end}
+                  badge={
+                    item.to === "/audit"
+                      ? auditTotal
+                      : item.to === "/escalations"
+                        ? escalations
+                        : undefined
+                  }
+                />
               </li>
             ))}
           </ul>
         </nav>
 
         <footer className="app-sidebar__foot">
-          <NavItem
-            to={SETTINGS_NAV.to}
-            label={t(SETTINGS_NAV.labelKey)}
-            icon={SETTINGS_NAV.icon}
-          />
-          <AppPreferencesMenu variant="sidebar" />
+          <SidebarPreferencesMenu />
           <a
             className="app-sidebar__status"
             href={CSPR_PACKAGE_URL}

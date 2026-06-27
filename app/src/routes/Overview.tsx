@@ -1,20 +1,27 @@
 import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
 import { PageHeader } from "../components/layout/PageHeader";
 import { StatePanel } from "../components/layout/StatePanel";
 import { ChainSnapshot } from "../components/chain/ChainSnapshot";
+import { OutcomeBadge, VerdictBadge } from "../components/proof/Badges";
 import { BtnIcon } from "../components/ui/BtnIcon";
 import { DonutStat } from "../components/ui/DonutStat";
+import { FilterPills } from "../components/ui/FilterPills";
 import { MetricCard } from "../components/ui/MetricCard";
 import { OutcomeBreakdown } from "../components/ui/OutcomeBreakdown";
 import { RatioBar } from "../components/ui/RatioBar";
 import { SectionHead } from "../components/ui/SectionHead";
-import { getAuditSummary, getChainSummary } from "../lib/api";
+import { getAudit, getAuditSummary, getChainSummary } from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
 import "./overview.css";
+
+type PeriodScope = "testnet" | "session";
 
 export function Overview() {
   const chain = useAsyncData(getChainSummary);
   const audit = useAsyncData(getAuditSummary);
+  const auditLog = useAsyncData(getAudit);
+  const [scope, setScope] = useState<PeriodScope>("testnet");
 
   const loading = chain.loading || audit.loading;
   const error = chain.error ?? audit.error;
@@ -25,6 +32,11 @@ export function Overview() {
     testnetTotal > 0 && chain.data
       ? (chain.data.testnet.accepted / testnetTotal) * 100
       : 0;
+
+  const recent = useMemo(
+    () => auditLog.data?.records.slice(-3).reverse() ?? [],
+    [auditLog.data],
+  );
 
   return (
     <div className="page">
@@ -47,45 +59,76 @@ export function Overview() {
       <StatePanel
         loading={loading}
         error={error}
+        skeleton="dashboard"
         onRetry={() => {
           chain.reload();
           audit.reload();
+          auditLog.reload();
         }}
       >
         {chain.data && audit.data ? (
           <div className="overview-layout">
+            <FilterPills
+              ariaLabel="Metric scope"
+              value={scope}
+              onChange={setScope}
+              options={[
+                { value: "testnet", label: "Testnet" },
+                { value: "session", label: "Session" },
+              ]}
+            />
+
             <section className="overview-hero panel">
-              <div className="overview-hero__primary">
-                <DonutStat
-                  percent={acceptanceRate}
-                  label="Testnet acceptance"
-                  sublabel={`${chain.data.testnet.accepted} of ${testnetTotal} attestations valid on Casper`}
-                  tone="valid"
-                />
-                <div className="overview-hero__ratio">
-                  <SectionHead
-                    label="Attestation split"
-                    aside={
-                      chain.data.testnet.source === "live" ? "Live query" : "README fallback"
-                    }
+              {scope === "testnet" ? (
+                <div className="overview-hero__primary">
+                  <DonutStat
+                    percent={acceptanceRate}
+                    label="Testnet acceptance"
+                    sublabel={`${chain.data.testnet.accepted} of ${testnetTotal} attestations valid on Casper`}
+                    tone="valid"
                   />
-                  <RatioBar
-                    ariaLabel="Testnet attestation split"
-                    segments={[
-                      {
-                        value: chain.data.testnet.accepted,
-                        label: "Accepted",
-                        tone: "valid",
-                      },
-                      {
-                        value: chain.data.testnet.rejected,
-                        label: "Rejected",
-                        tone: "invalid",
-                      },
-                    ]}
-                  />
+                  <div className="overview-hero__ratio">
+                    <SectionHead
+                      label="Attestation split"
+                      aside={
+                        chain.data.testnet.source === "live" ? "Live query" : "README fallback"
+                      }
+                    />
+                    <RatioBar
+                      ariaLabel="Testnet attestation split"
+                      segments={[
+                        { value: chain.data.testnet.accepted, label: "Accepted", tone: "valid" },
+                        { value: chain.data.testnet.rejected, label: "Rejected", tone: "invalid" },
+                      ]}
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="overview-hero__primary">
+                  <DonutStat
+                    percent={
+                      audit.data.total > 0
+                        ? (audit.data.tokenizable / audit.data.total) * 100
+                        : 0
+                    }
+                    label="Session tokenizable rate"
+                    sublabel={`${audit.data.tokenizable} of ${audit.data.total} records tokenizable`}
+                    tone="accent"
+                  />
+                  <div className="overview-hero__ratio">
+                    <SectionHead label="Session outcomes" aside={`${audit.data.total} records`} />
+                    <RatioBar
+                      ariaLabel="Session outcome split"
+                      segments={[
+                        { value: audit.data.tokenizable, label: "Tokenizable", tone: "valid" as const },
+                        { value: audit.data.rejected, label: "Rejected", tone: "invalid" as const },
+                        { value: audit.data.skipped, label: "Skipped", tone: "muted" as const },
+                        { value: audit.data.escalated, label: "Escalated", tone: "accent" as const },
+                      ].filter((s) => s.value > 0)}
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="overview-metrics">
                 <MetricCard
@@ -122,6 +165,28 @@ export function Overview() {
                 />
               </div>
             </section>
+
+            {recent.length > 0 ? (
+              <section className="overview-recent panel">
+                <SectionHead label="Recent activity" aside="Last 3 records" />
+                <ul className="overview-recent__list">
+                  {recent.map((record, index) => (
+                    <li key={`${record.assetId}-${index}`} className="overview-recent__item">
+                      <Link to={`/audit/${encodeURIComponent(record.assetId)}`}>
+                        {record.assetId}
+                      </Link>
+                      <VerdictBadge
+                        verdict={record.verification?.verdict ?? record.onChain?.verdict ?? null}
+                      />
+                      <OutcomeBadge outcome={record.outcome} />
+                    </li>
+                  ))}
+                </ul>
+                <Link className="overview-recent__link" to="/audit">
+                  View full audit log
+                </Link>
+              </section>
+            ) : null}
 
             {audit.data.total > 0 ? (
               <OutcomeBreakdown

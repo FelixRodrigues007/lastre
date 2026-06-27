@@ -60,3 +60,44 @@
   display: grid;
   gap: 0.5rem;
 }
+
+.overview-recent {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.overview-recent__list {
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.overview-recent__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.overview-recent__item a {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.overview-recent__item a:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.overview-recent__link {
+  font-size: var(--text-small);
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+}
+
+.overview-recent__link:hover {
+  color: var(--lastro-brand-seal);
+}

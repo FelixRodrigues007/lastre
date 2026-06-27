@@ -1,0 +1,53 @@
+.copy-block {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.copy-block__label {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.copy-block__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+}
+
+.copy-block__value {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-brand-seal);
+  word-break: break-all;
+}
+
+.copy-block__btn {
+  flex-shrink: 0;
+  min-height: 1.625rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: transparent;
+  color: var(--lastro-text-secondary);
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-medium);
+  cursor: pointer;
+}
+
+.copy-block__btn:hover {
+  border-color: var(--lastro-border-strong);
+  color: var(--lastro-text-primary);
+}
+
+.copy-block__btn--done {
+  color: var(--lastro-status-valid);
+}
