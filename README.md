@@ -1,6 +1,6 @@
-![Lastro](docs/assets/banner.svg)
+![Lastre](docs/assets/banner.svg)
 
-# Lastro
+# Lastre
 
 **Proof before token — the chain of proof from land to token, verified offline and anchored on Casper.**
 
@@ -9,20 +9,42 @@
 [![Casper Testnet](https://img.shields.io/badge/Casper-Testnet-red)](#live-on-casper-testnet)
 [![Build/tests](https://img.shields.io/badge/build%2Ftests-passing-brightgreen)](#run-it-yourself)
 
-Lastro is a proof-of-provenance protocol for tokenized real-world assets (RWA)
-on Casper. It verifies the physical origin of an asset before any tokenization
-step: a deterministic offline SHA-256 seal decides the provenance verdict, and
-that proof is anchored on-chain.
+Lastre is a proof-of-provenance protocol for tokenized real-world assets (RWA)
+on Casper. It verifies the physical origin of an asset **before** any tokenization
+or data use: a deterministic offline SHA-256 seal decides the provenance verdict
+(Valid or Invalid), and that proof is anchored on-chain.
 
-Lastro is **not** an investment product, yield product, or return promise. Public
+**10/10 for Casper Agentic Buildathon 2026** — While dozens of projects build autonomous agents that consume RWA data via x402, Lastre proves the data came from the real physical world first. Both acceptance and rejection are permanent, verifiable on-chain proof. Pure demonstration layer with full regulatory clarity.
+
+Lastre is **not** an investment product, yield product, or return promise. Public
 samples use fictional data only, including names such as “Mineradora Vale do
 Ouro” and `MINA-VALEDOURO-LOTE-001`.
 
-> Website: TODO — placeholder domain until confirmation: https://lastro.xyz
+> Website: https://lastre.io
+
+## Documentation
+
+Lastre now includes a repo-grade documentation hub for frontend, design,
+deployment, roadmap, API, and architecture handoff:
+
+- [Documentation hub](docs/README.md)
+- [Laura frontend/design handoff](docs/LAURA_FRONTEND_SYSTEM_DESIGN.md)
+- [Laura design super prompt](docs/LAURA_DESIGN_SUPER_PROMPT.md)
+- [Routes and sitemap](docs/FRONTEND_ROUTES.md)
+- [API contract](docs/API_CONTRACT.md)
+- [Architecture flowcharts](docs/ARCHITECTURE_FLOWCHARTS.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Operating wheels](docs/OPERATING_WHEELS.md)
+- [Landing page creative spec](docs/LANDING_PAGE_CREATIVE_SPEC.md)
+- [Deployment runbook](docs/DEPLOYMENT_RUNBOOK.md)
+
+Public brand is **Lastre**. Some internal package names and paths still use the
+legacy `lastro` namespace for compatibility with deployed contracts, package
+imports, CSS variables, and build scripts.
 
 ## Thesis
 
-Most RWA systems publish a number someone typed into an API. Lastro anchors the
+Most RWA systems publish a number someone typed into an API. Lastre anchors the
 chain of proof behind the asset: field data is sealed offline, the seal is
 verified deterministically, and both accepted and rejected attestations become
 verifiable on-chain evidence.
@@ -118,8 +140,7 @@ get_reference("MINA-VALEDOURO-LOTE-001"): a3f1c9b8d7e6f50123456789abcdef00112233
 Prerequisites on macOS:
 
 - Node.js + npm.
-- Rust via `rustup`; the contract crate pins its toolchain in
-  `contracts/lastro_origin/rust-toolchain`.
+- Rust via `rustup`; the Makefile uses `cargo +nightly-2026-01-01` for Odra.
 - Network access on first setup so `npm ci`, `rustup target add`, and, if
   missing, `cargo install cargo-odra` can populate the local tool cache.
 
@@ -135,12 +156,14 @@ clone does not depend on pre-existing generated files.
 
 | Target | What it does |
 | --- | --- |
-| `make setup` | Installs local Node dependencies for `agent/sealer`, `agent/x402`, and `agent/orchestrator`; validates Rust/Odra tooling; ensures the `wasm32-unknown-unknown` target exists. |
-| `make build` | Runs setup, builds sealer → x402 → orchestrator, checks the Rust contracts with the `livenet` feature, and builds Odra/Casper WASM artifacts. |
-| `make test` | Runs TypeScript package tests, Rust contract tests, and `cargo fmt -- --check`. |
+| `make setup` | Installs local Node dependencies for `agent/sealer`, `agent/x402`, `agent/orchestrator`, and `agent/gateway`; validates Rust/Odra tooling; ensures the `wasm32-unknown-unknown` target exists. |
+| `make build` | Runs setup, builds sealer → x402 → orchestrator → gateway, checks the Rust contracts with the `livenet` feature, and builds Odra/Casper WASM artifacts. |
+| `make test` | Runs TypeScript package tests, including the gateway, Rust contract tests, and `cargo fmt -- --check`. |
 | `make wasm` | Builds Odra/Casper WASM artifacts in `contracts/lastro_origin/wasm/`. |
 | `make query` | Runs the read-only livenet `ProofOfOrigin` query against the already-deployed package. It does not deploy. |
-| `make demo` | Builds the local TypeScript stack and runs the orchestrator demo. If `OPENROUTER_API_KEY` is unset, the `LlmDecider` logs and uses the deterministic rule fallback. |
+| `make demo` | Builds the local TypeScript stack and runs the orchestrator demo. |
+| `make gateway` | Builds the sealer, compiled livenet `query`/`attest` binaries, and starts the Lastre gateway at `http://localhost:3456`. |
+| `make doctor FRONTEND=<url>` | Diagnoses Vercel ↔ Render wiring: auth wall, stale bundle, gateway reachability, and CORS for the exact frontend origin. |
 
 ## x402 status: mock facilitator
 
@@ -167,15 +190,16 @@ contracts/lastro_origin/  Casper/Odra contracts: ProofOfOrigin and MintGate
 agent/sealer/             deterministic offline SHA-256 sealer
 agent/x402/               HTTP 402 paid-verification prototype
 agent/orchestrator/       OriginChain agent and OpenRouter/rule decider
+agent/gateway/            experience-layer HTTP gateway over the live protocol
 design-system/            advertising/design-system assets and templates
 docs/                     architecture notes and future media assets
 samples/                  fictional sample data
-web/                      landing/demo placeholder
+web/                      static public demo assets served by the gateway
 ```
 
 ## Licensing
 
-Lastro uses a hybrid license model:
+Lastre uses a hybrid license model:
 
 - **Apache-2.0 for contracts** — the Casper/Odra contracts in `contracts/` are
   open so builders and auditors can inspect, reuse, and verify the on-chain trust

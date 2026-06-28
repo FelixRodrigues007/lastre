@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lastre — Spot the Fraud</title>
+  <style>
+    :root {
+      --gold: #d4af37;
+      --dark: #0b1f3a;
+      --ink: #e5edf7;
+      --muted: #9fb0c7;
+      --panel: #172338;
+      --panel-2: #101a2b;
+      --line: #31435f;
+      --green: #10b981;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      line-height: 1.5;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(212, 175, 55, 0.16), transparent 34rem),
+        linear-gradient(135deg, #081222 0%, #0f172a 48%, #111827 100%);
+    }
+    a { color: #f8d86a; }
+    .banner {
+      background: #450a0a;
+      color: #fecaca;
+      padding: 10px 16px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid rgba(254, 202, 202, 0.25);
+    }
+    .container { max-width: 1080px; margin: 0 auto; padding: 28px; }
+    .eyebrow { color: var(--gold); text-transform: uppercase; letter-spacing: 0.16em; font-size: 12px; font-weight: 900; }
+    h1 { font-size: clamp(2.2rem, 6vw, 4.4rem); line-height: 0.95; margin: 8px 0 12px; color: #f5d56a; }
+    h2 { color: #f5d56a; margin: 0 0 12px; }
+    h3 { margin: 0 0 8px; color: #f7e7a1; }
+    .lead { color: #dbeafe; max-width: 760px; font-size: clamp(1rem, 2vw, 1.18rem); }
+    nav { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 0; }
+    nav a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--ink);
+      text-decoration: none;
+      background: rgba(23, 35, 56, 0.62);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 22px 0; }
+    button {
+      background: var(--gold);
+      color: #0b1f3a;
+      border: 0;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button.secondary { background: #26364f; color: var(--ink); border: 1px solid var(--line); }
+    button.danger { background: #7f1d1d; color: #fee2e2; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    select {
+      background: var(--panel-2);
+      border: 1px solid #475569;
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+    .scoreboard { display: flex; gap: 14px; flex-wrap: wrap; margin-left: auto; }
+    .stat { min-width: 120px; padding: 12px 16px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; text-align: center; }
+    .stat strong { display: block; font-size: 1.8rem; color: #f8d86a; }
+    .stat span { font-size: 12px; color: var(--muted); }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+    .seal-card {
+      background: rgba(23, 35, 56, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+    .seal-card[data-state="fraud"] { border-color: rgba(239, 68, 68, 0.7); }
+    .seal-card[data-state="genuine"] { border-color: rgba(16, 185, 129, 0.7); }
+    .seal-card[data-state="fraud"] .seal-value { animation: seal-break 600ms ease both; color: #fca5a5; }
+    .seal-card[data-state="genuine"] .seal-value { color: #6ee7b7; }
+    .seal-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 800; }
+    .seal-value { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 15px; word-break: break-all; margin: 8px 0 14px; }
+    .field { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px dashed rgba(49, 67, 95, 0.6); font-size: 13px; }
+    .field span:first-child { color: var(--muted); }
+    .field .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .field.changed { color: #fca5a5; font-weight: 800; }
+    .verdict { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 900; margin-top: 12px; }
+    .verdict-valid { background: rgba(16, 185, 129, 0.16); color: #6ee7b7; }
+    .verdict-invalid { background: rgba(239, 68, 68, 0.16); color: #fca5a5; }
+    .pick { width: 100%; margin-top: 14px; }
+    .reveal { margin-top: 22px; padding: 18px; border-radius: 16px; border: 1px solid var(--line); background: rgba(8, 18, 34, 0.62); }
+    .reveal[data-correct="true"] { border-color: rgba(16, 185, 129, 0.6); }
+    .reveal[data-correct="false"] { border-color: rgba(239, 68, 68, 0.6); }
+    .feedback { font-size: 1.2rem; font-weight: 900; }
+    .feedback.correct { color: #6ee7b7; }
+    .feedback.wrong { color: #fca5a5; }
+    .diff { margin: 10px 0; padding: 10px 12px; border-left: 3px solid var(--red); background: rgba(239, 68, 68, 0.08); color: #fecaca; border-radius: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+    .honesty-note { border-left: 3px solid var(--gold); padding: 10px 12px; background: rgba(212, 175, 55, 0.08); color: #fde68a; border-radius: 8px; margin-top: 12px; font-size: 13px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .muted { color: var(--muted); }
+    .small { font-size: 12px; }
+    .footer-note { margin: 46px 0 0; color: var(--muted); font-size: 12px; }
+    @keyframes seal-break {
+      0% { transform: translateX(0); filter: none; }
+      20% { transform: translateX(-3px) skewX(-2deg); }
+      40% { transform: translateX(3px) skewX(2deg); }
+      60% { transform: translateX(-2px); letter-spacing: 1px; }
+      100% { transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .seal-card[data-state="fraud"] .seal-value { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+    @media (max-width: 720px) { .scoreboard { margin-left: 0; } }
+  </style>
+</head>
+<body id="spot-fraud-page">
+  <div class="banner" role="note">
+    DEMONSTRATION — simulated assets, no investment offered. Public action: Spot the fraud.
+  </div>
+
+  <main class="container">
+    <section>
+      <div class="eyebrow">Provenance fraud game · live sealer</div>
+      <h1>Spot the Fraud</h1>
+      <p class="lead">Two seals for the same lot. One is genuine. One is tampered. Find the Invalid. The deterministic SHA-256 seal — computed offline — is the only judge of the verdict.</p>
+      <nav aria-label="Game navigation">
+        <a href="/demo">Demo</a>
+        <a href="/marketplace">Marketplace</a>
+        <a href="/map">Map</a>
+        <a href="/proof">/proof</a>
+        <a href="/spot-fraud">Spot the Fraud</a>
+      </nav>
+    </section>
+
+    <div class="toolbar">
+      <div>
+        <label class="small muted" for="lot-select">Lot</label><br>
+        <select id="lot-select" aria-label="Choose a fictional lot"></select>
+      </div>
+      <div>
+        <label class="small muted" for="difficulty-select">Difficulty</label><br>
+        <select id="difficulty-select" aria-label="Choose difficulty">
+          <option value="easy">Quick Challenge (easy)</option>
+          <option value="hard">Hard Mode (subtle)</option>
+        </select>
+      </div>
+      <button id="new-round" onclick="newRound()">New round</button>
+      <div class="scoreboard">
+        <div class="stat"><strong id="streak">0</strong><span>Streak</span></div>
+        <div class="stat"><strong id="score">0</strong><span>Fraud Detection Score</span></div>
+      </div>
+    </div>
+
+    <section class="cards" id="cards" aria-live="polite"></section>
+
+    <section id="reveal-section"></section>
+
+    <section style="margin-top: 40px;">
+      <div class="reveal">
+        <h2>Honesty frame</h2>
+        <p class="small">All lots, operators, and coordinates are fictional. Seals are computed by the real sealer. Tampering is simulated. When anchored, the verdict is real and on-chain in the <span class="mono">SANDBOX-*</span> namespace only.</p>
+        <p class="muted small">No screen offers an asset action. The public action is always: <strong>Spot the fraud</strong> / <strong>Verify provenance</strong>.</p>
+      </div>
+    </section>
+
+    <p class="footer-note">DEMONSTRATION — simulated assets, no investment offered. The seal decides the verdict; the game only reveals it.</p>
+  </main>
+
+  <script>
+    const GATEWAY_ORIGIN = window.LASTRO_GATEWAY_URL || window.location.origin || "http://localhost:3456";
+    let streak = 0;
+    let score = 0;
+    let current = null;
+    let answered = false;
+
+    function gatewayUrl(path) { return `${GATEWAY_ORIGIN}${path}`; }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function truncate(value, left = 10, right = 6) {
+      const text = String(value ?? "");
+      if (text.length <= left + right + 3) return text;
+      return `${text.slice(0, left)}…${text.slice(-right)}`;
+    }
+
+    async function loadLots() {
+      const select = document.getElementById("lot-select");
+      try {
+        const response = await fetch(gatewayUrl("/catalog"));
+        if (!response.ok) throw new Error(`Catalog failed: ${response.status}`);
+        const catalog = await response.json();
+        const assets = catalog.assets || [];
+        select.innerHTML = assets
+          .map((asset) => `<option value="${escapeHtml(asset.assetId)}">${escapeHtml(asset.assetId)} — ${escapeHtml(asset.mineral || asset.mineralType || "fictional lot")}</option>`)
+          .join("");
+        const registered = assets.find((asset) => asset.referenceRegistered);
+        if (registered) select.value = registered.assetId;
+      } catch (error) {
+        select.innerHTML = `<option value="">Catalog unavailable</option>`;
+      }
+    }
+
+    async function newRound() {
+      answered = false;
+      const cards = document.getElementById("cards");
+      const reveal = document.getElementById("reveal-section");
+      reveal.innerHTML = "";
+      cards.innerHTML = `<div class="seal-card"><span class="seal-label">Loading</span><p class="muted">Generating a genuine/tampered pair from the real sealer…</p></div>`;
+
+      const assetId = document.getElementById("lot-select").value;
+      const difficulty = document.getElementById("difficulty-select").value;
+      const query = assetId ? `?assetId=${encodeURIComponent(assetId)}&difficulty=${difficulty}` : `?difficulty=${difficulty}`;
+
+      try {
+        const response = await fetch(gatewayUrl(`/fraud-challenge${query}`));
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `Challenge failed: ${response.status}`);
+        current = data;
+        renderCards(data);
+      } catch (error) {
+        cards.innerHTML = `<div class="seal-card"><span class="seal-label">Unavailable</span><p>${escapeHtml(error.message)}</p><p class="honesty-note">No challenge is shown unless the gateway returns one.</p></div>`;
+      }
+    }
+
+    function renderCards(data) {
+      const cards = document.getElementById("cards");
+      cards.innerHTML = ["A", "B"].map((side) => {
+        const card = side === "A" ? data.sealA : data.sealB;
+        const m = card.measurement;
+        return `
+          <article class="seal-card" id="card-${side}" data-side="${side}">
+            <span class="seal-label">Seal ${side} · ${escapeHtml(data.assetId)}</span>
+            <div class="seal-value" id="seal-${side}">${escapeHtml(truncate(card.seal, 10, 6))}</div>
+            <div class="field"><span>Mass</span><span class="mono" id="mass-${side}">${escapeHtml(String(m.massGrams))} g</span></div>
+            <div class="field"><span>Sector</span><span class="mono">${escapeHtml(m.origin?.site || "fictional sector")}</span></div>
+            <div class="field"><span>Captured at</span><span class="mono">${escapeHtml(m.capturedAtISO)}</span></div>
+            <button class="pick" onclick="guess('${side}')">This is the fraud</button>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function guess(side) {
+      if (!current || answered) return;
+      answered = true;
+      try {
+        const response = await fetch(gatewayUrl("/fraud/guess"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ challengeId: current.challengeId, userChoice: side, currentStreak: streak }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `Guess failed: ${response.status}`);
+        streak = data.currentStreak;
+        score = data.score;
+        document.getElementById("streak").textContent = String(streak);
+        document.getElementById("score").textContent = String(score);
+        revealResult(side, data);
+      } catch (error) {
+        answered = false;
+        document.getElementById("reveal-section").innerHTML = `<div class="reveal" data-correct="false"><p class="feedback wrong">${escapeHtml(error.message)}</p></div>`;
+      }
+    }
+
+    function revealResult(side, data) {
+      const tampered = data.tamperedSide;
+      for (const s of ["A", "B"]) {
+        const card = document.getElementById(`card-${s}`);
+        const fullSeal = s === "A" ? current.sealA.seal : current.sealB.seal;
+        const verdict = s === "A" ? data.verdictA : data.verdictB;
+        document.getElementById(`seal-${s}`).textContent = fullSeal;
+        card.dataset.state = verdict === "Invalid" ? "fraud" : "genuine";
+        card.querySelector(".pick").disabled = true;
+        const verdictBadge = document.createElement("div");
+        verdictBadge.className = `verdict ${verdict === "Valid" ? "verdict-valid" : "verdict-invalid"}`;
+        verdictBadge.textContent = `Sealer verdict: ${verdict}`;
+        card.appendChild(verdictBadge);
+        if (s === tampered) {
+          const mass = document.getElementById(`mass-${s}`);
+          if (mass) mass.parentElement.classList.add("changed");
+        }
+      }
+
+      const reveal = document.getElementById("reveal-section");
+      const onChain = `On-chain, the genuine seal records Valid and the tampered seal records Invalid — both are permanent proof. Rejection is not a discarded error.`;
+      const anchorBlock = current.assetId.startsWith("SANDBOX-")
+        ? `<div class="actions">
+             <button class="danger" onclick="anchorTampered()">Anchor the tampered seal on-chain</button>
+             <a class="pick" href="/proof" style="text-decoration:none; display:inline-flex; align-items:center;"><button class="secondary">See on Proof page</button></a>
+           </div>
+           <div id="anchor-result" class="small muted" style="margin-top:10px;"></div>`
+        : `<p class="honesty-note small">Anchoring is restricted to <span class="mono">SANDBOX-*</span> lots. Pick a SANDBOX lot to anchor a tampered seal in a controlled demo.</p>
+           <div class="actions"><a href="/proof" style="text-decoration:none;"><button class="secondary">See on Proof page</button></a></div>`;
+
+      reveal.innerHTML = `
+        <div class="reveal" data-correct="${data.correct}">
+          <p class="feedback ${data.correct ? "correct" : "wrong"}">${data.correct ? "Correct! Fraud detected." : "Wrong. This was the genuine seal."}</p>
+          <div class="diff">${escapeHtml(data.difference)}</div>
+          <p class="small">A one-field change produced a completely different SHA-256 seal, so the sealer marks it <strong>Invalid</strong>. The seal alone decides the verdict.</p>
+          <p class="honesty-note">${onChain}</p>
+          ${anchorBlock}
+        </div>
+      `;
+    }
+
+    async function anchorTampered() {
+      const out = document.getElementById("anchor-result");
+      if (!current) return;
+      out.textContent = "Submitting controlled anchor… the gateway may reject this unless the SANDBOX flag and demo key are enabled.";
+      try {
+        const response = await fetch(gatewayUrl("/fraud/anchor-tampered"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ challengeId: current.challengeId }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || `Anchor failed: ${response.status}`);
+        const txUrl = data.explorerUrl || `https://testnet.cspr.live/transaction/${data.txHash}`;
+        out.innerHTML = `Anchored: <strong>${escapeHtml(data.verdict)}</strong> · <a href="${escapeHtml(txUrl)}" target="_blank" rel="noreferrer">${escapeHtml(truncate(data.txHash, 14, 8))}</a>. Refresh <a href="/proof">/proof</a> to read the permanent rejection.`;
+      } catch (error) {
+        out.textContent = `Anchor not submitted: ${error.message}`;
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      await loadLots();
+      await newRound();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+.git
+.gitignore
+.vercel
+node_modules
+**/node_modules
+**/dist
+**/target
+**/wasm
+.DS_Store
+.env
+.env.*
+!.env.example
+npm-debug.log*
+Dockerfile
+README.local

@@ -3,7 +3,7 @@
 .site-nav {
   --site-nav-height: 3.25rem;
   position: sticky;
-  top: 0;
+  top: var(--demo-banner-height, 0);
   z-index: 50;
   color: var(--lastro-color-cream-200);
   background: color-mix(in oklab, var(--lastro-color-olive-950) 32%, transparent);

@@ -73,6 +73,14 @@
   --section-kicker-bar: var(--lastro-color-olive-400);
 }
 
+.compare[data-theme="light"] {
+  --section-bg: var(--lastro-color-cream-100);
+  --section-wash-a: rgba(254, 241, 111, 0.1);
+  --section-wash-b: rgba(84, 87, 54, 0.04);
+  --section-kicker: var(--lastro-color-olive-600);
+  --section-kicker-bar: var(--lastro-color-olive-400);
+}
+
 .minerals[data-theme="light"] {
   --section-bg-top: var(--lastro-color-cream-200);
   --section-bg-bottom: var(--lastro-color-cream-300);
@@ -186,6 +194,10 @@
 
 .minerals[data-theme="light"].section--band {
   border-block-start-color: rgba(84, 87, 54, 0.12);
+}
+
+.compare[data-theme="light"].section--band {
+  border-block-color: rgba(111, 100, 16, 0.14);
 }
 
 .demonstration.section--band {

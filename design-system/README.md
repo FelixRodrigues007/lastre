@@ -1,12 +1,12 @@
-# Lastro Advertising Design System
+# Lastre Advertising Design System
 
-A compact design system for producing Lastro advertising materials: social ads, launch graphics, demo slides, paid media tests, and ecosystem announcements.
+A compact design system for producing Lastre advertising materials: social ads, launch graphics, demo slides, paid media tests, and ecosystem announcements.
 
 > **Core line:** Proof before token — the chain of proof from land to token, verified offline and anchored on Casper.
 
 ## Purpose
 
-This system keeps Lastro materials consistent, technically precise, and safe for public communication. It is built for ads and promo assets, not app UI.
+This system keeps Lastre materials consistent, technically precise, and safe for public communication. It is built for ads and promo assets, not app UI.
 
 Use it to create:
 - LinkedIn/X launch posts and paid social images.
@@ -21,11 +21,11 @@ Use it to create:
 2. **Use fictional data only.** Demo examples may use fictional names like “Mineradora Vale do Ouro,” but never real companies or people.
 3. **Never say the LLM decides truth.** The deterministic seal decides the verdict; the LLM/agent decides the action.
 4. **Show the rejected path.** Invalid provenance is recorded on-chain as permanent proof, not discarded as an error.
-5. **Be precise about maturity.** Lastro is an early prototype/demo unless the repo status says otherwise.
+5. **Be precise about maturity.** Lastre is an early prototype/demo unless the repo status says otherwise.
 
 ## Brand idea
 
-Lastro should feel like **forensic infrastructure**: dark, precise, grounded, and trustable. It should avoid generic crypto gradients, speculative hype, and abstract “AI magic.”
+Lastre should feel like **forensic infrastructure**: dark, precise, grounded, and trustable. It should avoid generic crypto gradients, speculative hype, and abstract “AI magic.”
 
 ### Personality
 
@@ -86,7 +86,7 @@ Hierarchy for social ads:
 2. Headline: one sharp idea, 5–9 words.
 3. Support: one explanatory sentence.
 4. Proof rail: `Offline seal → Casper attest → Valid/Invalid`.
-5. Footer: Lastro mark + category (`RWA provenance trust layer`).
+5. Footer: Lastre mark + category (`RWA provenance trust layer`).
 
 ## Recommended ad modules
 
@@ -147,4 +147,4 @@ The linter validates token JSON, SVG XML, banned wording in rendered ad copy, an
 
 - The logo/mark in `assets/lastro-mark.svg` is provisional.
 - Typeface choices assume Space Grotesk + Inter; replace with licensed brand fonts if chosen.
-- The palette is a candidate direction; validate against any existing Lastro visual identity before scaling.
+- The palette is a candidate direction; validate against any existing Lastre visual identity before scaling.

@@ -45,6 +45,11 @@
   align-items: center;
 }
 
+.demonstration__visual {
+  display: grid;
+  gap: var(--lastro-space-6);
+}
+
 .demonstration__actions {
   margin-top: clamp(1.75rem, 1rem + 3vw, 2.5rem);
 }

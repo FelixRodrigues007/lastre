@@ -52,7 +52,7 @@ export function LayerShowcase() {
               <span className="sol-showcase__avatar sol-showcase__avatar--agent" />
               <div className="sol-showcase__msg-body">
                 <header className="sol-showcase__msg-head">
-                  <span className="sol-showcase__author">Lastro</span>
+                  <span className="sol-showcase__author">Lastre</span>
                   <span className="sol-showcase__agent-tag">AGENT</span>
                 </header>
                 <div className="sol-showcase__typing" aria-hidden="true">
@@ -82,7 +82,7 @@ export function LayerShowcase() {
                   <time>10:12 pm</time>
                 </header>
                 <p>
-                  Hey <span className="sol-showcase__mention">@Lastro</span> what
+                  Hey <span className="sol-showcase__mention">@Lastre</span> what
                   asset classes cleared origin proof this week?
                 </p>
                 <footer className="sol-showcase__thread-hint">
@@ -103,7 +103,7 @@ export function LayerShowcase() {
                   <span className="sol-showcase__author">Mara Okonkwo</span>
                 </header>
                 <p>
-                  Hey <span className="sol-showcase__mention">@Lastro</span> what
+                  Hey <span className="sol-showcase__mention">@Lastre</span> what
                   asset classes cleared origin proof this week?
                 </p>
               </div>
@@ -113,7 +113,7 @@ export function LayerShowcase() {
               <span className="sol-showcase__avatar sol-showcase__avatar--agent" />
               <div className="sol-showcase__msg-body">
                 <header className="sol-showcase__msg-head">
-                  <span className="sol-showcase__author">Lastro</span>
+                  <span className="sol-showcase__author">Lastre</span>
                   <span className="sol-showcase__agent-tag">AGENT</span>
                 </header>
                 <p>
@@ -146,7 +146,7 @@ export function LayerShowcase() {
               <span className="sol-showcase__avatar sol-showcase__avatar--agent" />
               <div className="sol-showcase__msg-body">
                 <header className="sol-showcase__msg-head">
-                  <span className="sol-showcase__author">Lastro</span>
+                  <span className="sol-showcase__author">Lastre</span>
                   <span className="sol-showcase__agent-tag">AGENT</span>
                 </header>
                 <p>

@@ -1,0 +1,40 @@
+name: Frontend/design task
+description: Request a Lastre frontend or design-system change
+title: "frontend: "
+labels: ["frontend", "design"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should the user be able to do?
+    validations:
+      required: true
+  - type: textarea
+    id: route
+    attributes:
+      label: Route or component
+      description: Which route/component is affected?
+  - type: textarea
+    id: api
+    attributes:
+      label: API dependencies
+      description: Which gateway endpoints does this use?
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Product rules
+      options:
+        - label: The screen will include the demonstration banner.
+          required: true
+        - label: The copy avoids investment/yield/return/price/buy/sell/ownership language.
+          required: true
+        - label: Simulated, unverified, and live states are visually distinct.
+          required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: "- [ ] ..."
+    validations:
+      required: true

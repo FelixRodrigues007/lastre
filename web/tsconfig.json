@@ -17,10 +17,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
-    "types": ["node"],
-    "paths": {
-      "@design-system/*": ["../design-system/*"]
-    }
+    "types": ["node"]
+    // Note: design-system tokens are copied locally to avoid parent-dir
+    // resolution problems on Vercel sub-directory deploys.
   },
   "include": ["src", "vite.config.ts"]
 }

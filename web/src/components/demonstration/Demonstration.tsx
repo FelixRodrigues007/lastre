@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { CSPR_EXPLORER_EMBED, CSPR_PACKAGE_URL, GITHUB_URL } from "../../site-links";
 import { useSite } from "../../context/SiteContext";
 import { Button } from "../ui/Button";
+import { LiveGatewayPanel } from "../gateway/LiveGatewayPanel";
 import { BoundaryVisual } from "./BoundaryVisual";
 import { ExplorerVisual } from "./ExplorerVisual";
 import "./demonstration.css";
@@ -114,7 +115,10 @@ export function Demonstration() {
                 </p>
               </>
             ) : (
-              <ExplorerVisual />
+              <>
+                <ExplorerVisual />
+                <LiveGatewayPanel />
+              </>
             )}
           </div>
         </div>

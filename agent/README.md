@@ -1,6 +1,6 @@
-# Lastro Agent
+# Lastre Agent
 
-TypeScript packages for the Lastro off-chain stack:
+TypeScript packages for the Lastre off-chain stack:
 
 - `sealer` — deterministic offline SHA-256 provenance seal.
 - `x402` — HTTP 402 paid-verification prototype with a mock facilitator.
