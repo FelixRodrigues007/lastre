@@ -22,6 +22,9 @@
   --lastro-color-cream-100: #f4f8f4;
   --lastro-color-cream-200: #eaf1eb;
   --lastro-color-cream-300: #d6ded7;
+  /* Greenish off-white — cream tinted with the brand mint. Shared by every
+   * "clear" band (compare, demonstration) so they read as one surface. */
+  --lastro-surface-clear: color-mix(in oklab, var(--lastro-color-seal-400) 12%, var(--lastro-color-cream-100));
   --lastro-color-seal-300: #cdf4ba;
   --lastro-color-seal-400: #B2ED97;
   --lastro-color-seal-500: #8fd870;

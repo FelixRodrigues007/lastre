@@ -115,7 +115,7 @@ export function ComparisonTable() {
   const c = content.compare;
 
   return (
-    <section className="compare section section--band" id="compare">
+    <section className="compare section section--band" id="compare" data-theme="light">
       <div className="shell">
         <div className="compare__layout">
           <div className="compare__intro">

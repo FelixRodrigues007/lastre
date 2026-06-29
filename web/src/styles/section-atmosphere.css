@@ -74,8 +74,19 @@
   --section-kicker-bar: var(--lastro-color-olive-400);
 }
 
+/* Light variant — the comparison table rides dark-on-cream. `.compare` sits in
+ * the forced dark-band list above, so re-flip the text/border tokens here (the
+ * attribute selector out-specifies it) and explicitly tint the brand column. */
 .compare[data-theme="light"] {
-  --section-bg: var(--lastro-color-cream-100);
+  --lastro-text-primary: var(--lastro-color-olive-950);
+  --lastro-text-secondary: var(--lastro-color-olive-700);
+  --lastro-text-muted: var(--lastro-color-olive-500);
+  --lastro-border-subtle: rgba(19, 44, 36, 0.12);
+  --lastro-border-strong: rgba(19, 44, 36, 0.22);
+  --lastro-brand-seal-text: var(--lastro-color-seal-800);
+
+  /* Greenish off-white, not pure white — shared clear-band surface. */
+  --section-bg: var(--lastro-surface-clear);
   --section-wash-a: rgba(178, 237, 151, 0.1);
   --section-wash-b: rgba(84, 87, 54, 0.04);
   --section-kicker: var(--lastro-color-olive-600);
@@ -110,15 +121,16 @@
   --lastro-border-subtle: rgba(19, 44, 36, 0.12);
   --lastro-border-strong: rgba(19, 44, 36, 0.22);
 
-  --section-bg: var(--lastro-color-cream-100);
+  --section-bg: var(--lastro-surface-clear);
   --section-kicker: var(--lastro-color-olive-700);
   --section-kicker-bar: var(--lastro-color-olive-500);
   --atmo-grid-opacity: 0;
 
-  /* Flat cream — drop the radial washes. On the dark band they read as a faint
-   * glow, but over near-white cream the top/bottom radials show as bright white
-   * beams. A solid fill keeps the band even edge to edge. */
-  background: var(--lastro-color-cream-100);
+  /* Flat greenish off-white — drop the radial washes. On the dark band they
+   * read as a faint glow, but over the near-white surface the top/bottom
+   * radials show as bright beams. A solid fill keeps the band even edge to
+   * edge, and matches the compare band's clear surface. */
+  background: var(--lastro-surface-clear);
 }
 
 .demonstration[data-theme="light"].section--band {

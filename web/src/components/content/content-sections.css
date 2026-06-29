@@ -120,6 +120,14 @@
   max-width: 58ch;
 }
 
+/* Clear cream band — `--section-bg` resolves to cream via the section's
+ * data-theme="light". Flat fill (no radial washes) keeps it even edge to edge,
+ * the same call demonstration's light variant makes over near-white cream. */
+.compare {
+  color: var(--lastro-text-primary);
+  background: var(--section-bg, transparent);
+}
+
 /* Trim the band's top whitespace so the section opens closer to the divider. */
 .compare.section--band {
   padding-block-start: clamp(2.5rem, 1.5rem + 3vw, 4rem);
