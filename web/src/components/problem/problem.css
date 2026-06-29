@@ -4,6 +4,9 @@
     radial-gradient(110% 85% at 50% 0%, var(--section-wash-a) 0%, transparent 58%),
     radial-gradient(70% 55% at 100% 100%, var(--section-wash-b) 0%, transparent 52%),
     var(--section-bg);
+  /* Section is cropped to end just past the agent cards — no dead tail below
+     the scene. Overrides the global --section-gap bottom padding. */
+  padding-bottom: clamp(2.5rem, 1.5rem + 2.5vw, 3.5rem);
 }
 
 .problem__layout {
@@ -212,39 +215,146 @@
   padding-top: clamp(0.25rem, 0.1rem + 0.8vw, 1rem);
 }
 
-/* The "Without proof" card is gone — the right column now holds the live 3D
-   "encrypting" seal (same brand mark as the FAQ), free-standing, no card. */
-.problem__seal {
+/* The "Without proof" card is gone — the right column is now a scene: the live
+   3D agent network glows behind, glass cards of agent types overlap in front. */
+.problem__agents {
   position: relative;
-  align-self: center;
-  justify-self: center;
-  width: 100%;
-  max-width: clamp(18rem, 30vw, 30rem);
-  aspect-ratio: 1 / 1;
-  pointer-events: none;
+  display: flex;
+  align-items: flex-start;
+  min-height: clamp(20rem, 22vw, 24rem);
+  /* Crop the oversized mesh to the column — clean editorial bleed, and the
+     bottom edge cuts the animation instead of letting it float free. */
+  overflow: clip;
 }
 
-.problem__seal .glyph-field {
+@media (min-width: 980px) {
+  .problem__agents {
+    position: sticky;
+    top: calc(var(--site-nav-height, 64px) + 2.5rem);
+  }
+}
+
+/* Agent network — counter-rotating ASCII glyph mesh, behind the cards. Drawn
+   larger than the box, then cropped by the container's `overflow: clip`. The
+   cards' backdrop-filter blurs it, so it reads as live depth, not a flat bg. */
+.problem__agents-field {
+  position: absolute;
+  /* Anchored low and bled hard past the bottom edge so the mesh runs off the
+     box and `overflow: clip` cuts it cleanly along the bottom. */
+  inset: 4% -18% -34% -18%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.72;
+  /* The clip line lands ~74% down this bled field. Fade the mesh to transparent
+     just before it so glyphs dissolve into the background instead of being
+     sliced mid-character by `overflow: clip`. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 10%,
+    #000 56%,
+    transparent 74%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 10%,
+    #000 56%,
+    transparent 74%
+  );
+}
+
+.problem__agents-field .glyph-field {
   position: absolute;
   inset: 0;
   background: none;
   color: var(--lastro-color-seal-400);
 }
 
-@media (min-width: 980px) {
-  /* Keep it level with the lead copy on the two-column layout. */
-  .problem__seal {
-    position: sticky;
-    top: calc(var(--site-nav-height, 64px) + 2.5rem);
-  }
+.problem__agents-stack {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.4vw, 1.8rem);
+}
+
+.problem__agents-label {
+  margin-bottom: var(--lastro-space-2);
+  margin-left: clamp(0.5rem, 2vw, 1.5rem);
+  /* sits over the live mesh — a soft dark glow keeps it readable */
+  text-shadow: 0 1px 8px var(--lastro-color-olive-950);
+}
+
+/* ── glass agent cards, cascaded in overlap ───────────────────────── */
+
+.agent-card {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lastro-space-3);
+  width: fit-content;
+  max-width: clamp(13rem, 20vw, 16rem);
+  padding: 0.6rem 0.95rem;
+  border-radius: 980px;
+  /* translucent glass over the live network */
+  background: color-mix(in oklab, var(--lastro-color-olive-900) 58%, transparent);
+  border: var(--lastro-stroke-hairline) solid
+    color-mix(in oklab, var(--lastro-color-cream-200) 14%, transparent);
+  backdrop-filter: var(--premium-glass, saturate(180%) blur(20px));
+  -webkit-backdrop-filter: var(--premium-glass, saturate(180%) blur(20px));
+  box-shadow:
+    0 18px 38px -24px rgba(0, 0, 0, 0.78),
+    inset 0 1px 0 rgba(234, 241, 235, 0.07);
+  transition:
+    transform var(--dur-interact) var(--ease-out-expo),
+    border-color var(--dur-interact) var(--ease-out-expo),
+    box-shadow var(--dur-interact) var(--ease-out-expo);
+}
+
+/* Scatter the pills across the network instead of stacking them — each sits at
+   a different horizontal offset so the live mesh shows through between them. */
+.agent-card:nth-of-type(1) { margin-left: clamp(0rem, 1vw, 0.75rem); }
+.agent-card:nth-of-type(2) { margin-left: clamp(3.5rem, 16vw, 7rem); }
+.agent-card:nth-of-type(3) { margin-left: clamp(1.25rem, 7vw, 3rem); }
+.agent-card:nth-of-type(4) { margin-left: clamp(5rem, 22vw, 9rem); }
+
+.agent-card:hover {
+  transform: translateX(6px) translateY(-3px);
+  border-color: color-mix(in oklab, var(--lastro-brand-seal) 40%, transparent);
+  box-shadow:
+    0 26px 52px -28px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(234, 241, 235, 0.1);
+}
+
+.agent-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in oklab, var(--lastro-color-olive-950) 55%, transparent);
+  color: var(--lastro-brand-seal);
+}
+
+.agent-card__name {
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-primary);
+  white-space: nowrap;
 }
 
 @media (max-width: 980px) {
-  /* Stacked: smaller and centred so it reads as a section mark, not a hero. */
-  .problem__seal {
-    max-width: clamp(15rem, 60vw, 22rem);
-    opacity: 0.85;
-  }
+  /* Narrow screens: tame the scatter so nothing overflows the column. */
+  .agent-card:nth-of-type(1) { margin-left: 0; }
+  .agent-card:nth-of-type(2) { margin-left: clamp(1.5rem, 12vw, 4rem); }
+  .agent-card:nth-of-type(3) { margin-left: clamp(0.5rem, 5vw, 2rem); }
+  .agent-card:nth-of-type(4) { margin-left: clamp(2rem, 16vw, 5rem); }
 }
 
 /* ── gap pipeline ─────────────────────────────────────────────────── */

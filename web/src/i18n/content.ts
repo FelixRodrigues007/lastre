@@ -59,6 +59,13 @@ export const content = {
         { label: "No proof of origin", detail: "the question is skipped", missing: true },
         { label: "Agents · escrows · settlements", detail: "running on fiction", fiction: true },
       ] as const,
+      agentsLabel: "Agents acting on it",
+      agents: [
+        { name: "Pricing agent", icon: "price" },
+        { name: "Settlement bot", icon: "settle" },
+        { name: "Escrow agent", icon: "escrow" },
+        { name: "Oracle relay", icon: "oracle" },
+      ] as const,
     },
     solution: {
       badge: "Origin proof",
@@ -461,6 +468,13 @@ export const content = {
         { label: "Alegação API / modelo", detail: "aceita como está" },
         { label: "Sem prova de origem", detail: "a pergunta é ignorada", missing: true },
         { label: "Agentes · escrows · liquidações", detail: "operando sobre ficção", fiction: true },
+      ] as const,
+      agentsLabel: "Agentes que agem sobre isso",
+      agents: [
+        { name: "Agente de preço", icon: "price" },
+        { name: "Bot de liquidação", icon: "settle" },
+        { name: "Agente de escrow", icon: "escrow" },
+        { name: "Relay de oráculo", icon: "oracle" },
       ] as const,
     },
     solution: {

@@ -70,6 +70,9 @@ export function useWebGLCanvas({
   // Keep the latest uniforms without re-running the effect (props may be a fresh closure each render).
   const uniformsRef = useRef(uniforms);
   uniformsRef.current = uniforms;
+  // Survives effect re-runs on the same canvas: a context lost by a prior run
+  // can only be restored through the extension captured before it was lost.
+  const loseExtRef = useRef<WEBGL_lose_context | null>(null);
 
   const { vertex, fragment } = shaders;
 
@@ -85,6 +88,11 @@ export function useWebGLCanvas({
     let gl: WebGLRenderingContext | null = null;
     let program: WebGLProgram | null = null;
     let buffer: WebGLBuffer | null = null;
+    // Captured while the context is alive and kept across losses: once a context
+    // is lost, getExtension() returns null, so restoreContext() can only be
+    // reached through a reference saved beforehand. Backed by a ref so it also
+    // survives effect re-runs on the same canvas.
+    let loseExt: WEBGL_lose_context | null = loseExtRef.current;
     let uniformLocs: Record<string, WebGLUniformLocation | null> = {};
     let raf = 0;
     let start = performance.now();
@@ -150,8 +158,22 @@ export function useWebGLCanvas({
 
     const acquire = () => {
       if (gl) return;
-      gl = canvas.getContext("webgl", { alpha: true, antialias: false, premultipliedAlpha: false });
-      if (!gl) return;
+      const ctx = canvas.getContext("webgl", { alpha: true, antialias: false, premultipliedAlpha: false });
+      if (!ctx) return;
+
+      // A canvas whose context we released via loseContext() keeps handing back
+      // that SAME lost context — getContext never mints a fresh one. It can only
+      // be revived with restoreContext(), which fires webglcontextrestored and
+      // re-enters acquire() with a live context. Without this, scrolling a
+      // backdrop out and back left it permanently blank (CSS fallback only).
+      if (ctx.isContextLost()) {
+        loseExt?.restoreContext();
+        return;
+      }
+
+      gl = ctx;
+      loseExt = gl.getExtension("WEBGL_lose_context");
+      loseExtRef.current = loseExt;
 
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -203,7 +225,9 @@ export function useWebGLCanvas({
       if (gl) {
         gl.deleteProgram(program);
         gl.deleteBuffer(buffer);
-        gl.getExtension("WEBGL_lose_context")?.loseContext();
+        // Use the saved ref, not gl.getExtension — and keep loseExt so the next
+        // acquire() can restoreContext() this canvas.
+        loseExt?.loseContext();
       }
       gl = null;
       program = null;

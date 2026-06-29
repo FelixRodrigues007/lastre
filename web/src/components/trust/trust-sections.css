@@ -46,31 +46,103 @@
   text-wrap: balance;
 }
 
-.personas__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--lastro-space-6);
+/* ── Personas — editorial index rows (no cards) ────────────────────── */
+.personas__rows {
   list-style: none;
   padding: 0;
   margin-top: var(--lastro-space-8);
+  /* hairline above the first row; each row carries its own bottom rule */
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
 }
 
-.personas__card {
-  padding: var(--panel-pad);
-  border-radius: var(--lastro-radius-md);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: var(--lastro-bg-panel);
+.personas__row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: var(--lastro-space-2) var(--lastro-space-6);
+  padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  transition: border-color 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.personas__title {
+.personas__row:hover {
+  border-bottom-color: color-mix(in oklab, var(--lastro-brand-seal) 45%, transparent);
+}
+
+.personas__row-index {
+  font-family: var(--lastro-font-mono, monospace);
+  font-size: 0.8125rem;
+  line-height: 1;
+  padding-top: 0.4rem;
+  letter-spacing: 0.08em;
+  color: color-mix(in oklab, var(--lastro-text-secondary) 60%, transparent);
+  font-variant-numeric: tabular-nums;
+  transition: color 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.personas__row:hover .personas__row-index {
+  color: var(--lastro-brand-seal);
+}
+
+.personas__row-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lastro-space-2);
+}
+
+.personas__row-label {
+  color: color-mix(in oklab, var(--lastro-text-secondary) 75%, transparent);
+}
+
+.personas__row-title {
   font-family: var(--lastro-font-display);
-  font-size: 1.125rem;
-  margin-bottom: var(--lastro-space-3);
+  font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.65rem);
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
-.personas__body {
+.personas__row-body {
+  grid-column: 2;
+  max-width: 56ch;
   color: var(--lastro-text-secondary);
   font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* Compact glyph signature — sits at the row's trailing edge on wide screens */
+.personas__row-glyph {
+  position: relative;
+  display: none;
+  width: 104px;
+  height: 72px;
+  border-radius: var(--lastro-radius-sm);
+  overflow: hidden;
+  align-self: center;
+}
+
+@media (min-width: 880px) {
+  .personas__row {
+    grid-template-columns: auto minmax(13rem, 1.1fr) minmax(0, 1.4fr) auto;
+    align-items: center;
+    gap: var(--lastro-space-8);
+  }
+
+  .personas__row-body {
+    grid-column: auto;
+    align-self: center;
+  }
+
+  .personas__row-glyph {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .personas__row,
+  .personas__row-index {
+    transition: none;
+  }
 }
 
 .security__list {

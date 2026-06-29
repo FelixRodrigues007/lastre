@@ -13,6 +13,10 @@ type GlyphSolid3DProps = {
   verts?: readonly Vec3[];
   /** Vertex-index pairs describing every edge. */
   edges?: readonly (readonly [number, number])[];
+  /** Draw a second, smaller, counter-rotating copy inside the first. */
+  nested?: boolean;
+  /** Fraction of the box the outer solid spans (≈ size). Default 0.6. */
+  fill?: number;
 };
 
 const CHAR_POOL = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
@@ -22,7 +26,7 @@ const SCRAMBLE_EVERY = 3;
 const SCRAMBLE_FRACTION = 0.05;
 
 /* Projection tuning (normalised units, scaled at paint). */
-const FILL = 0.6; // fraction of the box the outer solid spans
+const DEFAULT_FILL = 0.6; // fraction of the box the outer solid spans
 const TILT_X = -0.42; // fixed tilt → top facet shows, reads as 3D head-on
 const DEPTH_NEAR = 1.0; // brightness at the closest edge
 const DEPTH_FAR = 0.45; // …at the furthest edge (kept high → crisp, not ghosted)
@@ -46,6 +50,24 @@ export const OCTAHEDRON: readonly (readonly [number, number])[] = [
   [0, 4], [4, 1], [1, 5], [5, 0], // equatorial square
 ];
 export const OCTAHEDRON_VERTS = OCTA_VERTS;
+
+/* ── Agent network: a central hub (0) wired to two offset rings of nodes,
+   plus ring + cross links — reads as autonomous agents around a coordinator.
+   All outer nodes sit on the unit sphere so it fills the box like a solid. */
+const R = 0.5944; // horizontal radius of the diagonal ring nodes (√(1²−0.55²)/√2)
+const RING_Y = 0.55;
+const AGENT_VERTS: readonly Vec3[] = [
+  [0, 0, 0], // 0 — hub / coordinator
+  [R, RING_Y, R], [-R, RING_Y, R], [-R, RING_Y, -R], [R, RING_Y, -R], // 1–4 top ring
+  [0.835, -RING_Y, 0], [0, -RING_Y, 0.835], [-0.835, -RING_Y, 0], [0, -RING_Y, -0.835], // 5–8 bottom ring
+];
+export const AGENT_NETWORK_VERTS = AGENT_VERTS;
+export const AGENT_NETWORK: readonly (readonly [number, number])[] = [
+  [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], // hub spokes
+  [1, 2], [2, 3], [3, 4], [4, 1], // top ring
+  [5, 6], [6, 7], [7, 8], [8, 5], // bottom ring
+  [1, 5], [2, 6], [3, 7], [4, 8], // top→bottom cross links
+];
 
 type Point = { bx: number; by: number; bz: number; dir: 1 | -1; char: string };
 
@@ -122,6 +144,8 @@ export function GlyphSolid3D({
   perEdge = 16,
   verts = OCTA_VERTS,
   edges = OCTAHEDRON,
+  nested = true,
+  fill = DEFAULT_FILL,
 }: GlyphSolid3DProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -137,10 +161,12 @@ export function GlyphSolid3D({
     const c2d = context;
 
     const innerEdge = Math.max(6, Math.round(perEdge * INNER_RATIO * 1.4));
-    const points = [
-      ...buildSolid(verts, edges, 0.5, 1, perEdge),
-      ...buildSolid(verts, edges, 0.5 * INNER_RATIO, -1, innerEdge),
-    ];
+    const points = nested
+      ? [
+          ...buildSolid(verts, edges, 0.5, 1, perEdge),
+          ...buildSolid(verts, edges, 0.5 * INNER_RATIO, -1, innerEdge),
+        ]
+      : buildSolid(verts, edges, 0.5, 1, perEdge);
     const rootStyle = getComputedStyle(document.documentElement);
     const monoFamily = rootStyle.getPropertyValue("--lastro-font-mono").trim() || "monospace";
 
@@ -180,7 +206,7 @@ export function GlyphSolid3D({
       cssH = H;
 
       const size = Math.min(W, H);
-      scale = size * FILL;
+      scale = size * fill;
       focal = size * 1.6;
       baseFont = size * 0.023;
     }
@@ -273,7 +299,7 @@ export function GlyphSolid3D({
       io.disconnect();
       ro.disconnect();
     };
-  }, [speed, perEdge, verts, edges]);
+  }, [speed, perEdge, verts, edges, nested, fill]);
 
   return (
     <div ref={wrapRef} className={`glyph-field${className ? ` ${className}` : ""}`} aria-hidden="true">

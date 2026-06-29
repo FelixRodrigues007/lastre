@@ -1,5 +1,4 @@
 import { useSite } from "../../context/SiteContext";
-import { MediaCard } from "../ui/MediaCard";
 import { GlyphField, type GlyphShape } from "../visual/GlyphField";
 import { MEDIA } from "../../site-media";
 import "./trust-sections.css";
@@ -42,18 +41,23 @@ export function Personas() {
           {content.different.titlePrefix}
           <span className="accent-emphasis">{content.different.titleEmphasis}</span>
         </p>
-        <ul className="card-grid card-grid--3 reveal-stagger" style={{ marginTop: "var(--lastro-space-8)" }}>
+        <ol className="personas__rows reveal-stagger">
           {c.personas.map((p, i) => (
-            <li key={p.title}>
-              <MediaCard
-                media={<GlyphField shape={PERSONA_GLYPHS[i] ?? "magnifier"} />}
-                label={p.label}
-                title={p.title}
-                body={p.body}
-              />
+            <li key={p.title} className="personas__row">
+              <span className="personas__row-index" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="personas__row-head">
+                <span className="personas__row-label mono-label">{p.label}</span>
+                <h3 className="personas__row-title">{p.title}</h3>
+              </div>
+              <p className="personas__row-body">{p.body}</p>
+              <span className="personas__row-glyph" aria-hidden="true">
+                <GlyphField shape={PERSONA_GLYPHS[i] ?? "magnifier"} />
+              </span>
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
     </section>
   );

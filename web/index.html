@@ -74,8 +74,24 @@
         ]
       }
     </script>
+
+    <!-- Anti-flash: paint the brand surface on the first frame, before the
+         bundle CSS loads. The full pre-loader is the React <Preloader/>, which
+         removes #preboot once it mounts. -->
+    <style id="preboot-style">
+      html {
+        background: #132c24;
+      }
+      #preboot {
+        position: fixed;
+        inset: 0;
+        background: #132c24;
+        z-index: 9998;
+      }
+    </style>
   </head>
   <body>
+    <div id="preboot"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

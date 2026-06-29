@@ -17,7 +17,7 @@ export function Demonstration() {
   const [showEmbed, setShowEmbed] = useState(false);
 
   return (
-    <div className="demonstration section--band">
+    <div className="demonstration section--band" data-theme="light">
 
       <section
         className="demonstration__row demonstration__row--flip"

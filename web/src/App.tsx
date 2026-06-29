@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { initScrollEffects } from "./lib/initScrollEffects";
 import { initCinematicScroll } from "./lib/initCinematicScroll";
 import { SiteProvider } from "./context/SiteContext";
+import { Preloader } from "./components/preloader/Preloader";
 import { SiteNav } from "./components/layout/SiteNav";
 import { SkipLink, ScrollDepthTracker, StickyMobileCta } from "./components/layout/SiteChrome";
 import { Hero } from "./components/hero/Hero";
@@ -26,6 +27,7 @@ export function App() {
 
   return (
     <SiteProvider>
+      <Preloader />
       <SkipLink />
       <ScrollDepthTracker />
       <StickyMobileCta />

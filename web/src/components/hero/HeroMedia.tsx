@@ -1,12 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { useSite } from "../../context/SiteContext";
 import { MEDIA } from "../../site-media";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { ProofPanel } from "./ProofPanel";
 import { useHeroParallax } from "./useHeroParallax";
 import "./proof-panel.css";
 
 const HERO_WIDTH = 2560;
 const HERO_HEIGHT = 1428;
+
+const HERO_VIDEO_POSTER = "/media/hero/hero-scene-poster.jpg";
+const HERO_VIDEO_DESKTOP = {
+  webm: "/media/hero/hero-scene-1080.webm",
+  mp4: "/media/hero/hero-scene-1080.mp4",
+} as const;
+const HERO_VIDEO_MOBILE = {
+  mp4: "/media/hero/hero-scene-720.mp4",
+} as const;
 
 const HERO_SRCSET_MOBILE = [
   { w: 1280, webp: "/media/hero/hero-origin-1280.webp", png: "/media/hero/hero-origin-1280.png" },
@@ -66,9 +76,46 @@ function HeroPicture({
   );
 }
 
-/** Full-bleed hero still — parallax depth planes + mesh gradient shader. */
+/** Autoplaying, muted, looping scene video — the moving counterpart to HeroPicture. */
+function HeroVideo({ className, mobile }: { className?: string; mobile: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Some mobile browsers ignore the autoplay attribute until play() is called.
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const tryPlay = () => {
+      void el.play().catch(() => {
+        /* autoplay blocked — poster stays visible, acceptable fallback */
+      });
+    };
+    tryPlay();
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      className={className}
+      width={HERO_WIDTH}
+      height={HERO_HEIGHT}
+      poster={HERO_VIDEO_POSTER}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      aria-hidden="true"
+    >
+      {!mobile ? <source src={HERO_VIDEO_DESKTOP.webm} type="video/webm" /> : null}
+      <source src={mobile ? HERO_VIDEO_MOBILE.mp4 : HERO_VIDEO_DESKTOP.mp4} type="video/mp4" />
+    </video>
+  );
+}
+
+/** Full-bleed hero scene — parallax depth planes with an autoplaying motion layer. */
 export function HeroMedia() {
   const mobile = useIsMobile();
+  const reducedMotion = useReducedMotion();
   const { content } = useSite();
   const mediaRef = useRef<HTMLDivElement>(null);
   useHeroParallax(mediaRef, { travel: mobile ? 80 : 140 });
@@ -92,12 +139,16 @@ export function HeroMedia() {
         </div>
 
         <div className="hero__layer hero__layer--main" data-parallax-depth={mobile ? "0.15" : "0.38"}>
-          <HeroPicture
-            alt={content.hero.mediaAlt}
-            className="hero__layer-img hero__layer-img--main"
-            priority
-            mobile={mobile}
-          />
+          {reducedMotion ? (
+            <HeroPicture
+              alt={content.hero.mediaAlt}
+              className="hero__layer-img hero__layer-img--main"
+              priority
+              mobile={mobile}
+            />
+          ) : (
+            <HeroVideo className="hero__layer-img hero__layer-img--main" mobile={mobile} />
+          )}
         </div>
 
         <div className="hero__layer hero__layer--grade" aria-hidden="true" />

@@ -100,6 +100,43 @@
   --atmo-grid-opacity: 0.038;
 }
 
+/* Light variant — the honesty + live-testnet rows ride cream-on-olive instead
+ * of the dark band. Overrides the forced dark-band light text above (higher
+ * specificity via the attribute selector) and re-tints the section field. */
+.demonstration[data-theme="light"] {
+  --lastro-text-primary: var(--lastro-color-olive-950);
+  --lastro-text-secondary: var(--lastro-color-olive-700);
+  --lastro-text-muted: var(--lastro-color-olive-500);
+  --lastro-border-subtle: rgba(19, 44, 36, 0.12);
+  --lastro-border-strong: rgba(19, 44, 36, 0.22);
+
+  --section-bg: var(--lastro-color-cream-100);
+  --section-kicker: var(--lastro-color-olive-700);
+  --section-kicker-bar: var(--lastro-color-olive-500);
+  --atmo-grid-opacity: 0;
+
+  /* Flat cream — drop the radial washes. On the dark band they read as a faint
+   * glow, but over near-white cream the top/bottom radials show as bright white
+   * beams. A solid fill keeps the band even edge to edge. */
+  background: var(--lastro-color-cream-100);
+}
+
+.demonstration[data-theme="light"].section--band {
+  border-block-start-color: rgba(84, 87, 54, 0.16);
+}
+
+/* The two floating consoles keep their own dark surfaces, so re-anchor their
+ * text/border tokens back to light — otherwise the band's dark-on-cream text
+ * inheritance would render dark text on the dark olive console. */
+.demonstration[data-theme="light"] .bound,
+.demonstration[data-theme="light"] .live-gateway {
+  --lastro-text-primary: var(--lastro-color-cream-200);
+  --lastro-text-secondary: var(--lastro-color-sage-300);
+  --lastro-text-muted: var(--lastro-color-olive-400);
+  --lastro-border-subtle: rgba(255, 255, 255, 0.07);
+  --lastro-border-strong: rgba(255, 255, 255, 0.14);
+}
+
 /* Kicker styling is now unified globally (.kicker in global.css): muted
  * theme-aware text + static valid-status dot. Per-band color overrides are
  * intentionally dropped so every section eyebrow matches the hero. */
