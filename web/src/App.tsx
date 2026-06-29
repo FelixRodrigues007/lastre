@@ -1,21 +1,27 @@
 import { useEffect } from "react";
 import { initScrollEffects } from "./lib/initScrollEffects";
+import { initCinematicScroll } from "./lib/initCinematicScroll";
 import { SiteProvider } from "./context/SiteContext";
 import { SiteNav } from "./components/layout/SiteNav";
 import { SkipLink, ScrollDepthTracker, StickyMobileCta } from "./components/layout/SiteChrome";
 import { Hero } from "./components/hero/Hero";
 import { Problem } from "./components/problem/Problem";
 import { Solution } from "./components/solution/Solution";
-import { Different } from "./components/different/Different";
 import { Proof } from "./components/proof/Proof";
 import { HowItWorks } from "./components/how/HowItWorks";
 import { Demonstration } from "./components/demonstration/Demonstration";
 import { SiteFooter } from "./components/layout/SiteFooter";
-import { Faq } from "./components/content/ContentSections";
+import { Faq, ComparisonTable } from "./components/content/ContentSections";
+import { Personas, PartnersBar } from "./components/trust/TrustSections";
 
 export function App() {
   useEffect(() => {
-    return initScrollEffects();
+    const cleanScroll = initScrollEffects();
+    const cleanCinematic = initCinematicScroll();
+    return () => {
+      cleanScroll();
+      cleanCinematic();
+    };
   }, []);
 
   return (
@@ -30,9 +36,11 @@ export function App() {
           <Hero />
           <Problem />
           <Solution />
+          <PartnersBar />
           <HowItWorks />
           <Proof />
-          <Different />
+          <Personas />
+          <ComparisonTable />
           <Demonstration />
           <Faq />
         </main>

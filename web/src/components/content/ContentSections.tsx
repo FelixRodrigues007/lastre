@@ -1,10 +1,11 @@
 import { useId, useState } from "react";
 import { useSite } from "../../context/SiteContext";
 import { sha256Hex } from "../../lib/cryptoSeal";
-import { MEDIA } from "../../site-media";
 import { DEMO_TERMINAL_CMD } from "../../site-links";
+import { MEDIA } from "../../site-media";
+import { ShaderImage } from "../visual/ShaderImage";
 import "./content-sections.css";
-import "../ui/media-card.css";
+import "../visual/visual.css";
 
 export function Faq() {
   const { t, content } = useSite();
@@ -14,9 +15,11 @@ export function Faq() {
   return (
     <section className="faq section section--bordered" id="faq" aria-labelledby={`${baseId}-title`}>
       <div className="shell faq__layout">
-        <h2 id={`${baseId}-title`} className="section-title">
-          {t("faq")}
-        </h2>
+        <div className="faq__intro">
+          <h2 id={`${baseId}-title`} className="section-title">
+            {t("faq")}
+          </h2>
+        </div>
         <div className="faq__list">
           {content.faq.items.map((item, i) => {
             const expanded = open === i;
@@ -55,13 +58,19 @@ export function UseCases() {
     compliance: MEDIA.depthBack,
   } as const;
 
+  const shaders = {
+    minerals: "mesh" as const,
+    agents: "liquid" as const,
+    compliance: "glow" as const,
+  };
+
   return (
     <section className="use-cases section" id="use-cases" aria-labelledby="use-cases-title">
       <div className="shell">
-        <h2 id="use-cases-title" className="section-title">
+        <h2 id="use-cases-title" className="section-title reveal-scroll">
           {t("useCases")}
         </h2>
-        <div className="use-cases__tabs" role="tablist">
+        <div className="use-cases__tabs reveal-scroll" role="tablist">
           {tabs.map((u) => (
             <button
               key={u.key}
@@ -76,11 +85,16 @@ export function UseCases() {
           ))}
         </div>
         <div
-          className="use-cases__panel panel panel--elevated use-cases__panel--media"
+          className="use-cases__panel panel panel--elevated use-cases__panel--media reveal-scroll"
           role="tabpanel"
         >
           <div className="use-cases__panel-media" aria-hidden="true">
-            <img key={active.key} src={images[active.key]} alt="" loading="lazy" />
+            <ShaderImage
+              key={active.key}
+              src={images[active.key]}
+              shader={shaders[active.key]}
+              drift
+            />
           </div>
           <div className="use-cases__panel-copy">
             <h3 className="use-cases__title">{active.title}</h3>
@@ -97,14 +111,23 @@ export function ComparisonTable() {
   const c = content.compare;
 
   return (
-    <section className="compare section section--band" id="compare" data-theme="light">
+    <section className="compare section section--band" id="compare">
       <div className="shell">
         <div className="compare__layout">
           <div className="compare__intro">
             <h2 className="section-title">{t("compare")}</h2>
             <p className="compare__lede">{c.lede}</p>
+            <div className="compare__visual reveal-scroll" aria-hidden="true">
+              <ShaderImage src={MEDIA.heroMiner} shader="glow" drift />
+            </div>
           </div>
-          <div className="compare__wrap panel panel--elevated">
+          <div
+            className="compare__wrap panel panel--elevated"
+            data-theme="light"
+            role="region"
+            aria-label={t("compare")}
+            tabIndex={0}
+          >
             <table className="compare__table">
               <thead>
                 <tr>

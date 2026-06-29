@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { useSite } from "../../context/SiteContext";
 import { TrustGlobeVisual } from "./TrustGlobeVisual";
 import "./problem.css";
+import "../visual/visual.css";
 
 const LANE_ICONS = ["globe", "claim", "scale"] as const;
 

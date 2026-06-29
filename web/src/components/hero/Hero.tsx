@@ -13,6 +13,10 @@ export function Hero() {
   const accepted = useCountUp(stats.accepted);
   const rejected = useCountUp(stats.rejected);
 
+  const headlineWords = t("heroHeadline").trim().split(" ");
+  const headlineAccent = headlineWords.pop() ?? "";
+  const headlineLead = headlineWords.join(" ");
+
   return (
     <section className="hero" id="top">
       <HeroMedia />
@@ -20,9 +24,12 @@ export function Hero() {
       <div className="hero__stage">
         <div className="shell hero__layout">
           <div className="hero__copy">
-            <p className="hero__eyebrow mono-label">{content.hero.eyebrow}</p>
+            <p className="hero__eyebrow">{content.hero.eyebrow}</p>
 
-            <h1 className="hero__headline">{t("heroHeadline")}</h1>
+            <h1 className="hero__headline">
+              {headlineLead}{" "}
+              <span className="hero__accent">{headlineAccent}</span>
+            </h1>
 
             <p className="hero__subhead">{t("heroSubShort")}</p>
 

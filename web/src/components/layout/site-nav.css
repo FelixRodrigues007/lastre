@@ -124,21 +124,30 @@
 
 .site-nav__action {
   display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastro-weight-semibold);
   letter-spacing: -0.012em;
-  color: color-mix(in oklab, var(--lastro-color-cream-200) 72%, transparent);
+  color: var(--lastro-color-olive-950);
+  background: var(--lastro-brand-seal);
+  border: 1px solid color-mix(in oklab, var(--lastro-color-olive-950) 12%, transparent);
   text-decoration: none;
-  padding: 0.375rem 0.625rem;
-  border-radius: var(--lastro-radius-pill);
+  padding: 0.375rem 0.875rem;
+  border-radius: 10px;
   transition:
-    color 160ms ease,
-    background-color 160ms ease;
+    background-color 160ms ease,
+    transform 160ms ease;
 }
 
 .site-nav__action:hover {
-  color: var(--lastro-color-cream-200);
-  background: color-mix(in oklab, var(--lastro-color-cream-200) 8%, transparent);
+  background: color-mix(in oklab, var(--lastro-brand-seal) 92%, var(--lastro-color-olive-950));
+}
+
+.site-nav__action:active {
+  transform: translateY(0.5px);
+  background: color-mix(in oklab, var(--lastro-brand-seal) 85%, var(--lastro-color-olive-950));
 }
 
 .site-nav__menu-btn {

@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSite } from "../../context/SiteContext";
+import { MEDIA } from "../../site-media";
 import { ProofPanel } from "./ProofPanel";
+import { useHeroParallax } from "./useHeroParallax";
 import "./proof-panel.css";
 
 const HERO_WIDTH = 2560;
@@ -64,14 +66,31 @@ function HeroPicture({
   );
 }
 
-/** Full-bleed hero still — single sharp plane + light parallax on scroll. */
+/** Full-bleed hero still — parallax depth planes + mesh gradient shader. */
 export function HeroMedia() {
   const mobile = useIsMobile();
   const { content } = useSite();
+  const mediaRef = useRef<HTMLDivElement>(null);
+  useHeroParallax(mediaRef, { travel: mobile ? 80 : 140 });
 
   return (
-    <div className="hero__media">
+    <div className="hero__media" ref={mediaRef}>
       <div className="hero__depth" aria-hidden="true">
+        <div className="hero__layer hero__layer--back" data-parallax-depth={mobile ? "0.08" : "0.18"}>
+          <img
+            className="hero__layer-img hero__layer-img--back"
+            src={MEDIA.layerBack}
+            alt=""
+            width={2560}
+            height={1428}
+            decoding="async"
+            draggable={false}
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+
         <div className="hero__layer hero__layer--main" data-parallax-depth={mobile ? "0.15" : "0.38"}>
           <HeroPicture
             alt={content.hero.mediaAlt}
@@ -83,9 +102,6 @@ export function HeroMedia() {
 
         <div className="hero__layer hero__layer--grade" aria-hidden="true" />
       </div>
-
-      {/* CSS-animated loop — lightweight stand-in for hero video (improvement #2) */}
-      <div className="hero__loop" aria-hidden="true" />
 
       <div className="hero__scrim" aria-hidden="true" />
       <div className="hero__fade" aria-hidden="true" />

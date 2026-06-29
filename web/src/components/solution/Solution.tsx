@@ -1,6 +1,7 @@
 import { useId } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { useSite } from "../../context/SiteContext";
+import { SectionMarker } from "../ui/SectionMarker";
 import { LayerShowcase } from "./LayerShowcase";
 import "./solution.css";
 
@@ -73,6 +74,8 @@ export function Solution() {
   return (
     <section className="sol section section--bordered" id="solution" aria-labelledby={`${baseId}-title`}>
       <div className="shell">
+        <SectionMarker index="01" label="The layer" keyword="Proof" />
+
         <header className="sol__header">
           <div className="sol__header-main reveal-scroll">
             <span className="sol__badge">

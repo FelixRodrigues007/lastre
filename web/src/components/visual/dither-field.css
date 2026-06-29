@@ -1,0 +1,124 @@
+/* Dithered gradient field — a brand-tinted colour ramp screened by an ordered
+ * dot pattern that fades toward the highlight, reading as a halftone gradient.
+ * Tunable per instance through the --dither-* custom properties. */
+
+.dither-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  /* the colour ramp the dots sit on */
+  background: linear-gradient(
+    135deg,
+    var(--dither-a) 0%,
+    var(--dither-b) 52%,
+    var(--dither-c) 100%
+  );
+}
+
+/* The dot screen. multiply keeps the dots reading as shadow grain over the
+ * ramp; the mask thins them toward the bright corner so density tracks tone. */
+.dither-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    var(--dither-dot, rgba(19, 44, 36, 0.62)) 1px,
+    transparent 1.45px
+  );
+  background-size: var(--dither-grid, 3.5px) var(--dither-grid, 3.5px);
+  mix-blend-mode: multiply;
+  -webkit-mask-image: linear-gradient(135deg, #000 4%, rgba(0, 0, 0, 0.18) 58%, transparent 92%);
+  mask-image: linear-gradient(135deg, #000 4%, rgba(0, 0, 0, 0.18) 58%, transparent 92%);
+}
+
+/* ── brand variants ───────────────────────────────────────────────── */
+
+/* seal — warm yellow falling into olive (the default hero accent) */
+.dither-field--seal {
+  --dither-a: var(--lastro-color-seal-400, #B2ED97);
+  --dither-b: var(--lastro-color-olive-500, #6f8f2e);
+  --dither-c: var(--lastro-color-olive-900, #1c2210);
+}
+
+/* valid — verification green into deep olive */
+.dither-field--valid {
+  --dither-a: var(--lastro-color-valid-400, #6fb87e);
+  --dither-b: var(--lastro-color-olive-600, #415f54);
+  --dither-c: var(--lastro-color-olive-950, #132C24);
+}
+
+/* overlay — dots only, no gradient. Drops over a photo or panel to give it the
+ * pixelated halftone screen Caret applies to its imagery. Uniform density. */
+.dither-field--overlay {
+  background: transparent;
+}
+
+.dither-field--overlay::after {
+  background-size: var(--dither-grid, 4px) var(--dither-grid, 4px);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* spectrum — brand-bounded multi-hue sweep (seal → sage → valid) */
+.dither-field--spectrum {
+  background: linear-gradient(
+    120deg,
+    var(--lastro-color-seal-400, #B2ED97) 0%,
+    var(--lastro-color-sage-300, #b9c2a0) 38%,
+    var(--lastro-color-valid-400, #6fb87e) 70%,
+    var(--lastro-color-olive-800, #2c3318) 100%
+  );
+}
+
+/* ── floating panel — the mockup sits inside, the dither shows around it ── */
+
+.dither-panel {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: clamp(20rem, 15rem + 20vw, 33rem);
+  padding: clamp(1.5rem, 1rem + 3vw, 3.75rem);
+  border-radius: var(--lastro-radius-lg);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.dither-panel__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: grid;
+  gap: var(--lastro-space-6);
+}
+
+/* When the panel bleeds to a viewport edge, square that edge and drop its
+ * border so it reads as running off-canvas like Caret. */
+.bleed-right > .dither-panel {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  border-inline-end: 0;
+}
+
+.bleed-left > .dither-panel {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-inline-start: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* a barely-there drift so the screen feels alive without animating layout */
+  .dither-field::after {
+    animation: dither-drift 18s linear infinite alternate;
+  }
+}
+
+@keyframes dither-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: var(--dither-grid, 3.5px) calc(var(--dither-grid, 3.5px) * 1.5);
+  }
+}

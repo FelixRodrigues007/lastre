@@ -169,8 +169,8 @@ export function Process() {
             <SectionHead label="Lots in batch" />
 
             <ul className="process-picker__list">
-              {assetIds.map((assetId) => (
-                <li key={assetId}>
+              {assetIds.map((assetId, index) => (
+                <li key={`${assetId}-${index}`}>
                   <label className="process-picker__item">
                     <input
                       type="checkbox"

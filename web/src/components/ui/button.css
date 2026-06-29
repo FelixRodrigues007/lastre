@@ -1,4 +1,4 @@
-/* ── Lastro buttons — single serious system ─────────────────────────── */
+/* ── Lastre buttons — single serious system ─────────────────────────── */
 
 .btn {
   --btn-height: 2.5rem;
@@ -45,32 +45,32 @@
   font-size: 0.8125rem;
 }
 
-/* Primary — one filled action per block */
+/* Primary — one filled orange action per block */
 .btn--primary {
-  background: var(--lastro-brand-seal);
-  color: var(--lastro-color-olive-950);
-  border-color: color-mix(in oklab, var(--lastro-color-olive-950) 12%, transparent);
+  background: var(--lastro-button-primary-bg);
+  color: var(--lastro-button-primary-text);
+  border-color: color-mix(in oklab, var(--lastro-color-orange-600) 45%, transparent);
 }
 
 .btn--primary:hover {
-  background: color-mix(in oklab, var(--lastro-brand-seal) 92%, var(--lastro-color-olive-950));
+  background: var(--lastro-color-orange-500);
 }
 
 .btn--primary:active {
-  background: color-mix(in oklab, var(--lastro-brand-seal) 85%, var(--lastro-color-olive-950));
+  background: var(--lastro-color-orange-600);
 }
 
-/* Inverted primary on dark surfaces */
+/* Primary keeps its orange weight on dark surfaces */
 .btn--on-dark.btn--primary,
 .on-dark .btn--primary {
-  background: var(--lastro-color-cream-50);
-  color: var(--lastro-color-olive-950);
-  border-color: color-mix(in oklab, var(--lastro-color-cream-50) 80%, transparent);
+  background: var(--lastro-button-primary-bg);
+  color: var(--lastro-button-primary-text);
+  border-color: color-mix(in oklab, var(--lastro-color-orange-600) 45%, transparent);
 }
 
 .btn--on-dark.btn--primary:hover,
 .on-dark .btn--primary:hover {
-  background: color-mix(in oklab, var(--lastro-color-cream-50) 92%, white);
+  background: var(--lastro-color-orange-500);
 }
 
 /* Secondary — outline, same weight as primary */

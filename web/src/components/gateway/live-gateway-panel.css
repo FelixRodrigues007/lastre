@@ -52,7 +52,7 @@
 }
 
 .live-gateway__status--loading {
-  background: rgba(254, 241, 111, 0.12);
+  background: rgba(178, 237, 151, 0.12);
   color: var(--lastro-brand-seal);
 }
 
@@ -85,19 +85,51 @@
   gap: var(--lastro-space-3);
 }
 
-.live-gateway__stats span {
+.live-gateway__stat {
+  position: relative;
+  display: grid;
+  gap: 0.4rem;
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   border-radius: var(--lastro-radius-lg);
   padding: var(--lastro-space-4);
   color: var(--lastro-text-muted);
-  font-size: 0.78rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* A thin top rule carries the stat's semantic colour so the trio reads as a
+ * scoreboard, not three identical boxes. */
+.live-gateway__stat::before {
+  content: "";
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline: var(--lastro-space-4);
+  height: 2px;
+  border-radius: var(--lastro-radius-pill);
+  background: var(--stat-accent, var(--lastro-border-subtle));
+}
+
+.live-gateway__stat--accepted {
+  --stat-accent: var(--lastro-status-valid);
+}
+
+.live-gateway__stat--rejected {
+  --stat-accent: var(--lastro-status-invalid);
+}
+
+.live-gateway__stat--lots {
+  --stat-accent: var(--lastro-brand-seal);
 }
 
 .live-gateway__stats strong {
   display: block;
-  color: var(--lastro-text-primary);
+  color: var(--stat-accent, var(--lastro-text-primary));
   font-family: var(--lastro-font-display);
-  font-size: 1.55rem;
+  font-size: 1.7rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.03em;
   line-height: 1;
 }
 
@@ -112,17 +144,43 @@
   justify-content: space-between;
   gap: var(--lastro-space-4);
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-inline-start: var(--lastro-stroke-rule) solid var(--row-accent, var(--lastro-border-subtle));
   border-radius: var(--lastro-radius-lg);
   padding: var(--lastro-space-4);
+  background: var(--row-tint, transparent);
   font-family: var(--lastro-font-mono);
   font-size: 0.78rem;
 }
 
-.live-gateway__row strong[data-verdict="Valid"] {
+.live-gateway__row[data-verdict="Valid"] {
+  --row-accent: var(--lastro-status-valid);
+  --row-tint: rgba(76, 175, 126, 0.06);
+}
+
+.live-gateway__row[data-verdict="Invalid"] {
+  --row-accent: var(--lastro-status-invalid);
+  --row-tint: rgba(220, 82, 64, 0.06);
+}
+
+.live-gateway__asset {
+  color: var(--lastro-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.live-gateway__verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.live-gateway__verdict[data-verdict="Valid"] {
   color: var(--lastro-status-valid);
 }
 
-.live-gateway__row strong[data-verdict="Invalid"] {
+.live-gateway__verdict[data-verdict="Invalid"] {
   color: var(--lastro-status-invalid);
 }
 

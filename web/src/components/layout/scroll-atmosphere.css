@@ -26,7 +26,7 @@
 }
 
 .scroll-atmo__wash--hero {
-  --wash-color: rgba(254, 241, 111, 0.14);
+  --wash-color: rgba(178, 237, 151, 0.14);
   --wash-pos: 82% -8%;
 }
 
@@ -51,12 +51,12 @@
 }
 
 .scroll-atmo__wash--vault {
-  --wash-color: rgba(254, 241, 111, 0.1);
+  --wash-color: rgba(178, 237, 151, 0.1);
   --wash-pos: 72% 0%;
 }
 
 .scroll-atmo__wash--cream {
-  --wash-color: rgba(254, 241, 111, 0.14);
+  --wash-color: rgba(178, 237, 151, 0.14);
   --wash-pos: 50% 100%;
 }
 

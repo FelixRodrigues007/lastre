@@ -1,33 +1,43 @@
 import type { ReactNode } from "react";
+import { ShaderImage } from "../visual/ShaderImage";
 import "./media-card.css";
 
 type MediaCardProps = {
-  image: string;
-  alt: string;
+  image?: string;
+  alt?: string;
+  /** Optional visual override — rendered in place of the photo (e.g. a GlyphField). */
+  media?: ReactNode;
   label?: string;
   title: string;
   body: ReactNode;
   featured?: boolean;
   footer?: ReactNode;
   className?: string;
+  shader?: "mesh" | "glow" | "liquid" | "none";
 };
 
 /** Image-forward card — Awwwards editorial tile. */
 export function MediaCard({
   image,
-  alt,
+  alt = "",
+  media,
   label,
   title,
   body,
   featured,
   footer,
   className = "",
+  shader = "mesh",
 }: MediaCardProps) {
   return (
     <article className={`media-card${featured ? " media-card--featured" : ""} ${className}`.trim()}>
       <div className="media-card__visual">
-        <img className="media-card__img" src={image} alt={alt} loading="lazy" decoding="async" />
-        <div className="media-card__scrim" aria-hidden="true" />
+        {media ?? (
+          <>
+            <ShaderImage src={image ?? ""} alt={alt} shader={shader} drift className="media-card__shader-img" />
+            <div className="media-card__scrim" aria-hidden="true" />
+          </>
+        )}
         {label ? <span className="media-card__label mono-label">{label}</span> : null}
       </div>
       <div className="media-card__body">

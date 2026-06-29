@@ -1,32 +1,37 @@
-/* Lastre Design System — generated manually from lastro.tokens.json (v0.2.0)
- * Near-monochromatic olive palette + single seal accent. Dark is the default
- * theme; add data-theme="light" on <html> or any scope to switch.
- * Accent (seal/yellow) is reserved for CTAs, the verification seal, and key
- * values — hierarchy otherwise comes from type, scale, and space. */
+/* Lastre Design System — green/mint palette (v0.3.0)
+ * Deep-green surfaces (#132C24 → #263F37), mint accent (#B2ED97), orange CTA
+ * (#F57C25), clean near-white text. Dark is the default theme; add
+ * data-theme="light" on <html> or any scope to switch.
+ * Orange is reserved for the single filled CTA per block; mint carries
+ * accents, the verification seal, badges, and key values. */
 :root {
   /* ── primitive · color ─────────────────────────────────────────── */
-  --lastro-color-olive-950: #070708;
-  --lastro-color-olive-900: #0c0c0e;
-  --lastro-color-olive-850: #111114;
-  --lastro-color-olive-800: #16161a;
-  --lastro-color-olive-700: #1f1f24;
-  --lastro-color-olive-600: #2a2a30;
-  --lastro-color-olive-500: #3a3a42;
-  --lastro-color-olive-400: #56565f;
-  --lastro-color-olive-300: #72727c;
-  --lastro-color-sage-400: #9b9ba3;
-  --lastro-color-sage-300: #b4b4bc;
-  --lastro-color-sage-200: #c8c8d0;
-  --lastro-color-cream-50: #f4f3e6;
-  --lastro-color-cream-100: #efeede;
-  --lastro-color-cream-200: #e7e6d0;
-  --lastro-color-cream-300: #dadbc2;
-  --lastro-color-seal-300: #fff39a;
-  --lastro-color-seal-400: #fef16f;
-  --lastro-color-seal-500: #f2df3e;
-  --lastro-color-seal-600: #cdb820;
-  --lastro-color-seal-700: #9c8c12;
-  --lastro-color-seal-800: #6f6410;
+  --lastro-color-olive-950: #132C24;
+  --lastro-color-olive-900: #173329;
+  --lastro-color-olive-850: #1c3a2f;
+  --lastro-color-olive-800: #213f34;
+  --lastro-color-olive-700: #263F37;
+  --lastro-color-olive-600: #314e44;
+  --lastro-color-olive-500: #415f54;
+  --lastro-color-olive-400: #5e7d70;
+  --lastro-color-olive-300: #809f91;
+  --lastro-color-sage-400: #93a89c;
+  --lastro-color-sage-300: #aebcb1;
+  --lastro-color-sage-200: #c4cfc6;
+  --lastro-color-cream-50: #ffffff;
+  --lastro-color-cream-100: #f4f8f4;
+  --lastro-color-cream-200: #eaf1eb;
+  --lastro-color-cream-300: #d6ded7;
+  --lastro-color-seal-300: #cdf4ba;
+  --lastro-color-seal-400: #B2ED97;
+  --lastro-color-seal-500: #8fd870;
+  --lastro-color-seal-600: #6cbb4d;
+  --lastro-color-seal-700: #4f9234;
+  --lastro-color-seal-800: #366b23;
+  --lastro-color-orange-300: #f89a55;
+  --lastro-color-orange-400: #F57C25;
+  --lastro-color-orange-500: #e06a17;
+  --lastro-color-orange-600: #bd560f;
   --lastro-color-valid-400: #9ab84a;
   --lastro-color-valid-500: #6f8f2e;
   --lastro-color-valid-600: #577322;
@@ -35,7 +40,7 @@
   --lastro-color-invalid-600: #9e3a22;
 
   /* ── primitive · type / space / radius / stroke ────────────────── */
-  --lastro-font-display: "Space Grotesk", Inter, system-ui, sans-serif;
+  --lastro-font-display: "Inter Display", "Inter", ui-sans-serif, system-ui, sans-serif;
   --lastro-font-body: Inter, ui-sans-serif, system-ui, sans-serif;
   --lastro-font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
   --lastro-weight-regular: 400;
@@ -67,22 +72,23 @@
   --lastro-bg-inverse: var(--lastro-color-cream-200);
   --lastro-text-primary: var(--lastro-color-cream-200);
   --lastro-text-secondary: var(--lastro-color-sage-300);
-  --lastro-text-muted: var(--lastro-color-olive-400);
+  --lastro-text-muted: var(--lastro-color-sage-400);
   --lastro-text-inverse: var(--lastro-color-olive-950);
   --lastro-brand-seal: var(--lastro-color-seal-400);
   --lastro-brand-seal-text: var(--lastro-color-seal-400);
+  --lastro-brand-orange: var(--lastro-color-orange-400);
   --lastro-status-valid: var(--lastro-color-valid-400);
   --lastro-status-invalid: var(--lastro-color-invalid-400);
-  --lastro-border-subtle: rgba(255, 255, 255, 0.07);
-  --lastro-border-strong: rgba(255, 255, 255, 0.14);
+  --lastro-border-subtle: rgba(255, 255, 255, 0.09);
+  --lastro-border-strong: rgba(255, 255, 255, 0.16);
 
   /* ── component ─────────────────────────────────────────────────── */
-  --lastro-button-primary-bg: var(--lastro-color-seal-400);
-  --lastro-button-primary-text: var(--lastro-color-olive-950);
-  --lastro-badge-bg: rgba(254, 241, 111, 0.14);
+  --lastro-button-primary-bg: var(--lastro-color-orange-400);
+  --lastro-button-primary-text: #ffffff;
+  --lastro-badge-bg: rgba(178, 237, 151, 0.14);
   --lastro-badge-text: var(--lastro-color-seal-400);
-  --lastro-badge-border: rgba(254, 241, 111, 0.30);
-  --lastro-adcard-bg: linear-gradient(135deg, #070708 0%, #111114 58%, #16161a 100%);
+  --lastro-badge-border: rgba(178, 237, 151, 0.30);
+  --lastro-adcard-bg: linear-gradient(135deg, #132C24 0%, #213f34 58%, #263F37 100%);
 }
 
 /* ── semantic · LIGHT override ───────────────────────────────────── */
@@ -100,11 +106,11 @@
   --lastro-brand-seal-text: var(--lastro-color-seal-800);
   --lastro-status-valid: var(--lastro-color-valid-600);
   --lastro-status-invalid: var(--lastro-color-invalid-600);
-  --lastro-border-subtle: rgba(18, 20, 7, 0.12);
-  --lastro-border-strong: rgba(18, 20, 7, 0.24);
-  --lastro-badge-bg: rgba(111, 100, 16, 0.14);
+  --lastro-border-subtle: rgba(19, 44, 36, 0.12);
+  --lastro-border-strong: rgba(19, 44, 36, 0.22);
+  --lastro-badge-bg: rgba(54, 107, 35, 0.12);
   --lastro-badge-text: var(--lastro-color-seal-800);
-  --lastro-badge-border: rgba(111, 100, 16, 0.32);
+  --lastro-badge-border: rgba(54, 107, 35, 0.30);
   --lastro-adcard-bg: var(--lastro-color-cream-200);
 }
 

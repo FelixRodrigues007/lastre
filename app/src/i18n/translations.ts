@@ -26,8 +26,8 @@ export const translations = {
     "status.testnet": "Testnet",
     "status.casper": "Casper Testnet",
     "status.livePackage": "Live package",
-    "brand.console": "Lastro Console",
-    "brand.name": "Lastro",
+    "brand.console": "Lastre Console",
+    "brand.name": "Lastre",
   },
   pt: {
     "nav.overview": "Visão geral",
@@ -54,8 +54,8 @@ export const translations = {
     "status.testnet": "Testnet",
     "status.casper": "Casper Testnet",
     "status.livePackage": "Pacote ao vivo",
-    "brand.console": "Lastro Console",
-    "brand.name": "Lastro",
+    "brand.console": "Lastre Console",
+    "brand.name": "Lastre",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

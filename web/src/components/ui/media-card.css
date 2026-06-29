@@ -35,6 +35,22 @@
   overflow: hidden;
 }
 
+.media-card__shader-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.media-card__shader-img .shader-image__img {
+  transform: none;
+}
+
+.media-card:hover .media-card__shader-img .shader-image__img {
+  transform: scale(1.08);
+}
+
 .media-card--featured .media-card__visual {
   aspect-ratio: 16 / 11;
 }
@@ -255,11 +271,17 @@ html.premium .panel--media {
   z-index: 0;
 }
 
-.pull-quote__bg img {
+.pull-quote__bg .shader-image {
+  width: 100%;
+  height: 100%;
+}
+
+.pull-quote__bg img,
+.pull-quote__bg .shader-image__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.18;
+  opacity: 0.22;
   filter: saturate(0.85);
 }
 

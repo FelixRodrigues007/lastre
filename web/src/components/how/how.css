@@ -140,8 +140,10 @@
     opacity 480ms var(--ease-out-expo);
 }
 
+/* 0.75 keeps inactive cards visibly de-emphasised while the body copy
+   still clears WCAG AA (was 0.62 → 3.75:1, fails). */
 .how__card:not(.how__card--active) {
-  opacity: 0.62;
+  opacity: 0.75;
 }
 
 .how__card--active {
@@ -225,11 +227,13 @@
   color: var(--lastro-text-secondary);
 }
 
-/* full-bleed diagram cell — atmospheric wash with the diagram floating on it */
+/* full-bleed diagram cell — shader atmosphere with the diagram floating on it */
 .how__card-viz {
+  position: relative;
   display: grid;
   place-items: center;
   padding: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+  overflow: hidden;
   transition:
     box-shadow 480ms var(--ease-out-expo),
     transform 640ms var(--ease-out-expo);
@@ -246,6 +250,62 @@
     );
 }
 
+/* WebGL backdrop — bright seal-dominant mesh fills the viz column behind the mockup */
+.how__step-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  /* Light fallback shown only before the shader mounts (viewport-pooled). */
+  background:
+    radial-gradient(
+      80% 70% at 28% 30%,
+      color-mix(in oklab, var(--lastro-brand-seal) 32%, var(--lastro-bg-primary)) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      150deg,
+      color-mix(in oklab, var(--lastro-color-sage-300) 22%, var(--lastro-bg-primary)) 0%,
+      var(--lastro-bg-primary) 100%
+    );
+}
+
+.how__step-backdrop .mesh-gradient {
+  position: absolute;
+  inset: 0;
+}
+
+/* Halftone dot texture — the signature grain over the mesh, fading diagonally. */
+.how__step-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in oklab, var(--lastro-text-primary) 42%, transparent) 0.6px,
+    transparent 1.5px
+  );
+  background-size: 5px 5px;
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(118deg, #000 0%, rgba(0, 0, 0, 0.35) 45%, transparent 70%);
+  mask-image: linear-gradient(118deg, #000 0%, rgba(0, 0, 0, 0.35) 45%, transparent 70%);
+}
+
+/* Halftone dot-screen over the per-step mesh — Caret-style dithered panel,
+ * layered above the backdrop (z0) and below the floating mockup (z1). */
+.how__card-dither {
+  z-index: 0;
+  opacity: 0.55;
+}
+
+.how__card-viz .viz {
+  position: relative;
+  z-index: 1;
+}
+
 /* ── diagram column (shared idiom with the hero ProofPanel) ────────── */
 .viz {
   display: flex;
@@ -255,10 +315,16 @@
   width: 100%;
   max-width: 380px;
   padding: var(--lastro-space-8);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  border-radius: var(--lastro-radius-md);
-  background: var(--lastro-bg-primary);
-  box-shadow: 0 24px 50px -30px rgba(18, 20, 7, 0.45);
+  /* Frosted-glass mockup floating over the mesh — Caret idiom. */
+  border: 1px solid color-mix(in oklab, var(--lastro-text-primary) 9%, transparent);
+  border-radius: var(--lastro-radius-lg);
+  background: color-mix(in oklab, var(--lastro-bg-primary) 78%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+  backdrop-filter: blur(18px) saturate(118%);
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in oklab, #fff 55%, transparent),
+    0 2px 6px -2px rgba(19, 44, 36, 0.18),
+    0 34px 64px -28px rgba(19, 44, 36, 0.5);
 }
 
 .viz__flow {

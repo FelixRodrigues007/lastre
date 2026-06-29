@@ -1,0 +1,42 @@
+.shader-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Host for a code-split, viewport-gated background (ReactBits, etc.). */
+.lazy-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lazy-bg > canvas,
+.lazy-bg > div {
+  width: 100%;
+  height: 100%;
+}
+
+.mesh-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.seal-glow {
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+.liquid-metal {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}

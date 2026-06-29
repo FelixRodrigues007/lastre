@@ -2,7 +2,10 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { Button } from "../ui/Button";
 import { SealMark } from "../ui/SealMark";
+import { SectionMarker } from "../ui/SectionMarker";
 import { useSite } from "../../context/SiteContext";
+import { DitherField } from "../visual/DitherField";
+import { StepBackdrop } from "./StepBackdrop";
 import { StepVisual } from "./StepVisual";
 import "./how.css";
 
@@ -61,6 +64,8 @@ export function HowItWorks() {
         03
       </span>
       <div className="shell">
+        <SectionMarker index="02" label="How it works" keyword="Seal" />
+
         <header className="section__header section__header--fill how__header">
           <div className="section__header-bar reveal-scroll">
             <p className="kicker">{c.kicker}</p>
@@ -133,6 +138,8 @@ export function HowItWorks() {
                 </div>
 
                 <div className="how__card-viz" aria-hidden="true">
+                  <StepBackdrop step={STEP_KEYS[i] ?? "seal"} />
+                  <DitherField variant="overlay" className="how__card-dither" />
                   <StepVisual step={STEP_KEYS[i] ?? "seal"} />
                 </div>
               </li>

@@ -24,7 +24,9 @@
 }
 
 .badge--verdict-invalid {
-  color: var(--lastro-status-invalid);
+  /* lighter than status-invalid (#d9603f) so the label clears WCAG AA
+     (~5:1) on the tinted badge fill; #d9603f sat at 4.32. */
+  color: #e0714f;
   border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, transparent);
   background: color-mix(in srgb, var(--lastro-status-invalid) 12%, transparent);
 }

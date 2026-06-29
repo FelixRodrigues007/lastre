@@ -18,7 +18,7 @@ export const content = {
       scrollExplore: "Explore",
       scrollLabel: "Scroll to learn more",
       mediaAlt:
-        "Open-pit mineral mine at dawn: field workers and haul trucks at a licensed extraction site used in Lastro's fictional provenance demo.",
+        "Open-pit mineral mine at dawn: field workers and haul trucks at a licensed extraction site used in Lastre's fictional provenance demo.",
       proofPanel: {
         label: "Provenance seal",
         ariaLabel: "Provenance seal — valid on Casper Testnet",
@@ -62,10 +62,10 @@ export const content = {
     },
     solution: {
       badge: "Origin proof",
-      titleLine1: "Lastro proves the origin",
+      titleLine1: "Lastre proves the origin",
       titleLine2: "before any token or agent touches the data.",
       aside:
-        "Lastro sits beneath the agent economy. It turns physical readings into chain-judged proof, so tokens and agents act on verified origin — never on unverified claims.",
+        "Lastre sits beneath the agent economy. It turns physical readings into chain-judged proof, so tokens and agents act on verified origin — never on unverified claims.",
       featuresAria: "What the proof layer delivers",
       features: [
         {
@@ -74,7 +74,7 @@ export const content = {
         },
         {
           title: "Verdicts nothing can fake",
-          body: "Lastro seals readings offline with deterministic cryptography. No cloud, no clock, no LLM deciding the outcome — only a chain-judged Valid or Invalid.",
+          body: "Lastre seals readings offline with deterministic cryptography. No cloud, no clock, no LLM deciding the outcome — only a chain-judged Valid or Invalid.",
         },
         {
           title: "The layer everything builds on",
@@ -85,8 +85,8 @@ export const content = {
     different: {
       kicker: "Why it's different",
       titlePrefix: "Others build agents that consume real-world data. ",
-      titleEmphasis: "Lastro proves the data came from reality first.",
-      pillarsAria: "What makes Lastro different",
+      titleEmphasis: "Lastre proves the data came from reality first.",
+      pillarsAria: "What makes Lastre different",
       pillars: [
         {
           title: "Physical provenance",
@@ -149,7 +149,7 @@ export const content = {
       lead1Prefix: "Tamper with a single value and the entire seal changes. The chain records ",
       lead1Invalid: "Invalid",
       lead1Suffix: " — permanently, verifiably, by anyone.",
-      lead2Prefix: "Most systems hide a failure. Lastro ",
+      lead2Prefix: "Most systems hide a failure. Lastre ",
       lead2Emphasis: "carves it into the ledger",
       lead2Suffix: " as ",
       evidenceTerm: "evidence",
@@ -182,7 +182,7 @@ export const content = {
       honestyIntro: "Honesty is part of the protocol boundary.",
       honestyTitle: "We verify provenance. We don't sell anything.",
       honestyLead:
-        "Everything here uses simulated assets and offers no investment, no token sale, and no yield. Lastro is a proof layer — it confers no ownership and no financial right.",
+        "Everything here uses simulated assets and offers no investment, no token sale, and no yield. Lastre is a proof layer — it confers no ownership and no financial right.",
       liveKicker: "Verify it yourself",
       liveTitle: "Live on Casper Testnet. Provable by anyone.",
       liveLead: "The contract is deployed. Real attestations — accepted and rejected — sit on-chain right now.",
@@ -198,7 +198,7 @@ export const content = {
       kicker: "Against illegal mining",
       title: "Provenance for the minerals the world runs on.",
       lead:
-        "From gold to lithium to niobium, Lastro traces a lot from a licensed, authorized, cleared origin — mine, processing, transport, export — and anchors the proof at every step. The trust layer for a legal mineral supply chain.",
+        "From gold to lithium to niobium, Lastre traces a lot from a licensed, authorized, cleared origin — mine, processing, transport, export — and anchors the proof at every step. The trust layer for a legal mineral supply chain.",
       caption: "Shown with simulated assets for demonstration.",
     },
     faq: {
@@ -209,7 +209,7 @@ export const content = {
         },
         {
           q: "Is this a token sale or investment?",
-          a: "No. Lastro is a proof layer. The public demo uses fictional assets only.",
+          a: "No. Lastre is a proof layer. The public demo uses fictional assets only.",
         },
         {
           q: "Testnet vs mainnet?",
@@ -224,7 +224,7 @@ export const content = {
           a: "Rejections are evidence. Hiding failure breaks auditability for compliance and evaluators.",
         },
         {
-          q: "Can I verify without trusting Lastro?",
+          q: "Can I verify without trusting Lastre?",
           a: "Yes. Open the Casper explorer, read verdicts, and run make demo from the repository.",
         },
         {
@@ -245,8 +245,8 @@ export const content = {
       ],
     },
     compare: {
-      lede: "Lastro proves origin before any agent acts. Oracles and API attestations assume the source is already trustworthy.",
-      columns: { lastro: "Lastro", oracle: "Oracle", api: "API attestation" },
+      lede: "Lastre proves origin before any agent acts. Oracles and API attestations assume the source is already trustworthy.",
+      columns: { lastro: "Lastre", oracle: "Oracle", api: "API attestation" },
       rows: [
         { label: "Verdict source", lastro: "Deterministic seal", oracle: "External attestor", api: "Provider claim" },
         { label: "Offline proof", lastro: "Yes", oracle: "Partial", api: "No" },
@@ -386,7 +386,7 @@ export const content = {
         "Token sale or ownership",
         "Financial rights of any kind",
       ] as const,
-      foot: "Lastro confers proof, not ownership. The line is part of the protocol.",
+      foot: "Lastre confers proof, not ownership. The line is part of the protocol.",
     },
     explorer: {
       network: "Casper Testnet · casper-test",
@@ -399,9 +399,9 @@ export const content = {
       sync: "SYNC",
     },
     meta: {
-      title: "Lastro — Proof before token.",
+      title: "Lastre — Proof before token.",
       description:
-        "Lastro verifies physical origin offline with deterministic SHA-256 seals, then anchors Valid or Invalid verdicts on Casper — before any token or agent acts on the data.",
+        "Lastre verifies physical origin offline with deterministic SHA-256 seals, then anchors Valid or Invalid verdicts on Casper — before any token or agent acts on the data.",
     },
   },
   pt: {
@@ -421,7 +421,7 @@ export const content = {
       scrollExplore: "Explorar",
       scrollLabel: "Rolar para saber mais",
       mediaAlt:
-        "Mina a céu aberto ao amanhecer: trabalhadores e caminhões em um site de extração licenciado usado na demo fictícia de proveniência da Lastro.",
+        "Mina a céu aberto ao amanhecer: trabalhadores e caminhões em um site de extração licenciado usado na demo fictícia de proveniência da Lastre.",
       proofPanel: {
         label: "Selo de proveniência",
         ariaLabel: "Selo de proveniência — válido no Casper Testnet",
@@ -465,10 +465,10 @@ export const content = {
     },
     solution: {
       badge: "Prova de origem",
-      titleLine1: "A Lastro prova a origem",
+      titleLine1: "A Lastre prova a origem",
       titleLine2: "antes de qualquer token ou agente tocar nos dados.",
       aside:
-        "A Lastro fica abaixo da economia de agentes. Transforma leituras físicas em prova julgada on-chain, para que tokens e agentes ajam sobre origem verificada — nunca sobre alegações não verificadas.",
+        "A Lastre fica abaixo da economia de agentes. Transforma leituras físicas em prova julgada on-chain, para que tokens e agentes ajam sobre origem verificada — nunca sobre alegações não verificadas.",
       featuresAria: "O que a camada de prova entrega",
       features: [
         {
@@ -477,7 +477,7 @@ export const content = {
         },
         {
           title: "Vereditos que nada pode falsificar",
-          body: "A Lastro sela leituras offline com criptografia determinística. Sem nuvem, sem relógio, sem LLM decidindo o resultado — apenas Valid ou Invalid julgado pela chain.",
+          body: "A Lastre sela leituras offline com criptografia determinística. Sem nuvem, sem relógio, sem LLM decidindo o resultado — apenas Valid ou Invalid julgado pela chain.",
         },
         {
           title: "A camada sobre a qual tudo se constrói",
@@ -488,8 +488,8 @@ export const content = {
     different: {
       kicker: "Por que é diferente",
       titlePrefix: "Outros constroem agentes que consomem dados do mundo real. ",
-      titleEmphasis: "A Lastro prova que os dados vieram da realidade primeiro.",
-      pillarsAria: "O que torna a Lastro diferente",
+      titleEmphasis: "A Lastre prova que os dados vieram da realidade primeiro.",
+      pillarsAria: "O que torna a Lastre diferente",
       pillars: [
         {
           title: "Proveniência física",
@@ -552,7 +552,7 @@ export const content = {
       lead1Prefix: "Adultere um único valor e todo o selo muda. A chain registra ",
       lead1Invalid: "Invalid",
       lead1Suffix: " — permanentemente, verificável por qualquer um.",
-      lead2Prefix: "A maioria dos sistemas esconde uma falha. A Lastro ",
+      lead2Prefix: "A maioria dos sistemas esconde uma falha. A Lastre ",
       lead2Emphasis: "grava no ledger",
       lead2Suffix: " como ",
       evidenceTerm: "evidência",
@@ -585,7 +585,7 @@ export const content = {
       honestyIntro: "Honestidade faz parte da fronteira do protocolo.",
       honestyTitle: "Verificamos proveniência. Não vendemos nada.",
       honestyLead:
-        "Tudo aqui usa ativos simulados e não oferece investimento, venda de token ou rendimento. A Lastro é uma camada de prova — não confere propriedade nem direito financeiro.",
+        "Tudo aqui usa ativos simulados e não oferece investimento, venda de token ou rendimento. A Lastre é uma camada de prova — não confere propriedade nem direito financeiro.",
       liveKicker: "Verifique você mesmo",
       liveTitle: "Ao vivo no Casper Testnet. Provável por qualquer um.",
       liveLead: "O contrato está implantado. Atestações reais — aceitas e rejeitadas — estão on-chain agora.",
@@ -601,7 +601,7 @@ export const content = {
       kicker: "Contra mineração ilegal",
       title: "Proveniência para os minerais que movem o mundo.",
       lead:
-        "Do ouro ao lítio ao nióbio, a Lastro rastreia um lote desde uma origem licenciada, autorizada e liberada — mina, processamento, transporte, exportação — e ancora a prova em cada etapa. A camada de confiança para uma cadeia mineral legal.",
+        "Do ouro ao lítio ao nióbio, a Lastre rastreia um lote desde uma origem licenciada, autorizada e liberada — mina, processamento, transporte, exportação — e ancora a prova em cada etapa. A camada de confiança para uma cadeia mineral legal.",
       caption: "Exibido com ativos simulados para demonstração.",
     },
     faq: {
@@ -612,7 +612,7 @@ export const content = {
         },
         {
           q: "Isso é venda de token ou investimento?",
-          a: "Não. A Lastro é uma camada de prova. A demo pública usa apenas ativos fictícios.",
+          a: "Não. A Lastre é uma camada de prova. A demo pública usa apenas ativos fictícios.",
         },
         {
           q: "Testnet vs mainnet?",
@@ -627,7 +627,7 @@ export const content = {
           a: "Rejeições são evidência. Esconder falhas quebra a auditabilidade para compliance e avaliadores.",
         },
         {
-          q: "Posso verificar sem confiar na Lastro?",
+          q: "Posso verificar sem confiar na Lastre?",
           a: "Sim. Abra o explorer Casper, leia os vereditos e execute make demo do repositório.",
         },
         {
@@ -648,8 +648,8 @@ export const content = {
       ],
     },
     compare: {
-      lede: "A Lastro prova origem antes de qualquer agente agir. Oráculos e atestações de API assumem que a fonte já é confiável.",
-      columns: { lastro: "Lastro", oracle: "Oráculo", api: "Atestação API" },
+      lede: "A Lastre prova origem antes de qualquer agente agir. Oráculos e atestações de API assumem que a fonte já é confiável.",
+      columns: { lastro: "Lastre", oracle: "Oráculo", api: "Atestação API" },
       rows: [
         { label: "Fonte do veredito", lastro: "Selo determinístico", oracle: "Atestador externo", api: "Alegação do provedor" },
         { label: "Prova offline", lastro: "Sim", oracle: "Parcial", api: "Não" },
@@ -789,7 +789,7 @@ export const content = {
         "Venda de token ou propriedade",
         "Direitos financeiros de qualquer tipo",
       ] as const,
-      foot: "A Lastro confere prova, não propriedade. A linha faz parte do protocolo.",
+      foot: "A Lastre confere prova, não propriedade. A linha faz parte do protocolo.",
     },
     explorer: {
       network: "Casper Testnet · casper-test",
@@ -802,9 +802,9 @@ export const content = {
       sync: "SYNC",
     },
     meta: {
-      title: "Lastro — Prova antes do token.",
+      title: "Lastre — Prova antes do token.",
       description:
-        "A Lastro verifica origem física offline com selos SHA-256 determinísticos e ancora vereditos Valid ou Invalid no Casper — antes de qualquer token ou agente agir sobre os dados.",
+        "A Lastre verifica origem física offline com selos SHA-256 determinísticos e ancora vereditos Valid ou Invalid no Casper — antes de qualquer token ou agente agir sobre os dados.",
     },
   },
 } as const;

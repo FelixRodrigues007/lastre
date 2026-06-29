@@ -25,7 +25,7 @@ export const translations = {
     builtFor: "Built for evaluators",
     faq: "Frequently asked questions",
     useCases: "Use cases",
-    compare: "How Lastro compares",
+    compare: "How Lastre compares",
     changelog: "What's new on testnet",
     whatWeAreNot: "What we are not",
     security: "Security posture",
@@ -35,7 +35,7 @@ export const translations = {
     heroSubShort:
       "Offline deterministic seals. On-chain verdicts. Before any token or agent acts.",
     heroSubFull:
-      "Lastro is the trust layer for real-world assets and autonomous agents. It verifies physical origin offline and deterministically, then anchors the verdict on Casper — before any token or agent acts on the data.",
+      "Lastre is the trust layer for real-world assets and autonomous agents. It verifies physical origin offline and deterministically, then anchors the verdict on Casper — before any token or agent acts on the data.",
     readMore: "Read more",
     readLess: "Read less",
     testnetHealthy: "Testnet healthy",
@@ -67,7 +67,7 @@ export const translations = {
     builtFor: "Feito para avaliadores",
     faq: "Perguntas frequentes",
     useCases: "Casos de uso",
-    compare: "Como a Lastro se compara",
+    compare: "Como a Lastre se compara",
     changelog: "Novidades no testnet",
     whatWeAreNot: "O que não somos",
     security: "Postura de segurança",
@@ -77,7 +77,7 @@ export const translations = {
     heroSubShort:
       "Selos determinísticos offline. Vereditos on-chain. Antes de qualquer token ou agente agir.",
     heroSubFull:
-      "Lastro é a camada de confiança para ativos do mundo real e agentes autônomos. Verifica origem física offline e deterministicamente, depois ancora o veredito no Casper — antes de qualquer token ou agente agir sobre os dados.",
+      "Lastre é a camada de confiança para ativos do mundo real e agentes autônomos. Verifica origem física offline e deterministicamente, depois ancora o veredito no Casper — antes de qualquer token ou agente agir sobre os dados.",
     readMore: "Ler mais",
     readLess: "Ler menos",
     testnetHealthy: "Testnet saudável",

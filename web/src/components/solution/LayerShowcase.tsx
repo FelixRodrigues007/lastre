@@ -1,4 +1,7 @@
 /** Cinematic proof-feed mock — floating product UI over a scenic backdrop. */
+import { MeshGradientShader } from "../shaders/MeshGradientShader";
+import { DitherField } from "../visual/DitherField";
+
 export function LayerShowcase() {
   return (
     <div className="sol-showcase" aria-hidden="true">
@@ -19,6 +22,8 @@ export function LayerShowcase() {
             draggable={false}
           />
         </picture>
+        <MeshGradientShader blend="overlay" opacity={0.35} intensity={0.75} speed={0.6} />
+        <DitherField variant="overlay" className="sol-showcase__dither" />
       </div>
 
       <div className="sol-showcase__window">

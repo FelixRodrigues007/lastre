@@ -1,0 +1,178 @@
+/* ShaderImage — cinematic still with WebGL overlay */
+
+.shader-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--lastro-radius-md);
+  background: var(--lastro-color-olive-900);
+}
+
+.shader-image__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 1.2s var(--ease-out-expo);
+}
+
+.shader-image--drift .shader-image__img {
+  animation: ken-burns 22s var(--ease-out-expo) infinite alternate;
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1.05) translate(0, 0);
+  }
+  to {
+    transform: scale(1.12) translate(-1.5%, -1%);
+  }
+}
+
+.shader-image__grade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    color-mix(in oklab, var(--lastro-color-olive-950) 55%, transparent) 100%
+  );
+  pointer-events: none;
+}
+
+/* BlurReveal */
+
+.blur-reveal {
+  --blur-reveal: 16px;
+  --blur-reveal-opacity: 0;
+  --blur-reveal-y: 28px;
+  filter: blur(var(--blur-reveal));
+  opacity: var(--blur-reveal-opacity);
+  transform: translate3d(0, var(--blur-reveal-y), 0);
+  will-change: filter, opacity, transform;
+}
+
+/* BlurRevealText — per-word scroll scrub */
+
+.blur-reveal-text {
+  margin: 0;
+}
+
+.blur-reveal-text__word {
+  display: inline;
+  --blur-word: 14px;
+  --blur-word-opacity: 0;
+  --blur-word-y: 18px;
+  filter: blur(var(--blur-word));
+  opacity: var(--blur-word-opacity);
+  transform: translate3d(0, var(--blur-word-y), 0);
+  will-change: filter, opacity, transform;
+}
+
+/* PortraitWall — scroll-scrubbed horizontal gallery */
+
+.portrait-wall {
+  position: relative;
+  height: clamp(28rem, 20rem + 18vw, 42rem);
+  margin-top: clamp(2.5rem, 1.5rem + 4vw, 4rem);
+  overflow: hidden;
+  border-radius: var(--lastro-radius-lg);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: var(--lastro-color-olive-900);
+}
+
+.portrait-wall__strip {
+  display: flex;
+  gap: clamp(1rem, 0.5rem + 2vw, 1.5rem);
+  height: 100%;
+  padding: clamp(1rem, 0.5rem + 2vw, 1.5rem);
+  will-change: transform;
+}
+
+.portrait-wall__tile {
+  flex: none;
+  width: clamp(14rem, 10rem + 12vw, 22rem);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lastro-space-3);
+  margin: 0;
+}
+
+.portrait-wall__tile .shader-image {
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--lastro-radius-sm);
+}
+
+.portrait-wall__caption {
+  color: var(--lastro-text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.625rem;
+}
+
+/* Problem cinematic strip */
+
+.problem__strip {
+  position: relative;
+  width: 100%;
+  height: clamp(10rem, 6rem + 14vw, 16rem);
+  margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  border-radius: var(--lastro-radius-lg);
+  overflow: hidden;
+}
+
+.problem__strip .shader-image {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+/* Proof visual column */
+
+.evidence__visual {
+  position: relative;
+  min-height: clamp(16rem, 12rem + 12vw, 24rem);
+  margin-bottom: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  border-radius: var(--lastro-radius-lg);
+  overflow: hidden;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.evidence__visual .shader-image {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+}
+
+/* Different pillar images */
+
+.diff__pillar-visual {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  margin-bottom: var(--lastro-space-6);
+  border-radius: var(--lastro-radius-sm);
+  overflow: hidden;
+}
+
+/* How step backdrop — see how.css */
+
+@media (prefers-reduced-motion: reduce) {
+  .shader-image--drift .shader-image__img {
+    animation: none;
+  }
+
+  .blur-reveal {
+    filter: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .blur-reveal-text__word {
+    filter: none;
+    opacity: 1;
+    transform: none;
+  }
+}

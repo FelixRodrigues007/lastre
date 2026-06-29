@@ -1,8 +1,12 @@
 import { useId } from "react";
 import { useSite } from "../../context/SiteContext";
+import { MEDIA } from "../../site-media";
+import { ShaderImage } from "../visual/ShaderImage";
 import "./different.css";
+import "../visual/visual.css";
 
 const PILLAR_KEYS = ["provenance", "offline", "onchain"] as const;
+const PILLAR_IMAGES = [MEDIA.heroMiner, MEDIA.depthBack, MEDIA.layerFront] as const;
 
 export function Different() {
   const baseId = useId();
@@ -28,6 +32,13 @@ export function Different() {
         <ul className="diff__pillars reveal-stagger" aria-label={c.pillarsAria}>
           {c.pillars.map((pillar, i) => (
             <li key={PILLAR_KEYS[i] ?? pillar.title} className="diff__pillar">
+              <div className="diff__pillar-visual" aria-hidden="true">
+                <ShaderImage
+                  src={PILLAR_IMAGES[i] ?? MEDIA.heroMiner}
+                  shader={i === 1 ? "glow" : "mesh"}
+                  drift={i !== 2}
+                />
+              </div>
               <h3 className="diff__pillar-title">{pillar.title}</h3>
               <p className="diff__pillar-body">{pillar.body}</p>
             </li>

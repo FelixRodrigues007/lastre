@@ -73,6 +73,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .minerals__actions .btn--primary {
-    box-shadow: 0 8px 20px -12px rgba(18, 20, 7, 0.25);
+    box-shadow: 0 8px 20px -12px rgba(19, 44, 36, 0.25);
   }
 }

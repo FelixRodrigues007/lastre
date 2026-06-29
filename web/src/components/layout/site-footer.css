@@ -17,7 +17,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(254, 241, 111, 0.45),
+    rgba(178, 237, 151, 0.45),
     transparent
   );
   opacity: 0.55;
@@ -35,10 +35,7 @@
 
 .site-footer__scenic {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: clamp(22rem, 14rem + 28vw, 36rem);
+  inset: 0;
   pointer-events: none;
   user-select: none;
 }
@@ -51,8 +48,8 @@
   background: linear-gradient(
     to bottom,
     var(--lastro-bg-primary) 0%,
-    rgba(231, 230, 208, 0.72) 10%,
-    transparent 26%
+    rgba(234, 241, 235, 0.6) 3%,
+    transparent 10%
   );
 }
 
@@ -65,6 +62,23 @@
   object-position: center 38%;
   transform: translate3d(0, var(--scroll-shift-y, 0px), 0) scale(1.06);
   will-change: transform;
+}
+
+.site-footer__scenic .mesh-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+}
+
+/* Halftone dot screen over the scenic photo — same dither the cards use,
+ * sat below the top fade so it dissolves into the page instead of hard-edging. */
+.site-footer__scenic-dither {
+  z-index: 3;
+  opacity: 0.5;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 100%);
 }
 
 /* ── content grid ─────────────────────────────────────────────────── */
@@ -226,7 +240,7 @@
   position: absolute;
   left: 50%;
   bottom: 0;
-  z-index: 2;
+  z-index: 1;
   transform: translateX(-50%) translateY(18%);
   width: max-content;
   font-family: var(--lastro-font-display);

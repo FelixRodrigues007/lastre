@@ -3,6 +3,8 @@ import { useId, useState } from "react";
 import { useSite } from "../../context/SiteContext";
 import { trackEvent } from "../../lib/analytics";
 import { truncateHash } from "../../lib/cryptoSeal";
+import { MEDIA } from "../../site-media";
+import { ShaderImage } from "../visual/ShaderImage";
 import { GlossaryTerm } from "../content/ContentSections";
 import {
   CSPR_VERIFY_URL,
@@ -14,6 +16,7 @@ import {
 } from "./seal-data";
 import "./proof.css";
 import "../content/content-sections.css";
+import "../visual/visual.css";
 
 type TamperField = "none" | "mass" | "origin";
 
@@ -106,6 +109,10 @@ export function Proof() {
       </span>
       <div className="shell split-grid">
         <div className="evidence__lead">
+          <div className="evidence__visual reveal-scroll" aria-hidden="true">
+            <ShaderImage src={MEDIA.heroMiner} shader="glow" drift />
+          </div>
+
           <p className="kicker reveal-scroll">{c.kicker}</p>
           <p className="section-intro">{c.intro}</p>
 

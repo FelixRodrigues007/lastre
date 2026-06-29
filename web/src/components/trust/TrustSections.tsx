@@ -1,8 +1,10 @@
 import { useSite } from "../../context/SiteContext";
 import { MediaCard } from "../ui/MediaCard";
+import { GlyphField, type GlyphShape } from "../visual/GlyphField";
 import { MEDIA } from "../../site-media";
 import "./trust-sections.css";
 import "../ui/media-card.css";
+import "../visual/visual.css";
 
 const PARTNERS = ["Casper Network", "Open Source", "SHA-256", "Web Crypto"] as const;
 
@@ -24,25 +26,27 @@ export function PartnersBar() {
   );
 }
 
-const PERSONA_IMAGES = [MEDIA.heroMiner, MEDIA.layerFront, MEDIA.footerMine] as const;
+const PERSONA_GLYPHS: readonly GlyphShape[] = ["magnifier", "blocks", "shield"];
 
 export function Personas() {
-  const { t, content } = useSite();
+  const { content } = useSite();
   const c = content.trust;
 
   return (
     <section className="personas section section--bordered" id="personas" aria-labelledby="personas-title">
       <div className="shell">
-        <p className="kicker reveal-scroll">{t("builtFor")}</p>
         <h2 id="personas-title" className="section-title section-title--narrow reveal-scroll">
           {c.personasTitle}
         </h2>
+        <p className="personas__lede reveal-scroll">
+          {content.different.titlePrefix}
+          <span className="accent-emphasis">{content.different.titleEmphasis}</span>
+        </p>
         <ul className="card-grid card-grid--3 reveal-stagger" style={{ marginTop: "var(--lastro-space-8)" }}>
           {c.personas.map((p, i) => (
             <li key={p.title}>
               <MediaCard
-                image={PERSONA_IMAGES[i] ?? MEDIA.heroMiner}
-                alt=""
+                media={<GlyphField shape={PERSONA_GLYPHS[i] ?? "magnifier"} />}
                 label={p.label}
                 title={p.title}
                 body={p.body}
@@ -112,43 +116,3 @@ export function GitHubStats() {
   );
 }
 
-const QUOTE_IMAGES = [MEDIA.heroMiner, MEDIA.depthFront] as const;
-
-export function Testimonials() {
-  const { t, content } = useSite();
-  const c = content.trust;
-
-  return (
-    <section className="testimonials section" id="testimonials" aria-label={c.testimonialsAria}>
-      <div className="shell">
-        <p className="kicker">{t("simulatedOnly")}</p>
-        <ul className="card-grid card-grid--2">
-          {c.quotes.map((q, i) => (
-            <li key={q.role}>
-              <blockquote className="testimonials__card panel panel--light">
-                <div className="testimonials__card-media" aria-hidden="true">
-                  <img src={QUOTE_IMAGES[i] ?? MEDIA.heroMiner} alt="" loading="lazy" />
-                </div>
-                <p className="testimonials__quote">"{q.text}"</p>
-                <cite className="testimonials__cite mono-label">{q.role}</cite>
-              </blockquote>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-export function PullQuote() {
-  const { content } = useSite();
-
-  return (
-    <aside className="pull-quote pull-quote--media shell" id="quote" aria-label={content.trust.pullQuoteAria}>
-      <div className="pull-quote__bg" aria-hidden="true">
-        <img src={MEDIA.heroOriginWide} alt="" loading="lazy" />
-      </div>
-      <p className="pull-quote__text">"{content.trust.pullQuote}"</p>
-    </aside>
-  );
-}

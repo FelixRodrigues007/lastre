@@ -3,6 +3,36 @@
   gap: var(--lastro-space-8);
 }
 
+.faq__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lastro-space-6);
+}
+
+.faq__visual {
+  position: relative;
+  height: clamp(12rem, 8rem + 12vw, 18rem);
+  border-radius: var(--lastro-radius-lg);
+  overflow: hidden;
+}
+
+.faq__visual .shader-image {
+  width: 100%;
+  height: 100%;
+}
+
+.compare__visual {
+  margin-top: var(--lastro-space-8);
+  height: clamp(10rem, 6rem + 10vw, 14rem);
+  border-radius: var(--lastro-radius-md);
+  overflow: hidden;
+}
+
+.compare__visual .shader-image {
+  width: 100%;
+  height: 100%;
+}
+
 @media (min-width: 900px) {
   .faq__layout {
     grid-template-columns: 0.9fr 1.1fr;
@@ -95,6 +125,25 @@
 .compare__wrap {
   overflow-x: auto;
   margin-top: 0;
+  /* data-theme="light" on this panel redefines the colour tokens, but `color`
+   * is still inherited from the dark section. Re-apply it so the cells read as
+   * dark olive on the cream panel instead of light-on-light. */
+  color: var(--lastro-text-primary);
+}
+
+.compare__table th[scope="row"],
+.compare__table thead th {
+  color: var(--lastro-text-primary);
+}
+
+.compare__table td {
+  color: var(--lastro-text-secondary);
+}
+
+/* Lastre's own column carries the verdict — give it brand weight. */
+.compare__table td:first-of-type {
+  color: var(--lastro-brand-seal-text);
+  font-weight: var(--lastro-weight-semibold);
 }
 
 .compare__table {
@@ -304,7 +353,7 @@
 [data-contrast="high"] {
   --lastro-text-secondary: var(--lastro-color-cream-100);
   --lastro-text-muted: var(--lastro-color-sage-300);
-  --lastro-border-subtle: rgba(231, 230, 208, 0.28);
+  --lastro-border-subtle: rgba(234, 241, 235, 0.28);
 }
 
 .mobile-nav__overlay {

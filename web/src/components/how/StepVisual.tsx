@@ -85,7 +85,7 @@ export function StepVisual({ step }: StepVisualProps) {
               <span className="viz__chip-text">Casper</span>
             </span>
           </span>
-          <span className="viz__meta mono-label">ProofOfOrigin · #2 481 902</span>
+          <span className="viz__meta mono-label">Proof of origin · #2 481 902</span>
           <span className="viz__foot mono-label">Reference registered on-chain</span>
         </>
       )}

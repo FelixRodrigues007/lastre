@@ -4,10 +4,12 @@ import { CSPR_EXPLORER_EMBED, CSPR_PACKAGE_URL, GITHUB_URL } from "../../site-li
 import { useSite } from "../../context/SiteContext";
 import { Button } from "../ui/Button";
 import { LiveGatewayPanel } from "../gateway/LiveGatewayPanel";
+import { SectionMarker } from "../ui/SectionMarker";
+import { DitherField } from "../visual/DitherField";
 import { BoundaryVisual } from "./BoundaryVisual";
-import { ExplorerVisual } from "./ExplorerVisual";
 import "./demonstration.css";
 import "../content/content-sections.css";
+import "../visual/visual.css";
 
 export function Demonstration() {
   const baseId = useId();
@@ -17,6 +19,10 @@ export function Demonstration() {
 
   return (
     <div className="demonstration section--band">
+      <div className="shell">
+        <SectionMarker index="03" label="See it live" keyword="Verify" />
+      </div>
+
       <section
         className="demonstration__row"
         id="honesty"
@@ -44,20 +50,25 @@ export function Demonstration() {
           </div>
 
           <div
-            className="demonstration__visual reveal-scroll"
+            className="demonstration__visual bleed-right reveal-scroll"
             style={{ "--reveal-delay": "180ms" } as CSSProperties}
           >
-            <BoundaryVisual />
+            <div className="dither-panel">
+              <DitherField variant="seal" />
+              <div className="dither-panel__content">
+                <BoundaryVisual />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <section
-        className="demonstration__row demonstration__row--reverse"
+        className="demonstration__row"
         id="demo"
         aria-labelledby={`${baseId}-live-title`}
       >
-        <div className="shell split-grid demonstration__grid demonstration__grid--reverse">
+        <div className="shell split-grid demonstration__grid">
           <div className="demonstration__copy">
             <p className="kicker reveal-scroll">{c.liveKicker}</p>
 
@@ -94,32 +105,34 @@ export function Demonstration() {
           </div>
 
           <div
-            className="demonstration__visual reveal-scroll"
+            className="demonstration__visual bleed-right reveal-scroll"
             style={{ "--reveal-delay": "240ms" } as CSSProperties}
           >
-            {showEmbed ? (
-              <>
-                <iframe
-                  className="expl__embed"
-                  src={CSPR_EXPLORER_EMBED}
-                  title={c.embedTitle}
-                  sandbox="allow-scripts allow-same-origin allow-popups"
-                  loading="lazy"
-                />
-                <p className="expl__embed-fallback">
-                  {c.embedFallback}{" "}
-                  <a href={CSPR_PACKAGE_URL} target="_blank" rel="noopener noreferrer">
-                    {c.embedFallbackLink}
-                  </a>
-                  .
-                </p>
-              </>
-            ) : (
-              <>
-                <ExplorerVisual />
-                <LiveGatewayPanel />
-              </>
-            )}
+            <div className="dither-panel">
+              <DitherField variant="valid" />
+              <div className="dither-panel__content">
+                {showEmbed ? (
+                  <>
+                    <iframe
+                      className="expl__embed"
+                      src={CSPR_EXPLORER_EMBED}
+                      title={c.embedTitle}
+                      sandbox="allow-scripts allow-same-origin allow-popups"
+                      loading="lazy"
+                    />
+                    <p className="expl__embed-fallback">
+                      {c.embedFallback}{" "}
+                      <a href={CSPR_PACKAGE_URL} target="_blank" rel="noopener noreferrer">
+                        {c.embedFallbackLink}
+                      </a>
+                      .
+                    </p>
+                  </>
+                ) : (
+                  <LiveGatewayPanel />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>

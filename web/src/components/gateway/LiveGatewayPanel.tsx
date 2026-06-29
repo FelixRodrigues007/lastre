@@ -30,6 +30,28 @@ function formatClock(date: Date) {
   return date.toLocaleTimeString("en-US", { hour12: false });
 }
 
+function VerdictGlyph({ verdict }: { verdict: string }) {
+  if (verdict === "Valid") {
+    return (
+      <svg width="11" height="11" viewBox="0 0 14 14" aria-hidden="true">
+        <path
+          d="M2.5 7.5L5.5 10.5L11.5 3.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+  return (
+    <svg width="10" height="10" viewBox="0 0 14 14" aria-hidden="true">
+      <path d="M4 4L10 10M10 4L4 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function LiveGatewayPanel() {
   const [state, setState] = useState<LoadState>("loading");
   const [error, setError] = useState<string | null>(null);
@@ -157,15 +179,15 @@ export function LiveGatewayPanel() {
       ) : (
         <>
           <div className="live-gateway__stats" aria-label="Gateway proof counters">
-            <span>
+            <span className="live-gateway__stat live-gateway__stat--accepted">
               <strong>{snapshot.proof?.accepted ?? "—"}</strong>
               Accepted
             </span>
-            <span>
+            <span className="live-gateway__stat live-gateway__stat--rejected">
               <strong>{snapshot.proof?.rejected ?? "—"}</strong>
               Rejected
             </span>
-            <span>
+            <span className="live-gateway__stat live-gateway__stat--lots">
               <strong>{onChainAssets || "—"}</strong>
               Live catalog lots
             </span>
@@ -176,9 +198,16 @@ export function LiveGatewayPanel() {
               <p className="live-gateway__muted">Waiting for live verdicts…</p>
             ) : (
               snapshot.verdicts.map((verdict) => (
-                <article className="live-gateway__row" key={verdict.assetId}>
-                  <span>{verdict.assetId}</span>
-                  <strong data-verdict={verdict.verdict}>{verdict.verdict}</strong>
+                <article
+                  className="live-gateway__row"
+                  data-verdict={verdict.verdict}
+                  key={verdict.assetId}
+                >
+                  <span className="live-gateway__asset">{verdict.assetId}</span>
+                  <strong className="live-gateway__verdict" data-verdict={verdict.verdict}>
+                    <VerdictGlyph verdict={verdict.verdict} />
+                    {verdict.verdict}
+                  </strong>
                 </article>
               ))
             )}

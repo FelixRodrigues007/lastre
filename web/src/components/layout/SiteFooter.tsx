@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { MeshGradientShader } from "../shaders/MeshGradientShader";
+import { DitherField } from "../visual/DitherField";
 import { SealMark } from "../ui/SealMark";
 import {
   APP_URL,
@@ -99,14 +101,6 @@ export function SiteFooter() {
 
   return (
     <footer className="site-footer" id="footer" data-theme="light">
-      <nav className="shell site-footer__breadcrumb mono-label" aria-label="Breadcrumb">
-        <a href="#top">{f.breadcrumbHome}</a>
-        <span aria-hidden="true"> / </span>
-        <a href="#proof">{f.breadcrumbProof}</a>
-        <span aria-hidden="true"> / </span>
-        <span>{f.breadcrumbFooter}</span>
-      </nav>
-
       <div className="site-footer__stage">
         <div className="site-footer__scenic" aria-hidden="true" data-scroll-shift="0.08">
           <img
@@ -118,6 +112,8 @@ export function SiteFooter() {
             loading="lazy"
             decoding="async"
           />
+          <MeshGradientShader blend="overlay" opacity={0.28} intensity={0.65} speed={0.4} />
+          <DitherField variant="overlay" className="site-footer__scenic-dither" />
         </div>
 
         <div className="shell site-footer__body reveal-scroll">

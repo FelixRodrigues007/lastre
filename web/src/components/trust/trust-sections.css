@@ -10,6 +10,16 @@
   gap: var(--lastro-space-6);
 }
 
+/* Muted partner strip that still clears WCAG AA (6.2:1 on olive-950)
+   instead of the global --lastro-text-muted (2.4:1, fails). */
+.partners {
+  --partners-muted: #949877;
+}
+
+.partners__label {
+  color: var(--partners-muted);
+}
+
 .partners__logos {
   display: flex;
   flex-wrap: wrap;
@@ -23,8 +33,17 @@
   font-family: var(--lastro-font-display);
   font-size: 0.875rem;
   font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-muted);
+  color: var(--partners-muted);
   letter-spacing: -0.01em;
+}
+
+.personas__lede {
+  margin-top: var(--lastro-space-4);
+  max-width: 54ch;
+  font-size: clamp(1.05rem, 0.98rem + 0.5vw, 1.3rem);
+  line-height: 1.4;
+  color: var(--lastro-text-secondary);
+  text-wrap: balance;
 }
 
 .personas__grid {
@@ -126,5 +145,13 @@
   font-size: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
   line-height: 1.35;
   letter-spacing: -0.02em;
-  color: var(--lastro-text-secondary);
+  color: var(--lastro-text-primary);
+}
+
+.pull-quote__text::before {
+  content: "\201C";
+}
+
+.pull-quote__text::after {
+  content: "\201D";
 }
