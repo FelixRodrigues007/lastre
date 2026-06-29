@@ -1,0 +1,13 @@
+# Cloudflare Pages — SPA fallback
+#
+# Serve index.html (HTTP 200, no redirect) for any path that is NOT a real
+# static file, so client-side routes such as /proof, /catalog, /spot-fraud,
+# /asset/:id keep working on direct load and on hard refresh.
+#
+# Real build files are served FIRST and are NOT affected by this rule:
+#   /assets/*        (Vite content-hashed JS/CSS)
+#   /media/*         (images)
+#   /catalog.json    (public catalog)
+#
+# This replaces the Vercel "rewrites" rule, which Cloudflare Pages does not read.
+/*    /index.html    200

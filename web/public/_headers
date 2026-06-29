@@ -1,0 +1,14 @@
+# Cloudflare Pages — response headers
+#
+# 1) Long-term immutable caching for Vite content-hashed assets. The filename
+#    changes whenever the content changes, so it is safe to cache forever.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 2) Safe baseline security headers for the public demo. These do NOT block the
+#    Google Fonts <link> tags used by index.html, and do not set a strict CSP
+#    (a wrong CSP would break fonts/JS), so they are safe to ship as-is.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
