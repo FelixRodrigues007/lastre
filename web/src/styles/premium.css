@@ -325,12 +325,6 @@ html.premium .section-title {
   line-height: 1.02;
 }
 
-html.premium .kicker::before {
-  width: 20px;
-  height: 2px;
-  border-radius: 2px;
-}
-
 html.premium .interactive-lift:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.45);

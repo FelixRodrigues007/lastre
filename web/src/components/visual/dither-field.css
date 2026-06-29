@@ -93,17 +93,16 @@
   gap: var(--lastro-space-6);
 }
 
-/* When the panel bleeds to a viewport edge, square that edge and drop its
- * border so it reads as running off-canvas like Caret. */
+/* When the panel bleeds to a viewport edge it reads as running off-canvas like
+ * Caret: the bleeding edge loses its border and every corner is squared, so the
+ * frame is a clean rectangle that opens and closes on flush straight lines. */
 .bleed-right > .dither-panel {
-  border-start-end-radius: 0;
-  border-end-end-radius: 0;
+  border-radius: 0;
   border-inline-end: 0;
 }
 
 .bleed-left > .dither-panel {
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
+  border-radius: 0;
   border-inline-start: 0;
 }
 

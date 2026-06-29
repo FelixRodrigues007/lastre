@@ -125,6 +125,9 @@
 
 /* ── the scrolling card stack ──────────────────────────────────────── */
 .how__cards {
+  /* Height of the hatched provenance band between cards — shared so the
+     coloured viz panel can sit flush against it without overlap. */
+  --how-band-height: 12px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -164,7 +167,7 @@
   position: absolute;
   inset-inline: 0;
   top: 0;
-  height: 12px;
+  height: var(--how-band-height);
   z-index: 1;
   border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   background: repeating-linear-gradient(
@@ -248,6 +251,15 @@
       color-mix(in oklab, var(--lastro-color-sage-300) 30%, var(--lastro-bg-elevated)) 0%,
       var(--lastro-bg-panel) 100%
     );
+}
+
+/* Every card after the first carries the hatched band at its top. Inset only
+   that panel's top by the band height so the coloured frame starts exactly at
+   the band's lower edge — flush, never overlapping. The frame above reaches
+   down to the band's upper edge (no bottom margin), so the band sits in a
+   clean channel touched by both frames. */
+.how__card + .how__card .how__card-viz {
+  margin-top: var(--how-band-height);
 }
 
 /* WebGL backdrop — bright seal-dominant mesh fills the viz column behind the mockup */

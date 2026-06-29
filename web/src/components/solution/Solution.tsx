@@ -1,7 +1,6 @@
 import { useId } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { useSite } from "../../context/SiteContext";
-import { SectionMarker } from "../ui/SectionMarker";
 import { LayerShowcase } from "./LayerShowcase";
 import "./solution.css";
 
@@ -74,15 +73,10 @@ export function Solution() {
   return (
     <section className="sol section section--bordered" id="solution" aria-labelledby={`${baseId}-title`}>
       <div className="shell">
-        <SectionMarker index="01" label="The layer" keyword="Proof" />
+        <p className="kicker reveal-scroll">{c.badge}</p>
 
         <header className="sol__header">
           <div className="sol__header-main reveal-scroll">
-            <span className="sol__badge">
-              <span className="sol__badge-dot" aria-hidden="true" />
-              {c.badge}
-            </span>
-
             <h2
               id={`${baseId}-title`}
               className="sol__title sol__title--split"

@@ -4,7 +4,6 @@ import { CSPR_EXPLORER_EMBED, CSPR_PACKAGE_URL, GITHUB_URL } from "../../site-li
 import { useSite } from "../../context/SiteContext";
 import { Button } from "../ui/Button";
 import { LiveGatewayPanel } from "../gateway/LiveGatewayPanel";
-import { SectionMarker } from "../ui/SectionMarker";
 import { DitherField } from "../visual/DitherField";
 import { BoundaryVisual } from "./BoundaryVisual";
 import "./demonstration.css";
@@ -19,19 +18,15 @@ export function Demonstration() {
 
   return (
     <div className="demonstration section--band">
-      <div className="shell">
-        <SectionMarker index="03" label="See it live" keyword="Verify" />
-      </div>
 
       <section
-        className="demonstration__row"
+        className="demonstration__row demonstration__row--flip"
         id="honesty"
         aria-labelledby={`${baseId}-honesty-title`}
       >
         <div className="shell split-grid demonstration__grid">
           <div className="demonstration__copy">
             <p className="kicker reveal-scroll">{c.honestyKicker}</p>
-            <p className="section-intro">{c.honestyIntro}</p>
 
             <h2
               id={`${baseId}-honesty-title`}
@@ -41,16 +36,17 @@ export function Demonstration() {
               {c.honestyTitle}
             </h2>
 
-            <p
-              className="section-lead section-lead--rule reveal-scroll body-max-ch"
+            <div
+              className="section-lead section-lead--rule section-lead--stack reveal-scroll body-max-ch"
               style={{ "--reveal-delay": "120ms" } as CSSProperties}
             >
-              {c.honestyLead}
-            </p>
+              <p>{c.honestyIntro}</p>
+              <p>{c.honestyLead}</p>
+            </div>
           </div>
 
           <div
-            className="demonstration__visual bleed-right reveal-scroll"
+            className="demonstration__visual bleed-left reveal-scroll"
             style={{ "--reveal-delay": "180ms" } as CSSProperties}
           >
             <div className="dither-panel">

@@ -100,33 +100,9 @@
   --atmo-grid-opacity: 0.038;
 }
 
-/* ── kicker restraint — seal only on minerals + vault CTA ─────────── */
-
-.problem .kicker,
-.sol .kicker,
-.how .kicker,
-.evidence .kicker,
-.diff .kicker,
-.demonstration .kicker {
-  color: var(--section-kicker);
-}
-
-.problem .kicker::before,
-.sol .kicker::before,
-.how .kicker::before,
-.evidence .kicker::before,
-.diff .kicker::before,
-.demonstration .kicker::before {
-  background: var(--section-kicker-bar);
-}
-
-.minerals .kicker {
-  color: var(--section-kicker);
-}
-
-.minerals .kicker::before {
-  background: var(--section-kicker-bar);
-}
+/* Kicker styling is now unified globally (.kicker in global.css): muted
+ * theme-aware text + static valid-status dot. Per-band color overrides are
+ * intentionally dropped so every section eyebrow matches the hero. */
 
 /* ── contextual panel recipes ─────────────────────────────────────── */
 
@@ -156,6 +132,32 @@
   box-shadow:
     0 36px 72px -36px rgba(0, 0, 0, 0.58),
     inset 0 1px 0 rgba(178, 237, 151, 0.04);
+}
+
+/* Tamper-test card rides light against the dark evidence band.
+ * Re-anchor the theme tokens locally so every child (readings, seals,
+ * toggle, verdict) flips to dark-on-cream regardless of the band's
+ * forced light-text inheritance. */
+.evidence .panel--elevated[data-theme="light"] {
+  --lastro-text-primary: var(--lastro-color-olive-950);
+  --lastro-text-secondary: var(--lastro-color-olive-700);
+  --lastro-text-muted: var(--lastro-color-olive-500);
+  --lastro-brand-seal-text: var(--lastro-color-seal-800);
+  --lastro-bg-primary: var(--lastro-color-cream-200);
+  --lastro-bg-panel: var(--lastro-color-cream-100);
+  --lastro-bg-elevated: var(--lastro-color-cream-50);
+  --lastro-border-subtle: rgba(19, 44, 36, 0.12);
+  --lastro-border-strong: rgba(19, 44, 36, 0.22);
+
+  background: linear-gradient(
+    160deg,
+    var(--lastro-color-cream-50) 0%,
+    var(--lastro-color-cream-100) 100%
+  );
+  border-color: rgba(19, 44, 36, 0.14);
+  box-shadow:
+    0 36px 72px -32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .how[data-theme="light"] .how__panel {

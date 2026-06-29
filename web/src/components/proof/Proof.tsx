@@ -114,7 +114,6 @@ export function Proof() {
           </div>
 
           <p className="kicker reveal-scroll">{c.kicker}</p>
-          <p className="section-intro">{c.intro}</p>
 
           <h2
             id={`${baseId}-title`}
@@ -128,6 +127,7 @@ export function Proof() {
             className="section-lead section-lead--stack reveal-scroll body-max-ch"
             style={{ "--reveal-delay": "120ms" } as CSSProperties}
           >
+            <p>{c.intro}</p>
             <p>
               {c.lead1Prefix}
               <span className="accent-emphasis" style={{ color: "var(--lastro-status-invalid)" }}>
@@ -146,6 +146,7 @@ export function Proof() {
 
         <aside
           className="evidence__panel panel panel--elevated split-grid__aside--sticky reveal-scroll"
+          data-theme="light"
           style={{ "--reveal-delay": "180ms" } as CSSProperties}
           aria-label={c.panelAria}
         >

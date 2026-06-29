@@ -87,7 +87,9 @@ html[data-atmo-tone="light"] .media-card__scrim {
 
 .media-card__label {
   position: absolute;
-  left: 1rem;
+  /* Align the label's text edge with the body (title + copy sit at 1.35rem):
+     0.7rem box inset + 0.65rem inner padding = 1.35rem to the glyph. */
+  left: 0.7rem;
   bottom: 1rem;
   padding: 0.35rem 0.65rem;
   border-radius: 980px;

@@ -10,7 +10,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "cobe": "^2.0.1",
+    "cobe": "^0.6.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

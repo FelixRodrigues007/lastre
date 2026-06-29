@@ -129,8 +129,11 @@
   text-align: left;
 }
 
-/* eyebrow pill — mint chip */
-.hero__eyebrow {
+/* eyebrow pill — mint chip. Shared with section eyebrows (.kicker) so every
+ * hat follows the hero pill exactly. Theme-aware via --lastro-badge-* tokens:
+ * mint-on-dark in dark bands, green-on-cream under [data-theme="light"]. */
+.hero__eyebrow,
+.kicker {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;

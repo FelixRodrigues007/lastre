@@ -234,27 +234,6 @@
   color: var(--lastro-text-primary);
 }
 
-/* ── giant cropped wordmark ───────────────────────────────────────── */
-
-.site-footer__scenic-wordmark {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  z-index: 1;
-  transform: translateX(-50%) translateY(18%);
-  width: max-content;
-  font-family: var(--lastro-font-display);
-  font-size: clamp(14rem, 10rem + 30vw, 40rem);
-  font-weight: var(--lastro-weight-medium);
-  line-height: 0.8;
-  letter-spacing: -0.06em;
-  text-align: center;
-  white-space: nowrap;
-  color: #ffffff;
-  pointer-events: none;
-  user-select: none;
-}
-
 @media (min-width: 720px) {
   .site-footer__grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
@@ -280,11 +259,6 @@
 @media (min-width: 1080px) {
   .site-footer__grid {
     grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.6fr);
-  }
-
-  .site-footer__scenic-wordmark {
-    transform: translateX(-50%) translateY(20%);
-    font-size: clamp(16rem, 12rem + 24vw, 44rem);
   }
 }
 

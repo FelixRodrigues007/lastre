@@ -4,6 +4,7 @@ import { sha256Hex } from "../../lib/cryptoSeal";
 import { DEMO_TERMINAL_CMD } from "../../site-links";
 import { MEDIA } from "../../site-media";
 import { ShaderImage } from "../visual/ShaderImage";
+import { CubeField3D } from "../visual/CubeField3D";
 import "./content-sections.css";
 import "../visual/visual.css";
 
@@ -14,6 +15,9 @@ export function Faq() {
 
   return (
     <section className="faq section section--bordered" id="faq" aria-labelledby={`${baseId}-title`}>
+      <span className="faq__mark" aria-hidden="true">
+        <CubeField3D />
+      </span>
       <div className="shell faq__layout">
         <div className="faq__intro">
           <h2 id={`${baseId}-title`} className="section-title">
@@ -117,13 +121,9 @@ export function ComparisonTable() {
           <div className="compare__intro">
             <h2 className="section-title">{t("compare")}</h2>
             <p className="compare__lede">{c.lede}</p>
-            <div className="compare__visual reveal-scroll" aria-hidden="true">
-              <ShaderImage src={MEDIA.heroMiner} shader="glow" drift />
-            </div>
           </div>
           <div
-            className="compare__wrap panel panel--elevated"
-            data-theme="light"
+            className="compare__wrap"
             role="region"
             aria-label={t("compare")}
             tabIndex={0}
@@ -309,8 +309,4 @@ export function PostDemoBanner() {
       </a>
     </div>
   );
-}
-
-export function SectionIntro({ children }: { children: string }) {
-  return <p className="section-intro mono-label">{children}</p>;
 }

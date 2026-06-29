@@ -213,25 +213,9 @@ a {
   }
 }
 
-/* Section eyebrow (no chip) — small kicker above headlines. */
-.kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--lastro-space-3);
-  font-family: var(--lastro-font-mono);
-  font-size: var(--text-eyebrow);
-  font-weight: var(--lastro-weight-medium);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--lastro-brand-seal-text);
-}
-
-.kicker::before {
-  content: "";
-  width: 28px;
-  height: var(--lastro-stroke-rule);
-  background: var(--lastro-brand-seal);
-}
+/* Section eyebrow (.kicker) is the hero pill — its base appearance is defined
+ * once alongside .hero__eyebrow in components/hero/hero.css to stay locked to
+ * the hero. Section-specific layout overrides (if any) live with each section. */
 
 /* ── section system (shared across all bands) ─────────────────────── */
 
@@ -522,7 +506,11 @@ a {
  * stacked mobile layouts keep their gutter. */
 .bleed-right,
 .bleed-left {
-  --bleed-gutter: max(var(--shell-pad), calc((100vw - var(--shell-max)) / 2));
+  /* Distance from the shell's content edge to the viewport edge: the shell's
+   * own inline padding plus, once the shell is capped, half the leftover. The
+   * earlier max() dropped the padding term and left a shell-pad gap on wide
+   * screens, so the panel never reached the edge. */
+  --bleed-gutter: calc(var(--shell-pad) + max(0px, (100vw - var(--shell-max)) / 2));
 }
 
 @media (min-width: 980px) {

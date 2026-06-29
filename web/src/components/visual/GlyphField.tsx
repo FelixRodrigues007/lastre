@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./glyph-field.css";
 
-export type GlyphShape = "magnifier" | "blocks" | "shield";
+export type GlyphShape = "magnifier" | "blocks" | "shield" | "seal";
 
 type GlyphFieldProps = {
   /** Which silhouette to render as a character mosaic. */
@@ -10,9 +10,16 @@ type GlyphFieldProps = {
   /** Mosaic resolution. Cols ≈ 2.1× rows keeps cells visually square. */
   cols?: number;
   rows?: number;
+  /** Continuously re-scramble glyphs ("encrypting" churn), not just on hover. */
+  animate?: boolean;
 };
 
 const CHAR_POOL = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
+
+/* Continuous-scramble cadence: re-roll a slice of glyphs every few frames so
+   the silhouette reads as live encryption rather than static ASCII art. */
+const SCRAMBLE_EVERY = 3;
+const SCRAMBLE_FRACTION = 0.06;
 
 /* Monospace cell geometry (charW = fs·CW, lineH = fs·LH) — matches the paint
    step so the silhouette renders undistorted. */
@@ -90,10 +97,42 @@ function shield(x: number, y: number): boolean {
   return inside && !check;
 }
 
+/** Min distance from (x,y) to the closed polygon's edges, in normalised space. */
+function polyRingDistance(x: number, y: number, pts: readonly (readonly [number, number])[]): number {
+  let min = Infinity;
+  for (let i = 0; i < pts.length; i += 1) {
+    const a = pts[i];
+    const b = pts[(i + 1) % pts.length];
+    const d = segmentDistance(x, y, a[0], a[1], b[0], b[1]);
+    if (d < min) min = d;
+  }
+  return min;
+}
+
+/* Lastre seal — pointy-top hexagon (outer lot + inner seal), a centred cross,
+   and the on-chain node. Mirrors the SealMark SVG, normalised to 0–1. */
+const SEAL_OUTER = [
+  [0.5, 0.15], [0.8, 0.325], [0.8, 0.675], [0.5, 0.85], [0.2, 0.675], [0.2, 0.325],
+] as const;
+const SEAL_INNER = [
+  [0.5, 0.294], [0.675, 0.397], [0.675, 0.603], [0.5, 0.706], [0.325, 0.603], [0.325, 0.397],
+] as const;
+
+function seal(x: number, y: number): boolean {
+  const outer = polyRingDistance(x, y, SEAL_OUTER) < 0.038;
+  const inner = polyRingDistance(x, y, SEAL_INNER) < 0.032;
+  const cross =
+    (Math.abs(y - 0.5) < 0.028 && x > 0.34 && x < 0.66) ||
+    (Math.abs(x - 0.5) < 0.028 && y > 0.34 && y < 0.66);
+  const node = Math.hypot(x - 0.5, y - 0.5) < 0.058;
+  return outer || inner || cross || node;
+}
+
 const SHAPES: Record<GlyphShape, (x: number, y: number) => boolean> = {
   magnifier,
   blocks,
   shield,
+  seal,
 };
 
 type Glyph = { col: number; row: number; char: string };
@@ -122,7 +161,7 @@ function buildGlyphs(shape: GlyphShape, cols: number, rows: number): Glyph[] {
  * cursor and springs back, echoing the cassator.com scatter effect. Honours
  * reduced-motion (static paint) and pauses while off-screen.
  */
-export function GlyphField({ shape, className, cols = 46, rows = 22 }: GlyphFieldProps) {
+export function GlyphField({ shape, className, cols = 46, rows = 22, animate = false }: GlyphFieldProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -151,6 +190,7 @@ export function GlyphField({ shape, className, cols = 46, rows = 22 }: GlyphFiel
     const mouse = { x: -9999, y: -9999, active: false };
     let raf = 0;
     let visible = true;
+    let frame = 0;
 
     const reduce =
       window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -203,6 +243,17 @@ export function GlyphField({ shape, className, cols = 46, rows = 22 }: GlyphFiel
       raf = 0;
       let moving = false;
       const rad = CURSOR_RADIUS;
+      // Continuous "encrypting" churn: re-roll a slice of glyphs each cadence.
+      if (animate) {
+        frame += 1;
+        if (frame % SCRAMBLE_EVERY === 0) {
+          for (const p of particles) {
+            if (Math.random() < SCRAMBLE_FRACTION) {
+              p.char = CHAR_POOL[Math.floor(Math.random() * CHAR_POOL.length)];
+            }
+          }
+        }
+      }
       for (const p of particles) {
         if (mouse.active) {
           const dx = p.x - mouse.x;
@@ -240,7 +291,7 @@ export function GlyphField({ shape, className, cols = 46, rows = 22 }: GlyphFiel
         }
       }
       paint();
-      if (visible && (moving || mouse.active)) raf = requestAnimationFrame(step);
+      if (visible && (moving || mouse.active || animate)) raf = requestAnimationFrame(step);
     }
 
     function wake() {
@@ -297,7 +348,7 @@ export function GlyphField({ shape, className, cols = 46, rows = 22 }: GlyphFiel
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerleave", onPointerLeave);
     };
-  }, [shape, cols, rows]);
+  }, [shape, cols, rows, animate]);
 
   return (
     <div ref={wrapRef} className={`glyph-field${className ? ` ${className}` : ""}`} aria-hidden="true">

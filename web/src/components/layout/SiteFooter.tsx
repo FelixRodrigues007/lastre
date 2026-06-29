@@ -151,10 +151,6 @@ export function SiteFooter() {
             </nav>
           </div>
         </div>
-
-        <p className="site-footer__scenic-wordmark" aria-hidden="true">
-          Lastre
-        </p>
       </div>
     </footer>
   );

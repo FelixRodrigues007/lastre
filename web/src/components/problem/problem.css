@@ -35,10 +35,6 @@
   margin-inline: auto;
 }
 
-.problem__header .kicker::before {
-  display: none;
-}
-
 .problem__header .kicker {
   justify-content: center;
 }
@@ -80,53 +76,89 @@
 
 .trust-globe {
   width: 100%;
+  height: 100%;
 }
 
 .trust-globe__stage {
   position: relative;
   width: 100%;
+  height: 100%;
   overflow: hidden;
-  border-radius: clamp(1rem, 0.5rem + 1.5vw, 1.5rem);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  box-shadow:
-    0 40px 80px -48px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 rgba(234, 241, 235, 0.06);
   min-height: clamp(320px, 24rem + 14vw, 480px);
-  aspect-ratio: 16 / 9;
+  /* Deep olive base — the colored dither field + mesh shader layered on top
+     supply the actual colour, the same way the footer scenic is built. */
   background: var(--lastro-color-olive-950);
 }
 
+/* Colored dithered field (CSS, always paints) fills the globe half. */
+.trust-globe__dither {
+  z-index: 0;
+  opacity: 0.5;
+}
+
 .trust-globe__canvas {
+  z-index: 2;
   position: absolute;
   inset: 0;
-  margin: auto;
-  /* Square drawing buffer is centred; CSS keeps it within the stage. */
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  aspect-ratio: 1 / 1;
   contain: layout paint;
   touch-action: pan-y;
 }
 
-/* ── three-lane feature strip (Cloudflare-style) ──────────────────── */
+/* ── unified frame: globe + vertical lane stack share one border ──── */
 
-.problem__lanes {
-  display: grid;
-  grid-template-columns: 1fr;
+.problem__stage-row {
+  display: flex;
+  align-items: stretch;
   gap: 0;
-  border-block: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: clamp(1rem, 0.5rem + 1.5vw, 1.5rem);
+  overflow: hidden;
+  box-shadow:
+    0 40px 80px -48px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(234, 241, 235, 0.06);
 }
 
-@media (min-width: 768px) {
-  .problem__lanes {
-    grid-template-columns: repeat(3, 1fr);
+.problem__stage-row .problem__globe {
+  flex: 1 1 auto;
+  margin-inline: 0;
+}
+
+/* Lanes lose their own box — a single vertical rule divides them from the globe. */
+.problem__stage-row .problem__lanes {
+  flex: 0 0 clamp(17rem, 24vw, 22rem);
+  border: 0;
+  border-left: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: 0;
+}
+
+@media (max-width: 900px) {
+  .problem__stage-row {
+    flex-direction: column;
   }
 
-  .problem__lane + .problem__lane {
-    border-left: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  /* Stacked: the divider runs across the top instead of down the side. */
+  .problem__stage-row .problem__lanes {
+    flex: 1 1 auto;
+    border-left: 0;
+    border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   }
+}
+
+/* ── three-lane feature strip — vertical stack ────────────────────── */
+
+.problem__lanes {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: clamp(0.75rem, 0.5rem + 1vw, 1.25rem);
+  overflow: hidden;
+}
+
+.problem__lane + .problem__lane {
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
 }
 
 .problem__lane {
@@ -141,12 +173,6 @@
   border-color: var(--lastro-border-strong);
   background: color-mix(in oklab, var(--lastro-brand-seal) 8%, var(--lastro-bg-panel));
   transform: scale(1.04);
-}
-
-@media (max-width: 767px) {
-  .problem__lane + .problem__lane {
-    border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  }
 }
 
 .problem__lane-icon {
@@ -186,16 +212,39 @@
   padding-top: clamp(0.25rem, 0.1rem + 0.8vw, 1rem);
 }
 
-.problem__panel {
-  display: flex;
-  flex-direction: column;
+/* The "Without proof" card is gone — the right column now holds the live 3D
+   "encrypting" seal (same brand mark as the FAQ), free-standing, no card. */
+.problem__seal {
+  position: relative;
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+  max-width: clamp(18rem, 30vw, 30rem);
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
 }
 
-.problem__panel-title {
-  display: block;
-  margin-bottom: var(--lastro-space-6);
-  padding-bottom: var(--lastro-space-4);
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+.problem__seal .glyph-field {
+  position: absolute;
+  inset: 0;
+  background: none;
+  color: var(--lastro-color-seal-400);
+}
+
+@media (min-width: 980px) {
+  /* Keep it level with the lead copy on the two-column layout. */
+  .problem__seal {
+    position: sticky;
+    top: calc(var(--site-nav-height, 64px) + 2.5rem);
+  }
+}
+
+@media (max-width: 980px) {
+  /* Stacked: smaller and centred so it reads as a section mark, not a hero. */
+  .problem__seal {
+    max-width: clamp(15rem, 60vw, 22rem);
+    opacity: 0.85;
+  }
 }
 
 /* ── gap pipeline ─────────────────────────────────────────────────── */

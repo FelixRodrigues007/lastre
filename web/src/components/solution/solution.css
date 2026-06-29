@@ -19,30 +19,6 @@
   margin-bottom: clamp(2.5rem, 1.5rem + 4vw, 4rem);
 }
 
-.sol__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px 6px 10px;
-  border-radius: var(--lastro-radius-pill);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in oklab, var(--lastro-bg-panel) 80%, transparent);
-  font-family: var(--lastro-font-body);
-  font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
-  letter-spacing: -0.01em;
-  color: var(--lastro-text-primary);
-}
-
-.sol__badge-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--lastro-status-valid);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--lastro-status-valid) 28%, transparent);
-  animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
-}
-
 .sol__title {
   margin-top: clamp(1.25rem, 0.75rem + 2vw, 1.75rem);
   max-width: 14ch;
@@ -584,7 +560,6 @@
   }
 
   .sol-showcase__typing span,
-  .sol__badge-dot,
   .sol-showcase__live-dot {
     animation: none;
   }

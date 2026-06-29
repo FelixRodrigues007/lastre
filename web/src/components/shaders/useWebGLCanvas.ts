@@ -90,6 +90,19 @@ export function useWebGLCanvas({
     let start = performance.now();
     let w = 0;
     let h = 0;
+    // A canvas whose WebGL context is lost paints the browser's broken-content
+    // glyph. Hide it while contextless so the CSS fallback behind shows instead,
+    // and reveal it again the moment a real frame lands.
+    let painted = false;
+    const showCanvas = () => {
+      if (painted) return;
+      painted = true;
+      canvas.style.visibility = "visible";
+    };
+    const hideCanvas = () => {
+      painted = false;
+      canvas.style.visibility = "hidden";
+    };
 
     // Tracks whether the canvas is currently within the viewport margin, so a
     // context lost to GPU eviction (not to scroll-out) can be re-acquired.
@@ -132,6 +145,7 @@ export function useWebGLCanvas({
       if (uniformLocs.u_hue) gl.uniform1f(uniformLocs.u_hue, (u.u_hue as number) ?? 52);
 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      showCanvas();
     };
 
     const acquire = () => {
@@ -200,6 +214,7 @@ export function useWebGLCanvas({
     const onContextLost = (event: Event) => {
       event.preventDefault();
       cancelAnimationFrame(raf);
+      hideCanvas();
       gl = null;
       program = null;
       buffer = null;
@@ -213,6 +228,12 @@ export function useWebGLCanvas({
 
     // Animated mode repaints every RAF frame; reduced mode must repaint once on resize.
     const onResize = () => (reduced ? render(performance.now()) : resize());
+
+    // Start hidden: the canvas is only ever revealed once it paints a real
+    // frame (showCanvas in render). A canvas that never acquires a context, or
+    // loses one, therefore shows the CSS fallback behind it — never the
+    // browser's broken-content glyph.
+    hideCanvas();
 
     canvas.addEventListener("webglcontextlost", onContextLost, false);
     canvas.addEventListener("webglcontextrestored", onContextRestored, false);

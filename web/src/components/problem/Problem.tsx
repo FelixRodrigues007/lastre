@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { useSite } from "../../context/SiteContext";
 import { TrustGlobeVisual } from "./TrustGlobeVisual";
+import { GlyphSolid3D } from "../visual/GlyphSolid3D";
 import "./problem.css";
 import "../visual/visual.css";
 
@@ -78,29 +79,31 @@ export function Problem() {
               </p>
             </header>
 
-            <div
-              className="problem__globe reveal-scroll reveal-scroll--scale"
-              style={{ "--reveal-delay": "120ms" } as CSSProperties}
-              data-scroll-shift="0.12"
-            >
-              <TrustGlobeVisual />
+            <div className="problem__stage-row">
+              <div
+                className="problem__globe reveal-scroll reveal-scroll--scale"
+                style={{ "--reveal-delay": "120ms" } as CSSProperties}
+                data-scroll-shift="0.12"
+              >
+                <TrustGlobeVisual />
+              </div>
+
+              <div
+                className="problem__lanes reveal-stagger"
+                style={{ "--reveal-delay": "80ms" } as CSSProperties}
+              >
+                {c.lanes.map((lane, i) => (
+                  <article key={lane.title} className="problem__lane interactive-lift">
+                    <span className="problem__lane-icon" aria-hidden="true">
+                      <LaneIcon kind={LANE_ICONS[i] ?? "globe"} />
+                    </span>
+                    <h3 className="problem__lane-title">{lane.title}</h3>
+                    <p className="problem__lane-body">{lane.body}</p>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-
-        <div
-          className="problem__lanes reveal-stagger"
-          style={{ "--reveal-delay": "80ms" } as CSSProperties}
-        >
-          {c.lanes.map((lane, i) => (
-            <article key={lane.title} className="problem__lane interactive-lift">
-              <span className="problem__lane-icon" aria-hidden="true">
-                <LaneIcon kind={LANE_ICONS[i] ?? "globe"} />
-              </span>
-              <h3 className="problem__lane-title">{lane.title}</h3>
-              <p className="problem__lane-body">{lane.body}</p>
-            </article>
-          ))}
         </div>
 
         <div className="split-grid problem__grid">
@@ -118,48 +121,13 @@ export function Problem() {
             </div>
           </div>
 
-          <aside
-            className="problem__panel panel panel--elevated split-grid__aside--sticky reveal-scroll"
+          <div
+            className="problem__seal reveal-scroll reveal-scroll--scale"
             style={{ "--reveal-delay": "180ms" } as CSSProperties}
-            aria-label={c.panelAria}
+            aria-hidden="true"
           >
-            <span className="mono-label problem__panel-title">{c.panelTitle}</span>
-
-            <ol className="gap gap--animate">
-              {c.gapSteps.map((step, i) => (
-                <li
-                  key={step.label}
-                  className={`gap__step${"missing" in step && step.missing ? " gap__step--broken" : ""}${i === c.gapSteps.length - 1 ? " gap__step--last" : ""}`}
-                >
-                  {"missing" in step && step.missing ? (
-                    <span className="gap__node gap__node--missing" aria-hidden="true">
-                      <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true">
-                        <path
-                          d="M4 4L10 10M10 4L4 10"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </span>
-                  ) : (
-                    <span
-                      className={`gap__node${i === c.gapSteps.length - 1 ? " gap__node--inherit" : ""}`}
-                      aria-hidden="true"
-                    />
-                  )}
-                  <span className="gap__body">
-                    <span className={`gap__label${"missing" in step && step.missing ? " gap__label--missing" : ""}`}>
-                      {step.label}
-                    </span>
-                    <span className={`gap__detail${"fiction" in step && step.fiction ? " gap__detail--fiction" : ""}`}>
-                      {step.detail}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </aside>
+            <GlyphSolid3D speed={0.005} perEdge={14} />
+          </div>
         </div>
       </div>
     </section>
