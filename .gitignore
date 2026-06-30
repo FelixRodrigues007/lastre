@@ -5,6 +5,7 @@ target/
 # Node
 node_modules/
 dist/
+app/server-dist/
 # Env & secrets
 .env
 .env.*

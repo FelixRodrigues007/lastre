@@ -104,6 +104,9 @@ function mapCliSnapshot(raw: CliSnapshot, fetchedAt: string): LiveTestnetSnapsho
 }
 
 function snapshotBinaryPath(): string {
+  const configured = process.env.LASTRO_QUERY_SNAPSHOT_BIN?.trim();
+  if (configured) return configured;
+
   const debug = path.join(CONTRACT_DIR, "target/debug/query_snapshot");
   const release = path.join(CONTRACT_DIR, "target/release/query_snapshot");
   if (existsSync(release)) return release;

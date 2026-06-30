@@ -50,14 +50,37 @@ CNAME  app  <console-project>.pages.dev   Proxied
 
 ## 2. Console API on Render
 
-The API needs the agent stack built (`make build-sealer build-x402
-build-orchestrator build-query-snapshot`) and `app/server` running on Node 22.
-Add a Docker service (mirror the root `Dockerfile` pattern used by the gateway),
-start command `node app/server/dist/index.js` (or `tsx app/server/index.ts`),
-listening on `$PORT`. Map custom domain `app-api.lastre.io`.
+Create a second Render Web Service using Docker:
 
-The API must allow CORS from the console origin and serve `/api/*`. Without it,
-the UI loads but every data call fails.
+```text
+Repo:             FelixRodrigues007/lastro
+Runtime:          Docker
+Dockerfile path:  Dockerfile.app-api
+Health check:     /api/health
+```
+
+The API image builds the agent stack and the `query_snapshot` Casper binary, then
+runs:
+
+```bash
+node app/server-dist/index.js
+```
+
+The server reads Render's `$PORT` first, then falls back to
+`LASTRO_APP_API_PORT`, and allows CORS from `https://app.lastre.io` by default.
+If you need to add preview domains later, set:
+
+```bash
+LASTRO_APP_ALLOWED_ORIGINS=https://app.lastre.io,https://<preview>.pages.dev
+```
+
+Map the custom domain:
+
+```text
+app-api.lastre.io -> Render service
+```
+
+The API must serve `/api/*`. Without it, the UI loads but every data call fails.
 
 ## 3. Point the landing's "App" link at the console
 

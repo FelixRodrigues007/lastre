@@ -3,12 +3,20 @@ import { URL } from "node:url";
 import { AppRuntime, type DeciderMode } from "./runtime.js";
 import { getLiveTestnetSnapshot } from "./casper-read.js";
 
-const PORT = Number(process.env.LASTRO_APP_API_PORT ?? 3001);
+const PORT = readPort();
+const HOST = process.env.LASTRO_APP_API_HOST ?? "0.0.0.0";
 const runtime = new AppRuntime();
 
 export function createAppServer() {
   return createServer(async (req, res) => {
+    applyCorsHeaders(req, res);
+
     try {
+      if ((req.method ?? "GET") === "OPTIONS") {
+        sendOptions(res, req);
+        return;
+      }
+
       await handleRequest(req, res);
     } catch (error) {
       sendJson(res, 500, {
@@ -19,12 +27,28 @@ export function createAppServer() {
   });
 }
 
+function readPort(): number {
+  const raw = process.env.PORT ?? process.env.LASTRO_APP_API_PORT ?? "3001";
+  const port = Number(raw);
+
+  if (!Number.isInteger(port) || port < 1 || port > 65_535) {
+    throw new Error(`Invalid API port: ${raw}`);
+  }
+
+  return port;
+}
+
 async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const url = new URL(req.url ?? "/", `http://${req.headers.host ?? "127.0.0.1"}`);
   const { pathname } = url;
   const method = req.method ?? "GET";
 
-  if (method === "GET" && pathname === "/api/health") {
+  if ((method === "GET" || method === "HEAD") && pathname === "/api/health") {
+    if (method === "HEAD") {
+      sendEmptyJson(res, 200);
+      return;
+    }
+
     sendJson(res, 200, { ok: true });
     return;
   }
@@ -154,10 +178,71 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
   sendJson(res, 404, { error: "not_found" });
 }
 
+const DEFAULT_ALLOWED_ORIGINS = [
+  "http://localhost:5174",
+  "http://127.0.0.1:5174",
+  "https://app.lastre.io",
+];
+
+function configuredAllowedOrigins(): Set<string> {
+  const configured = [
+    process.env.LASTRO_APP_ALLOWED_ORIGINS,
+    process.env.CORS_ORIGINS,
+  ]
+    .filter(Boolean)
+    .flatMap((value) => value!.split(","))
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  return new Set([...DEFAULT_ALLOWED_ORIGINS, ...configured]);
+}
+
+function getHeaderValue(value: string | string[] | undefined): string | null {
+  if (!value) return null;
+  return Array.isArray(value) ? (value[0] ?? null) : value;
+}
+
+function resolveAllowedOrigin(origin: string | null): string | null {
+  if (!origin) return null;
+
+  const allowedOrigins = configuredAllowedOrigins();
+  if (allowedOrigins.has("*")) return origin;
+  if (allowedOrigins.has(origin)) return origin;
+
+  return null;
+}
+
+function applyCorsHeaders(req: IncomingMessage, res: ServerResponse): void {
+  const origin = getHeaderValue(req.headers.origin);
+  const allowedOrigin = resolveAllowedOrigin(origin);
+
+  if (!allowedOrigin) return;
+
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  res.setHeader("Vary", "Origin");
+}
+
+function sendOptions(res: ServerResponse, req: IncomingMessage): void {
+  const requestedHeaders =
+    getHeaderValue(req.headers["access-control-request-headers"]) ?? "Content-Type";
+
+  res.statusCode = 204;
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", requestedHeaders);
+  res.setHeader("Access-Control-Max-Age", "86400");
+  res.end();
+}
+
 function sendJson(res: ServerResponse, statusCode: number, body: unknown): void {
   res.statusCode = statusCode;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.end(JSON.stringify(body));
+}
+
+function sendEmptyJson(res: ServerResponse, statusCode: number): void {
+  res.statusCode = statusCode;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.end();
 }
 
 async function readJsonBody<T>(req: IncomingMessage): Promise<T> {
@@ -175,6 +260,6 @@ async function readJsonBody<T>(req: IncomingMessage): Promise<T> {
 }
 
 const server = createAppServer();
-server.listen(PORT, () => {
-  console.info(`[lastro-app] API listening on http://127.0.0.1:${PORT}`);
+server.listen(PORT, HOST, () => {
+  console.info(`[lastro-app] API listening on http://${HOST}:${PORT}`);
 });

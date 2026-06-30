@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "noEmit": false,
+    "outDir": "../server-dist",
+    "rootDir": ".",
+    "sourceMap": false
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["../server-dist"]
+}

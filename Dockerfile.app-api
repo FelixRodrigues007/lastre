@@ -1,0 +1,94 @@
+# ===========================================================
+# LASTRO Console API — Render Docker image
+# ===========================================================
+# The console UI (app/) is static and can run on Cloudflare Pages.
+# The console API is a Node server and needs the built agent packages plus the
+# Casper query_snapshot binary, so it runs as a separate Render Docker service.
+
+# --- Stage A: build the Casper testnet snapshot query binary ---
+FROM rust:bookworm AS rust-builder
+
+RUN rustup toolchain install nightly-2026-01-01 --profile minimal \
+  && rustup default nightly-2026-01-01
+
+WORKDIR /app
+
+COPY contracts/lastro_origin ./contracts/lastro_origin
+
+RUN cargo +nightly-2026-01-01 build \
+  --release \
+  --features livenet \
+  --bin query_snapshot \
+  --manifest-path contracts/lastro_origin/Cargo.toml
+
+# --- Stage B: build agent packages + app API TypeScript ---
+FROM node:22-bookworm AS node-builder
+
+WORKDIR /app
+
+COPY agent/sealer/package*.json ./agent/sealer/
+COPY agent/x402/package*.json ./agent/x402/
+COPY agent/orchestrator/package*.json ./agent/orchestrator/
+COPY app/package*.json ./app/
+
+RUN cd agent/sealer && npm ci
+RUN cd agent/x402 && npm ci
+RUN cd agent/orchestrator && npm ci
+RUN cd app && npm ci
+
+COPY agent/sealer ./agent/sealer
+COPY agent/x402 ./agent/x402
+COPY agent/orchestrator ./agent/orchestrator
+COPY app ./app
+
+RUN cd agent/sealer && npm run build
+RUN cd agent/x402 && npm run build
+RUN cd agent/orchestrator && npm run build
+RUN cd app && npm run build:api
+
+# --- Stage C: slim runtime for Render ---
+FROM node:22-slim AS runtime
+
+WORKDIR /app
+
+# HTTPS calls to the public Casper node need CA certificates. libssl3 keeps
+# native-TLS Rust dependency trees safe on Debian slim runtimes.
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates libssl3 \
+  && rm -rf /var/lib/apt/lists/*
+
+# Keep package.json files so Node treats compiled .js files in these package
+# scopes as ESM ("type": "module").
+COPY --from=node-builder /app/agent/sealer/package.json ./agent/sealer/package.json
+COPY --from=node-builder /app/agent/x402/package.json ./agent/x402/package.json
+COPY --from=node-builder /app/agent/orchestrator/package.json ./agent/orchestrator/package.json
+COPY --from=node-builder /app/app/package*.json ./app/
+
+# The API currently has no production-only server dependencies, but installing
+# app dependencies keeps the runtime future-proof if the server adds one later.
+RUN cd app && npm ci --omit=dev
+
+COPY --from=node-builder /app/agent/sealer/dist ./agent/sealer/dist
+COPY --from=node-builder /app/agent/x402/dist ./agent/x402/dist
+COPY --from=node-builder /app/agent/orchestrator/dist ./agent/orchestrator/dist
+COPY --from=node-builder /app/app/server-dist ./app/server-dist
+COPY --from=rust-builder /app/contracts/lastro_origin/target/release/query_snapshot /app/bin/query_snapshot
+
+# casper-read runs the binary with cwd=/app/contracts/lastro_origin. The
+# release image does not need contract sources, but the cwd must exist.
+RUN mkdir -p /app/contracts/lastro_origin \
+  && chmod +x /app/bin/query_snapshot
+
+ENV NODE_ENV=production
+ENV PORT=10000
+ENV LASTRO_QUERY_SNAPSHOT_BIN=/app/bin/query_snapshot
+ENV PACKAGE_HASH=hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
+ENV NODE_ADDRESS=https://node.testnet.casper.network/rpc
+ENV CHAIN_NAME=casper-test
+ENV ODRA_CASPER_LIVENET_NODE_ADDRESS=https://node.testnet.casper.network/rpc
+ENV ODRA_CASPER_LIVENET_CHAIN_NAME=casper-test
+ENV ODRA_CASPER_LIVENET_EVENTS_URL=https://node.testnet.casper.network/events/main
+
+EXPOSE 10000
+
+CMD ["node", "app/server-dist/index.js"]
