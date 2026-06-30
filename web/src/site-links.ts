@@ -9,7 +9,16 @@ export const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
 
 export const DOCS_URL = `${GITHUB_URL}#readme`;
 
-export const APP_URL = "/app";
+// The product console (app/) is deployed separately from this landing page.
+// On the Cloudflare Pages landing, "/app" does NOT exist: the SPA fallback
+// (_redirects: /* /index.html 200) would just re-serve the landing. Set
+// VITE_APP_URL to the deployed console URL (e.g. https://app.lastre.io) so the
+// "App" link actually opens the console. Falls back to "/app" for local dev
+// where a reverse proxy may map it.
+export const APP_URL = import.meta.env.VITE_APP_URL || "/app";
+
+/** True when APP_URL points to a different origin and should open with target. */
+export const APP_URL_IS_EXTERNAL = /^https?:\/\//.test(APP_URL);
 
 export const TRUST_URL = "#trust";
 

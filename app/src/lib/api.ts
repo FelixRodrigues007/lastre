@@ -11,8 +11,19 @@ import type {
 } from "./types";
 import { ApiError } from "./types";
 
+// Base URL for the console API. In dev, Vite proxies "/api" to the local
+// app server on :3001 (see vite.config.ts), so the empty default works.
+// In a split deployment (static UI + separately hosted API), set
+// VITE_API_BASE_URL to the API origin, e.g. https://app-api.lastre.io
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
+
+function apiUrl(path: string): string {
+  const suffix = path.startsWith("/") ? path : `/${path}`;
+  return `${API_BASE_URL}${suffix}`;
+}
+
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, {
+  const response = await fetch(apiUrl(path), {
     ...init,
     headers: {
       "Content-Type": "application/json",
@@ -84,7 +95,7 @@ export function updateSettings(decider: DeciderMode) {
 }
 
 export async function downloadAuditExport(): Promise<void> {
-  const response = await fetch("/api/audit/export");
+  const response = await fetch(apiUrl("/api/audit/export"));
   if (!response.ok) {
     throw new ApiError("Export failed", response.status);
   }

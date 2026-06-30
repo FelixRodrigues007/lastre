@@ -1,0 +1,11 @@
+# Cloudflare Pages — SPA fallback for the Lastro console.
+#
+# The console uses react-router (BrowserRouter), so deep links such as
+# /lots/:assetId, /audit/:assetId, /process, /chain must all resolve to
+# index.html (HTTP 200, no redirect) and let the client router render them.
+#
+# NOTE: the console also calls a backend at /api/*. When deployed as a static
+# site, /api/* must be proxied to the running app server (app/server) or that
+# API must be hosted elsewhere; otherwise data calls return this index.html.
+# Real build assets under /assets/* are served first and are unaffected.
+/*    /index.html    200
