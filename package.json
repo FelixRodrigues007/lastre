@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "build": "npm --prefix web ci && npm --prefix web run build",
+    "build:web": "npm --prefix web run build"
+  },
   "devDependencies": {
     "shadcn": "^4.12.0"
   }
