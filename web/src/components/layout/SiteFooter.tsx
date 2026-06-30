@@ -4,6 +4,7 @@ import { DitherField } from "../visual/DitherField";
 import { SealMark } from "../ui/SealMark";
 import {
   APP_URL,
+  APP_URL_IS_EXTERNAL,
   CASE_STUDY_URL,
   CSPR_PACKAGE_URL,
   DOCS_URL,
@@ -26,7 +27,7 @@ const FOOTER_HREFS: readonly (readonly { href: string; external?: boolean }[])[]
     { href: "#faq" },
   ],
   [
-    { href: APP_URL },
+    { href: APP_URL, external: APP_URL_IS_EXTERNAL },
     { href: "#use-cases" },
     { href: "#compare" },
     { href: TRUST_URL },
@@ -130,7 +131,11 @@ export function SiteFooter() {
 
               <p className="site-footer__desc body-max-ch">{f.desc}</p>
 
-              <a className="site-footer__cta" href={APP_URL}>
+              <a
+                className="site-footer__cta"
+                href={APP_URL}
+                {...(APP_URL_IS_EXTERNAL ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
                 {t("openApp")}
               </a>
 

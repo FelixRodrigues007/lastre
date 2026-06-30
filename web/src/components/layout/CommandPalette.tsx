@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   APP_URL,
+  APP_URL_IS_EXTERNAL,
   CSPR_PACKAGE_URL,
   DOCS_URL,
   GITHUB_URL,
@@ -12,7 +13,7 @@ import "./command-palette.css";
 
 const ACTION_HREFS: Record<string, { href: string; external?: boolean }> = {
   demo: { href: "#proof" },
-  app: { href: APP_URL },
+  app: { href: APP_URL, external: APP_URL_IS_EXTERNAL },
   "how-seal": { href: "#how/seal" },
   docs: { href: DOCS_URL, external: true },
   github: { href: GITHUB_URL, external: true },
@@ -69,8 +70,12 @@ export function CommandPalette() {
     trackEvent("cta_click", { target: action.id });
     if (action.external) {
       window.open(action.href, "_blank", "noopener,noreferrer");
-    } else {
+    } else if (action.href.startsWith("#")) {
       document.querySelector(action.href)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Non-anchor, same-origin route (e.g. "/app" dev fallback). Navigating via
+      // querySelector would throw on "/..." selectors, so go to the URL instead.
+      window.location.assign(action.href);
     }
   };
 

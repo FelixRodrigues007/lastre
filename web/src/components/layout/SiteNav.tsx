@@ -3,7 +3,7 @@ import { SealMark } from "../ui/SealMark";
 import { useSite } from "../../context/SiteContext";
 import { trackEvent } from "../../lib/analytics";
 import type { Locale } from "../../i18n/translations";
-import { APP_URL, DOCS_URL } from "../../site-links";
+import { APP_URL, APP_URL_IS_EXTERNAL, DOCS_URL } from "../../site-links";
 import "./site-nav.css";
 
 function LocaleToggle({ className }: { className?: string }) {
@@ -46,7 +46,9 @@ const NAV_HREFS = [
 
 const SECONDARY_HREFS = [
   { href: "#faq", key: "faq" as const },
-  { href: APP_URL, key: "app" as const },
+  ...(APP_URL_IS_EXTERNAL
+    ? ([{ href: APP_URL, key: "app" as const, external: true }] as const)
+    : ([{ href: APP_URL, key: "app" as const }] as const)),
   { href: DOCS_URL, key: "docs" as const, external: true },
 ] as const;
 
@@ -158,7 +160,11 @@ export function SiteNav() {
 
           <div className="site-nav__end">
             <LocaleToggle />
-            <a className="site-nav__action" href={APP_URL}>
+            <a
+              className="site-nav__action"
+              href={APP_URL}
+              {...(APP_URL_IS_EXTERNAL ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
               {nav.app}
             </a>
             <button
