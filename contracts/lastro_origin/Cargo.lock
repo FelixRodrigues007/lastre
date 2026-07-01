@@ -1657,6 +1657,7 @@ dependencies = [
  "odra-casper-livenet-env",
  "odra-cli",
  "odra-test",
+ "serde",
  "serde_json",
 ]
 
