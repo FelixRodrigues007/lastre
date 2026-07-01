@@ -69,6 +69,7 @@ COPY --from=node-builder /app/app/package*.json ./app/
 RUN cd app && npm ci --omit=dev
 
 COPY --from=node-builder /app/agent/sealer/dist ./agent/sealer/dist
+COPY --from=node-builder /app/agent/sealer/samples ./agent/sealer/samples
 COPY --from=node-builder /app/agent/x402/dist ./agent/x402/dist
 COPY --from=node-builder /app/agent/orchestrator/dist ./agent/orchestrator/dist
 COPY --from=node-builder /app/app/server-dist ./app/server-dist
