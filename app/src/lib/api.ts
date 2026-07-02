@@ -10,6 +10,7 @@ import type {
   AppSettings,
 } from "./types";
 import { ApiError } from "./types";
+import { buildDemoLotDetail } from "./demoCatalog";
 
 // Base URL for the console API. In dev, Vite proxies "/api" to the local
 // app server on :3001 (see vite.config.ts), so the empty default works.
@@ -52,8 +53,20 @@ export function getLots() {
   return apiFetch<{ lots: LotListItem[] }>("/api/lots");
 }
 
-export function getLot(assetId: string) {
-  return apiFetch<LotDetail>(`/api/lots/${encodeURIComponent(assetId)}`);
+export async function getLot(assetId: string): Promise<LotDetail> {
+  try {
+    return await apiFetch<LotDetail>(`/api/lots/${encodeURIComponent(assetId)}`);
+  } catch (error) {
+    // Fictional showcase assets from the Marketplace/Global-Mundi catalog are
+    // not always present in the console API. Instead of dead-ending on a 404
+    // "Unknown lot" + Retry, resolve them locally as demo detail pages.
+    // Any other id (typos, genuinely missing lots) still surfaces the error.
+    if (error instanceof ApiError && error.status === 404) {
+      const demo = buildDemoLotDetail(assetId);
+      if (demo) return demo;
+    }
+    throw error;
+  }
 }
 
 export function getChainTestnet() {

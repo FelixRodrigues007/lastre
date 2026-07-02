@@ -5,19 +5,9 @@ import { PageHeader } from "../components/layout/PageHeader";
 import { getLots, mintAsset, lockCollateral, releaseCollateral } from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
 import { shortHash } from "../lib/format";
+import { DEMO_CATALOG, demoSeal, type CatalogAsset } from "../lib/demoCatalog";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./marketplace.css";
-
-interface CatalogAsset {
-  assetId: string;
-  name?: string;
-  category?: "mineral" | "carbon_credit";
-  origin?: { lat: number; lng: number; site?: string; label?: string };
-  creditType?: string;
-  tonnesCO2e?: number;
-  mineral?: string;
-  expectedOnChain?: string;
-}
 
 type MarketplaceView = "assets" | "map";
 type MarketplacePersona = "public" | "buyer" | "defi" | "operator";
@@ -165,38 +155,9 @@ export function Marketplace() {
     setIsSigning(false);
   }
 
-  // Static catalog seed (in real would come from /catalog or merged)
-  const [catalog] = useState<CatalogAsset[]>([
-    {
-      assetId: "MINA-VALEDOURO-LOTE-002",
-      category: "mineral",
-      mineral: "Gold",
-      expectedOnChain: "Valid",
-      origin: { lat: -20.123456, lng: -43.987654, site: "Mina Vale do Ouro — fictional" },
-    },
-    {
-      assetId: "CARBON-VCS-AMAZONIA-2024-001",
-      category: "carbon_credit",
-      creditType: "VCS",
-      tonnesCO2e: 125000,
-      expectedOnChain: "Valid",
-      origin: { lat: -3.12, lng: -60.01, site: "Amazon REDD+ Zone A — fictional" },
-    },
-    {
-      assetId: "CARBON-GOLDSTANDARD-SOLAR-2025-002",
-      category: "carbon_credit",
-      creditType: "GoldStandard",
-      tonnesCO2e: 45000,
-      origin: { lat: -5.78, lng: -35.2, site: "Northeast Solar Park — fictional" },
-    },
-    {
-      assetId: "CARBON-IREC-WIND-2024-004",
-      category: "carbon_credit",
-      creditType: "IREC",
-      tonnesCO2e: 62000,
-      origin: { lat: -50.1, lng: -68.4, site: "Patagonia Wind Corridor — fictional" },
-    },
-  ]);
+  // Static catalog seed — shared source of truth with the lot-detail fallback
+  // (app/src/lib/demoCatalog.ts) so catalog assets never dead-end on 404.
+  const [catalog] = useState<CatalogAsset[]>(DEMO_CATALOG);
 
   // Advanced carbon types for filters (full demo set, matches backend CarbonCreditType)
   const CARBON_TYPES = ["VCS", "GoldStandard", "ARR", "IREC", "REDD+", "CER", "VCU", "RenewableEnergy", "Solar", "Wind", "Biomass", "PCH"];
@@ -381,7 +342,7 @@ export function Marketplace() {
             ? Math.min(99, 68 + (lot.attested ? 18 : 0) + (lot.sealMatchesReference ? 8 : 0) + (lot.latestVerdict === "Valid" ? 5 : 0))
             : (a.expectedOnChain === "Valid" ? 91 : 62);
 
-          const computedSeal = lot?.computedSeal || "a1b2c3d4e5f6" + a.assetId.slice(-6);
+          const computedSeal = lot?.computedSeal || demoSeal(a.assetId);
 
           return (
             <div key={a.assetId} className={`market-card panel rich-nft-card ${isCarbon ? "carbon" : "mineral"}`}>
