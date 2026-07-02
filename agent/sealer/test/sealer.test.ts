@@ -15,14 +15,14 @@ function loadSample(name: string): ProvenanceArtifact {
   return JSON.parse(readFileSync(`samples/${name}`, "utf8")) as ProvenanceArtifact;
 }
 
-const valid = loadSample("valid.json");
-const tampered = loadSample("tampered.json");
+const valid = { ...loadSample("valid.json"), category: "mineral" as const };
+const tampered = { ...loadSample("tampered.json"), category: "mineral" as const };
 
 // Known-good hash for valid.json. Pinning it turns the determinism test into a
 // golden test: any accidental algorithm change (for example, changing the key
 // ordering rule) breaks here instead of passing silently.
 const VALID_SEAL =
-  "472c927a8129dfba4eea2aea00d683d127f8d6387db6fe9d2f779741e4b500f2";
+  "e8738d5caacc30152561e3aac63c450b99e668df33f620932d76cfd037441d2a";
 
 test("computeSeal is deterministic for the same artifact", () => {
   // (a) same input called twice -> same hash
@@ -37,16 +37,17 @@ test("computeSeal changes when any provenance field changes", () => {
 
 test("object key order does not affect the seal", () => {
   const reordered: ProvenanceArtifact = {
-    operator: valid.operator,
-    capturedAtISO: valid.capturedAtISO,
-    massGrams: valid.massGrams,
-    frameHash: valid.frameHash,
+    assetId: valid.assetId,
+    category: "mineral",
     origin: {
       site: valid.origin.site,
       lng: valid.origin.lng,
       lat: valid.origin.lat,
     },
-    assetId: valid.assetId,
+    frameHash: valid.frameHash,
+    massGrams: valid.massGrams,
+    capturedAtISO: valid.capturedAtISO,
+    operator: valid.operator,
   };
 
   equal(canonicalize(reordered), canonicalize(valid));

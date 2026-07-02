@@ -189,7 +189,12 @@ marked with `TODO(casper-facilitator)` in `agent/x402/src/facilitator.ts` and
 contracts/lastro_origin/  Casper/Odra contracts: ProofOfOrigin and MintGate
 agent/sealer/             deterministic offline SHA-256 sealer
 agent/x402/               HTTP 402 paid-verification prototype
-agent/orchestrator/       OriginChain agent and OpenRouter/rule decider
+agent/orchestrator/       OriginChain agent and xAI/OpenRouter/rule decider (LLM decides action only)
+
+LLM provider for decider (action only):
+- Preferred: export XAI_API_KEY=...   (uses https://api.x.ai/v1 + grok-4.3)
+- Fallback: export OPENROUTER_API_KEY=...
+- Both: XAI takes precedence. Never commit keys.
 agent/gateway/            experience-layer HTTP gateway over the live protocol
 design-system/            advertising/design-system assets and templates
 docs/                     architecture notes and future media assets

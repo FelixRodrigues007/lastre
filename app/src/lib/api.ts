@@ -110,3 +110,38 @@ export async function downloadAuditExport(): Promise<void> {
   anchor.click();
   URL.revokeObjectURL(url);
 }
+
+export async function createArtifact(artifact: any) {
+  return apiFetch<any>("/api/artifacts", {
+    method: "POST",
+    body: JSON.stringify(artifact),
+  });
+}
+
+export async function computeSealForArtifact(artifact: any) {
+  return apiFetch<{ seal: string; passport: any }>("/api/seal", {
+    method: "POST",
+    body: JSON.stringify(artifact),
+  });
+}
+
+export async function mintAsset(assetId: string, minter?: string) {
+  return apiFetch<{ success: boolean; txHash?: string; lot?: any; error?: string }>("/api/mint", {
+    method: "POST",
+    body: JSON.stringify({ assetId, minter }),
+  });
+}
+
+export async function lockCollateral(assetId: string, owner: string) {
+  return apiFetch<{ success: boolean; error?: string }>("/api/defi/lock", {
+    method: "POST",
+    body: JSON.stringify({ assetId, owner }),
+  });
+}
+
+export async function releaseCollateral(assetId: string, owner: string) {
+  return apiFetch<{ success: boolean; error?: string }>("/api/defi/release", {
+    method: "POST",
+    body: JSON.stringify({ assetId, owner }),
+  });
+}

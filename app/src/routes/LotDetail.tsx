@@ -42,8 +42,14 @@ export function LotDetail() {
             <div className="lot-detail-main">
               <div className="lot-detail-hero">
                 <MetricCard
-                  label="Mass"
-                  value={`${data.artifact.massGrams.toLocaleString()} g`}
+                  label={data.artifact.tonnesCO2e != null ? "Tonnes CO₂e" : "Mass"}
+                  value={
+                    data.artifact.tonnesCO2e != null
+                      ? `${data.artifact.tonnesCO2e.toLocaleString()} t`
+                      : data.artifact.massGrams != null
+                        ? `${data.artifact.massGrams.toLocaleString()} g`
+                        : "—"
+                  }
                   size="lg"
                 />
                 <MetricCard

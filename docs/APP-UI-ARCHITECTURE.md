@@ -249,7 +249,7 @@ For `skip` / `escalate`: verification and on-chain panels show em dash with expl
 
 **Read-only in v1 except:**
 
-- Decider: `RuleDecider` (default) vs `LlmDecider` (requires server `OPENROUTER_API_KEY`)
+- Decider: `RuleDecider` (default) vs `LlmDecider` (requires server `XAI_API_KEY` or `OPENROUTER_API_KEY`)
 - Theme: dark (default) / light — `data-theme` on `<html>`
 - Known limits display (from `DEFAULT_LIMITS`) — perimeter box, mass range
 
@@ -491,7 +491,7 @@ All badges must include text labels (not color-only) for WCAG AA.
 |---|---|
 | API unreachable | Banner + retry; link to `make demo` CLI fallback |
 | Unknown asset | 404 page with back to Lots |
-| LLM decider unavailable | Auto-fallback message: *"Using rule decider — OPENROUTER_API_KEY not set"* |
+| LLM decider unavailable | Auto-fallback message: *"Using rule decider — XAI_API_KEY or OPENROUTER_API_KEY not set"* |
 | Process failure | Show error on current step; prior records remain in audit |
 
 ### Invalid verdict presentation
@@ -516,7 +516,7 @@ All badges must include text labels (not color-only) for WCAG AA.
 ## Security & compliance (UI)
 
 - No secrets in frontend env except public URLs
-- `OPENROUTER_API_KEY` only on server
+- `XAI_API_KEY` or `OPENROUTER_API_KEY` only on server (never in browser)
 - No PII fields in forms — artifacts are fictional
 - Rate-limit `POST /api/process/batch` in demo deployment
 - Content Security Policy on app host

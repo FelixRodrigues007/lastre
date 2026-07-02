@@ -2,6 +2,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { URL } from "node:url";
 import { AppRuntime, type DeciderMode } from "./runtime.js";
 import { getLiveTestnetSnapshot } from "./casper-read.js";
+import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
 
 const PORT = readPort();
 const HOST = process.env.LASTRO_APP_API_HOST ?? "0.0.0.0";
@@ -172,6 +173,79 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
 
     const result = await runtime.processBatch(assetIds, decider);
     sendJson(res, 200, result);
+    return;
+  }
+
+  // Create new artifact from upload / camera flow (adds to queue, ready for Process)
+  if (method === "POST" && pathname === "/api/artifacts") {
+    const artifact = await readJsonBody<any>(req);
+    if (!artifact || !artifact.assetId || !artifact.category || !artifact.origin) {
+      sendJson(res, 400, { error: "invalid_artifact", message: "assetId, category and origin required" });
+      return;
+    }
+    // ensure category
+    artifact.category = artifact.category === "carbon_credit" ? "carbon_credit" : "mineral";
+    runtime.addArtifact(artifact as any);
+    const lot = runtime.getLot(artifact.assetId);
+    sendJson(res, 200, lot ?? { success: true, assetId: artifact.assetId });
+    return;
+  }
+
+  // Instant seal computation for passport preview (client builds artifact, gets seal + passport)
+  if (method === "POST" && pathname === "/api/seal") {
+    const artifact = await readJsonBody<any>(req);
+    if (!artifact || !artifact.assetId) {
+      sendJson(res, 400, { error: "invalid" });
+      return;
+    }
+    const seal = computeSeal(artifact as any);
+    const passport = {
+      artifact,
+      seal,
+      sealAlgo: "SHA-256",
+      version: "1.0.0",
+    };
+    sendJson(res, 200, { seal, passport });
+    return;
+  }
+
+  // Mint via MintGate simulation (only after Valid proof)
+  if (method === "POST" && pathname === "/api/mint") {
+    const body = await readJsonBody<{ assetId: string; minter?: string }>(req);
+    if (!body?.assetId) {
+      sendJson(res, 400, { error: "assetId required" });
+      return;
+    }
+    const result = runtime.mintAsset(body.assetId, body.minter);
+    if (result.success) {
+      const lot = runtime.getLot(body.assetId);
+      sendJson(res, 200, { success: true, txHash: result.txHash, lot });
+    } else {
+      sendJson(res, 400, { success: false, error: result.error });
+    }
+    return;
+  }
+
+  // DeFi collateral lock (demo)
+  if (method === "POST" && pathname === "/api/defi/lock") {
+    const body = await readJsonBody<{ assetId: string; owner: string }>(req);
+    if (!body?.assetId || !body?.owner) {
+      sendJson(res, 400, { error: "assetId and owner required" });
+      return;
+    }
+    const result = runtime.lockCollateral(body.assetId, body.owner);
+    sendJson(res, result.success ? 200 : 400, result);
+    return;
+  }
+
+  if (method === "POST" && pathname === "/api/defi/release") {
+    const body = await readJsonBody<{ assetId: string; owner: string }>(req);
+    if (!body?.assetId || !body?.owner) {
+      sendJson(res, 400, { error: "assetId and owner required" });
+      return;
+    }
+    const result = runtime.releaseCollateral(body.assetId, body.owner);
+    sendJson(res, result.success ? 200 : 400, result);
     return;
   }
 

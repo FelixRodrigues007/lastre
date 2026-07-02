@@ -5,13 +5,40 @@ export type VerificationVerdict = "Valid" | "Invalid";
 export type Outcome = "tokenizable" | "rejected" | "skipped" | "escalated";
 export type DeciderMode = "rule" | "llm";
 
+export type AssetCategory = 'mineral' | 'carbon_credit';
+
+export type CarbonCreditType =
+  | 'VCU'              // Créditos de Carbono Voluntários
+  | 'VCS'              // Créditos Verra (VCS)
+  | 'GoldStandard'     // Créditos Gold Standard
+  | 'CER'              // Créditos UNFCCC (CERs)
+  | 'REDD+'            // Créditos REDD+
+  | 'ARR'              // Créditos de Reflorestamento (ARR)
+  | 'RenewableEnergy'  // Créditos de Energia Renovável
+  | 'Biomass'          // Créditos de Biomassa
+  | 'Wind'             // Créditos de Energia Eólica
+  | 'Solar'            // Créditos de Energia Solar
+  | 'PCH'              // Créditos de Pequenas Centrais Hidrelétricas (PCH)
+  | 'IREC';            // I-REC (International Renewable Energy Certificate)
+
 export type ProvenanceArtifact = {
   assetId: string;
+  category: AssetCategory;
   origin: { lat: number; lng: number; site: string };
   frameHash: string;
-  massGrams: number;
+  massGrams?: number; // optional for credits (use tonnesCO2e)
   capturedAtISO: string;
   operator: string;
+  // Mineral-specific (backward compat)
+  mineral?: string;
+  mineralType?: string;
+  // Carbon credit specific
+  creditType?: CarbonCreditType;
+  tonnesCO2e?: number;
+  vintage?: string; // e.g. "2024"
+  methodology?: string;
+  projectId?: string;
+  verifier?: string; // e.g. "Verra", "Gold Standard"
 };
 
 export type Decision = {
@@ -63,6 +90,9 @@ export type LotListItem = {
   latestVerdict: VerificationVerdict | null;
   demoRole: string;
   auditRecord: AuditRecord | null;
+  isMinted?: boolean;
+  mintTx?: string | null;
+  creditType?: CarbonCreditType;  // for carbon credits
 };
 
 export type KnownLimits = {

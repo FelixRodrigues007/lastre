@@ -14,7 +14,7 @@ import type { LotListItem } from "../lib/types";
 import { useAsyncData } from "../hooks/useAsyncData";
 import "./lots.css";
 
-type SortKey = "assetId" | "massGrams" | "verdict" | "attested";
+type SortKey = "assetId" | "quantity" | "verdict" | "attested";
 type ViewMode = "table" | "cards";
 
 function lotTone(lot: LotListItem): "valid" | "invalid" | "pending" {
@@ -26,8 +26,10 @@ function lotTone(lot: LotListItem): "valid" | "invalid" | "pending" {
 function sortLots(lots: LotListItem[], key: SortKey): LotListItem[] {
   return [...lots].sort((a, b) => {
     switch (key) {
-      case "massGrams":
-        return b.artifact.massGrams - a.artifact.massGrams;
+      case "quantity":
+        const qa = (a.artifact as any).tonnesCO2e ?? a.artifact.massGrams ?? 0;
+        const qb = (b.artifact as any).tonnesCO2e ?? b.artifact.massGrams ?? 0;
+        return qb - qa;
       case "verdict":
         return (a.latestVerdict ?? "Z").localeCompare(b.latestVerdict ?? "Z");
       case "attested":
@@ -70,11 +72,13 @@ export function Lots() {
       <PageHeader
         kicker="Lots"
         title="Lot queue"
-        lead="Demo assets from Mineradora Vale do Ouro — inspect artifacts before attestation."
+        lead="Minerals and carbon credits. Capture new via camera or upload, then process."
         actions={
-          <Link className="route-cta" to="/process">
-            Run batch
-          </Link>
+          <>
+            <Link className="route-cta route-cta--ghost" to="/capture">Capture / New</Link>
+            <Link className="route-cta" to="/process">Run batch</Link>
+            <Link className="route-cta" to="/marketplace">Marketplace</Link>
+          </>
         }
       />
 
@@ -129,10 +133,9 @@ export function Lots() {
                     <tr>
                       <th scope="col">Asset</th>
                       <th scope="col" className="lots-table__num">
-                        Mass (g)
+                        Qty
                       </th>
-                      <th scope="col">Operator</th>
-                      <th scope="col">Site</th>
+                      <th scope="col">Operator / Site</th>
                       <th scope="col">Verdict</th>
                       <th scope="col">Attested</th>
                     </tr>
@@ -147,10 +150,16 @@ export function Lots() {
                           <span className="lots-table__role">{lot.demoRole}</span>
                         </td>
                         <td className="lots-table__num">
-                          {lot.artifact.massGrams.toLocaleString()}
+                          {lot.artifact.tonnesCO2e != null
+                            ? `${lot.artifact.tonnesCO2e.toLocaleString()} t`
+                            : lot.artifact.massGrams != null
+                              ? `${lot.artifact.massGrams.toLocaleString()} g`
+                              : "—"}
                         </td>
-                        <td>{lot.artifact.operator}</td>
-                        <td>{lot.artifact.origin.site}</td>
+                        <td>
+                          {lot.artifact.operator}
+                          <div className="small muted">{lot.artifact.origin.site}</div>
+                        </td>
                         <td>
                           <VerdictBadge verdict={lot.latestVerdict} />
                         </td>
@@ -172,8 +181,12 @@ export function Lots() {
                       <header className="lot-card__head">
                         <div>
                           <p className="lot-card__mass">
-                            {lot.artifact.massGrams.toLocaleString()}
-                            <span className="lot-card__unit"> g</span>
+                            {lot.artifact.tonnesCO2e != null
+                              ? lot.artifact.tonnesCO2e.toLocaleString()
+                              : lot.artifact.massGrams != null
+                                ? lot.artifact.massGrams.toLocaleString()
+                                : "—"}
+                            <span className="lot-card__unit"> {lot.artifact.tonnesCO2e != null ? "tCO₂e" : "g"}</span>
                           </p>
                           <h2 className="lot-card__title">
                             <Link to={`/lots/${encodeURIComponent(lot.artifact.assetId)}`}>

@@ -226,6 +226,7 @@ function buildGenuineArtifact(asset: CatalogAsset): ProvenanceArtifact {
   const origin = asset.origin ?? { lat: -30.05, lng: -53.2, label: "Fictional demo sector" };
   return {
     assetId: asset.assetId,
+    category: "mineral",
     origin: {
       lat: origin.lat,
       lng: origin.lng,
@@ -248,23 +249,24 @@ function applyTamper(
     ...genuine,
     origin: { ...genuine.origin },
   };
+  const massGrams = genuine.massGrams ?? 125_000;
 
   if (difficulty === "easy") {
-    tampered.massGrams = genuine.massGrams + 1;
+    tampered.massGrams = massGrams + 1;
     return {
       tampered,
-      difference: `massGrams changed by +1 (${genuine.massGrams}g → ${tampered.massGrams}g)`,
+      difference: `massGrams changed by +1 (${massGrams}g → ${tampered.massGrams}g)`,
     };
   }
 
   // Hard mode: a subtle, realistic, single-field change that still breaks the seal.
   const variant = randomBytes(1)[0] % 2;
   if (variant === 0) {
-    const bumped = Math.round(genuine.massGrams * 1.001);
-    tampered.massGrams = bumped === genuine.massGrams ? genuine.massGrams + 1 : bumped;
+    const bumped = Math.round(massGrams * 1.001);
+    tampered.massGrams = bumped === massGrams ? massGrams + 1 : bumped;
     return {
       tampered,
-      difference: `massGrams changed by +0.1% (${genuine.massGrams}g → ${tampered.massGrams}g)`,
+      difference: `massGrams changed by +0.1% (${massGrams}g → ${tampered.massGrams}g)`,
     };
   }
 

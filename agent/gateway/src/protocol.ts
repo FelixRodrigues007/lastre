@@ -162,6 +162,7 @@ export function buildArtifactFromMeasurement(assetId: string, measurement: Recor
 
   return {
     assetId,
+    category: "mineral",
     origin: {
       lat: numericValue(origin?.lat, -30.05),
       lng: numericValue(origin?.lng, -53.2),

@@ -7,7 +7,7 @@ import type { AuditRecord, BatchResult, Decider } from "./types.js";
 
 async function main(): Promise<void> {
   await runDemo("Deterministic RuleDecider", new RuleDecider());
-  await runDemo("LlmDecider (OpenRouter when configured, rule fallback otherwise)", new LlmDecider());
+  await runDemo("LlmDecider (xAI or OpenRouter when configured, rule fallback otherwise)", new LlmDecider());
 }
 
 async function runDemo(title: string, decider: Decider): Promise<void> {

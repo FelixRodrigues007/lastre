@@ -73,11 +73,35 @@ export interface ProofResponse {
   recentAttestations: RecentAttestation[];
 }
 
+export type AssetCategory = 'mineral' | 'carbon_credit';
+
+export type CarbonCreditType =
+  | 'VCU'              // Créditos de Carbono Voluntários (VCUs)
+  | 'VCS'              // Créditos Verra (VCS)
+  | 'GoldStandard'     // Créditos Gold Standard
+  | 'CER'              // Créditos UNFCCC (CERs)
+  | 'REDD+'            // Créditos REDD+
+  | 'ARR'              // Créditos de Reflorestamento (ARR)
+  | 'RenewableEnergy'  // Créditos de Energia Renovável
+  | 'Biomass'          // Créditos de Biomassa
+  | 'Wind'             // Créditos de Energia Eólica
+  | 'Solar'            // Créditos de Energia Solar
+  | 'PCH'              // Créditos de Pequenas Centrais Hidrelétricas (PCH)
+  | 'IREC';            // I-REC (International Renewable Energy Certificate)
+
 export interface CatalogAsset {
   assetId: string;
   name?: string;
+  category?: AssetCategory;
   mineral?: string;
   mineralType?: string;
+  // Carbon credit fields
+  creditType?: CarbonCreditType;
+  tonnesCO2e?: number;
+  vintage?: string;
+  methodology?: string;
+  projectId?: string;
+  verifier?: string;
   operator?: string;
   origin?: { lat: number; lng: number; label: string };
   custodyPath?: Array<{ lat: number; lng: number; step?: string; label?: string }>;

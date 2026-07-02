@@ -16,6 +16,8 @@ export const WORKSPACE_NAV: NavItem[] = [
   { to: "/process", labelKey: "nav.process", icon: "process", mobileLabelKey: "nav.run" },
   { to: "/audit", labelKey: "nav.audit", icon: "audit" },
   { to: "/escalations", labelKey: "nav.escalations", icon: "escalations", mobileLabelKey: "nav.queue" },
+  { to: "/marketplace", labelKey: "nav.marketplace", icon: "globe" },
+  { to: "/my-assets", labelKey: "nav.myAssets", icon: "shield" },
 ];
 
 export const SETTINGS_NAV: NavItem = {

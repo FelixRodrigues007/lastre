@@ -9,6 +9,9 @@ import { Lots } from "./routes/Lots";
 import { Overview } from "./routes/Overview";
 import { Process } from "./routes/Process";
 import { Settings } from "./routes/Settings";
+import { Capture } from "./routes/Capture";
+import { Marketplace } from "./routes/Marketplace";
+import { MyAssets } from "./routes/MyAssets";
 
 export function App() {
   return (
@@ -23,6 +26,9 @@ export function App() {
         <Route path="/chain" element={<Chain />} />
         <Route path="/escalations" element={<Escalations />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/capture" element={<Capture />} />
+        <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/my-assets" element={<MyAssets />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AppShell>

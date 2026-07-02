@@ -11,24 +11,54 @@ import { createHash } from "node:crypto";
 export const PASSPORT_VERSION = "1.0.0" as const;
 export const SEAL_ALGO = "SHA-256" as const;
 
-/** Fictional provenance capture at the lot origin. */
+export type AssetCategory = "mineral" | "carbon_credit";
+
+export type CarbonCreditType =
+  | "VCU"
+  | "VCS"
+  | "GoldStandard"
+  | "CER"
+  | "REDD+"
+  | "ARR"
+  | "RenewableEnergy"
+  | "Biomass"
+  | "Wind"
+  | "Solar"
+  | "PCH"
+  | "IREC";
+
+/** Fictional provenance capture at the lot origin. Generalized for minerals + carbon credits. */
 export type ProvenanceArtifact = {
   /** Asset/lot identifier also used by the contract. */
   assetId: string;
+  /** mineral or carbon_credit */
+  category: AssetCategory;
   /** Geolocation and human-readable name of the origin point. */
   origin: {
     lat: number;
     lng: number;
     site: string;
   };
-  /** Camera-frame hash. Simulated in the demo, but shaped for the future architecture. */
+  /** Camera-frame hash. Simulated in the demo. */
   frameHash: string;
-  /** Lot mass in grams. */
-  massGrams: number;
-  /** Capture timestamp as input data; it is never generated automatically here. */
+  /** Mass in grams (for minerals). Optional for carbon credits. */
+  massGrams?: number;
+  /** Capture timestamp as input data. */
   capturedAtISO: string;
   /** Operator responsible for the capture at origin. */
   operator: string;
+
+  // Mineral specific (optional)
+  mineral?: string;
+  mineralType?: string;
+
+  // Carbon credit specific (optional but recommended when category=carbon_credit)
+  creditType?: CarbonCreditType;
+  tonnesCO2e?: number;
+  vintage?: string;
+  methodology?: string;
+  projectId?: string;
+  verifier?: string;
 };
 
 /** Offline passport that can feed the contract and an audit log. */

@@ -1,12 +1,27 @@
 {
   "perimeter": {
     "label": "Vale do Ouro fictional provenance perimeter — DEMONSTRATION",
-    "center": { "lat": -30.05, "lng": -53.20 },
+    "center": {
+      "lat": -30.05,
+      "lng": -53.2
+    },
     "polygon": [
-      { "lat": -29.98, "lng": -53.30 },
-      { "lat": -29.98, "lng": -53.10 },
-      { "lat": -30.12, "lng": -53.10 },
-      { "lat": -30.12, "lng": -53.30 }
+      {
+        "lat": -29.98,
+        "lng": -53.3
+      },
+      {
+        "lat": -29.98,
+        "lng": -53.1
+      },
+      {
+        "lat": -30.12,
+        "lng": -53.1
+      },
+      {
+        "lat": -30.12,
+        "lng": -53.3
+      }
     ]
   },
   "assets": [
@@ -16,11 +31,30 @@
       "mineral": "Gold",
       "mineralType": "Gold ore",
       "operator": "Mineradora Vale do Ouro Ltda. (fictional)",
-      "origin": { "lat": -30.01, "lng": -53.27, "label": "Vale do Ouro Sector A — fictional origin" },
+      "origin": {
+        "lat": -30.01,
+        "lng": -53.27,
+        "label": "Vale do Ouro Sector A — fictional origin"
+      },
       "custodyPath": [
-        { "lat": -30.01, "lng": -53.27, "step": "origin", "label": "Fictional extraction point" },
-        { "lat": -30.04, "lng": -53.22, "step": "measurement", "label": "Offline seal station" },
-        { "lat": -30.05, "lng": -53.20, "step": "anchored", "label": "Casper Testnet anchor" }
+        {
+          "lat": -30.01,
+          "lng": -53.27,
+          "step": "origin",
+          "label": "Fictional extraction point"
+        },
+        {
+          "lat": -30.04,
+          "lng": -53.22,
+          "step": "measurement",
+          "label": "Offline seal station"
+        },
+        {
+          "lat": -30.05,
+          "lng": -53.2,
+          "step": "anchored",
+          "label": "Casper Testnet anchor"
+        }
       ],
       "referenceRegistered": true,
       "expectedOnChain": "Invalid",
@@ -33,11 +67,30 @@
       "mineral": "Gold",
       "mineralType": "Gold ore",
       "operator": "Mineradora Vale do Ouro Ltda. (fictional)",
-      "origin": { "lat": -30.08, "lng": -53.15, "label": "Vale do Ouro Sector B — fictional origin" },
+      "origin": {
+        "lat": -30.08,
+        "lng": -53.15,
+        "label": "Vale do Ouro Sector B — fictional origin"
+      },
       "custodyPath": [
-        { "lat": -30.08, "lng": -53.15, "step": "origin", "label": "Fictional extraction point" },
-        { "lat": -30.06, "lng": -53.18, "step": "measurement", "label": "Offline seal station" },
-        { "lat": -30.05, "lng": -53.20, "step": "anchored", "label": "Casper Testnet anchor" }
+        {
+          "lat": -30.08,
+          "lng": -53.15,
+          "step": "origin",
+          "label": "Fictional extraction point"
+        },
+        {
+          "lat": -30.06,
+          "lng": -53.18,
+          "step": "measurement",
+          "label": "Offline seal station"
+        },
+        {
+          "lat": -30.05,
+          "lng": -53.2,
+          "step": "anchored",
+          "label": "Casper Testnet anchor"
+        }
       ],
       "referenceRegistered": true,
       "expectedOnChain": "Valid",
@@ -50,11 +103,30 @@
       "mineral": "Iron ore",
       "mineralType": "Iron ore",
       "operator": "Operadora Serra Azul de Metais Ltda. (fictional)",
-      "origin": { "lat": -19.91, "lng": -43.76, "label": "Serra Azul Bench 4 — fictional origin" },
+      "origin": {
+        "lat": -19.91,
+        "lng": -43.76,
+        "label": "Serra Azul Bench 4 — fictional origin"
+      },
       "custodyPath": [
-        { "lat": -19.91, "lng": -43.76, "step": "origin", "label": "Fictional pit bench" },
-        { "lat": -19.88, "lng": -43.72, "step": "measurement", "label": "Mobile assay station" },
-        { "lat": -19.86, "lng": -43.69, "step": "sealed", "label": "Offline seal archive" }
+        {
+          "lat": -19.91,
+          "lng": -43.76,
+          "step": "origin",
+          "label": "Fictional pit bench"
+        },
+        {
+          "lat": -19.88,
+          "lng": -43.72,
+          "step": "measurement",
+          "label": "Mobile assay station"
+        },
+        {
+          "lat": -19.86,
+          "lng": -43.69,
+          "step": "sealed",
+          "label": "Offline seal archive"
+        }
       ],
       "referenceRegistered": false,
       "expectedOnChain": "Simulated",
@@ -67,11 +139,30 @@
       "mineral": "Niobium",
       "mineralType": "Niobium concentrate",
       "operator": "Companhia Fictícia do Nióbio Araxá Ltda. (fictional)",
-      "origin": { "lat": -19.62, "lng": -46.94, "label": "Araxá Ridge N2 — fictional origin" },
+      "origin": {
+        "lat": -19.62,
+        "lng": -46.94,
+        "label": "Araxá Ridge N2 — fictional origin"
+      },
       "custodyPath": [
-        { "lat": -19.62, "lng": -46.94, "step": "origin", "label": "Fictional ridge sample" },
-        { "lat": -19.60, "lng": -46.91, "step": "measurement", "label": "Offline spectroscopy station" },
-        { "lat": -19.58, "lng": -46.88, "step": "sealed", "label": "Provenance archive" }
+        {
+          "lat": -19.62,
+          "lng": -46.94,
+          "step": "origin",
+          "label": "Fictional ridge sample"
+        },
+        {
+          "lat": -19.6,
+          "lng": -46.91,
+          "step": "measurement",
+          "label": "Offline spectroscopy station"
+        },
+        {
+          "lat": -19.58,
+          "lng": -46.88,
+          "step": "sealed",
+          "label": "Provenance archive"
+        }
       ],
       "referenceRegistered": false,
       "expectedOnChain": "Simulated",
@@ -84,11 +175,30 @@
       "mineral": "Lithium",
       "mineralType": "Lithium-bearing pegmatite",
       "operator": "Aurora Mineral Operações Ltda. (fictional)",
-      "origin": { "lat": -16.76, "lng": -42.02, "label": "Jequitinhonha Pegmatite J5 — fictional origin" },
+      "origin": {
+        "lat": -16.76,
+        "lng": -42.02,
+        "label": "Jequitinhonha Pegmatite J5 — fictional origin"
+      },
       "custodyPath": [
-        { "lat": -16.76, "lng": -42.02, "step": "origin", "label": "Fictional pegmatite face" },
-        { "lat": -16.73, "lng": -41.99, "step": "measurement", "label": "Offline mass and frame capture" },
-        { "lat": -16.70, "lng": -41.96, "step": "sealed", "label": "Demo seal record" }
+        {
+          "lat": -16.76,
+          "lng": -42.02,
+          "step": "origin",
+          "label": "Fictional pegmatite face"
+        },
+        {
+          "lat": -16.73,
+          "lng": -41.99,
+          "step": "measurement",
+          "label": "Offline mass and frame capture"
+        },
+        {
+          "lat": -16.7,
+          "lng": -41.96,
+          "step": "sealed",
+          "label": "Demo seal record"
+        }
       ],
       "referenceRegistered": false,
       "expectedOnChain": "Simulated",
@@ -101,11 +211,30 @@
       "mineral": "Copper",
       "mineralType": "Copper ore",
       "operator": "Caraíba Verificação Mineral Ltda. (fictional)",
-      "origin": { "lat": -9.86, "lng": -39.88, "label": "Caraíba Gallery C6 — fictional origin" },
+      "origin": {
+        "lat": -9.86,
+        "lng": -39.88,
+        "label": "Caraíba Gallery C6 — fictional origin"
+      },
       "custodyPath": [
-        { "lat": -9.86, "lng": -39.88, "step": "origin", "label": "Fictional underground gallery" },
-        { "lat": -9.83, "lng": -39.84, "step": "measurement", "label": "Offline weighing station" },
-        { "lat": -9.80, "lng": -39.80, "step": "sealed", "label": "Demo seal record" }
+        {
+          "lat": -9.86,
+          "lng": -39.88,
+          "step": "origin",
+          "label": "Fictional underground gallery"
+        },
+        {
+          "lat": -9.83,
+          "lng": -39.84,
+          "step": "measurement",
+          "label": "Offline weighing station"
+        },
+        {
+          "lat": -9.8,
+          "lng": -39.8,
+          "step": "sealed",
+          "label": "Demo seal record"
+        }
       ],
       "referenceRegistered": false,
       "expectedOnChain": "Simulated",
@@ -118,11 +247,30 @@
       "mineral": "Bauxite",
       "mineralType": "Bauxite ore",
       "operator": "Trombetas Origem Mineral Ltda. (fictional)",
-      "origin": { "lat": -1.47, "lng": -56.39, "label": "Trombetas Plateau B7 — fictional origin" },
+      "origin": {
+        "lat": -1.47,
+        "lng": -56.39,
+        "label": "Trombetas Plateau B7 — fictional origin"
+      },
       "custodyPath": [
-        { "lat": -1.47, "lng": -56.39, "step": "origin", "label": "Fictional plateau block" },
-        { "lat": -1.44, "lng": -56.35, "step": "measurement", "label": "Offline moisture and mass check" },
-        { "lat": -1.41, "lng": -56.31, "step": "sealed", "label": "Demo seal record" }
+        {
+          "lat": -1.47,
+          "lng": -56.39,
+          "step": "origin",
+          "label": "Fictional plateau block"
+        },
+        {
+          "lat": -1.44,
+          "lng": -56.35,
+          "step": "measurement",
+          "label": "Offline moisture and mass check"
+        },
+        {
+          "lat": -1.41,
+          "lng": -56.31,
+          "step": "sealed",
+          "label": "Demo seal record"
+        }
       ],
       "referenceRegistered": false,
       "expectedOnChain": "Simulated",
@@ -135,17 +283,380 @@
       "mineral": "Tin",
       "mineralType": "Cassiterite concentrate",
       "operator": "Rondônia Estanho Verificações Ltda. (fictional)",
-      "origin": { "lat": -10.82, "lng": -63.20, "label": "Rondônia Cassiterite Channel T8 — fictional origin" },
+      "origin": {
+        "lat": -10.82,
+        "lng": -63.2,
+        "label": "Rondônia Cassiterite Channel T8 — fictional origin"
+      },
       "custodyPath": [
-        { "lat": -10.82, "lng": -63.20, "step": "origin", "label": "Fictional channel sample" },
-        { "lat": -10.79, "lng": -63.16, "step": "measurement", "label": "Offline density station" },
-        { "lat": -10.76, "lng": -63.12, "step": "sandbox", "label": "Controlled demo anchor candidate" }
+        {
+          "lat": -10.82,
+          "lng": -63.2,
+          "step": "origin",
+          "label": "Fictional channel sample"
+        },
+        {
+          "lat": -10.79,
+          "lng": -63.16,
+          "step": "measurement",
+          "label": "Offline density station"
+        },
+        {
+          "lat": -10.76,
+          "lng": -63.12,
+          "step": "sandbox",
+          "label": "Controlled demo anchor candidate"
+        }
       ],
       "referenceRegistered": false,
       "expectedOnChain": "Simulated",
       "simulated": true,
       "note": "Simulated sandbox showcase asset. If Felix registers a reference and anchors it for video, the UI still labels this catalog row as simulated until catalog metadata is intentionally changed."
+    },
+    {
+      "assetId": "CARBON-VCS-AMAZONIA-2024-001",
+      "name": "Amazon REDD+ VCS Project 001",
+      "category": "carbon_credit",
+      "creditType": "VCS",
+      "tonnesCO2e": 125000,
+      "vintage": "2024",
+      "methodology": "REDD+",
+      "projectId": "VCS-12345",
+      "verifier": "Verra",
+      "operator": "Amazonia Conservation Ltda. (fictional)",
+      "origin": {
+        "lat": -3.12,
+        "lng": -60.01,
+        "label": "Amazon REDD+ Zone A — fictional"
+      },
+      "custodyPath": [
+        {
+          "lat": -3.12,
+          "lng": -60.01,
+          "step": "origin",
+          "label": "Forest monitoring station"
+        },
+        {
+          "lat": -3.1,
+          "lng": -59.95,
+          "step": "verification",
+          "label": "Third-party audit"
+        },
+        {
+          "lat": -3.05,
+          "lng": -59.8,
+          "step": "sealed",
+          "label": "Lastro seal + Casper anchor"
+        }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Valid",
+      "simulated": false,
+      "note": "Real-world simulated VCS REDD+ credit. Provenance anchored before tokenization.",
+      "mineral": "Carbon Credit — VCS",
+      "mineralType": "VCS"
+    },
+    {
+      "assetId": "CARBON-GOLDSTANDARD-SOLAR-2025-002",
+      "name": "Northeast Solar Gold Standard 002",
+      "category": "carbon_credit",
+      "creditType": "GoldStandard",
+      "tonnesCO2e": 45000,
+      "vintage": "2025",
+      "methodology": "Solar PV",
+      "projectId": "GS-9876",
+      "verifier": "Gold Standard",
+      "operator": "Nordeste Solar Energia (fictional)",
+      "origin": {
+        "lat": -5.78,
+        "lng": -35.2,
+        "label": "Solar Park RN — fictional"
+      },
+      "custodyPath": [
+        {
+          "lat": -5.78,
+          "lng": -35.2,
+          "step": "origin",
+          "label": "Solar generation site"
+        },
+        {
+          "lat": -5.75,
+          "lng": -35.1,
+          "step": "measurement",
+          "label": "I-REC + GS verification"
+        },
+        {
+          "lat": -5.7,
+          "lng": -34.95,
+          "step": "sealed",
+          "label": "Lastro + Casper"
+        }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Valid",
+      "simulated": false,
+      "note": "Gold Standard + I-REC linked renewable credit.",
+      "mineral": "Carbon Credit — Gold Standard",
+      "mineralType": "GoldStandard"
+    },
+    {
+      "assetId": "CARBON-REDD-ARR-MATA-2023-003",
+      "name": "Mata Atlântica ARR Credit 003",
+      "category": "carbon_credit",
+      "creditType": "ARR",
+      "tonnesCO2e": 89000,
+      "vintage": "2023-2025",
+      "methodology": "ARR + REDD+",
+      "projectId": "REDD-4567",
+      "verifier": "Verra + Gold Standard",
+      "operator": "Mata Viva Restauração (fictional)",
+      "origin": {
+        "lat": -22.9,
+        "lng": -43.2,
+        "label": "Atlantic Forest Restoration — fictional"
+      },
+      "custodyPath": [
+        {
+          "lat": -22.9,
+          "lng": -43.2,
+          "step": "origin",
+          "label": "Reforestation plots"
+        },
+        {
+          "lat": -22.85,
+          "lng": -43.1,
+          "step": "monitoring",
+          "label": "Satellite + field verification"
+        },
+        {
+          "lat": -22.8,
+          "lng": -42.95,
+          "step": "sealed",
+          "label": "On-chain anchor"
+        }
+      ],
+      "referenceRegistered": false,
+      "expectedOnChain": "Simulated",
+      "simulated": true,
+      "note": "Simulated ARR/REDD+ mixed credit for reforestation.",
+      "mineral": "Carbon Credit — ARR",
+      "mineralType": "ARR"
+    },
+    {
+      "assetId": "CARBON-IREC-WIND-2024-004",
+      "name": "Patagonia Wind I-REC 004",
+      "category": "carbon_credit",
+      "creditType": "IREC",
+      "tonnesCO2e": 62000,
+      "vintage": "2024",
+      "methodology": "Wind + I-REC",
+      "projectId": "IREC-WIND-3344",
+      "verifier": "I-REC Standard",
+      "operator": "Vento do Sul Energia (fictional)",
+      "origin": {
+        "lat": -30.5,
+        "lng": -55.8,
+        "label": "Patagonia Wind Farm — fictional"
+      },
+      "custodyPath": [
+        {
+          "lat": -30.5,
+          "lng": -55.8,
+          "step": "origin",
+          "label": "Wind turbines"
+        },
+        {
+          "lat": -30.45,
+          "lng": -55.7,
+          "step": "generation",
+          "label": "Metered output"
+        },
+        {
+          "lat": -30.4,
+          "lng": -55.6,
+          "step": "sealed",
+          "label": "Casper provenance"
+        }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Valid",
+      "simulated": false,
+      "note": "I-REC renewable energy credit with carbon attribution.",
+      "mineral": "Carbon Credit — I-REC",
+      "mineralType": "IREC"
+    },
+    {
+      "assetId": "CARBON-VCU-001",
+      "name": "Amazon Rainforest VCU 001",
+      "category": "carbon_credit",
+      "creditType": "VCU",
+      "tonnesCO2e": 150000,
+      "vintage": "2023",
+      "methodology": "REDD+",
+      "projectId": "VCU-AMZ-001",
+      "verifier": "Verra",
+      "operator": "Amazon Conservation Alliance (fictional)",
+      "origin": {
+        "lat": -3.5,
+        "lng": -60.0,
+        "label": "Amazon Basin — fictional"
+      },
+      "custodyPath": [
+        {
+          "lat": -3.5,
+          "lng": -60.0,
+          "step": "origin",
+          "label": "Forest protection area"
+        },
+        {
+          "lat": -3.4,
+          "lng": -59.8,
+          "step": "verification",
+          "label": "Third-party audit"
+        },
+        {
+          "lat": -3.3,
+          "lng": -59.5,
+          "step": "sealed",
+          "label": "Lastro seal + Casper anchor"
+        }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Valid",
+      "simulated": false,
+      "note": "Voluntary Carbon Unit from REDD+ project.",
+      "mineral": "Carbon Credit — VCU",
+      "mineralType": "VCU"
+    },
+    {
+      "assetId": "CARBON-CER-001",
+      "name": "India Wind CER 001",
+      "category": "carbon_credit",
+      "creditType": "CER",
+      "tonnesCO2e": 80000,
+      "vintage": "2022",
+      "methodology": "Wind",
+      "projectId": "CER-IND-WIND-001",
+      "verifier": "UNFCCC",
+      "operator": "Tata Wind Power (fictional)",
+      "origin": {
+        "lat": 20.0,
+        "lng": 78.0,
+        "label": "Maharashtra Wind Park — fictional"
+      },
+      "custodyPath": [
+        {
+          "lat": 20.0,
+          "lng": 78.0,
+          "step": "origin",
+          "label": "Wind farm"
+        },
+        {
+          "lat": 19.8,
+          "lng": 77.5,
+          "step": "certification",
+          "label": "CDM validation"
+        },
+        {
+          "lat": 19.5,
+          "lng": 77.0,
+          "step": "sealed",
+          "label": "Casper provenance"
+        }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Valid",
+      "simulated": false,
+      "note": "Certified Emission Reduction from UNFCCC.",
+      "mineral": "Carbon Credit — CER",
+      "mineralType": "CER"
+    },
+    {
+      "assetId": "CARBON-BIOMASS-001",
+      "name": "Brazil Biomass Credit 001",
+      "category": "carbon_credit",
+      "creditType": "Biomass",
+      "tonnesCO2e": 45000,
+      "vintage": "2024",
+      "methodology": "Biomass Energy",
+      "projectId": "BIO-BR-001",
+      "verifier": "Gold Standard",
+      "operator": "BioEnergy Brasil (fictional)",
+      "origin": {
+        "lat": -15.0,
+        "lng": -55.0,
+        "label": "Mato Grosso Biomass Plant — fictional"
+      },
+      "custodyPath": [
+        {
+          "lat": -15.0,
+          "lng": -55.0,
+          "step": "origin",
+          "label": "Biomass facility"
+        },
+        {
+          "lat": -14.8,
+          "lng": -54.5,
+          "step": "verification",
+          "label": "GS audit"
+        },
+        {
+          "lat": -14.5,
+          "lng": -54.0,
+          "step": "sealed",
+          "label": "On-chain"
+        }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Valid",
+      "simulated": false,
+      "note": "Biomass energy credit.",
+      "mineral": "Carbon Credit — Biomass",
+      "mineralType": "Biomass"
+    },
+    {
+      "assetId": "CARBON-PCH-001",
+      "name": "Peru PCH Hydro Credit 001",
+      "category": "carbon_credit",
+      "creditType": "PCH",
+      "tonnesCO2e": 30000,
+      "vintage": "2023",
+      "methodology": "Small Hydro",
+      "projectId": "PCH-PE-001",
+      "verifier": "Verra",
+      "operator": "Andes Hydro (fictional)",
+      "origin": {
+        "lat": -10.0,
+        "lng": -75.0,
+        "label": "Andes PCH — fictional"
+      },
+      "custodyPath": [
+        {
+          "lat": -10.0,
+          "lng": -75.0,
+          "step": "origin",
+          "label": "Small hydro plant"
+        },
+        {
+          "lat": -9.8,
+          "lng": -74.5,
+          "step": "measurement",
+          "label": "Generation verification"
+        },
+        {
+          "lat": -9.5,
+          "lng": -74.0,
+          "step": "sealed",
+          "label": "Casper anchor"
+        }
+      ],
+      "referenceRegistered": true,
+      "expectedOnChain": "Valid",
+      "simulated": false,
+      "note": "PCH credit.",
+      "mineral": "Carbon Credit — PCH",
+      "mineralType": "PCH"
     }
   ],
-  "disclaimer": "DEMONSTRATION — simulated assets, no investment offered. All operators, origins, and lots are fictional."
+  "disclaimer": "DEMONSTRATION — simulated assets, no investment offered. All operators, origins, and lots are fictional. Carbon credit data is illustrative of commercial types."
 }

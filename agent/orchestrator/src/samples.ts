@@ -3,6 +3,7 @@ import { TAMPERED_ASSET_ID, VALID_ASSET_ID } from "../../x402/dist/index.js";
 
 const VALID_ARTIFACT: ProvenanceArtifact = {
   assetId: VALID_ASSET_ID,
+  category: "mineral",
   origin: {
     lat: -20.123456,
     lng: -43.987654,
@@ -12,6 +13,27 @@ const VALID_ARTIFACT: ProvenanceArtifact = {
   massGrams: 125000,
   capturedAtISO: "2026-06-23T18:30:00.000Z",
   operator: "Mineradora Vale do Ouro",
+  mineral: "Gold",
+  mineralType: "Gold ore",
+};
+
+const CARBON_VALID_ARTIFACT: ProvenanceArtifact = {
+  assetId: "CARBON-VCS-AMAZONIA-2024-001",
+  category: "carbon_credit",
+  origin: {
+    lat: -3.12,
+    lng: -60.01,
+    site: "Amazon REDD+ Zone A — fictional",
+  },
+  frameHash: "a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0",
+  capturedAtISO: "2026-06-20T10:00:00.000Z",
+  operator: "Amazonia Conservation Ltda. (fictional)",
+  creditType: "VCS",
+  tonnesCO2e: 125000,
+  vintage: "2024",
+  methodology: "REDD+",
+  projectId: "VCS-12345",
+  verifier: "Verra",
 };
 
 const VALID_REFERENCE_FOR_TAMPERED_ID: ProvenanceArtifact = {
@@ -39,6 +61,7 @@ export type DemoArtifacts = {
   tampered: ProvenanceArtifact;
   validDuplicate: ProvenanceArtifact;
   outOfRegion: ProvenanceArtifact;
+  carbonValid: ProvenanceArtifact;
 };
 
 export function createDemoArtifacts(): DemoArtifacts {
@@ -47,6 +70,7 @@ export function createDemoArtifacts(): DemoArtifacts {
     tampered: cloneArtifact(TAMPERED_ARTIFACT),
     validDuplicate: cloneArtifact(VALID_ARTIFACT),
     outOfRegion: cloneArtifact(OUT_OF_REGION_ARTIFACT),
+    carbonValid: cloneArtifact(CARBON_VALID_ARTIFACT),
   };
 }
 

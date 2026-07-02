@@ -104,8 +104,8 @@ export function Settings() {
                   <h2 className="settings-card__title">Decider</h2>
                   <p className="settings-card__hint">
                     {settings.data.llmConfigured
-                      ? "OpenRouter key detected on server."
-                      : "LLM falls back to rules — OPENROUTER_API_KEY not set."}
+                      ? "xAI or OpenRouter key detected on server."
+                      : "LLM falls back to rules — XAI_API_KEY or OPENROUTER_API_KEY not set."}
                   </p>
                   <div className="settings-card__row">
                     <label className="settings-radio">

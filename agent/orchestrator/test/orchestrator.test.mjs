@@ -113,7 +113,7 @@ test("every batch log record has non-empty reasoning", async () => {
   equal(result.summary.onChainRejected, 1);
 });
 
-test("LlmDecider without OPENROUTER_API_KEY uses deterministic rule fallback and logs the active mode", async () => {
+test("LlmDecider without XAI/OPENROUTER key uses deterministic rule fallback and logs the active mode", async () => {
   const artifacts = createDemoArtifacts();
   const logs = [];
   const originalFetch = globalThis.fetch;
@@ -143,8 +143,8 @@ test("LlmDecider without OPENROUTER_API_KEY uses deterministic rule fallback and
     equal(decision.decidedBy, "rule");
     ok(decision.reasoning.trim().length > 0);
     ok(
-      logs.some((message) => message.includes("rule fallback") && message.includes("OPENROUTER_API_KEY")),
-      "expected an explicit rule-fallback log when OPENROUTER_API_KEY is absent",
+      logs.some((message) => message.includes("rule fallback") && (message.includes("XAI_API_KEY") || message.includes("OPENROUTER_API_KEY"))),
+      "expected an explicit rule-fallback log when no LLM API key is present",
     );
   } finally {
     globalThis.fetch = originalFetch;
@@ -210,8 +210,8 @@ test("LlmDecider with a key calls the env-configured endpoint/model and returns 
     equal(sentBody.model, "test/model");
 
     ok(
-      logs.some((message) => message.includes("OpenRouter LLM path") && message.includes("test/model")),
-      "expected an explicit OpenRouter-LLM-path log naming the configured model",
+      logs.some((message) => (message.includes("OpenRouter LLM path") || message.includes("xAI LLM path")) && message.includes("test/model")),
+      "expected an explicit LLM-path log naming the configured model",
     );
   } finally {
     globalThis.fetch = originalFetch;
@@ -221,7 +221,7 @@ test("LlmDecider with a key calls the env-configured endpoint/model and returns 
   }
 });
 
-test("LlmDecider with a key falls back to the deterministic rule when OpenRouter fails", async () => {
+test("LlmDecider with a key falls back to the deterministic rule when the LLM provider fails", async () => {
   const artifacts = createDemoArtifacts();
   const logs = [];
   const originalFetch = globalThis.fetch;

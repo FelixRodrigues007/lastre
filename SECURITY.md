@@ -19,7 +19,7 @@ Never commit:
 - Casper secret keys;
 - deployer keys;
 - sandbox demo keys;
-- OpenRouter/API keys;
+- xAI or OpenRouter API keys (XAI_API_KEY / OPENROUTER_API_KEY);
 - Vercel or Render tokens;
 - `.env.local` files;
 - private key paths that reveal local operational structure.

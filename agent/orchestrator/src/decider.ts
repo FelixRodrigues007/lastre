@@ -1,5 +1,8 @@
 import type { Decider, Decision, DecisionContext } from "./types.js";
 
+const DEFAULT_XAI_BASE_URL = "https://api.x.ai/v1";
+const DEFAULT_XAI_MODEL = "grok-4.3";
+
 const DEFAULT_OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 const DEFAULT_OPENROUTER_MODEL = "openrouter/auto";
 
@@ -37,18 +40,24 @@ export class RuleDecider implements Decider {
       };
     }
 
-    const { minExclusive, maxInclusive } = limits.massGrams;
-    if (artifact.massGrams <= minExclusive || artifact.massGrams > maxInclusive) {
-      return {
-        action: "escalate",
-        reasoning: "Mass is outside the plausible range for the lot; escalate to a human before paying for verification.",
-        decidedBy: "rule",
-      };
+    // For minerals use mass; for carbon credits we skip strict mass check (or use tonnes if present)
+    if (artifact.category !== "carbon_credit") {
+      const mass = artifact.massGrams ?? 0;
+      const { minExclusive, maxInclusive } = limits.massGrams;
+      if (mass <= minExclusive || mass > maxInclusive) {
+        return {
+          action: "escalate",
+          reasoning: "Mass is outside the plausible range for the lot; escalate to a human before paying for verification.",
+          decidedBy: "rule",
+        };
+      }
     }
 
     return {
       action: "pay",
-      reasoning: "Basic metadata is complete, within the perimeter, and in a plausible mass range; pay to verify the deterministic seal.",
+      reasoning: artifact.category === "carbon_credit"
+        ? "Carbon credit metadata complete and within expected bounds; pay to verify the seal."
+        : "Basic metadata is complete, within the perimeter, and in a plausible mass range; pay to verify the deterministic seal.",
       decidedBy: "rule",
     };
   }
@@ -63,13 +72,18 @@ export type LlmDeciderOptions = {
 };
 
 /**
- * OpenRouter-backed decider for operational actions.
+ * LLM-backed decider (xAI or OpenRouter) for operational actions.
  *
  * Critical invariant: the LLM decides only the operational ACTION
  * (`pay`, `skip`, or `escalate`). It never decides, changes, or overwrites the
  * provenance VERDICT (`Valid` / `Invalid`). The verdict is produced later by
  * recomputing the deterministic SHA-256 seal and comparing it with the
  * reference seal.
+ *
+ * Provider selection:
+ * - Prefers XAI_API_KEY (xAI API at api.x.ai) if present.
+ * - Falls back to OPENROUTER_API_KEY if XAI key absent.
+ * - Otherwise pure RuleDecider fallback.
  */
 export class LlmDecider implements Decider {
   private readonly apiKey?: string;
@@ -78,23 +92,42 @@ export class LlmDecider implements Decider {
   private readonly chatCompletionsUrl: string;
   private readonly fallback: RuleDecider;
   private readonly logger: LlmLogger;
+  private readonly provider: "xai" | "openrouter" | "none";
 
   constructor(options: LlmDeciderOptions = {}) {
-    this.apiKey = options.apiKey?.trim() ?? process.env.OPENROUTER_API_KEY?.trim();
-    this.model = firstNonEmpty(options.model, process.env.OPENROUTER_MODEL) ?? DEFAULT_OPENROUTER_MODEL;
-    this.baseUrl = firstNonEmpty(options.baseUrl, process.env.OPENROUTER_BASE_URL) ?? DEFAULT_OPENROUTER_BASE_URL;
+    const xaiKey = options.apiKey?.trim() ?? process.env.XAI_API_KEY?.trim();
+    const orKey = process.env.OPENROUTER_API_KEY?.trim();
+
+    if (xaiKey) {
+      this.apiKey = xaiKey;
+      this.model = firstNonEmpty(options.model, process.env.XAI_MODEL) ?? DEFAULT_XAI_MODEL;
+      this.baseUrl = firstNonEmpty(options.baseUrl, process.env.XAI_BASE_URL) ?? DEFAULT_XAI_BASE_URL;
+      this.provider = "xai";
+    } else if (orKey) {
+      this.apiKey = orKey;
+      this.model = firstNonEmpty(options.model, process.env.OPENROUTER_MODEL) ?? DEFAULT_OPENROUTER_MODEL;
+      this.baseUrl = firstNonEmpty(options.baseUrl, process.env.OPENROUTER_BASE_URL) ?? DEFAULT_OPENROUTER_BASE_URL;
+      this.provider = "openrouter";
+    } else {
+      this.apiKey = undefined;
+      this.model = DEFAULT_XAI_MODEL;
+      this.baseUrl = DEFAULT_XAI_BASE_URL;
+      this.provider = "none";
+    }
+
     this.chatCompletionsUrl = buildChatCompletionsUrl(this.baseUrl);
     this.fallback = options.fallback ?? new RuleDecider();
     this.logger = options.logger ?? ((message) => console.info(message));
 
     if (this.apiKey) {
+      const providerLabel = this.provider === "xai" ? "xAI" : "OpenRouter";
       this.logger(
-        `[Lastro] LlmDecider active: OpenRouter LLM path (model=${this.model}, endpoint=${this.chatCompletionsUrl}). ` +
+        `[Lastro] LlmDecider active: ${providerLabel} LLM path (model=${this.model}, endpoint=${this.chatCompletionsUrl}). ` +
           "The LLM decides ACTION only; the deterministic SHA-256 seal decides VERDICT.",
       );
     } else {
       this.logger(
-        "[Lastro] LlmDecider active: rule fallback because OPENROUTER_API_KEY is absent. " +
+        "[Lastro] LlmDecider active: rule fallback (no XAI_API_KEY or OPENROUTER_API_KEY). " +
           "The fallback/LLM decides ACTION only; the deterministic SHA-256 seal decides VERDICT.",
       );
     }
@@ -137,15 +170,15 @@ export class LlmDecider implements Decider {
       });
 
       if (!response.ok) {
-        return this.decideWithRuleFallback(context, `OpenRouter returned HTTP ${response.status}`);
+        return this.decideWithRuleFallback(context, `LLM provider returned HTTP ${response.status}`);
       }
 
-      const body = (await response.json()) as OpenRouterResponse;
+      const body = (await response.json()) as LLMResponse;
       const content = body.choices?.[0]?.message?.content;
       const parsed = parseDecisionContent(content);
 
       if (!parsed) {
-        return this.decideWithRuleFallback(context, "OpenRouter response did not contain a valid action JSON object");
+        return this.decideWithRuleFallback(context, "LLM provider response did not contain a valid action JSON object");
       }
 
       return {
@@ -155,7 +188,7 @@ export class LlmDecider implements Decider {
     } catch (error) {
       return this.decideWithRuleFallback(
         context,
-        `OpenRouter request failed: ${error instanceof Error ? error.message : "unknown error"}`,
+        `LLM request failed: ${error instanceof Error ? error.message : "unknown error"}`,
       );
     }
   }
@@ -166,7 +199,7 @@ export class LlmDecider implements Decider {
   }
 }
 
-type OpenRouterResponse = {
+type LLMResponse = {
   choices?: Array<{
     message?: {
       content?: string;
@@ -235,9 +268,15 @@ function findMissingRequiredField(artifact: DecisionContext["artifact"]): string
   if (!artifact.origin || !Number.isFinite(artifact.origin.lng)) return "origin.lng";
   if (!isNonEmptyString(artifact.origin.site)) return "origin.site";
   if (!isNonEmptyString(artifact.frameHash)) return "frameHash";
-  if (!Number.isFinite(artifact.massGrams)) return "massGrams";
   if (!isNonEmptyString(artifact.capturedAtISO)) return "capturedAtISO";
   if (!isNonEmptyString(artifact.operator)) return "operator";
+
+  if (artifact.category === "mineral" && !Number.isFinite(artifact.massGrams)) {
+    return "massGrams";
+  }
+  if (artifact.category === "carbon_credit" && !Number.isFinite(artifact.tonnesCO2e)) {
+    return "tonnesCO2e";
+  }
   return null;
 }
 

@@ -211,8 +211,7 @@ export function Process() {
             {runError ? <p className="process-picker__error">{runError}</p> : null}
 
             <p className="process-picker__note">
-              LLM mode uses OpenRouter when <code>OPENROUTER_API_KEY</code> is set; otherwise rule
-              fallback applies.
+              LLM mode uses xAI (XAI_API_KEY) or OpenRouter when set; otherwise rule fallback applies.
             </p>
           </aside>
 

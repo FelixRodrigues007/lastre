@@ -14,6 +14,7 @@
     "lint": "tsc --noEmit && tsc -p server/tsconfig.json --noEmit"
   },
   "dependencies": {
+    "maplibre-gl": "^5.24.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3"
@@ -23,9 +24,9 @@
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@vitejs/plugin-react": "^4.3.4",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.7",
     "concurrently": "^9.2.0",
-    "tsx": "^4.20.3"
+    "tsx": "^4.20.3",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7"
   }
 }

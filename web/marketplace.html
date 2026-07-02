@@ -168,9 +168,44 @@
       </div>
       <div class="filter-grid" aria-label="Marketplace filters">
         <div>
-          <label for="mineral-filter">Mineral</label>
+          <label for="mineral-filter">Asset / Credit Type</label>
           <select id="mineral-filter" onchange="applyMarketplaceFilters()">
-            <option value="all">All minerals</option>
+            <option value="all">All assets &amp; credits</option>
+            <optgroup label="Minerals">
+              <option value="Gold">Gold</option>
+              <option value="Iron ore">Iron ore</option>
+              <option value="Copper">Copper</option>
+              <option value="Bauxite">Bauxite</option>
+              <option value="Tin">Tin</option>
+            </optgroup>
+            <optgroup label="Carbon Credits">
+              <option value="VCU">VCU - Voluntary Carbon Units</option>
+              <option value="VCS">VCS - Verra</option>
+              <option value="GoldStandard">Gold Standard</option>
+              <option value="CER">CER - UNFCCC</option>
+              <option value="REDD+">REDD+</option>
+              <option value="ARR">ARR - Reflorestamento</option>
+              <option value="RenewableEnergy">Renewable Energy</option>
+              <option value="Biomass">Biomass</option>
+              <option value="Wind">Wind</option>
+              <option value="Solar">Solar</option>
+              <option value="PCH">PCH - Pequenas Hidrelétricas</option>
+              <option value="IREC">I-REC</option>
+            </optgroup>
+            <optgroup label="Carbon Credits">
+              <option value="VCU">VCU - Voluntary Carbon Units</option>
+              <option value="VCS">VCS - Verra</option>
+              <option value="GoldStandard">Gold Standard</option>
+              <option value="CER">CER - UNFCCC</option>
+              <option value="REDD+">REDD+</option>
+              <option value="ARR">ARR - Reflorestamento</option>
+              <option value="RenewableEnergy">Renewable Energy</option>
+              <option value="Biomass">Biomass</option>
+              <option value="Wind">Wind</option>
+              <option value="Solar">Solar</option>
+              <option value="PCH">PCH - Pequenas Hidrelétricas</option>
+              <option value="IREC">I-REC</option>
+            </optgroup>
           </select>
         </div>
         <div>
@@ -321,17 +356,26 @@
 
 
     function populateFilterOptions(assets) {
-      const mineralFilter = document.getElementById("mineral-filter");
-      if (!mineralFilter) return;
-      const current = mineralFilter.value || "all";
-      const minerals = [...new Set(assets.map((asset) => asset.mineral || asset.mineralType).filter(Boolean))].sort();
-      mineralFilter.innerHTML = `<option value="all">All minerals</option>` + minerals.map((mineral) => `<option value="${escapeHtml(mineral)}">${escapeHtml(mineral)}</option>`).join("");
-      mineralFilter.value = minerals.includes(current) ? current : "all";
+      const assetFilter = document.getElementById("mineral-filter");
+      if (!assetFilter) return;
+      const current = assetFilter.value || "all";
+      const minerals = [...new Set(assets.filter(a => !a.category || a.category === 'mineral').map((asset) => asset.mineral || asset.mineralType).filter(Boolean))].sort();
+      const credits = [...new Set(assets.filter(a => a.category === 'carbon_credit').map((asset) => asset.creditType).filter(Boolean))].sort();
+      let html = `<option value="all">All assets & credits</option>`;
+      if (minerals.length) {
+        html += `<optgroup label="Minerals">` + minerals.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("") + `</optgroup>`;
+      }
+      if (credits.length) {
+        html += `<optgroup label="Carbon Credits">` + credits.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("") + `</optgroup>`;
+      }
+      assetFilter.innerHTML = html;
+      assetFilter.value = current;
     }
 
     function selectedMarketplaceFilters() {
+      const val = document.getElementById("mineral-filter")?.value || "all";
       return {
-        mineral: document.getElementById("mineral-filter")?.value || "all",
+        asset: val,
         status: document.getElementById("status-filter")?.value || "all"
       };
     }
@@ -342,9 +386,9 @@
 
     function assetPassesFilters(asset) {
       const filters = selectedMarketplaceFilters();
-      const mineral = asset.mineral || asset.mineralType || "";
+      const assetVal = asset.creditType || asset.mineral || asset.mineralType || "";
       const status = assetStatus(asset);
-      return (filters.mineral === "all" || mineral === filters.mineral)
+      return (filters.asset === "all" || assetVal === filters.asset)
         && (filters.status === "all" || status === filters.status);
     }
 
@@ -384,7 +428,7 @@
       const visible = assets.filter(assetPassesFilters);
       container.innerHTML = "";
       if (visible.length === 0) {
-        container.innerHTML = `<div class="card"><span class="badge badge-available">No matching lots</span><p class="muted">Change the mineral or status filter.</p></div>`;
+        container.innerHTML = `<div class="card"><span class="badge badge-available">No matching lots</span><p class="muted">Change the asset/credit type or status filter.</p></div>`;
         return;
       }
       for (const asset of visible) {
@@ -409,7 +453,8 @@
       return `
         <div class="badge ${badgeClass(status)}">${escapeHtml(status)}</div>
         <h3>${escapeHtml(asset.name || asset.assetId)}</h3>
-        <p class="muted">${escapeHtml(asset.mineral || asset.mineralType || "Fictional mineral lot")} · ${escapeHtml(asset.operator || "Fictional operator")}</p>
+        <p class="muted">${escapeHtml(asset.creditType || asset.mineral || asset.mineralType || "Fictional asset")} · ${escapeHtml(asset.operator || "Fictional operator")}</p>
+        ${asset.creditType ? `<p class="small"><strong>Credit:</strong> ${escapeHtml(asset.tonnesCO2e || '?')} tCO2e · ${escapeHtml(asset.vintage || '')} · ${escapeHtml(asset.methodology || '')}</p>` : ''}
         <p><strong>Asset:</strong> <span class="mono">${escapeHtml(asset.assetId)}</span></p>
         <p><strong>Origin:</strong> ${escapeHtml(asset.origin?.label || "fictional origin")}</p>
         <p class="small">${escapeHtml(asset.note || "Fictional demo asset.")}</p>

@@ -30,6 +30,8 @@ export type LotListItem = {
   latestVerdict: VerificationVerdict | null;
   demoRole: string;
   auditRecord: AuditRecord | null;
+  isMinted: boolean;
+  mintTx: string | null;
 };
 
 export type AuditExport = {
@@ -66,12 +68,13 @@ const DEMO_CATALOG: Array<{ key: keyof ReturnType<typeof createDemoArtifacts>; r
   { key: "valid", role: "Genuine lot · expected Valid" },
   { key: "tampered", role: "Tampered mass · expected Invalid" },
   { key: "outOfRegion", role: "Geo outside perimeter · expected escalate" },
+  { key: "carbonValid", role: "Carbon credit (VCS REDD+) · expected Valid" },
 ];
 
 const DEFAULT_BATCH_KEYS: Array<keyof ReturnType<typeof createDemoArtifacts>> = [
   "valid",
+  "carbonValid",
   "tampered",
-  "validDuplicate",
   "outOfRegion",
 ];
 
@@ -83,6 +86,13 @@ export class AppRuntime {
   private auditLog: AuditRecord[] = [];
   private deciderMode: DeciderMode = "rule";
   private lastBatch: BatchResult | null = null;
+
+  // User-submitted artifacts (from app upload/camera flows)
+  private userArtifacts: ProvenanceArtifact[] = [];
+
+  // Minted state (simulates MintGate.is_minted + on-chain record)
+  private mintedAssets = new Set<string>();
+  private mintTxs = new Map<string, string>(); // assetId -> tx hash (demo)
 
   getDeciderMode(): DeciderMode {
     return this.deciderMode;
@@ -133,9 +143,13 @@ export class AppRuntime {
   }
 
   listLots(): LotListItem[] {
-    return DEMO_CATALOG.map(({ key, role }) =>
+    const demoItems = DEMO_CATALOG.map(({ key, role }) =>
       this.buildLotItem(this.demoArtifacts[key], role),
     );
+    const userItems = this.userArtifacts.map((artifact) =>
+      this.buildLotItem(artifact, "User submitted · " + (artifact.category === "carbon_credit" ? "Carbon Credit" : "Mineral")),
+    );
+    return [...demoItems, ...userItems];
   }
 
   getLot(assetId: string): LotListItem | null {
@@ -145,7 +159,87 @@ export class AppRuntime {
         return this.buildLotItem(artifact, role);
       }
     }
+    const userMatch = this.userArtifacts.find((a) => a.assetId === assetId);
+    if (userMatch) {
+      return this.buildLotItem(userMatch, "User submitted");
+    }
     return null;
+  }
+
+  addArtifact(artifact: ProvenanceArtifact): void {
+    // Prevent duplicates by assetId
+    this.userArtifacts = this.userArtifacts.filter((a) => a.assetId !== artifact.assetId);
+    this.userArtifacts.push(artifact);
+  }
+
+  getAllArtifacts(): ProvenanceArtifact[] {
+    const demo = Object.values(this.demoArtifacts) as ProvenanceArtifact[];
+    return [...demo, ...this.userArtifacts];
+  }
+
+  mintAsset(assetId: string, minter = "demo-minter"): { success: boolean; txHash?: string; error?: string } {
+    if (this.mintedAssets.has(assetId)) {
+      return { success: false, error: "Already minted" };
+    }
+
+    // Require explicit Valid verdict from agent + attestation for mint (demo of Proof before token + MintGate gate)
+    const lot = this.getLot(assetId);
+    const hasValidProof = lot?.latestVerdict === "Valid";
+
+    if (!hasValidProof) {
+      return { success: false, error: "No Valid proof (must process through agent first)" };
+    }
+
+    this.mintedAssets.add(assetId);
+    const txHash = `mint-${Date.now().toString(16)}-${assetId.slice(-6)}`;
+    this.mintTxs.set(assetId, txHash);
+
+    return { success: true, txHash };
+  }
+
+  isMinted(assetId: string): boolean {
+    return this.mintedAssets.has(assetId);
+  }
+
+  getMintTx(assetId: string): string | null {
+    return this.mintTxs.get(assetId) ?? null;
+  }
+
+  // Simple DeFi collateral simulation (checks minted + proof)
+  private lockedCollateral = new Map<string, { owner: string; lockedAt: string }>();
+
+  lockCollateral(assetId: string, owner: string): { success: boolean; error?: string } {
+    if (!this.isMinted(assetId)) {
+      return { success: false, error: "Asset must be minted first" };
+    }
+    const lot = this.getLot(assetId);
+    if (!lot || lot.latestVerdict !== "Valid") {
+      return { success: false, error: "Only Valid proven assets can be used as collateral" };
+    }
+    if (this.lockedCollateral.has(assetId)) {
+      return { success: false, error: "Already locked" };
+    }
+    this.lockedCollateral.set(assetId, { owner, lockedAt: new Date().toISOString() });
+    return { success: true };
+  }
+
+  releaseCollateral(assetId: string, owner: string): { success: boolean; error?: string } {
+    const lock = this.lockedCollateral.get(assetId);
+    if (!lock || lock.owner !== owner) {
+      return { success: false, error: "Not locked by you" };
+    }
+    this.lockedCollateral.delete(assetId);
+    return { success: true };
+  }
+
+  getLockedStatus(assetId: string) {
+    return this.lockedCollateral.get(assetId) || null;
+  }
+
+  listLockedBy(owner: string) {
+    return Array.from(this.lockedCollateral.entries())
+      .filter(([_, lock]) => lock.owner === owner)
+      .map(([id, lock]) => ({ assetId: id, ...lock }));
   }
 
   private buildLotItem(artifact: ProvenanceArtifact, demoRole: string): LotListItem {
@@ -163,6 +257,8 @@ export class AppRuntime {
         auditRecord?.verification?.verdict ?? auditRecord?.onChain?.verdict ?? null,
       demoRole,
       auditRecord,
+      isMinted: this.isMinted(artifact.assetId),
+      mintTx: this.getMintTx(artifact.assetId),
     };
   }
 
@@ -197,7 +293,7 @@ export class AppRuntime {
       decider: this.deciderMode,
       limits: DEFAULT_LIMITS,
       persistence: "session",
-      llmConfigured: Boolean(process.env.OPENROUTER_API_KEY?.trim()),
+      llmConfigured: Boolean(process.env.XAI_API_KEY?.trim() || process.env.OPENROUTER_API_KEY?.trim()),
     };
   }
 
@@ -232,6 +328,9 @@ export class AppRuntime {
         return structuredClone(artifact);
       }
     }
+
+    const user = this.userArtifacts.find((a) => a.assetId === assetId);
+    if (user) return structuredClone(user);
 
     const lot = this.getLot(assetId);
     if (lot) {
