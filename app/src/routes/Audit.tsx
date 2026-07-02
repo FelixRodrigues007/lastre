@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { PageHeader } from "../components/layout/PageHeader";
 import { StatePanel } from "../components/layout/StatePanel";
 import { AuditRecordCard } from "../components/proof/AuditRecordCard";
+import { ProofJourney } from "../components/proof/ProofJourney";
 import { ActionBadge, OutcomeBadge, VerdictBadge } from "../components/proof/Badges";
 import { BtnIcon } from "../components/ui/BtnIcon";
 import { DataToolbar } from "../components/ui/DataToolbar";
@@ -88,6 +89,8 @@ export function Audit() {
           </>
         }
       />
+
+      <ProofJourney activePath="/audit" compact />
 
       {exportError ? <p className="audit-export-error">{exportError}</p> : null}
 

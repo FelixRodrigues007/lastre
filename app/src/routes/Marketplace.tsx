@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { PageHeader } from "../components/layout/PageHeader";
+import { ProofJourney } from "../components/proof/ProofJourney";
 import { getLots, mintAsset, lockCollateral, releaseCollateral } from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
 import { shortHash } from "../lib/format";
@@ -72,9 +73,10 @@ export function Marketplace() {
   const [persona, setPersona] = useState<MarketplacePersona>(() => readStoredPersona());
   const [locked, setLocked] = useState<Record<string, boolean>>({});
 
-  // Buy confirmation modal + signing sim (demo only, respects guardrails)
-  const [buyConfirm, setBuyConfirm] = useState<any>(null);
+  // Claim confirmation modal + signing sim (demo only, respects guardrails)
+  const [claimConfirm, setClaimConfirm] = useState<any>(null);
   const [isSigning, setIsSigning] = useState(false);
+  const [claimSuccess, setClaimSuccess] = useState<{ assetId: string; txHash: string } | null>(null);
 
   function connectWallet() {
     const fake = createDemoAccount();
@@ -120,25 +122,24 @@ export function Marketplace() {
     }
   }
 
-  // "Buy" confirmation flow: simulates Casper signing then mints (demo guardrail: no real value language)
-  function openBuyConfirm(asset: any) {
+  // Claim confirmation flow: simulates Casper signing then mints (demo guardrail: no real value language)
+  function openClaimConfirm(asset: any) {
     if (!connectedAccount) {
       connectWallet();
     }
-    setBuyConfirm(asset);
+    setClaimConfirm(asset);
     setIsSigning(false);
   }
 
-  async function confirmSimulatedBuy() {
-    if (!buyConfirm || !connectedAccount) return;
+  async function confirmSimulatedClaim() {
+    if (!claimConfirm || !connectedAccount) return;
     setIsSigning(true);
-    // Simulate Casper signature delay + UX
     await new Promise((r) => setTimeout(r, 850));
     try {
-      const res = await mintAsset(buyConfirm.assetId, connectedAccount);
-      if (res.success) {
-        alert(`✅ Simulated Casper signature complete.\nAsset: ${buyConfirm.assetId}\nMint tx: ${res.txHash}\n\nRecorded via MintGate (demo). View on cspr.live.`);
-        setBuyConfirm(null);
+      const res = await mintAsset(claimConfirm.assetId, connectedAccount);
+      if (res.success && res.txHash) {
+        setClaimSuccess({ assetId: claimConfirm.assetId, txHash: res.txHash });
+        setClaimConfirm(null);
         lotsData.reload();
       } else {
         alert("Claim failed: " + (res.error || "No valid proof"));
@@ -150,8 +151,8 @@ export function Marketplace() {
     }
   }
 
-  function closeBuyConfirm() {
-    setBuyConfirm(null);
+  function closeClaimConfirm() {
+    setClaimConfirm(null);
     setIsSigning(false);
   }
 
@@ -245,11 +246,44 @@ export function Marketplace() {
         actions={<Link className="route-cta" to="/capture">Capture New</Link>}
       />
 
+      <ProofJourney activePath="/marketplace" compact />
+
+      {claimSuccess ? (
+        <section className="claim-success panel" role="status" aria-live="polite">
+          <p className="claim-success__text">
+            <strong>Symbolic representation claimed (demo).</strong> Asset{" "}
+            <code>{claimSuccess.assetId}</code> recorded via MintGate simulation.
+          </p>
+          <div className="claim-success__actions">
+            <Link className="route-cta" to="/my-assets">
+              View My Assets
+            </Link>
+            <Link
+              className="route-cta route-cta--ghost"
+              to={`/lots/${encodeURIComponent(claimSuccess.assetId)}`}
+            >
+              Open evidence room
+            </Link>
+            <a
+              className="route-cta route-cta--ghost"
+              href={`https://testnet.cspr.live/transaction/${claimSuccess.txHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on cspr.live ↗
+            </a>
+            <button type="button" className="route-cta route-cta--ghost" onClick={() => setClaimSuccess(null)}>
+              Dismiss
+            </button>
+          </div>
+        </section>
+      ) : null}
+
       <div className="market-filters panel">
         <div className="wallet-section">
           <select value={persona} onChange={e => updatePersona(e.target.value as MarketplacePersona)} title="Persona / role simulation">
             <option value="public">Public Verifier</option>
-            <option value="buyer">NFT Buyer</option>
+            <option value="buyer">NFT Claimer (Demo)</option>
             <option value="defi">DeFi User</option>
             <option value="operator">Internal Operator</option>
           </select>
@@ -393,7 +427,7 @@ export function Marketplace() {
               <div className="card-actions">
                 <Link to={`/lots/${encodeURIComponent(a.assetId)}`} className="btn small">Inspect Proof</Link>
                 {isValidProof && !isMinted ? (
-                  <button onClick={() => openBuyConfirm(a)} className="btn primary small">Claim NFT (Demo)</button>
+                  <button onClick={() => openClaimConfirm(a)} className="btn primary small">Claim NFT (Demo)</button>
                 ) : isMinted ? (
                   <>
                     <span className="small success">Minted ✓</span>
@@ -424,7 +458,7 @@ export function Marketplace() {
         <section className="panel" style={{marginTop: 16}}>
           <h4>Internal Operator Controls (demo)</h4>
           <p className="small">Connected as operator. You see privileged actions above (e.g. on minted). Use Process route for LLM batch, Escalations for reviews. Casper package: <a href="https://testnet.cspr.live/contract-package/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561" target="_blank">view on cspr.live ↗</a></p>
-          <div className="small muted">Tip: Run Capture → auto-attest → Claim as buyer, then switch to operator to review/lock.</div>
+          <div className="small muted">Tip: Run Capture → auto-attest → Claim as demo claimer, then switch to operator to review/lock.</div>
         </section>
       )}
 
@@ -458,14 +492,14 @@ export function Marketplace() {
         </section>
       )}
 
-      {/* Buy confirmation modal — simulates Casper signing. Demo guardrail language. */}
-      {buyConfirm && (
-        <div className="modal-overlay" onClick={closeBuyConfirm}>
-          <div className="buy-modal" onClick={e => e.stopPropagation()}>
-            <h3>Buy Confirmation (Demo) — Simulate Casper Signing</h3>
-            <div>Asset: <strong>{buyConfirm.assetId}</strong></div>
+      {/* Claim confirmation modal — simulates Casper signing. Demo guardrail language. */}
+      {claimConfirm && (
+        <div className="modal-overlay" onClick={closeClaimConfirm}>
+          <div className="claim-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Claim NFT Representation (Demo)</h3>
+            <div>Asset: <strong>{claimConfirm.assetId}</strong></div>
             <div className="demo-disclaimer">
-              DEMO ONLY. This simulates acquiring a provenance NFT representation. No real asset, value, or on-chain transfer occurs.
+              DEMO ONLY. Symbolic provenance representation — no real asset, value, or ownership transfer.
             </div>
             <div className="sig-sim">
               Signing with: {connectedAccount?.slice(0, 16)}...<br />
@@ -474,13 +508,13 @@ export function Marketplace() {
             <p className="small">Provenance seal + attestation will be bound on success (demo).</p>
             <div className="actions">
               <button
-                onClick={confirmSimulatedBuy}
+                onClick={confirmSimulatedClaim}
                 disabled={isSigning}
                 className="btn primary"
               >
                 {isSigning ? "Signing with Casper account..." : "Sign & Claim (simulated)"}
               </button>
-              <button onClick={closeBuyConfirm} className="btn" disabled={isSigning}>Cancel</button>
+              <button onClick={closeClaimConfirm} className="btn" disabled={isSigning}>Cancel</button>
             </div>
             <div className="small muted" style={{marginTop: 12}}>cspr.live link shown after simulated mint.</div>
           </div>
@@ -491,6 +525,7 @@ export function Marketplace() {
 }
 
 function GlobalMundiMap({ points }: { points: MapPoint[] }) {
+  const [selectedPoint, setSelectedPoint] = useState<MapPoint | null>(null);
   const anchor = { label: "Casper Testnet anchor", lat: 37.7749, lng: -122.4194 };
   const mintedCount = points.filter((point) => point.status === "minted").length;
   const provenCount = points.filter((point) => point.status === "proven").length;
@@ -532,12 +567,22 @@ function GlobalMundiMap({ points }: { points: MapPoint[] }) {
         </div>
       </div>
 
-      <MundiMapCanvas points={points} anchor={anchor} mapTilerKey={mapTilerKey} />
+      <MundiMapCanvas
+        points={points}
+        anchor={anchor}
+        mapTilerKey={mapTilerKey}
+        onSelectPoint={setSelectedPoint}
+      />
+
+      {selectedPoint ? (
+        <MundiPointDrawer point={selectedPoint} onClose={() => setSelectedPoint(null)} />
+      ) : null}
 
       <div className="mundi-ledger">
         <div className="mundi-legend" aria-label="Map legend">
           <span><i className="mundi-legend-dot mineral" /> Mineral origin</span>
           <span><i className="mundi-legend-dot carbon_credit" /> Carbon credit origin</span>
+          <span><i className="mundi-legend-anchor" /> Casper anchor (not GPS custody)</span>
           <span><i className="mundi-legend-line proven" /> Proven route</span>
           <span><i className="mundi-legend-line minted" /> Minted route</span>
         </div>
@@ -546,14 +591,19 @@ function GlobalMundiMap({ points }: { points: MapPoint[] }) {
         </div>
         {points.length > 0 ? (
           points.map((point) => (
-            <Link key={point.assetId} to={`/lots/${encodeURIComponent(point.assetId)}`} className="mundi-row">
+            <button
+              key={point.assetId}
+              type="button"
+              className={`mundi-row${selectedPoint?.assetId === point.assetId ? " mundi-row--selected" : ""}`}
+              onClick={() => setSelectedPoint(point)}
+            >
               <span className={`mundi-status ${point.status}`} />
               <span>
                 <strong>{point.label}</strong>
                 <small>{point.assetId} · {point.detail}</small>
               </span>
               <em>{point.status}</em>
-            </Link>
+            </button>
           ))
         ) : (
           <div className="mundi-row mundi-row--empty">
@@ -569,14 +619,53 @@ function GlobalMundiMap({ points }: { points: MapPoint[] }) {
   );
 }
 
+function MundiPointDrawer({
+  point,
+  onClose,
+}: {
+  point: MapPoint;
+  onClose: () => void;
+}) {
+  return (
+    <aside className="mundi-drawer panel" role="dialog" aria-label={`Origin preview: ${point.label}`}>
+      <div className="mundi-drawer__head">
+        <span className={`mundi-status ${point.status}`} aria-hidden="true" />
+        <div>
+          <strong>{point.label}</strong>
+          <small>
+            {point.assetId} · {point.detail}
+          </small>
+        </div>
+        <button type="button" className="mundi-drawer__close" onClick={onClose} aria-label="Close preview">
+          ×
+        </button>
+      </div>
+      <p className="mundi-drawer__note small muted">
+        Fictional origin point for demo provenance — not GPS custody tracking. Preview here, then open the full
+        evidence room when ready.
+      </p>
+      <div className="mundi-drawer__actions">
+        <Link className="route-cta" to={`/lots/${encodeURIComponent(point.assetId)}`}>
+          Open evidence room
+        </Link>
+        <button type="button" className="route-cta route-cta--ghost" onClick={onClose}>
+          Close
+        </button>
+      </div>
+    </aside>
+  );
+}
+
 function MundiMapCanvas({
   points,
   anchor,
   mapTilerKey,
+  onSelectPoint,
 }: {
   points: MapPoint[];
   anchor: { label: string; lat: number; lng: number };
   mapTilerKey: string;
+  onSelectPoint?: (point: MapPoint) => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [mapStatus, setMapStatus] = useState<"fallback" | "loading" | "ready" | "error">(
@@ -613,6 +702,18 @@ function MundiMapCanvas({
             const markerEl = document.createElement("div");
             markerEl.className = `mundi-maplibre-marker ${point.category} ${point.status}`;
             markerEl.setAttribute("aria-label", `${point.label}: ${point.status}`);
+            markerEl.setAttribute("role", "button");
+            markerEl.tabIndex = 0;
+            markerEl.addEventListener("click", (event) => {
+              event.stopPropagation();
+              onSelectPoint?.(point);
+            });
+            markerEl.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                onSelectPoint?.(point);
+              }
+            });
 
             const popup = new maplibre.Popup({ offset: 18 }).setHTML(
               `<strong>${escapeHtml(point.label)}</strong><br/><small>${escapeHtml(point.assetId)} · ${escapeHtml(point.detail)} · ${escapeHtml(point.status)}</small>`,
@@ -653,7 +754,7 @@ function MundiMapCanvas({
       cancelled = true;
       cleanup();
     };
-  }, [anchor.lat, anchor.lng, anchor.label, mapTilerKey, points]);
+  }, [anchor.lat, anchor.lng, anchor.label, mapTilerKey, onSelectPoint, points]);
 
   if (!mapTilerKey || mapStatus === "error") {
     return (
@@ -663,7 +764,7 @@ function MundiMapCanvas({
             MapTiler/MapLibre could not load in this browser. Showing the zero-token SVG fallback so the demo stays stable.
           </p>
         ) : null}
-        <MundiSvgFallback points={points} anchor={anchor} />
+        <MundiSvgFallback points={points} anchor={anchor} onSelectPoint={onSelectPoint} />
       </>
     );
   }
@@ -738,7 +839,15 @@ function fitMundiBounds(
   );
 }
 
-function MundiSvgFallback({ points, anchor }: { points: MapPoint[]; anchor: { lat: number; lng: number } }) {
+function MundiSvgFallback({
+  points,
+  anchor,
+  onSelectPoint,
+}: {
+  points: MapPoint[];
+  anchor: { lat: number; lng: number };
+  onSelectPoint?: (point: MapPoint) => void;
+}) {
   return (
     <div className="mundi-canvas">
       <svg viewBox="0 0 1000 520" role="img" aria-label="World map with provenance origin points">
@@ -765,7 +874,20 @@ function MundiSvgFallback({ points, anchor }: { points: MapPoint[]; anchor: { la
           const origin = project(point.lng, point.lat);
           const target = project(anchor.lng, anchor.lat);
           return (
-            <g key={point.assetId}>
+            <g
+              key={point.assetId}
+              className="mundi-svg-point"
+              role="button"
+              tabIndex={0}
+              aria-label={`${point.label}: ${point.status}`}
+              onClick={() => onSelectPoint?.(point)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  onSelectPoint?.(point);
+                }
+              }}
+            >
               <line x1={origin.x} y1={origin.y} x2={target.x} y2={target.y} className={`mundi-route ${point.status}`} />
               <circle cx={origin.x} cy={origin.y} r="9" className={`mundi-dot ${point.category} ${point.status}`} />
               <circle cx={origin.x} cy={origin.y} r="16" className={`mundi-pulse ${point.status}`} />

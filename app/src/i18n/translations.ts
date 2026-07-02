@@ -61,6 +61,8 @@ export const translations = {
     "journey.casper.hint": "On-chain attestation",
     "journey.marketplace.label": "Marketplace",
     "journey.marketplace.hint": "Symbolic demo layer",
+    "journey.myAssets.label": "My Assets",
+    "journey.myAssets.hint": "Claimed representations",
 
     "overview.kicker": "Overview",
     "overview.title": "Proof command center",
@@ -190,6 +192,8 @@ export const translations = {
     "journey.casper.hint": "Atestação on-chain",
     "journey.marketplace.label": "Marketplace",
     "journey.marketplace.hint": "Camada demo simbólica",
+    "journey.myAssets.label": "Meus ativos",
+    "journey.myAssets.hint": "Representações reivindicadas",
 
     "overview.kicker": "Visão geral",
     "overview.title": "Centro de comando da prova",

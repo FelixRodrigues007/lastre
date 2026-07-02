@@ -308,6 +308,15 @@
   background: color-mix(in srgb, var(--lastro-status-valid) 75%, var(--lastro-text-primary));
 }
 
+.mundi-legend-anchor {
+  border: 2px solid #f97316;
+  border-radius: 999px;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  background: #fff7ed;
+}
+
 .mundi-legend-line {
   display: inline-block;
   height: 0;
@@ -334,18 +343,30 @@
 
 .mundi-row {
   align-items: center;
+  background: transparent;
   border: 1px solid #243652;
   border-radius: 14px;
   color: #e5edf7;
+  cursor: pointer;
   display: grid;
+  font: inherit;
   gap: 12px;
   grid-template-columns: auto 1fr auto;
   padding: 12px 14px;
-  text-decoration: none;
+  text-align: left;
+  width: 100%;
 }
 
-.mundi-row:hover {
+.mundi-row:hover,
+.mundi-row:focus-visible {
   border-color: var(--lastro-brand-seal);
+  outline: 2px solid color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
+  outline-offset: 2px;
+}
+
+.mundi-row--selected {
+  border-color: var(--lastro-brand-seal);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, var(--lastro-bg-primary));
 }
 
 .mundi-row--empty {
@@ -363,6 +384,58 @@
   font-size: 12px;
   font-style: normal;
   text-transform: uppercase;
+}
+
+.mundi-drawer {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mundi-drawer__head {
+  align-items: start;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto 1fr auto;
+}
+
+.mundi-drawer__head small {
+  color: #9fb0c7;
+  display: block;
+  margin-top: 4px;
+}
+
+.mundi-drawer__close {
+  background: transparent;
+  border: 0;
+  color: #9fb0c7;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.mundi-drawer__note {
+  margin: 0;
+}
+
+.mundi-drawer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mundi-svg-point {
+  cursor: pointer;
+}
+
+.mundi-svg-point:focus {
+  outline: none;
+}
+
+.mundi-svg-point:focus-visible .mundi-dot {
+  stroke: #fff;
+  stroke-width: 2;
 }
 
 .mundi-status {
@@ -435,7 +508,7 @@
 }
 .mint-tx-link:hover { color: #a3e635; }
 
-/* Demo buy/claim confirmation modal */
+/* Demo claim confirmation modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -445,6 +518,7 @@
   justify-content: center;
   z-index: 1000;
 }
+.claim-modal,
 .buy-modal {
   background: var(--lastro-bg-elevated);
   border: 1px solid #31435f;
@@ -454,7 +528,9 @@
   padding: 20px;
   color: #e5edf7;
 }
+.claim-modal h3,
 .buy-modal h3 { margin: 0 0 12px; font-size: 16px; }
+.claim-modal .demo-disclaimer,
 .buy-modal .demo-disclaimer {
   font-size: 11px;
   color: #f59e0b;
@@ -463,6 +539,7 @@
   border-radius: 4px;
   margin: 10px 0;
 }
+.claim-modal .sig-sim,
 .buy-modal .sig-sim {
   font-family: monospace;
   background: var(--lastro-bg-primary);
@@ -471,8 +548,34 @@
   margin: 8px 0;
   font-size: 12px;
 }
+.claim-modal .actions,
 .buy-modal .actions { display: flex; gap: 8px; margin-top: 16px; }
+.claim-modal .btn,
 .buy-modal .btn { flex: 1; }
+
+.claim-success {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.claim-success__text {
+  margin: 0;
+  color: var(--lastro-text-secondary);
+}
+
+.claim-success__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.my-assets-empty__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
 
 /* Real MapLibre / MapTiler canvas, activated only when VITE_MAPTILER_KEY exists. */
 .mundi-maplibre-shell {

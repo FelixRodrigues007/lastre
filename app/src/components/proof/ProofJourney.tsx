@@ -24,6 +24,12 @@ const STEP_DEFS: ProofJourneyStepDef[] = [
     to: "/marketplace",
     icon: "globe",
   },
+  {
+    labelKey: "journey.myAssets.label",
+    hintKey: "journey.myAssets.hint",
+    to: "/my-assets",
+    icon: "shield",
+  },
 ];
 
 type ProofJourneyProps = {
