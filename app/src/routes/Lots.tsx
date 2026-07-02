@@ -5,6 +5,7 @@ import { StatePanel } from "../components/layout/StatePanel";
 import { VerdictBadge } from "../components/proof/Badges";
 import { DataToolbar, ViewToggle } from "../components/ui/DataToolbar";
 import { MetricCard } from "../components/ui/MetricCard";
+import { BarChart } from "../components/ui/BarChart";
 import { SearchInput } from "../components/ui/SearchInput";
 import { SectionHead } from "../components/ui/SectionHead";
 import { getLots } from "../lib/api";
@@ -48,11 +49,13 @@ export function Lots() {
 
   const stats = useMemo(() => {
     const items = lots.data?.lots ?? [];
+    const pending = items.filter((l) => !l.latestVerdict && !l.attested).length;
     return {
       total: items.length,
       attested: items.filter((l) => l.attested).length,
       valid: items.filter((l) => l.latestVerdict === "Valid").length,
       invalid: items.filter((l) => l.latestVerdict === "Invalid").length,
+      pending,
     };
   }, [lots.data]);
 
@@ -85,16 +88,32 @@ export function Lots() {
       <StatePanel loading={lots.loading} error={lots.error} skeleton="table" onRetry={lots.reload}>
         {lots.data ? (
           <>
-            <div className="lots-summary">
-              <MetricCard label="Total lots" value={stats.total} size="lg" />
-              <MetricCard
-                label="Attested"
-                value={stats.attested}
-                hint={`${stats.total - stats.attested} pending`}
-                tone="accent"
-              />
-              <MetricCard label="Valid verdict" value={stats.valid} tone="valid" />
-              <MetricCard label="Invalid verdict" value={stats.invalid} tone="invalid" />
+            <div className="lots-insights">
+              <div className="lots-summary">
+                <MetricCard label="Total lots" value={stats.total} size="lg" />
+                <MetricCard
+                  label="Attested"
+                  value={stats.attested}
+                  hint={`${stats.pending} awaiting proof`}
+                  tone="accent"
+                />
+                <MetricCard label="Valid verdict" value={stats.valid} tone="valid" />
+                <MetricCard label="Invalid verdict" value={stats.invalid} tone="invalid" />
+              </div>
+
+              <section className="panel lots-chart">
+                <BarChart
+                  title="Verdict distribution"
+                  subtitle="Seal outcomes across the lot catalog"
+                  layout="horizontal"
+                  items={[
+                    { label: "Valid", value: stats.valid, tone: "valid" },
+                    { label: "Invalid", value: stats.invalid, tone: "invalid" },
+                    { label: "Pending", value: stats.pending, tone: "muted" },
+                  ]}
+                  emptyLabel="No lots in catalog"
+                />
+              </section>
             </div>
 
             <DataToolbar

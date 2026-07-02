@@ -55,6 +55,25 @@
   box-shadow: var(--app-shadow-panel);
 }
 
+.process-sticky-summary__copy {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.process-sticky-summary__note {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--lastro-text-muted);
+  max-width: 42ch;
+}
+
+.process-sticky-summary__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .process-sticky-summary__text {
   font-size: 0.8125rem;
   color: var(--lastro-text-secondary);

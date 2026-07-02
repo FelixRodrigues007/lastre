@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import type { BatchSummary } from "../../lib/types";
 import "./process-pipeline.css";
 
-const STEPS = ["Triage", "Pay", "Verify", "On-chain", "Done"] as const;
+const STEPS = ["Triage", "Agent", "Seal", "Casper", "Done"] as const;
 
 type ProcessPipelineStripProps = {
   activeStep: number;
@@ -36,13 +36,26 @@ type ProcessStickySummaryProps = {
 export function ProcessStickySummary({ summary, total }: ProcessStickySummaryProps) {
   return (
     <div className="process-sticky-summary" role="status">
-      <p className="process-sticky-summary__text">
-        <strong>{total} processed</strong> · {summary.tokenizable} tokenizable ·{" "}
-        {summary.rejected} rejected · {summary.escalated} escalated
-      </p>
-      <Link className="route-cta" to="/audit">
-        Open audit log
-      </Link>
+      <div className="process-sticky-summary__copy">
+        <p className="process-sticky-summary__text">
+          <strong>{total} processed</strong> · {summary.tokenizable} tokenizable ·{" "}
+          {summary.rejected} rejected · {summary.escalated} escalated
+        </p>
+        <p className="process-sticky-summary__note">
+          The agent chose each action. The seal decided each verdict. Invalid rows are permanent
+          proof — not errors.
+        </p>
+      </div>
+      <div className="process-sticky-summary__actions">
+        <Link className="route-cta route-cta--ghost" to="/audit">
+          Open audit log
+        </Link>
+        {summary.tokenizable > 0 ? (
+          <Link className="route-cta" to="/marketplace">
+            Claim demo representation
+          </Link>
+        ) : null}
+      </div>
     </div>
   );
 }

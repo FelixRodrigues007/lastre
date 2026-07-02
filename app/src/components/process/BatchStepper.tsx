@@ -1,5 +1,5 @@
 import type { AuditRecord } from "../../lib/types";
-import { AuditRecordCard } from "../proof/AuditRecordCard";
+import { ProcessRecordPanel } from "./ProcessRecordPanel";
 import "./batch-stepper.css";
 
 type BatchStepperProps = {
@@ -14,8 +14,8 @@ export function BatchStepper({ records, currentIndex, running }: BatchStepperPro
       <div className="panel batch-stepper__empty">
         <p className="batch-stepper__empty-title">No batch run yet</p>
         <p className="batch-stepper__empty-hint">
-          Select lots and run the demo batch to watch triage, verification, and on-chain
-          recording.
+          Select lots and run the demo batch to watch agent action, seal verification, verdict, and
+          Casper recording — one layer at a time.
         </p>
       </div>
     );
@@ -34,7 +34,7 @@ export function BatchStepper({ records, currentIndex, running }: BatchStepperPro
         return (
           <li key={`${record.assetId}-${index}`} className={`batch-stepper__item batch-stepper__item--${state}`}>
             <span className="batch-stepper__marker" aria-hidden="true" />
-            <AuditRecordCard record={record} index={index + 1} />
+            <ProcessRecordPanel record={record} index={index + 1} />
           </li>
         );
       })}

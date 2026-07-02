@@ -143,18 +143,26 @@ export class AppRuntime {
   }
 
   listLots(): LotListItem[] {
-    const demoItems = DEMO_CATALOG.map(({ key, role }) =>
-      this.buildLotItem(this.demoArtifacts[key], role),
-    );
-    const userItems = this.userArtifacts.map((artifact) =>
-      this.buildLotItem(artifact, "User submitted · " + (artifact.category === "carbon_credit" ? "Carbon Credit" : "Mineral")),
-    );
+    const demoItems = DEMO_CATALOG.flatMap(({ key, role }) => {
+      const artifact = this.demoArtifacts[key];
+      if (!artifact) return [];
+      return [this.buildLotItem(artifact, role)];
+    });
+    const userItems = this.userArtifacts
+      .filter((artifact) => artifact?.assetId)
+      .map((artifact) =>
+        this.buildLotItem(
+          artifact,
+          `User submitted · ${artifact.category === "carbon_credit" ? "Carbon Credit" : "Mineral"}`,
+        ),
+      );
     return [...demoItems, ...userItems];
   }
 
   getLot(assetId: string): LotListItem | null {
     for (const { key, role } of DEMO_CATALOG) {
       const artifact = this.demoArtifacts[key];
+      if (!artifact) continue;
       if (artifact.assetId === assetId) {
         return this.buildLotItem(artifact, role);
       }

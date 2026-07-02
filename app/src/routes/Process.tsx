@@ -2,8 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageHeader } from "../components/layout/PageHeader";
 import { StatePanel } from "../components/layout/StatePanel";
+import { ProofJourney } from "../components/proof/ProofJourney";
 import { BatchStepper } from "../components/process/BatchStepper";
 import { ProcessPipelineStrip, ProcessStickySummary } from "../components/process/ProcessPipeline";
+import { ProcessTrustBoundary } from "../components/process/ProcessTrustBoundary";
+import { ProcessWhatHappened } from "../components/process/ProcessWhatHappened";
 import { OutcomeBreakdown } from "../components/ui/OutcomeBreakdown";
 import { SectionHead } from "../components/ui/SectionHead";
 import { useNavCounts } from "../context/NavCountsContext";
@@ -121,8 +124,10 @@ export function Process() {
       <PageHeader
         kicker="Process"
         title="Run demo batch"
-        lead="Triage, mock payment, seal verification, and on-chain verdict — one lot at a time."
+        lead="The agent chooses the action (pay, skip, escalate). The seal decides Valid or Invalid."
       />
+
+      <ProofJourney activePath="/process" compact />
 
       <ProcessPipelineStrip activeStep={pipelineStep} />
 
@@ -228,6 +233,8 @@ export function Process() {
               ) : null}
             </header>
 
+            <ProcessTrustBoundary />
+
             <BatchStepper records={displayed} currentIndex={currentIndex} running={running} />
           </section>
         </div>
@@ -235,6 +242,7 @@ export function Process() {
 
       {displayed.length > 0 && !running ? (
         <>
+          <ProcessWhatHappened records={displayed} summary={batchSummary} />
           <ProcessStickySummary summary={batchSummary} total={displayed.length} />
           <OutcomeBreakdown
             title="Batch result"

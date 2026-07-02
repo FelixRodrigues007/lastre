@@ -96,7 +96,7 @@ body::before {
   background:
     radial-gradient(
       120% 80% at 82% -10%,
-      rgba(178, 237, 151, 0.035) 0%,
+      rgba(var(--lastro-mint-wash), 0.028) 0%,
       transparent 46%
     ),
     radial-gradient(

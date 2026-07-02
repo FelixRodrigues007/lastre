@@ -9,6 +9,7 @@ import { DataToolbar } from "../components/ui/DataToolbar";
 import { EmptyState } from "../components/ui/EmptyState";
 import { FilterPills } from "../components/ui/FilterPills";
 import { OutcomeBreakdown } from "../components/ui/OutcomeBreakdown";
+import { BarChart } from "../components/ui/BarChart";
 import { SearchInput } from "../components/ui/SearchInput";
 import { SectionHead } from "../components/ui/SectionHead";
 import { downloadAuditExport, getAudit, getAuditSummary } from "../lib/api";
@@ -90,6 +91,18 @@ export function Audit() {
 
       {exportError ? <p className="audit-export-error">{exportError}</p> : null}
 
+      {summary.data && summary.data.tokenizable > 0 ? (
+        <section className="audit-next panel" aria-label="Next step after valid proof">
+          <p className="audit-next__text">
+            <strong>{summary.data.tokenizable} tokenizable</strong> — proof recorded. Symbolic demo
+            layers unlock only after valid attestation.
+          </p>
+          <Link className="route-cta" to="/marketplace">
+            <BtnIcon icon="globe">Open Marketplace (demo)</BtnIcon>
+          </Link>
+        </section>
+      ) : null}
+
       <StatePanel
         loading={loading}
         error={error}
@@ -103,22 +116,65 @@ export function Audit() {
           <EmptyState
             icon="audit"
             title="No logs yet"
-            hint="Run a batch from Process to populate the audit log with session records."
+            hint="Capture a document or run a batch from Process to populate the audit log."
             action={
-              <Link className="route-cta" to="/process">
-                Go to Process
-              </Link>
+              <div className="audit-empty__actions">
+                <Link className="route-cta" to="/capture">
+                  Start with Capture
+                </Link>
+                <Link className="route-cta route-cta--ghost" to="/process">
+                  Go to Process
+                </Link>
+              </div>
             }
           />
         ) : summary.data && audit.data ? (
           <>
-            <OutcomeBreakdown
-              title="Batch outcomes"
-              tokenizable={summary.data.tokenizable}
-              rejected={summary.data.rejected}
-              skipped={summary.data.skipped}
-              escalated={summary.data.escalated}
-            />
+            <div className="audit-dashboard">
+              <OutcomeBreakdown
+                title="Outcome distribution"
+                tokenizable={summary.data.tokenizable}
+                rejected={summary.data.rejected}
+                skipped={summary.data.skipped}
+                escalated={summary.data.escalated}
+              />
+              <BarChart
+                title="Verdict vs action"
+                subtitle="Seal verdicts and agent actions in this session"
+                layout="vertical"
+                items={[
+                  {
+                    label: "Valid",
+                    value: audit.data.records.filter(
+                      (r) => (r.verification?.verdict ?? r.onChain?.verdict) === "Valid",
+                    ).length,
+                    tone: "valid",
+                  },
+                  {
+                    label: "Invalid",
+                    value: audit.data.records.filter(
+                      (r) => (r.verification?.verdict ?? r.onChain?.verdict) === "Invalid",
+                    ).length,
+                    tone: "invalid",
+                  },
+                  {
+                    label: "Pay",
+                    value: audit.data.records.filter((r) => r.decision.action === "pay").length,
+                    tone: "seal",
+                  },
+                  {
+                    label: "Skip",
+                    value: audit.data.records.filter((r) => r.decision.action === "skip").length,
+                    tone: "muted",
+                  },
+                  {
+                    label: "Escalate",
+                    value: audit.data.records.filter((r) => r.decision.action === "escalate").length,
+                    tone: "accent",
+                  },
+                ]}
+              />
+            </div>
 
             <DataToolbar
               search={

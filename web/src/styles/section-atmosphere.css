@@ -25,7 +25,7 @@
 
 .hero {
   --section-bg: var(--lastro-color-olive-950);
-  --section-wash-a: rgba(178, 237, 151, 0.09);
+  --section-wash-a: rgba(var(--lastro-mint-wash), 0.045);
   --section-wash-b: rgba(255, 255, 255, 0.03);
   --section-kicker: var(--lastro-color-seal-400);
   --section-kicker-bar: var(--lastro-brand-seal);
@@ -37,13 +37,13 @@
   --section-wash-b: rgba(195, 74, 44, 0.05);
   --section-kicker: var(--lastro-color-sage-300);
   --section-kicker-bar: var(--lastro-color-sage-400);
-  --section-border: rgba(234, 241, 235, 0.1);
+  --section-border: rgba(220, 232, 226, 0.08);
 }
 
 .sol {
   --section-bg: var(--lastro-color-olive-850);
   --section-wash-a: rgba(255, 255, 255, 0.04);
-  --section-wash-b: rgba(178, 237, 151, 0.05);
+  --section-wash-b: rgba(var(--lastro-mint-wash), 0.05);
   --section-kicker: var(--lastro-color-valid-400);
   --section-kicker-bar: var(--lastro-color-valid-500);
 }
@@ -52,14 +52,14 @@
   --section-bg: var(--lastro-color-cream-50);
   --section-panel: var(--lastro-color-cream-100);
   --section-wash-a: rgba(84, 87, 54, 0.05);
-  --section-wash-b: rgba(178, 237, 151, 0.06);
+  --section-wash-b: rgba(var(--lastro-mint-wash), 0.035);
   --section-kicker: var(--lastro-color-olive-700);
   --section-kicker-bar: var(--lastro-color-olive-500);
 }
 
 .evidence {
   --section-bg: var(--lastro-color-olive-800);
-  --section-wash-a: rgba(178, 237, 151, 0.05);
+  --section-wash-a: rgba(var(--lastro-mint-wash), 0.05);
   --section-wash-b: rgba(195, 74, 44, 0.07);
   --section-kicker: var(--lastro-color-sage-400);
   --section-kicker-bar: var(--lastro-color-sage-300);
@@ -68,7 +68,7 @@
 .diff[data-theme="light"] {
   --section-bg: var(--lastro-color-cream-100);
   --section-card: var(--lastro-color-cream-50);
-  --section-wash-a: rgba(178, 237, 151, 0.1);
+  --section-wash-a: rgba(var(--lastro-mint-wash), 0.1);
   --section-wash-b: rgba(84, 87, 54, 0.04);
   --section-kicker: var(--lastro-color-olive-600);
   --section-kicker-bar: var(--lastro-color-olive-400);
@@ -87,7 +87,7 @@
 
   /* Greenish off-white, not pure white — shared clear-band surface. */
   --section-bg: var(--lastro-surface-clear);
-  --section-wash-a: rgba(178, 237, 151, 0.1);
+  --section-wash-a: rgba(var(--lastro-mint-wash), 0.1);
   --section-wash-b: rgba(84, 87, 54, 0.04);
   --section-kicker: var(--lastro-color-olive-600);
   --section-kicker-bar: var(--lastro-color-olive-400);
@@ -97,14 +97,14 @@
   --section-bg-top: var(--lastro-color-cream-200);
   --section-bg-bottom: var(--lastro-color-cream-300);
   --section-wash-a: rgba(84, 87, 54, 0.09);
-  --section-wash-b: rgba(178, 237, 151, 0.06);
+  --section-wash-b: rgba(var(--lastro-mint-wash), 0.035);
   --section-kicker: var(--lastro-color-seal-700);
   --section-kicker-bar: var(--lastro-color-seal-600);
 }
 
 .demonstration {
   --section-bg: var(--lastro-color-olive-950);
-  --section-wash-a: rgba(178, 237, 151, 0.04);
+  --section-wash-a: rgba(var(--lastro-mint-wash), 0.04);
   --section-wash-b: rgba(255, 255, 255, 0.03);
   --section-kicker: var(--lastro-color-sage-300);
   --section-kicker-bar: var(--lastro-color-olive-400);
@@ -180,7 +180,7 @@
   );
   box-shadow:
     0 36px 72px -36px rgba(0, 0, 0, 0.58),
-    inset 0 1px 0 rgba(178, 237, 151, 0.04);
+    inset 0 1px 0 rgba(var(--lastro-mint-wash), 0.04);
 }
 
 /* Tamper-test card rides light against the dark evidence band.
@@ -253,5 +253,5 @@
 }
 
 .demonstration.section--band {
-  border-block-start-color: rgba(178, 237, 151, 0.1);
+  border-block-start-color: rgba(var(--lastro-mint-wash), 0.1);
 }

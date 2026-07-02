@@ -1,0 +1,142 @@
+.process-record {
+  display: grid;
+  gap: 1rem;
+}
+
+.process-record__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.process-record__title {
+  font-family: var(--lastro-font-display);
+  font-size: 1rem;
+  font-weight: var(--lastro-weight-semibold);
+}
+
+.process-record__title a:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.process-record__grid {
+  display: grid;
+  gap: 0.65rem;
+}
+
+@media (min-width: 900px) {
+  .process-record__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+}
+
+.process-record__cell {
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+  padding: 0.75rem 0.8rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
+}
+
+.process-record__cell--agent {
+  border-top: 2px solid color-mix(in srgb, var(--lastro-status-accent, #8ba4c7) 55%, transparent);
+}
+
+.process-record__cell--seal {
+  border-top: 2px solid var(--lastro-brand-seal);
+}
+
+.process-record__cell--verdict {
+  border-top: 2px solid var(--lastro-status-valid);
+}
+
+.process-record__cell--verdict:has(.badge--verdict-invalid) {
+  border-top-color: var(--lastro-status-invalid);
+}
+
+.process-record__cell--casper {
+  border-top: 2px solid #6ea8d8;
+}
+
+.process-record__label {
+  margin: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-primary);
+}
+
+.process-record__sublabel {
+  margin: -0.2rem 0 0;
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+  line-height: 1.35;
+}
+
+.process-record__meta,
+.process-record__detail,
+.process-record__empty,
+.process-record__invalid-note,
+.process-record__valid-note,
+.process-record__match {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.process-record__meta {
+  color: var(--lastro-text-muted);
+}
+
+.process-record__detail {
+  color: var(--lastro-text-secondary);
+}
+
+.process-record__empty {
+  color: var(--lastro-text-muted);
+}
+
+.process-record__seals {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.process-record__match--valid {
+  color: var(--lastro-status-valid);
+}
+
+.process-record__match--invalid {
+  color: var(--lastro-status-invalid);
+  font-weight: var(--lastro-weight-medium);
+}
+
+.process-record__invalid-note {
+  color: var(--lastro-status-invalid);
+  font-size: 0.6875rem;
+}
+
+.process-record__valid-note {
+  color: var(--lastro-text-secondary);
+  font-size: 0.6875rem;
+}
+
+.process-record__tx {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-secondary);
+}
+
+.process-record__link {
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+}
+
+.process-record__link:hover {
+  color: var(--lastro-brand-seal);
+}

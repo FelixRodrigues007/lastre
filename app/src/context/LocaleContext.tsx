@@ -7,14 +7,14 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { TranslationKey } from "../i18n/translations";
+import type { TranslationKey, TranslationParams } from "../i18n/translations";
 import { translate } from "../i18n/translations";
 import { applyLocale, getStoredLocale, type Locale } from "../lib/locale";
 
 type LocaleContextValue = {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  t: (key: TranslationKey) => string;
+  t: (key: TranslationKey, params?: TranslationParams) => string;
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
@@ -31,7 +31,10 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     applyLocale(locale);
   }, [locale]);
 
-  const t = useCallback((key: TranslationKey) => translate(locale, key), [locale]);
+  const t = useCallback(
+    (key: TranslationKey, params?: TranslationParams) => translate(locale, key, params),
+    [locale],
+  );
 
   const value = useMemo(() => ({ locale, setLocale, t }), [locale, setLocale, t]);
 

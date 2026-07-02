@@ -1,4 +1,5 @@
 import type { Action, Outcome, VerificationVerdict } from "../../lib/types";
+import { useLocaleContext } from "../../context/LocaleContext";
 import "./badges.css";
 
 type VerdictBadgeProps = {
@@ -6,9 +7,13 @@ type VerdictBadgeProps = {
 };
 
 export function VerdictBadge({ verdict }: VerdictBadgeProps) {
+  const { t } = useLocaleContext();
+
   if (!verdict) {
-    return <span className="badge badge--muted">No verdict</span>;
+    return <span className="badge badge--muted">{t("badge.noVerdict")}</span>;
   }
+
+  const label = verdict === "Valid" ? t("common.valid") : t("common.invalid");
 
   return (
     <span className={`badge badge--verdict badge--verdict-${verdict.toLowerCase()}`}>
@@ -33,7 +38,7 @@ export function VerdictBadge({ verdict }: VerdictBadgeProps) {
           />
         </svg>
       )}
-      {verdict}
+      {label}
     </span>
   );
 }
@@ -43,7 +48,11 @@ type ActionBadgeProps = {
 };
 
 export function ActionBadge({ action }: ActionBadgeProps) {
-  return <span className={`badge badge--action badge--action-${action}`}>{action}</span>;
+  const { t } = useLocaleContext();
+  const label =
+    action === "pay" ? t("badge.pay") : action === "skip" ? t("badge.skip") : t("badge.escalate");
+
+  return <span className={`badge badge--action badge--action-${action}`}>{label}</span>;
 }
 
 type OutcomeBadgeProps = {
@@ -51,5 +60,15 @@ type OutcomeBadgeProps = {
 };
 
 export function OutcomeBadge({ outcome }: OutcomeBadgeProps) {
-  return <span className={`badge badge--outcome badge--outcome-${outcome}`}>{outcome}</span>;
+  const { t } = useLocaleContext();
+  const label =
+    outcome === "tokenizable"
+      ? t("badge.tokenizable")
+      : outcome === "rejected"
+        ? t("badge.rejected")
+        : outcome === "skipped"
+          ? t("badge.skipped")
+          : t("badge.escalated");
+
+  return <span className={`badge badge--outcome badge--outcome-${outcome}`}>{label}</span>;
 }

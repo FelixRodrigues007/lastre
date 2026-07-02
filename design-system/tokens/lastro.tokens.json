@@ -2,44 +2,47 @@
   "$schema": "https://tokens.studio/schemas/tokens.json",
   "meta": {
     "name": "Lastro Design Tokens",
-    "version": "0.2.0",
-    "status": "candidate",
-    "description": "Single source of truth for Lastro brand, advertising, and product UI. Near-monochromatic olive palette + single seal accent, light & dark themes. All examples must use fictional data and avoid investment/yield language."
+    "version": "0.3.1",
+    "status": "canonical",
+    "description": "LP + app — forest-mint family, deeper scale (v0.3.1). Edit design-system/tokens/lastro.css only."
   },
   "primitive": {
     "color": {
       "olive": {
-        "950": { "value": "#070708" },
-        "900": { "value": "#0c0c0e" },
-        "850": { "value": "#111114" },
-        "800": { "value": "#16161a" },
-        "700": { "value": "#1f1f24" },
-        "600": { "value": "#2a2a30" },
-        "500": { "value": "#3a3a42" },
-        "400": { "value": "#56565f" },
-        "300": { "value": "#72727c" }
+        "950": { "value": "#0a1713" },
+        "900": { "value": "#0f201a" },
+        "850": { "value": "#122820" },
+        "800": { "value": "#163026" },
+        "700": { "value": "#1a3830" },
+        "600": { "value": "#23463c" },
+        "500": { "value": "#2f574c" },
+        "400": { "value": "#4a7266" },
+        "300": { "value": "#6a9184" }
       },
       "sage": {
-        "400": { "value": "#9b9ba3" },
-        "300": { "value": "#b4b4bc" },
-        "200": { "value": "#c8c8d0" }
+        "400": { "value": "#7a9088" },
+        "300": { "value": "#95a89f" },
+        "200": { "value": "#b0c0b8" }
       },
       "cream": {
-        "50": { "value": "#f4f3e6" },
-        "100": { "value": "#efeede" },
-        "200": { "value": "#e7e6d0" },
-        "300": { "value": "#dadbc2" }
+        "50": { "value": "#f6faf8" },
+        "100": { "value": "#ecf2ee" },
+        "200": { "value": "#dce8e2" },
+        "300": { "value": "#c8d6cf" }
       },
       "seal": {
-        "300": { "value": "#fff39a" },
-        "400": { "value": "#fef16f" },
-        "500": { "value": "#f2df3e" },
-        "600": { "value": "#cdb820" },
-        "700": { "value": "#9c8c12" },
-        "800": { "value": "#6f6410" }
+        "300": { "value": "#b8e8a4" },
+        "400": { "value": "#92d67a" },
+        "500": { "value": "#72c458" },
+        "600": { "value": "#5aa342" },
+        "700": { "value": "#458234" },
+        "800": { "value": "#336628" }
+      },
+      "orange": {
+        "400": { "value": "#F57C25" }
       },
       "valid": {
-        "400": { "value": "#9ab84a" },
+        "400": { "value": "#8aab52" },
         "500": { "value": "#6f8f2e" },
         "600": { "value": "#577322" }
       },
@@ -51,7 +54,7 @@
     },
     "font": {
       "family": {
-        "display": { "value": "Space Grotesk, Inter, system-ui, sans-serif" },
+        "display": { "value": "Inter Display, Inter, system-ui, sans-serif" },
         "body": { "value": "Inter, ui-sans-serif, system-ui, sans-serif" },
         "mono": { "value": "JetBrains Mono, IBM Plex Mono, ui-monospace, monospace" }
       },
@@ -75,17 +78,17 @@
     "color": {
       "dark": {
         "background": { "primary": { "value": "{primitive.color.olive.950}" }, "panel": { "value": "{primitive.color.olive.900}" }, "elevated": { "value": "{primitive.color.olive.800}" }, "inverse": { "value": "{primitive.color.cream.200}" } },
-        "text": { "primary": { "value": "{primitive.color.cream.200}" }, "secondary": { "value": "{primitive.color.sage.300}" }, "muted": { "value": "{primitive.color.olive.400}" }, "inverse": { "value": "{primitive.color.olive.950}" } },
+        "text": { "primary": { "value": "{primitive.color.cream.200}" }, "secondary": { "value": "{primitive.color.sage.300}" }, "muted": { "value": "{primitive.color.sage.400}" }, "inverse": { "value": "{primitive.color.olive.950}" } },
         "brand": { "seal": { "value": "{primitive.color.seal.400}" }, "sealText": { "value": "{primitive.color.seal.400}" } },
         "status": { "valid": { "value": "{primitive.color.valid.400}" }, "invalid": { "value": "{primitive.color.invalid.400}" } },
-        "border": { "subtle": { "value": "rgba(255, 255, 255, 0.07)" }, "strong": { "value": "rgba(255, 255, 255, 0.14)" } }
+        "border": { "subtle": { "value": "rgba(255, 255, 255, 0.09)" }, "strong": { "value": "rgba(255, 255, 255, 0.16)" } }
       },
       "light": {
         "background": { "primary": { "value": "{primitive.color.cream.200}" }, "panel": { "value": "{primitive.color.cream.100}" }, "elevated": { "value": "{primitive.color.cream.50}" }, "inverse": { "value": "{primitive.color.olive.950}" } },
         "text": { "primary": { "value": "{primitive.color.olive.950}" }, "secondary": { "value": "{primitive.color.olive.700}" }, "muted": { "value": "{primitive.color.olive.500}" }, "inverse": { "value": "{primitive.color.cream.50}" } },
         "brand": { "seal": { "value": "{primitive.color.seal.400}" }, "sealText": { "value": "{primitive.color.seal.800}" } },
         "status": { "valid": { "value": "{primitive.color.valid.600}" }, "invalid": { "value": "{primitive.color.invalid.600}" } },
-        "border": { "subtle": { "value": "rgba(18, 20, 7, 0.12)" }, "strong": { "value": "rgba(18, 20, 7, 0.24)" } }
+        "border": { "subtle": { "value": "rgba(19, 44, 36, 0.12)" }, "strong": { "value": "rgba(19, 44, 36, 0.22)" } }
       }
     },
     "copy": {
@@ -96,14 +99,14 @@
   },
   "component": {
     "button": {
-      "primary": { "background": { "value": "{primitive.color.seal.400}" }, "text": { "value": "{primitive.color.olive.950}" } },
+      "primary": { "background": { "value": "{primitive.color.orange.400}" }, "text": { "value": "#ffffff" } },
       "secondary": { "background": { "value": "transparent" }, "text": { "value": "{semantic.color.dark.text.primary}" }, "border": { "value": "{semantic.color.dark.border.strong}" } }
     },
-    "badge": { "background": { "value": "rgba(254, 241, 111, 0.14)" }, "text": { "value": "{primitive.color.seal.400}" }, "border": { "value": "rgba(254, 241, 111, 0.30)" } },
+    "badge": { "background": { "value": "rgba(114, 196, 88, 0.12)" }, "text": { "value": "{primitive.color.seal.400}" }, "border": { "value": "rgba(114, 196, 88, 0.22)" } },
     "proofRail": { "valid": { "value": "{primitive.color.valid.400}" }, "invalid": { "value": "{primitive.color.invalid.400}" }, "seal": { "value": "{primitive.color.seal.400}" } },
     "adCard": {
-      "backgroundDark": { "value": "linear-gradient(135deg, #070708 0%, #111114 58%, #16161a 100%)" },
-      "backgroundLight": { "value": "#e7e6d0" },
+      "backgroundDark": { "value": "linear-gradient(135deg, #0a1713 0%, #163026 58%, #1a3830 100%)" },
+      "backgroundLight": { "value": "#dce8e2" },
       "border": { "value": "{semantic.color.dark.border.subtle}" },
       "radius": { "value": "{primitive.radius.lg}" }
     }

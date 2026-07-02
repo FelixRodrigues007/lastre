@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useLocaleContext } from "../../context/LocaleContext";
 import {
   SkeletonDashboard,
   SkeletonDetail,
@@ -37,6 +38,8 @@ export function StatePanel({
   skeleton = "dashboard",
   children,
 }: StatePanelProps) {
+  const { t } = useLocaleContext();
+
   if (loading) {
     return <SkeletonForVariant variant={skeleton} />;
   }
@@ -47,7 +50,7 @@ export function StatePanel({
         <p className="state-panel__text">{error}</p>
         {onRetry ? (
           <button type="button" className="route-cta" onClick={onRetry}>
-            Retry
+            {t("common.retry")}
           </button>
         ) : null}
       </div>

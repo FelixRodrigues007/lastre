@@ -1,0 +1,147 @@
+.bar-chart {
+  display: grid;
+  gap: 0.875rem;
+  padding: 1rem 1.125rem;
+  border-radius: var(--panel-radius);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: var(--lastro-bg-panel);
+}
+
+.bar-chart__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.bar-chart__subtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--lastro-text-muted);
+  max-width: 36ch;
+}
+
+.bar-chart__total {
+  font-family: var(--lastro-font-display);
+  font-size: 1.25rem;
+  font-weight: var(--lastro-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--lastro-text-primary);
+}
+
+.bar-chart__empty {
+  margin: 0;
+  padding: 1.25rem 0;
+  text-align: center;
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+}
+
+.bar-chart__list {
+  list-style: none;
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+}
+
+.bar-chart--horizontal .bar-chart__list {
+  gap: 0.75rem;
+}
+
+.bar-chart__row {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.bar-chart__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.bar-chart__label {
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+}
+
+.bar-chart__value {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar-chart__track {
+  height: 8px;
+  border-radius: var(--lastro-radius-pill);
+  background: color-mix(in srgb, var(--lastro-text-muted) 18%, transparent);
+  overflow: hidden;
+}
+
+.bar-chart--vertical .bar-chart__track {
+  height: 72px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar-chart__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  min-width: 2px;
+  transition: width 400ms var(--ease-out), height 400ms var(--ease-out);
+}
+
+.bar-chart--vertical .bar-chart__fill {
+  width: 100%;
+  min-height: 2px;
+}
+
+.bar-chart__fill--valid {
+  background: var(--lastro-status-valid);
+}
+
+.bar-chart__fill--invalid {
+  background: var(--lastro-status-invalid);
+}
+
+.bar-chart__fill--accent {
+  background: var(--lastro-brand-orange);
+}
+
+.bar-chart__fill--seal {
+  background: var(--lastro-brand-seal);
+}
+
+.bar-chart__fill--muted {
+  background: color-mix(in srgb, var(--lastro-text-muted) 70%, var(--lastro-brand-seal));
+}
+
+.bar-chart__hint {
+  margin: 0;
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+  line-height: 1.35;
+}
+
+.bar-chart--vertical .bar-chart__list {
+  grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
+  align-items: end;
+  gap: 0.5rem;
+}
+
+.bar-chart--vertical .bar-chart__row {
+  align-content: end;
+  height: 100%;
+}
+
+.bar-chart--vertical .bar-chart__meta {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.15rem;
+}

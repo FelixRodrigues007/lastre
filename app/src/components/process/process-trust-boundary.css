@@ -1,0 +1,112 @@
+.process-trust-boundary {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem 1.125rem;
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent);
+}
+
+.process-trust-boundary__head {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.process-trust-boundary__kicker {
+  margin: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lastro-brand-seal);
+}
+
+.process-trust-boundary__lead {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+  max-width: 62ch;
+}
+
+.process-trust-boundary__lead strong {
+  color: var(--lastro-text-primary);
+}
+
+.process-trust-boundary__rail {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.process-trust-boundary__step {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.process-trust-boundary__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--lastro-text-muted);
+}
+
+.process-trust-boundary__dot--seal {
+  background: var(--lastro-brand-seal);
+}
+
+.process-trust-boundary__dot--agent {
+  background: color-mix(in srgb, var(--lastro-status-accent, #8ba4c7) 80%, #fff);
+}
+
+.process-trust-boundary__dot--verdict {
+  background: var(--lastro-status-valid);
+}
+
+.process-trust-boundary__dot--casper {
+  background: #6ea8d8;
+}
+
+.process-trust-boundary__copy {
+  display: grid;
+  gap: 0.05rem;
+  min-width: 5.5rem;
+}
+
+.process-trust-boundary__title {
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastro-text-primary);
+}
+
+.process-trust-boundary__owner {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+}
+
+.process-trust-boundary__note {
+  font-size: 0.625rem;
+  color: var(--lastro-text-secondary);
+}
+
+.process-trust-boundary__arrow {
+  color: var(--lastro-text-muted);
+  font-size: 0.75rem;
+  opacity: 0.7;
+  padding-right: 0.15rem;
+}
+
+@media (max-width: 720px) {
+  .process-trust-boundary__arrow {
+    display: none;
+  }
+
+  .process-trust-boundary__step {
+    flex: 1 1 calc(50% - 0.35rem);
+  }
+}

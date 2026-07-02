@@ -11,6 +11,7 @@ export type NavItem = {
 
 export const WORKSPACE_NAV: NavItem[] = [
   { to: "/", labelKey: "nav.overview", icon: "overview", end: true },
+  { to: "/capture", labelKey: "nav.capture", icon: "capture" },
   { to: "/chain", labelKey: "nav.chain", icon: "chain" },
   { to: "/lots", labelKey: "nav.lots", icon: "lots" },
   { to: "/process", labelKey: "nav.process", icon: "process", mobileLabelKey: "nav.run" },

@@ -1,16 +1,57 @@
-import { Link, useParams } from "react-router-dom";
-import { useCallback } from "react";
+import { useParams } from "react-router-dom";
+import { useCallback, useMemo } from "react";
 import { PageHeader } from "../components/layout/PageHeader";
 import { StatePanel } from "../components/layout/StatePanel";
 import { ArtifactPanel } from "../components/lots/ArtifactPanel";
+import { LotEvidenceGrid } from "../components/lots/LotEvidenceGrid";
+import { LotProofStatus } from "../components/lots/LotProofStatus";
+import { SealCompare } from "../components/lots/SealCompare";
+import { ProofJourney } from "../components/proof/ProofJourney";
 import { VerdictBadge } from "../components/proof/Badges";
-import { ProofRail, proofStepFromLot } from "../components/proof/ProofRail";
-import { SealChip } from "../components/proof/SealChip";
 import { Breadcrumbs } from "../components/ui/Breadcrumbs";
-import { MetricCard } from "../components/ui/MetricCard";
+import { SectionHead } from "../components/ui/SectionHead";
 import { getLot } from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
 import "./lot-detail.css";
+
+function tamperFields(lot: { sealMatchesReference: boolean | null; artifact: { category: string } }): string[] {
+  if (lot.sealMatchesReference !== false) return [];
+  if (lot.artifact.category === "mineral") return ["massGrams"];
+  return ["artifact fields"];
+}
+
+function verdictHeadline(lot: {
+  sealMatchesReference: boolean | null;
+  latestVerdict: "Valid" | "Invalid" | null;
+  auditRecord: { outcome: string } | null;
+}): { title: string; lead: string; tone: "valid" | "invalid" | "pending" } {
+  if (lot.sealMatchesReference === false || lot.latestVerdict === "Invalid") {
+    return {
+      title: "Tamper detected",
+      lead: "Seal mismatch — invalid is permanent proof, not a system error.",
+      tone: "invalid",
+    };
+  }
+  if (lot.latestVerdict === "Valid") {
+    return {
+      title: "Valid attestation",
+      lead: "Computed seal matches reference. Proof is eligible for symbolic demo layers.",
+      tone: "valid",
+    };
+  }
+  if (lot.auditRecord) {
+    return {
+      title: "Processed — awaiting verdict",
+      lead: "Agent acted on this lot. Seal verification may still be pending.",
+      tone: "pending",
+    };
+  }
+  return {
+    title: "Awaiting proof",
+    lead: "Artifact captured. Run Process to compare agent action against seal verdict.",
+    tone: "pending",
+  };
+}
 
 export function LotDetail() {
   const { assetId = "" } = useParams();
@@ -18,8 +59,11 @@ export function LotDetail() {
   const lot = useAsyncData(loader, [assetId]);
 
   const data = lot.data;
-  const proofStep = data ? proofStepFromLot(data) : 1;
-  const sealMismatch = data?.sealMatchesReference === false;
+  const headline = data ? verdictHeadline(data) : null;
+  const highlightFields = useMemo(
+    () => (data?.sealMatchesReference === false ? tamperFields(data) : []),
+    [data],
+  );
 
   return (
     <div className="page">
@@ -31,128 +75,43 @@ export function LotDetail() {
       />
 
       <PageHeader
-        kicker="Lot detail"
+        kicker="Evidence room"
         title={assetId || "Unknown lot"}
-        lead={data?.demoRole ?? "Artifact fields, computed seal, reference seal, and proof rail."}
+        lead={data?.demoRole ?? "Forensic view of artifact, seals, and proof chain."}
       />
 
+      <ProofJourney activePath={`/lots/${assetId}`} compact />
+
       <StatePanel loading={lot.loading} error={lot.error} skeleton="detail" onRetry={lot.reload}>
-        {data ? (
+        {data && headline ? (
           <div className="lot-detail-layout">
             <div className="lot-detail-main">
-              <div className="lot-detail-hero">
-                <MetricCard
-                  label={data.artifact.tonnesCO2e != null ? "Tonnes CO₂e" : "Mass"}
-                  value={
-                    data.artifact.tonnesCO2e != null
-                      ? `${data.artifact.tonnesCO2e.toLocaleString()} t`
-                      : data.artifact.massGrams != null
-                        ? `${data.artifact.massGrams.toLocaleString()} g`
-                        : "—"
-                  }
-                  size="lg"
-                />
-                <MetricCard
-                  label="Proof step"
-                  value={`${proofStep + 1} / 5`}
-                  hint="Chain of proof progress"
-                  tone="accent"
-                />
-                <MetricCard
-                  label="Attested"
-                  value={data.attested ? "Yes" : "No"}
-                  hint={
-                    data.auditRecord ? (
-                      <Link to={`/audit/${encodeURIComponent(data.artifact.assetId)}`}>
-                        View audit record
-                      </Link>
-                    ) : (
-                      "Not yet processed"
-                    )
-                  }
-                  tone={data.attested ? "valid" : "default"}
-                />
-              </div>
-
-              <section className="panel lot-detail__section lot-detail__section--wide">
-                <header className="panel__head">
-                  <span className="mono-label">Proof rail</span>
-                </header>
-                <ProofRail activeStep={proofStep} verdict={data.latestVerdict} />
-              </section>
-
-              <section className="panel lot-detail__section lot-detail__section--wide">
-                <header className="panel__head">
-                  <span className="mono-label">Seals</span>
-                  {sealMismatch ? (
-                    <span className="lot-detail__mismatch">Mismatch — tampered artifact</span>
-                  ) : data.sealMatchesReference ? (
-                    <span className="lot-detail__match">Matches reference</span>
-                  ) : null}
-                </header>
-                <div className="lot-detail__seals">
-                  <SealChip hash={data.computedSeal} label="computed" />
-                  {data.referenceSeal ? (
-                    <SealChip hash={data.referenceSeal} label="reference" />
-                  ) : (
-                    <p className="lot-detail__empty">No reference seal registered</p>
-                  )}
+              <section className={`lot-detail-verdict lot-detail-verdict--${headline.tone}`}>
+                <div className="lot-detail-verdict__copy">
+                  <h2 className="lot-detail-verdict__title">{headline.title}</h2>
+                  <p className="lot-detail-verdict__lead">{headline.lead}</p>
                 </div>
+                <VerdictBadge verdict={data.latestVerdict} />
               </section>
 
-              <section className="panel lot-detail__section lot-detail__section--wide">
-                <header className="panel__head">
-                  <span className="mono-label">Artifact</span>
-                </header>
-                <ArtifactPanel
-                  artifact={data.artifact}
-                  highlightFields={sealMismatch ? ["massGrams"] : []}
+              <LotEvidenceGrid lot={data} />
+
+              {data.referenceSeal ? (
+                <SealCompare
+                  computed={data.computedSeal}
+                  reference={data.referenceSeal}
+                  matches={data.sealMatchesReference}
+                  tamperFields={highlightFields}
                 />
-              </section>
-
-              {data.testnetAttestation ? (
-                <section className="panel lot-detail__section lot-detail__section--wide">
-                  <header className="panel__head">
-                    <span className="mono-label">Casper Testnet</span>
-                    <VerdictBadge verdict={data.testnetAttestation.verdict} />
-                  </header>
-                  <div className="lot-detail__seals">
-                    <SealChip hash={data.testnetAttestation.providedSeal} label="on-chain seal" />
-                    {data.testnetAttestation.referenceSeal ? (
-                      <SealChip hash={data.testnetAttestation.referenceSeal} label="reference" />
-                    ) : null}
-                  </div>
-                  {data.testnetAttestation.explorerUrl ? (
-                    <a
-                      className="lot-detail__explorer"
-                      href={data.testnetAttestation.explorerUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View attestation on cspr.live
-                    </a>
-                  ) : null}
-                </section>
               ) : null}
+
+              <section className="panel lot-detail__section">
+                <SectionHead label="Artifact fields" aside={data.artifact.category} />
+                <ArtifactPanel artifact={data.artifact} highlightFields={highlightFields} />
+              </section>
             </div>
 
-            <aside className="lot-detail-rail panel">
-              <p className="mono-label">Status</p>
-              <div className="lot-detail-rail__verdict">
-                <VerdictBadge verdict={data.latestVerdict} />
-              </div>
-              <p className="lot-detail-rail__role">{data.demoRole}</p>
-              <dl className="lot-detail-rail__meta">
-                <div>
-                  <dt>Operator</dt>
-                  <dd>{data.artifact.operator}</dd>
-                </div>
-                <div>
-                  <dt>Site</dt>
-                  <dd>{data.artifact.origin.site}</dd>
-                </div>
-              </dl>
-            </aside>
+            <LotProofStatus lot={data} />
           </div>
         ) : null}
       </StatePanel>

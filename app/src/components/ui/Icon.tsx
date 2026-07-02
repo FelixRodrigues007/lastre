@@ -2,6 +2,7 @@ import type { SVGProps } from "react";
 
 export type IconName =
   | "overview"
+  | "capture"
   | "chain"
   | "lots"
   | "process"
@@ -45,6 +46,14 @@ export function Icon({ name, size = 18, className, ...props }: IconProps) {
           <rect x="11.5" y="2.5" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth={STROKE} />
           <rect x="2.5" y="11.5" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth={STROKE} />
           <rect x="11.5" y="11.5" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth={STROKE} />
+        </svg>
+      );
+    case "capture":
+      return (
+        <svg {...common}>
+          <rect x="3.5" y="5.5" width="13" height="10" rx="2" stroke="currentColor" strokeWidth={STROKE} />
+          <circle cx="10" cy="10.5" r="2.75" stroke="currentColor" strokeWidth={STROKE} />
+          <path d="M7.5 5.5L8.75 3.5H11.25L12.5 5.5" stroke="currentColor" strokeWidth={STROKE} strokeLinejoin="round" />
         </svg>
       );
     case "chain":

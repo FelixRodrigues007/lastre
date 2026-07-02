@@ -10,7 +10,7 @@
   --app-radius-pill: 999px;
 
   --app-bg-canvas: var(--lastro-bg-primary);
-  --app-bg-sidebar: color-mix(in srgb, var(--lastro-bg-panel) 96%, #000);
+  --app-bg-sidebar: color-mix(in srgb, var(--lastro-bg-panel) 99%, #000);
   --app-stroke-divider: color-mix(in srgb, #fff 7%, transparent);
   --app-stroke-active: color-mix(in srgb, var(--lastro-brand-seal) 18%, transparent);
   --app-fill-hover: color-mix(in srgb, #fff 4%, transparent);
@@ -120,14 +120,14 @@ button {
   padding: 0.45rem 0.95rem;
   border-radius: var(--app-radius-control);
   border: none;
-  background: var(--lastro-button-primary-bg, var(--lastro-brand-seal));
-  color: var(--lastro-button-primary-text, var(--lastro-text-inverse));
+  background: var(--lastro-button-primary-bg);
+  color: var(--lastro-button-primary-text);
   font-size: 0.8125rem;
   font-weight: var(--lastro-weight-semibold);
   letter-spacing: -0.01em;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 1px 2px rgba(0, 0, 0, 0.16);
+    0 1px 2px rgba(0, 0, 0, 0.2);
   transition:
     transform var(--dur-fast) var(--ease-spring),
     filter var(--dur-fast) var(--ease-spring),
@@ -156,7 +156,7 @@ button {
 }
 
 .panel {
-  background: color-mix(in srgb, var(--lastro-bg-panel) 90%, transparent);
+  background: var(--lastro-bg-panel);
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   border-radius: var(--panel-radius);
   padding: var(--panel-pad);

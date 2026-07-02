@@ -5,9 +5,9 @@
   margin-bottom: 16px;
 }
 .market-filters input, .market-filters select {
-  background: #101a2b;
-  border: 1px solid #31435f;
-  color: #e5edf7;
+  background: var(--lastro-bg-elevated);
+  border: 1px solid var(--lastro-border-strong);
+  color: var(--lastro-text-primary);
   padding: 8px 12px;
   border-radius: 8px;
   min-width: 160px;
@@ -21,14 +21,14 @@
 
 .market-card {
   padding: 16px;
-  border: 1px solid #31435f;
+  border: 1px solid var(--lastro-border-strong);
 }
-.market-card.carbon { border-color: #10b98133; }
-.market-card.mineral { border-color: #d4af3733; }
+.market-card.carbon { border-color: color-mix(in srgb, var(--lastro-status-valid) 28%, transparent); }
+.market-card.mineral { border-color: color-mix(in srgb, var(--lastro-brand-seal) 28%, transparent); }
 
 .card-head { display: flex; justify-content: space-between; margin-bottom: 12px; }
 .asset-id { font-family: monospace; font-weight: 700; }
-.asset-name { font-size: 13px; color: #9fb0c7; }
+.asset-name { font-size: 13px; color: var(--lastro-text-muted); }
 
 .cat-badge {
   font-size: 11px;
@@ -36,10 +36,16 @@
   border-radius: 999px;
   font-weight: 700;
 }
-.cat-badge.carbon { background: #10b98122; color: #6ee7b7; }
-.cat-badge.mineral { background: #d4af3722; color: #f8d86a; }
+.cat-badge.carbon {
+  background: color-mix(in srgb, var(--lastro-status-valid) 14%, transparent);
+  color: color-mix(in srgb, var(--lastro-status-valid) 85%, var(--lastro-text-primary));
+}
+.cat-badge.mineral {
+  background: color-mix(in srgb, var(--lastro-brand-seal) 14%, transparent);
+  color: var(--lastro-brand-seal);
+}
 
-.meta { font-size: 13px; line-height: 1.5; margin-bottom: 14px; color: #cbd5e1; }
+.meta { font-size: 13px; line-height: 1.5; margin-bottom: 14px; color: var(--lastro-text-secondary); }
 
 .card-actions { display: flex; gap: 8px; align-items: center; }
 .btn {
@@ -53,25 +59,25 @@
   display: inline-block;
   text-align: center;
 }
-.btn.primary { background: #d4af37; color: #0b1f3a; }
+.btn.primary { background: var(--lastro-brand-seal); color: var(--lastro-text-inverse); }
 .btn.small { font-size: 12px; padding: 4px 10px; }
-.muted { color: #64748b; font-size: 12px; }
-.danger { background: #ef4444; color: white; }
+.muted { color: var(--lastro-text-muted); font-size: 12px; }
+.danger { background: var(--lastro-status-invalid); color: white; }
 
-.note { margin-top: 24px; font-size: 12px; color: #9fb0c7; }
+.note { margin-top: 24px; font-size: 12px; color: var(--lastro-text-muted); }
 
 .wallet-section {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  background: #0b1222;
+  background: var(--lastro-bg-primary);
   padding: 4px 8px;
   border-radius: 6px;
 }
-.wallet-label { color: #64748b; }
-.success { color: #10b981; font-weight: 700; }
-.minted { border-color: #d4af37; }
+.wallet-label { color: var(--lastro-text-muted); }
+.success { color: var(--lastro-status-valid); font-weight: 700; }
+.minted { border-color: var(--lastro-brand-seal); }
 .my-assets { margin-top: 32px; }
 
 .market-tabs {
@@ -95,13 +101,13 @@
 }
 
 .market-tabs button.active {
-  background: linear-gradient(135deg, #d4af37, #f8d86a);
+  background: linear-gradient(135deg, var(--lastro-color-seal-400), var(--lastro-color-seal-300));
   color: #071323;
 }
 
 .mundi-map {
   padding: clamp(16px, 2.5vw, 28px);
-  border-color: #d4af3733;
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent);
   overflow: hidden;
 }
 
@@ -124,7 +130,7 @@
 }
 
 .eyebrow {
-  color: #f8d86a;
+  color: var(--lastro-color-seal-300);
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -146,7 +152,7 @@
 }
 
 .mundi-stats strong {
-  color: #f8d86a;
+  color: var(--lastro-color-seal-300);
 }
 
 .mundi-production-path {
@@ -160,8 +166,8 @@
   border: 1px solid #243652;
   border-radius: 14px;
   background:
-    linear-gradient(135deg, rgba(212, 175, 55, 0.08), transparent 62%),
-    #0b1222;
+    linear-gradient(135deg, color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent), transparent 62%),
+    var(--lastro-bg-primary);
   padding: 11px 12px;
 }
 
@@ -216,11 +222,11 @@
 }
 
 .mundi-route.proven {
-  stroke: #d4af37;
+  stroke: var(--lastro-brand-seal);
 }
 
 .mundi-route.minted {
-  stroke: #10b981;
+  stroke: var(--lastro-status-valid);
 }
 
 .mundi-dot {
@@ -230,22 +236,22 @@
 }
 
 .mundi-dot.mineral {
-  fill: #f8d86a;
+  fill: var(--lastro-color-seal-300);
 }
 
 .mundi-dot.carbon_credit {
-  fill: #6ee7b7;
+  fill: color-mix(in srgb, var(--lastro-status-valid) 75%, var(--lastro-text-primary));
 }
 
 .mundi-pulse {
   fill: none;
   opacity: 0.65;
-  stroke: #d4af37;
+  stroke: var(--lastro-brand-seal);
   stroke-width: 1.5;
 }
 
 .mundi-pulse.minted {
-  stroke: #10b981;
+  stroke: var(--lastro-status-valid);
 }
 
 .mundi-anchor {
@@ -295,11 +301,11 @@
 }
 
 .mundi-legend-dot.mineral {
-  background: #f8d86a;
+  background: var(--lastro-color-seal-300);
 }
 
 .mundi-legend-dot.carbon_credit {
-  background: #6ee7b7;
+  background: color-mix(in srgb, var(--lastro-status-valid) 75%, var(--lastro-text-primary));
 }
 
 .mundi-legend-line {
@@ -310,15 +316,15 @@
 }
 
 .mundi-legend-line.proven {
-  border-color: #d4af37;
+  border-color: var(--lastro-brand-seal);
 }
 
 .mundi-legend-line.minted {
-  border-color: #10b981;
+  border-color: var(--lastro-status-valid);
 }
 
 .mundi-api-note {
-  background: #0b1222;
+  background: var(--lastro-bg-primary);
   border: 1px solid #243652;
   border-radius: 14px;
   color: #cbd5e1;
@@ -339,7 +345,7 @@
 }
 
 .mundi-row:hover {
-  border-color: #d4af37;
+  border-color: var(--lastro-brand-seal);
 }
 
 .mundi-row--empty {
@@ -367,11 +373,11 @@
 }
 
 .mundi-status.proven {
-  background: #d4af37;
+  background: var(--lastro-brand-seal);
 }
 
 .mundi-status.minted {
-  background: #10b981;
+  background: var(--lastro-status-valid);
 }
 
 @media (max-width: 760px) {
@@ -387,7 +393,7 @@
 /* Rich NFT card enhancements for provenance display (demo only) */
 .rich-nft-card .seal-row {
   font-size: 11px;
-  background: #0b1222;
+  background: var(--lastro-bg-primary);
   padding: 4px 8px;
   border-radius: 4px;
   margin: 8px 0;
@@ -397,15 +403,15 @@
 }
 .rich-nft-card .seal-row code {
   font-family: monospace;
-  color: #d4af37;
+  color: var(--lastro-brand-seal);
 }
 .prov-score {
   font-size: 11px;
   font-weight: 700;
   padding: 1px 7px;
   border-radius: 999px;
-  background: #10b98122;
-  color: #6ee7b7;
+  background: color-mix(in srgb, var(--lastro-status-valid) 14%, transparent);
+  color: color-mix(in srgb, var(--lastro-status-valid) 75%, var(--lastro-text-primary));
   display: inline-block;
   margin-left: 6px;
 }
@@ -414,15 +420,15 @@
   font-size: 12px;
   line-height: 1.35;
   padding: 6px 8px;
-  background: #052e1f;
-  border-left: 3px solid #10b981;
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 90%, var(--lastro-status-valid));
+  border-left: 3px solid var(--lastro-status-valid);
   margin: 8px 0;
   border-radius: 0 4px 4px 0;
 }
-.carbon-details strong { color: #6ee7b7; }
+.carbon-details strong { color: color-mix(in srgb, var(--lastro-status-valid) 75%, var(--lastro-text-primary)); }
 .mint-tx-link {
   font-size: 11px;
-  color: #6ee7b7;
+  color: color-mix(in srgb, var(--lastro-status-valid) 75%, var(--lastro-text-primary));
   text-decoration: underline;
   display: inline-block;
   margin-top: 4px;
@@ -440,7 +446,7 @@
   z-index: 1000;
 }
 .buy-modal {
-  background: #101a2b;
+  background: var(--lastro-bg-elevated);
   border: 1px solid #31435f;
   border-radius: 12px;
   width: 100%;
@@ -459,7 +465,7 @@
 }
 .buy-modal .sig-sim {
   font-family: monospace;
-  background: #0b1222;
+  background: var(--lastro-bg-primary);
   padding: 8px;
   border-radius: 6px;
   margin: 8px 0;
@@ -516,11 +522,11 @@
 }
 
 .mundi-maplibre-marker.mineral {
-  background: #f8d86a;
+  background: var(--lastro-color-seal-300);
 }
 
 .mundi-maplibre-marker.carbon_credit {
-  background: #6ee7b7;
+  background: color-mix(in srgb, var(--lastro-status-valid) 75%, var(--lastro-text-primary));
   box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.16), 0 0 22px rgba(16, 185, 129, 0.45);
 }
 
@@ -536,7 +542,7 @@
 .maplibregl-popup-content {
   border: 1px solid #243652;
   border-radius: 12px;
-  background: #0b1222;
+  background: var(--lastro-bg-primary);
   color: #e5edf7;
   font-family: var(--lastro-font-body);
   padding: 10px 12px;
@@ -547,7 +553,7 @@
 }
 
 .maplibregl-popup-tip {
-  border-top-color: #0b1222 !important;
+  border-top-color: var(--lastro-bg-primary) !important;
 }
 
 /* Real MapLibre / MapTiler canvas, activated only when VITE_MAPTILER_KEY exists. */
@@ -598,11 +604,11 @@
 }
 
 .mundi-maplibre-marker.mineral {
-  background: #f8d86a;
+  background: var(--lastro-color-seal-300);
 }
 
 .mundi-maplibre-marker.carbon_credit {
-  background: #6ee7b7;
+  background: color-mix(in srgb, var(--lastro-status-valid) 75%, var(--lastro-text-primary));
   box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.16), 0 0 22px rgba(16, 185, 129, 0.45);
 }
 
@@ -618,7 +624,7 @@
 .maplibregl-popup-content {
   border: 1px solid #243652;
   border-radius: 12px;
-  background: #0b1222;
+  background: var(--lastro-bg-primary);
   color: #e5edf7;
   font-family: var(--lastro-font-body);
   padding: 10px 12px;
@@ -629,5 +635,5 @@
 }
 
 .maplibregl-popup-tip {
-  border-top-color: #0b1222 !important;
+  border-top-color: var(--lastro-bg-primary) !important;
 }

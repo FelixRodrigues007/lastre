@@ -1,8 +1,22 @@
+.lots-insights {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .lots-insights {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: stretch;
+  }
+}
+
 .lots-summary {
   display: grid;
   gap: 0.625rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
   width: 100%;
 }
 
@@ -10,6 +24,17 @@
   .lots-summary {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
+}
+
+.lots-chart {
+  display: grid;
+  align-content: start;
+}
+
+.lots-chart .bar-chart {
+  border: none;
+  background: transparent;
+  padding: 0;
 }
 
 .lots-grid {

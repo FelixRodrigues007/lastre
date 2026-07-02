@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+  margin-top: 1.25rem;
 }
 @media (max-width: 900px) {
   .capture-layout { grid-template-columns: 1fr; }
@@ -13,15 +14,20 @@
   gap: 12px;
   margin-bottom: 16px;
 }
-.capture-form label { font-size: 12px; font-weight: 700; color: #cbd5e1; display: block; margin-bottom: 4px; }
+.capture-form label { font-size: 12px; font-weight: 700; color: var(--lastro-text-secondary); display: block; margin-bottom: 4px; }
 .capture-form input, .capture-form select {
-  width: 100%; background: #101a2b; border: 1px solid #31435f; color: #e5edf7; padding: 8px; border-radius: 8px;
+  width: 100%;
+  background: var(--lastro-bg-elevated);
+  border: 1px solid var(--lastro-border-strong);
+  color: var(--lastro-text-primary);
+  padding: 8px;
+  border-radius: 8px;
 }
 
 .media-preview {
   min-height: 220px;
-  background: #0b1222;
-  border: 1px solid #31435f;
+  background: var(--lastro-bg-primary);
+  border: 1px solid var(--lastro-border-strong);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
@@ -31,8 +37,8 @@
 .preview-img, .preview-video { max-width: 100%; max-height: 260px; object-fit: contain; }
 
 .passport-card {
-  background: #132c24;
-  border: 2px solid #d4af37;
+  background: var(--lastro-bg-elevated);
+  border: 2px solid var(--lastro-brand-seal);
   border-radius: 12px;
   padding: 16px;
   font-family: ui-monospace, monospace;
@@ -40,9 +46,45 @@
 .passport-header { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
 .passport-body { line-height: 1.6; font-size: 13px; }
 .seal { word-break: break-all; font-size: 12px; }
-.passport-footer { margin-top: 12px; font-size: 11px; color: #f8d86a; }
+.passport-footer { margin-top: 12px; font-size: 11px; color: var(--lastro-brand-seal); }
 
 .actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
-.capture-msg { background: rgba(212,175,55,0.1); padding: 8px 12px; border-radius: 6px; font-size: 13px; }
-.file-label { background: #26364f; padding: 8px 14px; border-radius: 8px; cursor: pointer; display: inline-block; }
+.capture-msg {
+  background: color-mix(in srgb, var(--lastro-brand-seal) 12%, transparent);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--lastro-text-secondary);
+}
+.capture-next {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding: 1rem 1.125rem;
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+}
+.capture-next__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-semibold);
+}
+.capture-next__lead {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--lastro-text-secondary);
+  max-width: 58ch;
+}
+.capture-next__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.file-label {
+  background: var(--lastro-bg-elevated);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid var(--lastro-border-subtle);
+}
 .file-label input { display: none; }

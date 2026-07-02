@@ -19,10 +19,51 @@
   line-height: 1.5;
 }
 
+.audit-empty__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.audit-dashboard {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 960px) {
+  .audit-dashboard {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: stretch;
+  }
+}
+
 .audit-export-error {
   margin-bottom: 1rem;
   font-size: var(--text-small);
   color: var(--lastro-status-invalid);
+}
+
+.audit-next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding: 0.875rem 1rem;
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 30%, transparent);
+}
+
+.audit-next__text {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--lastro-text-secondary);
+  max-width: 48ch;
+}
+
+.audit-next__text strong {
+  color: var(--lastro-text-primary);
 }
 
 .audit-no-match {

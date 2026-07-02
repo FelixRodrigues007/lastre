@@ -1,0 +1,50 @@
+.overview-next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.25rem;
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 24%, transparent);
+  background:
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--lastro-brand-seal) 7%, transparent),
+      var(--lastro-bg-panel) 55%
+    );
+}
+
+.overview-next__copy {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 52ch;
+}
+
+.overview-next__kicker {
+  margin: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lastro-brand-seal);
+}
+
+.overview-next__title {
+  margin: 0;
+  font-family: var(--lastro-font-display);
+  font-size: 1.125rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+}
+
+.overview-next__lead {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+}
+
+.overview-next__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

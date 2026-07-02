@@ -1,0 +1,170 @@
+.seal-compare {
+  display: grid;
+  gap: 1rem;
+}
+
+.seal-compare--mismatch {
+  border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, var(--lastro-border-subtle));
+}
+
+.seal-compare--match {
+  border-color: color-mix(in srgb, var(--lastro-status-valid) 28%, var(--lastro-border-subtle));
+}
+
+.seal-compare__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.seal-compare__lead {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+  color: var(--lastro-text-muted);
+  line-height: 1.4;
+}
+
+.seal-compare__status {
+  flex-shrink: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid transparent;
+}
+
+.seal-compare__status--match {
+  color: var(--lastro-status-valid);
+  border-color: color-mix(in srgb, var(--lastro-status-valid) 35%, transparent);
+  background: color-mix(in srgb, var(--lastro-status-valid) 8%, transparent);
+}
+
+.seal-compare__status--mismatch {
+  color: var(--lastro-status-invalid);
+  border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, transparent);
+  background: color-mix(in srgb, var(--lastro-status-invalid) 8%, transparent);
+}
+
+.seal-compare__status--pending {
+  color: var(--lastro-text-muted);
+  border-color: var(--lastro-border-subtle);
+}
+
+.seal-compare__columns {
+  display: grid;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .seal-compare__columns {
+    grid-template-columns: 1fr auto 1fr;
+  }
+}
+
+.seal-compare__col {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.seal-compare__label {
+  margin: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.seal-compare__hash {
+  display: block;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  word-break: break-all;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--lastro-radius-sm);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 50%, transparent);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.seal-compare__hash--computed {
+  border-top: 2px solid var(--lastro-brand-seal);
+}
+
+.seal-compare__hash--reference {
+  border-top: 2px solid color-mix(in srgb, var(--lastro-text-muted) 50%, transparent);
+}
+
+.seal-compare__char--diff {
+  color: var(--lastro-status-invalid);
+  background: color-mix(in srgb, var(--lastro-status-invalid) 18%, transparent);
+  border-radius: 2px;
+}
+
+.seal-compare__ellipsis {
+  color: var(--lastro-text-muted);
+}
+
+.seal-compare__hint {
+  margin: 0;
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+}
+
+.seal-compare__divider {
+  display: none;
+  font-family: var(--lastro-font-display);
+  font-size: 1.25rem;
+  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastro-text-muted);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .seal-compare__divider {
+    display: block;
+  }
+}
+
+.seal-compare--mismatch .seal-compare__divider {
+  color: var(--lastro-status-invalid);
+}
+
+.seal-compare--match .seal-compare__divider {
+  color: var(--lastro-status-valid);
+}
+
+.seal-compare__callout {
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--lastro-radius-sm);
+  background: color-mix(in srgb, var(--lastro-status-invalid) 7%, transparent);
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-status-invalid) 22%, transparent);
+}
+
+.seal-compare__callout p {
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--lastro-text-secondary);
+  line-height: 1.45;
+}
+
+.seal-compare__fields {
+  margin-top: 0.45rem !important;
+}
+
+.seal-compare__fields code {
+  margin-inline: 0.15rem;
+  font-size: 0.6875rem;
+  color: var(--lastro-status-invalid);
+}
+
+.seal-compare__ok {
+  margin: 0;
+  font-size: var(--text-small);
+  color: var(--lastro-status-valid);
+}

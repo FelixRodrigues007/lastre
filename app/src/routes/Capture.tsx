@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import React, { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../components/layout/PageHeader";
+import { ProofJourney } from "../components/proof/ProofJourney";
+import { BtnIcon } from "../components/ui/BtnIcon";
 import { computeSealForArtifact, createArtifact, processBatch } from "../lib/api";
 import type { CarbonCreditType } from "../lib/types";
 import "./capture.css";
@@ -32,7 +34,6 @@ interface FormState {
 }
 
 export function Capture() {
-  const navigate = useNavigate();
   const [form, setForm] = useState<FormState>({
     assetId: `USER-${Date.now().toString().slice(-6)}`,
     category: "carbon_credit",
@@ -52,6 +53,7 @@ export function Capture() {
   const [sealResult, setSealResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [submittedAssetId, setSubmittedAssetId] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -172,8 +174,10 @@ export function Capture() {
       try {
         await processBatch([sealResult.artifact.assetId], "rule");
       } catch {}
-      setMessage("Artifact submitted + auto-attested (Valid expected for clean capture). See in Marketplace or Lots. You can re-process with Grok LLM.");
-      setTimeout(() => navigate("/marketplace"), 1400);
+      setSubmittedAssetId(sealResult.artifact.assetId);
+      setMessage(
+        "Artifact submitted and auto-processed (Valid expected for clean capture). Choose your next step below.",
+      );
     } catch (e: any) {
       setMessage("Submit failed: " + e.message);
     } finally {
@@ -186,9 +190,35 @@ export function Capture() {
       <PageHeader
         kicker="Provenance Capture"
         title="New Artifact + Passport"
-        lead="Use camera or upload a document. Simulate offline edge AI parsing. Generate SHA-256 passport instantly. Works for minerals and all carbon credit types."
-        actions={<Link className="route-cta route-cta--ghost" to="/lots">Back to Lots</Link>}
+        lead="Document → structured fields → SHA-256 seal. The seal decides Valid or Invalid — not the agent."
+        actions={<Link className="route-cta route-cta--ghost" to="/lots">View lots</Link>}
       />
+
+      <ProofJourney activePath="/capture" compact />
+
+      {submittedAssetId ? (
+        <section className="panel capture-next panel--accent" aria-label="Next steps after capture">
+          <h3 className="capture-next__title">What happened?</h3>
+          <p className="capture-next__lead">
+            Passport sealed, batch processed, and proof logged. The agent chose the action; the seal
+            decided the verdict.
+          </p>
+          <div className="capture-next__actions">
+            <Link className="route-cta" to={`/lots/${encodeURIComponent(submittedAssetId)}`}>
+              <BtnIcon icon="lots">Open lot evidence</BtnIcon>
+            </Link>
+            <Link className="route-cta route-cta--ghost" to="/process">
+              <BtnIcon icon="process">Re-run in Process</BtnIcon>
+            </Link>
+            <Link className="route-cta route-cta--ghost" to="/audit">
+              <BtnIcon icon="audit">Open audit log</BtnIcon>
+            </Link>
+            <Link className="route-cta route-cta--ghost" to="/marketplace">
+              <BtnIcon icon="globe">Claim demo representation</BtnIcon>
+            </Link>
+          </div>
+        </section>
+      ) : null}
 
       <div className="capture-layout">
         {/* Form */}

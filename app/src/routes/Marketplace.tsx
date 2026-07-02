@@ -623,7 +623,7 @@ function MundiMapCanvas({
               .setPopup(popup)
               .addTo(map);
           }),
-          new maplibre.Marker({ color: "#f97316" })
+          new maplibre.Marker({ color: "#92d67a" })
             .setLngLat([anchor.lng, anchor.lat])
             .setPopup(new maplibre.Popup({ offset: 18 }).setText(anchor.label))
             .addTo(map),
@@ -706,7 +706,7 @@ function addMundiRouteLayer(
     type: "line",
     source: "mundi-routes",
     paint: {
-      "line-color": ["match", ["get", "status"], "minted", "#10b981", "proven", "#d4af37", "#64748b"],
+      "line-color": ["match", ["get", "status"], "minted", "#8aab52", "proven", "#92d67a", "#4a7266"],
       "line-dasharray": [2, 2],
       "line-opacity": 0.58,
       "line-width": 1.8,

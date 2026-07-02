@@ -3,6 +3,7 @@ import type { Locale } from "../lib/locale";
 export const translations = {
   en: {
     "nav.overview": "Overview",
+    "nav.capture": "Capture",
     "nav.chain": "Chain",
     "nav.lots": "Lots",
     "nav.process": "Process",
@@ -30,10 +31,109 @@ export const translations = {
     "status.livePackage": "Live package",
     "brand.console": "Lastre Console",
     "brand.name": "Lastre",
+
+    "common.retry": "Retry",
+    "common.runBatch": "Run batch",
+    "common.runDemoBatch": "Run demo batch",
+    "common.live": "Live",
+    "common.fallback": "Fallback",
+    "common.asset": "Asset",
+    "common.agent": "Agent",
+    "common.verdict": "Verdict",
+    "common.outcome": "Outcome",
+    "common.records": "{count} records",
+    "common.valid": "Valid",
+    "common.invalid": "Invalid",
+
+    "journey.aria": "Proof journey — capture to symbolic demo",
+    "journey.kicker": "Proof before token",
+    "journey.lead":
+      "Physical document → seal → agent action → verdict → Casper → symbolic demo only after proof.",
+    "journey.capture.label": "Capture",
+    "journey.capture.hint": "Document → structured fields",
+    "journey.seal.label": "Seal",
+    "journey.seal.hint": "SHA-256 passport",
+    "journey.process.label": "Process",
+    "journey.process.hint": "Agent action + verify",
+    "journey.audit.label": "Audit",
+    "journey.audit.hint": "Valid & Invalid proof",
+    "journey.casper.label": "Casper",
+    "journey.casper.hint": "On-chain attestation",
+    "journey.marketplace.label": "Marketplace",
+    "journey.marketplace.hint": "Symbolic demo layer",
+
+    "overview.kicker": "Overview",
+    "overview.title": "Proof command center",
+    "overview.lead": "One screen to see pipeline health, trust layers, and what to do next.",
+    "overview.pipeline.title": "Demo pipeline",
+    "overview.pipeline.subtitle": "How far fictional assets moved through the console",
+    "overview.pipeline.lots": "Lots in catalog",
+    "overview.pipeline.lotsHint": "Captured or seeded assets",
+    "overview.pipeline.processed": "Processed",
+    "overview.pipeline.processedHint": "Rows in session audit",
+    "overview.pipeline.sealVerified": "Seal verified",
+    "overview.pipeline.onCasper": "On Casper",
+    "overview.pipeline.tokenizable": "Tokenizable",
+    "overview.pipeline.empty": "Run Capture or Process to populate the pipeline",
+    "overview.trust.title": "Trust layers (session)",
+    "overview.trust.subtitle": "Agent chooses action · seal decides verdict · Casper records proof",
+    "overview.trust.agentActions": "Agent actions",
+    "overview.trust.sealChecks": "Seal checks",
+    "overview.trust.empty": "No session records yet",
+    "overview.testnet.label": "Casper testnet",
+    "overview.testnet.acceptance": "Attestation acceptance",
+    "overview.testnet.split": "{valid} valid · {invalid} invalid",
+    "overview.testnet.splitAria": "Testnet attestation split",
+    "overview.sessionOutcomes": "Session outcomes",
+    "overview.sessionEmpty": "No batch run yet. Process will populate outcome charts here.",
+    "overview.recentActivity": "Recent proof activity",
+    "overview.lastFive": "Last 5 records",
+    "overview.fullAudit": "Full audit log",
+    "overview.noActivity": "No activity yet — start with Capture.",
+    "overview.contract": "ProofOfOrigin contract",
+    "overview.technicalDetails": "Technical details",
+
+    "overview.next.aria": "Recommended next step",
+    "overview.next.kicker": "Your next step",
+    "overview.next.start.title": "Start the proof journey",
+    "overview.next.start.lead":
+      "Capture a fictional document, run Process, then read the audit log. The seal decides the verdict.",
+    "overview.next.start.cta": "Start with Capture",
+    "overview.next.lots.title": "Lots ready — run the demo batch",
+    "overview.next.lots.lead":
+      "{count} lot(s) in queue. Process will show agent action vs seal verdict for each one.",
+    "overview.next.lots.cta": "Run demo batch",
+    "overview.next.lots.secondary": "Review lots",
+    "overview.next.review.title": "Proof logged — review outcomes",
+    "overview.next.review.lead":
+      "{count} record(s) in session. Invalid rows are permanent proof, not errors.",
+    "overview.next.review.cta": "Open audit log",
+    "overview.next.review.secondary": "Run another batch",
+    "overview.next.tokenizable.title": "Valid proof — symbolic demo unlocked",
+    "overview.next.tokenizable.lead":
+      "{count} tokenizable record(s). Marketplace and My Assets are demo layers only — after proof.",
+    "overview.next.tokenizable.cta": "Open Marketplace (demo)",
+    "overview.next.tokenizable.secondary": "My Assets",
+
+    "badge.noVerdict": "No verdict",
+    "badge.pay": "pay",
+    "badge.skip": "skip",
+    "badge.escalate": "escalate",
+    "badge.tokenizable": "tokenizable",
+    "badge.rejected": "rejected",
+    "badge.skipped": "skipped",
+    "badge.escalated": "escalated",
+
+    "outcome.title": "Session outcomes",
+    "outcome.tokenizable": "Tokenizable",
+    "outcome.rejected": "Rejected",
+    "outcome.skipped": "Skipped",
+    "outcome.escalated": "Escalated",
   },
   pt: {
     "nav.overview": "Visão geral",
-    "nav.chain": "Chain",
+    "nav.capture": "Captura",
+    "nav.chain": "Cadeia",
     "nav.lots": "Lotes",
     "nav.process": "Processar",
     "nav.audit": "Auditoria",
@@ -43,7 +143,7 @@ export const translations = {
     "nav.myAssets": "Meus Ativos",
     "nav.run": "Executar",
     "nav.queue": "Fila",
-    "nav.workspace": "Workspace",
+    "nav.workspace": "Área de trabalho",
     "nav.suffix": "Console de proveniência",
     "guardrail.demo": "Demo",
     "guardrail.text":
@@ -60,11 +160,124 @@ export const translations = {
     "status.livePackage": "Pacote ao vivo",
     "brand.console": "Lastre Console",
     "brand.name": "Lastre",
+
+    "common.retry": "Tentar novamente",
+    "common.runBatch": "Executar lote",
+    "common.runDemoBatch": "Executar lote demo",
+    "common.live": "Ao vivo",
+    "common.fallback": "Reserva",
+    "common.asset": "Ativo",
+    "common.agent": "Agente",
+    "common.verdict": "Veredito",
+    "common.outcome": "Resultado",
+    "common.records": "{count} registros",
+    "common.valid": "Válido",
+    "common.invalid": "Inválido",
+
+    "journey.aria": "Jornada da prova — da captura ao demo simbólico",
+    "journey.kicker": "Prova antes do token",
+    "journey.lead":
+      "Documento físico → selo → ação do agente → veredito → Casper → demo simbólico só após a prova.",
+    "journey.capture.label": "Captura",
+    "journey.capture.hint": "Documento → campos estruturados",
+    "journey.seal.label": "Selo",
+    "journey.seal.hint": "Passaporte SHA-256",
+    "journey.process.label": "Processar",
+    "journey.process.hint": "Ação do agente + verificação",
+    "journey.audit.label": "Auditoria",
+    "journey.audit.hint": "Prova válida e inválida",
+    "journey.casper.label": "Casper",
+    "journey.casper.hint": "Atestação on-chain",
+    "journey.marketplace.label": "Marketplace",
+    "journey.marketplace.hint": "Camada demo simbólica",
+
+    "overview.kicker": "Visão geral",
+    "overview.title": "Centro de comando da prova",
+    "overview.lead":
+      "Uma tela para ver a saúde do pipeline, camadas de confiança e o próximo passo.",
+    "overview.pipeline.title": "Pipeline demo",
+    "overview.pipeline.subtitle": "Quão longe os ativos fictícios avançaram no console",
+    "overview.pipeline.lots": "Lotes no catálogo",
+    "overview.pipeline.lotsHint": "Ativos capturados ou semeados",
+    "overview.pipeline.processed": "Processados",
+    "overview.pipeline.processedHint": "Linhas na auditoria da sessão",
+    "overview.pipeline.sealVerified": "Selo verificado",
+    "overview.pipeline.onCasper": "No Casper",
+    "overview.pipeline.tokenizable": "Tokenizáveis",
+    "overview.pipeline.empty": "Use Captura ou Processar para popular o pipeline",
+    "overview.trust.title": "Camadas de confiança (sessão)",
+    "overview.trust.subtitle":
+      "Agente escolhe ação · selo decide veredito · Casper registra a prova",
+    "overview.trust.agentActions": "Ações do agente",
+    "overview.trust.sealChecks": "Checagens de selo",
+    "overview.trust.empty": "Nenhum registro na sessão ainda",
+    "overview.testnet.label": "Casper testnet",
+    "overview.testnet.acceptance": "Aceitação de atestações",
+    "overview.testnet.split": "{valid} válidos · {invalid} inválidos",
+    "overview.testnet.splitAria": "Divisão de atestações na testnet",
+    "overview.sessionOutcomes": "Resultados da sessão",
+    "overview.sessionEmpty":
+      "Nenhum lote executado ainda. Processar vai popular os gráficos aqui.",
+    "overview.recentActivity": "Atividade recente de prova",
+    "overview.lastFive": "Últimos 5 registros",
+    "overview.fullAudit": "Log completo de auditoria",
+    "overview.noActivity": "Nenhuma atividade ainda — comece pela Captura.",
+    "overview.contract": "Contrato ProofOfOrigin",
+    "overview.technicalDetails": "Detalhes técnicos",
+
+    "overview.next.aria": "Próximo passo recomendado",
+    "overview.next.kicker": "Seu próximo passo",
+    "overview.next.start.title": "Comece a jornada da prova",
+    "overview.next.start.lead":
+      "Capture um documento fictício, execute Processar e leia o log de auditoria. O selo decide o veredito.",
+    "overview.next.start.cta": "Começar pela Captura",
+    "overview.next.lots.title": "Lotes prontos — execute o lote demo",
+    "overview.next.lots.lead":
+      "{count} lote(s) na fila. Processar mostra ação do agente vs veredito do selo para cada um.",
+    "overview.next.lots.cta": "Executar lote demo",
+    "overview.next.lots.secondary": "Revisar lotes",
+    "overview.next.review.title": "Prova registrada — revise os resultados",
+    "overview.next.review.lead":
+      "{count} registro(s) na sessão. Linhas inválidas são prova permanente, não erros.",
+    "overview.next.review.cta": "Abrir log de auditoria",
+    "overview.next.review.secondary": "Executar outro lote",
+    "overview.next.tokenizable.title": "Prova válida — demo simbólico liberado",
+    "overview.next.tokenizable.lead":
+      "{count} registro(s) tokenizável(is). Marketplace e Meus Ativos são camadas demo — após a prova.",
+    "overview.next.tokenizable.cta": "Abrir Marketplace (demo)",
+    "overview.next.tokenizable.secondary": "Meus Ativos",
+
+    "badge.noVerdict": "Sem veredito",
+    "badge.pay": "pagar",
+    "badge.skip": "pular",
+    "badge.escalate": "escalar",
+    "badge.tokenizable": "tokenizável",
+    "badge.rejected": "rejeitado",
+    "badge.skipped": "pulado",
+    "badge.escalated": "escalado",
+
+    "outcome.title": "Resultados da sessão",
+    "outcome.tokenizable": "Tokenizáveis",
+    "outcome.rejected": "Rejeitados",
+    "outcome.skipped": "Pulados",
+    "outcome.escalated": "Escalados",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 
 export type TranslationKey = keyof typeof translations.en;
 
-export function translate(locale: Locale, key: TranslationKey): string {
-  return translations[locale][key] ?? translations.en[key];
+export type TranslationParams = Record<string, string | number>;
+
+export function translate(
+  locale: Locale,
+  key: TranslationKey,
+  params?: TranslationParams,
+): string {
+  let text: string = translations[locale][key] ?? translations.en[key];
+  if (params) {
+    for (const [name, value] of Object.entries(params)) {
+      text = text.replaceAll(`{${name}}`, String(value));
+    }
+  }
+  return text;
 }

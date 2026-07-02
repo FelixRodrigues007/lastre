@@ -90,14 +90,16 @@ function mapCliSnapshot(raw: CliSnapshot, fetchedAt: string): LiveTestnetSnapsho
     network: "casper-test",
     accepted: raw.accepted,
     rejected: raw.rejected,
-    attestations: raw.attestations.map((row) => ({
-      assetId: row.asset_id,
-      verdict: row.verdict === "Valid" ? "Valid" : "Invalid",
-      providedSeal: row.provided_seal,
-      referenceSeal: row.reference_seal,
-      attester: row.attester,
-      explorerUrl: TESTNET_TX_LINKS[row.asset_id] ?? null,
-    })),
+    attestations: raw.attestations
+      .filter((row) => row?.asset_id)
+      .map((row) => ({
+        assetId: row.asset_id,
+        verdict: row.verdict === "Valid" ? "Valid" : "Invalid",
+        providedSeal: row.provided_seal,
+        referenceSeal: row.reference_seal,
+        attester: row.attester,
+        explorerUrl: TESTNET_TX_LINKS[row.asset_id] ?? null,
+      })),
     source: "live",
     fetchedAt,
   };
