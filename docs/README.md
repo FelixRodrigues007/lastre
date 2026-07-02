@@ -12,7 +12,7 @@ and **lastro** as a legacy internal namespace until the migration plan is execut
 
 | Audience | Read first | Then read |
 |---|---|---|
-| Laura / frontend design | [`LAURA_DESIGN_SUPER_PROMPT.md`](LAURA_DESIGN_SUPER_PROMPT.md) | [`LAURA_FRONTEND_SYSTEM_DESIGN.md`](LAURA_FRONTEND_SYSTEM_DESIGN.md), [`FRONTEND_ROUTES.md`](FRONTEND_ROUTES.md) |
+| Laura / frontend design | [`LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md`](LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md) | [`LAURA_DESIGN_SUPER_PROMPT.md`](LAURA_DESIGN_SUPER_PROMPT.md), [`LAURA_FRONTEND_SYSTEM_DESIGN.md`](LAURA_FRONTEND_SYSTEM_DESIGN.md), [`FRONTEND_ROUTES.md`](FRONTEND_ROUTES.md) |
 | Frontend engineer | [`FRONTEND_ROUTES.md`](FRONTEND_ROUTES.md) | [`API_CONTRACT.md`](API_CONTRACT.md), [`QUALITY_CHECKLIST.md`](QUALITY_CHECKLIST.md) |
 | Backend/deploy operator | [`DEPLOYMENT_RUNBOOK.md`](DEPLOYMENT_RUNBOOK.md) | [`API_CONTRACT.md`](API_CONTRACT.md), [`ARCHITECTURE_FLOWCHARTS.md`](ARCHITECTURE_FLOWCHARTS.md) |
 | Product/storytelling | [`LASTRE_BRAND_AND_DOMAIN.md`](LASTRE_BRAND_AND_DOMAIN.md) | [`ROADMAP.md`](ROADMAP.md), [`ARCHITECTURE_FLOWCHARTS.md`](ARCHITECTURE_FLOWCHARTS.md) |
@@ -22,9 +22,11 @@ and **lastro** as a legacy internal namespace until the migration plan is execut
 
 - **Product name:** Lastre.
 - **Domain:** `lastre.io`.
-- **Gateway API today:** `https://lastro.onrender.com`.
-- **Future API domain:** `https://api.lastre.io` once the custom domain is mapped.
-- **Frontend host:** Vercel, attached to `lastre.io`.
+- **Public landing today:** `https://lastre.io` on Cloudflare Pages (`web/`).
+- **Console app today:** `https://app.lastre.io` on Cloudflare Pages (`app/`).
+- **Console API today:** `https://app-api.lastre.io` on Render Docker (`Dockerfile.app-api`).
+- **Legacy/public gateway:** `https://lastro.onrender.com` may still be used by older landing/live-proof docs.
+- **Frontend host:** Cloudflare Pages.
 - **Backend host:** Render Docker service.
 - **Chain:** Casper Testnet (`casper-test`).
 - **Contract package hash:** `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561`.
@@ -44,6 +46,7 @@ ownership, or transferable-token product. The deterministic SHA-256 seal decides
 
 ## Documentation map
 
+- [`LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md`](LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md) — current all-in-one platform architecture, product explanation, deployment topology, UX guardrails, route/API map, and Laura handoff.
 - [`LASTRE_BRAND_AND_DOMAIN.md`](LASTRE_BRAND_AND_DOMAIN.md) — rebrand, domain,
   DNS, naming, and migration rules.
 - [`FRONTEND_ROUTES.md`](FRONTEND_ROUTES.md) — complete route map and page-level
