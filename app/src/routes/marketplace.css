@@ -53,6 +53,11 @@
   display: inline-block;
   text-align: center;
 }
+.btn:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+  opacity: 0.62;
+}
 .btn.primary { background: #d4af37; color: #0b1f3a; }
 .btn.small { font-size: 12px; padding: 4px 10px; }
 .muted { color: #64748b; font-size: 12px; }
@@ -557,6 +562,184 @@
 }
 .agent-x402-note strong { color: #6ee7b7; }
 
+.demo-killer-banner {
+  align-items: center;
+  background:
+    radial-gradient(circle at 12% 15%, rgba(248, 216, 106, 0.18), transparent 34%),
+    linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(212, 175, 55, 0.10)),
+    #081323;
+  border-color: rgba(212, 175, 55, 0.34);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 18px 20px;
+}
+
+.demo-killer-banner h3 {
+  color: #f8d86a;
+  margin: 4px 0 6px;
+}
+
+.demo-killer-banner p {
+  color: #cbd5e1;
+  margin: 0;
+  max-width: 760px;
+}
+
+.demo-killer-button {
+  box-shadow: 0 0 28px rgba(212, 175, 55, 0.22);
+  min-width: 210px;
+}
+
+.market-summary-panel {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+}
+
+.market-summary-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.85em;
+}
+
+.mint-events {
+  border-top: 1px dashed #243652;
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+}
+
+.mint-events__head {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.mint-events__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mint-events__list a {
+  align-items: center;
+  border: 1px solid #243652;
+  border-radius: 999px;
+  color: #cfe0ff;
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px 10px;
+  text-decoration: none;
+}
+
+.mint-events__list a:hover {
+  border-color: #d4af37;
+}
+
+.mint-events__list code {
+  color: #6ee7b7;
+}
+
+.full-demo-overlay {
+  z-index: 1100;
+}
+
+.full-demo-modal {
+  background: #101a2b;
+  border: 1px solid #d4af3755;
+  border-radius: 18px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.46);
+  color: #e5edf7;
+  max-width: 680px;
+  padding: 22px;
+  width: min(92vw, 680px);
+}
+
+.full-demo-modal__head {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.full-demo-modal h3 {
+  color: #f8d86a;
+  margin: 5px 0 6px;
+}
+
+.full-demo-steps {
+  counter-reset: demo-step;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+}
+
+.full-demo-step {
+  align-items: flex-start;
+  border: 1px solid #243652;
+  border-radius: 14px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto 1fr;
+  padding: 11px 12px;
+}
+
+.full-demo-step--active {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.full-demo-step--done {
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+.full-demo-step__marker {
+  align-items: center;
+  background: #0b1222;
+  border: 1px solid #31435f;
+  border-radius: 999px;
+  color: #f8d86a;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 900;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
+}
+
+.full-demo-step--done .full-demo-step__marker {
+  color: #6ee7b7;
+}
+
+.full-demo-step strong {
+  display: block;
+  font-size: 13px;
+}
+
+.full-demo-step p {
+  color: #9fb0c7;
+  font-size: 12px;
+  margin: 3px 0 0;
+}
+
+.full-demo-status {
+  border: 1px solid #1f5c47;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.08);
+  color: #6ee7b7;
+  font-size: 13px;
+  font-weight: 800;
+  margin: 16px 0 0;
+  padding: 10px 12px;
+}
+
 .card-actions--agent {
   margin-top: 8px;
   display: flex;
@@ -606,6 +789,14 @@
 }
 .for-agents__stat strong { font-size: 20px; color: #6ee7b7; font-family: var(--lastro-font-mono, monospace); }
 .for-agents__stat span { font-size: 11px; color: #9fb0c7; }
+.for-agents__toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 12px;
+}
 .for-agents__code {
   margin-top: 14px;
   padding: 14px;
@@ -626,6 +817,53 @@
   font-size: 13px;
 }
 .agent-proof .success { color: #34d399; }
+
+.agent-query-modal {
+  max-width: 760px;
+}
+
+.agent-query-modal .agent-proof a {
+  color: #6ee7b7;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.demo-mint-note {
+  border: 1px solid #d4af3755;
+  border-radius: 10px;
+  background: rgba(212, 175, 55, 0.08);
+  color: #f8d86a;
+  font-size: 12px;
+  font-weight: 800;
+  margin: 10px 0;
+  padding: 9px 10px;
+}
+
+.demo-mint-note a {
+  color: #6ee7b7;
+}
+
+.payload-toolbar {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.agent-payload-json {
+  background: #071323;
+  border: 1px solid #243652;
+  border-radius: 12px;
+  color: #cfe0ff;
+  font-family: var(--lastro-font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  line-height: 1.45;
+  margin: 8px 0 0;
+  max-height: 240px;
+  overflow: auto;
+  padding: 12px;
+}
 
 /* Real MapLibre / MapTiler canvas, activated only when VITE_MAPTILER_KEY exists. */
 .mundi-maplibre-shell {

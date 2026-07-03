@@ -1,7 +1,14 @@
-import React, { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { FullDemoModal, type FullDemoStep } from "../components/demo/FullDemoModal";
 import { PageHeader } from "../components/layout/PageHeader";
 import { computeSealForArtifact, createArtifact, processBatch } from "../lib/api";
+import {
+  buildMarketplaceDemoUrl,
+  createFullDemoState,
+  FULL_DEMO_ASSET_ID,
+  writeFullDemoState,
+} from "../lib/fullDemo";
 import type { CarbonCreditType } from "../lib/types";
 import "./capture.css";
 
@@ -9,6 +16,44 @@ const CARBON_TYPES: CarbonCreditType[] = [
   "VCU", "VCS", "GoldStandard", "CER", "REDD+", "ARR",
   "RenewableEnergy", "Biomass", "Wind", "Solar", "PCH", "IREC",
 ];
+
+const DEMO_CARBON_PRESET: FormState = {
+  assetId: FULL_DEMO_ASSET_ID,
+  category: "carbon_credit",
+  operator: "Amazonia Conservation Ltda. (fictional)",
+  site: "Amazon REDD+ Zone A — fictional",
+  lat: -3.12,
+  lng: -60.01,
+  capturedAtISO: "2026-06-20T10:00:00.000Z",
+  creditType: "VCS",
+  tonnesCO2e: 125000,
+  vintage: "2024",
+  methodology: "REDD+",
+  projectId: "VCS-12345",
+  verifier: "Verra",
+};
+
+const CAPTURE_DEMO_STEPS: FullDemoStep[] = [
+  {
+    label: "Preset carbon proof",
+    detail: "Load the fictional VCS Amazonia carbon credit with global coordinates and registry metadata.",
+  },
+  {
+    label: "Generate passport + SHA-256 seal",
+    detail: "Compute the deterministic proof packet the verifier and agents will read.",
+  },
+  {
+    label: "Submit + autonomous agent",
+    detail: "Create the artifact, run the Grok LLM path with rule fallback, and attest the Valid seal.",
+  },
+  {
+    label: "Return to Marketplace",
+    detail: "Open the x402 agent-query flow, then emit the MintGate demo event.",
+  },
+];
+
+const FULL_DEMO_FRAME_HASH = "a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0";
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 interface FormState {
   assetId: string;
@@ -33,6 +78,7 @@ interface FormState {
 
 export function Capture() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [form, setForm] = useState<FormState>({
     assetId: `USER-${Date.now().toString().slice(-6)}`,
     category: "carbon_credit",
@@ -53,11 +99,56 @@ export function Capture() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [autoResult, setAutoResult] = useState<{ verdict: string; action: string; decidedBy: string } | null>(null);
+  const [fullDemoOpen, setFullDemoOpen] = useState(false);
+  const [fullDemoStep, setFullDemoStep] = useState(0);
+  const [fullDemoStatus, setFullDemoStatus] = useState("");
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const fullDemoStartedRef = useRef(false);
 
   const update = (patch: Partial<FormState>) => setForm((f) => ({ ...f, ...patch }));
+
+  function applyDemoCarbonPreset() {
+    setForm({ ...DEMO_CARBON_PRESET });
+    setFrameHash(FULL_DEMO_FRAME_HASH);
+    setSealResult(null);
+    setAutoResult(null);
+    setMessage("Loaded fictional Valid carbon preset. Generate passport to compute the matching SHA-256 seal.");
+  }
+
+  function buildArtifact(source: FormState = form, sourceFrameHash = frameHash) {
+    const artifact: any = {
+      assetId: source.assetId,
+      category: source.category,
+      origin: { lat: source.lat, lng: source.lng, site: source.site },
+      frameHash: sourceFrameHash || "simulated-frame-" + Date.now().toString(36),
+      capturedAtISO: source.capturedAtISO,
+      operator: source.operator,
+    };
+
+    if (source.category === "mineral") {
+      artifact.massGrams = source.massGrams || 100000;
+      artifact.mineral = source.mineral || "Gold";
+      artifact.mineralType = source.mineralType || "Ore";
+    } else {
+      artifact.tonnesCO2e = source.tonnesCO2e || 50000;
+      artifact.creditType = source.creditType;
+      artifact.vintage = source.vintage;
+      artifact.methodology = source.methodology;
+      artifact.projectId = source.projectId;
+      artifact.verifier = source.verifier || "Verra";
+    }
+
+    return artifact;
+  }
+
+  useEffect(() => {
+    if (searchParams.get("demo") !== "full" || fullDemoStartedRef.current) return;
+    fullDemoStartedRef.current = true;
+    void runFullDemoCaptureFlow(searchParams.get("assetId") || FULL_DEMO_ASSET_ID);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   async function startCamera() {
     try {
@@ -127,28 +218,7 @@ export function Capture() {
     setLoading(true);
     setMessage("");
     setSealResult(null);
-
-    const artifact: any = {
-      assetId: form.assetId,
-      category: form.category,
-      origin: { lat: form.lat, lng: form.lng, site: form.site },
-      frameHash: frameHash || "simulated-frame-" + Date.now().toString(36),
-      capturedAtISO: form.capturedAtISO,
-      operator: form.operator,
-    };
-
-    if (form.category === "mineral") {
-      artifact.massGrams = form.massGrams || 100000;
-      artifact.mineral = form.mineral || "Gold";
-      artifact.mineralType = form.mineralType || "Ore";
-    } else {
-      artifact.tonnesCO2e = form.tonnesCO2e || 50000;
-      artifact.creditType = form.creditType;
-      artifact.vintage = form.vintage;
-      artifact.methodology = form.methodology;
-      artifact.projectId = form.projectId;
-      artifact.verifier = form.verifier || "Verra";
-    }
+    const artifact = buildArtifact();
 
     try {
       const res = await computeSealForArtifact(artifact);
@@ -156,6 +226,64 @@ export function Capture() {
       setMessage("Passport generated. Seal computed locally via edge-style process.");
     } catch (e: any) {
       setMessage("Error generating seal: " + (e.message || e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function runFullDemoCaptureFlow(assetId: string) {
+    const preset = { ...DEMO_CARBON_PRESET, assetId };
+    setFullDemoOpen(true);
+    setFullDemoStep(0);
+    setFullDemoStatus("Preparing carbon preset…");
+    setLoading(true);
+    setAutoResult(null);
+    setMessage("Full demo started: Capture → Agent → Marketplace → x402 → MintGate.");
+
+    try {
+      writeFullDemoState(createFullDemoState("capture", new Date(), assetId));
+      setForm(preset);
+      setFrameHash(FULL_DEMO_FRAME_HASH);
+      await delay(700);
+
+      setFullDemoStep(1);
+      setFullDemoStatus("Generating passport and cryptographic seal…");
+      const artifact = buildArtifact(preset, FULL_DEMO_FRAME_HASH);
+      const seal = await computeSealForArtifact(artifact);
+      setSealResult({ artifact, ...seal });
+      setMessage("Passport generated. Full demo is submitting to the agent now.");
+      await delay(850);
+
+      setFullDemoStep(2);
+      setFullDemoStatus("Submitting artifact and letting the Grok LLM path decide action…");
+      await createArtifact(artifact);
+      let batch = await processBatch([assetId], "llm");
+      let record = batch.records?.find((r: any) => r.assetId === assetId) ?? batch.records?.[0] ?? null;
+      let verdict = record?.verification?.verdict ?? record?.onChain?.verdict ?? "Unverified";
+
+      // Demo reliability guardrail: the LLM decides action only. If a provider
+      // answers conservatively in live demo conditions, run the deterministic
+      // rule fallback so the canonical Valid carbon proof still reaches x402.
+      if (verdict !== "Valid") {
+        batch = await processBatch([assetId], "rule");
+        record = batch.records?.find((r: any) => r.assetId === assetId) ?? batch.records?.[0] ?? record;
+        verdict = record?.verification?.verdict ?? record?.onChain?.verdict ?? verdict;
+      }
+
+      const action = record?.decision?.action ?? "—";
+      const decidedBy = record?.decision?.decidedBy ?? "llm";
+      setAutoResult({ verdict, action, decidedBy });
+      setMessage(`Artifact submitted. Agent (${decidedBy}) chose "${action}". Status: ${verdict}.`);
+      await delay(1000);
+
+      setFullDemoStep(3);
+      setFullDemoStatus("Opening Marketplace for paid x402 proof query…");
+      writeFullDemoState(createFullDemoState("marketplace", new Date(), assetId));
+      await delay(650);
+      navigate(buildMarketplaceDemoUrl(assetId));
+    } catch (error) {
+      setFullDemoStatus(`Full demo stopped: ${error instanceof Error ? error.message : "unknown error"}`);
+      setMessage("Full demo stopped. You can run the manual Capture flow below.");
     } finally {
       setLoading(false);
     }
@@ -210,6 +338,15 @@ export function Capture() {
         actions={<Link className="route-cta route-cta--ghost" to="/lots">Back to Lots</Link>}
       />
 
+      <FullDemoModal
+        open={fullDemoOpen}
+        assetId={form.assetId}
+        steps={CAPTURE_DEMO_STEPS}
+        activeStep={fullDemoStep}
+        status={fullDemoStatus}
+        onClose={() => setFullDemoOpen(false)}
+      />
+
       <div className="capture-layout">
         {/* Form */}
         <section className="panel capture-form">
@@ -226,7 +363,7 @@ export function Capture() {
             <label>
               Asset ID
               <input value={form.assetId} onChange={e => update({ assetId: e.target.value })} />
-              <button type="button" className="btn small" style={{marginTop:4}} onClick={() => update({ assetId: "CARBON-VCS-AMAZONIA-2024-001", category: "carbon_credit", creditType: "VCS", tonnesCO2e: 125000, vintage: "2024", site: "Amazon REDD+ Zone A — fictional" })}>Use demo Valid carbon</button>
+              <button type="button" className="btn small" style={{marginTop:4}} onClick={applyDemoCarbonPreset}>Use demo Valid carbon</button>
             </label>
 
             <label>

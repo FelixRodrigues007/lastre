@@ -1,11 +1,31 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
+import { FullDemoModal, type FullDemoStep } from "../components/demo/FullDemoModal";
 import { PageHeader } from "../components/layout/PageHeader";
-import { getLots, mintAsset, lockCollateral, releaseCollateral, simulateAgentQuery, type AgentQueryResult } from "../lib/api";
+import {
+  getLots,
+  getLot,
+  getMintSummary,
+  mintAsset,
+  lockCollateral,
+  processBatch,
+  releaseCollateral,
+  simulateAgentQuery,
+  type AgentQueryResult,
+  type MintSummary,
+} from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
 import { shortHash } from "../lib/format";
 import { DEMO_CATALOG, demoSeal, type CatalogAsset } from "../lib/demoCatalog";
+import {
+  buildCaptureDemoUrl,
+  clearFullDemoState,
+  createFullDemoState,
+  FULL_DEMO_ASSET_ID,
+  readFullDemoState,
+  writeFullDemoState,
+} from "../lib/fullDemo";
 import { resolveMapProvider, type MapProviderConfig } from "../lib/mapProvider";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./marketplace.css";
@@ -29,8 +49,39 @@ const MAP_API_DECISION = {
     "MapLibre keeps the renderer open-source and vendor-neutral; production vector tiles come from Mapbox (VITE_MAPBOX_TOKEN) or MapTiler (VITE_MAPTILER_KEY) once a key is set.",
 };
 
+const MARKETPLACE_DEMO_STEPS: FullDemoStep[] = [
+  {
+    label: "Filter carbon credit + available",
+    detail: "Focus the Marketplace on the freshly processed fictional VCS carbon proof.",
+  },
+  {
+    label: "Paid agent proof query",
+    detail: "Simulate an external agent paying via x402 before it acts on the asset.",
+  },
+  {
+    label: "MintGate claim",
+    detail: "Emit the demo LotMinted event only after the Valid proof exists.",
+  },
+  {
+    label: "Show payload for judges",
+    detail: "Leave the x402 modal open with carbon score, seal match, and Casper links.",
+  },
+];
+
+const AGENT_SNIPPET = `// Agent verifies provenance before acting (x402)
+const quote = await fetch(
+  "https://app-api.lastre.io/api/x402/provenance/" + assetId
+); // -> HTTP 402 { accepts: [{ nonce, maxAmountRequired, asset: "CSPR" }] }
+
+const proof = await fetch(url, {
+  headers: { "X-PAYMENT": signCasperPayment(quote) },
+}).then(r => r.json());
+// proof.provenance -> { seal, verdict, carbonDetails, csprLinks, ... }
+if (proof.provenance.verdict === "Valid") approveAction();`;
+
 const DEMO_ACCOUNT_STORAGE_KEY = "casper-demo-account";
 const DEMO_PERSONA_STORAGE_KEY = "casper-demo-persona";
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function readDemoStorage(key: string): string | null {
   if (typeof window === "undefined") return null;
@@ -59,6 +110,8 @@ function readStoredPersona(): MarketplacePersona {
 }
 
 export function Marketplace() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const lotsData = useAsyncData(getLots);
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState<"all" | "mineral" | "carbon_credit">("all");
@@ -79,6 +132,36 @@ export function Marketplace() {
 
   // x402 agent-query demo state
   const [agentQuery, setAgentQuery] = useState<{ assetId: string; loading: boolean; result: AgentQueryResult | null } | null>(null);
+  const [mintSummary, setMintSummary] = useState<MintSummary | null>(null);
+  const [mintSummaryError, setMintSummaryError] = useState<string | null>(null);
+  const [snippetCopied, setSnippetCopied] = useState(false);
+  const [payloadCopied, setPayloadCopied] = useState(false);
+  const [fullDemoOpen, setFullDemoOpen] = useState(false);
+  const [fullDemoStep, setFullDemoStep] = useState(0);
+  const [fullDemoStatus, setFullDemoStatus] = useState("");
+  const [fullDemoMint, setFullDemoMint] = useState<{ assetId: string; txHash?: string; alreadyMinted?: boolean } | null>(null);
+  const fullDemoStartedRef = useRef(false);
+
+  useEffect(() => {
+    void reloadMintSummary();
+  }, []);
+
+  useEffect(() => {
+    const isFullDemo = searchParams.get("demo") === "full" || readFullDemoState()?.stage === "marketplace";
+    if (!isFullDemo || fullDemoStartedRef.current) return;
+    fullDemoStartedRef.current = true;
+    void runMarketplaceFullDemo(searchParams.get("assetId") || readFullDemoState()?.assetId || FULL_DEMO_ASSET_ID);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  async function reloadMintSummary() {
+    try {
+      setMintSummaryError(null);
+      setMintSummary(await getMintSummary());
+    } catch (error) {
+      setMintSummaryError(error instanceof Error ? error.message : "Mint summary unavailable");
+    }
+  }
 
   function connectWallet() {
     const fake = createDemoAccount();
@@ -144,6 +227,7 @@ export function Marketplace() {
         alert(`✅ Simulated Casper signature complete.\nAsset: ${buyConfirm.assetId}\nMint tx: ${res.txHash}\n\nRecorded via MintGate (demo). View on cspr.live.`);
         setBuyConfirm(null);
         lotsData.reload();
+        void reloadMintSummary();
       } else {
         alert("Claim failed: " + (res.error || "No valid proof"));
       }
@@ -160,18 +244,103 @@ export function Marketplace() {
   }
 
   // x402: simulate an external agent paying to read a proof before it acts.
-  async function runAgentQuery(assetId: string) {
+  async function runAgentQuery(assetId: string, from = "agent-casper-demo"): Promise<AgentQueryResult | null> {
     setAgentQuery({ assetId, loading: true, result: null });
+    setPayloadCopied(false);
     try {
-      const result = await simulateAgentQuery(assetId, "agent-casper-demo");
+      const result = await simulateAgentQuery(assetId, from);
       setAgentQuery({ assetId, loading: false, result });
+      return result;
     } catch (e: any) {
-      setAgentQuery({ assetId, loading: false, result: { ok: false, reason: e?.message || "query_failed" } });
+      const result = { ok: false, reason: e?.message || "query_failed" };
+      setAgentQuery({ assetId, loading: false, result });
+      return result;
     }
   }
 
   function closeAgentQuery() {
     setAgentQuery(null);
+  }
+
+  function startFullDemo() {
+    setFullDemoMint(null);
+    writeFullDemoState(createFullDemoState("capture"));
+    navigate(buildCaptureDemoUrl());
+  }
+
+  async function runMarketplaceFullDemo(assetId: string) {
+    setFullDemoOpen(true);
+    setFullDemoMint(null);
+    setFullDemoStep(0);
+    setFullDemoStatus("Filtering Marketplace for carbon credits ready to claim…");
+    writeFullDemoState(createFullDemoState("marketplace", new Date(), assetId));
+    setView("assets");
+    setCatFilter("carbon_credit");
+    setCreditFilter("all");
+    setStatusFilter("available");
+    await delay(850);
+
+    try {
+      // Idempotent safeguard: if the user opens the Marketplace demo URL directly,
+      // make sure the proof has a Valid audit record before x402/mint. If Capture
+      // already did it, do NOT process again because duplicate attestations become
+      // "skip" records and would hide the last Valid verdict.
+      const currentLot = await getLot(assetId);
+      if (currentLot.latestVerdict !== "Valid") {
+        const batch = await processBatch([assetId], "llm");
+        const record = batch.records?.find((r: any) => r.assetId === assetId) ?? batch.records?.[0] ?? null;
+        const verdict = record?.verification?.verdict ?? record?.onChain?.verdict ?? "Unverified";
+        if (verdict !== "Valid") {
+          await processBatch([assetId], "rule");
+        }
+      }
+      lotsData.reload();
+    } catch {
+      // The Capture leg usually processed this already; keep the demo moving.
+    }
+
+    setFullDemoStep(1);
+    setFullDemoStatus("Simulating Agent Casper-style proof query via x402…");
+    writeFullDemoState(createFullDemoState("x402", new Date(), assetId));
+    const query = await runAgentQuery(assetId, "agent-casper-demo");
+    await delay(950);
+
+    setFullDemoStep(2);
+    setFullDemoStatus("Claiming the provenance NFT representation through MintGate demo…");
+    writeFullDemoState(createFullDemoState("mint", new Date(), assetId));
+    const minter = connectedAccount ?? connectWallet();
+    try {
+      const mint = await mintAsset(assetId, minter);
+      setFullDemoMint({ assetId, txHash: mint.txHash });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      setFullDemoMint({ assetId, alreadyMinted: message.includes("Already minted") });
+    }
+
+    await reloadMintSummary();
+    lotsData.reload();
+    setFullDemoStep(3);
+    setFullDemoStatus(
+      query?.ok
+        ? "Complete: x402 payload is open for judges, with carbon score and seal match."
+        : "Demo reached x402, but the paid query returned an error. Check API runtime state.",
+    );
+    writeFullDemoState(createFullDemoState("complete", new Date(), assetId));
+  }
+
+  async function copyAgentSnippet() {
+    if (!navigator.clipboard) return;
+    await navigator.clipboard.writeText(AGENT_SNIPPET);
+    setSnippetCopied(true);
+    setTimeout(() => setSnippetCopied(false), 1600);
+  }
+
+  async function copyAgentPayload() {
+    if (!agentQuery?.result) return;
+    if (!navigator.clipboard) return;
+    await navigator.clipboard.writeText(JSON.stringify(agentQuery.result, null, 2));
+    setPayloadCopied(true);
+    setTimeout(() => setPayloadCopied(false), 1600);
   }
 
   // Static catalog seed — shared source of truth with the lot-detail fallback
@@ -264,6 +433,32 @@ export function Marketplace() {
         actions={<Link className="route-cta" to="/capture">Capture New</Link>}
       />
 
+      <FullDemoModal
+        open={fullDemoOpen}
+        assetId={searchParams.get("assetId") || FULL_DEMO_ASSET_ID}
+        steps={MARKETPLACE_DEMO_STEPS}
+        activeStep={fullDemoStep}
+        status={fullDemoStatus}
+        onClose={() => {
+          setFullDemoOpen(false);
+          clearFullDemoState();
+        }}
+      />
+
+      <section className="panel demo-killer-banner" aria-label="Full end-to-end demo">
+        <div>
+          <span className="eyebrow">Judge-ready flow</span>
+          <h3>Run Full End-to-End Demo</h3>
+          <p>
+            One click runs Capture → agent decision → paid x402 proof query → MintGate demo claim,
+            then leaves the agent payload visible with the carbon impact score.
+          </p>
+        </div>
+        <button type="button" className="btn primary demo-killer-button" onClick={startFullDemo}>
+          Run Full End-to-End Demo
+        </button>
+      </section>
+
       <div className="market-filters panel">
         <div className="wallet-section">
           <select value={persona} onChange={e => updatePersona(e.target.value as MarketplacePersona)} title="Persona / role simulation">
@@ -308,12 +503,43 @@ export function Marketplace() {
         </select>
       </div>
 
-      <div className="panel" style={{padding: "8px 12px", display: "flex", gap: 16, flexWrap: "wrap", fontSize: "0.85em", marginBottom: 8}}>
-        <span><strong>{visible.length}</strong> matching</span>
-        <span><strong>{lots.filter((l: any) => l.isMinted).length}</strong> minted (Casper MintGate sim)</span>
-        <span><strong>{lots.filter((l: any) => l.attested || l.latestVerdict).length}</strong> attested on-chain (sim + live)</span>
-        <span className="agent-x402-note">🔌 Queryable by agents via <strong>x402</strong></span>
-        <span className="small muted">Live state from app runtime + testnet attestations. <a href="https://testnet.cspr.live" target="_blank" rel="noopener">cspr.live ↗</a></span>
+      <div className="panel market-summary-panel">
+        <div className="market-summary-strip">
+          <span><strong>{visible.length}</strong> matching</span>
+          <span><strong>{lots.filter((l: any) => l.isMinted).length}</strong> minted in visible runtime</span>
+          <span><strong>{mintSummary?.mintCount ?? "—"}</strong> Total minted</span>
+          <span><strong>{lots.filter((l: any) => l.attested || l.latestVerdict).length}</strong> attested on-chain (sim + live)</span>
+          <span className="agent-x402-note">🔌 Queryable by agents via <strong>x402</strong></span>
+          <span className="small muted">Live state from app runtime + testnet attestations. <a href="https://testnet.cspr.live" target="_blank" rel="noopener">cspr.live ↗</a></span>
+        </div>
+
+        <div className="mint-events">
+          <div className="mint-events__head">
+            <strong>Latest LotMinted events</strong>
+            <button type="button" className="btn small ghost" onClick={() => void reloadMintSummary()}>
+              Refresh
+            </button>
+          </div>
+          {mintSummaryError ? (
+            <p className="small muted">Mint summary unavailable: {mintSummaryError}</p>
+          ) : mintSummary?.events?.length ? (
+            <div className="mint-events__list">
+              {mintSummary.events.slice(0, 3).map((event) => (
+                <a
+                  key={`${event.assetId}-${event.mintTx}-${event.at}`}
+                  href={`https://testnet.cspr.live/transaction/${event.mintTx}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>{event.assetId}</span>
+                  <code>{shortHash(event.mintTx, 8, 6)}</code>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p className="small muted">No LotMinted event yet. Run the demo or claim a Valid asset.</p>
+          )}
+        </div>
       </div>
 
       <div className="market-tabs" role="tablist" aria-label="Marketplace views">
@@ -364,6 +590,7 @@ export function Marketplace() {
             : (a.expectedOnChain === "Valid" ? 91 : 62);
 
           const computedSeal = lot?.computedSeal || demoSeal(a.assetId);
+          const isAgentQuerying = Boolean(agentQuery && agentQuery.assetId === a.assetId && agentQuery.loading);
 
           return (
             <div key={a.assetId} className={`market-card panel rich-nft-card ${isCarbon ? "carbon" : "mineral"}`}>
@@ -435,11 +662,12 @@ export function Marketplace() {
                   x402 queryable
                 </span>
                 <button
-                  onClick={() => runAgentQuery(a.assetId)}
+                  onClick={() => void runAgentQuery(a.assetId)}
                   className="btn small ghost"
+                  disabled={isAgentQuerying}
                   title="Simulate an external agent paying via x402 to verify this proof"
                 >
-                  Simulate Agent Query (x402)
+                  {isAgentQuerying ? "Agent paying…" : "Simulate Agent Query (x402)"}
                 </button>
               </div>
             </div>
@@ -461,8 +689,9 @@ export function Marketplace() {
             <span className="eyebrow">For Agents</span>
             <h3>Lastro is the provenance layer autonomous agents query before acting</h3>
             <p className="small muted">
-              Other agents (portfolio, DeFi, RWA issuance) pay a small x402 fee to read a lot's
-              seal, verdict and carbon details <strong>before</strong> they touch a physical/carbon asset.
+              <strong>Other agents pay via x402 to query Lastre before touching any RWA/carbon record.</strong>{" "}
+              Portfolio, DeFi, and RWA issuance agents read a lot's seal, verdict and carbon details
+              <strong> before</strong> they act on a physical/carbon asset.
               Proof before token — for humans and for machines.
             </p>
           </div>
@@ -471,17 +700,14 @@ export function Marketplace() {
             <span>pay-per-proof</span>
           </div>
         </div>
+        <div className="for-agents__toolbar">
+          <span className="small muted">Drop-in Node/TS snippet for external agents:</span>
+          <button type="button" className="btn small ghost" onClick={() => void copyAgentSnippet()}>
+            {snippetCopied ? "Copied ✓" : "Copy snippet"}
+          </button>
+        </div>
         <pre className="for-agents__code" aria-label="Example agent query">
-{`// Agent verifies provenance before acting (x402)
-const quote = await fetch(
-  "https://app-api.lastre.io/api/x402/provenance/" + assetId
-); // -> HTTP 402 { accepts: [{ nonce, maxAmountRequired, asset: "CSPR" }] }
-
-const proof = await fetch(url, {
-  headers: { "X-PAYMENT": signCasperPayment(quote) },
-}).then(r => r.json());
-// proof.provenance -> { seal, verdict, carbonDetails, csprLinks, ... }
-if (proof.provenance.verdict === "Valid") approveAction();`}
+{AGENT_SNIPPET}
         </pre>
         <p className="small muted">
           Try it live: click <strong>Simulate Agent Query (x402)</strong> on any card above.
@@ -559,7 +785,7 @@ if (proof.provenance.verdict === "Valid") approveAction();`}
       {/* x402 Agent Query result modal (DEMO) */}
       {agentQuery && (
         <div className="modal-overlay" onClick={closeAgentQuery}>
-          <div className="buy-modal" onClick={e => e.stopPropagation()}>
+          <div className="buy-modal agent-query-modal" onClick={e => e.stopPropagation()}>
             <h3>Agent Query via x402 (Demo)</h3>
             <div>Asset: <strong>{agentQuery.assetId}</strong></div>
             {agentQuery.loading ? (
@@ -567,7 +793,8 @@ if (proof.provenance.verdict === "Valid") approveAction();`}
             ) : agentQuery.result?.ok && agentQuery.result.provenance ? (
               <>
                 <div className="sig-sim">
-                  Agent paid <strong>{agentQuery.result.amountCspr}</strong> CSPR (mock) · facilitator: {agentQuery.result.facilitatorMode}<br />
+                  External agent paid <strong>{agentQuery.result.amountCspr}</strong> CSPR via x402 (mock settlement) to read this proof.<br />
+                  Facilitator: {agentQuery.result.facilitatorMode}<br />
                   Settlement tx: <code>{shortHash(agentQuery.result.txHash || "", 10, 8)}</code>
                 </div>
                 <div className="agent-proof">
@@ -578,8 +805,44 @@ if (proof.provenance.verdict === "Valid") approveAction();`}
                     <div>Carbon impact score: <strong>{agentQuery.result.provenance.carbonDetails.carbonImpactScore}</strong></div>
                   )}
                   <div className="seal-row"><span>Seal:</span> <code>{shortHash(agentQuery.result.provenance.seal, 10, 8)}</code></div>
+                  {agentQuery.result.provenance.csprLinks?.attestation && (
+                    <a href={agentQuery.result.provenance.csprLinks.attestation} target="_blank" rel="noopener noreferrer">
+                      View attestation on cspr.live ↗
+                    </a>
+                  )}
+                  {agentQuery.result.provenance.csprLinks?.mint && (
+                    <a href={agentQuery.result.provenance.csprLinks.mint} target="_blank" rel="noopener noreferrer">
+                      View mint on cspr.live ↗
+                    </a>
+                  )}
                 </div>
-                <p className="small muted">This is the payload an external agent reads before acting on the asset. Total paid queries this session: {agentQuery.result.totalPaidQueries}.</p>
+                {fullDemoMint?.assetId === agentQuery.assetId && (
+                  <div className="demo-mint-note">
+                    {fullDemoMint.txHash ? (
+                      <>
+                        MintGate demo event emitted:{" "}
+                        <a href={`https://testnet.cspr.live/transaction/${fullDemoMint.txHash}`} target="_blank" rel="noopener noreferrer">
+                          {shortHash(fullDemoMint.txHash, 10, 8)} ↗
+                        </a>
+                      </>
+                    ) : fullDemoMint.alreadyMinted ? (
+                      "MintGate demo event already existed for this runtime."
+                    ) : (
+                      "MintGate demo claim was attempted after the paid proof query."
+                    )}
+                  </div>
+                )}
+                <p className="small muted">
+                  This is what an external Agent Casper-style agent would read before deciding whether it can act.
+                  Total paid queries this session: {agentQuery.result.totalPaidQueries}.
+                </p>
+                <div className="payload-toolbar">
+                  <strong>Complete proof payload</strong>
+                  <button type="button" className="btn small ghost" onClick={() => void copyAgentPayload()}>
+                    {payloadCopied ? "Copied ✓" : "Copy JSON"}
+                  </button>
+                </div>
+                <pre className="agent-payload-json">{JSON.stringify(agentQuery.result, null, 2)}</pre>
               </>
             ) : (
               <p className="small">Query failed: {agentQuery.result?.reason ?? "unknown"}</p>
