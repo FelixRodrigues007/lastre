@@ -273,6 +273,70 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     return;
   }
 
+  // MintGate summary: simulated LotMinted events + mint_count (mirrors on-chain reads)
+  if (method === "GET" && pathname === "/api/mint/summary") {
+    sendJson(res, 200, runtime.getMintSummary());
+    return;
+  }
+
+  // ---- x402 Provenance provider (DEMO) --------------------------------------
+  // Agents pay via x402 to read a proof before acting on a physical/carbon RWA.
+  // GET  /api/x402/provenance/:assetId            -> 402 with payment requirements
+  // GET  /api/x402/provenance/:assetId + X-PAYMENT -> 200 with provenance snapshot
+  const x402Match = pathname.match(/^\/api\/x402\/provenance\/([^/]+)$/u);
+  if (method === "GET" && x402Match) {
+    const assetId = decodeURIComponent(x402Match[1]);
+    if (!runtime.getLot(assetId)) {
+      sendJson(res, 404, { error: "not_found", message: "Unknown lot" });
+      return;
+    }
+
+    const paymentHeader = getHeaderValue(req.headers["x-payment"]);
+    if (!paymentHeader) {
+      const { requirements } = runtime.quoteProvenanceQuery(assetId);
+      res.statusCode = 402;
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.end(JSON.stringify({ x402Version: 1, error: "payment_required", accepts: [requirements] }));
+      return;
+    }
+
+    let payment: unknown;
+    try {
+      payment = JSON.parse(Buffer.from(paymentHeader, "base64url").toString("utf8"));
+    } catch {
+      payment = null;
+    }
+    if (!isPaymentPayload(payment)) {
+      const { requirements } = runtime.quoteProvenanceQuery(assetId);
+      res.statusCode = 402;
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.end(JSON.stringify({ x402Version: 1, error: "malformed_payment", accepts: [requirements] }));
+      return;
+    }
+
+    const settled = await runtime.settleProvenanceQuery(assetId, payment);
+    if (!settled.ok) {
+      res.statusCode = 402;
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.end(JSON.stringify({ x402Version: 1, error: settled.reason, accepts: settled.requirements ? [settled.requirements] : [] }));
+      return;
+    }
+    res.setHeader("X-PAYMENT-RESPONSE", settled.txHash);
+    sendJson(res, 200, { paid: true, txHash: settled.txHash, facilitator: settled.facilitatorMode, provenance: settled.provenance });
+    return;
+  }
+
+  // DEMO helper: run the full x402 handshake locally (quote -> sign -> settle)
+  // so the UI can show "an agent paid to verify this proof" without a wallet.
+  const x402SimMatch = pathname.match(/^\/api\/x402\/simulate\/([^/]+)$/u);
+  if (method === "POST" && x402SimMatch) {
+    const assetId = decodeURIComponent(x402SimMatch[1]);
+    const body = await readJsonBody<{ from?: string }>(req);
+    const result = await runtime.simulateAgentProvenanceQuery(assetId, body?.from || undefined);
+    sendJson(res, result.ok ? 200 : 404, result);
+    return;
+  }
+
   // DeFi collateral lock (demo)
   if (method === "POST" && pathname === "/api/defi/lock") {
     const body = await readJsonBody<{ assetId: string; owner: string }>(req);
@@ -321,6 +385,19 @@ function configuredAllowedOrigins(): Set<string> {
 function getHeaderValue(value: string | string[] | undefined): string | null {
   if (!value) return null;
   return Array.isArray(value) ? (value[0] ?? null) : value;
+}
+
+function isPaymentPayload(
+  value: unknown,
+): value is { nonce: string; amount: number; from: string; sig: string } {
+  if (!value || typeof value !== "object") return false;
+  const p = value as Record<string, unknown>;
+  return (
+    typeof p.nonce === "string" &&
+    typeof p.amount === "number" &&
+    typeof p.from === "string" &&
+    typeof p.sig === "string"
+  );
 }
 
 function resolveAllowedOrigin(origin: string | null): string | null {

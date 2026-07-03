@@ -60,12 +60,22 @@ make app-dev
 
 ## Global Mundi map
 
-The Marketplace split view lazy-loads **MapLibre GL JS** when a map token is set.
-Copy `app/.env.example` to `app/.env.local` and add:
+The Marketplace split view lazy-loads **MapLibre GL JS** (MapTiler) or **Mapbox GL JS**
+when a map token is set. Provider resolution lives in `app/src/lib/mapConfig.ts`.
+Copy `app/.env.example` to `app/.env.local` and add one token:
+
+Mapbox (preferred when both are set):
 
 ```text
-VITE_MAPBOX_TOKEN=<Mapbox public token pk.*>
+VITE_MAPBOX_TOKEN=<Mapbox public access token, pk.*>
 ```
 
-Mapbox is preferred (Felix). Alternatively `VITE_MAPTILER_KEY` for MapTiler Cloud.
-Without a key, or if the map fails to load, a zero-token SVG fallback keeps the demo stable.
+MapTiler:
+
+```text
+VITE_MAPTILER_KEY=<MapTiler Cloud API key>
+```
+
+Without a key, or if the third-party map cannot load, a zero-token SVG fallback
+keeps the demo stable. `VITE_*` variables are inlined at **build time**, so after
+adding or changing a token you must **redeploy** for the new bundle to pick it up.

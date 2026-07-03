@@ -198,3 +198,63 @@ export async function releaseCollateral(assetId: string, owner: string) {
     body: JSON.stringify({ assetId, owner }),
   });
 }
+
+// ---- x402 provenance provider (DEMO) ---------------------------------------
+
+export type ProvenanceSnapshot = {
+  assetId: string;
+  category: string;
+  seal: string;
+  referenceSeal: string | null;
+  sealMatch: boolean | null;
+  verdict: string;
+  attested: boolean;
+  mintStatus: string;
+  attestationTx: string | null;
+  mintTx: string | null;
+  carbonDetails: {
+    tonnesCO2e: number | null;
+    creditType: string | null;
+    vintage: string | null;
+    methodology: string | null;
+    verifier: string | null;
+    carbonImpactScore: number | null;
+  } | null;
+  packageHash: string;
+  csprLinks: { package: string; attestation: string | null; mint: string | null };
+  readAt: string;
+};
+
+export type AgentQueryResult = {
+  ok: boolean;
+  reason?: string;
+  txHash?: string;
+  facilitatorMode?: string;
+  provenance?: ProvenanceSnapshot | null;
+  amountCspr?: number;
+  payTo?: string;
+  totalPaidQueries?: number;
+};
+
+/**
+ * DEMO: run the full x402 handshake (quote → sign → settle) server-side so the
+ * UI can show an external agent paying to read a proof before acting. Mock
+ * facilitator — not a real Casper settlement.
+ */
+export async function simulateAgentQuery(assetId: string, from?: string) {
+  return apiFetch<AgentQueryResult>(`/api/x402/simulate/${encodeURIComponent(assetId)}`, {
+    method: "POST",
+    body: JSON.stringify({ from }),
+  });
+}
+
+export type MintSummary = {
+  mintCount: number;
+  packageHash: string;
+  packageUrl: string;
+  events: Array<{ assetId: string; minter: string; mintTx: string; at: string }>;
+};
+
+export function getMintSummary() {
+  return apiFetch<MintSummary>("/api/mint/summary");
+}
