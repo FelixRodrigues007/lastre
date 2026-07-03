@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   border-bottom: 0.5px solid var(--app-stroke-divider);
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 78%, transparent);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 82%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
@@ -26,8 +26,8 @@
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 6px;
-  color: var(--lastro-brand-seal);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
+  color: var(--lastro-accent-trust);
+  background: var(--lastro-fill-trust);
   flex-shrink: 0;
 }
 
@@ -37,13 +37,13 @@
   margin-right: 0.35rem;
   padding: 0.12rem 0.45rem;
   border-radius: var(--lastro-radius-pill);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 14%, transparent);
+  background: var(--lastro-fill-brand);
   font-family: var(--lastro-font-mono);
   font-size: 0.625rem;
   font-weight: var(--lastro-weight-semibold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-brand-seal);
+  color: var(--lastro-accent-brand);
 }
 
 .guardrail__text {
@@ -52,6 +52,17 @@
   color: var(--lastro-text-secondary);
   line-height: 1.35;
   letter-spacing: -0.01em;
+}
+
+.guardrail__session {
+  display: inline;
+  margin-left: 0.35rem;
+  color: var(--lastro-text-muted);
+}
+
+.guardrail__session::before {
+  content: "·";
+  margin-right: 0.35rem;
 }
 
 @media (max-width: 640px) {

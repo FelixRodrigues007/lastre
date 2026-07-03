@@ -1,0 +1,194 @@
+.escalation-geo {
+  display: grid;
+  gap: 1rem;
+}
+
+.escalation-geo__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.875rem;
+}
+
+.escalation-geo__intro {
+  min-width: 0;
+  flex: 1 1 14rem;
+}
+
+.escalation-geo__title {
+  margin: 0;
+}
+
+.escalation-geo__lead {
+  margin: 0.35rem 0 0;
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+  line-height: 1.5;
+  max-width: 52ch;
+}
+
+.escalation-geo__stamp {
+  flex-shrink: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.625rem;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.escalation-geo__stamp--in {
+  color: var(--lastro-text-secondary);
+}
+
+.escalation-geo__stamp--out {
+  color: var(--lastro-brand-seal);
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
+}
+
+.escalation-geo__compare {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 0.5px solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+}
+
+.escalation-geo__compare-head {
+  display: grid;
+  grid-template-columns: 5.75rem minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  border-bottom: 0.5px solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 55%, transparent);
+}
+
+.escalation-geo__compare-col {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.escalation-geo__compare-col--field {
+  color: var(--lastro-text-muted);
+}
+
+.escalation-geo__compare-body {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.escalation-geo__compare-row {
+  display: grid;
+  grid-template-columns: 5.75rem minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-bottom: 0.5px solid var(--lastro-border-subtle);
+}
+
+.escalation-geo__compare-row:last-child {
+  border-bottom: none;
+}
+
+.escalation-geo__compare-field {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.escalation-geo__compare-declared,
+.escalation-geo__compare-expected {
+  margin: 0;
+  min-width: 0;
+}
+
+.escalation-geo__mono {
+  display: inline-block;
+  max-width: 100%;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+  color: var(--lastro-text-primary);
+  white-space: nowrap;
+}
+
+.escalation-geo__mono--muted {
+  font-size: 0.75rem;
+  color: var(--lastro-text-secondary);
+  white-space: normal;
+}
+
+.escalation-geo__compare-row--flag {
+  background: color-mix(in srgb, var(--lastro-status-invalid) 6%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastro-status-invalid) 55%, transparent);
+}
+
+.escalation-geo__compare-row--flag .escalation-geo__compare-declared .escalation-geo__mono {
+  color: var(--lastro-brand-seal);
+}
+
+.escalation-geo__site {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  padding: 0.85rem 1rem;
+  border-top: 0.5px solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 35%, transparent);
+}
+
+.escalation-geo__site-label {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+}
+
+.escalation-geo__site-value {
+  flex: 1 1 12rem;
+  min-width: 0;
+  font-size: 0.8125rem;
+  color: var(--lastro-text-secondary);
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .escalation-geo__compare-head {
+    display: none;
+  }
+
+  .escalation-geo__compare-row {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .escalation-geo__compare-declared::before,
+  .escalation-geo__compare-expected::before {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-family: var(--lastro-font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--lastro-text-muted);
+  }
+
+  .escalation-geo__compare-declared::before {
+    content: attr(data-label);
+  }
+
+  .escalation-geo__compare-expected::before {
+    content: attr(data-label);
+  }
+}

@@ -1,0 +1,139 @@
+/* Micro-interactions & states — CTA hover, verdict crossfade, skeleton */
+
+/* Focus rings live in craft.css (stacked shadow pattern) */
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Map markers — success lime */
+.mundi-svg-point:focus-visible .mundi-dot {
+  outline: none;
+  filter: drop-shadow(0 0 6px rgba(var(--lastro-lime-wash), 0.55));
+}
+
+/* Map markers — success lime */
+
+.entry-btn--primary {
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    filter var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .route-cta--ghost:hover {
+    transform: translateY(-1px);
+    filter: none;
+    background: var(--app-fill-hover);
+    box-shadow: inset 0 0 0 0.5px var(--app-stroke-divider);
+  }
+
+  .entry-btn--primary:hover {
+    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--lastro-bg-elevated) 88%, #fff);
+    box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--lastro-brand-orange) 35%, transparent);
+  }
+}
+
+.entry-btn--primary:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* ── Verdict / status crossfade (200ms spring) ── */
+
+.verdict-hero,
+.lot-drawer,
+.evidence-kpi,
+.status-badge,
+.ratio-bar__segment,
+.ratio-bar__dot,
+.lot-list-row::before,
+.lot-drawer__head,
+.process-ledger__row,
+.donut-stat__ring-fill {
+  transition:
+    background var(--dur-state) var(--ease-spring),
+    border-color var(--dur-state) var(--ease-spring),
+    color var(--dur-state) var(--ease-spring),
+    fill var(--dur-state) var(--ease-spring),
+    stroke var(--dur-state) var(--ease-spring),
+    opacity var(--dur-state) var(--ease-spring),
+    box-shadow var(--dur-state) var(--ease-spring),
+    flex-grow var(--dur-state) var(--ease-spring),
+    width var(--dur-state) var(--ease-spring);
+}
+
+.verdict-hero--valid,
+.verdict-hero--invalid,
+.verdict-hero--pending {
+  transition:
+    background var(--dur-state) var(--ease-spring),
+    border-color var(--dur-state) var(--ease-spring);
+}
+
+.verdict-hero__icon--valid,
+.verdict-hero__icon--invalid,
+.verdict-hero__icon--pending {
+  transition:
+    background var(--dur-state) var(--ease-spring),
+    border-color var(--dur-state) var(--ease-spring),
+    color var(--dur-state) var(--ease-spring);
+}
+
+.status-badge {
+  transition: color var(--dur-state) var(--ease-spring);
+}
+
+.status-badge__circle {
+  transition:
+    color var(--dur-state) var(--ease-spring),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.evidence-kpi {
+  transition:
+    background var(--dur-state) var(--ease-spring),
+    border-color var(--dur-state) var(--ease-spring);
+}
+
+.lot-drawer--valid,
+.lot-drawer--invalid,
+.lot-drawer--pending {
+  transition: border-color var(--dur-state) var(--ease-spring);
+}
+
+/* ── Reduced motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .route-cta,
+  .entry-btn--primary,
+  .verdict-hero,
+  .evidence-kpi,
+  .status-badge,
+  .ratio-bar__segment,
+  .lot-list-row::before {
+    transition-duration: 0.01ms;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .route-cta:hover,
+    .route-cta--ghost:hover,
+    .entry-btn--primary:hover {
+      transform: none;
+    }
+  }
+
+  .route-cta:active,
+  .entry-btn--primary:active {
+    transform: none;
+  }
+
+  .skeleton-block::after {
+    animation: none;
+    opacity: 0.35;
+    background-position: 0 0;
+  }
+}

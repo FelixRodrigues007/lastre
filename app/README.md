@@ -60,15 +60,12 @@ make app-dev
 
 ## Global Mundi map
 
-The Marketplace includes a **Global Mundi Map** tab. When `VITE_MAPTILER_KEY` is set, it lazy-loads **MapLibre GL JS** and renders MapTiler vector tiles. Without a key, or if the third-party map cannot load, it uses the zero-token SVG fallback for demo reliability. For production map tiles, use:
+The Marketplace split view lazy-loads **MapLibre GL JS** when a map token is set.
+Copy `app/.env.example` to `app/.env.local` and add:
 
 ```text
-VITE_MAPTILER_KEY=<MapTiler Cloud key>
+VITE_MAPBOX_TOKEN=<Mapbox public token pk.*>
 ```
 
-Recommended stack: **MapLibre GL JS** for the open-source renderer and
-**MapTiler Cloud** for vector tiles/styles/geocoding. The map uses the MapTiler
-`streets-v4` style endpoint so a normal MapTiler API key is enough to activate
-the real basemap. Until the key is present, the SVG fallback remains active so
-`app.lastre.io` does not depend on a third-party map quota during the buildathon
-demo.
+Mapbox is preferred (Felix). Alternatively `VITE_MAPTILER_KEY` for MapTiler Cloud.
+Without a key, or if the map fails to load, a zero-token SVG fallback keeps the demo stable.

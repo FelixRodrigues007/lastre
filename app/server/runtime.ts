@@ -64,6 +64,17 @@ export type AuditSummary = {
   escalated: number;
 };
 
+export type EscalationResolutionAction = "requeued" | "discarded" | "overridden";
+
+export type EscalationActionResult = {
+  assetId: string;
+  action: EscalationResolutionAction;
+  record: AuditRecord;
+  previousReasoning: string | null;
+  /** True when re-queue/reprocess produced another escalation. */
+  requeuedEscalated: boolean;
+};
+
 const DEMO_CATALOG: Array<{ key: keyof ReturnType<typeof createDemoArtifacts>; role: string }> = [
   { key: "valid", role: "Genuine lot · expected Valid" },
   { key: "tampered", role: "Tampered mass · expected Invalid" },
@@ -86,6 +97,8 @@ export class AppRuntime {
   private auditLog: AuditRecord[] = [];
   private deciderMode: DeciderMode = "rule";
   private lastBatch: BatchResult | null = null;
+  /** Asset IDs awaiting human review in the escalation queue. */
+  private pendingEscalations = new Set<string>();
 
   // User-submitted artifacts (from app upload/camera flows)
   private userArtifacts: ProvenanceArtifact[] = [];
@@ -96,6 +109,20 @@ export class AppRuntime {
 
   getDeciderMode(): DeciderMode {
     return this.deciderMode;
+  }
+
+  /** Pre-populates audit, chain, escalations, and mints for a complete demo session. */
+  async seedDemoSessionIfEmpty(): Promise<void> {
+    if (this.auditLog.length > 0) return;
+
+    const assetIds = this.getDefaultBatchAssetIds();
+    await this.processBatch(assetIds, "rule");
+
+    for (const record of this.auditLog) {
+      if (record.outcome === "tokenizable") {
+        this.mintAsset(record.assetId);
+      }
+    }
   }
 
   setDeciderMode(mode: DeciderMode): void {
@@ -254,9 +281,13 @@ export class AppRuntime {
     const referenceSeal = this.gateway.getReferenceSeal(artifact.assetId) ?? null;
     const computedSeal = computeSeal(artifact);
     const auditRecord = this.getLatestAuditRecord(artifact.assetId);
+    const referenceArtifact = referenceSeal
+      ? this.resolveReferenceArtifact(artifact, referenceSeal)
+      : null;
 
     return {
       artifact,
+      referenceArtifact,
       referenceSeal,
       computedSeal,
       sealMatchesReference: referenceSeal ? computedSeal === referenceSeal : null,
@@ -268,6 +299,44 @@ export class AppRuntime {
       isMinted: this.isMinted(artifact.assetId),
       mintTx: this.getMintTx(artifact.assetId),
     };
+  }
+
+  private resolveReferenceArtifact(
+    artifact: ProvenanceArtifact,
+    referenceSeal: string,
+  ): ProvenanceArtifact | null {
+    if (computeSeal(artifact) === referenceSeal) {
+      return JSON.parse(JSON.stringify(artifact)) as ProvenanceArtifact;
+    }
+
+    const patchArtifact = (patch: Partial<ProvenanceArtifact>): ProvenanceArtifact => ({
+      ...artifact,
+      ...patch,
+      origin: { ...artifact.origin, ...(patch.origin ?? {}) },
+    });
+
+    const numericKeys: Array<"massGrams" | "tonnesCO2e"> = ["massGrams", "tonnesCO2e"];
+    for (const key of numericKeys) {
+      const current = artifact[key];
+      if (typeof current !== "number") continue;
+      const span = Math.max(10_000, Math.abs(current) * 0.1);
+      for (let value = current - span; value <= current + span; value += 1) {
+        if (value === current) continue;
+        const trial = patchArtifact({ [key]: value });
+        if (computeSeal(trial) === referenceSeal) return trial;
+      }
+    }
+
+    const lat = artifact.origin.lat;
+    const lng = artifact.origin.lng;
+    for (let delta = -0.05; delta <= 0.05; delta += 0.0001) {
+      const trialLat = patchArtifact({ origin: { lat: lat + delta, lng, site: artifact.origin.site } });
+      if (computeSeal(trialLat) === referenceSeal) return trialLat;
+      const trialLng = patchArtifact({ origin: { lat, lng: lng + delta, site: artifact.origin.site } });
+      if (computeSeal(trialLng) === referenceSeal) return trialLng;
+    }
+
+    return null;
   }
 
   private getLatestAuditRecord(assetId: string): AuditRecord | null {
@@ -306,7 +375,138 @@ export class AppRuntime {
   }
 
   listEscalations(): AuditRecord[] {
-    return this.auditLog.filter((record) => record.outcome === "escalated");
+    return Array.from(this.pendingEscalations)
+      .map((assetId) => this.getLatestAuditRecord(assetId))
+      .filter((record): record is AuditRecord => record != null && record.outcome === "escalated");
+  }
+
+  private trackEscalationsFromBatch(records: AuditRecord[]): void {
+    for (const record of records) {
+      if (record.outcome === "escalated") {
+        this.pendingEscalations.add(record.assetId);
+      }
+    }
+  }
+
+  private removePendingEscalation(assetId: string): void {
+    this.pendingEscalations.delete(assetId);
+  }
+
+  async resolveEscalationRequeue(assetId: string): Promise<EscalationActionResult> {
+    if (!this.pendingEscalations.has(assetId)) {
+      throw new Error(`No pending escalation for ${assetId}`);
+    }
+
+    const previous = this.getLatestAuditRecord(assetId);
+    this.removePendingEscalation(assetId);
+
+    const result = await this.processBatch([assetId]);
+    const record = result.records[0];
+    const requeuedEscalated = record.outcome === "escalated";
+
+    return {
+      assetId,
+      action: "requeued",
+      record,
+      previousReasoning: previous?.decision.reasoning ?? null,
+      requeuedEscalated,
+    };
+  }
+
+  resolveEscalationDiscard(assetId: string): EscalationActionResult {
+    if (!this.pendingEscalations.has(assetId)) {
+      throw new Error(`No pending escalation for ${assetId}`);
+    }
+
+    const previous = this.getLatestAuditRecord(assetId);
+    const record: AuditRecord = {
+      assetId,
+      decision: {
+        action: "skip",
+        reasoning: `Human review: case discarded from escalation queue. Agent had escalated because: ${previous?.decision.reasoning ?? "unknown"}`,
+        decidedBy: "rule",
+      },
+      verification: null,
+      onChain: null,
+      outcome: "skipped",
+    };
+
+    this.auditLog.push(record);
+    this.removePendingEscalation(assetId);
+
+    return {
+      assetId,
+      action: "discarded",
+      record,
+      previousReasoning: previous?.decision.reasoning ?? null,
+      requeuedEscalated: false,
+    };
+  }
+
+  async resolveEscalationOverride(
+    assetId: string,
+    overrideAction: "pay" | "skip",
+  ): Promise<EscalationActionResult> {
+    if (!this.pendingEscalations.has(assetId)) {
+      throw new Error(`No pending escalation for ${assetId}`);
+    }
+
+    const previous = this.getLatestAuditRecord(assetId);
+    const artifact = this.resolveArtifact(assetId);
+    this.removePendingEscalation(assetId);
+
+    if (overrideAction === "skip") {
+      const record: AuditRecord = {
+        assetId,
+        decision: {
+          action: "skip",
+          reasoning: `Human override: skip after escalation review. Agent had escalated because: ${previous?.decision.reasoning ?? "unknown"}`,
+          decidedBy: "rule",
+        },
+        verification: null,
+        onChain: null,
+        outcome: "skipped",
+      };
+      this.auditLog.push(record);
+      return {
+        assetId,
+        action: "overridden",
+        record,
+        previousReasoning: previous?.decision.reasoning ?? null,
+        requeuedEscalated: false,
+      };
+    }
+
+    const decision = {
+      action: "pay" as const,
+      reasoning: `Human override: pay for verification after escalation review. Agent had escalated because: ${previous?.decision.reasoning ?? "unknown"}`,
+      decidedBy: "rule" as const,
+    };
+
+    const verification = await this.gateway.verifyAndSettle(artifact.assetId, artifact);
+    const onChainResult = this.originChain.attest(artifact.assetId, verification.seal);
+    const outcome = verification.verdict === "Valid" ? "tokenizable" : "rejected";
+
+    const record: AuditRecord = {
+      assetId,
+      decision,
+      verification,
+      onChain: {
+        verdict: onChainResult.verdict,
+        txHash: verification.txHash,
+      },
+      outcome,
+    };
+
+    this.auditLog.push(record);
+
+    return {
+      assetId,
+      action: "overridden",
+      record,
+      previousReasoning: previous?.decision.reasoning ?? null,
+      requeuedEscalated: false,
+    };
   }
 
   getDefaultBatchAssetIds(): string[] {
@@ -324,6 +524,7 @@ export class AppRuntime {
     const result = await agent.processBatch(artifacts);
 
     this.auditLog.push(...result.records);
+    this.trackEscalationsFromBatch(result.records);
     this.lastBatch = result;
 
     return result;

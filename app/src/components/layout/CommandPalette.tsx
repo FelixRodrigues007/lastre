@@ -80,7 +80,9 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             autoFocus
             aria-label="Command search"
           />
-          <span className="command-palette__hint">esc</span>
+          <span className="command-palette__hint">
+            <kbd>esc</kbd>
+          </span>
         </div>
         <ul className="command-palette__list" role="listbox">
           {filtered.length === 0 ? (

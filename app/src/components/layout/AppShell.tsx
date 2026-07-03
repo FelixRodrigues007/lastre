@@ -1,10 +1,15 @@
 import type { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { CaptureWizardProvider } from "../../context/CaptureWizardContext";
 import { SealMark } from "../ui/SealMark";
 import { useLocaleContext } from "../../context/LocaleContext";
+import { usePageReveal } from "../../hooks/usePageReveal";
+import { resolveScreenId } from "../../lib/screenMotion";
+import { useSidebarCollapsed } from "../../hooks/useSidebarCollapsed";
+import { CaptureWizardTrigger } from "../capture/CaptureWizardTrigger";
+import { OnboardingChecklist } from "../onboarding/OnboardingChecklist";
 import { AppSidebar } from "./AppSidebar";
 import { CommandPalette, useCommandPalette } from "./CommandPalette";
-import { GuardrailBanner } from "./GuardrailBanner";
 import { MobileTabBar } from "./MobileTabBar";
 import "./app-shell.css";
 
@@ -18,27 +23,38 @@ type AppShellProps = {
 export function AppShell({ children }: AppShellProps) {
   const { t } = useLocaleContext();
   const { open, setOpen, close } = useCommandPalette();
+  const location = useLocation();
+  const screen = resolveScreenId(location.pathname);
+  const { collapsed: sidebarCollapsed } = useSidebarCollapsed();
+  const revealed = usePageReveal();
 
   return (
-    <div className="app-shell">
-      <div className="app-layout">
-        <AppSidebar />
+    <CaptureWizardProvider>
+      <div
+        className="app-shell"
+        data-sidebar-collapsed={sidebarCollapsed ? "true" : "false"}
+      >
+        <div className="app-layout">
+          <AppSidebar onOpenSearch={() => setOpen(true)} />
 
-        <div className="app-content">
-          <header className="app-topbar">
-            <NavLink className="app-topbar__brand" to="/" aria-label={`${t("brand.console")} — home`}>
-              <SealMark size={24} />
-              <span className="app-topbar__wordmark">{t("brand.console")}</span>
-            </NavLink>
-            <div className="app-topbar__end">
-              <button
-                type="button"
-                className="app-topbar__cmd"
-                onClick={() => setOpen(true)}
-                aria-label="Open command palette"
-              >
-                <kbd>⌘K</kbd>
-              </button>
+          <div className="app-content">
+            <header className="app-topbar">
+              <NavLink className="app-topbar__brand" to="/" aria-label={`${t("brand.console")} — home`}>
+                <SealMark size={24} live />
+                <span className="app-topbar__wordmark">{t("brand.console")}</span>
+              </NavLink>
+              <div className="app-topbar__end">
+                <CaptureWizardTrigger className="app-topbar__capture route-cta route-cta--ghost" icon>
+                  {t("capture.wizard.trigger")}
+                </CaptureWizardTrigger>
+                <button
+                  type="button"
+                  className="app-topbar__cmd"
+                  onClick={() => setOpen(true)}
+                  aria-label="Open command palette"
+                >
+                  <kbd>⌘K</kbd>
+                </button>
               <a
                 className="app-topbar__status"
                 href={CSPR_PACKAGE_URL}
@@ -51,17 +67,20 @@ export function AppShell({ children }: AppShellProps) {
             </div>
           </header>
 
-          <GuardrailBanner />
-
-          <main className="app-main">
+          <main
+            className={`app-main${revealed ? " app-main--revealed" : ""}`}
+            data-screen={screen}
+          >
             <div className="shell">{children}</div>
           </main>
 
           <MobileTabBar />
+          </div>
         </div>
-      </div>
 
-      <CommandPalette open={open} onClose={close} />
-    </div>
+        <CommandPalette open={open} onClose={close} />
+        <OnboardingChecklist asFloating />
+      </div>
+    </CaptureWizardProvider>
   );
 }

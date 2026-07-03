@@ -51,7 +51,7 @@ export function Settings() {
   const limits = settings.data?.limits;
 
   return (
-    <div className="page">
+    <div className="page settings-page">
       <PageHeader
         kicker="Settings"
         title="Demo configuration"

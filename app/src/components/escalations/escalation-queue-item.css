@@ -1,0 +1,174 @@
+.escalation-queue-item {
+  display: grid;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.escalation-queue-item::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  background: var(--lastro-accent-warn);
+}
+
+.escalation-queue-item__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.escalation-queue-item__title {
+  margin-top: 0.15rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.875rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.escalation-queue-item__title a:hover {
+  color: var(--lastro-accent-warn);
+}
+
+.escalation-queue-item__kind {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.45rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  color: var(--lastro-text-muted);
+}
+
+.escalation-queue-item__agent-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.escalation-queue-item__agent-copy {
+  flex: 1 1 16rem;
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+  line-height: 1.45;
+}
+
+.escalation-queue-item__decider {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+.escalation-queue-item__reason {
+  margin: 0;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--lastro-radius-sm);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 45%, transparent);
+  border-left: 3px solid var(--lastro-accent-warn);
+}
+
+.escalation-queue-item__reason p:last-child {
+  margin-top: 0.35rem;
+  font-size: var(--text-small);
+  color: var(--lastro-text-secondary);
+  line-height: 1.5;
+}
+
+.escalation-queue-item__fields {
+  display: grid;
+  gap: 0.65rem;
+  padding-top: 0.25rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.escalation-queue-item__foot {
+  display: grid;
+  gap: 0.65rem;
+  padding-top: 0.75rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.escalation-queue-item__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.escalation-queue-item__discard {
+  font-size: var(--text-small);
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-muted);
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.escalation-queue-item__discard:hover:not(:disabled) {
+  color: var(--lastro-text-secondary);
+  border-color: var(--lastro-border-subtle);
+  background: var(--app-fill-hover);
+}
+
+.escalation-queue-item__discard:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.escalation-queue-item__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.escalation-queue-item__link {
+  font-size: var(--text-small);
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+}
+
+.escalation-queue-item__link:hover {
+  color: var(--lastro-brand-seal);
+}
+
+.escalation-queue-item__feedback {
+  font-size: var(--text-small);
+  color: var(--lastro-text-secondary);
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--lastro-radius-sm);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 20%, transparent);
+}
+
+.escalation-queue-item__error {
+  font-size: var(--text-small);
+  color: var(--lastro-text-primary);
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--lastro-radius-sm);
+  background: color-mix(in srgb, #c44 12%, transparent);
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, #c44 30%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .escalation-queue-item__discard {
+    transition: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .escalation-queue-item__actions .route-cta {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}

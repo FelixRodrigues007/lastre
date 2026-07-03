@@ -17,7 +17,11 @@ export type IconName =
   | "refresh"
   | "globe"
   | "chevron-down"
-  | "search";
+  | "search"
+  | "check"
+  | "chevron-left"
+  | "panel-left"
+  | "lock";
 
 type IconProps = SVGProps<SVGSVGElement> & {
   name: IconName;
@@ -161,6 +165,21 @@ export function Icon({ name, size = 18, className, ...props }: IconProps) {
           <path d="M8 5L13 10L8 15" stroke="currentColor" strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
+    case "chevron-left":
+      return (
+        <svg {...common}>
+          <path d="M12 5L7 10L12 15" stroke="currentColor" strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case "panel-left":
+      return (
+        <svg {...common}>
+          <rect x="3.5" y="3.5" width="13" height="13" rx="2.25" stroke="currentColor" strokeWidth={STROKE} />
+          <path d="M8 3.5V16.5" stroke="currentColor" strokeWidth={STROKE} strokeLinecap="round" />
+          <path d="M5.75 10L3.5 10" stroke="currentColor" strokeWidth={STROKE} strokeLinecap="round" />
+          <path d="M5.75 7.25L3.5 10L5.75 12.75" stroke="currentColor" strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
     case "download":
       return (
         <svg {...common}>
@@ -205,6 +224,38 @@ export function Icon({ name, size = 18, className, ...props }: IconProps) {
         <svg {...common}>
           <circle cx="9" cy="9" r="4.75" stroke="currentColor" strokeWidth={STROKE} />
           <path d="M12.75 12.75L16 16" stroke="currentColor" strokeWidth={STROKE} strokeLinecap="round" />
+        </svg>
+      );
+    case "check":
+      return (
+        <svg {...common}>
+          <path
+            d="M5.5 10.25L8.25 13L14.75 6.5"
+            stroke="currentColor"
+            strokeWidth={STROKE}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
+    case "lock":
+      return (
+        <svg {...common}>
+          <rect
+            x="5.5"
+            y="9"
+            width="9"
+            height="7"
+            rx="1.5"
+            stroke="currentColor"
+            strokeWidth={STROKE}
+          />
+          <path
+            d="M7 9V6.75C7 5.23122 8.23122 4 9.75 4H10.25C11.7688 4 13 5.23122 13 6.75V9"
+            stroke="currentColor"
+            strokeWidth={STROKE}
+            strokeLinecap="round"
+          />
         </svg>
       );
     default:

@@ -1,0 +1,47 @@
+.market-notice-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: color-mix(in srgb, #000 55%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.market-notice {
+  width: min(100%, 24rem);
+  padding: 18px 18px 16px;
+  border-radius: 12px;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: var(--lastro-bg-elevated);
+  box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.75);
+}
+
+.market-notice--success {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+}
+
+.market-notice--error {
+  border-color: color-mix(in srgb, var(--lastro-status-invalid) 40%, transparent);
+}
+
+.market-notice__title {
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--lastro-text-primary);
+}
+
+.market-notice__message {
+  margin: 0 0 14px;
+  font-size: 0.8125rem;
+  color: var(--lastro-text-secondary);
+  line-height: 1.45;
+}
+
+.market-notice__actions {
+  display: flex;
+  justify-content: flex-end;
+}

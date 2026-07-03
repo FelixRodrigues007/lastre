@@ -7,6 +7,14 @@ import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
 const PORT = readPort();
 const HOST = process.env.LASTRO_APP_API_HOST ?? "0.0.0.0";
 const runtime = new AppRuntime();
+let demoSeedPromise: Promise<void> | null = null;
+
+function ensureDemoSeeded(): Promise<void> {
+  if (!demoSeedPromise) {
+    demoSeedPromise = runtime.seedDemoSessionIfEmpty();
+  }
+  return demoSeedPromise;
+}
 
 export function createAppServer() {
   return createServer(async (req, res) => {
@@ -52,6 +60,10 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
 
     sendJson(res, 200, { ok: true });
     return;
+  }
+
+  if (pathname.startsWith("/api/")) {
+    await ensureDemoSeeded();
   }
 
   if (method === "GET" && pathname === "/api/chain/summary") {
@@ -153,10 +165,45 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     return;
   }
 
+  const escalationMatch = pathname.match(/^\/api\/escalations\/([^/]+)\/(requeue|discard|override)$/u);
+  if (method === "POST" && escalationMatch) {
+    const assetId = decodeURIComponent(escalationMatch[1]);
+    const action = escalationMatch[2];
+
+    try {
+      if (action === "requeue") {
+        const result = await runtime.resolveEscalationRequeue(assetId);
+        sendJson(res, 200, result);
+        return;
+      }
+
+      if (action === "discard") {
+        sendJson(res, 200, runtime.resolveEscalationDiscard(assetId));
+        return;
+      }
+
+      const body = await readJsonBody<{ overrideAction?: "pay" | "skip" }>(req);
+      if (body.overrideAction !== "pay" && body.overrideAction !== "skip") {
+        sendJson(res, 400, { error: "invalid_override", message: "overrideAction must be pay or skip" });
+        return;
+      }
+
+      const result = await runtime.resolveEscalationOverride(assetId, body.overrideAction);
+      sendJson(res, 200, result);
+    } catch (error) {
+      sendJson(res, 404, {
+        error: "not_found",
+        message: error instanceof Error ? error.message : "Escalation not found",
+      });
+    }
+    return;
+  }
+
   if (method === "GET" && pathname === "/api/process/defaults") {
     sendJson(res, 200, {
       assetIds: runtime.getDefaultBatchAssetIds(),
       decider: runtime.getDeciderMode(),
+      lastBatch: runtime.getLastBatch(),
     });
     return;
   }
@@ -334,6 +381,12 @@ async function readJsonBody<T>(req: IncomingMessage): Promise<T> {
 }
 
 const server = createAppServer();
-server.listen(PORT, HOST, () => {
-  console.info(`[lastro-app] API listening on http://${HOST}:${PORT}`);
-});
+
+async function bootstrap(): Promise<void> {
+  await ensureDemoSeeded();
+  server.listen(PORT, HOST, () => {
+    console.info(`[lastro-app] API listening on http://${HOST}:${PORT}`);
+  });
+}
+
+void bootstrap();

@@ -18,8 +18,8 @@ export function DataToolbar({ search, filters, actions }: DataToolbarProps) {
 }
 
 type ViewToggleProps = {
-  value: "table" | "cards";
-  onChange: (value: "table" | "cards") => void;
+  value: "list" | "cards";
+  onChange: (value: "list" | "cards") => void;
 };
 
 export function ViewToggle({ value, onChange }: ViewToggleProps) {
@@ -27,10 +27,10 @@ export function ViewToggle({ value, onChange }: ViewToggleProps) {
     <div className="view-toggle" role="group" aria-label="View mode">
       <button
         type="button"
-        className={`view-toggle__btn${value === "table" ? " view-toggle__btn--active" : ""}`}
-        onClick={() => onChange("table")}
+        className={`view-toggle__btn${value === "list" ? " view-toggle__btn--active" : ""}`}
+        onClick={() => onChange("list")}
       >
-        Table
+        List
       </button>
       <button
         type="button"

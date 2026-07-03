@@ -2,7 +2,7 @@
   display: grid;
   gap: 0.75rem;
   position: sticky;
-  top: calc(var(--app-nav-height) + var(--app-banner-height) + 1rem);
+  top: calc(var(--app-nav-height) + 1rem);
 }
 
 .lot-proof-status__verdict {
@@ -75,4 +75,98 @@
   display: grid;
   gap: 0.45rem;
   padding-top: 0.35rem;
+}
+
+/* Drawer — iOS grouped list */
+.lot-proof-status--drawer {
+  gap: 1.25rem;
+}
+
+.lot-proof-status__section-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-primary);
+}
+
+.lot-proof-status__group {
+  display: grid;
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--lastro-bg-primary) 55%, transparent);
+  border: 0.5px solid var(--lastro-border-subtle);
+}
+
+.lot-proof-status__group > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 0.5px solid var(--lastro-border-subtle);
+}
+
+.lot-proof-status__group > div:last-child {
+  border-bottom: none;
+}
+
+.lot-proof-status__group dt {
+  margin: 0;
+  font-family: var(--lastro-font-body);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-regular);
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--lastro-text-primary);
+  flex-shrink: 0;
+}
+
+.lot-proof-status__group dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-muted);
+  text-align: right;
+  word-break: break-word;
+}
+
+.lot-proof-status--drawer .lot-proof-status__rail {
+  padding-top: 0;
+  border-top: none;
+}
+
+.lot-proof-status--drawer .lot-proof-status__actions {
+  padding-top: 0;
+  gap: 0.625rem;
+}
+
+.lot-proof-status--drawer .lot-proof-status__actions .route-cta {
+  width: 100%;
+  justify-content: center;
+  min-height: 2.75rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+}
+
+.lot-proof-status--drawer .lot-proof-status__actions .route-cta:not(.route-cta--ghost) {
+  background: var(--lastro-brand-seal);
+  color: #fff;
+  box-shadow: none;
+}
+
+.lot-proof-status--drawer .lot-proof-status__actions .route-cta--ghost {
+  min-height: auto;
+  padding: 0.35rem 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--lastro-brand-seal);
+  font-size: 0.875rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.lot-proof-status--drawer .lot-proof-status__actions .route-cta--ghost:hover {
+  background: transparent;
+  text-decoration: underline;
 }

@@ -1,19 +1,35 @@
-@keyframes skeleton-shimmer {
+@keyframes skeleton-shimmer-slide {
   0% {
-    opacity: 0.45;
+    background-position: 180% 0;
   }
-  50% {
-    opacity: 0.85;
-  }
+
   100% {
-    opacity: 0.45;
+    background-position: -180% 0;
   }
 }
 
 .skeleton-block {
+  position: relative;
+  overflow: hidden;
   border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-text-muted) 16%, transparent);
-  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  background: color-mix(in srgb, var(--lastro-color-olive-850) 92%, var(--lastro-color-olive-900));
+}
+
+.skeleton-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 38%,
+    color-mix(in srgb, var(--lastro-color-jade-500) 14%, transparent) 48%,
+    color-mix(in srgb, var(--lastro-color-seal-400) 10%, transparent) 52%,
+    transparent 62%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  animation: skeleton-shimmer-slide 1.65s var(--ease-in-out) infinite;
 }
 
 .skeleton-page {
@@ -68,5 +84,13 @@
 @media (min-width: 960px) {
   .skeleton-split {
     grid-template-columns: 280px 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block::after {
+    animation: none;
+    opacity: 0.35;
+    background-position: 0 0;
   }
 }

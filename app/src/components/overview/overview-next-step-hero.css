@@ -1,0 +1,149 @@
+.overview-step-hero {
+  position: relative;
+  width: min(100%, 15.5rem);
+  margin-inline: auto;
+}
+
+.overview-step-hero__ghost {
+  position: absolute;
+  inset: 0.55rem -0.3rem -0.3rem 0.55rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, #fff 85%, var(--lastro-color-cream-100));
+  box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.45);
+  transform: rotate(3deg);
+  opacity: 0.4;
+}
+
+.overview-step-hero__card {
+  position: relative;
+  z-index: 1;
+  padding: 1rem 1.05rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, #fff 70%, var(--lastro-color-cream-200));
+  background: #fff;
+  color: var(--lastro-color-olive-900);
+  box-shadow:
+    0 1px 2px rgba(10, 23, 19, 0.05),
+    0 16px 44px -18px rgba(0, 0, 0, 0.38);
+}
+
+.overview-step-hero__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.overview-step-hero__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 10px;
+  flex-shrink: 0;
+  color: var(--lastro-color-seal-700);
+  background: color-mix(in srgb, var(--lastro-color-seal-500) 14%, #fff);
+  border: 1px solid color-mix(in srgb, var(--lastro-color-seal-500) 22%, #fff);
+}
+
+.overview-step-hero__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-family: var(--lastro-font-display);
+  font-size: 0.625rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+  color: var(--lastro-color-olive-700);
+}
+
+.overview-step-hero__title {
+  margin: 0.2rem 0 0;
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.overview-step-hero__lead {
+  margin: 0.65rem 0 0;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--lastro-color-olive-600) 78%, #fff);
+}
+
+.overview-step-hero__trail {
+  display: flex;
+  gap: 0.35rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.overview-step-hero__trail li {
+  flex: 1;
+  padding: 0.28rem 0.35rem;
+  border-radius: 6px;
+  font-size: 0.5625rem;
+  text-align: center;
+  line-height: 1.25;
+  color: color-mix(in srgb, var(--lastro-color-olive-600) 70%, #fff);
+  background: var(--lastro-color-cream-100);
+  border: 1px solid color-mix(in srgb, var(--lastro-color-olive-500) 10%, #fff);
+}
+
+.overview-step-hero__trail li.is-active {
+  color: var(--lastro-color-olive-900);
+  font-weight: var(--lastro-weight-semibold);
+  background: color-mix(in srgb, var(--lastro-color-seal-500) 12%, #fff);
+  border-color: color-mix(in srgb, var(--lastro-color-seal-500) 28%, #fff);
+}
+
+.overview-step-hero__trail li.is-done {
+  color: var(--lastro-color-valid-600);
+  background: color-mix(in srgb, var(--lastro-color-valid-500) 10%, #fff);
+  border-color: color-mix(in srgb, var(--lastro-color-valid-500) 20%, #fff);
+}
+
+.overview-step-hero--banner {
+  width: 9.25rem;
+  margin: 0 auto;
+  transform: translateY(0.35rem);
+}
+
+.overview-step-hero--banner .overview-step-hero__ghost {
+  inset: 0.5rem -0.2rem 0.1rem 0.5rem;
+  border-radius: 11px;
+  opacity: 0.5;
+}
+
+.overview-step-hero--banner .overview-step-hero__card {
+  padding: 0.75rem 0.8rem 0.7rem;
+  border-radius: 11px;
+}
+
+.overview-step-hero--banner .overview-step-hero__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 8px;
+}
+
+.overview-step-hero--banner .overview-step-hero__brand {
+  font-size: 0.5625rem;
+}
+
+.overview-step-hero--banner .overview-step-hero__title {
+  font-size: 0.75rem;
+}
+
+.overview-step-hero--banner .overview-step-hero__trail {
+  margin-top: 0.45rem;
+  gap: 0.25rem;
+}
+
+.overview-step-hero--banner .overview-step-hero__trail li {
+  font-size: 0.5rem;
+  padding: 0.2rem 0.25rem;
+}

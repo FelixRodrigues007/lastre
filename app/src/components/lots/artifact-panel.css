@@ -26,11 +26,25 @@
   color: var(--lastro-text-muted);
 }
 
+.artifact-panel__note {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.5625rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--lastro-text-muted);
+  opacity: 0.85;
+}
+
 .artifact-panel__row dd {
   font-family: var(--lastro-font-mono);
   font-size: 0.75rem;
   color: var(--lastro-text-secondary);
   word-break: break-all;
+}
+
+.artifact-panel__mono {
+  color: var(--lastro-text-primary);
 }
 
 .artifact-panel__row--highlight dd {

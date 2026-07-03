@@ -1,10 +1,17 @@
 .outcome-breakdown {
   display: grid;
+  border-radius: var(--panel-radius);
+  box-shadow: var(--app-shadow-panel);
+  overflow: hidden;
+}
+
+.outcome-breakdown__card {
+  display: grid;
   gap: 0.875rem;
   padding: 1rem 1.125rem;
-  border-radius: var(--panel-radius);
   background: color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent);
-  box-shadow: var(--app-shadow-panel);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: none;
 }
 
 .outcome-breakdown__head {
@@ -21,27 +28,46 @@
   letter-spacing: -0.02em;
 }
 
-.outcome-breakdown__grid {
+.outcome-breakdown__kpis {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.625rem;
+  background: color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-top: 0.5px solid var(--app-stroke-divider);
 }
 
 @media (min-width: 640px) {
-  .outcome-breakdown__grid {
+  .outcome-breakdown__kpis {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-.outcome-breakdown__cell {
+.outcome-breakdown__kpi {
   display: grid;
   gap: 0.15rem;
-  padding: 0.5rem 0.625rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  padding: 0.625rem 0.875rem;
+  text-align: center;
 }
 
-.outcome-breakdown__cell-label {
+.outcome-breakdown__kpi:not(:first-child) {
+  border-left: 0.5px solid var(--app-stroke-divider);
+}
+
+@media (max-width: 639px) {
+  .outcome-breakdown__kpi:nth-child(odd) {
+    border-left: none;
+  }
+
+  .outcome-breakdown__kpi:nth-child(n + 3) {
+    border-top: 0.5px solid var(--app-stroke-divider);
+  }
+
+  .outcome-breakdown__kpi:nth-child(even) {
+    border-left: 0.5px solid var(--app-stroke-divider);
+  }
+}
+
+.outcome-breakdown__kpi-label {
   font-family: var(--lastro-font-mono);
   font-size: 0.625rem;
   letter-spacing: 0.06em;
@@ -49,7 +75,7 @@
   color: var(--lastro-text-muted);
 }
 
-.outcome-breakdown__cell-value {
+.outcome-breakdown__kpi-value {
   font-family: var(--lastro-font-display);
   font-size: 1.25rem;
   font-weight: var(--lastro-weight-semibold);
@@ -57,10 +83,10 @@
   font-variant-numeric: tabular-nums;
 }
 
-.outcome-breakdown__cell--valid .outcome-breakdown__cell-value {
+.outcome-breakdown__kpi--valid .outcome-breakdown__kpi-value {
   color: var(--lastro-status-valid);
 }
 
-.outcome-breakdown__cell--invalid .outcome-breakdown__cell-value {
+.outcome-breakdown__kpi--invalid .outcome-breakdown__kpi-value {
   color: var(--lastro-status-invalid);
 }

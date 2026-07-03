@@ -13,19 +13,19 @@
 
 .ratio-bar__segment {
   min-width: 2px;
-  transition: flex-grow 480ms var(--ease-out);
+  transition: flex-grow var(--dur-state) var(--ease-spring);
 }
 
 .ratio-bar__segment--valid {
-  background: var(--lastro-status-valid);
+  background: var(--lastro-gradient-lime-shine);
 }
 
 .ratio-bar__segment--invalid {
-  background: var(--lastro-status-invalid);
+  background: linear-gradient(90deg, var(--lastro-color-coral-500), var(--lastro-color-coral-400));
 }
 
 .ratio-bar__segment--accent {
-  background: var(--lastro-brand-seal);
+  background: var(--lastro-gradient-jade-shine);
 }
 
 .ratio-bar__segment--muted {
@@ -54,15 +54,15 @@
 }
 
 .ratio-bar__dot--valid {
-  background: var(--lastro-status-valid);
+  background: var(--lastro-accent-success);
 }
 
 .ratio-bar__dot--invalid {
-  background: var(--lastro-status-invalid);
+  background: var(--lastro-accent-danger);
 }
 
 .ratio-bar__dot--accent {
-  background: var(--lastro-brand-seal);
+  background: var(--lastro-accent-trust);
 }
 
 .ratio-bar__dot--muted {

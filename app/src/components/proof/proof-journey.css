@@ -62,20 +62,22 @@
   background: color-mix(in srgb, var(--lastro-bg-primary) 45%, transparent);
   color: var(--lastro-text-secondary);
   text-decoration: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   transition:
     border-color 0.15s ease,
     color 0.15s ease,
     background 0.15s ease;
 }
 
+button.proof-journey__step {
+  width: 100%;
+}
+
 .proof-journey__step:hover {
   border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
   color: var(--lastro-text-primary);
-}
-
-.proof-journey__step:focus-visible {
-  outline: 2px solid var(--lastro-brand-seal);
-  outline-offset: 2px;
 }
 
 .proof-journey__step--active {

@@ -54,7 +54,7 @@
   border-top: 2px solid var(--lastro-status-valid);
 }
 
-.process-record__cell--verdict:has(.badge--verdict-invalid) {
+.process-record__cell--verdict:has([data-tone="danger"]) {
   border-top-color: var(--lastro-status-invalid);
 }
 

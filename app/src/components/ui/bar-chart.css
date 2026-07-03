@@ -4,7 +4,8 @@
   padding: 1rem 1.125rem;
   border-radius: var(--panel-radius);
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: var(--lastro-bg-panel);
+  background: var(--lastro-gradient-surface-panel);
+  box-shadow: var(--app-shadow-panel);
 }
 
 .bar-chart__head {
@@ -93,7 +94,7 @@
   height: 100%;
   border-radius: inherit;
   min-width: 2px;
-  transition: width 400ms var(--ease-out), height 400ms var(--ease-out);
+  transition: width var(--dur-data) var(--ease-out), height var(--dur-data) var(--ease-out);
 }
 
 .bar-chart--vertical .bar-chart__fill {
@@ -102,19 +103,23 @@
 }
 
 .bar-chart__fill--valid {
-  background: var(--lastro-status-valid);
+  background: var(--lastro-gradient-lime-shine);
 }
 
 .bar-chart__fill--invalid {
-  background: var(--lastro-status-invalid);
+  background: linear-gradient(90deg, var(--lastro-color-coral-500), var(--lastro-color-coral-400));
 }
 
 .bar-chart__fill--accent {
-  background: var(--lastro-brand-orange);
+  background: var(--lastro-gradient-cta);
 }
 
 .bar-chart__fill--seal {
-  background: var(--lastro-brand-seal);
+  background: var(--lastro-gradient-seal-shine);
+}
+
+.bar-chart__fill--trust {
+  background: var(--lastro-gradient-jade-shine);
 }
 
 .bar-chart__fill--muted {

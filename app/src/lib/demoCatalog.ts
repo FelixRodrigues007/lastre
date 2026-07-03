@@ -34,6 +34,7 @@ export interface CatalogAsset {
 export const DEMO_CATALOG: CatalogAsset[] = [
   {
     assetId: "MINA-VALEDOURO-LOTE-002",
+    name: "Mineradora Vale do Ouro",
     category: "mineral",
     mineral: "Gold",
     expectedOnChain: "Valid",
@@ -130,6 +131,7 @@ export function buildDemoLotDetail(assetId: string): LotDetail | null {
 
   return {
     artifact,
+    referenceArtifact: artifact,
     referenceSeal: seal,
     computedSeal: seal,
     sealMatchesReference: true,

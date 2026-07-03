@@ -5,6 +5,8 @@
   padding: 2rem 1.5rem;
   width: 100%;
   text-align: left;
+  border-radius: var(--app-radius-control);
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--lastro-border-subtle) 75%, transparent);
 }
 
 .empty-state__icon {
@@ -14,6 +16,8 @@
   height: 2.5rem;
   border-radius: var(--lastro-radius-sm);
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 50%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   color: var(--lastro-text-muted);
 }
 

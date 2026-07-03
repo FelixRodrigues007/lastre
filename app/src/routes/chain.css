@@ -1,28 +1,31 @@
 .chain-layout {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.5rem;
   width: 100%;
 }
 
 @media (min-width: 900px) {
   .chain-layout {
-    grid-template-columns: minmax(280px, 360px) 1fr;
+    grid-template-columns: minmax(240px, 300px) 1fr;
     align-items: start;
+    gap: 1.75rem;
+  }
+
+  .chain-layout .empty-state {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .chain-layout .chain-session-metrics {
+    grid-column: 1;
+  }
+
+  .chain-layout .chain-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
 }
 
-.chain-metrics {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.chain-metrics__grid {
-  display: grid;
-  gap: 0.625rem;
-}
-
-.chain-metrics__grid .metric-card {
-  box-shadow: none;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+.chain-page .empty-state {
+  margin: 0;
 }

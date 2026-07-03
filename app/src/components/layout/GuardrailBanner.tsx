@@ -14,6 +14,7 @@ export function GuardrailBanner() {
         <p className="guardrail__text">
           <span className="guardrail__chip">{t("guardrail.demo")}</span>
           {t("guardrail.text")}
+          <span className="guardrail__session">{t("guardrail.session")}</span>
         </p>
       </div>
     </aside>

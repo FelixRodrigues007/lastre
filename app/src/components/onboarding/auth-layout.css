@@ -1,0 +1,199 @@
+/* Split entry — form left, hero image right (Mobbin: Front / Linear / Mercury) */
+
+.entry-shell {
+  min-height: 100dvh;
+  display: grid;
+  background: var(--lastro-bg-primary);
+  color: var(--lastro-text-primary);
+}
+
+@media (min-width: 900px) {
+  .entry-shell {
+    grid-template-columns: minmax(420px, 1fr) minmax(380px, 1.05fr);
+  }
+}
+
+.entry-shell__form {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100dvh;
+}
+
+.entry-shell__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1.25rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--lastro-border-subtle);
+}
+
+.entry-shell__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.entry-shell__wordmark {
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+}
+
+.entry-shell__main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(400px, 100%);
+  margin-inline: auto;
+  padding: clamp(1.75rem, 5vh, 3rem) clamp(1.25rem, 4vw, 2.5rem) 2.5rem;
+}
+
+.entry-shell__main--wide {
+  width: min(480px, 100%);
+  align-items: stretch;
+}
+
+.entry-shell__disclaimer {
+  margin: 0 0 1.25rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--lastro-text-muted);
+}
+
+/* Language toggle */
+.auth-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.75rem;
+}
+
+.auth-lang__btn {
+  padding: 0.25rem 0.4rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--lastro-font-body);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-muted);
+  background: transparent;
+}
+
+.auth-lang__btn--active {
+  color: var(--lastro-text-primary);
+}
+
+.auth-lang__btn:focus-visible {
+  outline: none;
+}
+
+.auth-lang__sep {
+  color: var(--lastro-border-strong);
+  user-select: none;
+}
+
+/* Shared entry card */
+.entry-card {
+  width: 100%;
+  padding: 1.75rem;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: 12px;
+  background: var(--lastro-gradient-surface-panel);
+  box-shadow: var(--app-shadow-panel);
+}
+
+.entry-divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block: 0.25rem;
+}
+
+.entry-divider::before,
+.entry-divider::after {
+  content: "";
+  height: 1px;
+  background: var(--lastro-border-subtle);
+}
+
+.entry-divider span {
+  font-size: 0.75rem;
+  color: var(--lastro-text-muted);
+}
+
+.entry-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: var(--lastro-weight-medium);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.entry-btn:focus-visible {
+  outline: none;
+}
+
+.entry-btn--primary {
+  border: 1px solid var(--lastro-border-strong);
+  color: var(--lastro-text-primary);
+  background: var(--lastro-bg-elevated);
+}
+
+.entry-btn--primary:hover {
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 88%, #fff);
+}
+
+.entry-btn--ghost {
+  border: 1px solid transparent;
+  color: var(--lastro-text-secondary);
+  background: transparent;
+}
+
+.entry-btn--ghost:hover {
+  color: var(--lastro-text-primary);
+  background: color-mix(in srgb, #fff 4%, transparent);
+}
+
+.entry-field {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  color: var(--lastro-text-secondary);
+}
+
+.entry-field input {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--lastro-border-strong);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--lastro-text-primary);
+  background: var(--lastro-bg-primary);
+}
+
+.entry-field input:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--lastro-accent-trust) 45%, var(--lastro-border-strong));
+}
+
+.entry-footnote {
+  margin: 1rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--lastro-text-muted);
+}
+
+@media (min-width: 900px) {
+  .entry-footnote {
+    text-align: left;
+  }
+}

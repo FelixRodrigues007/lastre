@@ -1,0 +1,319 @@
+.market-cams__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.market-cams__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--lastro-text-secondary);
+}
+
+.market-cams__live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #e24b4b;
+  animation: market-cam-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes market-cam-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.market-cams__clock {
+  margin-left: auto;
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+}
+
+.market-cams__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.market-cams__tile {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 10px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.market-cams__tile:hover .market-cam-feed__video {
+  filter: saturate(0.85) contrast(1.05) brightness(0.78);
+}
+
+.market-cam-feed {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--lastro-bg-elevated);
+  aspect-ratio: 16 / 10;
+}
+
+.market-cam-feed__viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.market-cam-feed--embedded {
+  aspect-ratio: auto;
+  overflow: visible;
+}
+
+.market-cam-feed--large {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+}
+
+.market-cam-feed--compact {
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+}
+
+.market-cam-feed--compact .market-cam-feed__badge {
+  top: 5px;
+  left: 5px;
+  padding: 1px 4px;
+  font-size: 0.5rem;
+}
+
+.market-cam-feed__compact-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 14px 6px 5px;
+  background: linear-gradient(180deg, transparent, rgba(10, 23, 19, 0.9));
+  color: var(--lastro-text-primary);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Camera modal */
+.market-cam-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 28px);
+  background: color-mix(in srgb, #000 68%, transparent);
+  backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+}
+
+.market-cam-modal {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 56rem);
+  max-height: min(92vh, 720px);
+  padding: 14px 14px 12px;
+  border-radius: 14px;
+  background: var(--lastro-bg-elevated);
+  box-shadow:
+    inset 0 0 0 0.5px var(--app-stroke-divider),
+    0 28px 56px -20px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+}
+
+.market-cam-modal__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px 12px;
+  align-items: start;
+}
+
+.market-cam-modal__titles {
+  min-width: 0;
+}
+
+.market-cam-modal__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--lastro-text-primary);
+}
+
+.market-cam-modal__zone {
+  margin: 2px 0 0;
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+.market-cam-modal__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.market-cam-modal__clock {
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+}
+
+.market-cam-modal__close {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--app-fill-hover);
+  color: var(--lastro-text-secondary);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.market-cam-modal__close:hover {
+  background: var(--app-fill-active);
+  color: var(--lastro-text-primary);
+}
+
+.market-cam-modal__main {
+  min-height: 0;
+}
+
+.market-cam-modal__strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.market-cam-modal__thumb {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--lastro-border-subtle);
+  transition:
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.market-cam-modal__thumb:hover {
+  transform: translateY(-1px);
+}
+
+.market-cam-modal__thumb--active {
+  box-shadow:
+    inset 0 0 0 2px var(--lastro-brand-seal),
+    0 0 0 1px color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+}
+
+.market-cam-modal__disclaimer {
+  margin: 0;
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+@media (max-width: 640px) {
+  .market-cam-modal__head {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .market-cam-modal__meta {
+    grid-column: 1 / -1;
+  }
+
+  .market-cam-modal__strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.market-cam-feed__video {
+  position: absolute;
+  inset: 0;
+  background-image: url("/media/entry-hero.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: saturate(0.7) contrast(1.05) brightness(0.68);
+  transition: filter var(--dur-fast) var(--ease-out);
+}
+
+.market-cam-feed__scan {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(146, 214, 122, 0.05) 48%,
+    transparent 52%
+  );
+  animation: market-cam-scan 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes market-cam-scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.market-cam-feed__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(226, 75, 75, 0.9);
+  color: #fff;
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.market-cam-feed__meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 20px 10px 8px;
+  background: linear-gradient(180deg, transparent, rgba(10, 23, 19, 0.85));
+  color: var(--lastro-text-primary);
+}
+
+.market-cam-feed__meta strong {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.market-cam-feed__meta span {
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+}
+

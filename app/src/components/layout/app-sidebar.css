@@ -5,158 +5,245 @@
 @media (min-width: 900px) {
   .app-sidebar {
     display: block;
-    position: sticky;
-    top: 0;
+    position: relative;
+    z-index: 4;
+    align-self: stretch;
     flex-shrink: 0;
     width: var(--app-sidebar-width);
-    height: 100dvh;
+    min-height: 100dvh;
     border-right: 0.5px solid var(--app-stroke-divider);
-    background: var(--app-bg-sidebar);
-    backdrop-filter: blur(24px) saturate(1.2);
-    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    background:
+      var(--app-bg-sidebar) 0 0 / 100% 100dvh no-repeat,
+      var(--app-bg-sidebar-fill);
+    transition: width var(--dur-fast) var(--ease-out);
+  }
+
+  .app-sidebar--collapsed {
+    width: var(--app-sidebar-width-collapsed);
   }
 
   .app-sidebar__inner {
+    position: sticky;
+    top: 0;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding: 1rem 0.75rem 1.125rem;
-    gap: 1.25rem;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 0 0.75rem 0.875rem;
+    gap: 0;
+    transition: padding var(--dur-fast) var(--ease-out);
+  }
+
+  .app-sidebar--collapsed .app-sidebar__inner {
+    padding-inline: 0.5rem;
+  }
+
+  .app-sidebar__head {
+    flex-shrink: 0;
+    padding-top: 1.125rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .app-sidebar__brand-row {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .app-sidebar--collapsed .app-sidebar__brand-row {
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
   }
 
   .app-sidebar__brand {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    padding: 0.45rem 0.55rem;
-    margin-bottom: 0.25rem;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+    padding: 0.375rem 0.5rem;
     border-radius: var(--app-radius-control);
-    transition: background var(--dur-fast) var(--ease-spring);
+    color: var(--lastro-text-primary);
+    text-decoration: none;
+    transition:
+      opacity var(--dur-fast) var(--ease-out),
+      padding var(--dur-fast) var(--ease-out);
+  }
+
+  .app-sidebar--collapsed .app-sidebar__brand {
+    flex: none;
+    justify-content: center;
+    width: 100%;
+    padding: 0.25rem;
   }
 
   .app-sidebar__brand:hover {
-    background: var(--app-fill-hover);
+    opacity: 0.82;
   }
 
-  .app-sidebar__mark {
+  .app-sidebar__collapse {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 9px;
-    background: color-mix(in srgb, var(--lastro-brand-seal) 12%, transparent);
-    box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--lastro-brand-seal) 28%, transparent);
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--lastro-text-muted);
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
   }
 
-  .app-sidebar__wordmark {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    min-width: 0;
+  .app-sidebar__collapse:hover {
+    background: var(--app-fill-hover);
+    color: var(--lastro-text-primary);
+  }
+
+  .app-sidebar--collapsed .app-sidebar__collapse {
+    width: 1.625rem;
+    height: 1.625rem;
   }
 
   .app-sidebar__name {
     font-family: var(--lastro-font-display);
-    font-size: 0.9375rem;
+    font-size: 1.25rem;
     font-weight: var(--lastro-weight-semibold);
-    letter-spacing: -0.025em;
-    line-height: 1.15;
+    letter-spacing: -0.035em;
+    line-height: 1;
     color: var(--lastro-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity var(--dur-fast) var(--ease-out);
   }
 
-  .app-sidebar__suffix {
-    font-size: 0.6875rem;
-    font-weight: var(--lastro-weight-medium);
-    letter-spacing: 0.01em;
+  .app-sidebar--collapsed .app-sidebar__name {
+    display: none;
+  }
+
+  .app-sidebar__divider {
+    height: 0.5px;
+    margin: 0 -0.75rem 0.875rem;
+    background: var(--app-stroke-divider);
+    transition: margin var(--dur-fast) var(--ease-out);
+  }
+
+  .app-sidebar--collapsed .app-sidebar__divider {
+    margin-inline: -0.5rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .app-sidebar__search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 2.125rem;
+    padding: 0.4375rem 0.625rem;
+    border: 0.5px solid var(--app-stroke-divider);
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--app-fill-hover) 45%, transparent);
     color: var(--lastro-text-muted);
-    line-height: 1.25;
+    font-family: inherit;
+    font-size: 0.8125rem;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      padding var(--dur-fast) var(--ease-out);
+  }
+
+  .app-sidebar--collapsed .app-sidebar__search {
+    justify-content: center;
+    padding: 0.4375rem;
+  }
+
+  .app-sidebar__search:hover {
+    border-color: color-mix(in srgb, #fff 12%, transparent);
+    background: var(--app-fill-hover);
+    color: var(--lastro-text-secondary);
+  }
+
+  .app-sidebar__search:focus-visible {
+    outline: none;
+  }
+
+  .app-sidebar__search-icon {
+    flex-shrink: 0;
+    opacity: 0.65;
+  }
+
+  .app-sidebar__search-placeholder {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-sidebar__search-kbd {
+    flex-shrink: 0;
+  }
+
+  .app-sidebar--collapsed .app-sidebar__search-placeholder,
+  .app-sidebar--collapsed .app-sidebar__search-kbd {
+    display: none;
   }
 
   .app-sidebar__nav {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    overflow-x: clip;
     padding-inline: 0.125rem;
-  }
-
-  .app-sidebar__section {
-    padding: 0 0.55rem;
-    margin-bottom: 0.45rem;
-    font-size: 0.6875rem;
-    font-weight: var(--lastro-weight-semibold);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--lastro-text-muted);
+    margin-inline: -0.125rem;
   }
 
   .app-sidebar__list {
     list-style: none;
     display: grid;
-    gap: 0.125rem;
+    gap: 0.0625rem;
     margin: 0;
     padding: 0;
   }
 
-  .app-sidebar__foot {
-    display: grid;
-    gap: 0.375rem;
-    padding-top: 0.875rem;
+  .app-sidebar__bottom {
+    flex-shrink: 0;
+    margin-top: auto;
+    margin-inline: -0.75rem;
+    padding-inline: 0.75rem;
     border-top: 0.5px solid var(--app-stroke-divider);
-  }
-
-  .app-sidebar__status {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 0.55rem;
-    margin-top: 0.25rem;
-    padding: 0.55rem 0.6rem;
-    border-radius: var(--app-radius-control);
-    background: color-mix(in srgb, var(--lastro-bg-elevated) 70%, transparent);
-    box-shadow: inset 0 0 0 0.5px var(--app-stroke-divider);
+    padding-top: 0.875rem;
     transition:
-      background var(--dur-fast) var(--ease-spring),
-      transform var(--dur-fast) var(--ease-spring);
+      margin var(--dur-fast) var(--ease-out),
+      padding var(--dur-fast) var(--ease-out);
   }
 
-  .app-sidebar__status:hover {
-    background: var(--app-fill-hover);
-    transform: translateY(-0.5px);
+  .app-sidebar--collapsed .app-sidebar__bottom {
+    margin-inline: -0.5rem;
+    padding-inline: 0.5rem;
   }
 
-  .app-sidebar__status-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.625rem;
-    height: 1.625rem;
-    border-radius: 7px;
-    color: var(--lastro-status-valid);
-    background: color-mix(in srgb, var(--lastro-status-valid) 12%, transparent);
+  .app-sidebar--collapsed .sidebar-guide {
+    display: none;
   }
 
-  .app-sidebar__status-copy {
-    display: flex;
-    flex-direction: column;
-    gap: 0.05rem;
-    min-width: 0;
+  .app-sidebar__bottom:not(:has(.sidebar-guide)) {
+    padding-top: 0.625rem;
   }
 
-  .app-sidebar__status-label {
-    font-size: 0.75rem;
-    font-weight: var(--lastro-weight-medium);
-    letter-spacing: -0.01em;
-    color: var(--lastro-text-primary);
-  }
-
-  .app-sidebar__status-meta {
-    font-size: 0.625rem;
-    color: var(--lastro-text-muted);
-  }
-
-  .app-sidebar__status-external {
-    color: var(--lastro-text-muted);
-    opacity: 0.8;
+  .app-sidebar__foot {
+    flex-shrink: 0;
+    padding-top: 0.625rem;
+    margin-top: 0.625rem;
+    border-top: 0.5px solid var(--app-stroke-divider);
   }
 }

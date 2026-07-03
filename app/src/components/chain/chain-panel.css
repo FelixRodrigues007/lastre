@@ -1,0 +1,180 @@
+.chain-panel {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.chain-panel__notices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 45%, transparent);
+}
+
+.chain-panel__session-notice {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+}
+
+.chain-panel__source {
+  padding: 0.22rem 0.6rem;
+  border-radius: var(--lastro-radius-pill);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.chain-panel__source--live {
+  color: var(--lastro-accent-trust);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-trust);
+  background: var(--lastro-fill-trust);
+}
+
+.chain-panel__source--fallback {
+  color: var(--lastro-accent-warn);
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-accent-warn) 35%, transparent);
+  background: var(--lastro-fill-warn);
+}
+
+[data-theme="light"] .chain-panel__source--fallback {
+  color: #b8741f;
+}
+
+.chain-panel__immutable {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--lastro-radius-md);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 60%, transparent);
+}
+
+.chain-panel__lock {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--lastro-brand-seal);
+  margin-top: 0.1rem;
+}
+
+.chain-panel__immutable-text {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+  color: var(--lastro-text-primary);
+  max-width: 42rem;
+}
+
+.chain-panel__technical {
+  padding-top: 0.25rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.chain-panel__technical-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0;
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--lastro-radius-xs);
+}
+
+.chain-panel__technical-toggle:hover {
+  color: var(--lastro-text-primary);
+}
+
+.chain-panel__technical-body {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.75rem 0 0;
+  padding: 0.85rem 1rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 50%, transparent);
+}
+
+.chain-panel__technical-body div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.chain-panel__technical-body dt {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.chain-panel__technical-body dd {
+  margin: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-secondary);
+  word-break: break-all;
+}
+
+.chain-panel__technical-body a {
+  color: var(--lastro-brand-seal);
+}
+
+.chain-panel__technical-body a:hover {
+  text-decoration: underline;
+}
+
+.chain-session-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.chain-session-metrics__item {
+  padding: 0.85rem 1rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+}
+
+.chain-session-metrics__label {
+  display: block;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.chain-session-metrics__value {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--lastro-font-display);
+  font-size: 1.5rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.chain-session-metrics__value--invalid {
+  color: var(--lastro-accent-warn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chain-panel__technical-toggle {
+    transition: none;
+  }
+}

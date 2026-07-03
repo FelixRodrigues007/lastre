@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
+import { useCaptureWizard } from "../../context/CaptureWizardContext";
 import { useLocaleContext } from "../../context/LocaleContext";
 import type { TranslationKey } from "../../i18n/translations";
 import { Icon, type IconName } from "../ui/Icon";
@@ -17,7 +18,6 @@ const STEP_DEFS: ProofJourneyStepDef[] = [
   { labelKey: "journey.seal.label", hintKey: "journey.seal.hint", to: "/lots", icon: "shield" },
   { labelKey: "journey.process.label", hintKey: "journey.process.hint", to: "/process", icon: "process" },
   { labelKey: "journey.audit.label", hintKey: "journey.audit.hint", to: "/audit", icon: "audit" },
-  { labelKey: "journey.casper.label", hintKey: "journey.casper.hint", to: "/chain", icon: "chain" },
   {
     labelKey: "journey.marketplace.label",
     hintKey: "journey.marketplace.hint",
@@ -39,6 +39,7 @@ type ProofJourneyProps = {
 
 export function ProofJourney({ activePath, compact = false }: ProofJourneyProps) {
   const { t } = useLocaleContext();
+  const { openCaptureWizard } = useCaptureWizard();
   const steps = useMemo(
     () =>
       STEP_DEFS.map((step) => ({
@@ -68,19 +69,36 @@ export function ProofJourney({ activePath, compact = false }: ProofJourneyProps)
 
           return (
             <li key={step.to} className="proof-journey__item">
-              <Link
-                to={step.to}
-                className={`proof-journey__step${active ? " proof-journey__step--active" : ""}`}
-                aria-current={active ? "step" : undefined}
-              >
-                <span className="proof-journey__icon" aria-hidden="true">
-                  <Icon name={step.icon} size={16} />
-                </span>
-                <span className="proof-journey__copy">
-                  <span className="proof-journey__label">{step.label}</span>
-                  {!compact ? <span className="proof-journey__hint">{step.hint}</span> : null}
-                </span>
-              </Link>
+              {step.to === "/capture" ? (
+                <button
+                  type="button"
+                  className={`proof-journey__step${active ? " proof-journey__step--active" : ""}`}
+                  aria-current={active ? "step" : undefined}
+                  onClick={openCaptureWizard}
+                >
+                  <span className="proof-journey__icon" aria-hidden="true">
+                    <Icon name={step.icon} size={16} />
+                  </span>
+                  <span className="proof-journey__copy">
+                    <span className="proof-journey__label">{step.label}</span>
+                    {!compact ? <span className="proof-journey__hint">{step.hint}</span> : null}
+                  </span>
+                </button>
+              ) : (
+                <Link
+                  to={step.to}
+                  className={`proof-journey__step${active ? " proof-journey__step--active" : ""}`}
+                  aria-current={active ? "step" : undefined}
+                >
+                  <span className="proof-journey__icon" aria-hidden="true">
+                    <Icon name={step.icon} size={16} />
+                  </span>
+                  <span className="proof-journey__copy">
+                    <span className="proof-journey__label">{step.label}</span>
+                    {!compact ? <span className="proof-journey__hint">{step.hint}</span> : null}
+                  </span>
+                </Link>
+              )}
               {index < steps.length - 1 ? (
                 <Icon name="chevron-right" size={14} className="proof-journey__chevron" />
               ) : null}
@@ -101,6 +119,6 @@ export function proofStepFromLot(input: {
   if (input.latestVerdict) return 4;
   if (input.auditRecord?.decision.action === "pay") return 3;
   if (input.auditRecord) return 2;
-  if (input.attested) return 4;
+  if (input.attested) return 3;
   return 1;
 }

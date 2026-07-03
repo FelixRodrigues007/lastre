@@ -1,0 +1,28 @@
+.login {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.login__head {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.login__title {
+  margin: 0;
+  font-family: var(--lastro-font-display);
+  font-size: 1.375rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.login__actions {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.login__email {
+  display: grid;
+  gap: 0.65rem;
+}

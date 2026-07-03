@@ -1,0 +1,389 @@
+/* Craft layer — tactile feedback, living brand, ambient depth */
+
+/* ── Focus: ring stacks ON TOP of existing shadow (Apple pattern) ── */
+
+:root {
+  --focus-ring-brand:
+    0 0 0 2px var(--lastro-bg-primary),
+    0 0 0 4px color-mix(in srgb, var(--lastro-accent-brand) 50%, transparent);
+  --focus-ring-trust:
+    0 0 0 2px var(--lastro-bg-primary),
+    0 0 0 4px color-mix(in srgb, var(--lastro-accent-trust) 48%, transparent),
+    0 0 18px -2px rgba(var(--lastro-jade-wash), 0.34);
+}
+
+.route-cta:focus-visible,
+.entry-btn:focus-visible,
+.tab:focus-visible,
+.filter-pill:focus-visible,
+.nav-item:focus-visible,
+.nav-item--sidebar:focus-visible,
+.path-option:focus-visible,
+.path-select__skip:focus-visible,
+.app-topbar__cmd:focus-visible,
+.app-topbar__capture:focus-visible,
+.capture-wizard__close:focus-visible,
+.settings-modal__close:focus-visible,
+.settings-modal__nav-item:focus-visible,
+.settings-modal__segment-btn:focus-visible,
+.process-config-lot:focus-visible,
+.process-config-segment__btn:focus-visible,
+.process-config__run:focus-visible,
+.process-lot-card:focus-visible,
+.process-lot-selector__bulk-btn:focus-visible,
+.command-palette__item:focus-visible,
+.proof-journey__step:focus-visible,
+.escalation-queue-item__discard:focus-visible,
+.auth-lang__btn:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--focus-ring-brand),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.route-cta--ghost:focus-visible {
+  box-shadow: var(--focus-ring-brand);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.audit-table__row:focus-visible,
+.audit-cards__link:focus-visible,
+.audit-on-chain__link:focus-visible,
+.escalation-table__row:focus-visible,
+.escalation-filters__select:focus-visible,
+.marketplace-filters__select:focus-visible,
+.chain-list__asset:focus-visible,
+.chain-list__copy:focus-visible,
+.chain-list__attestation:focus-visible,
+.chain-panel__technical-toggle:focus-visible,
+.my-assets-strip__card:focus-visible,
+.market-card--link:focus-visible,
+.mundi-row:focus-visible,
+.entry-field input:focus-visible,
+.persona-switcher__select:focus-visible,
+.search-input:focus-within,
+.app-sidebar__search:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-trust);
+}
+
+.app-sidebar__search:focus-visible {
+  border-color: color-mix(in srgb, var(--lastro-accent-trust) 42%, var(--lastro-border-subtle));
+}
+
+/* ── CTA press ripple (clip-path, Emil asymmetric) ── */
+
+.route-cta,
+.entry-btn--primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.route-cta::after,
+.entry-btn--primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, #fff 22%, transparent);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 280ms var(--ease-out);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.route-cta > *,
+.entry-btn--primary > * {
+  position: relative;
+  z-index: 1;
+}
+
+.route-cta:not(:disabled):active::after,
+.entry-btn--primary:active::after {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 120ms var(--ease-out);
+}
+
+/* ── Living seal ── */
+
+@keyframes seal-breathe {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+    transform: scale(1);
+  }
+
+  50% {
+    filter: drop-shadow(0 0 8px rgba(var(--lastro-mint-wash), 0.45));
+    transform: scale(1.03);
+  }
+}
+
+.seal-mark--live {
+  display: inline-flex;
+  animation: seal-breathe 3.2s var(--ease-in-out) infinite;
+  transform-origin: center;
+}
+
+.seal-mark--live circle {
+  animation: seal-core-pulse 3.2s var(--ease-in-out) infinite;
+}
+
+@keyframes seal-core-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.72;
+  }
+}
+
+/* ── Overview hero — card settles, trail pulses ── */
+
+@keyframes hero-card-settle {
+  from {
+    opacity: 0;
+    transform: translateY(10px) rotate(-1deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes hero-ghost-float {
+  0%,
+  100% {
+    transform: rotate(3deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(2.5deg) translateY(-4px);
+  }
+}
+
+@keyframes trail-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lastro-color-seal-500) 0%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastro-color-seal-500) 18%, transparent);
+  }
+}
+
+[data-screen="overview"] .overview-step-hero__card {
+  animation: hero-card-settle 640ms var(--ease-out) both;
+}
+
+[data-screen="overview"] .overview-step-hero__ghost {
+  animation: hero-ghost-float 7s var(--ease-in-out) infinite;
+}
+
+.overview-step-hero__trail li {
+  transition:
+    background var(--dur-state) var(--ease-spring),
+    border-color var(--dur-state) var(--ease-spring),
+    color var(--dur-state) var(--ease-spring),
+    box-shadow var(--dur-state) var(--ease-spring);
+}
+
+.overview-step-hero__trail li.is-active {
+  animation: trail-pulse 2.4s var(--ease-in-out) infinite;
+}
+
+.overview-step-hero__icon {
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.overview-step-hero__card:hover .overview-step-hero__icon {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+/* ── Verdict crossfade fill (layered) ── */
+
+.verdict-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.verdict-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--dur-state) var(--ease-spring);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.verdict-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.verdict-hero--valid::before {
+  opacity: 1;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--lastro-fill-success) 95%, transparent) 0%,
+    transparent 62%
+  );
+}
+
+.verdict-hero--invalid::before {
+  opacity: 1;
+  background: linear-gradient(135deg, var(--lastro-fill-danger) 0%, transparent 58%);
+}
+
+.verdict-hero--pending::before {
+  opacity: 1;
+  background: linear-gradient(135deg, var(--lastro-fill-trust) 0%, transparent 58%);
+}
+
+/* ── Tabs sliding pill ── */
+
+.tabs {
+  position: relative;
+  isolation: isolate;
+}
+
+.tabs__indicator {
+  position: absolute;
+  z-index: 0;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  left: 0;
+  border-radius: calc(var(--app-radius-control) - 2px);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 92%, transparent);
+  box-shadow:
+    inset 0 0 0 0.5px var(--lastro-border-subtle),
+    0 1px 3px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 280ms var(--ease-spring),
+    width 280ms var(--ease-spring);
+  pointer-events: none;
+}
+
+.tab {
+  position: relative;
+  z-index: 1;
+}
+
+.tab--active {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Ambient mesh — disabled (no page overlay layer) */
+
+.process-page::before {
+  animation: none;
+}
+
+/* ── Marketplace — cover depth on hover ── */
+
+.market-lot-card__cover img {
+  transition: transform 520ms var(--ease-out), filter var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-screen="marketplace"] .market-lot-card:hover .market-lot-card__cover img,
+  [data-screen="marketplace"] .market-lot-card--hovered .market-lot-card__cover img {
+    transform: scale(1.05);
+    filter: saturate(1) contrast(1.04);
+  }
+}
+
+/* ── Mobile tab — active rail ── */
+
+.nav-item--mobile.nav-item--active::after {
+  content: "";
+  position: absolute;
+  bottom: 0.4rem;
+  left: 50%;
+  width: 1.125rem;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--lastro-accent-brand);
+  transform: translateX(-50%) scaleX(1);
+  animation: mobile-tab-in 320ms var(--ease-spring) both;
+}
+
+@keyframes mobile-tab-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0.4);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+
+/* ── Lot drawer — content settles in ── */
+
+.lot-drawer__head {
+  animation: motion-fade-up-in var(--dur-moderate) var(--ease-out) both;
+}
+
+.lot-drawer__body {
+  animation: motion-fade-up-in var(--dur-moderate) var(--ease-out) both;
+  animation-delay: 80ms;
+}
+
+/* ── Status badge pop on change ── */
+
+.status-badge__circle {
+  transition:
+    color var(--dur-state) var(--ease-spring),
+    transform var(--dur-state) var(--ease-spring);
+}
+
+.status-badge--success .status-badge__circle,
+.status-badge--danger .status-badge__circle {
+  transform: scale(1.08);
+}
+
+/* ── Reduced motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .seal-mark--live,
+  .seal-mark--live circle,
+  [data-screen="overview"] .overview-step-hero__ghost,
+  .overview-step-hero__trail li.is-active,
+  .page::before {
+    animation: none;
+  }
+
+  .tabs__indicator {
+    transition-duration: 0.01ms;
+  }
+
+  .route-cta::after,
+  .entry-btn--primary::after,
+  .lot-drawer__head,
+  .lot-drawer__body,
+  .nav-item--mobile.nav-item--active::after {
+    animation: none;
+  }
+
+  [data-screen="marketplace"] .market-lot-card:hover .market-lot-card__cover img,
+  [data-screen="marketplace"] .market-lot-card--hovered .market-lot-card__cover img {
+    transform: none;
+  }
+
+  .overview-step-hero__card:hover .overview-step-hero__icon {
+    transform: none;
+  }
+}

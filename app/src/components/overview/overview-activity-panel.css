@@ -1,0 +1,207 @@
+.overview-activity-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.overview-activity-panel__tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  gap: 0;
+  margin: 0 -0.15rem;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.overview-activity-panel__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.overview-activity-panel__tab {
+  position: relative;
+  flex-shrink: 0;
+  padding: 0.5rem 0.7rem;
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-muted);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.overview-activity-panel__tab:hover {
+  color: var(--lastro-text-primary);
+}
+
+.overview-activity-panel__tab--active {
+  color: var(--lastro-brand-seal);
+}
+
+.overview-activity-panel__tab--active::after {
+  content: "";
+  position: absolute;
+  left: 0.7rem;
+  right: 0.7rem;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--lastro-brand-seal);
+}
+
+.overview-activity-panel__scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.15rem;
+}
+
+.overview-activity-panel__scroll::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.25rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--lastro-bg-panel) 92%, transparent) 0%,
+    transparent 100%
+  );
+}
+
+.overview-activity-panel__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-bottom: 0.5rem;
+  scroll-padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--lastro-text-muted) 28%, transparent) transparent;
+}
+
+.overview-activity-panel__list::-webkit-scrollbar {
+  width: 3px;
+}
+
+.overview-activity-panel__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overview-activity-panel__list::-webkit-scrollbar-thumb {
+  border-radius: var(--lastro-radius-pill);
+  background: color-mix(in srgb, var(--lastro-text-muted) 30%, transparent);
+}
+
+.overview-activity-panel__list::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--lastro-text-muted) 45%, transparent);
+}
+
+.overview-activity-panel__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.overview-activity-panel__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+  padding: 0.55rem 0.15rem;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.overview-activity-panel__row:hover {
+  background: color-mix(in srgb, var(--lastro-brand-seal) 4%, transparent);
+}
+
+.overview-activity-panel__items li:last-child .overview-activity-panel__row {
+  border-bottom: none;
+  padding-bottom: 0.15rem;
+}
+
+.overview-activity-panel__copy {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.overview-activity-panel__title {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overview-activity-panel__meta {
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overview-activity-panel__badges {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  max-width: 11rem;
+}
+
+.overview-activity-panel__chevron {
+  color: var(--lastro-text-muted);
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+.overview-activity-panel__row:hover .overview-activity-panel__chevron {
+  color: var(--lastro-brand-seal);
+  opacity: 1;
+}
+
+.overview-activity-panel__empty {
+  margin: 0;
+  padding: 1.75rem 0.25rem;
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .overview-activity-panel__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .overview-activity-panel__badges {
+    max-width: none;
+    flex-wrap: wrap;
+  }
+
+  .overview-activity-panel__chevron {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overview-activity-panel__scroll::after {
+    display: none;
+  }
+}

@@ -10,19 +10,29 @@ type NavItemProps = {
   end?: boolean;
   variant?: "sidebar" | "mobile";
   badge?: number;
+  collapsed?: boolean;
 };
 
-export function NavItem({ to, label, icon, end, variant = "sidebar", badge }: NavItemProps) {
+export function NavItem({
+  to,
+  label,
+  icon,
+  end,
+  variant = "sidebar",
+  badge,
+  collapsed = false,
+}: NavItemProps) {
   return (
     <NavLink
       to={to}
       end={end}
+      title={collapsed ? label : undefined}
       className={({ isActive }) =>
-        `nav-item nav-item--${variant}${isActive ? " nav-item--active" : ""}`
+        `nav-item nav-item--${variant}${isActive ? " nav-item--active" : ""}${collapsed ? " nav-item--collapsed" : ""}`
       }
     >
       <span className="nav-item__icon-wrap" aria-hidden="true">
-        <Icon name={icon} size={variant === "mobile" ? 20 : 17} />
+        <Icon name={icon} size={variant === "mobile" ? 20 : 16} />
       </span>
       <span className="nav-item__label">{label}</span>
       {badge && badge > 0 ? (

@@ -1,0 +1,22 @@
+.process-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 100%;
+  max-height: calc(100vh - 10rem);
+  overflow: hidden;
+}
+
+.process-filters__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-gutter: stable;
+}
+
+@media (max-width: 959px) {
+  .process-filters {
+    max-height: none;
+  }
+}

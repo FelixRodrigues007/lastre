@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import type { LotDetail } from "../../lib/types";
 import { shortHash } from "../../lib/format";
 import { CSPR_PACKAGE_URL } from "../../lib/navigation";
-import { ActionBadge, OutcomeBadge, VerdictBadge } from "../proof/Badges";
+import { ActionBadge, MutedStatusBadge, OutcomeBadge, VerdictBadge } from "../proof/Badges";
 import "./lot-evidence-grid.css";
 
 type LotEvidenceGridProps = {
@@ -38,7 +38,7 @@ export function LotEvidenceGrid({ lot }: LotEvidenceGridProps) {
             </>
           ) : (
             <>
-              <span className="badge badge--muted">Not processed</span>
+              <MutedStatusBadge label="Not processed" />
               <p className="lot-evidence__detail">
                 Run the demo batch in Process to see agent action vs seal verdict.
               </p>
@@ -81,7 +81,7 @@ export function LotEvidenceGrid({ lot }: LotEvidenceGridProps) {
             </>
           ) : (
             <>
-              <span className="badge badge--muted">No reference</span>
+              <MutedStatusBadge label="No reference" />
               <p className="lot-evidence__detail">Reference seal not registered for this lot.</p>
             </>
           )}
@@ -143,7 +143,7 @@ export function LotEvidenceGrid({ lot }: LotEvidenceGridProps) {
             </>
           ) : (
             <>
-              <span className="badge badge--muted">Not on-chain</span>
+              <MutedStatusBadge label="Not on-chain" />
               <p className="lot-evidence__detail">No Casper attestation recorded for this lot yet.</p>
               <a className="lot-evidence__link" href={CSPR_PACKAGE_URL} target="_blank" rel="noopener noreferrer">
                 Open ProofOfOrigin package

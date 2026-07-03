@@ -1,0 +1,60 @@
+.chain-timeline-panel {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.chain-timeline-panel__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chain-timeline-group {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.chain-timeline-group__head {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.chain-timeline-group__title {
+  margin: 0;
+  font-family: var(--lastro-font-display);
+  font-size: 0.875rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+  color: var(--lastro-text-primary);
+}
+
+.chain-timeline-group__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--lastro-text-muted);
+}
+
+.chain-timeline-group__empty {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--lastro-text-muted);
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) dashed var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 30%, transparent);
+}
+
+.chain-timeline-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.15rem 0;
+}
+
+.chain-timeline-divider__line {
+  flex: 1;
+  height: 1px;
+  background: var(--lastro-border-subtle);
+}

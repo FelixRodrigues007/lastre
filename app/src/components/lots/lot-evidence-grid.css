@@ -51,7 +51,7 @@
   border-top: 2px solid var(--lastro-status-valid);
 }
 
-.lot-evidence__cell--verdict:has(.badge--verdict-invalid) {
+.lot-evidence__cell--verdict:has([data-tone="danger"]) {
   border-top-color: var(--lastro-status-invalid);
 }
 

@@ -1,0 +1,68 @@
+.process-config-shell {
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  padding: 1.1rem 1.15rem 1.15rem;
+  border-radius: 1.125rem;
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-subtle) 65%, transparent);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 94%, var(--lastro-bg-primary));
+  backdrop-filter: blur(20px) saturate(1.2);
+  box-shadow:
+    0 0 0 0.5px color-mix(in srgb, var(--lastro-text-primary) 6%, transparent) inset,
+    0 12px 40px rgba(0, 0, 0, 0.14);
+  transition:
+    border-color var(--dur-normal) var(--ease-out),
+    box-shadow var(--dur-normal) var(--ease-out);
+}
+
+.process-config-shell__glow {
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      ellipse 120% 80% at 50% 100%,
+      color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent) 0%,
+      transparent 62%
+    );
+  transition: opacity var(--dur-normal) var(--ease-out);
+}
+
+.process-config-shell--running {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 38%, transparent);
+  box-shadow:
+    0 0 0 0.5px color-mix(in srgb, var(--lastro-brand-seal) 12%, transparent) inset,
+    0 12px 40px rgba(0, 0, 0, 0.14),
+    0 0 32px -12px color-mix(in srgb, var(--lastro-brand-seal) 28%, transparent);
+}
+
+.process-config-shell--running .process-config-shell__glow {
+  opacity: 1;
+  animation: process-config-glow 2.8s ease-in-out infinite;
+}
+
+.process-config-shell__inner {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes process-config-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-config-shell--running .process-config-shell__glow {
+    animation: none;
+    opacity: 0.75;
+  }
+}

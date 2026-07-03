@@ -1,0 +1,134 @@
+.chain-timeline-item {
+  /* legacy alias — rows use .chain-list__row */
+}
+
+.chain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-sm);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--lastro-bg-primary) 30%, transparent);
+}
+
+.chain-list__row {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-left: 3px solid transparent;
+}
+
+.chain-list__row:last-child {
+  border-bottom: none;
+}
+
+.chain-list__row--valid {
+  border-left-color: var(--lastro-accent-trust);
+}
+
+.chain-list__row--invalid {
+  border-left-color: var(--lastro-accent-danger);
+}
+
+.chain-list__primary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+}
+
+.chain-list__asset {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+  word-break: break-all;
+}
+
+.chain-list__asset:hover {
+  color: var(--lastro-accent-trust);
+}
+
+.chain-list__seal {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.chain-list__seal-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chain-list__seal code {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-brand-seal);
+  word-break: break-all;
+}
+
+.chain-list__copy {
+  padding: 0.2rem 0.5rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.02em;
+  color: var(--lastro-text-secondary);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 70%, transparent);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-xs);
+  cursor: pointer;
+}
+
+.chain-list__copy:hover {
+  color: var(--lastro-text-primary);
+  border-color: var(--lastro-border-strong);
+}
+
+.chain-list__copy--done {
+  color: var(--lastro-status-valid);
+  border-color: color-mix(in srgb, var(--lastro-status-valid) 40%, transparent);
+}
+
+.chain-list__attestation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+}
+
+.chain-list__attestation:hover {
+  color: var(--lastro-brand-seal);
+}
+
+@media (min-width: 720px) {
+  .chain-list__row {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .chain-list__seal {
+    gap: 0.15rem;
+  }
+
+  .chain-list__attestation {
+    justify-self: end;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chain-list__copy {
+    transition: none;
+  }
+}

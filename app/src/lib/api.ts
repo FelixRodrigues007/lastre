@@ -4,6 +4,7 @@ import type {
   BatchResult,
   ChainSummary,
   DeciderMode,
+  EscalationActionResult,
   LiveTestnetSnapshot,
   LotDetail,
   LotListItem,
@@ -11,6 +12,8 @@ import type {
 } from "./types";
 import { ApiError } from "./types";
 import { buildDemoLotDetail } from "./demoCatalog";
+import { getDemoOverviewAuditRecord } from "./demoOverviewAudit";
+import { applyDemoMint, buildDemoMintedLotDetail } from "./demoMints";
 
 // Base URL for the console API. In dev, Vite proxies "/api" to the local
 // app server on :3001 (see vite.config.ts), so the empty default works.
@@ -55,15 +58,18 @@ export function getLots() {
 
 export async function getLot(assetId: string): Promise<LotDetail> {
   try {
-    return await apiFetch<LotDetail>(`/api/lots/${encodeURIComponent(assetId)}`);
+    const lot = await apiFetch<LotDetail>(`/api/lots/${encodeURIComponent(assetId)}`);
+    return applyDemoMint(lot);
   } catch (error) {
     // Fictional showcase assets from the Marketplace/Global-Mundi catalog are
     // not always present in the console API. Instead of dead-ending on a 404
     // "Unknown lot" + Retry, resolve them locally as demo detail pages.
     // Any other id (typos, genuinely missing lots) still surfaces the error.
     if (error instanceof ApiError && error.status === 404) {
+      const demoMinted = buildDemoMintedLotDetail(assetId);
+      if (demoMinted) return demoMinted;
       const demo = buildDemoLotDetail(assetId);
-      if (demo) return demo;
+      if (demo) return applyDemoMint(demo);
     }
     throw error;
   }
@@ -77,16 +83,50 @@ export function getAudit() {
   return apiFetch<{ records: AuditRecord[] }>("/api/audit");
 }
 
-export function getAuditRecord(assetId: string) {
-  return apiFetch<AuditRecord>(`/api/audit/${encodeURIComponent(assetId)}`);
+export async function getAuditRecord(assetId: string): Promise<AuditRecord> {
+  try {
+    return await apiFetch<AuditRecord>(`/api/audit/${encodeURIComponent(assetId)}`);
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) {
+      const demo = getDemoOverviewAuditRecord(assetId);
+      if (demo) return demo;
+    }
+    throw error;
+  }
 }
 
 export function getEscalations() {
   return apiFetch<{ records: AuditRecord[] }>("/api/escalations");
 }
 
+export function requeueEscalation(assetId: string) {
+  return apiFetch<EscalationActionResult>(
+    `/api/escalations/${encodeURIComponent(assetId)}/requeue`,
+    { method: "POST" },
+  );
+}
+
+export function discardEscalation(assetId: string) {
+  return apiFetch<EscalationActionResult>(
+    `/api/escalations/${encodeURIComponent(assetId)}/discard`,
+    { method: "POST" },
+  );
+}
+
+export function overrideEscalation(assetId: string, overrideAction: "pay" | "skip") {
+  return apiFetch<EscalationActionResult>(
+    `/api/escalations/${encodeURIComponent(assetId)}/override`,
+    {
+      method: "POST",
+      body: JSON.stringify({ overrideAction }),
+    },
+  );
+}
+
 export function getProcessDefaults() {
-  return apiFetch<{ assetIds: string[]; decider: DeciderMode }>("/api/process/defaults");
+  return apiFetch<{ assetIds: string[]; decider: DeciderMode; lastBatch: BatchResult | null }>(
+    "/api/process/defaults",
+  );
 }
 
 export function processBatch(assetIds: string[], decider: DeciderMode) {

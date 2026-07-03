@@ -1,0 +1,250 @@
+/* Lastro motion system — Emil Kowalski design engineering principles */
+
+/* ── Keyframes ── */
+
+@keyframes motion-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes motion-drawer-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes motion-popover-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes motion-popover-down-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes motion-fade-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Modals (occasional use — standard enter animation) ── */
+
+.settings-modal-overlay,
+.capture-wizard-overlay,
+.market-notice-overlay {
+  animation: motion-overlay-in var(--dur-normal) var(--ease-out);
+}
+
+.settings-modal,
+.capture-wizard,
+.market-notice {
+  animation: motion-modal-in var(--dur-moderate) var(--ease-out);
+  transform-origin: center;
+}
+
+/* ── Drawers ── */
+
+.lot-drawer-overlay {
+  animation: motion-overlay-in var(--dur-normal) var(--ease-out);
+}
+
+.lot-drawer {
+  animation: motion-drawer-slide-in var(--dur-drawer) var(--ease-drawer);
+}
+
+.market-map-drawer {
+  animation: motion-popover-down-in var(--dur-normal) var(--ease-out);
+  transform-origin: bottom right;
+}
+
+/* ── Popovers (origin-aware — scale from trigger, not center) ── */
+
+.session-menu__panel,
+.app-prefs__menu {
+  transform-origin: bottom center;
+  animation: motion-popover-in var(--dur-normal) var(--ease-out);
+}
+
+/* Command palette: intentionally no open animation (keyboard-initiated, high frequency). */
+
+/* ── Press feedback — buttons must feel responsive ── */
+
+/* Shared transition baseline for pressable controls */
+.route-cta,
+.entry-btn,
+.tab,
+.filter-pill,
+.nav-item--sidebar,
+.path-option,
+button:not(:disabled) {
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    filter var(--dur-fast) var(--ease-out);
+}
+.route-cta:not(:disabled):active,
+.entry-btn--primary:active,
+.tab:active,
+.filter-pill:active,
+.path-option:active,
+.settings-modal__close:active,
+.capture-wizard__close:active,
+.command-palette__item:active,
+.nav-item--sidebar:active {
+  transform: scale(0.97);
+}
+
+/* Row/card press targets — slightly subtler than icon buttons */
+.lot-list-row:active,
+.market-lot-card:active,
+.my-assets-strip__card:active {
+  transform: scale(0.98);
+}
+
+/* ── Hover transforms — fine pointer only (avoid false positives on touch) ── */
+
+@media (hover: hover) and (pointer: fine) {
+  .market-lot-card:hover,
+  .market-lot-card--hovered {
+    transform: translateY(-2px);
+  }
+
+  .my-assets-strip__card:hover:not(.my-assets-strip__card--selected) {
+    transform: translateY(-1px);
+  }
+}
+
+.market-lot-card {
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* ── Stagger list enter (decorative — never block interaction) ── */
+
+.motion-stagger > * {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: motion-fade-up-in var(--dur-moderate) var(--ease-out) forwards;
+}
+
+.motion-stagger > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.motion-stagger > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.motion-stagger > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+
+.motion-stagger > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+
+.motion-stagger > *:nth-child(5) {
+  animation-delay: 160ms;
+}
+
+.motion-stagger > *:nth-child(6) {
+  animation-delay: 200ms;
+}
+
+.motion-stagger > *:nth-child(n + 7) {
+  animation-delay: 240ms;
+}
+
+/* ── Reduced motion — keep opacity fades, remove movement ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-modal-overlay,
+  .capture-wizard-overlay,
+  .market-notice-overlay,
+  .lot-drawer-overlay {
+    animation: motion-overlay-in 200ms var(--ease-out);
+  }
+
+  .settings-modal,
+  .capture-wizard,
+  .market-notice,
+  .lot-drawer,
+  .market-map-drawer,
+  .session-menu__panel,
+  .app-prefs__menu {
+    animation: motion-overlay-in 200ms var(--ease-out);
+    transform: none;
+  }
+
+  .motion-stagger > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  button:not(:disabled):active,
+  [role="button"]:not([aria-disabled="true"]):active,
+  .route-cta:active,
+  .tab:active,
+  .lot-list-row:active,
+  .market-lot-card:active,
+  .my-assets-strip__card:active {
+    transform: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .market-lot-card:hover,
+    .market-lot-card--hovered,
+    .my-assets-strip__card:hover {
+      transform: none;
+    }
+  }
+}

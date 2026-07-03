@@ -24,12 +24,12 @@
   }
 
   .proof-rail__step--active {
-    border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
-    background: color-mix(in srgb, var(--lastro-brand-seal) 6%, transparent);
+    border-color: var(--lastro-border-brand);
+    background: var(--lastro-fill-brand);
   }
 
   .proof-rail__step--done {
-    border-color: color-mix(in srgb, var(--lastro-status-valid) 25%, transparent);
+    border-color: var(--lastro-border-success);
   }
 }
 
@@ -58,11 +58,12 @@
 }
 
 .proof-rail__step--done .proof-rail__node {
-  background: var(--lastro-status-valid);
+  background: var(--lastro-accent-success);
 }
 
 .proof-rail__step--active .proof-rail__node {
-  background: var(--lastro-brand-seal);
+  background: var(--lastro-gradient-seal-shine);
+  box-shadow: var(--lastro-glow-seal);
 }
 
 .proof-rail__label {
@@ -84,4 +85,62 @@
 
 .proof-rail__verdict--invalid {
   color: var(--lastro-status-invalid);
+}
+
+/* Vertical timeline — drawer / narrow surfaces */
+.proof-rail--vertical {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.proof-rail--vertical .proof-rail__step {
+  position: relative;
+  grid-template-columns: 1.125rem 1fr auto;
+  grid-template-rows: auto;
+  align-items: center;
+  justify-items: start;
+  gap: 0 0.75rem;
+  padding: 0.55rem 0;
+  text-align: left;
+  border: none;
+  background: transparent;
+}
+
+.proof-rail--vertical .proof-rail__step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 0.3125rem;
+  top: 1.35rem;
+  bottom: -0.55rem;
+  width: 1px;
+  background: var(--lastro-border-subtle);
+}
+
+.proof-rail--vertical .proof-rail__step--done::before {
+  background: color-mix(in srgb, var(--lastro-accent-success) 45%, var(--lastro-border-subtle));
+}
+
+.proof-rail--vertical .proof-rail__node {
+  width: 0.625rem;
+  height: 0.625rem;
+  box-shadow: 0 0 0 2px var(--lastro-bg-panel);
+}
+
+.proof-rail--vertical .proof-rail__label {
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-regular);
+  color: var(--lastro-text-secondary);
+}
+
+.proof-rail--vertical .proof-rail__step--active .proof-rail__label {
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-primary);
+}
+
+.proof-rail--vertical .proof-rail__step--done .proof-rail__label {
+  color: var(--lastro-text-secondary);
+}
+
+.proof-rail--vertical .proof-rail__verdict {
+  font-size: 0.6875rem;
 }

@@ -9,17 +9,33 @@
   --app-radius-card: 14px;
   --app-radius-pill: 999px;
 
-  --app-bg-canvas: var(--lastro-bg-primary);
-  --app-bg-sidebar: color-mix(in srgb, var(--lastro-bg-panel) 99%, #000);
+  --app-bg-canvas: var(--lastro-color-olive-950);
+  --app-bg-sidebar:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--lastro-bg-panel) 98%, #000) 0%,
+      color-mix(in srgb, var(--lastro-color-olive-925) 96%, #000) 100%
+    );
+  --app-bg-sidebar-fill: var(--lastro-color-olive-925);
   --app-stroke-divider: color-mix(in srgb, #fff 7%, transparent);
-  --app-stroke-active: color-mix(in srgb, var(--lastro-brand-seal) 18%, transparent);
+  --app-stroke-active: var(--lastro-border-brand);
+  --app-stroke-trust: var(--lastro-border-trust);
   --app-fill-hover: color-mix(in srgb, #fff 4%, transparent);
   --app-fill-active: color-mix(in srgb, #fff 6%, var(--lastro-bg-elevated));
+  --app-fill-brand: var(--lastro-fill-brand);
+  --app-fill-trust: var(--lastro-fill-trust);
 
-  --app-shadow-panel:
-    0 0 0 0.5px var(--app-stroke-divider),
-    0 1px 2px rgba(0, 0, 0, 0.28),
-    0 12px 32px -16px rgba(0, 0, 0, 0.55);
+  --app-shadow-panel: var(--lastro-shadow-md);
+  --app-shadow-elevated: var(--lastro-shadow-lg);
+  --app-shadow-float: var(--lastro-shadow-xl);
+
+  /* Floating surfaces — must read above sidebar + charts */
+  --app-surface-popover: var(--lastro-color-olive-800);
+  --app-border-popover: color-mix(in srgb, var(--lastro-color-cream-200) 16%, var(--lastro-border-strong));
+  --app-shadow-popover:
+    0 0 0 0.5px rgba(0, 0, 0, 0.45),
+    0 4px 8px rgba(0, 0, 0, 0.28),
+    0 20px 52px -16px rgba(0, 0, 0, 0.68);
 
   --text-page-title: clamp(1.625rem, 1.1rem + 1.8vw, 2.125rem);
   --text-section: 1.0625rem;
@@ -27,9 +43,32 @@
 
   --panel-pad: clamp(1.125rem, 0.9rem + 0.8vw, 1.5rem);
   --panel-radius: var(--app-radius-card);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Emil motion tokens — animations.dev */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --dur-instant: 100ms;
   --dur-fast: 160ms;
+  --dur-normal: 200ms;
+  --dur-moderate: 250ms;
+  --dur-slow: 400ms;
+  --dur-drawer: 380ms;
+  --dur-data: 480ms;
+  --dur-state: 200ms;
+
+  --cta-shadow-brand: none;
+  --cta-shadow-brand-hover: none;
+  --cta-shadow-trust-hover: none;
+  --focus-glow-brand: var(--lastro-glow-seal);
+  --focus-glow-trust: var(--lastro-glow-jade);
+  --focus-glow-success: var(--lastro-glow-lime);
+
+  --segment-active-shadow:
+    inset 0 0 0 0.5px var(--lastro-border-subtle),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 *,
@@ -46,10 +85,12 @@ html {
 body {
   min-height: 100dvh;
   color: var(--lastro-text-primary);
-  background: var(--lastro-bg-primary);
+  background: var(--app-bg-canvas);
   font-family: var(--lastro-font-body);
   font-size: 0.9375rem;
   line-height: 1.5;
+  letter-spacing: -0.011em;
+  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -78,6 +119,8 @@ button {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--lastro-text-muted);
+  font-feature-settings: "zero" 1, "ss01" 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .page {
@@ -126,21 +169,32 @@ button {
   font-weight: var(--lastro-weight-semibold);
   letter-spacing: -0.01em;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 1px 2px rgba(0, 0, 0, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 1px 2px rgba(0, 0, 0, 0.22);
   transition:
-    transform var(--dur-fast) var(--ease-spring),
-    filter var(--dur-fast) var(--ease-spring),
-    background var(--dur-fast) var(--ease-spring);
+    transform var(--dur-fast) var(--ease-out),
+    filter var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
 }
 
-.route-cta:hover {
-  filter: brightness(1.04);
+.route-cta:focus-visible {
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .route-cta:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 2px 4px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .route-cta:active {
   filter: brightness(0.96);
-  transform: scale(0.99);
+  transform: translateY(0) scale(0.97);
 }
 
 .route-cta--ghost {
@@ -156,15 +210,83 @@ button {
 }
 
 .panel {
-  background: var(--lastro-bg-panel);
+  background: var(--lastro-gradient-surface-panel);
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   border-radius: var(--panel-radius);
   padding: var(--panel-pad);
   box-shadow: var(--app-shadow-panel);
+  position: relative;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lastro-gradient-glass-highlight);
+  pointer-events: none;
 }
 
 .panel--elevated {
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 94%, transparent);
+  background: var(--lastro-gradient-surface-elevated);
+  box-shadow: var(--app-shadow-elevated);
+}
+
+/* Surface vocabulary — layered depth system */
+.surface-panel,
+.surface-elevated,
+.surface-float,
+.surface-glass {
+  position: relative;
+  border-radius: var(--panel-radius);
+}
+
+.surface-panel {
+  background: var(--lastro-gradient-surface-panel);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  box-shadow: var(--app-shadow-panel);
+}
+
+.surface-elevated {
+  background: var(--lastro-gradient-surface-elevated);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  box-shadow: var(--app-shadow-elevated);
+}
+
+.surface-float {
+  background: var(--lastro-gradient-surface-elevated);
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-trust) 45%, var(--lastro-border-subtle));
+  box-shadow: var(--app-shadow-float);
+  backdrop-filter: blur(24px) saturate(1.18);
+  -webkit-backdrop-filter: blur(24px) saturate(1.18);
+}
+
+.surface-glass {
+  background: color-mix(in srgb, var(--lastro-bg-panel) 62%, transparent);
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-trust) 40%, var(--lastro-border-subtle));
+  box-shadow: var(--app-shadow-panel);
+  backdrop-filter: blur(20px) saturate(1.15);
+  -webkit-backdrop-filter: blur(20px) saturate(1.15);
+}
+
+.surface-panel::before,
+.surface-elevated::before,
+.surface-float::before,
+.surface-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lastro-gradient-glass-highlight);
+  pointer-events: none;
+}
+
+.surface-panel > *,
+.surface-elevated > *,
+.surface-float > *,
+.surface-glass > * {
+  position: relative;
+  z-index: 1;
 }
 
 .panel__head {
@@ -211,10 +333,22 @@ button {
 }
 
 :root[data-theme="light"] {
-  --app-shadow-panel:
-    0 0 0 0.5px color-mix(in srgb, var(--lastro-text-inverse) 8%, transparent),
-    0 1px 2px rgba(19, 44, 36, 0.06),
-    0 10px 28px -14px rgba(19, 44, 36, 0.12);
+  --app-bg-canvas: var(--lastro-color-cream-200);
+  --app-surface-popover: var(--lastro-color-cream-50);
+  --app-border-popover: color-mix(in srgb, var(--lastro-color-olive-950) 12%, var(--lastro-border-strong));
+  --app-shadow-popover:
+    0 0 0 0.5px rgba(10, 23, 19, 0.08),
+    0 4px 8px rgba(19, 44, 36, 0.08),
+    0 20px 52px -16px rgba(19, 44, 36, 0.18);
+  --app-bg-sidebar:
+    linear-gradient(
+      180deg,
+      var(--lastro-color-cream-100) 0%,
+      color-mix(in srgb, var(--lastro-color-cream-200) 88%, var(--lastro-color-jade-300)) 100%
+    );
+  --app-bg-sidebar-fill: color-mix(in srgb, var(--lastro-color-cream-200) 88%, var(--lastro-color-jade-300));
+  --app-shadow-panel: var(--lastro-shadow-md);
+  --app-shadow-elevated: var(--lastro-shadow-lg);
 }
 
 @media (prefers-reduced-motion: reduce) {

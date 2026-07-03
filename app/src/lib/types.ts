@@ -83,6 +83,7 @@ export type BatchResult = {
 
 export type LotListItem = {
   artifact: ProvenanceArtifact;
+  referenceArtifact: ProvenanceArtifact | null;
   referenceSeal: string | null;
   computedSeal: string;
   sealMatchesReference: boolean | null;
@@ -153,6 +154,16 @@ export type AuditSummary = {
   skipped: number;
   escalated: number;
   lastBatch: BatchSummary | null;
+};
+
+export type EscalationResolutionAction = "requeued" | "discarded" | "overridden";
+
+export type EscalationActionResult = {
+  assetId: string;
+  action: EscalationResolutionAction;
+  record: AuditRecord;
+  previousReasoning: string | null;
+  requeuedEscalated: boolean;
 };
 
 export class ApiError extends Error {

@@ -1,0 +1,190 @@
+.my-assets-layout {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.my-assets-analytics {
+  min-height: clamp(480px, calc(100dvh - 12rem), 780px);
+}
+
+.my-assets-page--split {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.my-assets-page--split .note {
+  margin-top: 0.25rem;
+}
+
+/* Horizontal asset strip — outside the report card */
+.my-assets-strip {
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.my-assets-strip__hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-muted);
+  letter-spacing: 0.01em;
+}
+
+.my-assets-strip__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.my-assets-strip__cards > li {
+  flex: 0 0 240px;
+  width: 240px;
+  max-width: 100%;
+}
+
+.my-assets-strip__card {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  border-radius: 10px;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 55%, transparent);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.my-assets-strip__card .my-assets-strip__label {
+  color: var(--lastro-text-secondary);
+}
+
+.my-assets-strip__card .my-assets-strip__score {
+  color: var(--lastro-text-muted);
+}
+
+.my-assets-strip__card .my-assets-strip__photo {
+  filter: saturate(0.7) brightness(0.9);
+  transition: filter var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .my-assets-strip__card:hover:not(.my-assets-strip__card--selected) {
+    background: color-mix(in srgb, var(--lastro-bg-panel) 78%, transparent);
+    border-color: color-mix(in srgb, var(--lastro-text-muted) 22%, var(--lastro-border-subtle));
+  }
+
+  .my-assets-strip__card:hover:not(.my-assets-strip__card--selected) .my-assets-strip__label {
+    color: var(--lastro-text-primary);
+  }
+
+  .my-assets-strip__card:hover:not(.my-assets-strip__card--selected) .my-assets-strip__photo {
+    filter: saturate(0.85) brightness(0.95);
+  }
+}
+
+.my-assets-strip__card--selected {
+  border-color: #4a7fd4;
+  border-left-width: 3px;
+  padding-left: 10px;
+  background: var(--lastro-bg-panel);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #4a7fd4 40%, transparent),
+    var(--app-shadow-panel);
+}
+
+.my-assets-strip__card--selected .my-assets-strip__label {
+  color: var(--lastro-text-primary);
+  font-weight: var(--lastro-weight-semibold);
+}
+
+.my-assets-strip__card--selected .my-assets-strip__score {
+  color: #6b9de8;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.my-assets-strip__card--selected .my-assets-strip__photo {
+  filter: none;
+}
+
+.my-assets-strip__card--selected .my-assets-strip__thumb {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #4a7fd4 30%, transparent),
+    0 0 0 2px color-mix(in srgb, #4a7fd4 18%, transparent);
+}
+
+.my-assets-strip__card--selected:hover {
+  border-color: #5a8ee0;
+  background: color-mix(in srgb, #4a7fd4 6%, var(--lastro-bg-panel));
+}
+
+.my-assets-strip__thumb {
+  display: block;
+  width: 72px;
+  height: 72px;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--lastro-bg-elevated);
+  box-shadow: inset 0 0 0 1px var(--lastro-border-subtle);
+}
+
+.my-assets-strip__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.my-assets-strip__body {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.my-assets-strip__label {
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  line-height: 1.35;
+  color: var(--lastro-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.my-assets-strip__score {
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.my-assets-page__detail-empty {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  padding: 2rem;
+  color: var(--lastro-text-muted);
+  font-size: var(--text-small);
+}
+
+@media (max-width: 520px) {
+  .my-assets-strip__cards > li {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+}

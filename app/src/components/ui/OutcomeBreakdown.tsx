@@ -28,34 +28,36 @@ export function OutcomeBreakdown({
     { value: escalated, label: t("outcome.escalated"), tone: "accent" as const },
   ].filter((s) => s.value > 0);
 
+  const kpis = [
+    { label: t("outcome.tokenizable"), value: tokenizable, tone: "valid" as const },
+    { label: t("outcome.rejected"), value: rejected, tone: "invalid" as const },
+    { label: t("outcome.skipped"), value: skipped, tone: null },
+    { label: t("outcome.escalated"), value: escalated, tone: null },
+  ];
+
   return (
     <section className="outcome-breakdown" aria-label={heading}>
-      <header className="outcome-breakdown__head">
-        <p className="mono-label">{heading}</p>
-        <span className="outcome-breakdown__total">{t("common.records", { count: total })}</span>
-      </header>
+      <div className="outcome-breakdown__card">
+        <header className="outcome-breakdown__head">
+          <p className="mono-label">{heading}</p>
+          <span className="outcome-breakdown__total">{t("common.records", { count: total })}</span>
+        </header>
 
-      {total > 0 ? (
-        <RatioBar segments={segments} ariaLabel={`${heading}: ${total}`} />
-      ) : null}
+        {total > 0 ? (
+          <RatioBar segments={segments} ariaLabel={`${heading}: ${total}`} />
+        ) : null}
+      </div>
 
-      <div className="outcome-breakdown__grid">
-        <div className="outcome-breakdown__cell outcome-breakdown__cell--valid">
-          <span className="outcome-breakdown__cell-label">{t("outcome.tokenizable")}</span>
-          <span className="outcome-breakdown__cell-value">{tokenizable}</span>
-        </div>
-        <div className="outcome-breakdown__cell outcome-breakdown__cell--invalid">
-          <span className="outcome-breakdown__cell-label">{t("outcome.rejected")}</span>
-          <span className="outcome-breakdown__cell-value">{rejected}</span>
-        </div>
-        <div className="outcome-breakdown__cell">
-          <span className="outcome-breakdown__cell-label">{t("outcome.skipped")}</span>
-          <span className="outcome-breakdown__cell-value">{skipped}</span>
-        </div>
-        <div className="outcome-breakdown__cell">
-          <span className="outcome-breakdown__cell-label">{t("outcome.escalated")}</span>
-          <span className="outcome-breakdown__cell-value">{escalated}</span>
-        </div>
+      <div className="outcome-breakdown__kpis">
+        {kpis.map((kpi) => (
+          <div
+            key={kpi.label}
+            className={`outcome-breakdown__kpi${kpi.tone ? ` outcome-breakdown__kpi--${kpi.tone}` : ""}`}
+          >
+            <span className="outcome-breakdown__kpi-label">{kpi.label}</span>
+            <span className="outcome-breakdown__kpi-value">{kpi.value}</span>
+          </div>
+        ))}
       </div>
     </section>
   );

@@ -3,12 +3,28 @@
   gap: 0.35rem;
   padding: 1rem 1.125rem;
   border-radius: var(--panel-radius);
-  background: color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent);
+  background: var(--lastro-gradient-surface-panel);
   box-shadow: var(--app-shadow-panel);
+  position: relative;
+}
+
+.metric-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lastro-gradient-glass-highlight);
+  pointer-events: none;
 }
 
 .metric-card--accent {
-  background: color-mix(in srgb, var(--lastro-brand-seal) 6%, var(--lastro-bg-panel));
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--lastro-fill-brand) 85%, var(--lastro-bg-panel)) 0%,
+      var(--lastro-gradient-surface-panel) 100%
+    );
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-brand);
 }
 
 .metric-card__label {
@@ -34,15 +50,18 @@
 }
 
 .metric-card__value--valid {
-  color: var(--lastro-status-valid);
+  color: var(--lastro-accent-success);
 }
 
 .metric-card__value--invalid {
-  color: var(--lastro-status-invalid);
+  color: var(--lastro-accent-danger);
 }
 
 .metric-card__value--accent {
-  color: var(--lastro-brand-seal);
+  background: var(--lastro-gradient-seal-shine);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .metric-card__hint {
@@ -53,7 +72,7 @@
 }
 
 .metric-card__hint a {
-  color: var(--lastro-brand-seal);
+  color: var(--lastro-accent-trust);
 }
 
 .metric-card__hint a:hover {

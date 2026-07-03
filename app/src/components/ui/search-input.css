@@ -7,11 +7,15 @@
   border-radius: var(--app-radius-control);
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
-  transition: border-color var(--dur-fast) var(--ease-out);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .search-input:focus-within {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+  border-color: color-mix(in srgb, var(--lastro-accent-trust) 40%, var(--lastro-border-subtle));
+  box-shadow: var(--focus-glow-trust, var(--lastro-glow-jade));
+  outline: none;
 }
 
 .search-input__icon {

@@ -28,15 +28,15 @@
   fill: none;
   stroke-width: 6;
   stroke-linecap: round;
-  transition: stroke-dashoffset 600ms var(--ease-out);
+  transition: stroke-dashoffset var(--dur-state, 200ms) var(--ease-spring);
 }
 
 .donut-stat__ring-fill--valid {
-  stroke: var(--lastro-status-valid);
+  stroke: var(--lastro-accent-success);
 }
 
 .donut-stat__ring-fill--accent {
-  stroke: var(--lastro-brand-seal);
+  stroke: var(--lastro-accent-trust);
 }
 
 .donut-stat__ring-fill--neutral {

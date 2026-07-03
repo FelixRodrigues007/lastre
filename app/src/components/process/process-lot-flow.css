@@ -1,0 +1,490 @@
+.process-flow {
+  display: grid;
+  gap: 0.65rem;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+/* Fixed status rail — cards never jump when kicker appears */
+.process-flow__status {
+  display: flex;
+  align-items: center;
+  min-height: 1.375rem;
+}
+
+.process-flow__status-spacer {
+  display: block;
+  width: 100%;
+  height: 1.375rem;
+}
+
+.process-flow__kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--lastro-brand-seal);
+  opacity: 1;
+  transition: opacity 320ms var(--ease-out);
+}
+
+.process-flow__kicker-dot {
+  flex-shrink: 0;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--lastro-brand-seal);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
+  animation: process-flow-live-dot 2.2s var(--ease-in-out) infinite;
+}
+
+.process-flow__complete {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  color: var(--lastro-accent-success);
+}
+
+.process-flow__track-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.process-flow__track-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 3.5rem;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--lastro-bg-primary) 88%, transparent));
+  z-index: 2;
+}
+
+.process-flow__track {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+  padding-block: 0.25rem 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+@media (min-width: 960px) {
+  /* Cards bleed left behind the filter panel instead of clipping at the stage edge */
+  .process-flow__track {
+    --process-flow-bleed: calc(var(--process-layout-gap, clamp(2rem, 4vw, 4rem)) + var(--process-config-width, 20rem));
+    width: calc(100% + var(--process-flow-bleed));
+    margin-inline-start: calc(-1 * var(--process-flow-bleed));
+    padding-inline-start: var(--process-flow-bleed);
+  }
+}
+
+.process-flow__slot {
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+  height: 23.5rem;
+  scroll-snap-align: center;
+}
+
+.process-flow__connector {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  flex-shrink: 0;
+  height: 23.5rem;
+  align-self: flex-start;
+}
+
+.process-flow__connector-line {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin-top: 11.75rem;
+  background: color-mix(in srgb, var(--lastro-text-muted) 24%, transparent);
+  transition: background 420ms var(--ease-out);
+  overflow: hidden;
+}
+
+.process-flow__connector--active .process-flow__connector-line::after,
+.process-flow__connector--done .process-flow__connector-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--lastro-brand-seal) 55%, transparent) 45%,
+    var(--lastro-brand-seal) 100%
+  );
+  transform: translateX(-100%);
+  animation: process-flow-connector-energy 1.4s ease-in-out infinite;
+}
+
+.process-flow__connector--done .process-flow__connector-line::after {
+  animation: none;
+  transform: none;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--lastro-brand-seal) 30%, transparent),
+    var(--lastro-brand-seal)
+  );
+}
+
+.process-flow__connector--active .process-flow__connector-line,
+.process-flow__connector--done .process-flow__connector-line {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--lastro-brand-seal) 30%, transparent),
+    var(--lastro-brand-seal)
+  );
+}
+
+/* ── Lot card — rigid shell, Apple-quiet state changes ── */
+
+.process-lot-card {
+  display: grid;
+  grid-template-rows: 5.5rem 4.35rem minmax(0, 1fr) 5.6rem;
+  gap: 0;
+  width: min(15.5rem, 72vw);
+  height: 23.5rem;
+  max-height: 23.5rem;
+  flex-shrink: 0;
+  border-radius: 0.875rem;
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-subtle) 85%, transparent);
+  background: color-mix(in srgb, var(--lastro-bg-panel) 92%, transparent);
+  box-shadow:
+    0 0 0 0.5px color-mix(in srgb, #fff 5%, transparent) inset,
+    0 12px 32px -20px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  transition:
+    border-color 420ms var(--ease-out),
+    box-shadow 420ms var(--ease-out),
+    opacity 420ms var(--ease-out);
+}
+
+.process-lot-card--queued {
+  opacity: 0.58;
+}
+
+.process-lot-card--active {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
+  box-shadow:
+    0 0 0 0.5px color-mix(in srgb, var(--lastro-brand-seal) 20%, transparent) inset,
+    0 16px 40px -18px rgba(0, 0, 0, 0.7),
+    var(--lastro-glow-seal);
+}
+
+.process-lot-card--prepare {
+  border-color: color-mix(in srgb, var(--lastro-text-muted) 35%, transparent);
+}
+
+.process-lot-card--agent {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 52%, transparent);
+  box-shadow:
+    0 0 0 0.5px color-mix(in srgb, var(--lastro-brand-seal) 24%, transparent) inset,
+    0 16px 40px -18px rgba(0, 0, 0, 0.7),
+    var(--lastro-glow-seal);
+}
+
+.process-lot-card--seal {
+  border-color: color-mix(in srgb, var(--lastro-accent-brand) 48%, transparent);
+  box-shadow:
+    0 0 0 0.5px color-mix(in srgb, var(--lastro-accent-brand) 22%, transparent) inset,
+    0 16px 40px -18px rgba(0, 0, 0, 0.7),
+    var(--lastro-glow-lime);
+}
+
+.process-lot-card--done {
+  opacity: 0.92;
+  border-color: color-mix(in srgb, var(--lastro-accent-success) 28%, transparent);
+}
+
+.process-lot-card__banner {
+  position: relative;
+  height: 5.5rem;
+  overflow: hidden;
+  border-radius: 0.875rem 0.875rem 0 0;
+  background: var(--lastro-bg-elevated);
+}
+
+.process-lot-card__banner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.process-lot-card__banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent));
+}
+
+.process-lot-card__index {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.45rem;
+  z-index: 1;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--lastro-radius-pill);
+  font-size: 0.625rem;
+  color: var(--lastro-text-primary);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 72%, transparent);
+}
+
+.process-lot-card__head {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-content: start;
+  gap: 0.2rem;
+  height: 4.35rem;
+  padding: 0.65rem 0.75rem 0.45rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.process-lot-card__name {
+  margin: 0;
+  font-family: var(--lastro-font-display);
+  font-size: 0.9375rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.025em;
+  color: var(--lastro-text-primary);
+}
+
+.process-lot-card__meta {
+  margin: 0;
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+  min-height: 0.875rem;
+}
+
+.process-lot-card__meta--empty {
+  visibility: hidden;
+}
+
+.process-lot-card__agent {
+  margin: 0;
+  font-size: 0.625rem;
+  color: var(--lastro-brand-seal);
+  min-height: 0.875rem;
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out);
+}
+
+.process-lot-card__agent--visible {
+  opacity: 1;
+}
+
+/* Checklist — sidebar-guide pattern */
+
+.process-lot-card__checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0.5rem 0.65rem;
+  display: grid;
+  gap: 0.125rem;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.process-lot-card__check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  height: 2rem;
+  min-height: 2rem;
+  max-height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--lastro-text-muted);
+  transition:
+    background 320ms var(--ease-out),
+    color 320ms var(--ease-out),
+    opacity 320ms var(--ease-out);
+}
+
+.process-lot-card__check-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--lastro-border-strong) 75%, transparent);
+  color: var(--lastro-accent-brand);
+}
+
+.process-lot-card__check-item--done {
+  color: var(--lastro-text-muted);
+}
+
+.process-lot-card__check-item--done .process-lot-card__check-mark {
+  border-color: color-mix(in srgb, var(--lastro-accent-brand) 45%, transparent);
+  background: color-mix(in srgb, var(--lastro-accent-brand) 14%, var(--lastro-bg-primary));
+  transition:
+    border-color 320ms var(--ease-out),
+    background 320ms var(--ease-out);
+}
+
+.process-lot-card__check-item--active {
+  color: var(--lastro-text-primary);
+  background: color-mix(in srgb, var(--lastro-accent-brand) 9%, var(--app-fill-active));
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--lastro-accent-brand) 22%, transparent);
+}
+
+.process-lot-card__tail {
+  display: grid;
+  grid-template-rows: 2.85rem 2.75rem;
+  height: 5.6rem;
+  overflow: hidden;
+}
+
+.process-lot-card__reasoning-wrap,
+.process-lot-card__foot-wrap {
+  overflow: hidden;
+}
+
+.process-lot-card__reasoning {
+  margin: 0;
+  padding: 0 0.75rem;
+  height: 2.85rem;
+  max-height: 2.85rem;
+  overflow: hidden;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out);
+}
+
+.process-lot-card__reasoning--visible {
+  opacity: 1;
+}
+
+.process-lot-card__foot {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.75rem;
+  max-height: 2.75rem;
+  padding: 0 0.75rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.process-lot-card__foot--idle {
+  border-top: var(--lastro-stroke-hairline) solid transparent;
+}
+
+.process-lot-card__check-item--done .process-lot-card__check-label {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--lastro-text-muted) 55%, transparent);
+  text-decoration-thickness: 1px;
+}
+
+.process-lot-card__hash {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.process-lot-card__computing,
+.process-lot-card__waiting {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  height: 2.75rem;
+  max-height: 2.75rem;
+  padding: 0 0.75rem;
+  box-sizing: border-box;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+  overflow: hidden;
+}
+
+.process-lot-card__computing {
+  color: var(--lastro-brand-seal);
+}
+
+@media (max-width: 900px) {
+  .process-lot-card {
+    width: min(14rem, 78vw);
+    height: 22.5rem;
+    max-height: 22.5rem;
+    grid-template-rows: 5.5rem 4.35rem minmax(0, 1fr) 5.6rem;
+  }
+
+  .process-flow__slot,
+  .process-flow__connector {
+    height: 22.5rem;
+  }
+
+  .process-flow__connector-line {
+    margin-top: 11.25rem;
+  }
+
+  .process-flow__connector {
+    width: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-flow__kicker,
+  .process-flow__complete,
+  .process-lot-card,
+  .process-lot-card__agent,
+  .process-lot-card__reasoning,
+  .process-lot-card__check-item,
+  .process-lot-card__check-mark,
+  .process-flow__connector--active .process-flow__connector-line::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@keyframes process-flow-live-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lastro-brand-seal) 40%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@keyframes process-flow-connector-energy {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}

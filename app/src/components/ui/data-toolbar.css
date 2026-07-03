@@ -46,6 +46,7 @@
 .view-toggle__btn--active {
   background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
   color: var(--lastro-text-primary);
+  box-shadow: var(--segment-active-shadow);
 }
 
 .sort-select {

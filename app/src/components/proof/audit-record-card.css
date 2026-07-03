@@ -28,6 +28,13 @@
   color: var(--lastro-brand-seal);
 }
 
+.audit-card__subtitle {
+  margin: -0.35rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-muted);
+}
+
 .audit-card__section {
   display: grid;
   gap: 0.45rem;
@@ -75,4 +82,17 @@
   font-family: var(--lastro-font-mono);
   font-size: 0.75rem;
   color: var(--lastro-text-secondary);
+}
+
+.audit-card__explorer {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-brand-seal);
+  text-decoration: none;
+}
+
+.audit-card__explorer:hover {
+  text-decoration: underline;
 }

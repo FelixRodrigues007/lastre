@@ -32,6 +32,7 @@
   border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
   background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
   color: var(--lastro-text-primary);
+  box-shadow: var(--segment-active-shadow);
 }
 
 .filter-pill__count {

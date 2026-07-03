@@ -1,193 +1,407 @@
+.process-page .state-panel {
+  overflow: visible;
+}
+
+/* Keep the shell fixed — only the mesh layer animates inside a clipped viewport */
+.app-content:has(.process-page),
+.app-main:has(.process-page) {
+  overflow: hidden;
+  max-height: 100dvh;
+}
+
+.app-main:has(.process-page) .shell {
+  overflow: hidden;
+}
+
+.process-page {
+  --process-shell-pad: clamp(1.5rem, 2.5vw, 2.75rem);
+  --process-config-width: 20rem;
+  --process-layout-gap: clamp(2rem, 4vw, 4rem);
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  padding-block-start: clamp(1.75rem, 1rem + 3vh, 3rem);
+}
+
+/* Idle — subtle dot grid, full viewport */
+.process-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--lastro-bg-primary);
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--lastro-text-muted) 14%, transparent) 0.55px,
+    transparent 0.56px
+  );
+  background-size: 1.375rem 1.375rem;
+  background-position: center center;
+  opacity: 0.28;
+  transition: opacity 1s var(--ease-out);
+}
+
+.process-page--running::before,
+.process-page--completed::before {
+  opacity: 0;
+}
+
+.process-page > :not(.process-page__ambient) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Live mesh — full viewport, organic green motion when batch runs ── */
+
+.process-page__ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+  contain: strict;
+  transition: opacity 1.1s var(--ease-out);
+}
+
+.process-page--running .process-page__ambient {
+  opacity: 1;
+  transition-duration: 0.85s;
+}
+
+.process-page--running .process-page__mesh-base,
+.process-page--running .process-page__blob {
+  animation-play-state: running;
+}
+
+.process-page--completed .process-page__ambient {
+  opacity: 0.72;
+}
+
+.process-page__mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--lastro-bg-primary);
+}
+
+.process-page__mesh-base {
+  position: absolute;
+  inset: -8%;
+  background:
+    radial-gradient(
+      ellipse 85% 70% at 18% 42%,
+      color-mix(in srgb, var(--lastro-color-jade-500) 42%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 75% 65% at 82% 28%,
+      color-mix(in srgb, var(--lastro-color-seal-500) 34%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 90% 80% at 55% 92%,
+      color-mix(in srgb, var(--lastro-color-olive-800) 58%, transparent),
+      transparent 62%
+    ),
+    linear-gradient(
+      155deg,
+      color-mix(in srgb, var(--lastro-color-jade-700) 42%, var(--lastro-bg-primary)) 0%,
+      var(--lastro-bg-primary) 42%,
+      color-mix(in srgb, var(--lastro-color-olive-900) 65%, var(--lastro-bg-primary)) 100%
+    );
+  animation: process-mesh-base-drift 11s ease-in-out infinite;
+}
+
+.process-page__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.78;
+  will-change: transform;
+  mix-blend-mode: screen;
+  animation-play-state: paused;
+}
+
+.process-page__blob--1 {
+  top: 5%;
+  left: 0;
+  width: min(52vw, 36rem);
+  height: min(52vw, 36rem);
+  background: color-mix(in srgb, var(--lastro-color-lime-400) 58%, transparent);
+  animation: process-mesh-organic-1 9s ease-in-out infinite;
+}
+
+.process-page__blob--2 {
+  top: 10%;
+  right: 0;
+  width: min(48vw, 32rem);
+  height: min(48vw, 32rem);
+  background: color-mix(in srgb, var(--lastro-color-jade-400) 54%, transparent);
+  animation: process-mesh-organic-2 11s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+.process-page__blob--3 {
+  bottom: 0;
+  left: 15%;
+  width: min(56vw, 38rem);
+  height: min(56vw, 38rem);
+  background: color-mix(in srgb, var(--lastro-color-seal-400) 46%, transparent);
+  animation: process-mesh-organic-3 13s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+.process-page__blob--4 {
+  top: 38%;
+  left: 28%;
+  width: min(42vw, 28rem);
+  height: min(42vw, 28rem);
+  background: color-mix(in srgb, var(--lastro-color-lime-300) 42%, transparent);
+  animation: process-mesh-organic-4 10s ease-in-out infinite;
+  animation-delay: -1s;
+}
+
+.process-page__blob--5 {
+  top: 6%;
+  right: 18%;
+  width: min(46vw, 30rem);
+  height: min(46vw, 30rem);
+  background: color-mix(in srgb, var(--lastro-color-jade-300) 40%, transparent);
+  animation: process-mesh-organic-5 12s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
+.process-page__mesh-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+.process-page--running .process-page__mesh-grain {
+  animation: process-mesh-grain-shift 0.35s steps(3) infinite;
+}
+
+.process-page--completed .process-page__blob,
+.process-page--completed .process-page__mesh-base {
+  animation-duration: 36s;
+  animation-timing-function: ease-in-out;
+}
+
+@media (min-width: 900px) {
+  .process-page.page {
+    width: calc(100% + 2 * var(--process-shell-pad));
+    max-width: none;
+    margin-inline: calc(-1 * var(--process-shell-pad));
+    padding-inline: var(--process-shell-pad);
+  }
+}
+
 .process-layout {
+  position: relative;
   display: grid;
   gap: 1.25rem;
   width: 100%;
 }
 
+.process-layout--split {
+  min-height: calc(100dvh - 7.5rem);
+  padding: 0;
+  padding-block-start: clamp(0.5rem, 1.5vh, 1rem);
+  overflow: visible;
+}
+
+.process-layout__config {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--process-config-width);
+  height: fit-content;
+}
+
+.process-layout__stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 0;
+  min-height: min(28rem, calc(100dvh - 12rem));
+  padding-block: 0 1.5rem;
+  overflow: visible;
+}
+
+.process-layout__stage > * {
+  position: relative;
+  z-index: 1;
+}
+
+.process-layout__stage .process-pipeline--embedded {
+  width: 100%;
+  padding: 1rem 1.1rem 1.15rem;
+  border-radius: 1.125rem;
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-trust) 55%, transparent);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--lastro-bg-panel) 68%, transparent) 0%,
+      color-mix(in srgb, var(--lastro-bg-elevated) 52%, transparent) 100%
+    );
+  backdrop-filter: blur(20px) saturate(1.15);
+  box-shadow: var(--app-shadow-elevated);
+}
+
 @media (min-width: 960px) {
-  .process-layout {
-    grid-template-columns: minmax(280px, 340px) 1fr;
+  .process-layout--split {
+    grid-template-columns: minmax(0, var(--process-config-width)) minmax(0, 1fr);
     align-items: start;
+    gap: var(--process-layout-gap);
+    padding-inline: 0.5rem 0;
+  }
+
+  .process-layout--split .process-layout__config {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+  }
+
+  .process-layout--split .process-layout__stage {
+    grid-column: 2;
+    grid-row: 1;
+    padding-block: 0 2rem;
+    align-self: start;
+    justify-content: flex-start;
+    min-height: min(100%, calc(100dvh - 8rem));
   }
 }
 
-.process-picker {
-  display: grid;
-  gap: 1rem;
+@keyframes process-mesh-base-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate3d(3%, -2%, 0) scale(1.04);
+  }
+
+  50% {
+    transform: translate3d(-2%, 3%, 0) scale(0.98);
+  }
+
+  75% {
+    transform: translate3d(2%, 1%, 0) scale(1.02);
+  }
 }
 
-.process-picker__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
+@keyframes process-mesh-organic-1 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate3d(8%, 6%, 0) scale(1.08);
+  }
+
+  50% {
+    transform: translate3d(4%, -5%, 0) scale(0.94);
+  }
+
+  75% {
+    transform: translate3d(-6%, 4%, 0) scale(1.05);
+  }
 }
 
-.process-picker__count {
-  margin-top: 0.25rem;
-  font-family: var(--lastro-font-display);
-  font-size: 1.125rem;
-  font-weight: var(--lastro-weight-semibold);
-  letter-spacing: -0.02em;
+@keyframes process-mesh-organic-2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  30% {
+    transform: translate3d(-7%, 6%, 0) scale(1.06);
+  }
+
+  60% {
+    transform: translate3d(5%, -5%, 0) scale(0.94);
+  }
 }
 
-.process-picker__decider {
-  display: grid;
-  gap: 0.5rem;
-  border: 0;
-  margin: 0;
-  padding: 0;
+@keyframes process-mesh-organic-3 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  20% {
+    transform: translate3d(-5%, -6%, 0) scale(1.07);
+  }
+
+  55% {
+    transform: translate3d(7%, -3%, 0) scale(0.92);
+  }
+
+  80% {
+    transform: translate3d(-3%, 5%, 0) scale(1.03);
+  }
 }
 
-.process-picker__decider-row {
-  display: flex;
-  gap: 0.5rem;
+@keyframes process-mesh-organic-4 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  40% {
+    transform: translate3d(-8%, -4%, 0) scale(1.08);
+  }
+
+  70% {
+    transform: translate3d(6%, 5%, 0) scale(0.93);
+  }
 }
 
-.process-picker__radio {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.75rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
-  cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease-out);
+@keyframes process-mesh-organic-5 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  35% {
+    transform: translate3d(5%, 7%, 0) scale(1.06);
+  }
+
+  65% {
+    transform: translate3d(-6%, -4%, 0) scale(0.95);
+  }
 }
 
-.process-picker__radio:has(input:checked) {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
-  color: var(--lastro-text-primary);
+@keyframes process-mesh-grain-shift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-12px, 8px, 0);
+  }
 }
 
-.process-picker__list {
-  list-style: none;
-  display: grid;
-  gap: 0.45rem;
-}
+@media (prefers-reduced-motion: reduce) {
+  .process-page__ambient,
+  .process-page__mesh-base,
+  .process-page__blob,
+  .process-page__mesh-grain {
+    animation: none !important;
+  }
 
-.process-picker__item {
-  display: flex;
-  gap: 0.65rem;
-  align-items: flex-start;
-  padding: 0.6rem 0.7rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease-out);
-}
-
-.process-picker__item:hover {
-  border-color: var(--lastro-border-strong);
-}
-
-.process-picker__item:has(input:checked) {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
-}
-
-.process-picker__id {
-  display: block;
-  font-family: var(--lastro-font-mono);
-  font-size: 0.6875rem;
-}
-
-.process-picker__meta {
-  display: block;
-  margin-top: 0.15rem;
-  font-size: 0.75rem;
-  color: var(--lastro-text-muted);
-  line-height: 1.4;
-}
-
-.process-progress {
-  display: grid;
-  gap: 0.4rem;
-}
-
-.process-progress__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.process-progress__pct {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.6875rem;
-  color: var(--lastro-text-secondary);
-}
-
-.process-progress__track {
-  height: 4px;
-  border-radius: var(--lastro-radius-pill);
-  background: color-mix(in srgb, var(--lastro-text-muted) 20%, transparent);
-  overflow: hidden;
-}
-
-.process-progress__fill {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--lastro-brand-seal);
-  transition: width 400ms var(--ease-out);
-}
-
-.process-picker__run {
-  width: 100%;
-  justify-content: center;
-  border: 0;
-}
-
-.process-picker__run:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.process-picker__error {
-  color: var(--lastro-status-invalid);
-  font-size: var(--text-small);
-}
-
-.process-picker__note {
-  font-size: 0.75rem;
-  color: var(--lastro-text-muted);
-  line-height: 1.45;
-}
-
-.process-picker__note code {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.6875rem;
-}
-
-.process-results__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.process-results__link {
-  flex-shrink: 0;
-  font-size: var(--text-small);
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
-}
-
-.process-results__link:hover {
-  color: var(--lastro-brand-seal);
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  .process-page--running .process-page__ambient,
+  .process-page--completed .process-page__ambient {
+    opacity: 1;
+  }
 }

@@ -1,11 +1,13 @@
 type SealMarkProps = {
   size?: number;
   label?: string;
+  live?: boolean;
 };
 
-export function SealMark({ size = 32, label }: SealMarkProps) {
+export function SealMark({ size = 32, label, live = false }: SealMarkProps) {
   return (
     <svg
+      className={live ? "seal-mark seal-mark--live" : "seal-mark"}
       width={size}
       height={size}
       viewBox="0 0 160 160"

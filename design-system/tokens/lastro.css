@@ -1,19 +1,22 @@
-/* Lastre Design System — LP family, deeper scale (v0.3.1)
+/* Lastre Design System — LP family, expanded palette (v0.4.0)
  * CANONICAL — web + app import only this file.
- * Same forest-mint family as lastre.io; surfaces pushed darker, seal accent less pastel. */
+ * Forest-mint brand with jade (trust), lime (success), amber (warn), sky (info). */
 :root {
-  /* ── primitive · olive (forest — darker steps, same hue) ───────── */
+  /* ── primitive · olive (forest — depth ladder) ───────────────── */
   --lastro-color-olive-950: #0a1713;
+  --lastro-color-olive-925: #0c1c17;
   --lastro-color-olive-900: #0f201a;
+  --lastro-color-olive-875: #11241d;
   --lastro-color-olive-850: #122820;
   --lastro-color-olive-800: #163026;
+  --lastro-color-olive-750: #18342b;
   --lastro-color-olive-700: #1a3830;
   --lastro-color-olive-600: #23463c;
   --lastro-color-olive-500: #2f574c;
   --lastro-color-olive-400: #4a7266;
   --lastro-color-olive-300: #6a9184;
 
-  /* ── primitive · neutrals ──────────────────────────────────────── */
+  /* ── primitive · neutrals ─────────────────────────────────────── */
   --lastro-color-sage-400: #7a9088;
   --lastro-color-sage-300: #95a89f;
   --lastro-color-sage-200: #b0c0b8;
@@ -22,30 +25,78 @@
   --lastro-color-cream-200: #dce8e2;
   --lastro-color-cream-300: #c8d6cf;
 
-  /* ── primitive · seal (mint — mid tone default, light reserved for glow) */
+  /* ── primitive · seal (brand mint — proof mark, nav, CTAs secondary) */
+  --lastro-color-seal-200: #d4f2c4;
+  --lastro-color-seal-250: #c8ecb6;
   --lastro-color-seal-300: #b8e8a4;
+  --lastro-color-seal-350: #a5df8f;
   --lastro-color-seal-400: #92d67a;
+  --lastro-color-seal-450: #82cc68;
   --lastro-color-seal-500: #72c458;
   --lastro-color-seal-600: #5aa342;
   --lastro-color-seal-700: #458234;
   --lastro-color-seal-800: #336628;
 
-  --lastro-surface-clear: color-mix(in oklab, var(--lastro-color-seal-500) 10%, var(--lastro-color-cream-100));
+  /* ── primitive · jade (trust / chain / on-chain — cool teal-green) */
+  --lastro-color-jade-950: #071612;
+  --lastro-color-jade-300: #7ad4bc;
+  --lastro-color-jade-400: #56c4a8;
+  --lastro-color-jade-500: #3db899;
+  --lastro-color-jade-600: #2a9a82;
+  --lastro-color-jade-700: #227a68;
 
+  /* ── primitive · lime (success / valid — warm chartreuse, not mint) */
+  --lastro-color-lime-300: #d4e878;
+  --lastro-color-lime-400: #b8d04a;
+  --lastro-color-lime-500: #9fc234;
+  --lastro-color-lime-600: #84a828;
+  --lastro-color-lime-700: #6a8820;
+
+  /* ── primitive · amber (warn / pending) ──────────────────────── */
+  --lastro-color-amber-300: #f0c060;
+  --lastro-color-amber-400: #e8a838;
+  --lastro-color-amber-500: #d4923a;
+  --lastro-color-amber-600: #b8741f;
+
+  /* ── primitive · sky (info / links) ───────────────────────────── */
+  --lastro-color-sky-300: #8ec4f8;
+  --lastro-color-sky-400: #6baef0;
+  --lastro-color-sky-500: #5099e8;
+  --lastro-color-sky-600: #3d82d0;
+
+  /* ── primitive · orange (primary CTA) ───────────────────────── */
   --lastro-color-orange-300: #f89a55;
-  --lastro-color-orange-400: #F57C25;
+  --lastro-color-orange-400: #f57c25;
   --lastro-color-orange-500: #e06a17;
   --lastro-color-orange-600: #bd560f;
 
-  --lastro-color-valid-400: #8aab52;
-  --lastro-color-valid-500: #6f8f2e;
-  --lastro-color-valid-600: #577322;
+  /* ── primitive · coral (invalid / danger) ─────────────────────── */
+  --lastro-color-coral-300: #f09078;
+  --lastro-color-coral-400: #e0714f;
+  --lastro-color-coral-500: #d9603f;
+  --lastro-color-coral-600: #c34a2c;
+  --lastro-color-coral-700: #9e3a22;
 
-  --lastro-color-invalid-400: #d9603f;
-  --lastro-color-invalid-500: #c34a2c;
-  --lastro-color-invalid-600: #9e3a22;
+  /* legacy valid aliases → lime family (distinct from seal mint) */
+  --lastro-color-valid-400: var(--lastro-color-lime-400);
+  --lastro-color-valid-500: var(--lastro-color-lime-500);
+  --lastro-color-valid-600: var(--lastro-color-lime-600);
 
-  /* ── primitive · type / space / radius / stroke ────────────────── */
+  --lastro-color-invalid-400: var(--lastro-color-coral-400);
+  --lastro-color-invalid-500: var(--lastro-color-coral-500);
+  --lastro-color-invalid-600: var(--lastro-color-coral-600);
+
+  --lastro-surface-clear: color-mix(in oklab, var(--lastro-color-seal-500) 10%, var(--lastro-color-cream-100));
+
+  /* RGB tuples for alpha compositing */
+  --lastro-mint-wash: 114, 196, 88;
+  --lastro-jade-wash: 61, 184, 153;
+  --lastro-lime-wash: 184, 208, 74;
+  --lastro-amber-wash: 232, 168, 56;
+  --lastro-sky-wash: 107, 174, 240;
+  --lastro-coral-wash: 224, 113, 79;
+
+  /* ── primitive · type / space / radius / stroke ───────────────── */
   --lastro-font-display: "Inter Display", "Inter", ui-sans-serif, system-ui, sans-serif;
   --lastro-font-body: Inter, ui-sans-serif, system-ui, sans-serif;
   --lastro-font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
@@ -74,8 +125,196 @@
 
   --site-nav-height: 3.25rem;
 
-  /* Mint wash for overlays — tied to seal-500, low alpha */
-  --lastro-mint-wash: 114, 196, 88;
+  /* ── gradients · surfaces & ambience ─────────────────────────── */
+  --lastro-gradient-surface-panel:
+    linear-gradient(
+      168deg,
+      var(--lastro-color-olive-900) 0%,
+      color-mix(in srgb, var(--lastro-color-olive-875) 88%, var(--lastro-color-jade-950)) 55%,
+      var(--lastro-color-olive-850) 100%
+    );
+
+  --lastro-gradient-surface-elevated:
+    linear-gradient(
+      152deg,
+      color-mix(in srgb, var(--lastro-color-olive-850) 94%, #fff) 0%,
+      var(--lastro-color-olive-800) 48%,
+      color-mix(in srgb, var(--lastro-color-olive-750) 90%, var(--lastro-color-jade-950)) 100%
+    );
+
+  --lastro-gradient-surface-canvas:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(var(--lastro-jade-wash), 0.06), transparent 55%),
+    radial-gradient(ellipse 90% 60% at 100% 50%, rgba(var(--lastro-mint-wash), 0.04), transparent 50%),
+    var(--lastro-color-olive-950);
+
+  --lastro-gradient-hero-brand:
+    radial-gradient(
+      ellipse 80% 70% at 72% 18%,
+      color-mix(in srgb, var(--lastro-color-seal-400) 38%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 55% 50% at 12% 88%,
+      color-mix(in srgb, var(--lastro-color-jade-500) 32%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      128deg,
+      var(--lastro-color-olive-950) 0%,
+      var(--lastro-color-olive-800) 34%,
+      color-mix(in srgb, var(--lastro-color-jade-700) 55%, var(--lastro-color-olive-700)) 68%,
+      color-mix(in srgb, var(--lastro-color-seal-700) 42%, var(--lastro-color-olive-600)) 100%
+    );
+
+  --lastro-gradient-mesh-primary:
+    radial-gradient(
+      ellipse 80% 60% at 72% 28%,
+      color-mix(in srgb, var(--lastro-color-seal-400) 16%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 55% 50% at 22% 72%,
+      color-mix(in srgb, var(--lastro-color-jade-500) 14%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 40% 35% at 50% 50%,
+      color-mix(in srgb, var(--lastro-color-olive-500) 10%, transparent),
+      transparent 70%
+    );
+
+  --lastro-gradient-seal-shine:
+    linear-gradient(135deg, var(--lastro-color-seal-300) 0%, var(--lastro-color-seal-500) 52%, var(--lastro-color-seal-700) 100%);
+
+  --lastro-gradient-jade-shine:
+    linear-gradient(135deg, var(--lastro-color-jade-300) 0%, var(--lastro-color-jade-500) 55%, var(--lastro-color-jade-700) 100%);
+
+  --lastro-gradient-lime-shine:
+    linear-gradient(135deg, var(--lastro-color-lime-300) 0%, var(--lastro-color-lime-500) 55%, var(--lastro-color-lime-700) 100%);
+
+  --lastro-gradient-cta:
+    linear-gradient(165deg, var(--lastro-color-orange-300) 0%, var(--lastro-color-orange-400) 42%, var(--lastro-color-orange-500) 100%);
+
+  --lastro-gradient-amber-shine:
+    linear-gradient(135deg, var(--lastro-color-amber-300) 0%, var(--lastro-color-amber-500) 55%, var(--lastro-color-amber-600) 100%);
+
+  --lastro-gradient-sky-shine:
+    linear-gradient(135deg, var(--lastro-color-sky-300) 0%, var(--lastro-color-sky-500) 55%, var(--lastro-color-sky-600) 100%);
+
+  --lastro-gradient-coral-shine:
+    linear-gradient(135deg, var(--lastro-color-coral-300) 0%, var(--lastro-color-coral-500) 55%, var(--lastro-color-coral-600) 100%);
+
+  --lastro-gradient-glass-highlight:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 38%, transparent 100%);
+
+  /* ── map · sky harmonized within forest ecosystem ──────────────── */
+  --lastro-color-map-deep: #071218;
+  --lastro-color-map-panel: #0a1822;
+  --lastro-color-map-border: #1e3348;
+  --lastro-color-map-border-strong: #2a4460;
+  --lastro-color-map-text: #dce8f0;
+  --lastro-color-map-text-secondary: #b8ccd8;
+  --lastro-color-map-text-muted: #8fa8bc;
+  --lastro-color-map-text-dim: #5a7285;
+  --lastro-color-map-water: #8ec8f0;
+  --lastro-color-map-water-deep: #6baed4;
+  --lastro-color-map-land: #2a4a3a;
+  --lastro-color-map-land-light: #b8dcc0;
+  --lastro-color-map-sand: #e8d4a8;
+
+  --lastro-gradient-map-panel:
+    linear-gradient(
+      168deg,
+      var(--lastro-color-map-panel) 0%,
+      color-mix(in srgb, var(--lastro-color-map-deep) 92%, var(--lastro-color-jade-950)) 100%
+    );
+
+  --lastro-gradient-map-water:
+    linear-gradient(180deg, var(--lastro-color-map-water) 0%, var(--lastro-color-map-water-deep) 100%);
+
+  /* ── data viz · chart series palette ───────────────────────────── */
+  --lastro-viz-1: var(--lastro-gradient-seal-shine);
+  --lastro-viz-2: var(--lastro-gradient-jade-shine);
+  --lastro-viz-3: var(--lastro-gradient-lime-shine);
+  --lastro-viz-4: var(--lastro-gradient-amber-shine);
+  --lastro-viz-5: var(--lastro-gradient-sky-shine);
+  --lastro-viz-6: var(--lastro-gradient-coral-shine);
+  --lastro-viz-7: linear-gradient(135deg, #e8a0c0 0%, #e06b9a 55%, #c45588 100%);
+
+  --lastro-viz-1-solid: var(--lastro-color-seal-400);
+  --lastro-viz-2-solid: var(--lastro-color-jade-400);
+  --lastro-viz-3-solid: var(--lastro-color-lime-400);
+  --lastro-viz-4-solid: var(--lastro-color-amber-400);
+  --lastro-viz-5-solid: var(--lastro-color-sky-400);
+  --lastro-viz-6-solid: var(--lastro-color-coral-400);
+  --lastro-viz-7-solid: #e06b9a;
+
+  /* ── route ambient · per-page mesh overlays ────────────────────── */
+  --lastro-ambient-chain:
+    radial-gradient(ellipse 70% 55% at 85% 15%, rgba(var(--lastro-jade-wash), 0.14), transparent 58%),
+    radial-gradient(ellipse 50% 45% at 10% 80%, rgba(var(--lastro-jade-wash), 0.08), transparent 55%);
+
+  --lastro-ambient-lots:
+    radial-gradient(ellipse 65% 50% at 75% 20%, rgba(var(--lastro-mint-wash), 0.06), transparent 60%),
+    radial-gradient(ellipse 45% 40% at 15% 85%, rgba(var(--lastro-jade-wash), 0.05), transparent 55%);
+
+  --lastro-ambient-market:
+    radial-gradient(ellipse 80% 60% at 100% 30%, rgba(var(--lastro-sky-wash), 0.1), transparent 58%),
+    radial-gradient(ellipse 55% 50% at 20% 70%, rgba(var(--lastro-jade-wash), 0.08), transparent 55%);
+
+  --lastro-ambient-assets:
+    radial-gradient(ellipse 70% 55% at 80% 25%, rgba(var(--lastro-mint-wash), 0.1), transparent 58%),
+    radial-gradient(ellipse 50% 45% at 15% 75%, rgba(var(--lastro-lime-wash), 0.07), transparent 55%);
+
+  --lastro-ambient-capture:
+    radial-gradient(ellipse 75% 60% at 50% 0%, rgba(var(--lastro-jade-wash), 0.1), transparent 62%),
+    radial-gradient(ellipse 45% 40% at 90% 90%, rgba(var(--lastro-mint-wash), 0.06), transparent 55%);
+
+  --lastro-ambient-escalations:
+    radial-gradient(ellipse 65% 50% at 70% 20%, rgba(var(--lastro-amber-wash), 0.09), transparent 58%),
+    radial-gradient(ellipse 50% 45% at 20% 80%, rgba(var(--lastro-coral-wash), 0.06), transparent 55%);
+
+  --lastro-ambient-audit:
+    radial-gradient(ellipse 70% 55% at 75% 18%, rgba(var(--lastro-jade-wash), 0.08), transparent 58%),
+    radial-gradient(ellipse 45% 40% at 12% 82%, rgba(var(--lastro-mint-wash), 0.05), transparent 55%);
+
+  /* ── elevation · layered depth (tinted ambient, inner highlight) ─ */
+  --lastro-shadow-xs:
+    0 0 0 0.5px rgba(220, 232, 226, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  --lastro-shadow-sm:
+    0 0 0 0.5px rgba(220, 232, 226, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.28),
+    0 4px 12px -4px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  --lastro-shadow-md:
+    0 0 0 0.5px rgba(220, 232, 226, 0.09),
+    0 2px 4px rgba(0, 0, 0, 0.22),
+    0 12px 32px -12px rgba(0, 0, 0, 0.48),
+    0 8px 24px -16px rgba(var(--lastro-jade-wash), 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  --lastro-shadow-lg:
+    0 0 0 0.5px rgba(220, 232, 226, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 24px 56px -20px rgba(0, 0, 0, 0.55),
+    0 16px 40px -24px rgba(var(--lastro-mint-wash), 0.1),
+    0 12px 32px -20px rgba(var(--lastro-jade-wash), 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
+  --lastro-shadow-xl:
+    0 0 0 0.5px rgba(220, 232, 226, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.18),
+    0 32px 72px -24px rgba(0, 0, 0, 0.62),
+    0 20px 48px -28px rgba(var(--lastro-mint-wash), 0.14),
+    0 16px 40px -28px rgba(var(--lastro-jade-wash), 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  --lastro-glow-seal: 0 0 0 3px rgba(var(--lastro-mint-wash), 0.18), 0 0 24px -4px rgba(var(--lastro-mint-wash), 0.28);
+  --lastro-glow-jade: 0 0 0 3px rgba(var(--lastro-jade-wash), 0.16), 0 0 24px -4px rgba(var(--lastro-jade-wash), 0.26);
+  --lastro-glow-lime: 0 0 0 3px rgba(var(--lastro-lime-wash), 0.16), 0 0 20px -4px rgba(var(--lastro-lime-wash), 0.24);
 
   /* ── semantic · DARK (default) ─────────────────────────────────── */
   --lastro-bg-primary: var(--lastro-color-olive-950);
@@ -86,22 +325,50 @@
   --lastro-text-secondary: var(--lastro-color-sage-300);
   --lastro-text-muted: var(--lastro-color-sage-400);
   --lastro-text-inverse: var(--lastro-color-olive-950);
-  --lastro-brand-seal: var(--lastro-color-seal-400);
-  --lastro-brand-seal-bright: var(--lastro-color-seal-300);
-  --lastro-brand-seal-text: var(--lastro-color-seal-400);
+
+  /* accent roles — use the right family per context */
+  --lastro-accent-brand: var(--lastro-color-seal-400);
+  --lastro-accent-brand-soft: var(--lastro-color-seal-500);
+  --lastro-accent-brand-bright: var(--lastro-color-seal-300);
+  --lastro-accent-trust: var(--lastro-color-jade-400);
+  --lastro-accent-trust-soft: var(--lastro-color-jade-500);
+  --lastro-accent-success: var(--lastro-color-lime-400);
+  --lastro-accent-success-soft: var(--lastro-color-lime-500);
+  --lastro-accent-warn: var(--lastro-color-amber-400);
+  --lastro-accent-info: var(--lastro-color-sky-400);
+  --lastro-accent-danger: var(--lastro-color-coral-400);
+
+  /* legacy semantic aliases */
+  --lastro-brand-seal: var(--lastro-accent-brand);
+  --lastro-brand-seal-bright: var(--lastro-accent-brand-bright);
+  --lastro-brand-seal-text: var(--lastro-accent-brand);
   --lastro-brand-orange: var(--lastro-color-orange-400);
-  --lastro-status-valid: var(--lastro-color-valid-400);
-  --lastro-status-invalid: var(--lastro-color-invalid-400);
+  --lastro-status-valid: var(--lastro-accent-success);
+  --lastro-status-invalid: var(--lastro-accent-danger);
+
   --lastro-border-subtle: rgba(220, 232, 226, 0.08);
   --lastro-border-strong: rgba(220, 232, 226, 0.16);
+  --lastro-border-brand: rgba(var(--lastro-mint-wash), 0.22);
+  --lastro-border-trust: rgba(var(--lastro-jade-wash), 0.22);
+  --lastro-border-success: rgba(var(--lastro-lime-wash), 0.24);
+
+  /* tinted fills */
+  --lastro-fill-brand: rgba(var(--lastro-mint-wash), 0.1);
+  --lastro-fill-brand-strong: rgba(var(--lastro-mint-wash), 0.16);
+  --lastro-fill-trust: rgba(var(--lastro-jade-wash), 0.1);
+  --lastro-fill-trust-strong: rgba(var(--lastro-jade-wash), 0.16);
+  --lastro-fill-success: rgba(var(--lastro-lime-wash), 0.1);
+  --lastro-fill-warn: rgba(var(--lastro-amber-wash), 0.12);
+  --lastro-fill-info: rgba(var(--lastro-sky-wash), 0.1);
+  --lastro-fill-danger: rgba(var(--lastro-coral-wash), 0.1);
 
   /* ── component ─────────────────────────────────────────────────── */
-  --lastro-button-primary-bg: var(--lastro-color-orange-400);
+  --lastro-button-primary-bg: var(--lastro-gradient-cta);
   --lastro-button-primary-text: #ffffff;
-  --lastro-badge-bg: rgba(var(--lastro-mint-wash), 0.12);
-  --lastro-badge-text: var(--lastro-color-seal-400);
-  --lastro-badge-border: rgba(var(--lastro-mint-wash), 0.22);
-  --lastro-adcard-bg: linear-gradient(135deg, #0a1713 0%, #163026 58%, #1a3830 100%);
+  --lastro-badge-bg: var(--lastro-fill-brand);
+  --lastro-badge-text: var(--lastro-accent-brand);
+  --lastro-badge-border: var(--lastro-border-brand);
+  --lastro-adcard-bg: linear-gradient(135deg, #0a1713 0%, #163026 52%, #1a3830 78%, #122820 100%);
 }
 
 /* ── semantic · LIGHT override ───────────────────────────────────── */
@@ -115,16 +382,109 @@
   --lastro-text-secondary: var(--lastro-color-olive-700);
   --lastro-text-muted: var(--lastro-color-olive-500);
   --lastro-text-inverse: var(--lastro-color-cream-50);
-  --lastro-brand-seal: var(--lastro-color-seal-500);
+
+  --lastro-accent-brand: var(--lastro-color-seal-600);
+  --lastro-accent-brand-soft: var(--lastro-color-seal-700);
+  --lastro-accent-brand-bright: var(--lastro-color-seal-500);
+  --lastro-accent-trust: var(--lastro-color-jade-600);
+  --lastro-accent-trust-soft: var(--lastro-color-jade-700);
+  --lastro-accent-success: var(--lastro-color-lime-600);
+  --lastro-accent-success-soft: var(--lastro-color-lime-700);
+  --lastro-accent-warn: var(--lastro-color-amber-600);
+  --lastro-accent-info: var(--lastro-color-sky-600);
+  --lastro-accent-danger: var(--lastro-color-coral-600);
+
+  --lastro-brand-seal: var(--lastro-accent-brand);
   --lastro-brand-seal-text: var(--lastro-color-seal-800);
-  --lastro-status-valid: var(--lastro-color-valid-600);
-  --lastro-status-invalid: var(--lastro-color-invalid-600);
+  --lastro-status-valid: var(--lastro-accent-success);
+  --lastro-status-invalid: var(--lastro-accent-danger);
+
   --lastro-border-subtle: rgba(10, 23, 19, 0.1);
   --lastro-border-strong: rgba(10, 23, 19, 0.2);
-  --lastro-badge-bg: rgba(var(--lastro-mint-wash), 0.14);
+  --lastro-border-brand: rgba(var(--lastro-mint-wash), 0.32);
+  --lastro-border-trust: rgba(var(--lastro-jade-wash), 0.28);
+  --lastro-border-success: rgba(var(--lastro-lime-wash), 0.32);
+
+  --lastro-fill-brand: rgba(var(--lastro-mint-wash), 0.14);
+  --lastro-fill-brand-strong: rgba(var(--lastro-mint-wash), 0.2);
+  --lastro-fill-trust: rgba(var(--lastro-jade-wash), 0.12);
+  --lastro-fill-trust-strong: rgba(var(--lastro-jade-wash), 0.18);
+  --lastro-fill-success: rgba(var(--lastro-lime-wash), 0.14);
+  --lastro-fill-warn: rgba(var(--lastro-amber-wash), 0.16);
+  --lastro-fill-info: rgba(var(--lastro-sky-wash), 0.12);
+  --lastro-fill-danger: rgba(var(--lastro-coral-wash), 0.12);
+
+  --lastro-badge-bg: var(--lastro-fill-brand);
   --lastro-badge-text: var(--lastro-color-seal-800);
-  --lastro-badge-border: rgba(var(--lastro-mint-wash), 0.28);
+  --lastro-badge-border: var(--lastro-border-brand);
   --lastro-adcard-bg: var(--lastro-color-cream-200);
+
+  --lastro-gradient-surface-panel:
+    linear-gradient(
+      168deg,
+      var(--lastro-color-cream-100) 0%,
+      color-mix(in srgb, var(--lastro-color-cream-50) 92%, var(--lastro-color-jade-300)) 100%
+    );
+
+  --lastro-gradient-surface-elevated:
+    linear-gradient(152deg, var(--lastro-color-cream-50) 0%, var(--lastro-color-cream-100) 100%);
+
+  --lastro-gradient-surface-canvas:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(var(--lastro-jade-wash), 0.08), transparent 55%),
+    radial-gradient(ellipse 90% 60% at 100% 50%, rgba(var(--lastro-mint-wash), 0.06), transparent 50%),
+    var(--lastro-color-cream-200);
+
+  --lastro-gradient-hero-brand:
+    radial-gradient(
+      ellipse 80% 70% at 72% 18%,
+      color-mix(in srgb, var(--lastro-color-seal-500) 28%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 55% 50% at 12% 88%,
+      color-mix(in srgb, var(--lastro-color-jade-500) 22%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      128deg,
+      var(--lastro-color-cream-200) 0%,
+      var(--lastro-color-cream-100) 42%,
+      color-mix(in srgb, var(--lastro-color-jade-300) 35%, var(--lastro-color-cream-100)) 100%
+    );
+
+  --lastro-shadow-sm:
+    0 0 0 0.5px rgba(10, 23, 19, 0.08),
+    0 1px 2px rgba(19, 44, 36, 0.06),
+    0 4px 12px -4px rgba(19, 44, 36, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+
+  --lastro-shadow-md:
+    0 0 0 0.5px rgba(10, 23, 19, 0.1),
+    0 2px 4px rgba(19, 44, 36, 0.05),
+    0 12px 32px -12px rgba(19, 44, 36, 0.14),
+    0 8px 24px -16px rgba(var(--lastro-jade-wash), 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  --lastro-shadow-lg:
+    0 0 0 0.5px rgba(10, 23, 19, 0.12),
+    0 4px 8px rgba(19, 44, 36, 0.06),
+    0 24px 56px -20px rgba(19, 44, 36, 0.16),
+    0 16px 40px -24px rgba(var(--lastro-mint-wash), 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+
+  --lastro-color-map-deep: #dce8f0;
+  --lastro-color-map-panel: #ecf2f6;
+  --lastro-color-map-border: #b8ccd8;
+  --lastro-color-map-border-strong: #9fb8cc;
+  --lastro-color-map-text: #1a2f3d;
+  --lastro-color-map-text-secondary: #3d5a6e;
+  --lastro-color-map-text-muted: #5a7285;
+  --lastro-color-map-text-dim: #6b8499;
+  --lastro-color-map-water: #8ec8f0;
+  --lastro-color-map-water-deep: #6baed4;
+
+  --lastro-gradient-map-panel:
+    linear-gradient(168deg, var(--lastro-color-cream-100) 0%, var(--lastro-color-cream-50) 100%);
 }
 
 .lastro-surface {

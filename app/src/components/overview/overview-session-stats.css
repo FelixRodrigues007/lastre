@@ -1,0 +1,72 @@
+.overview-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  min-height: 0;
+  border-radius: var(--panel-radius);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: var(--lastro-gradient-surface-panel);
+  box-shadow: var(--app-shadow-panel);
+  overflow: hidden;
+}
+
+.overview-metrics__cell {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  padding: 1rem 0.75rem;
+  min-width: 0;
+}
+
+.overview-metrics__cell:first-child {
+  border-right: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.overview-metrics__cell--accent {
+  background: color-mix(in srgb, var(--lastro-accent-success) 4%, transparent);
+}
+
+.overview-metrics__value {
+  font-family: var(--lastro-font-display);
+  font-size: clamp(1.875rem, 4vw, 2.25rem);
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--lastro-text-primary);
+  line-height: 1;
+}
+
+.overview-metrics__value--accent {
+  color: var(--lastro-accent-success);
+}
+
+.overview-metrics__label {
+  margin: 0;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+  line-height: 1.25;
+  text-wrap: balance;
+  max-width: 11rem;
+}
+
+.overview-metrics__hint {
+  margin: 0;
+  font-size: 0.625rem;
+  color: var(--lastro-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 720px) {
+  .overview-metrics__cell {
+    padding: 1.1rem 0.85rem;
+  }
+
+  .overview-metrics__label {
+    font-size: 0.625rem;
+  }
+}

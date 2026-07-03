@@ -1,36 +1,39 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
+import type { Map as MapboxMap } from "mapbox-gl";
+import { CaptureWizardTrigger } from "../components/capture/CaptureWizardTrigger";
+import { MarketMapDrawer } from "../components/marketplace/MarketMapDrawer";
+import { MarketplaceAssetBadge } from "../components/marketplace/MarketplaceAssetBadge";
+import { MarketplaceFilters } from "../components/marketplace/MarketplaceFilters";
 import { PageHeader } from "../components/layout/PageHeader";
-import { ProofJourney } from "../components/proof/ProofJourney";
-import { getLots, mintAsset, lockCollateral, releaseCollateral } from "../lib/api";
+import { SearchInput } from "../components/ui/SearchInput";
+import { useOnboarding } from "../context/OnboardingContext";
+import { getLots } from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
-import { shortHash } from "../lib/format";
-import { DEMO_CATALOG, demoSeal, type CatalogAsset } from "../lib/demoCatalog";
+import {
+  buildLotMap,
+  buildMapPoints,
+  enrichMarketplaceAsset,
+  mergeMarketplaceAssets,
+} from "../lib/marketplaceAssets";
+import { resolveMapCredentials, applyMarketplaceMapAppearance, type MapCredentials } from "../lib/mapConfig";
+import { MARKETPLACE_COVER_FALLBACK } from "../lib/marketplaceCovers";
+import type { EnrichedAsset, MapPoint, MarketplacePersona } from "../lib/marketplaceTypes";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./marketplace.css";
 
-type MarketplaceView = "assets" | "map";
-type MarketplacePersona = "public" | "buyer" | "defi" | "operator";
-
-type MapPoint = {
-  assetId: string;
-  label: string;
-  lat: number;
-  lng: number;
-  category: "mineral" | "carbon_credit";
-  status: "minted" | "proven" | "pending";
-  detail: string;
-};
-
-const MAP_API_DECISION = {
-  provider: "MapLibre GL JS + MapTiler Cloud",
-  reason:
-    "MapLibre keeps the renderer open-source and vendor-neutral; MapTiler can provide production vector tiles once the API key is available.",
-};
-
-const DEMO_ACCOUNT_STORAGE_KEY = "casper-demo-account";
 const DEMO_PERSONA_STORAGE_KEY = "casper-demo-persona";
+const MARKETPLACE_PAGE_SIZE = 5;
+const MARKETPLACE_ANCHOR = { label: "Casper Testnet anchor", lat: 37.7749, lng: -122.4194 };
+const MARKETPLACE_MAP_CONFIG = resolveMapCredentials();
+const EMPTY_LOTS: never[] = [];
+
+function useLatest<T>(value: T): MutableRefObject<T> {
+  const ref = useRef(value);
+  ref.current = value;
+  return ref;
+}
 
 function readDemoStorage(key: string): string | null {
   if (typeof window === "undefined") return null;
@@ -47,10 +50,6 @@ function writeDemoStorage(key: string, value: string | null): void {
   }
 }
 
-function createDemoAccount(): string {
-  return `casper-test-account-${Math.random().toString(36).slice(2, 10)}`;
-}
-
 function readStoredPersona(): MarketplacePersona {
   const stored = readDemoStorage(DEMO_PERSONA_STORAGE_KEY);
   return stored === "public" || stored === "buyer" || stored === "defi" || stored === "operator"
@@ -59,126 +58,49 @@ function readStoredPersona(): MarketplacePersona {
 }
 
 export function Marketplace() {
+  const navigate = useNavigate();
   const lotsData = useAsyncData(getLots);
+  const { completeStep } = useOnboarding();
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState<"all" | "mineral" | "carbon_credit">("all");
   const [creditFilter, setCreditFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "proven" | "minted" | "available">("all");
-  const [view, setView] = useState<MarketplaceView>("assets");
-
-  // Simple wallet / identity simulation for demo
-  const [connectedAccount, setConnectedAccount] = useState<string | null>(() =>
-    readDemoStorage(DEMO_ACCOUNT_STORAGE_KEY),
-  );
+  const [page, setPage] = useState(1);
+  const [hoveredAssetId, setHoveredAssetId] = useState<string | null>(null);
+  const [previewAsset, setPreviewAsset] = useState<EnrichedAsset | null>(null);
   const [persona, setPersona] = useState<MarketplacePersona>(() => readStoredPersona());
-  const [locked, setLocked] = useState<Record<string, boolean>>({});
 
-  // Claim confirmation modal + signing sim (demo only, respects guardrails)
-  const [claimConfirm, setClaimConfirm] = useState<any>(null);
-  const [isSigning, setIsSigning] = useState(false);
-  const [claimSuccess, setClaimSuccess] = useState<{ assetId: string; txHash: string } | null>(null);
+  useEffect(() => {
+    completeStep("marketplace");
+  }, [completeStep]);
 
-  function connectWallet() {
-    const fake = createDemoAccount();
-    writeDemoStorage(DEMO_ACCOUNT_STORAGE_KEY, fake);
-    setConnectedAccount(fake);
-    return fake;
-  }
-
-  function disconnectWallet() {
-    writeDemoStorage(DEMO_ACCOUNT_STORAGE_KEY, null);
-    setConnectedAccount(null);
-    setLocked({});
-  }
+  useEffect(() => {
+    setPage(1);
+  }, [search, catFilter, creditFilter, statusFilter]);
 
   function updatePersona(nextPersona: MarketplacePersona) {
     writeDemoStorage(DEMO_PERSONA_STORAGE_KEY, nextPersona);
     setPersona(nextPersona);
   }
 
-  async function handleLock(assetId: string) {
-    if (!connectedAccount) return;
-    const res = await lockCollateral(assetId, connectedAccount);
-    if (res.success) {
-      setLocked(prev => ({ ...prev, [assetId]: true }));
-      // Demo collateral value calc (fictional, no investment semantics)
-      const asset = merged.find((x: any) => x.assetId === assetId);
-      const tonnes = asset?.tonnesCO2e || 1000;
-      const demoLoanCspr = Math.floor(tonnes / 40); // simplistic: ~25 CSPR per 1000t demo rate
-      alert(`Locked ${assetId} as collateral (DeFi demo).\nSimulated max loan value: ~${demoLoanCspr} CSPR (demo only).`);
-    } else {
-      alert("Lock failed: " + res.error);
-    }
-  }
+  const lots = lotsData.data?.lots ?? EMPTY_LOTS;
 
-  async function handleRelease(assetId: string) {
-    if (!connectedAccount) return;
-    const res = await releaseCollateral(assetId, connectedAccount);
-    if (res.success) {
-      setLocked(prev => { const c = {...prev}; delete c[assetId]; return c; });
-      alert(`Released ${assetId}`);
-    } else {
-      alert("Release failed: " + res.error);
-    }
-  }
+  const lotMap = useMemo(() => buildLotMap(lots as never[]), [lots]);
+  const merged = useMemo(() => mergeMarketplaceAssets(lots as never[]), [lots]);
 
-  // Claim confirmation flow: simulates Casper signing then mints (demo guardrail: no real value language)
-  function openClaimConfirm(asset: any) {
-    if (!connectedAccount) {
-      connectWallet();
-    }
-    setClaimConfirm(asset);
-    setIsSigning(false);
-  }
-
-  async function confirmSimulatedClaim() {
-    if (!claimConfirm || !connectedAccount) return;
-    setIsSigning(true);
-    await new Promise((r) => setTimeout(r, 850));
-    try {
-      const res = await mintAsset(claimConfirm.assetId, connectedAccount);
-      if (res.success && res.txHash) {
-        setClaimSuccess({ assetId: claimConfirm.assetId, txHash: res.txHash });
-        setClaimConfirm(null);
-        lotsData.reload();
-      } else {
-        alert("Claim failed: " + (res.error || "No valid proof"));
-      }
-    } catch (e: any) {
-      alert("Simulated signing error: " + e.message);
-    } finally {
-      setIsSigning(false);
-    }
-  }
-
-  function closeClaimConfirm() {
-    setClaimConfirm(null);
-    setIsSigning(false);
-  }
-
-  // Static catalog seed — shared source of truth with the lot-detail fallback
-  // (app/src/lib/demoCatalog.ts) so catalog assets never dead-end on 404.
-  const [catalog] = useState<CatalogAsset[]>(DEMO_CATALOG);
-
-  // Advanced carbon types for filters (full demo set, matches backend CarbonCreditType)
-  const CARBON_TYPES = ["VCS", "GoldStandard", "ARR", "IREC", "REDD+", "CER", "VCU", "RenewableEnergy", "Solar", "Wind", "Biomass", "PCH"];
-
-  const lots = lotsData.data?.lots ?? [];
-
-  // lotMap for rich provenance + mint data
-  const lotMap = useMemo(() => {
-    const m = new Map<string, any>();
-    lots.forEach((l: any) => m.set(l.artifact.assetId, l));
-    return m;
-  }, [lots]);
-
-  const merged = useMemo(() => {
-    const map = new Map<string, any>();
-    [...catalog, ...lots.map((l: any) => l.artifact)].forEach((a: any) => {
-      if (!map.has(a.assetId)) map.set(a.assetId, a);
-    });
-    return Array.from(map.values());
-  }, [catalog, lots]);
+  const categoryTotals = useMemo(
+    () => ({
+      all: merged.length,
+      mineral: merged.filter(
+        (a: Record<string, unknown>) =>
+          (a.category || (!a.creditType ? "mineral" : "carbon_credit")) === "mineral",
+      ).length,
+      carbon: merged.filter(
+        (a: Record<string, unknown>) => a.category === "carbon_credit" || Boolean(a.creditType),
+      ).length,
+    }),
+    [merged],
+  );
 
   const visible = useMemo(() => {
     return merged.filter((a: any) => {
@@ -188,7 +110,11 @@ export function Marketplace() {
       const matchesCredit = creditFilter === "all" || a.creditType === creditFilter;
 
       const lot = lotMap.get(a.assetId);
-      const isValidProof = lot?.latestVerdict === "Valid" || (a.expectedOnChain === "Valid" && !lot);
+      const isInvalidProof =
+        lot?.latestVerdict === "Invalid" || lot?.sealMatchesReference === false;
+      const isValidProof =
+        !isInvalidProof &&
+        (lot?.latestVerdict === "Valid" || (a.expectedOnChain === "Valid" && !lot));
       const isMinted = !!lot?.isMinted || !!a.isMinted;
       const matchesStatus =
         statusFilter === "all" ||
@@ -207,488 +133,439 @@ export function Marketplace() {
     });
   }, [merged, search, catFilter, creditFilter, statusFilter, lotMap]);
 
-  const mapPoints = useMemo(() => {
-    return visible
-      .map((asset: any): MapPoint | null => {
-        if (!asset.origin || typeof asset.origin.lat !== "number" || typeof asset.origin.lng !== "number") {
-          return null;
-        }
+  const mapPoints = useMemo(
+    () => buildMapPoints(visible, lotMap),
+    [visible, lotMap],
+  );
 
-        const category = asset.category || (asset.creditType ? "carbon_credit" : "mineral");
-        const lot = lotMap.get(asset.assetId);
-        const isMinted = Boolean(lot?.isMinted || asset.isMinted);
-        const isValidProof = Boolean(lot?.latestVerdict === "Valid" || (asset.expectedOnChain === "Valid" && !lot));
-        const status = isMinted ? "minted" : isValidProof ? "proven" : "pending";
-        const label = asset.name || asset.origin.site || asset.origin.label || asset.assetId;
-        const detail = category === "carbon_credit"
-          ? `${asset.creditType || "Carbon"} · ${asset.tonnesCO2e ? `${asset.tonnesCO2e.toLocaleString()} tCO₂e` : "demo credit"}`
-          : `${asset.mineral || asset.mineralType || "Mineral"} · ${asset.massGrams ? `${asset.massGrams.toLocaleString()} g` : "demo lot"}`;
+  const enrichedAssets = useMemo(
+    () => visible.map((asset) => enrichMarketplaceAsset(asset, lotMap, mapPoints)),
+    [visible, lotMap, mapPoints],
+  );
 
-        return {
-          assetId: asset.assetId,
-          label,
-          lat: asset.origin.lat,
-          lng: asset.origin.lng,
-          category,
-          status,
-          detail,
-        };
-      })
-      .filter((point): point is MapPoint => point !== null);
-  }, [visible, lotMap]);
+  const pageCount = Math.max(1, Math.ceil(enrichedAssets.length / MARKETPLACE_PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const pagedAssets = useMemo(() => {
+    const start = (currentPage - 1) * MARKETPLACE_PAGE_SIZE;
+    return enrichedAssets.slice(start, start + MARKETPLACE_PAGE_SIZE);
+  }, [enrichedAssets, currentPage]);
+
+  const openAsset = useCallback(
+    (assetId: string) => {
+      navigate(`/marketplace/${encodeURIComponent(assetId)}`);
+    },
+    [navigate],
+  );
+
+  const handleSelectMapPoint = useCallback(
+    (point: MapPoint) => {
+      const asset = enrichedAssets.find((item) => String(item.asset.assetId) === point.assetId);
+      if (asset) setPreviewAsset(asset);
+    },
+    [enrichedAssets],
+  );
+
+  const selectedMapAssetId = previewAsset ? String(previewAsset.asset.assetId) : null;
 
   return (
-    <div className="page">
-      <PageHeader
-        kicker="Marketplace"
-        title="Provenance Marketplace"
-        lead="Browse verified and pending assets. Advanced filters for carbon types. Claim provenance NFT representation (demo) only after successful proof + Valid seal."
-        actions={<Link className="route-cta" to="/capture">Capture New</Link>}
-      />
+    <div className="page market-page">
+      <div className="market-page__intro">
+        <PageHeader
+          kicker="Marketplace"
+          title="Provenance Marketplace"
+          lead="Browse verified assets on the map. Select a lot to inspect origin, proof status, and claim options (demo)."
+          actions={
+            <CaptureWizardTrigger className="route-cta">Capture New</CaptureWizardTrigger>
+          }
+        />
+      </div>
 
-      <ProofJourney activePath="/marketplace" compact />
+      <aside className="market-list" aria-label="Marketplace assets">
+        <div className="market-list__search">
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Search assets…"
+            ariaLabel="Search marketplace assets"
+          />
+        </div>
 
-      {claimSuccess ? (
-        <section className="claim-success panel" role="status" aria-live="polite">
-          <p className="claim-success__text">
-            <strong>Symbolic representation claimed (demo).</strong> Asset{" "}
-            <code>{claimSuccess.assetId}</code> recorded via MintGate simulation.
-          </p>
-          <div className="claim-success__actions">
-            <Link className="route-cta" to="/my-assets">
-              View My Assets
-            </Link>
-            <Link
-              className="route-cta route-cta--ghost"
-              to={`/lots/${encodeURIComponent(claimSuccess.assetId)}`}
-            >
-              Open evidence room
-            </Link>
-            <a
-              className="route-cta route-cta--ghost"
-              href={`https://testnet.cspr.live/transaction/${claimSuccess.txHash}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View on cspr.live ↗
-            </a>
-            <button type="button" className="route-cta route-cta--ghost" onClick={() => setClaimSuccess(null)}>
-              Dismiss
-            </button>
-          </div>
-        </section>
-      ) : null}
+        <MarketplaceFilters
+          category={catFilter}
+          status={statusFilter}
+          creditType={creditFilter}
+          persona={persona}
+          totals={categoryTotals}
+          onCategoryChange={setCatFilter}
+          onStatusChange={setStatusFilter}
+          onCreditTypeChange={setCreditFilter}
+          onPersonaChange={updatePersona}
+        />
 
-      <div className="market-filters panel">
-        <div className="wallet-section">
-          <select value={persona} onChange={e => updatePersona(e.target.value as MarketplacePersona)} title="Persona / role simulation">
-            <option value="public">Public Verifier</option>
-            <option value="buyer">NFT Claimer (Demo)</option>
-            <option value="defi">DeFi User</option>
-            <option value="operator">Internal Operator</option>
-          </select>
-
-          {connectedAccount ? (
-            <>
-              <span className="wallet-label">Connected: </span>
-              <code>{connectedAccount.slice(0, 12)}...</code>
-              <button onClick={disconnectWallet} className="btn small">Disconnect</button>
-            </>
+        <div className="market-list__scroll">
+          {enrichedAssets.length === 0 ? (
+            <p className="market-list__empty muted">No matching assets. Try clearing filters.</p>
           ) : (
-            <button onClick={connectWallet} className="btn primary">Connect Casper Account (demo)</button>
+            pagedAssets.map((item) => {
+              const assetId = String(item.asset.assetId);
+              return (
+                <MarketListItem
+                  key={assetId}
+                  item={item}
+                  isHovered={hoveredAssetId === assetId}
+                  isSelected={selectedMapAssetId === assetId}
+                  onSelect={() => openAsset(assetId)}
+                  onHover={(hover) => setHoveredAssetId(hover ? assetId : null)}
+                />
+              );
+            })
           )}
         </div>
 
-        <input
-          placeholder="Search asset or operator…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+        {enrichedAssets.length > MARKETPLACE_PAGE_SIZE ? (
+          <MarketListPagination
+            page={currentPage}
+            pageCount={pageCount}
+            onPageChange={setPage}
+          />
+        ) : null}
+      </aside>
+
+      <div className="market-map" aria-label="Global Mundi provenance map">
+        <MarketMapPanel
+          points={mapPoints}
+          hoveredAssetId={hoveredAssetId}
+          selectedAssetId={selectedMapAssetId}
+          previewAsset={previewAsset}
+          onSelectPoint={handleSelectMapPoint}
+          onHoverPoint={setHoveredAssetId}
+          onClosePreview={() => setPreviewAsset(null)}
         />
-        <select value={catFilter} onChange={e => setCatFilter(e.target.value as any)}>
-          <option value="all">All categories</option>
-          <option value="mineral">Minerals</option>
-          <option value="carbon_credit">Carbon Credits</option>
-        </select>
-        <select value={creditFilter} onChange={e => setCreditFilter(e.target.value)}>
-          <option value="all">All credit types</option>
-          {CARBON_TYPES.map(c => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
-        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as any)} title="Advanced status filter">
-          <option value="all">All status</option>
-          <option value="proven">Proven (attested)</option>
-          <option value="minted">Minted NFT</option>
-          <option value="available">Available to claim</option>
-        </select>
       </div>
-
-      <div className="panel" style={{padding: "8px 12px", display: "flex", gap: 16, flexWrap: "wrap", fontSize: "0.85em", marginBottom: 8}}>
-        <span><strong>{visible.length}</strong> matching</span>
-        <span><strong>{lots.filter((l: any) => l.isMinted).length}</strong> minted (Casper MintGate sim)</span>
-        <span className="small muted">Live state from app runtime + testnet attestations. <a href="https://testnet.cspr.live" target="_blank" rel="noopener">cspr.live ↗</a></span>
-      </div>
-
-      <div className="market-tabs" role="tablist" aria-label="Marketplace views">
-        <button
-          className={view === "assets" ? "active" : ""}
-          type="button"
-          role="tab"
-          aria-selected={view === "assets"}
-          aria-controls="market-assets-panel"
-          onClick={() => setView("assets")}
-        >
-          Assets
-        </button>
-        <button
-          className={view === "map" ? "active" : ""}
-          type="button"
-          role="tab"
-          aria-selected={view === "map"}
-          aria-controls="market-map-panel"
-          onClick={() => setView("map")}
-        >
-          Global Mundi Map
-        </button>
-      </div>
-
-      {connectedAccount && (persona === "defi" || persona === "operator") && (
-        <div className="panel" style={{ margin: "12px 0", padding: "10px 14px", fontSize: "0.9em" }}>
-          <strong>DeFi demo positions</strong> (this session): {Object.keys(locked).length} asset(s) locked as collateral.
-          <span className="small muted"> • Use Lock/Release on Valid minted cards. Simulated values only.</span>
-        </div>
-      )}
-
-      {view === "assets" ? (
-      <div id="market-assets-panel" className="market-grid" role="tabpanel" aria-label="Marketplace assets">
-        {visible.length === 0 && <p>No matching assets.</p>}
-        {visible.map((a: any) => {
-          const isCarbon = a.category === "carbon_credit" || !!a.creditType;
-          const quantity = isCarbon ? a.tonnesCO2e : a.massGrams;
-          const unit = isCarbon ? "tCO₂e" : "g";
-          const lot = lotMap.get(a.assetId);
-          // Strict: only claim if we have a processed Valid verdict (or pure catalog expected for demo seeds)
-          const isValidProof = lot?.latestVerdict === "Valid" || (a.expectedOnChain === "Valid" && !lot);
-          const isMinted = !!lot?.isMinted || !!a.isMinted;
-          const mintTx = lot?.mintTx || a.mintTx;
-          // Rich provenance score (demo)
-          const provScore = lot
-            ? Math.min(99, 68 + (lot.attested ? 18 : 0) + (lot.sealMatchesReference ? 8 : 0) + (lot.latestVerdict === "Valid" ? 5 : 0))
-            : (a.expectedOnChain === "Valid" ? 91 : 62);
-
-          const computedSeal = lot?.computedSeal || demoSeal(a.assetId);
-
-          return (
-            <div key={a.assetId} className={`market-card panel rich-nft-card ${isCarbon ? "carbon" : "mineral"}`}>
-              <div className="card-head">
-                <div>
-                  <div className="asset-id">{a.assetId}</div>
-                  <div className="asset-name">{a.name || a.operator || "Provenance asset"}</div>
-                </div>
-                <span className={`cat-badge ${isCarbon ? "carbon" : "mineral"}`}>
-                  {isCarbon ? (a.creditType || "CARBON") : "MINERAL"}
-                </span>
-              </div>
-
-              <div className="prov-score" title="Provenance score (demo): combines attestation, seal match, verdict">Provenance Score: {provScore}</div>
-
-              {/* Rich provenance seal display */}
-              <div className="seal-row">
-                <span>Seal:</span>
-                <code>{shortHash(computedSeal, 8, 6)}</code>
-              </div>
-
-              {/* Carbon details if applicable */}
-              {isCarbon && (
-                <div className="carbon-details">
-                  {quantity && <div><strong>{quantity.toLocaleString()}</strong> {unit}</div>}
-                  {a.creditType && <div>Credit: <strong>{a.creditType}</strong></div>}
-                  {a.vintage && <div>Vintage: {a.vintage}</div>}
-                  {a.methodology && <div>{a.methodology}</div>}
-                  {a.verifier && <div>Verifier: {a.verifier}</div>}
-                </div>
-              )}
-              {!isCarbon && quantity && (
-                <div className="meta"><strong>{quantity.toLocaleString()}</strong> {unit}</div>
-              )}
-
-              {/* Mint tx link (simulated cspr.live) */}
-              {isMinted && mintTx && (
-                <a
-                  href={`https://testnet.cspr.live/transaction/${mintTx}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mint-tx-link"
-                >
-                  View mint tx on cspr.live ↗
-                </a>
-              )}
-
-              <div className="card-actions">
-                <Link to={`/lots/${encodeURIComponent(a.assetId)}`} className="btn small">Inspect Proof</Link>
-                {isValidProof && !isMinted ? (
-                  <button onClick={() => openClaimConfirm(a)} className="btn primary small">Claim NFT (Demo)</button>
-                ) : isMinted ? (
-                  <>
-                    <span className="small success">Minted ✓</span>
-                    {(persona === "defi" || persona === "buyer") && !locked[a.assetId] && (
-                      <button onClick={() => handleLock(a.assetId)} className="btn small">Lock as Collateral</button>
-                    )}
-                    {locked[a.assetId] && (
-                      <button onClick={() => handleRelease(a.assetId)} className="btn small danger">Release Collateral</button>
-                    )}
-                  </>
-                ) : (
-                  <span className="small muted">Proof required before claim</span>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      ) : (
-        <div id="market-map-panel" role="tabpanel" aria-label="Global Mundi provenance map">
-          <GlobalMundiMap points={mapPoints} />
-        </div>
-      )}
-
-      <p className="note">Only Valid + attested lots should be tokenizable. This demo uses the same catalog + live app state. All actions are simulations.</p>
-
-      {persona === "operator" && (
-        <section className="panel" style={{marginTop: 16}}>
-          <h4>Internal Operator Controls (demo)</h4>
-          <p className="small">Connected as operator. You see privileged actions above (e.g. on minted). Use Process route for LLM batch, Escalations for reviews. Casper package: <a href="https://testnet.cspr.live/contract-package/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561" target="_blank">view on cspr.live ↗</a></p>
-          <div className="small muted">Tip: Run Capture → auto-attest → Claim as demo claimer, then switch to operator to review/lock.</div>
-        </section>
-      )}
-
-      {connectedAccount && (
-        <section className="my-assets">
-          <h3>My Proven Assets (demo)</h3>
-          <p className="small">Assets you have claimed via MintGate (demo) in this session.</p>
-          <div className="market-grid">
-            {visible.filter((a: any) => (lotMap.get(a.assetId)?.isMinted || a.isMinted)).length > 0 ? (
-              visible.filter((a: any) => (lotMap.get(a.assetId)?.isMinted || a.isMinted)).map((a: any) => {
-                const lot = lotMap.get(a.assetId);
-                const isCarbon = a.category === "carbon_credit" || !!a.creditType;
-                const provScore = lot ? Math.min(99, 68 + (lot.attested ? 18 : 0) + (lot.sealMatchesReference ? 8 : 0) + (lot.latestVerdict === "Valid" ? 5 : 0)) : 91;
-                const mintTx = lot?.mintTx;
-                return (
-                  <div key={a.assetId} className="market-card panel rich-nft-card minted">
-                    <div className="asset-id">{a.assetId}</div>
-                    <div className="prov-score">Provenance Score: {provScore}</div>
-                    <div className="seal-row">Seal: <code>{shortHash(lot?.computedSeal || "minted-seal", 8, 6)}</code></div>
-                    {isCarbon && a.tonnesCO2e && <div className="carbon-details"><strong>{a.tonnesCO2e}</strong> tCO₂e • {a.creditType}</div>}
-                    {mintTx && <a href={`https://testnet.cspr.live/transaction/${mintTx}`} target="_blank" rel="noopener" className="mint-tx-link">View mint on cspr.live ↗</a>}
-                    <div className="small success">Claimed by {connectedAccount.slice(0,8)}...</div>
-                    <Link to={`/lots/${a.assetId}`} className="btn small">View Proof</Link>
-                  </div>
-                );
-              })
-            ) : (
-              <p className="small muted">Claim a valid proven asset via Marketplace to see it here.</p>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* Claim confirmation modal — simulates Casper signing. Demo guardrail language. */}
-      {claimConfirm && (
-        <div className="modal-overlay" onClick={closeClaimConfirm}>
-          <div className="claim-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Claim NFT Representation (Demo)</h3>
-            <div>Asset: <strong>{claimConfirm.assetId}</strong></div>
-            <div className="demo-disclaimer">
-              DEMO ONLY. Symbolic provenance representation — no real asset, value, or ownership transfer.
-            </div>
-            <div className="sig-sim">
-              Signing with: {connectedAccount?.slice(0, 16)}...<br />
-              Action: MintGate.record_mint (simulated Casper signature)
-            </div>
-            <p className="small">Provenance seal + attestation will be bound on success (demo).</p>
-            <div className="actions">
-              <button
-                onClick={confirmSimulatedClaim}
-                disabled={isSigning}
-                className="btn primary"
-              >
-                {isSigning ? "Signing with Casper account..." : "Sign & Claim (simulated)"}
-              </button>
-              <button onClick={closeClaimConfirm} className="btn" disabled={isSigning}>Cancel</button>
-            </div>
-            <div className="small muted" style={{marginTop: 12}}>cspr.live link shown after simulated mint.</div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
-function GlobalMundiMap({ points }: { points: MapPoint[] }) {
-  const [selectedPoint, setSelectedPoint] = useState<MapPoint | null>(null);
-  const anchor = { label: "Casper Testnet anchor", lat: 37.7749, lng: -122.4194 };
-  const mintedCount = points.filter((point) => point.status === "minted").length;
-  const provenCount = points.filter((point) => point.status === "proven").length;
-  const pendingCount = points.filter((point) => point.status === "pending").length;
-  const mapTilerKey = import.meta.env.VITE_MAPTILER_KEY?.trim() ?? "";
-  const mapTilerReady = Boolean(mapTilerKey);
+function MarketListPagination({
+  page,
+  pageCount,
+  onPageChange,
+}: {
+  page: number;
+  pageCount: number;
+  onPageChange: (page: number) => void;
+}) {
+  const pages = Array.from({ length: pageCount }, (_, index) => index + 1);
 
   return (
-    <section className="mundi-map panel" aria-label="Global Mundi provenance map">
-      <div className="mundi-copy">
-        <div>
-          <span className="eyebrow">Step 8 · Global Mundi</span>
-          <h2>Geographic proof surface</h2>
-          <p>
-            A demo-only origin map for minerals and carbon credits. It does not claim GPS custody tracking; it shows
-            where each fictional provenance record starts before the seal, agent decision, and Casper attestation.
-          </p>
-        </div>
-        <div className="mundi-stats" aria-label="Map summary">
-          <span><strong>{points.length}</strong> mapped assets</span>
-          <span><strong>{provenCount}</strong> proven</span>
-          <span><strong>{mintedCount}</strong> minted</span>
-          <span><strong>{pendingCount}</strong> pending</span>
-        </div>
+    <nav className="market-list__pagination" aria-label="Asset list pages">
+      <button
+        type="button"
+        className="market-list__page-btn"
+        disabled={page <= 1}
+        onClick={() => onPageChange(page - 1)}
+        aria-label="Previous page"
+      >
+        ←
+      </button>
+      <div className="market-list__page-numbers" role="group" aria-label="Page numbers">
+        {pages.map((pageNumber) => (
+          <button
+            key={pageNumber}
+            type="button"
+            className={`market-list__page-num${pageNumber === page ? " market-list__page-num--active" : ""}`}
+            aria-current={pageNumber === page ? "page" : undefined}
+            onClick={() => onPageChange(pageNumber)}
+          >
+            {pageNumber}
+          </button>
+        ))}
       </div>
-
-      <div className="mundi-production-path" aria-label="Production map integration path">
-        <div>
-          <strong>Renderer</strong>
-          <span>MapLibre GL JS</span>
-        </div>
-        <div>
-          <strong>Tiles / styles</strong>
-          <span>MapTiler Cloud</span>
-        </div>
-        <div>
-          <strong>API key</strong>
-          <span>{mapTilerReady ? "VITE_MAPTILER_KEY configured" : "Waiting for VITE_MAPTILER_KEY"}</span>
-        </div>
-      </div>
-
-      <MundiMapCanvas
-        points={points}
-        anchor={anchor}
-        mapTilerKey={mapTilerKey}
-        onSelectPoint={setSelectedPoint}
-      />
-
-      {selectedPoint ? (
-        <MundiPointDrawer point={selectedPoint} onClose={() => setSelectedPoint(null)} />
-      ) : null}
-
-      <div className="mundi-ledger">
-        <div className="mundi-legend" aria-label="Map legend">
-          <span><i className="mundi-legend-dot mineral" /> Mineral origin</span>
-          <span><i className="mundi-legend-dot carbon_credit" /> Carbon credit origin</span>
-          <span><i className="mundi-legend-anchor" /> Casper anchor (not GPS custody)</span>
-          <span><i className="mundi-legend-line proven" /> Proven route</span>
-          <span><i className="mundi-legend-line minted" /> Minted route</span>
-        </div>
-        <div className="mundi-api-note">
-          <strong>Map API choice:</strong> {MAP_API_DECISION.provider}. {MAP_API_DECISION.reason}
-        </div>
-        {points.length > 0 ? (
-          points.map((point) => (
-            <button
-              key={point.assetId}
-              type="button"
-              className={`mundi-row${selectedPoint?.assetId === point.assetId ? " mundi-row--selected" : ""}`}
-              onClick={() => setSelectedPoint(point)}
-            >
-              <span className={`mundi-status ${point.status}`} />
-              <span>
-                <strong>{point.label}</strong>
-                <small>{point.assetId} · {point.detail}</small>
-              </span>
-              <em>{point.status}</em>
-            </button>
-          ))
-        ) : (
-          <div className="mundi-row mundi-row--empty">
-            <span className="mundi-status" />
-            <span>
-              <strong>No origin points in this view</strong>
-              <small>Clear filters or process/capture assets with latitude and longitude.</small>
-            </span>
-          </div>
-        )}
-      </div>
-    </section>
+      <button
+        type="button"
+        className="market-list__page-btn"
+        disabled={page >= pageCount}
+        onClick={() => onPageChange(page + 1)}
+        aria-label="Next page"
+      >
+        →
+      </button>
+    </nav>
   );
 }
 
-function MundiPointDrawer({
-  point,
-  onClose,
+function MarketListItem({
+  item,
+  isHovered,
+  isSelected,
+  onSelect,
+  onHover,
 }: {
-  point: MapPoint;
-  onClose: () => void;
+  item: EnrichedAsset;
+  isHovered: boolean;
+  isSelected: boolean;
+  onSelect: () => void;
+  onHover: (hover: boolean) => void;
+}) {
+  const assetId = String(item.asset.assetId);
+  const origin = item.asset.origin as { site?: string; label?: string } | undefined;
+  const location = origin?.site || origin?.label;
+  const stats = [
+    item.isCarbon ? String(item.asset.creditType || "Carbon") : String(item.asset.mineral || item.asset.mineralType || "Mineral"),
+    item.quantity ? `${item.quantity.toLocaleString()} ${item.unit}` : null,
+    `Score ${item.provScore}`,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  return (
+    <button
+      type="button"
+      className={`market-list-item${isHovered ? " market-list-item--hovered" : ""}${isSelected ? " market-list-item--selected" : ""}`}
+      aria-label={`Open ${item.label}`}
+      aria-pressed={isSelected}
+      onClick={onSelect}
+      onMouseEnter={() => onHover(true)}
+      onMouseLeave={() => onHover(false)}
+      onFocus={() => onHover(true)}
+      onBlur={() => onHover(false)}
+    >
+      <span className="market-list-item__thumb" aria-hidden="true">
+        <img
+          className="market-list-item__photo"
+          src={item.coverUrl}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          onError={(event) => {
+            const img = event.currentTarget;
+            if (img.dataset.fallback === "1") return;
+            img.dataset.fallback = "1";
+            img.src = MARKETPLACE_COVER_FALLBACK;
+          }}
+        />
+      </span>
+      <span className="market-list-item__body">
+        <MarketplaceAssetBadge item={item} size="sm" className="market-list-item__status" />
+        <strong className="market-list-item__title">{item.label}</strong>
+        <span className="market-list-item__stats">{stats}</span>
+        <span className="market-list-item__foot">
+          {location ? `${location} · ` : ""}
+          <span className="mono-label">{assetId}</span>
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function MarketMapPanel({
+  points,
+  hoveredAssetId,
+  selectedAssetId,
+  previewAsset,
+  onSelectPoint,
+  onHoverPoint,
+  onClosePreview,
+}: {
+  points: MapPoint[];
+  hoveredAssetId: string | null;
+  selectedAssetId: string | null;
+  previewAsset: EnrichedAsset | null;
+  onSelectPoint: (point: MapPoint) => void;
+  onHoverPoint: (assetId: string | null) => void;
+  onClosePreview: () => void;
 }) {
   return (
-    <aside className="mundi-drawer panel" role="dialog" aria-label={`Origin preview: ${point.label}`}>
-      <div className="mundi-drawer__head">
-        <span className={`mundi-status ${point.status}`} aria-hidden="true" />
-        <div>
-          <strong>{point.label}</strong>
-          <small>
-            {point.assetId} · {point.detail}
-          </small>
+    <div className="market-map-panel">
+      <MundiMapCanvas
+        points={points}
+        anchor={MARKETPLACE_ANCHOR}
+        mapConfig={MARKETPLACE_MAP_CONFIG}
+        selectedAssetId={selectedAssetId}
+        hoveredAssetId={hoveredAssetId}
+        onSelectPoint={onSelectPoint}
+        onHoverPoint={onHoverPoint}
+      />
+
+      <div className="market-map-legend" aria-label="Map legend">
+        <div className="market-map-legend__items">
+          <span>
+            <i className="mundi-legend-dot mundi-legend-dot--origin mineral" aria-hidden="true" />
+            Declared origin <em>(fictional)</em>
+          </span>
+          <span>
+            <i className="mundi-legend-anchor" aria-hidden="true" />
+            Casper on-chain anchor
+          </span>
+          <span>
+            <i className="mundi-legend-line" aria-hidden="true" />
+            Attestation route (demo)
+          </span>
         </div>
-        <button type="button" className="mundi-drawer__close" onClick={onClose} aria-label="Close preview">
-          ×
-        </button>
+        <p className="market-map-legend__note">
+          Origins are operator-declared demo coordinates — not GPS tracking or real custody.
+        </p>
       </div>
-      <p className="mundi-drawer__note small muted">
-        Fictional origin point for demo provenance — not GPS custody tracking. Preview here, then open the full
-        evidence room when ready.
-      </p>
-      <div className="mundi-drawer__actions">
-        <Link className="route-cta" to={`/lots/${encodeURIComponent(point.assetId)}`}>
-          Open evidence room
-        </Link>
-        <button type="button" className="route-cta route-cta--ghost" onClick={onClose}>
-          Close
-        </button>
-      </div>
-    </aside>
+
+      {previewAsset ? (
+        <MarketMapDrawer asset={previewAsset} onClose={onClosePreview} />
+      ) : null}
+    </div>
   );
+}
+
+type MundiMapInstance = MapLibreMap | MapboxMap;
+type MundiMarkerHandle = { remove: () => void };
+
+function createAnchorMarkerElement(label: string): HTMLDivElement {
+  const markerEl = document.createElement("div");
+  markerEl.className = "mundi-maplibre-marker mundi-maplibre-marker--anchor";
+  markerEl.setAttribute("aria-label", label);
+  markerEl.setAttribute("role", "img");
+  markerEl.title = label;
+  return markerEl;
+}
+
+function createMarkerElement(
+  point: MapPoint,
+  markerElsRef: MutableRefObject<Map<string, HTMLDivElement>>,
+  onSelectPointRef: MutableRefObject<((point: MapPoint) => void) | undefined>,
+  onHoverPointRef: MutableRefObject<((assetId: string | null) => void) | undefined>,
+): HTMLDivElement {
+  const markerEl = document.createElement("div");
+  updateMarkerClasses(markerEl, point, null, null);
+  markerEl.setAttribute("aria-label", `${point.label}: ${point.status}`);
+  markerEl.setAttribute("role", "button");
+  markerEl.tabIndex = 0;
+  markerEl.dataset.assetId = point.assetId;
+  markerElsRef.current.set(point.assetId, markerEl);
+
+  markerEl.addEventListener("click", (event) => {
+    event.stopPropagation();
+    onSelectPointRef.current?.(point);
+  });
+  markerEl.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onSelectPointRef.current?.(point);
+    }
+  });
+  markerEl.addEventListener("mouseenter", () => onHoverPointRef.current?.(point.assetId));
+  markerEl.addEventListener("mouseleave", () => onHoverPointRef.current?.(null));
+
+  return markerEl;
 }
 
 function MundiMapCanvas({
   points,
   anchor,
-  mapTilerKey,
+  mapConfig,
+  selectedAssetId,
+  hoveredAssetId,
   onSelectPoint,
+  onHoverPoint,
 }: {
   points: MapPoint[];
   anchor: { label: string; lat: number; lng: number };
-  mapTilerKey: string;
+  mapConfig: MapCredentials;
+  selectedAssetId?: string | null;
+  hoveredAssetId?: string | null;
   onSelectPoint?: (point: MapPoint) => void;
+  onHoverPoint?: (assetId: string | null) => void;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<MundiMapInstance | null>(null);
+  const markersRef = useRef<MundiMarkerHandle[]>([]);
+  const markerElsRef = useRef<Map<string, HTMLDivElement>>(new Map());
+  const mapReadyRef = useRef(false);
+  const onSelectPointRef = useLatest(onSelectPoint);
+  const onHoverPointRef = useLatest(onHoverPoint);
   const [mapStatus, setMapStatus] = useState<"fallback" | "loading" | "ready" | "error">(
-    mapTilerKey ? "loading" : "fallback",
+    mapConfig.ready ? "loading" : "fallback",
   );
 
+  const clearMarkers = useCallback(() => {
+    markersRef.current.forEach((marker) => marker.remove());
+    markersRef.current = [];
+    markerElsRef.current.clear();
+  }, []);
+
   useEffect(() => {
-    if (!mapTilerKey || !containerRef.current) {
+    if (!mapConfig.ready || !containerRef.current) {
       setMapStatus("fallback");
       return;
     }
 
     let cancelled = false;
     let cleanup = () => {};
+    const container = containerRef.current;
+    mapReadyRef.current = false;
     setMapStatus("loading");
 
-    import("maplibre-gl")
-      .then((maplibre) => {
-        if (cancelled || !containerRef.current) return;
+    const bindMap = (map: MundiMapInstance) => {
+      mapRef.current = map;
+
+      const resize = () => {
+        if (!cancelled) map.resize();
+      };
+
+      const resizeObserver = new ResizeObserver(resize);
+      resizeObserver.observe(container);
+
+      const onLoad = () => {
+        if (cancelled) return;
+        if (mapConfig.provider === "mapbox" && "setProjection" in map) {
+          applyMarketplaceMapAppearance(map as MapboxMap);
+        }
+        resize();
+        mapReadyRef.current = true;
+        setMapStatus("ready");
+      };
+
+      if (mapConfig.provider === "mapbox") {
+        (map as MapboxMap).once("load", onLoad);
+      } else {
+        (map as MapLibreMap).once("load", onLoad);
+      }
+
+      cleanup = () => {
+        resizeObserver.disconnect();
+        clearMarkers();
+        map.remove();
+        mapRef.current = null;
+        mapReadyRef.current = false;
+      };
+    };
+
+    const boot = async () => {
+      try {
+        if (mapConfig.provider === "mapbox") {
+          const mapboxgl = (await import("mapbox-gl")).default;
+          await import("mapbox-gl/dist/mapbox-gl.css");
+          if (cancelled || !container) return;
+
+          mapboxgl.accessToken = mapConfig.token;
+          const map = new mapboxgl.Map({
+            container,
+            style: mapConfig.styleUrl,
+            center: [-45, -15],
+            zoom: 2.1,
+            projection: "mercator",
+            attributionControl: true,
+            cooperativeGestures: true,
+          });
+
+          map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
+          bindMap(map);
+          return;
+        }
+
+        const maplibre = await import("maplibre-gl");
+        if (cancelled || !container) return;
 
         const map = new maplibre.Map({
-          container: containerRef.current,
-          style: `https://api.maptiler.com/maps/streets-v4/style.json?key=${encodeURIComponent(mapTilerKey)}`,
+          container,
+          style: mapConfig.styleUrl,
           center: [0, 8],
           zoom: 1.08,
           attributionControl: { compact: true },
@@ -696,110 +573,170 @@ function MundiMapCanvas({
         });
 
         map.addControl(new maplibre.NavigationControl({ showCompass: false }), "top-right");
-
-        const markers = [
-          ...points.map((point) => {
-            const markerEl = document.createElement("div");
-            markerEl.className = `mundi-maplibre-marker ${point.category} ${point.status}`;
-            markerEl.setAttribute("aria-label", `${point.label}: ${point.status}`);
-            markerEl.setAttribute("role", "button");
-            markerEl.tabIndex = 0;
-            markerEl.addEventListener("click", (event) => {
-              event.stopPropagation();
-              onSelectPoint?.(point);
-            });
-            markerEl.addEventListener("keydown", (event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                onSelectPoint?.(point);
-              }
-            });
-
-            const popup = new maplibre.Popup({ offset: 18 }).setHTML(
-              `<strong>${escapeHtml(point.label)}</strong><br/><small>${escapeHtml(point.assetId)} · ${escapeHtml(point.detail)} · ${escapeHtml(point.status)}</small>`,
-            );
-
-            return new maplibre.Marker({ element: markerEl, anchor: "center" })
-              .setLngLat([point.lng, point.lat])
-              .setPopup(popup)
-              .addTo(map);
-          }),
-          new maplibre.Marker({ color: "#92d67a" })
-            .setLngLat([anchor.lng, anchor.lat])
-            .setPopup(new maplibre.Popup({ offset: 18 }).setText(anchor.label))
-            .addTo(map),
-        ];
-
-        map.once("load", () => {
-          if (cancelled) return;
-          addMundiRouteLayer(map, points, anchor);
-          setMapStatus("ready");
-          fitMundiBounds(map, points, anchor);
-        });
-
-        map.once("error", () => {
-          if (!cancelled && !map.loaded()) setMapStatus("error");
-        });
-
-        cleanup = () => {
-          markers.forEach((marker) => marker.remove());
-          map.remove();
-        };
-      })
-      .catch(() => {
+        bindMap(map);
+      } catch {
         if (!cancelled) setMapStatus("error");
-      });
+      }
+    };
+
+    void boot();
 
     return () => {
       cancelled = true;
       cleanup();
     };
-  }, [anchor.lat, anchor.lng, anchor.label, mapTilerKey, onSelectPoint, points]);
+  }, [clearMarkers, mapConfig.provider, mapConfig.ready, mapConfig.styleUrl, mapConfig.token]);
 
-  if (!mapTilerKey || mapStatus === "error") {
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReadyRef.current || mapStatus !== "ready") return;
+
+    let cancelled = false;
+
+    const sync = async () => {
+      clearMarkers();
+
+      if (mapConfig.provider === "mapbox") {
+        const mapboxgl = (await import("mapbox-gl")).default;
+        if (cancelled || !mapRef.current) return;
+
+        const mapboxMap = map as MapboxMap;
+        markersRef.current = [
+          ...points.map((point) => {
+            const markerEl = createMarkerElement(point, markerElsRef, onSelectPointRef, onHoverPointRef);
+            return new mapboxgl.Marker({ element: markerEl, anchor: "center" })
+              .setLngLat([point.lng, point.lat])
+              .addTo(mapboxMap);
+          }),
+          new mapboxgl.Marker({ element: createAnchorMarkerElement(anchor.label), anchor: "center" })
+            .setLngLat([anchor.lng, anchor.lat])
+            .addTo(mapboxMap),
+        ];
+      } else {
+        const maplibre = await import("maplibre-gl");
+        if (cancelled || !mapRef.current) return;
+
+        const maplibreMap = map as MapLibreMap;
+        markersRef.current = [
+          ...points.map((point) => {
+            const markerEl = createMarkerElement(point, markerElsRef, onSelectPointRef, onHoverPointRef);
+            return new maplibre.Marker({ element: markerEl, anchor: "center" })
+              .setLngLat([point.lng, point.lat])
+              .addTo(maplibreMap);
+          }),
+          new maplibre.Marker({ element: createAnchorMarkerElement(anchor.label), anchor: "center" })
+            .setLngLat([anchor.lng, anchor.lat])
+            .addTo(maplibreMap),
+        ];
+      }
+
+      updateMundiRouteLayer(map, points, anchor);
+      fitMundiBounds(map, points, anchor);
+    };
+
+    void sync();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [anchor, clearMarkers, mapConfig.provider, mapStatus, points]);
+
+  useEffect(() => {
+    markerElsRef.current.forEach((el, assetId) => {
+      const point = points.find((p) => p.assetId === assetId);
+      if (point) updateMarkerClasses(el, point, selectedAssetId, hoveredAssetId);
+    });
+  }, [hoveredAssetId, points, selectedAssetId]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !selectedAssetId) return;
+    const point = points.find((p) => p.assetId === selectedAssetId);
+    if (!point) return;
+    map.flyTo({
+      center: [point.lng, point.lat],
+      zoom: Math.max(map.getZoom(), 3.2),
+      duration: 650,
+      essential: true,
+    });
+  }, [points, selectedAssetId]);
+
+  if (!mapConfig.ready || mapStatus === "error") {
     return (
-      <>
-        {mapStatus === "error" ? (
-          <p className="mundi-map-warning" role="status">
-            MapTiler/MapLibre could not load in this browser. Showing the zero-token SVG fallback so the demo stays stable.
-          </p>
-        ) : null}
-        <MundiSvgFallback points={points} anchor={anchor} onSelectPoint={onSelectPoint} />
-      </>
+      <MundiSvgFallback
+        points={points}
+        anchor={anchor}
+        selectedAssetId={selectedAssetId}
+        hoveredAssetId={hoveredAssetId}
+        onSelectPoint={onSelectPoint}
+        onHoverPoint={onHoverPoint}
+      />
     );
   }
 
   return (
-    <div className="mundi-maplibre-shell">
-      <div ref={containerRef} className="mundi-maplibre-canvas" aria-label="Interactive MapLibre provenance map" />
+    <div className="mundi-maplibre-shell market-map-canvas">
+      <div ref={containerRef} className="mundi-maplibre-canvas" aria-label="Interactive provenance map" />
       {mapStatus === "loading" ? (
-        <div className="mundi-map-loading" role="status">Loading MapTiler vector map…</div>
+        <div className="mundi-map-loading" role="status">Loading map…</div>
       ) : null}
     </div>
   );
 }
 
+function updateMarkerClasses(
+  el: HTMLDivElement,
+  point: MapPoint,
+  selectedAssetId?: string | null,
+  hoveredAssetId?: string | null,
+) {
+  const classes = ["mundi-maplibre-marker", "mundi-maplibre-marker--origin", point.category, point.status];
+  if (selectedAssetId === point.assetId) classes.push("selected");
+  if (hoveredAssetId === point.assetId) classes.push("hovered");
+  el.className = classes.join(" ");
+}
+
+function buildMundiRouteGeoJson(points: MapPoint[], anchor: { lat: number; lng: number }) {
+  return {
+    type: "FeatureCollection" as const,
+    features: points.map((point) => ({
+      type: "Feature" as const,
+      properties: { status: point.status },
+      geometry: {
+        type: "LineString" as const,
+        coordinates: [
+          [point.lng, point.lat],
+          [anchor.lng, anchor.lat],
+        ],
+      },
+    })),
+  };
+}
+
+function updateMundiRouteLayer(
+  map: MundiMapInstance,
+  points: MapPoint[],
+  anchor: { lat: number; lng: number },
+) {
+  const data = buildMundiRouteGeoJson(points, anchor);
+  const source = (map as MapboxMap).getSource("mundi-routes") as { setData?: (next: typeof data) => void } | undefined;
+
+  if (source?.setData) {
+    source.setData(data);
+    return;
+  }
+
+  addMundiRouteLayer(map, points, anchor);
+}
+
 function addMundiRouteLayer(
-  map: MapLibreMap,
+  map: MundiMapInstance,
   points: MapPoint[],
   anchor: { lat: number; lng: number },
 ) {
   map.addSource("mundi-routes", {
     type: "geojson",
-    data: {
-      type: "FeatureCollection",
-      features: points.map((point) => ({
-        type: "Feature",
-        properties: { status: point.status },
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [point.lng, point.lat],
-            [anchor.lng, anchor.lat],
-          ],
-        },
-      })),
-    },
+    data: buildMundiRouteGeoJson(points, anchor),
   });
 
   map.addLayer({
@@ -807,16 +744,16 @@ function addMundiRouteLayer(
     type: "line",
     source: "mundi-routes",
     paint: {
-      "line-color": ["match", ["get", "status"], "minted", "#8aab52", "proven", "#92d67a", "#4a7266"],
-      "line-dasharray": [2, 2],
-      "line-opacity": 0.58,
-      "line-width": 1.8,
+      "line-color": ["match", ["get", "status"], "minted", "#6b9b5c", "proven", "#7a9aab", "#8a9aab"],
+      "line-dasharray": [3, 3],
+      "line-opacity": 0.72,
+      "line-width": 1.4,
     },
   });
 }
 
 function fitMundiBounds(
-  map: MapLibreMap,
+  map: MundiMapInstance,
   points: MapPoint[],
   anchor: { lat: number; lng: number },
 ) {
@@ -842,23 +779,22 @@ function fitMundiBounds(
 function MundiSvgFallback({
   points,
   anchor,
+  selectedAssetId,
+  hoveredAssetId,
   onSelectPoint,
+  onHoverPoint,
 }: {
   points: MapPoint[];
   anchor: { lat: number; lng: number };
+  selectedAssetId?: string | null;
+  hoveredAssetId?: string | null;
   onSelectPoint?: (point: MapPoint) => void;
+  onHoverPoint?: (assetId: string | null) => void;
 }) {
   return (
-    <div className="mundi-canvas">
+    <div className="mundi-canvas market-map-canvas">
       <svg viewBox="0 0 1000 520" role="img" aria-label="World map with provenance origin points">
-        <defs>
-          <radialGradient id="mundiGlow" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="rgba(212, 175, 55, 0.30)" />
-            <stop offset="100%" stopColor="rgba(16, 185, 129, 0)" />
-          </radialGradient>
-        </defs>
-        <rect width="1000" height="520" rx="24" fill="#071323" />
-        <ellipse cx="500" cy="260" rx="438" ry="204" fill="url(#mundiGlow)" opacity="0.65" />
+        <rect width="1000" height="520" fill="#aadaff" />
         {[-120, -60, 0, 60, 120].map((lng) => (
           <line key={`lng-${lng}`} x1={project(lng, 85).x} x2={project(lng, -85).x} y1="42" y2="478" className="mundi-gridline" />
         ))}
@@ -873,14 +809,19 @@ function MundiSvgFallback({
         {points.map((point) => {
           const origin = project(point.lng, point.lat);
           const target = project(anchor.lng, anchor.lat);
+          const isSelected = selectedAssetId === point.assetId;
+          const isHovered = hoveredAssetId === point.assetId;
           return (
             <g
               key={point.assetId}
-              className="mundi-svg-point"
+              className={`mundi-svg-point${isSelected ? " selected" : ""}${isHovered ? " hovered" : ""}`}
               role="button"
               tabIndex={0}
               aria-label={`${point.label}: ${point.status}`}
+              aria-pressed={isSelected}
               onClick={() => onSelectPoint?.(point)}
+              onMouseEnter={() => onHoverPoint?.(point.assetId)}
+              onMouseLeave={() => onHoverPoint?.(null)}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();
@@ -889,8 +830,7 @@ function MundiSvgFallback({
               }}
             >
               <line x1={origin.x} y1={origin.y} x2={target.x} y2={target.y} className={`mundi-route ${point.status}`} />
-              <circle cx={origin.x} cy={origin.y} r="9" className={`mundi-dot ${point.category} ${point.status}`} />
-              <circle cx={origin.x} cy={origin.y} r="16" className={`mundi-pulse ${point.status}`} />
+              <circle cx={origin.x} cy={origin.y} r="7" className={`mundi-dot mundi-dot--origin ${point.category} ${point.status}`} />
               <title>{`${point.label} · ${point.detail} · ${point.status}`}</title>
             </g>
           );
@@ -903,23 +843,17 @@ function MundiSvgFallback({
         ) : null}
 
         <g>
-          <circle cx={project(anchor.lng, anchor.lat).x} cy={project(anchor.lng, anchor.lat).y} r="11" className="mundi-anchor" />
+          <polygon
+            points={`${project(anchor.lng, anchor.lat).x},${project(anchor.lng, anchor.lat).y - 12} ${project(anchor.lng, anchor.lat).x + 10},${project(anchor.lng, anchor.lat).y} ${project(anchor.lng, anchor.lat).x},${project(anchor.lng, anchor.lat).y + 12} ${project(anchor.lng, anchor.lat).x - 10},${project(anchor.lng, anchor.lat).y}`}
+            className="mundi-anchor-shape"
+          />
           <text x={project(anchor.lng, anchor.lat).x + 18} y={project(anchor.lng, anchor.lat).y + 5} className="mundi-anchor-label">
-            Casper
+            Casper anchor
           </text>
         </g>
       </svg>
     </div>
   );
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
 }
 
 function project(lng: number, lat: number) {

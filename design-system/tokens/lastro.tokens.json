@@ -2,9 +2,9 @@
   "$schema": "https://tokens.studio/schemas/tokens.json",
   "meta": {
     "name": "Lastro Design Tokens",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "status": "canonical",
-    "description": "LP + app — forest-mint family, deeper scale (v0.3.1). Edit design-system/tokens/lastro.css only."
+    "description": "LP + app — forest-mint + jade/lime families, gradients & elevation (v0.4.0). Edit design-system/tokens/lastro.css only."
   },
   "primitive": {
     "color": {

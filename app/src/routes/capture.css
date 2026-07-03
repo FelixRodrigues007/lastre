@@ -1,3 +1,18 @@
+.capture-demo-tip {
+  margin-top: 1rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--lastro-border-subtle);
+  background: var(--lastro-bg-panel);
+}
+
+.capture-demo-tip p {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+}
+
 .capture-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;

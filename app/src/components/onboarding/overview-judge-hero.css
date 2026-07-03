@@ -1,0 +1,35 @@
+/* Mercury / Vercel empty-state — same rhythm as overview-next, no gimmicks */
+
+.judge-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.judge-hero__copy {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 48ch;
+}
+
+.judge-hero__title {
+  margin: 0;
+  font-family: var(--lastro-font-display);
+  font-size: 1.125rem;
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+}
+
+.judge-hero__lead {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+}
+
+.judge-hero__cta {
+  flex-shrink: 0;
+}

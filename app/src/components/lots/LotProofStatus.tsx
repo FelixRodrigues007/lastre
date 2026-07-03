@@ -7,28 +7,32 @@ import "./lot-proof-status.css";
 
 type LotProofStatusProps = {
   lot: LotDetail;
+  variant?: "default" | "drawer";
 };
 
-export function LotProofStatus({ lot }: LotProofStatusProps) {
+export function LotProofStatus({ lot, variant = "default" }: LotProofStatusProps) {
+  const inDrawer = variant === "drawer";
   const proofStep = proofStepFromLot(lot);
+  const isValid = lot.latestVerdict === "Valid" || lot.sealMatchesReference === true;
   const isTokenizable = lot.auditRecord?.outcome === "tokenizable";
+  const hasAudit = Boolean(lot.auditRecord);
 
-  let ctaTo = "/process";
-  let ctaLabel = "Run demo batch";
-  let ctaIcon: "process" | "audit" | "globe" | "capture" = "process";
+  let primaryTo = "/process";
+  let primaryLabel = "Run demo batch";
+  let primaryIcon: "process" | "audit" | "globe" = "process";
 
-  if (!lot.auditRecord) {
-    ctaTo = "/process";
-    ctaLabel = "Run demo batch";
-    ctaIcon = "process";
-  } else if (isTokenizable) {
-    ctaTo = "/marketplace";
-    ctaLabel = "Marketplace (demo)";
-    ctaIcon = "globe";
-  } else {
-    ctaTo = `/audit/${encodeURIComponent(lot.artifact.assetId)}`;
-    ctaLabel = "Audit record";
-    ctaIcon = "audit";
+  if (!hasAudit) {
+    primaryTo = "/process";
+    primaryLabel = "Run demo batch";
+    primaryIcon = "process";
+  } else if (isValid && isTokenizable) {
+    primaryTo = "/marketplace";
+    primaryLabel = "Marketplace (demo)";
+    primaryIcon = "globe";
+  } else if (hasAudit) {
+    primaryTo = `/audit/${encodeURIComponent(lot.artifact.assetId)}`;
+    primaryLabel = "View audit record";
+    primaryIcon = "audit";
   }
 
   const quantity =
@@ -39,16 +43,21 @@ export function LotProofStatus({ lot }: LotProofStatusProps) {
         : "—";
 
   return (
-    <aside className="lot-proof-status panel" aria-label="Current proof status">
-      <p className="mono-label">Proof status</p>
+    <aside
+      className={`lot-proof-status${inDrawer ? " lot-proof-status--drawer" : " panel"}`}
+      aria-label="Proof status rail"
+    >
+      {!inDrawer ? <p className="mono-label">Proof status</p> : null}
 
-      <div className="lot-proof-status__verdict">
-        <VerdictBadge verdict={lot.latestVerdict} />
-      </div>
+      {!inDrawer ? (
+        <div className="lot-proof-status__verdict">
+          <VerdictBadge verdict={lot.latestVerdict} />
+        </div>
+      ) : null}
 
-      <p className="lot-proof-status__role">{lot.demoRole}</p>
+      {!inDrawer ? <p className="lot-proof-status__role">{lot.demoRole}</p> : null}
 
-      <dl className="lot-proof-status__facts">
+      <dl className={inDrawer ? "lot-proof-status__group" : "lot-proof-status__facts"}>
         <div>
           <dt>Quantity</dt>
           <dd>{quantity}</dd>
@@ -63,22 +72,38 @@ export function LotProofStatus({ lot }: LotProofStatusProps) {
         </div>
         <div>
           <dt>Attested</dt>
-          <dd>{lot.attested ? "Yes" : "No"}</dd>
+          <dd>{lot.attested || lot.testnetAttestation ? "Yes" : "Awaiting"}</dd>
         </div>
       </dl>
 
       <div className="lot-proof-status__rail">
-        <p className="lot-proof-status__rail-label">Chain of proof</p>
-        <ProofRail activeStep={proofStep} verdict={lot.latestVerdict} />
+        {!inDrawer ? <p className="lot-proof-status__rail-label">Chain of proof</p> : null}
+        {inDrawer ? <p className="lot-proof-status__section-label">Chain of proof</p> : null}
+        <ProofRail activeStep={proofStep} verdict={lot.latestVerdict} layout={inDrawer ? "vertical" : "auto"} />
       </div>
 
       <div className="lot-proof-status__actions">
-        <Link className="route-cta" to={ctaTo}>
-          <BtnIcon icon={ctaIcon}>{ctaLabel}</BtnIcon>
+        <Link className="route-cta" to={primaryTo}>
+          <BtnIcon icon={primaryIcon}>{primaryLabel}</BtnIcon>
         </Link>
-        <Link className="route-cta route-cta--ghost" to="/lots">
-          Back to catalog
-        </Link>
+        {hasAudit ? (
+          <Link
+            className="route-cta route-cta--ghost"
+            to={`/audit/${encodeURIComponent(lot.artifact.assetId)}`}
+          >
+            View audit record
+          </Link>
+        ) : null}
+        {isValid && isTokenizable && primaryTo !== "/marketplace" ? (
+          <Link className="route-cta route-cta--ghost" to="/marketplace">
+            Marketplace (demo)
+          </Link>
+        ) : null}
+        {!inDrawer ? (
+          <Link className="route-cta route-cta--ghost" to="/lots">
+            Back to catalog
+          </Link>
+        ) : null}
       </div>
     </aside>
   );

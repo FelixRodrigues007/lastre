@@ -1,5 +1,6 @@
 :root {
-  --app-sidebar-width: 15.75rem;
+  --app-sidebar-width: 15rem;
+  --app-sidebar-width-collapsed: 3.75rem;
 }
 
 .app-shell {
@@ -72,6 +73,12 @@
   flex-shrink: 0;
 }
 
+.app-topbar__capture {
+  min-height: 1.75rem;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+}
+
 .app-topbar__cmd {
   display: inline-flex;
   align-items: center;
@@ -96,28 +103,21 @@
 }
 
 .app-topbar__dot {
+  position: relative;
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 50%;
-  background: var(--lastro-status-valid);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastro-status-valid) 20%, transparent);
+  background: var(--lastro-gradient-lime-shine);
+  box-shadow: var(--lastro-glow-lime);
 }
 
 .app-main {
   flex: 1;
 }
 
-.guardrail {
-  top: var(--app-nav-height);
-}
-
 @media (min-width: 900px) {
   .app-topbar {
     display: none;
-  }
-
-  .guardrail {
-    top: 0;
   }
 
   .app-main .shell {

@@ -5,22 +5,33 @@ import { BrowserRouter } from "react-router-dom";
 import "@design-system/tokens/lastro.css";
 import { initLocale } from "./lib/locale";
 import { initTheme } from "./lib/theme";
+import { initDemoSession } from "./lib/initDemoSession";
 import "./styles/app.css";
+import "./styles/app-craft.css";
+import "./styles/motion.css";
+import "./styles/screen-signatures.css";
+import "./styles/micro-states.css";
+import "./styles/craft.css";
+import "./styles/refine.css";
 
 initTheme();
 initLocale();
+initDemoSession();
 
 import { App } from "./App";
 import { LocaleProvider } from "./context/LocaleContext";
 import { NavCountsProvider } from "./context/NavCountsContext";
+import { OnboardingProvider } from "./context/OnboardingContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <LocaleProvider>
-        <NavCountsProvider>
-          <App />
-        </NavCountsProvider>
+        <OnboardingProvider>
+          <NavCountsProvider>
+            <App />
+          </NavCountsProvider>
+        </OnboardingProvider>
       </LocaleProvider>
     </BrowserRouter>
   </StrictMode>,

@@ -14,15 +14,20 @@ type ProofRailProps = {
   /** 0-based index of the active step */
   activeStep?: number;
   verdict?: VerificationVerdict | null;
+  layout?: "auto" | "vertical";
 };
 
 export function ProofRail({
   steps = DEFAULT_STEPS,
   activeStep = 0,
   verdict = null,
+  layout = "auto",
 }: ProofRailProps) {
   return (
-    <ol className="proof-rail" aria-label="Chain of proof">
+    <ol
+      className={`proof-rail${layout === "vertical" ? " proof-rail--vertical" : ""}`}
+      aria-label="Chain of proof"
+    >
       {steps.map((label, index) => {
         const isActive = index === activeStep;
         const isDone = index < activeStep;

@@ -14,12 +14,14 @@
     "lint": "tsc --noEmit && tsc -p server/tsconfig.json --noEmit"
   },
   "dependencies": {
+    "mapbox-gl": "^3.25.0",
     "maplibre-gl": "^5.24.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3"
   },
   "devDependencies": {
+    "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^26.0.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",

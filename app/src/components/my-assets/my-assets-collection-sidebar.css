@@ -1,0 +1,126 @@
+.my-assets-sidebar {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  padding: 1rem 1.1rem;
+}
+
+.my-assets-sidebar__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.my-assets-sidebar__score {
+  font-family: var(--lastro-font-display);
+  font-size: 1.75rem;
+  font-weight: var(--lastro-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--lastro-brand-seal);
+  letter-spacing: -0.03em;
+}
+
+.my-assets-sidebar__hint {
+  font-size: var(--text-small);
+  color: var(--lastro-text-muted);
+  margin-top: -0.35rem;
+}
+
+.my-assets-sidebar__stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.my-assets-sidebar__stat-label {
+  display: block;
+  font-size: var(--text-small);
+  font-weight: var(--lastro-weight-medium);
+  margin-bottom: 0.2rem;
+}
+
+.my-assets-sidebar__stat-value {
+  font-family: var(--lastro-font-display);
+  font-size: 1.125rem;
+  font-weight: var(--lastro-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.my-assets-sidebar__track {
+  height: 6px;
+  margin-top: 0.35rem;
+  border-radius: var(--app-radius-pill);
+  background: color-mix(in srgb, var(--lastro-text-muted) 16%, transparent);
+  overflow: hidden;
+}
+
+.my-assets-sidebar__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.my-assets-sidebar__fill--minted {
+  background: var(--lastro-brand-seal);
+}
+
+.my-assets-sidebar__fill--attested {
+  background: var(--lastro-status-valid);
+}
+
+.my-assets-sidebar__fill--carbon {
+  background: #4a7fd4;
+}
+
+.my-assets-sidebar__fill--mineral {
+  background: #c97a2e;
+}
+
+.my-assets-sidebar__foot {
+  display: grid;
+  gap: 0.2rem;
+  padding-top: 0.65rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.my-assets-sidebar__account,
+.my-assets-sidebar__network {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+.my-assets-page__layout {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .my-assets-page__layout {
+    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+.my-assets-page__main {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.my-assets-page__banner {
+  padding: 0.75rem 1rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent);
+  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
+  font-size: var(--text-small);
+  color: var(--lastro-text-secondary);
+}
+
+.my-assets-page__banner strong {
+  color: var(--lastro-text-primary);
+}

@@ -1,0 +1,101 @@
+.evidence-progress {
+  padding: 1rem 1.125rem;
+  margin-bottom: 1.25rem;
+}
+
+.evidence-progress__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.evidence-progress__total {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+.evidence-progress__track {
+  display: flex;
+  height: 8px;
+  border-radius: var(--lastro-radius-pill);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--lastro-text-muted) 14%, transparent);
+  margin-bottom: 0.75rem;
+}
+
+.evidence-progress__segment {
+  min-width: 3px;
+  transition: flex-grow var(--dur-data) var(--ease-out);
+}
+
+.evidence-progress__segment--not-ready {
+  background: var(--lastro-status-invalid);
+}
+
+.evidence-progress__segment--flagged {
+  background: var(--lastro-viz-4-solid);
+}
+
+.evidence-progress__segment--ready {
+  background: var(--lastro-viz-5-solid);
+}
+
+.evidence-progress__segment--accepted {
+  background: var(--lastro-viz-3-solid);
+}
+
+.evidence-progress__segment--na {
+  background: color-mix(in srgb, var(--lastro-text-muted) 45%, transparent);
+}
+
+.evidence-progress__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
+}
+
+.evidence-progress__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--lastro-text-secondary);
+}
+
+.evidence-progress__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.evidence-progress__dot--not-ready {
+  background: var(--lastro-status-invalid);
+}
+
+.evidence-progress__dot--flagged {
+  background: var(--lastro-viz-4-solid);
+}
+
+.evidence-progress__dot--ready {
+  background: var(--lastro-viz-5-solid);
+}
+
+.evidence-progress__dot--accepted {
+  background: var(--lastro-viz-3-solid);
+}
+
+.evidence-progress__dot--na {
+  background: color-mix(in srgb, var(--lastro-text-muted) 45%, transparent);
+}
+
+.evidence-progress__count {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastro-text-primary);
+  margin-left: 0.1rem;
+}

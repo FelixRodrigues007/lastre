@@ -1,0 +1,90 @@
+/* ClickUp-style: colored circle + label, no pill chrome */
+
+.status-badge {
+  --status-fg: var(--lastro-text-secondary);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  color: var(--status-fg);
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  transition: color var(--dur-state, 200ms) var(--ease-spring);
+}
+
+.status-badge--sm {
+  gap: 0.42rem;
+  font-size: 0.75rem;
+}
+
+.status-badge--sm .status-badge__circle {
+  width: 12px;
+  height: 12px;
+}
+
+.status-badge__circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--status-fg);
+}
+
+.status-badge__circle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.status-badge__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-indicator {
+  vertical-align: middle;
+}
+
+.status-badge--success {
+  --status-fg: var(--lastro-accent-success);
+}
+
+.status-badge--warning {
+  --status-fg: var(--lastro-accent-warn);
+}
+
+.status-badge--info {
+  --status-fg: var(--lastro-accent-info);
+}
+
+.status-badge--danger {
+  --status-fg: var(--lastro-accent-danger);
+}
+
+.status-badge--neutral {
+  --status-fg: var(--lastro-text-muted);
+}
+
+[data-theme="light"] .status-badge--success {
+  --status-fg: var(--lastro-accent-success);
+}
+
+[data-theme="light"] .status-badge--warning {
+  --status-fg: var(--lastro-accent-warn);
+}
+
+[data-theme="light"] .status-badge--info {
+  --status-fg: var(--lastro-accent-info);
+}
+
+[data-theme="light"] .status-badge--danger {
+  --status-fg: var(--lastro-accent-danger);
+}

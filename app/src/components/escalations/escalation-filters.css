@@ -1,0 +1,149 @@
+.escalation-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.escalation-filters__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  min-width: 0;
+  flex: 1 1 16rem;
+}
+
+.escalation-filters__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.875rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 70%, transparent);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.escalation-filters__chip:active {
+  transform: scale(0.98);
+}
+
+.escalation-filters__chip:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--lastro-brand-seal) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.escalation-filters__chip--active {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, var(--lastro-border-strong));
+  background: color-mix(in srgb, var(--lastro-brand-seal) 12%, var(--lastro-bg-elevated));
+  color: var(--lastro-text-primary);
+}
+
+.escalation-filters__chip--geo.escalation-filters__chip--active {
+  border-color: color-mix(in srgb, var(--lastro-status-warning, #c9a227) 50%, var(--lastro-border-strong));
+  background: color-mix(in srgb, var(--lastro-status-warning, #c9a227) 12%, var(--lastro-bg-elevated));
+}
+
+.escalation-filters__chip--missing.escalation-filters__chip--active {
+  border-color: color-mix(in srgb, var(--lastro-status-invalid) 45%, var(--lastro-border-strong));
+  background: color-mix(in srgb, var(--lastro-status-invalid) 10%, var(--lastro-bg-elevated));
+}
+
+.escalation-filters__count {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+}
+
+.escalation-filters__chip--active .escalation-filters__count {
+  color: var(--lastro-text-secondary);
+}
+
+.escalation-filters__field {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 9.5rem;
+  flex-shrink: 0;
+}
+
+.escalation-filters__field-label {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.escalation-filters__select {
+  width: 100%;
+  min-height: 1.875rem;
+  padding: 0.25rem 1.75rem 0.25rem 0.55rem;
+  border-radius: var(--app-radius-control);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background-color: color-mix(in srgb, var(--lastro-bg-elevated) 88%, var(--lastro-bg-panel));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238a9aab' d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  color: var(--lastro-text-primary);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  appearance: none;
+  cursor: pointer;
+}
+
+.escalation-filters--sidebar {
+  flex-direction: column;
+  align-items: stretch;
+  margin-bottom: 0;
+  gap: 0.625rem;
+}
+
+.escalation-filters--sidebar .escalation-filters__chips {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.escalation-filters--sidebar .escalation-filters__field {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+  width: 100%;
+  margin-inline-start: 0;
+}
+
+.escalation-filters--sidebar .escalation-filters__select {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .escalation-filters:not(.escalation-filters--sidebar) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .escalation-filters:not(.escalation-filters--sidebar) .escalation-filters__field {
+    width: 100%;
+  }
+
+  .escalation-filters--sidebar .escalation-filters__field {
+    margin-inline-start: 0;
+    width: 100%;
+  }
+
+  .escalation-filters--sidebar .escalation-filters__select {
+    flex: 1;
+    min-width: 0;
+  }
+}

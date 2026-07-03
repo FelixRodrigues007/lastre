@@ -1,258 +1,220 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { PageHeader } from "../components/layout/PageHeader";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { StatePanel } from "../components/layout/StatePanel";
-import { ProofJourney } from "../components/proof/ProofJourney";
-import { BatchStepper } from "../components/process/BatchStepper";
-import { ProcessPipelineStrip, ProcessStickySummary } from "../components/process/ProcessPipeline";
-import { ProcessTrustBoundary } from "../components/process/ProcessTrustBoundary";
-import { ProcessWhatHappened } from "../components/process/ProcessWhatHappened";
-import { OutcomeBreakdown } from "../components/ui/OutcomeBreakdown";
-import { SectionHead } from "../components/ui/SectionHead";
+import { ProcessConfigCard } from "../components/process/ProcessConfigCard";
+import { ProcessConfigShell } from "../components/process/ProcessConfigShell";
+import { ProcessSealArena } from "../components/process/ProcessSealArena";
+import { useLocaleContext } from "../context/LocaleContext";
 import { useNavCounts } from "../context/NavCountsContext";
-import { getProcessDefaults, processBatch } from "../lib/api";
-import type { AuditRecord, BatchSummary, DeciderMode } from "../lib/types";
+import { useOnboarding } from "../context/OnboardingContext";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { useAsyncData } from "../hooks/useAsyncData";
+import { getLots, getProcessDefaults, getSettings, processBatch, updateSettings } from "../lib/api";
+import { partitionProcessLots } from "../lib/processLots";
+import type { AuditRecord, BatchSummary, DeciderMode } from "../lib/types";
 import "./process.css";
+
+type BatchPhase = "idle" | "running" | "completed" | "error";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function summaryFromRecords(records: AuditRecord[]): BatchSummary {
-  return records.reduce(
-    (acc, record) => {
-      if (record.outcome === "tokenizable") acc.tokenizable += 1;
-      if (record.outcome === "rejected") acc.rejected += 1;
-      if (record.outcome === "skipped") acc.skipped += 1;
-      if (record.outcome === "escalated") acc.escalated += 1;
-      if (record.onChain?.verdict === "Valid") acc.onChainAccepted += 1;
-      if (record.onChain?.verdict === "Invalid") acc.onChainRejected += 1;
-      return acc;
-    },
-    {
-      tokenizable: 0,
-      rejected: 0,
-      skipped: 0,
-      escalated: 0,
-      onChainAccepted: 0,
-      onChainRejected: 0,
-    },
-  );
-}
-
 export function Process() {
+  const { t } = useLocaleContext();
+  const prefersReducedMotion = usePrefersReducedMotion();
   const defaults = useAsyncData(getProcessDefaults);
+  const lots = useAsyncData(getLots);
+  const settings = useAsyncData(getSettings);
   const { reload: reloadNavCounts } = useNavCounts();
+  const { completeStep } = useOnboarding();
+
   const [selected, setSelected] = useState<string[]>([]);
   const [decider, setDecider] = useState<DeciderMode>("rule");
-  const [running, setRunning] = useState(false);
+  const [phase, setPhase] = useState<BatchPhase>("idle");
+  const [fetchingBatch, setFetchingBatch] = useState(false);
   const [runError, setRunError] = useState<string | null>(null);
-  const [displayed, setDisplayed] = useState<AuditRecord[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+  const [records, setRecords] = useState<AuditRecord[]>([]);
+  const [summary, setSummary] = useState<BatchSummary | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [sealRevealedThrough, setSealRevealedThrough] = useState(-1);
+  const [streamingRecord, setStreamingRecord] = useState<AuditRecord | null>(null);
 
-  const assetIds = defaults.data?.assetIds ?? [];
+  const loading = defaults.loading || lots.loading;
+  const error = defaults.error ?? lots.error;
+  const selectionLocked = phase === "running";
+
+  const defaultAssetIds = defaults.data?.assetIds ?? [];
+
+  const { demoLots, capturedLots } = useMemo(() => {
+    const items = lots.data?.lots ?? [];
+    return partitionProcessLots(items, defaultAssetIds);
+  }, [lots.data, defaultAssetIds]);
+
+  const selectedLots = useMemo(() => {
+    const byId = new Map(
+      [...demoLots, ...capturedLots].map((lot) => [lot.artifact.assetId, lot]),
+    );
+    return selected.map((id) => byId.get(id)).filter((lot): lot is NonNullable<typeof lot> => Boolean(lot));
+  }, [selected, demoLots, capturedLots]);
 
   useEffect(() => {
     if (defaults.data) {
       setSelected(defaults.data.assetIds);
-      setDecider(defaults.data.decider);
     }
   }, [defaults.data]);
 
-  const lotMeta = useMemo(
-    () =>
-      new Map([
-        [assetIds[0] ?? "", "Genuine · expected Valid"],
-        [assetIds[1] ?? "", "Tampered · expected Invalid"],
-        [assetIds[2] ?? "", "Duplicate · expected skip"],
-        [assetIds[3] ?? "", "Out of region · expected escalate"],
-      ]),
-    [assetIds],
-  );
+  useEffect(() => {
+    const next = settings.data?.decider ?? defaults.data?.decider;
+    if (next) setDecider(next);
+  }, [settings.data?.decider, defaults.data?.decider]);
 
   const progress =
-    running && currentIndex !== null && selected.length > 0
-      ? Math.min(100, Math.round((currentIndex / selected.length) * 100))
-      : displayed.length > 0 && !running
+    phase === "running" && selected.length > 0
+      ? fetchingBatch
+        ? 8
+        : activeIndex !== null
+          ? Math.min(100, Math.round(((activeIndex + 1) / selected.length) * 100))
+          : 0
+      : phase === "completed"
         ? 100
         : 0;
 
-  const pipelineStep =
-    running && currentIndex !== null
-      ? Math.min(4, Math.floor((currentIndex / Math.max(selected.length, 1)) * 4))
-      : displayed.length > 0 && !running
-        ? 4
-        : 0;
-
-  const batchSummary = useMemo(() => summaryFromRecords(displayed), [displayed]);
-
-  function toggleAsset(assetId: string) {
+  const toggleAsset = useCallback((assetId: string) => {
+    if (selectionLocked) return;
     setSelected((prev) =>
       prev.includes(assetId) ? prev.filter((id) => id !== assetId) : [...prev, assetId],
     );
-  }
+  }, [selectionLocked]);
 
-  async function runBatch() {
-    if (!selected.length || running) return;
+  const handleDeciderChange = useCallback(async (mode: DeciderMode) => {
+    if (selectionLocked) return;
+    setDecider(mode);
+    try {
+      await updateSettings(mode);
+      settings.reload();
+    } catch {
+      // Best-effort sync during demo.
+    }
+  }, [selectionLocked, settings]);
 
-    setRunning(true);
+  const resetPipeline = useCallback(() => {
+    setPhase("idle");
+    setFetchingBatch(false);
     setRunError(null);
-    setDisplayed([]);
-    setCurrentIndex(0);
+    setRecords([]);
+    setSummary(null);
+    setActiveIndex(null);
+    setSealRevealedThrough(-1);
+    setStreamingRecord(null);
+  }, []);
+
+  const runBatch = useCallback(async () => {
+    if (!selected.length || phase === "running") return;
+
+    setPhase("running");
+    setFetchingBatch(true);
+    setRunError(null);
+    setRecords([]);
+    setSummary(null);
+    setActiveIndex(0);
+    setSealRevealedThrough(-1);
+    setStreamingRecord(null);
+
+    const cardPause = prefersReducedMotion ? 0 : 480;
+    const agentPause = prefersReducedMotion ? 0 : 1800;
+    const sealPause = prefersReducedMotion ? 0 : 720;
 
     try {
       const result = await processBatch(selected, decider);
+      setFetchingBatch(false);
 
       for (let i = 0; i < result.records.length; i += 1) {
-        setCurrentIndex(i);
-        setDisplayed((prev) => [...prev, result.records[i]]);
-        await sleep(450);
+        setActiveIndex(i);
+        setStreamingRecord(result.records[i]);
+        await sleep(agentPause);
+        setRecords((prev) => [...prev, result.records[i]]);
+        setStreamingRecord(null);
+        await sleep(sealPause);
+        setSealRevealedThrough(i);
+        await sleep(cardPause);
       }
 
-      setCurrentIndex(result.records.length);
+      setActiveIndex(null);
+      setSummary(result.summary);
+      setPhase("completed");
       reloadNavCounts();
+      completeStep("batch");
     } catch (err) {
-      setRunError(err instanceof Error ? err.message : "Batch failed");
-    } finally {
-      setRunning(false);
+      setFetchingBatch(false);
+      setRunError(err instanceof Error ? err.message : t("process.error.generic"));
+      setPhase("error");
+      setActiveIndex(null);
+      setStreamingRecord(null);
     }
-  }
+  }, [selected, decider, phase, prefersReducedMotion, reloadNavCounts, completeStep, t]);
+
+  const reloadAll = useCallback(() => {
+    defaults.reload();
+    lots.reload();
+    settings.reload();
+  }, [defaults, lots, settings]);
 
   return (
-    <div className="page">
-      <PageHeader
-        kicker="Process"
-        title="Run demo batch"
-        lead="The agent chooses the action (pay, skip, escalate). The seal decides Valid or Invalid."
-      />
+    <div
+      className={`page process-page${
+        phase === "running" ? " process-page--running" : ""
+      }${phase === "completed" ? " process-page--completed" : ""}`}
+    >
+      <div className="process-page__ambient" aria-hidden="true">
+        <div className="process-page__mesh">
+          <div className="process-page__mesh-base" />
+          <span className="process-page__blob process-page__blob--1" />
+          <span className="process-page__blob process-page__blob--2" />
+          <span className="process-page__blob process-page__blob--3" />
+          <span className="process-page__blob process-page__blob--4" />
+          <span className="process-page__blob process-page__blob--5" />
+        </div>
+        <div className="process-page__mesh-grain" />
+      </div>
 
-      <ProofJourney activePath="/process" compact />
-
-      <ProcessPipelineStrip activeStep={pipelineStep} />
-
-      <StatePanel loading={defaults.loading} error={defaults.error} skeleton="split" onRetry={defaults.reload}>
-        <div className="process-layout">
-          <aside className="panel process-picker">
-            <header className="process-picker__head">
-              <div>
-                <p className="mono-label">Configuration</p>
-                <p className="process-picker__count">
-                  {selected.length} of {assetIds.length} selected
-                </p>
-              </div>
-            </header>
-
-            <fieldset className="process-picker__decider">
-              <legend className="mono-label">Decider</legend>
-              <div className="process-picker__decider-row">
-                <label className="process-picker__radio">
-                  <input
-                    type="radio"
-                    name="decider"
-                    value="rule"
-                    checked={decider === "rule"}
-                    disabled={running}
-                    onChange={() => setDecider("rule")}
-                  />
-                  Rule
-                </label>
-                <label className="process-picker__radio">
-                  <input
-                    type="radio"
-                    name="decider"
-                    value="llm"
-                    checked={decider === "llm"}
-                    disabled={running}
-                    onChange={() => setDecider("llm")}
-                  />
-                  LLM
-                </label>
-              </div>
-            </fieldset>
-
-            <SectionHead label="Lots in batch" />
-
-            <ul className="process-picker__list">
-              {assetIds.map((assetId, index) => (
-                <li key={`${assetId}-${index}`}>
-                  <label className="process-picker__item">
-                    <input
-                      type="checkbox"
-                      checked={selected.includes(assetId)}
-                      disabled={running}
-                      onChange={() => toggleAsset(assetId)}
-                    />
-                    <span>
-                      <span className="process-picker__id">{assetId}</span>
-                      <span className="process-picker__meta">{lotMeta.get(assetId)}</span>
-                    </span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-
-            {running || displayed.length > 0 ? (
-              <div className="process-progress">
-                <div className="process-progress__head">
-                  <span className="mono-label">Progress</span>
-                  <span className="process-progress__pct">{progress}%</span>
-                </div>
-                <div className="process-progress__track" role="progressbar" aria-valuenow={progress}>
-                  <span className="process-progress__fill" style={{ width: `${progress}%` }} />
-                </div>
-              </div>
-            ) : null}
-
-            <button
-              type="button"
-              className="route-cta process-picker__run"
-              disabled={running || selected.length === 0}
-              onClick={runBatch}
-            >
-              {running ? "Processing…" : "Run batch"}
-            </button>
-
-            {runError ? <p className="process-picker__error">{runError}</p> : null}
-
-            <p className="process-picker__note">
-              LLM mode uses xAI (XAI_API_KEY) or OpenRouter when set; otherwise rule fallback applies.
-            </p>
-          </aside>
-
-          <section className="process-results">
-            <header className="process-results__head">
-              <SectionHead
-                label="Live pipeline"
-                aside={displayed.length > 0 ? `${displayed.length} processed` : undefined}
+      <StatePanel loading={loading} error={error} skeleton="dashboard" onRetry={reloadAll}>
+        <div className="process-layout process-layout--split">
+          <div className="process-layout__config">
+            <ProcessConfigShell running={phase === "running"}>
+              <ProcessConfigCard
+                demoLots={demoLots}
+                capturedLots={capturedLots}
+                selected={selected}
+                decider={decider}
+                phase={phase}
+                progress={progress}
+                fetchingBatch={fetchingBatch}
+                runError={runError}
+                disabled={selectionLocked}
+                onToggle={toggleAsset}
+                onDeciderChange={handleDeciderChange}
+                onRun={runBatch}
+                onRetry={runBatch}
               />
-              {displayed.length > 0 ? (
-                <Link className="process-results__link" to="/audit">
-                  Open audit log
-                </Link>
-              ) : null}
-            </header>
+            </ProcessConfigShell>
+          </div>
 
-            <ProcessTrustBoundary />
-
-            <BatchStepper records={displayed} currentIndex={currentIndex} running={running} />
-          </section>
+          <div className="process-layout__stage">
+            <ProcessSealArena
+              selectedLots={selectedLots}
+              phase={phase}
+              activeIndex={activeIndex}
+              records={records}
+              streamingRecord={streamingRecord}
+              sealRevealedThrough={sealRevealedThrough}
+              fetchingBatch={fetchingBatch}
+              decider={decider}
+              summary={summary}
+              onRepeat={resetPipeline}
+            />
+          </div>
         </div>
       </StatePanel>
-
-      {displayed.length > 0 && !running ? (
-        <>
-          <ProcessWhatHappened records={displayed} summary={batchSummary} />
-          <ProcessStickySummary summary={batchSummary} total={displayed.length} />
-          <OutcomeBreakdown
-            title="Batch result"
-            tokenizable={batchSummary.tokenizable}
-            rejected={batchSummary.rejected}
-            skipped={batchSummary.skipped}
-            escalated={batchSummary.escalated}
-          />
-        </>
-      ) : null}
     </div>
   );
 }

@@ -1,0 +1,58 @@
+.casper-proof {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.casper-proof__awaiting,
+.casper-proof__body {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.casper-proof__lead {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+  max-width: 52ch;
+}
+
+.casper-proof__verdict {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.casper-proof__note {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.casper-proof__note--valid {
+  color: var(--lastro-status-valid);
+}
+
+.casper-proof__note--invalid {
+  color: var(--lastro-text-secondary);
+}
+
+.casper-proof__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  padding-top: 0.25rem;
+}
+
+.casper-proof__link {
+  font-size: 0.8125rem;
+  color: var(--lastro-brand-seal);
+  text-decoration: none;
+}
+
+.casper-proof__link:hover {
+  text-decoration: underline;
+}
+
+.casper-proof__link--ghost {
+  color: var(--lastro-text-secondary);
+}

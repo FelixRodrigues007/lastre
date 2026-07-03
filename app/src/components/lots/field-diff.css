@@ -1,0 +1,121 @@
+.field-diff {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.field-diff__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.field-diff__lead {
+  margin: 0.2rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--lastro-text-muted);
+  max-width: 52ch;
+}
+
+.field-diff__stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--lastro-radius-pill);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: var(--lastro-stroke-hairline) solid transparent;
+}
+
+.field-diff__stamp-icon {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.field-diff__stamp--match {
+  color: var(--lastro-status-valid);
+  border-color: color-mix(in srgb, var(--lastro-status-valid) 35%, transparent);
+  background: color-mix(in srgb, var(--lastro-status-valid) 8%, transparent);
+}
+
+.field-diff__stamp--mismatch {
+  color: var(--lastro-status-invalid);
+  border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, transparent);
+  background: color-mix(in srgb, var(--lastro-status-invalid) 8%, transparent);
+}
+
+.field-diff__table-wrap {
+  overflow-x: auto;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.field-diff__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.field-diff__table thead th {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+}
+
+.field-diff__table tbody th,
+.field-diff__table tbody td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  vertical-align: top;
+}
+
+.field-diff__table tbody th {
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+  white-space: nowrap;
+}
+
+.field-diff__mono {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  color: var(--lastro-text-primary);
+}
+
+.field-diff__row--diverge {
+  background: color-mix(in srgb, var(--lastro-status-invalid) 7%, transparent);
+}
+
+.field-diff__row--diverge .field-diff__mono:last-child {
+  color: var(--lastro-status-invalid);
+  font-weight: var(--lastro-weight-semibold);
+}
+
+.field-diff__row--diverge td:last-child {
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastro-status-invalid) 70%, transparent);
+}
+
+.field-diff__footer {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.field-diff__footer--match {
+  color: var(--lastro-status-valid);
+}
+
+.field-diff__footer--mismatch {
+  color: var(--lastro-text-secondary);
+}

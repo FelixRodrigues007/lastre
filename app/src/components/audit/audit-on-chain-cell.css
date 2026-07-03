@@ -1,0 +1,34 @@
+.audit-on-chain {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 9rem;
+}
+
+.audit-on-chain--empty {
+  justify-items: start;
+}
+
+.audit-on-chain__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.audit-on-chain__tx {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+.audit-on-chain__link {
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-brand-seal);
+  text-decoration: none;
+  width: fit-content;
+}
+
+.audit-on-chain__link:hover {
+  text-decoration: underline;
+}

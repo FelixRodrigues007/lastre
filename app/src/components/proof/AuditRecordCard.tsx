@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { EvidenceStatusBadge } from "../audit/EvidenceStatusBadge";
+import { getEvidenceStatus, evidenceSubtitle } from "../../lib/auditEvidence";
 import type { AuditRecord } from "../../lib/types";
 import { shortHash } from "../../lib/format";
-import { ActionBadge, OutcomeBadge, VerdictBadge } from "./Badges";
+import { useLocaleContext } from "../../context/LocaleContext";
+import { ActionBadge, VerdictBadge } from "./Badges";
 import { SealChip } from "./SealChip";
 import "./audit-record-card.css";
 
@@ -9,9 +12,16 @@ type AuditRecordCardProps = {
   record: AuditRecord;
   index?: number;
   compact?: boolean;
+  disableTitleLink?: boolean;
 };
 
-export function AuditRecordCard({ record, index, compact = false }: AuditRecordCardProps) {
+export function AuditRecordCard({
+  record,
+  index,
+  compact = false,
+  disableTitleLink = false,
+}: AuditRecordCardProps) {
+  const { t } = useLocaleContext();
   const verdict = record.verification?.verdict ?? record.onChain?.verdict ?? null;
 
   return (
@@ -22,11 +32,17 @@ export function AuditRecordCard({ record, index, compact = false }: AuditRecordC
             <p className="mono-label audit-card__index">Record {index}</p>
           ) : null}
           <h3 className="audit-card__title">
-            <Link to={`/audit/${encodeURIComponent(record.assetId)}`}>{record.assetId}</Link>
+            {disableTitleLink ? (
+              <span>{record.assetId}</span>
+            ) : (
+              <Link to={`/audit/${encodeURIComponent(record.assetId)}`}>{record.assetId}</Link>
+            )}
           </h3>
         </div>
-        <OutcomeBadge outcome={record.outcome} />
+        <EvidenceStatusBadge status={getEvidenceStatus(record)} />
       </header>
+
+      <p className="audit-card__subtitle">{evidenceSubtitle(record)}</p>
 
       <section className="audit-card__section">
         <p className="audit-card__section-label">Agent decision</p>
@@ -59,11 +75,20 @@ export function AuditRecordCard({ record, index, compact = false }: AuditRecordC
 
       {record.onChain ? (
         <section className="audit-card__section">
-          <p className="audit-card__section-label">On-chain</p>
+          <p className="audit-card__section-label">{t("audit.evidence.col.onChain")}</p>
           <div className="audit-card__row">
             <VerdictBadge verdict={record.onChain.verdict} />
             <code className="audit-card__tx">tx {shortHash(record.onChain.txHash)}</code>
           </div>
+          <a
+            className="audit-card__explorer"
+            href={`https://testnet.cspr.live/deploy/${record.onChain.txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {t("audit.evidence.onChain.viewAttestation")}
+          </a>
         </section>
       ) : null}
     </article>
