@@ -52,6 +52,7 @@ export function Capture() {
   const [sealResult, setSealResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [autoResult, setAutoResult] = useState<{ verdict: string; action: string; decidedBy: string } | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -160,20 +161,39 @@ export function Capture() {
     }
   }
 
-  async function submitToApp() {
+  // Autonomous loop: submit → agent auto-processes → verdict surfaced inline.
+  async function submitToApp(decider: "rule" | "llm" = "rule") {
     if (!sealResult) {
       setMessage("Generate passport first.");
       return;
     }
     setLoading(true);
+    setAutoResult(null);
+    setMessage(decider === "llm" ? "Submitting + letting the Grok agent decide fully…" : "Submitting + auto-processing through the agent…");
     try {
       await createArtifact(sealResult.artifact);
-      // Auto-process with rule decider for instant demo flow (user can re-run with LLM in /process)
+      const assetId = sealResult.artifact.assetId;
+      let record: any = null;
       try {
-        await processBatch([sealResult.artifact.assetId], "rule");
-      } catch {}
-      setMessage("Artifact submitted + auto-attested (Valid expected for clean capture). See in Marketplace or Lots. You can re-process with Grok LLM.");
-      setTimeout(() => navigate("/marketplace"), 1400);
+        const batch = await processBatch([assetId], decider);
+        record = batch.records?.find((r: any) => r.assetId === assetId) ?? batch.records?.[0] ?? null;
+      } catch {
+        /* processing is best-effort in the demo loop */
+      }
+
+      const verdict = record?.verification?.verdict ?? record?.onChain?.verdict ?? "Unverified";
+      const action = record?.decision?.action ?? "—";
+      const decidedBy = record?.decision?.decidedBy ?? decider;
+      setAutoResult({ verdict, action, decidedBy });
+
+      const verdictMsg =
+        verdict === "Valid"
+          ? "Status: Valid — ready for Marketplace + Claim."
+          : verdict === "Invalid"
+            ? "Status: Invalid — recorded as tamper evidence (proof, not error)."
+            : "Status: Unverified — open Process to attest.";
+      setMessage(`Artifact submitted. Agent (${decidedBy}) chose "${action}". ${verdictMsg}`);
+      setTimeout(() => navigate("/marketplace"), 1800);
     } catch (e: any) {
       setMessage("Submit failed: " + e.message);
     } finally {
@@ -255,9 +275,29 @@ export function Capture() {
 
           <div className="actions">
             <button onClick={generatePassport} disabled={loading}>Generate Passport + Seal</button>
-            {sealResult && <button className="secondary" onClick={submitToApp} disabled={loading}>Submit to App Queue</button>}
+            {sealResult && (
+              <>
+                <button className="secondary" onClick={() => submitToApp("rule")} disabled={loading}>
+                  Submit + Auto-process
+                </button>
+                <button className="secondary" onClick={() => submitToApp("llm")} disabled={loading}>
+                  Let Agent decide fully (Grok LLM)
+                </button>
+              </>
+            )}
           </div>
           {message && <p className="capture-msg">{message}</p>}
+          {autoResult && (
+            <div className={`auto-loop-result auto-loop-result--${autoResult.verdict.toLowerCase()}`} role="status">
+              <span className="mono small">Autonomous loop</span>
+              <div className="auto-loop-steps">
+                <span>Agent action: <strong>{autoResult.action}</strong></span>
+                <span>Decided by: <strong>{autoResult.decidedBy}</strong></span>
+                <span>Seal verdict: <strong>{autoResult.verdict}</strong></span>
+              </div>
+              <p className="small muted">Capture → seal → agent action → verdict, with no extra manual step. Redirecting to Marketplace…</p>
+            </div>
+          )}
         </section>
 
         {/* Camera / Upload */}

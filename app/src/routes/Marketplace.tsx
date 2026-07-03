@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { PageHeader } from "../components/layout/PageHeader";
-import { getLots, mintAsset, lockCollateral, releaseCollateral } from "../lib/api";
+import { getLots, mintAsset, lockCollateral, releaseCollateral, simulateAgentQuery, type AgentQueryResult } from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
 import { shortHash } from "../lib/format";
 import { DEMO_CATALOG, demoSeal, type CatalogAsset } from "../lib/demoCatalog";
@@ -76,6 +76,9 @@ export function Marketplace() {
   // Buy confirmation modal + signing sim (demo only, respects guardrails)
   const [buyConfirm, setBuyConfirm] = useState<any>(null);
   const [isSigning, setIsSigning] = useState(false);
+
+  // x402 agent-query demo state
+  const [agentQuery, setAgentQuery] = useState<{ assetId: string; loading: boolean; result: AgentQueryResult | null } | null>(null);
 
   function connectWallet() {
     const fake = createDemoAccount();
@@ -154,6 +157,21 @@ export function Marketplace() {
   function closeBuyConfirm() {
     setBuyConfirm(null);
     setIsSigning(false);
+  }
+
+  // x402: simulate an external agent paying to read a proof before it acts.
+  async function runAgentQuery(assetId: string) {
+    setAgentQuery({ assetId, loading: true, result: null });
+    try {
+      const result = await simulateAgentQuery(assetId, "agent-casper-demo");
+      setAgentQuery({ assetId, loading: false, result });
+    } catch (e: any) {
+      setAgentQuery({ assetId, loading: false, result: { ok: false, reason: e?.message || "query_failed" } });
+    }
+  }
+
+  function closeAgentQuery() {
+    setAgentQuery(null);
   }
 
   // Static catalog seed — shared source of truth with the lot-detail fallback
@@ -293,6 +311,8 @@ export function Marketplace() {
       <div className="panel" style={{padding: "8px 12px", display: "flex", gap: 16, flexWrap: "wrap", fontSize: "0.85em", marginBottom: 8}}>
         <span><strong>{visible.length}</strong> matching</span>
         <span><strong>{lots.filter((l: any) => l.isMinted).length}</strong> minted (Casper MintGate sim)</span>
+        <span><strong>{lots.filter((l: any) => l.attested || l.latestVerdict).length}</strong> attested on-chain (sim + live)</span>
+        <span className="agent-x402-note">🔌 Queryable by agents via <strong>x402</strong></span>
         <span className="small muted">Live state from app runtime + testnet attestations. <a href="https://testnet.cspr.live" target="_blank" rel="noopener">cspr.live ↗</a></span>
       </div>
 
@@ -409,6 +429,19 @@ export function Marketplace() {
                   <span className="small muted">Proof required before claim</span>
                 )}
               </div>
+
+              <div className="card-actions card-actions--agent">
+                <span className="x402-badge" title="External agents can pay via x402 to read this proof before acting">
+                  x402 queryable
+                </span>
+                <button
+                  onClick={() => runAgentQuery(a.assetId)}
+                  className="btn small ghost"
+                  title="Simulate an external agent paying via x402 to verify this proof"
+                >
+                  Simulate Agent Query (x402)
+                </button>
+              </div>
             </div>
           );
         })}
@@ -420,6 +453,41 @@ export function Marketplace() {
       )}
 
       <p className="note">Only Valid + attested lots should be tokenizable. This demo uses the same catalog + live app state. All actions are simulations.</p>
+
+      {/* For Agents / Agent Integration Hub — Lastro as the trust foundation layer. */}
+      <section className="panel for-agents" aria-label="For Agents">
+        <div className="for-agents__head">
+          <div>
+            <span className="eyebrow">For Agents</span>
+            <h3>Lastro is the provenance layer autonomous agents query before acting</h3>
+            <p className="small muted">
+              Other agents (portfolio, DeFi, RWA issuance) pay a small x402 fee to read a lot's
+              seal, verdict and carbon details <strong>before</strong> they touch a physical/carbon asset.
+              Proof before token — for humans and for machines.
+            </p>
+          </div>
+          <div className="for-agents__stat">
+            <strong>x402</strong>
+            <span>pay-per-proof</span>
+          </div>
+        </div>
+        <pre className="for-agents__code" aria-label="Example agent query">
+{`// Agent verifies provenance before acting (x402)
+const quote = await fetch(
+  "https://app-api.lastre.io/api/x402/provenance/" + assetId
+); // -> HTTP 402 { accepts: [{ nonce, maxAmountRequired, asset: "CSPR" }] }
+
+const proof = await fetch(url, {
+  headers: { "X-PAYMENT": signCasperPayment(quote) },
+}).then(r => r.json());
+// proof.provenance -> { seal, verdict, carbonDetails, csprLinks, ... }
+if (proof.provenance.verdict === "Valid") approveAction();`}
+        </pre>
+        <p className="small muted">
+          Try it live: click <strong>Simulate Agent Query (x402)</strong> on any card above.
+          DEMO facilitator (mock settlement) — the seam maps to a real Casper facilitator.
+        </p>
+      </section>
 
       {persona === "operator" && (
         <section className="panel" style={{marginTop: 16}}>
@@ -484,6 +552,42 @@ export function Marketplace() {
               <button onClick={closeBuyConfirm} className="btn" disabled={isSigning}>Cancel</button>
             </div>
             <div className="small muted" style={{marginTop: 12}}>cspr.live link shown after simulated mint.</div>
+          </div>
+        </div>
+      )}
+
+      {/* x402 Agent Query result modal (DEMO) */}
+      {agentQuery && (
+        <div className="modal-overlay" onClick={closeAgentQuery}>
+          <div className="buy-modal" onClick={e => e.stopPropagation()}>
+            <h3>Agent Query via x402 (Demo)</h3>
+            <div>Asset: <strong>{agentQuery.assetId}</strong></div>
+            {agentQuery.loading ? (
+              <p className="small">Agent requesting quote → signing x402 payment → settling…</p>
+            ) : agentQuery.result?.ok && agentQuery.result.provenance ? (
+              <>
+                <div className="sig-sim">
+                  Agent paid <strong>{agentQuery.result.amountCspr}</strong> CSPR (mock) · facilitator: {agentQuery.result.facilitatorMode}<br />
+                  Settlement tx: <code>{shortHash(agentQuery.result.txHash || "", 10, 8)}</code>
+                </div>
+                <div className="agent-proof">
+                  <div>Verdict: <strong className={agentQuery.result.provenance.verdict === "Valid" ? "success" : ""}>{agentQuery.result.provenance.verdict}</strong></div>
+                  <div>Seal match: <strong>{String(agentQuery.result.provenance.sealMatch)}</strong></div>
+                  <div>Mint status: <strong>{agentQuery.result.provenance.mintStatus}</strong></div>
+                  {agentQuery.result.provenance.carbonDetails && (
+                    <div>Carbon impact score: <strong>{agentQuery.result.provenance.carbonDetails.carbonImpactScore}</strong></div>
+                  )}
+                  <div className="seal-row"><span>Seal:</span> <code>{shortHash(agentQuery.result.provenance.seal, 10, 8)}</code></div>
+                </div>
+                <p className="small muted">This is the payload an external agent reads before acting on the asset. Total paid queries this session: {agentQuery.result.totalPaidQueries}.</p>
+              </>
+            ) : (
+              <p className="small">Query failed: {agentQuery.result?.reason ?? "unknown"}</p>
+            )}
+            <div className="actions">
+              <button onClick={closeAgentQuery} className="btn">Close</button>
+            </div>
+            <div className="demo-disclaimer">DEMO ONLY. Mock x402 facilitator; no real CSPR moves. Structure mirrors a real Casper x402 settlement.</div>
           </div>
         </div>
       )}

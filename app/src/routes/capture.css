@@ -46,3 +46,15 @@
 .capture-msg { background: rgba(212,175,55,0.1); padding: 8px 12px; border-radius: 6px; font-size: 13px; }
 .file-label { background: #26364f; padding: 8px 14px; border-radius: 8px; cursor: pointer; display: inline-block; }
 .file-label input { display: none; }
+
+.auto-loop-result {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #31435f;
+  background: rgba(16, 185, 129, 0.06);
+}
+.auto-loop-result--invalid { background: rgba(239, 68, 68, 0.08); border-color: #7f2b2b; }
+.auto-loop-result--unverified { background: rgba(148, 163, 184, 0.08); }
+.auto-loop-steps { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0; font-size: 13px; }
+.auto-loop-steps strong { color: #f8d86a; }

@@ -18,6 +18,14 @@ import type { ProvenanceArtifact } from "../../agent/sealer/dist/src/sealer.js";
 import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
 
 import { PACKAGE_HASH, PACKAGE_URL } from "./constants.js";
+import { randomUUID } from "node:crypto";
+import {
+  DEFAULT_PAYMENT_REQUIREMENTS,
+  MockFacilitator,
+  signMockPayment,
+  type PaymentPayload,
+  type PaymentRequirements,
+} from "../../agent/x402/dist/index.js";
 
 export type DeciderMode = "rule" | "llm";
 
@@ -93,6 +101,16 @@ export class AppRuntime {
   // Minted state (simulates MintGate.is_minted + on-chain record)
   private mintedAssets = new Set<string>();
   private mintTxs = new Map<string, string>(); // assetId -> tx hash (demo)
+
+  // Simulated on-chain LotMinted events (mirrors the Odra MintGate LotMinted event).
+  private lotMintedEvents: Array<{ assetId: string; minter: string; mintTx: string; at: string }> = [];
+
+  // x402 provenance provider (DEMO): agents pay via x402 to query a proof before
+  // acting. Reuses the real MockFacilitator seam (HMAC sig + nonce anti-replay +
+  // synthetic settlement tx). Not a real Casper settlement.
+  private readonly x402Facilitator = new MockFacilitator();
+  private readonly x402Issued = new Map<string, PaymentRequirements>();
+  private x402QueryCount = 0;
 
   getDeciderMode(): DeciderMode {
     return this.deciderMode;
@@ -194,6 +212,9 @@ export class AppRuntime {
     const txHash = `mint-${Date.now().toString(16)}-${assetId.slice(-6)}`;
     this.mintTxs.set(assetId, txHash);
 
+    // Mirror the on-chain MintGate LotMinted event (DEMO / simulated).
+    this.lotMintedEvents.unshift({ assetId, minter, mintTx: txHash, at: new Date().toISOString() });
+
     return { success: true, txHash };
   }
 
@@ -203,6 +224,16 @@ export class AppRuntime {
 
   getMintTx(assetId: string): string | null {
     return this.mintTxs.get(assetId) ?? null;
+  }
+
+  /** Simulated MintGate LotMinted events + counters (mirrors on-chain reads). */
+  getMintSummary() {
+    return {
+      mintCount: this.mintedAssets.size,
+      packageHash: PACKAGE_HASH,
+      packageUrl: PACKAGE_URL,
+      events: this.lotMintedEvents.slice(0, 20),
+    };
   }
 
   // Simple DeFi collateral simulation (checks minted + proof)
@@ -240,6 +271,139 @@ export class AppRuntime {
     return Array.from(this.lockedCollateral.entries())
       .filter(([_, lock]) => lock.owner === owner)
       .map(([id, lock]) => ({ assetId: id, ...lock }));
+  }
+
+  /**
+   * Derived carbon-impact score (DEMO) an agent can consume before acting on a
+   * carbon RWA. Deterministic from tonnes + methodology/vintage — fictional.
+   */
+  carbonImpactScore(artifact: ProvenanceArtifact): number | null {
+    if (artifact.category !== "carbon_credit" || artifact.tonnesCO2e == null) return null;
+    const tonnes = artifact.tonnesCO2e;
+    const base = Math.min(60, Math.round(Math.log10(Math.max(tonnes, 1) + 1) * 15));
+    const methodologyBoost = artifact.methodology ? 12 : 0;
+    const vintageBoost = artifact.vintage ? 10 : 0;
+    const verifierBoost = artifact.verifier ? 10 : 0;
+    return Math.min(99, base + methodologyBoost + vintageBoost + verifierBoost);
+  }
+
+  /**
+   * Provenance snapshot an external agent pays to read via x402 before it acts
+   * on a physical/carbon RWA. This is the Lastro "foundation layer" payload.
+   */
+  getProvenanceSnapshot(assetId: string) {
+    const lot = this.getLot(assetId);
+    if (!lot) return null;
+    const a = lot.artifact;
+    const mintTx = this.getMintTx(assetId);
+    return {
+      assetId,
+      category: a.category,
+      seal: lot.computedSeal,
+      referenceSeal: lot.referenceSeal,
+      sealMatch: lot.sealMatchesReference,
+      verdict: lot.latestVerdict ?? "Unverified",
+      attested: lot.attested,
+      mintStatus: this.isMinted(assetId) ? "minted" : "not_minted",
+      attestationTx: lot.auditRecord?.onChain?.txHash ?? null,
+      mintTx,
+      carbonDetails:
+        a.category === "carbon_credit"
+          ? {
+              tonnesCO2e: a.tonnesCO2e ?? null,
+              creditType: a.creditType ?? null,
+              vintage: a.vintage ?? null,
+              methodology: a.methodology ?? null,
+              verifier: a.verifier ?? null,
+              carbonImpactScore: this.carbonImpactScore(a),
+            }
+          : null,
+      packageHash: PACKAGE_HASH,
+      csprLinks: {
+        package: PACKAGE_URL,
+        attestation: lot.auditRecord?.onChain?.txHash
+          ? `https://testnet.cspr.live/transaction/${lot.auditRecord.onChain.txHash}`
+          : null,
+        mint: mintTx ? `https://testnet.cspr.live/transaction/${mintTx}` : null,
+      },
+      readAt: new Date().toISOString(),
+    };
+  }
+
+  /**
+   * x402 step 1 — issue a payment quote (HTTP 402 body). The caller signs it and
+   * calls `settleProvenanceQuery`. Reuses the real x402 requirements contract.
+   */
+  quoteProvenanceQuery(assetId: string): { requirements: PaymentRequirements; assetId: string } {
+    const requirements: PaymentRequirements = {
+      ...DEFAULT_PAYMENT_REQUIREMENTS,
+      nonce: randomUUID(),
+    };
+    this.x402Issued.set(requirements.nonce, requirements);
+    return { requirements, assetId };
+  }
+
+  /**
+   * x402 step 2 — verify + settle the payment through the facilitator seam, then
+   * return the paid provenance snapshot. Mirrors the /verify flow in agent/x402.
+   */
+  async settleProvenanceQuery(
+    assetId: string,
+    payment: PaymentPayload,
+  ): Promise<
+    | { ok: true; txHash: string; provenance: ReturnType<AppRuntime["getProvenanceSnapshot"]>; facilitatorMode: string }
+    | { ok: false; reason: string; requirements?: PaymentRequirements }
+  > {
+    const requirements = this.x402Issued.get(payment.nonce);
+    if (!requirements) {
+      const fresh = this.quoteProvenanceQuery(assetId);
+      return { ok: false, reason: "nonce_unknown", requirements: fresh.requirements };
+    }
+
+    const verification = await this.x402Facilitator.verifyPayment(payment, requirements);
+    if (!verification.ok) {
+      return { ok: false, reason: verification.reason, requirements };
+    }
+
+    const settlement = await this.x402Facilitator.settlePayment(payment, requirements);
+    this.x402Issued.delete(payment.nonce);
+    this.x402QueryCount += 1;
+    return {
+      ok: true,
+      txHash: settlement.txHash,
+      provenance: this.getProvenanceSnapshot(assetId),
+      facilitatorMode: this.x402Facilitator.mode,
+    };
+  }
+
+  /**
+   * DEMO helper: run the full x402 handshake locally (quote → sign → settle) so
+   * the UI can show "an agent paid to verify this proof" end-to-end without an
+   * external wallet. Uses the mock signer; not a real Casper payment.
+   */
+  async simulateAgentProvenanceQuery(assetId: string, from = "agent-casper-demo") {
+    if (!this.getLot(assetId)) {
+      return { ok: false as const, reason: "unknown_asset" };
+    }
+    const { requirements } = this.quoteProvenanceQuery(assetId);
+    const payment: PaymentPayload = {
+      nonce: requirements.nonce,
+      amount: requirements.maxAmountRequired,
+      from,
+      sig: signMockPayment({
+        nonce: requirements.nonce,
+        amount: requirements.maxAmountRequired,
+        from,
+      }),
+    };
+    const settled = await this.settleProvenanceQuery(assetId, payment);
+    return {
+      ...settled,
+      requirements,
+      amountCspr: requirements.maxAmountRequired / 1_000_000_000,
+      payTo: requirements.payTo,
+      totalPaidQueries: this.x402QueryCount,
+    };
   }
 
   private buildLotItem(artifact: ProvenanceArtifact, demoRole: string): LotListItem {

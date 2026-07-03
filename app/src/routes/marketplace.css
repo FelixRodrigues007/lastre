@@ -550,6 +550,83 @@
   border-top-color: #0b1222 !important;
 }
 
+/* ---- x402 agent integration (P0/P1) ------------------------------------- */
+.agent-x402-note {
+  color: #6ee7b7;
+  font-weight: 600;
+}
+.agent-x402-note strong { color: #6ee7b7; }
+
+.card-actions--agent {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-top: 1px dashed #243652;
+  padding-top: 8px;
+}
+.x402-badge {
+  font-family: var(--lastro-font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6ee7b7;
+  border: 1px solid #1f5c47;
+  background: rgba(16, 185, 129, 0.08);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #31538a;
+  color: #cfe0ff;
+}
+
+.for-agents {
+  margin-top: 16px;
+  padding: 18px 20px;
+}
+.for-agents__head {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.for-agents__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #1f5c47;
+  border-radius: 12px;
+  padding: 8px 16px;
+  background: rgba(16, 185, 129, 0.06);
+}
+.for-agents__stat strong { font-size: 20px; color: #6ee7b7; font-family: var(--lastro-font-mono, monospace); }
+.for-agents__stat span { font-size: 11px; color: #9fb0c7; }
+.for-agents__code {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #0b1222;
+  border: 1px solid #243652;
+  color: #cfe0ff;
+  font-family: var(--lastro-font-mono, ui-monospace, monospace);
+  font-size: 12px;
+  line-height: 1.55;
+  overflow-x: auto;
+  white-space: pre;
+}
+.agent-proof {
+  margin: 12px 0;
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+.agent-proof .success { color: #34d399; }
+
 /* Real MapLibre / MapTiler canvas, activated only when VITE_MAPTILER_KEY exists. */
 .mundi-maplibre-shell {
   position: relative;
