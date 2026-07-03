@@ -6,6 +6,7 @@ import { getLots, mintAsset, lockCollateral, releaseCollateral } from "../lib/ap
 import { useAsyncData } from "../hooks/useAsyncData";
 import { shortHash } from "../lib/format";
 import { DEMO_CATALOG, demoSeal, type CatalogAsset } from "../lib/demoCatalog";
+import { resolveMapProvider, type MapProviderConfig } from "../lib/mapProvider";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./marketplace.css";
 
@@ -23,9 +24,9 @@ type MapPoint = {
 };
 
 const MAP_API_DECISION = {
-  provider: "MapLibre GL JS + MapTiler Cloud",
+  provider: "MapLibre GL JS + Mapbox or MapTiler Cloud",
   reason:
-    "MapLibre keeps the renderer open-source and vendor-neutral; MapTiler can provide production vector tiles once the API key is available.",
+    "MapLibre keeps the renderer open-source and vendor-neutral; production vector tiles come from Mapbox (VITE_MAPBOX_TOKEN) or MapTiler (VITE_MAPTILER_KEY) once a key is set.",
 };
 
 const DEMO_ACCOUNT_STORAGE_KEY = "casper-demo-account";
@@ -495,8 +496,7 @@ function GlobalMundiMap({ points }: { points: MapPoint[] }) {
   const mintedCount = points.filter((point) => point.status === "minted").length;
   const provenCount = points.filter((point) => point.status === "proven").length;
   const pendingCount = points.filter((point) => point.status === "pending").length;
-  const mapTilerKey = import.meta.env.VITE_MAPTILER_KEY?.trim() ?? "";
-  const mapTilerReady = Boolean(mapTilerKey);
+  const mapConfig = resolveMapProvider();
 
   return (
     <section className="mundi-map panel" aria-label="Global Mundi provenance map">
@@ -520,19 +520,19 @@ function GlobalMundiMap({ points }: { points: MapPoint[] }) {
       <div className="mundi-production-path" aria-label="Production map integration path">
         <div>
           <strong>Renderer</strong>
-          <span>MapLibre GL JS</span>
+          <span>{mapConfig.rendererLabel}</span>
         </div>
         <div>
           <strong>Tiles / styles</strong>
-          <span>MapTiler Cloud</span>
+          <span>{mapConfig.tilesLabel}</span>
         </div>
         <div>
           <strong>API key</strong>
-          <span>{mapTilerReady ? "VITE_MAPTILER_KEY configured" : "Waiting for VITE_MAPTILER_KEY"}</span>
+          <span>{mapConfig.statusLabel}</span>
         </div>
       </div>
 
-      <MundiMapCanvas points={points} anchor={anchor} mapTilerKey={mapTilerKey} />
+      <MundiMapCanvas points={points} anchor={anchor} mapConfig={mapConfig} />
 
       <div className="mundi-ledger">
         <div className="mundi-legend" aria-label="Map legend">
@@ -572,19 +572,20 @@ function GlobalMundiMap({ points }: { points: MapPoint[] }) {
 function MundiMapCanvas({
   points,
   anchor,
-  mapTilerKey,
+  mapConfig,
 }: {
   points: MapPoint[];
   anchor: { label: string; lat: number; lng: number };
-  mapTilerKey: string;
+  mapConfig: MapProviderConfig;
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const { ready: mapReady, styleUrl, transformRequest, loadingLabel } = mapConfig;
   const [mapStatus, setMapStatus] = useState<"fallback" | "loading" | "ready" | "error">(
-    mapTilerKey ? "loading" : "fallback",
+    mapReady ? "loading" : "fallback",
   );
 
   useEffect(() => {
-    if (!mapTilerKey || !containerRef.current) {
+    if (!mapReady || !styleUrl || !containerRef.current) {
       setMapStatus("fallback");
       return;
     }
@@ -599,7 +600,8 @@ function MundiMapCanvas({
 
         const map = new maplibre.Map({
           container: containerRef.current,
-          style: `https://api.maptiler.com/maps/streets-v4/style.json?key=${encodeURIComponent(mapTilerKey)}`,
+          style: styleUrl,
+          ...(transformRequest ? { transformRequest } : {}),
           center: [0, 8],
           zoom: 1.08,
           attributionControl: { compact: true },
@@ -653,14 +655,14 @@ function MundiMapCanvas({
       cancelled = true;
       cleanup();
     };
-  }, [anchor.lat, anchor.lng, anchor.label, mapTilerKey, points]);
+  }, [anchor.lat, anchor.lng, anchor.label, mapReady, styleUrl, transformRequest, points]);
 
-  if (!mapTilerKey || mapStatus === "error") {
+  if (!mapReady || mapStatus === "error") {
     return (
       <>
         {mapStatus === "error" ? (
           <p className="mundi-map-warning" role="status">
-            MapTiler/MapLibre could not load in this browser. Showing the zero-token SVG fallback so the demo stays stable.
+            The vector map could not load in this browser. Showing the zero-token SVG fallback so the demo stays stable.
           </p>
         ) : null}
         <MundiSvgFallback points={points} anchor={anchor} />
@@ -672,7 +674,7 @@ function MundiMapCanvas({
     <div className="mundi-maplibre-shell">
       <div ref={containerRef} className="mundi-maplibre-canvas" aria-label="Interactive MapLibre provenance map" />
       {mapStatus === "loading" ? (
-        <div className="mundi-map-loading" role="status">Loading MapTiler vector map…</div>
+        <div className="mundi-map-loading" role="status">Loading {loadingLabel} vector map…</div>
       ) : null}
     </div>
   );

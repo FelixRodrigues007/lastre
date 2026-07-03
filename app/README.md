@@ -60,15 +60,41 @@ make app-dev
 
 ## Global Mundi map
 
-The Marketplace includes a **Global Mundi Map** tab. When `VITE_MAPTILER_KEY` is set, it lazy-loads **MapLibre GL JS** and renders MapTiler vector tiles. Without a key, or if the third-party map cannot load, it uses the zero-token SVG fallback for demo reliability. For production map tiles, use:
+The Marketplace includes a **Global Mundi Map** tab. The renderer is always
+**MapLibre GL JS** (open-source, vendor-neutral). The tile provider is pluggable
+and resolved in one place — `app/src/lib/mapProvider.ts` — so you can switch
+providers **without touching the map component**. Without any key, or if the
+third-party map cannot load, it uses the zero-token SVG fallback for demo
+reliability.
+
+### Choose a provider (set exactly one token)
+
+Mapbox:
+
+```text
+VITE_MAPBOX_TOKEN=<Mapbox public access token, pk.*>
+```
+
+MapTiler:
 
 ```text
 VITE_MAPTILER_KEY=<MapTiler Cloud key>
 ```
 
-Recommended stack: **MapLibre GL JS** for the open-source renderer and
-**MapTiler Cloud** for vector tiles/styles/geocoding. The map uses the MapTiler
-`streets-v4` style endpoint so a normal MapTiler API key is enough to activate
-the real basemap. Until the key is present, the SVG fallback remains active so
-`app.lastre.io` does not depend on a third-party map quota during the buildathon
-demo.
+### Optional overrides
+
+```text
+# Only needed if BOTH tokens are set; otherwise the present token wins
+# (Mapbox is preferred when both exist). Values: mapbox | maptiler
+VITE_MAP_PROVIDER=mapbox
+
+# Use a custom style (e.g. a Mapbox Studio style) instead of the provider default
+VITE_MAP_STYLE_URL=mapbox://styles/<user>/<style>
+```
+
+Defaults: Mapbox uses the `mapbox/streets-v12` style; MapTiler uses the
+`streets-v4` style. `VITE_*` variables are inlined at **build time**, so after
+adding/changing a token you must **redeploy** (Cloudflare Pages → Retry
+deployment) for the new bundle to pick it up. The SVG fallback stays active
+until a valid token is present, so `app.lastre.io` never depends on a
+third-party map quota during the demo.
