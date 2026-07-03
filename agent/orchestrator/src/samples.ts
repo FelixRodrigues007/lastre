@@ -76,7 +76,11 @@ export function createDemoArtifacts(): DemoArtifacts {
 
 /** Genuine lots used to seed the gateway and mock-chain referenceSeals. */
 export function createDemoReferenceArtifacts(): ProvenanceArtifact[] {
-  return [cloneArtifact(VALID_ARTIFACT), cloneArtifact(VALID_REFERENCE_FOR_TAMPERED_ID)];
+  return [
+    cloneArtifact(VALID_ARTIFACT),
+    cloneArtifact(VALID_REFERENCE_FOR_TAMPERED_ID),
+    cloneArtifact(CARBON_VALID_ARTIFACT),
+  ];
 }
 
 function cloneArtifact(artifact: ProvenanceArtifact): ProvenanceArtifact {

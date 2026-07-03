@@ -31,16 +31,24 @@ export class RuleDecider implements Decider {
     }
 
     const { lat, lng } = artifact.origin;
-    const { minLat, maxLat, minLng, maxLng } = limits.minePerimeter;
-    if (lat < minLat || lat > maxLat || lng < minLng || lng > maxLng) {
+    if (artifact.category === "mineral") {
+      const { minLat, maxLat, minLng, maxLng } = limits.minePerimeter;
+      if (lat < minLat || lat > maxLat || lng < minLng || lng > maxLng) {
+        return {
+          action: "escalate",
+          reasoning: "Geolocation is outside the known mine perimeter; escalate to a human before verification.",
+          decidedBy: "rule",
+        };
+      }
+    } else if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
       return {
         action: "escalate",
-        reasoning: "Geolocation is outside the known mine perimeter; escalate to a human before verification.",
+        reasoning: "Carbon project coordinates are outside valid geographic bounds; escalate to a human before verification.",
         decidedBy: "rule",
       };
     }
 
-    // For minerals use mass; for carbon credits we skip strict mass check (or use tonnes if present)
+    // For minerals use mass; for carbon credits use tonnes/metadata instead of a mine perimeter.
     if (artifact.category !== "carbon_credit") {
       const mass = artifact.massGrams ?? 0;
       const { minExclusive, maxInclusive } = limits.massGrams;
