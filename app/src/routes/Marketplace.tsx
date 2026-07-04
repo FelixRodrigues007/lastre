@@ -1,16 +1,34 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { Map as MapboxMap } from "mapbox-gl";
 import { CaptureWizardTrigger } from "../components/capture/CaptureWizardTrigger";
+import { FullDemoModal, type FullDemoStep } from "../components/demo/FullDemoModal";
 import { MarketMapDrawer } from "../components/marketplace/MarketMapDrawer";
 import { MarketplaceAssetBadge } from "../components/marketplace/MarketplaceAssetBadge";
 import { MarketplaceFilters } from "../components/marketplace/MarketplaceFilters";
 import { PageHeader } from "../components/layout/PageHeader";
 import { SearchInput } from "../components/ui/SearchInput";
 import { useOnboarding } from "../context/OnboardingContext";
-import { getLots } from "../lib/api";
+import {
+  getLot,
+  getLots,
+  getMintSummary,
+  mintAsset,
+  processBatch,
+  simulateAgentQuery,
+  type AgentQueryResult,
+  type MintSummary,
+} from "../lib/api";
 import { useAsyncData } from "../hooks/useAsyncData";
+import { addDemoMint } from "../lib/demoMints";
+import {
+  clearFullDemoState,
+  createFullDemoState,
+  FULL_DEMO_ASSET_ID,
+  readFullDemoState,
+  writeFullDemoState,
+} from "../lib/fullDemo";
 import {
   buildLotMap,
   buildMapPoints,
@@ -28,6 +46,36 @@ const MARKETPLACE_PAGE_SIZE = 5;
 const MARKETPLACE_ANCHOR = { label: "Casper Testnet anchor", lat: 37.7749, lng: -122.4194 };
 const MARKETPLACE_MAP_CONFIG = resolveMapCredentials();
 const EMPTY_LOTS: never[] = [];
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const MARKETPLACE_DEMO_STEPS: FullDemoStep[] = [
+  {
+    label: "Capture + proof preset",
+    detail: "Load the fictional VCS Amazonia carbon proof and confirm the proof-before-token payload.",
+  },
+  {
+    label: "Agent processing",
+    detail: "Run the Lastre agent path so the action is decided before the deterministic seal verdict.",
+  },
+  {
+    label: "Paid x402 query",
+    detail: "Simulate an external agent paying via x402 to read the provenance snapshot.",
+  },
+  {
+    label: "MintGate claim",
+    detail: "Emit the demo LotMinted event only after the proof is Valid.",
+  },
+];
+
+const AGENT_SNIPPET = `const quote = await fetch(
+  "https://app-api.lastre.io/api/x402/provenance/" + assetId
+); // -> HTTP 402 payment requirements
+
+const proof = await fetch(url, {
+  headers: { "X-PAYMENT": signCasperPayment(quote) },
+}).then((r) => r.json());
+
+if (proof.provenance.verdict === "Valid") approveAction();`;
 
 function useLatest<T>(value: T): MutableRefObject<T> {
   const ref = useRef(value);
@@ -59,6 +107,7 @@ function readStoredPersona(): MarketplacePersona {
 
 export function Marketplace() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const lotsData = useAsyncData(getLots);
   const { completeStep } = useOnboarding();
   const [search, setSearch] = useState("");
@@ -69,18 +118,159 @@ export function Marketplace() {
   const [hoveredAssetId, setHoveredAssetId] = useState<string | null>(null);
   const [previewAsset, setPreviewAsset] = useState<EnrichedAsset | null>(null);
   const [persona, setPersona] = useState<MarketplacePersona>(() => readStoredPersona());
+  const [mintSummary, setMintSummary] = useState<MintSummary | null>(null);
+  const [mintSummaryError, setMintSummaryError] = useState<string | null>(null);
+  const [agentQuery, setAgentQuery] = useState<{
+    assetId: string;
+    loading: boolean;
+    result: AgentQueryResult | null;
+  } | null>(null);
+  const [fullDemoOpen, setFullDemoOpen] = useState(false);
+  const [fullDemoStep, setFullDemoStep] = useState(0);
+  const [fullDemoStatus, setFullDemoStatus] = useState("");
+  const [fullDemoMint, setFullDemoMint] = useState<{
+    assetId: string;
+    txHash?: string;
+    alreadyMinted?: boolean;
+  } | null>(null);
+  const [snippetCopied, setSnippetCopied] = useState(false);
+  const [payloadCopied, setPayloadCopied] = useState(false);
+  const fullDemoStartedRef = useRef(false);
 
   useEffect(() => {
     completeStep("marketplace");
   }, [completeStep]);
 
   useEffect(() => {
+    void reloadMintSummary();
+  }, []);
+
+  useEffect(() => {
+    const state = readFullDemoState();
+    const shouldRun = searchParams.get("demo") === "full" || state?.stage === "marketplace";
+    if (!shouldRun || fullDemoStartedRef.current) return;
+    fullDemoStartedRef.current = true;
+    void runMarketplaceFullDemo(searchParams.get("assetId") || state?.assetId || FULL_DEMO_ASSET_ID);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  useEffect(() => {
     setPage(1);
   }, [search, catFilter, creditFilter, statusFilter]);
+
+  async function reloadMintSummary() {
+    try {
+      setMintSummaryError(null);
+      setMintSummary(await getMintSummary());
+    } catch (error) {
+      setMintSummaryError(error instanceof Error ? error.message : "Mint summary unavailable");
+    }
+  }
 
   function updatePersona(nextPersona: MarketplacePersona) {
     writeDemoStorage(DEMO_PERSONA_STORAGE_KEY, nextPersona);
     setPersona(nextPersona);
+  }
+
+  async function runAgentQuery(assetId: string, from = "agent-casper-demo"): Promise<AgentQueryResult | null> {
+    setAgentQuery({ assetId, loading: true, result: null });
+    setPayloadCopied(false);
+    try {
+      const result = await simulateAgentQuery(assetId, from);
+      setAgentQuery({ assetId, loading: false, result });
+      return result;
+    } catch (error) {
+      const result = {
+        ok: false,
+        reason: error instanceof Error ? error.message : "query_failed",
+      };
+      setAgentQuery({ assetId, loading: false, result });
+      return result;
+    }
+  }
+
+  async function ensureValidProof(assetId: string) {
+    try {
+      const lot = await getLot(assetId);
+      if (lot.latestVerdict === "Valid") return;
+    } catch {
+      // If the runtime is cold or the detail endpoint is temporarily stale, try
+      // the agent path below. This is a demo flow, not a financial operation.
+    }
+
+    const llmBatch = await processBatch([assetId], "llm");
+    const llmRecord = llmBatch.records?.find((record) => record.assetId === assetId) ?? llmBatch.records?.[0] ?? null;
+    const llmVerdict = llmRecord?.verification?.verdict ?? llmRecord?.onChain?.verdict ?? null;
+
+    if (llmVerdict !== "Valid") {
+      await processBatch([assetId], "rule");
+    }
+  }
+
+  async function runMarketplaceFullDemo(assetId = FULL_DEMO_ASSET_ID) {
+    setFullDemoOpen(true);
+    setFullDemoMint(null);
+    setFullDemoStep(0);
+    setFullDemoStatus("Preparing the fictional carbon proof and focusing the Marketplace…");
+    writeFullDemoState(createFullDemoState("marketplace", new Date(), assetId));
+    setSearch(assetId);
+    setCatFilter("carbon_credit");
+    setCreditFilter("all");
+    setStatusFilter("available");
+    setPage(1);
+    await delay(700);
+
+    try {
+      setFullDemoStep(1);
+      setFullDemoStatus("Running the agent path. The agent decides action; SHA-256 decides verdict.");
+      await ensureValidProof(assetId);
+      lotsData.reload();
+      await delay(700);
+
+      setFullDemoStep(2);
+      setFullDemoStatus("Simulating an Agent Casper-style x402 payment for the provenance snapshot…");
+      writeFullDemoState(createFullDemoState("x402", new Date(), assetId));
+      const query = await runAgentQuery(assetId);
+      await delay(850);
+
+      setFullDemoStep(3);
+      setFullDemoStatus("Claiming the provenance NFT representation through MintGate demo…");
+      writeFullDemoState(createFullDemoState("mint", new Date(), assetId));
+      try {
+        const mint = await mintAsset(assetId, "agent-casper-demo");
+        if (mint.txHash) addDemoMint(assetId);
+        setFullDemoMint({ assetId, txHash: mint.txHash });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "";
+        if (message.includes("Already minted")) addDemoMint(assetId);
+        setFullDemoMint({ assetId, alreadyMinted: message.includes("Already minted") });
+      }
+
+      await reloadMintSummary();
+      lotsData.reload();
+      setFullDemoStatus(
+        query?.ok
+          ? "Complete: the paid x402 payload is open with verdict, seal match, carbon score, and Casper links."
+          : "Demo reached x402, but the paid query returned an error. Check the API deployment.",
+      );
+      writeFullDemoState(createFullDemoState("complete", new Date(), assetId));
+    } catch (error) {
+      setFullDemoStatus(`Demo stopped: ${error instanceof Error ? error.message : "unknown error"}`);
+    }
+  }
+
+  async function copyAgentSnippet() {
+    if (!navigator.clipboard) return;
+    await navigator.clipboard.writeText(AGENT_SNIPPET);
+    setSnippetCopied(true);
+    setTimeout(() => setSnippetCopied(false), 1600);
+  }
+
+  async function copyAgentPayload() {
+    if (!agentQuery?.result || !navigator.clipboard) return;
+    await navigator.clipboard.writeText(JSON.stringify(agentQuery.result, null, 2));
+    setPayloadCopied(true);
+    setTimeout(() => setPayloadCopied(false), 1600);
   }
 
   const lots = lotsData.data?.lots ?? EMPTY_LOTS;
@@ -178,9 +368,60 @@ export function Marketplace() {
             <CaptureWizardTrigger className="route-cta">Capture New</CaptureWizardTrigger>
           }
         />
+
+        <FullDemoModal
+          open={fullDemoOpen}
+          assetId={FULL_DEMO_ASSET_ID}
+          steps={MARKETPLACE_DEMO_STEPS}
+          activeStep={fullDemoStep}
+          status={fullDemoStatus}
+          onClose={() => {
+            setFullDemoOpen(false);
+            clearFullDemoState();
+          }}
+        />
+
+        <section className="market-demo-banner" aria-label="Full end-to-end demo">
+          <div>
+            <span className="eyebrow">Judge-ready flow</span>
+            <h3>Run Full End-to-End Demo</h3>
+            <p>
+              Capture preset → agent decision → paid x402 proof query → MintGate demo claim,
+              ending with the agent payload visible for judges.
+            </p>
+          </div>
+          <button type="button" className="route-cta" onClick={() => void runMarketplaceFullDemo()}>
+            Run Demo
+          </button>
+        </section>
       </div>
 
       <aside className="market-list" aria-label="Marketplace assets">
+        <section className="market-agent-card" aria-label="Agent integration">
+          <div className="market-agent-card__copy">
+            <span className="mono-label">x402 provider</span>
+            <strong>Agents pay Lastre before touching RWA/carbon data.</strong>
+            <p>
+              Query verdict, seal match, carbon score, and Casper links before any downstream action.
+            </p>
+          </div>
+          <button type="button" className="market-agent-card__copy-btn" onClick={() => void copyAgentSnippet()}>
+            {snippetCopied ? "Copied ✓" : "Copy snippet"}
+          </button>
+        </section>
+
+        <section className="market-mint-summary" aria-label="MintGate summary">
+          <span>
+            <strong>{mintSummary?.mintCount ?? "—"}</strong>
+            Total minted
+          </span>
+          <span>
+            <strong>{mintSummary?.events?.length ? mintSummary.events.slice(0, 3).length : 0}</strong>
+            LotMinted events
+          </span>
+          {mintSummaryError ? <em>{mintSummaryError}</em> : null}
+        </section>
+
         <div className="market-list__search">
           <SearchInput
             value={search}
@@ -242,6 +483,86 @@ export function Marketplace() {
           onClosePreview={() => setPreviewAsset(null)}
         />
       </div>
+
+      {agentQuery ? (
+        <div className="modal-overlay" onClick={() => setAgentQuery(null)}>
+          <div className="buy-modal agent-query-modal" onClick={(event) => event.stopPropagation()}>
+            <h3>Agent Query via x402 (Demo)</h3>
+            <div>
+              Asset: <strong>{agentQuery.assetId}</strong>
+            </div>
+            {agentQuery.loading ? (
+              <p className="small">Agent requesting quote → signing x402 payment → settling…</p>
+            ) : agentQuery.result?.ok && agentQuery.result.provenance ? (
+              <>
+                <div className="sig-sim">
+                  External agent paid <strong>{agentQuery.result.amountCspr}</strong> CSPR via x402
+                  (mock settlement) to read this proof.
+                  <br />
+                  Facilitator: {agentQuery.result.facilitatorMode}
+                  <br />
+                  Settlement tx: <code>{agentQuery.result.txHash}</code>
+                </div>
+                <div className="agent-proof">
+                  <div>
+                    Verdict: <strong className={agentQuery.result.provenance.verdict === "Valid" ? "success" : ""}>
+                      {agentQuery.result.provenance.verdict}
+                    </strong>
+                  </div>
+                  <div>Seal match: <strong>{String(agentQuery.result.provenance.sealMatch)}</strong></div>
+                  <div>Mint status: <strong>{agentQuery.result.provenance.mintStatus}</strong></div>
+                  {agentQuery.result.provenance.carbonDetails ? (
+                    <div>
+                      Carbon impact score:{" "}
+                      <strong>{agentQuery.result.provenance.carbonDetails.carbonImpactScore}</strong>
+                    </div>
+                  ) : null}
+                  {agentQuery.result.provenance.csprLinks?.attestation ? (
+                    <a href={agentQuery.result.provenance.csprLinks.attestation} target="_blank" rel="noopener noreferrer">
+                      View attestation on cspr.live ↗
+                    </a>
+                  ) : null}
+                  {agentQuery.result.provenance.csprLinks?.mint ? (
+                    <a href={agentQuery.result.provenance.csprLinks.mint} target="_blank" rel="noopener noreferrer">
+                      View mint on cspr.live ↗
+                    </a>
+                  ) : null}
+                </div>
+                {fullDemoMint?.assetId === agentQuery.assetId ? (
+                  <div className="demo-mint-note">
+                    {fullDemoMint.txHash
+                      ? `MintGate demo event emitted: ${fullDemoMint.txHash}`
+                      : fullDemoMint.alreadyMinted
+                        ? "MintGate demo event already existed for this runtime."
+                        : "MintGate demo claim was attempted after the paid proof query."}
+                  </div>
+                ) : null}
+                <p className="small muted">
+                  This is what an external agent would see before deciding whether to act.
+                  Total paid queries this session: {agentQuery.result.totalPaidQueries}.
+                </p>
+                <div className="payload-toolbar">
+                  <strong>Complete proof payload</strong>
+                  <button type="button" className="btn small ghost" onClick={() => void copyAgentPayload()}>
+                    {payloadCopied ? "Copied ✓" : "Copy JSON"}
+                  </button>
+                </div>
+                <pre className="agent-payload-json">{JSON.stringify(agentQuery.result, null, 2)}</pre>
+              </>
+            ) : (
+              <p className="small">Query failed: {agentQuery.result?.reason ?? "unknown"}</p>
+            )}
+            <div className="actions">
+              <button type="button" className="btn" onClick={() => setAgentQuery(null)}>
+                Close
+              </button>
+            </div>
+            <div className="demo-disclaimer">
+              DEMO ONLY. Mock x402 facilitator; no real CSPR moves. Structure mirrors a real Casper x402 settlement seam.
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

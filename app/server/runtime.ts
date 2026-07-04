@@ -31,6 +31,7 @@ export type DeciderMode = "rule" | "llm";
 
 export type LotListItem = {
   artifact: ProvenanceArtifact;
+  referenceArtifact: ProvenanceArtifact | null;
   referenceSeal: string | null;
   computedSeal: string;
   sealMatchesReference: boolean | null;
