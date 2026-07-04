@@ -15,6 +15,7 @@ import { Marketplace } from "./routes/Marketplace";
 import { MarketplaceAssetDetail } from "./routes/MarketplaceAssetDetail";
 import { MyAssetDetail } from "./routes/MyAssetDetail";
 import { MyAssets } from "./routes/MyAssets";
+import { Agents } from "./routes/Agents";
 import { Welcome } from "./routes/Welcome";
 
 function AppRoutes() {
@@ -35,6 +36,7 @@ function AppRoutes() {
         <Route path="/marketplace/:assetId" element={<MarketplaceAssetDetail />} />
         <Route path="/my-assets" element={<MyAssets />} />
         <Route path="/my-assets/:assetId" element={<MyAssetDetail />} />
+        <Route path="/agents" element={<Agents />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AppShell>

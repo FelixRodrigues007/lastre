@@ -199,6 +199,18 @@ export async function releaseCollateral(assetId: string, owner: string) {
   });
 }
 
+export type LockedCollateralPosition = {
+  assetId: string;
+  owner: string;
+  lockedAt: string;
+};
+
+export function getLockedCollateral(owner: string) {
+  return apiFetch<{ owner: string; positions: LockedCollateralPosition[] }>(
+    `/api/defi/locked/${encodeURIComponent(owner)}`,
+  );
+}
+
 // ---- x402 provenance provider (DEMO) ---------------------------------------
 
 export type ProvenanceSnapshot = {
@@ -253,6 +265,20 @@ export type MintSummary = {
   packageHash: string;
   packageUrl: string;
   events: Array<{ assetId: string; minter: string; mintTx: string; at: string }>;
+  paidX402Queries?: number;
+  source?: "hybrid-demo" | string;
+  onChain?: {
+    source: "live" | "fallback";
+    fetchedAt: string | null;
+    packageHash: string;
+    packageUrl: string;
+    proofOfOriginAccepted: number;
+    proofOfOriginRejected: number;
+    attestedAssetIds: string[];
+    mintGateAvailable: boolean;
+    mintCount: number | null;
+    note: string;
+  };
 };
 
 export function getMintSummary() {

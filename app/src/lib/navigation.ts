@@ -17,6 +17,7 @@ export const WORKSPACE_NAV: NavItem[] = [
   { to: "/escalations", labelKey: "nav.escalations", icon: "escalations", mobileLabelKey: "nav.queue" },
   { to: "/marketplace", labelKey: "nav.marketplace", icon: "globe" },
   { to: "/my-assets", labelKey: "nav.myAssets", icon: "shield" },
+  { to: "/agents", labelKey: "nav.agents", icon: "network" },
 ];
 
 export const SETTINGS_NAV: NavItem = {

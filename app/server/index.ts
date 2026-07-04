@@ -275,7 +275,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
 
   // MintGate summary: simulated LotMinted events + mint_count (mirrors on-chain reads)
   if (method === "GET" && pathname === "/api/mint/summary") {
-    sendJson(res, 200, runtime.getMintSummary());
+    sendJson(res, 200, await runtime.getMintSummary());
     return;
   }
 
@@ -357,6 +357,13 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     }
     const result = runtime.releaseCollateral(body.assetId, body.owner);
     sendJson(res, result.success ? 200 : 400, result);
+    return;
+  }
+
+  const lockedMatch = pathname.match(/^\/api\/defi\/locked\/([^/]+)$/u);
+  if (method === "GET" && lockedMatch) {
+    const owner = decodeURIComponent(lockedMatch[1]);
+    sendJson(res, 200, { owner, positions: runtime.listLockedBy(owner) });
     return;
   }
 

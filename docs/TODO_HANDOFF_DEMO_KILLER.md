@@ -52,3 +52,31 @@ Current base: `main` after Laura UX pass (`e4b4d7d`).
 - Etapa 2: richer MyAssets locked-position UX.
 - Etapa 3: merge simulated mint summary with real Casper contract reads if feasible.
 - Etapa 4: dedicated `/agents` route and “Why Lastre wins” narrative.
+
+## 2026-07-04 follow-up
+
+Implemented next backlog slice on `feat/my-assets-agents-polish`:
+
+- Richer My Assets collateral loop:
+  - top summary `claimed • locked`.
+  - filters `All / Available / Locked`.
+  - collateral status panel with demo CSPR value, verdict, seal, carbon/mineral details.
+  - Lock and Release actions with API + local demo fallback.
+- Mint summary is more explicit about hybrid reality:
+  - simulated mints and LotMinted events.
+  - live/fallback ProofOfOrigin accepted/rejected counts.
+  - note that query_snapshot currently reads ProofOfOrigin, not MintGate.
+- Added `/agents` route:
+  - x402 quote -> X-PAYMENT -> proof code example.
+  - payload fields agents should inspect.
+  - Why Lastre wins comparison.
+- Added `docs/DEMO_SCRIPT.md` with 90-second judge script.
+
+Additional verification to run before final deploy:
+
+```bash
+cd app && npm run build && npm run lint
+cd app && npx --no-install tsx --test test/fullDemo.test.ts test/myAssets.test.ts
+cd agent/orchestrator && npm test
+cd agent/x402 && npm test
+```

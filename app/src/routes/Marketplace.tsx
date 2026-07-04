@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { Map as MapboxMap } from "mapbox-gl";
 import { CaptureWizardTrigger } from "../components/capture/CaptureWizardTrigger";
@@ -408,16 +408,27 @@ export function Marketplace() {
           <button type="button" className="market-agent-card__copy-btn" onClick={() => void copyAgentSnippet()}>
             {snippetCopied ? "Copied ✓" : "Copy snippet"}
           </button>
+          <Link className="market-agent-card__copy-btn" to="/agents">
+            Open /agents
+          </Link>
         </section>
 
         <section className="market-mint-summary" aria-label="MintGate summary">
           <span>
             <strong>{mintSummary?.mintCount ?? "—"}</strong>
-            Total minted
+            Simulated mints
           </span>
           <span>
             <strong>{mintSummary?.events?.length ? mintSummary.events.slice(0, 3).length : 0}</strong>
             LotMinted events
+          </span>
+          <span>
+            <strong>{mintSummary?.onChain?.proofOfOriginAccepted ?? "—"}</strong>
+            Real accepted proofs
+          </span>
+          <span>
+            <strong>{mintSummary?.onChain?.source === "live" ? "Live" : "Fallback"}</strong>
+            On-chain source
           </span>
           {mintSummaryError ? <em>{mintSummaryError}</em> : null}
         </section>
@@ -510,7 +521,12 @@ export function Marketplace() {
                     </strong>
                   </div>
                   <div>Seal match: <strong>{String(agentQuery.result.provenance.sealMatch)}</strong></div>
-                  <div>Mint status: <strong>{agentQuery.result.provenance.mintStatus}</strong></div>
+                  <div>
+                    Mint status: <strong>{agentQuery.result.provenance.mintStatus}</strong>{" "}
+                    <span className="agent-proof__badge">
+                      {mintSummary?.onChain?.mintGateAvailable ? "On-chain" : "Simulated demo"}
+                    </span>
+                  </div>
                   {agentQuery.result.provenance.carbonDetails ? (
                     <div>
                       Carbon impact score:{" "}

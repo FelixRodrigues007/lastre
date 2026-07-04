@@ -262,13 +262,28 @@ export class AppRuntime {
     return this.mintTxs.get(assetId) ?? null;
   }
 
-  /** Simulated MintGate LotMinted events + counters (mirrors on-chain reads). */
-  getMintSummary() {
+  /** Simulated MintGate LotMinted events + counters, enriched with live ProofOfOrigin snapshot when available. */
+  async getMintSummary() {
+    const testnet = await getLiveTestnetSnapshot();
     return {
       mintCount: this.mintedAssets.size,
       packageHash: PACKAGE_HASH,
       packageUrl: PACKAGE_URL,
       events: this.lotMintedEvents.slice(0, 20),
+      paidX402Queries: this.x402QueryCount,
+      source: "hybrid-demo",
+      onChain: {
+        source: testnet.source,
+        fetchedAt: testnet.fetchedAt,
+        packageHash: testnet.packageHash,
+        packageUrl: testnet.packageUrl,
+        proofOfOriginAccepted: testnet.accepted,
+        proofOfOriginRejected: testnet.rejected,
+        attestedAssetIds: testnet.attestations.map((row) => row.assetId),
+        mintGateAvailable: false,
+        mintCount: null,
+        note: "Live query_snapshot currently reads ProofOfOrigin attestations. MintGate mints remain simulated until a MintGate reader/package is wired.",
+      },
     };
   }
 

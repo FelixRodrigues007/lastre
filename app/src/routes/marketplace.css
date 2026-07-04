@@ -1026,7 +1026,10 @@
   display: inline-block;
   margin-left: 6px;
 }
-.prov-score.low { background: var(--lastro-accent-warn)22; color: var(--lastro-color-amber-300); }
+.prov-score.low {
+  background: color-mix(in srgb, var(--lastro-accent-warn) 14%, transparent);
+  color: var(--lastro-color-amber-300);
+}
 .carbon-details {
   font-size: 12px;
   line-height: 1.35;
@@ -1145,7 +1148,7 @@
 
 .mundi-map-warning {
   margin: 0 0 12px;
-  border: 1px solid var(--lastro-accent-warn)55;
+  border: 1px solid color-mix(in srgb, var(--lastro-accent-warn) 35%, transparent);
   border-radius: 12px;
   background: color-mix(in srgb, var(--lastro-accent-warn) 18%, var(--lastro-color-map-deep));
   color: var(--lastro-color-amber-300);
@@ -1483,4 +1486,18 @@
   .market-demo-banner .route-cta {
     justify-content: center;
   }
+}
+
+.agent-proof__badge {
+  display: inline-flex;
+  margin-left: 6px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  color: var(--lastro-text-muted);
+  font-size: 0.65rem;
+  font-weight: var(--lastro-weight-semibold);
+}
+.market-agent-card__copy-btn {
+  text-decoration: none;
 }
