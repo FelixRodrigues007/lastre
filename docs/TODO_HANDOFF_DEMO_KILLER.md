@@ -80,3 +80,15 @@ cd app && npx --no-install tsx --test test/fullDemo.test.ts test/myAssets.test.t
 cd agent/orchestrator && npm test
 cd agent/x402 && npm test
 ```
+
+## 2026-07-04 final independent verification pass
+
+Closed remaining gaps from the updated Super Guia:
+
+- Added final Demo Killer CTA: **View in MyAssets** after the x402/MintGate flow completes.
+- Added visible Marketplace summary stat: `x402 paid queries`.
+- Added GhostShift-style comparison to `/agents`.
+- Added [`docs/JUDGE_ONE_PAGER.md`](./JUDGE_ONE_PAGER.md).
+- Updated [`docs/DEMO_SCRIPT.md`](./DEMO_SCRIPT.md) to use the final modal CTA.
+
+Production still requires redeploy of both Cloudflare Pages (`lastre-app`) and Render (`lastre-app-api`) for `/api/mint/summary` to expose `source`, `onChain`, and `paidX402Queries`.

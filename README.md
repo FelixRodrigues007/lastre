@@ -38,6 +38,7 @@ deployment, roadmap, API, and architecture handoff:
 - [Landing page creative spec](docs/LANDING_PAGE_CREATIVE_SPEC.md)
 - [Deployment runbook](docs/DEPLOYMENT_RUNBOOK.md)
 - [90-second demo script](docs/DEMO_SCRIPT.md)
+- [Judge one-pager](docs/JUDGE_ONE_PAGER.md)
 
 Public brand is **Lastre**. Some internal package names and paths still use the
 legacy `lastro` namespace for compatibility with deployed contracts, package

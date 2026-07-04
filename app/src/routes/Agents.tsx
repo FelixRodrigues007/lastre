@@ -50,6 +50,11 @@ const COMPETITORS = [
     lastre: "Lastre gives the swarm a shared proof payload: verdict, seal match, carbon fields, and Casper links.",
   },
   {
+    name: "GhostShift-style autonomous flows",
+    strength: "Strong automated workflows and agent handoffs.",
+    lastre: "Lastre adds the trust checkpoint: a paid provenance read before any automated workflow treats a carbon/RWA record as usable.",
+  },
+  {
     name: "ProofPay-style escrow flows",
     strength: "Strong milestone and payment logic.",
     lastre: "Lastre starts earlier: it proves the source document and carbon/mineral record before any downstream workflow.",

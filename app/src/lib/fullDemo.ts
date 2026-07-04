@@ -37,6 +37,10 @@ export function buildMarketplaceDemoUrl(assetId = FULL_DEMO_ASSET_ID): string {
   return `/marketplace?demo=full&assetId=${encodeURIComponent(assetId)}`;
 }
 
+export function buildMyAssetsUrl(assetId = FULL_DEMO_ASSET_ID): string {
+  return `/my-assets?asset=${encodeURIComponent(assetId)}`;
+}
+
 export function readFullDemoState(): FullDemoState | null {
   if (typeof window === "undefined") return null;
   const raw = window.localStorage.getItem(FULL_DEMO_STORAGE_KEY);

@@ -1,6 +1,13 @@
+import { Link } from "react-router-dom";
+
 export type FullDemoStep = {
   label: string;
   detail: string;
+};
+
+type FullDemoAction = {
+  label: string;
+  to: string;
 };
 
 type FullDemoModalProps = {
@@ -10,6 +17,7 @@ type FullDemoModalProps = {
   steps: FullDemoStep[];
   activeStep: number;
   status?: string;
+  primaryAction?: FullDemoAction;
   onClose?: () => void;
 };
 
@@ -20,6 +28,7 @@ export function FullDemoModal({
   steps,
   activeStep,
   status,
+  primaryAction,
   onClose,
 }: FullDemoModalProps) {
   if (!open) return null;
@@ -58,6 +67,14 @@ export function FullDemoModal({
         </ol>
 
         {status ? <p className="full-demo-status">{status}</p> : null}
+
+        {primaryAction ? (
+          <div className="full-demo-actions">
+            <Link className="route-cta" to={primaryAction.to}>
+              {primaryAction.label}
+            </Link>
+          </div>
+        ) : null}
       </div>
     </div>
   );

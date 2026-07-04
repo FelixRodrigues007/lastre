@@ -39,6 +39,7 @@ Point at:
 - `sealMatch: true`
 - `carbonImpactScore`
 - Casper links / simulated MintGate note
+- The **View in MyAssets** CTA shown after the demo finishes
 
 ### 0:45-1:05 — Explain the x402 payload
 
@@ -48,7 +49,7 @@ Say:
 
 ### 1:05-1:25 — My Assets / DeFi loop
 
-Open **My Assets**.
+Click **View in MyAssets** from the finished demo modal.
 Select the carbon asset.
 Show:
 

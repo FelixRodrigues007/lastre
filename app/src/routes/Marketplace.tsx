@@ -26,6 +26,7 @@ import {
   clearFullDemoState,
   createFullDemoState,
   FULL_DEMO_ASSET_ID,
+  buildMyAssetsUrl,
   readFullDemoState,
   writeFullDemoState,
 } from "../lib/fullDemo";
@@ -375,6 +376,11 @@ export function Marketplace() {
           steps={MARKETPLACE_DEMO_STEPS}
           activeStep={fullDemoStep}
           status={fullDemoStatus}
+          primaryAction={
+            fullDemoStep >= 3
+              ? { label: "View in MyAssets", to: buildMyAssetsUrl(FULL_DEMO_ASSET_ID) }
+              : undefined
+          }
           onClose={() => {
             setFullDemoOpen(false);
             clearFullDemoState();
@@ -429,6 +435,10 @@ export function Marketplace() {
           <span>
             <strong>{mintSummary?.onChain?.source === "live" ? "Live" : "Fallback"}</strong>
             On-chain source
+          </span>
+          <span>
+            <strong>{mintSummary?.paidX402Queries ?? 0}</strong>
+            x402 paid queries
           </span>
           {mintSummaryError ? <em>{mintSummaryError}</em> : null}
         </section>
