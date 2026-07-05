@@ -240,6 +240,7 @@ export type ProvenanceSnapshot = {
 export type AgentQueryResult = {
   ok: boolean;
   reason?: string;
+  fallback?: boolean;
   txHash?: string;
   facilitatorMode?: string;
   provenance?: ProvenanceSnapshot | null;

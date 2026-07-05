@@ -66,7 +66,12 @@ export function FullDemoModal({
           })}
         </ol>
 
-        {status ? <p className="full-demo-status">{status}</p> : null}
+        {status ? (
+          <p className="full-demo-status" role="status" aria-live="polite">
+            <span className="full-demo-status__label">Current step</span>
+            {status}
+          </p>
+        ) : null}
 
         {primaryAction ? (
           <div className="full-demo-actions">

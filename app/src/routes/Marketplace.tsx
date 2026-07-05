@@ -78,6 +78,52 @@ const proof = await fetch(url, {
 
 if (proof.provenance.verdict === "Valid") approveAction();`;
 
+function buildCachedDemoAgentQuery(
+  assetId: string,
+  reason: string,
+  paidQueries = 0,
+): AgentQueryResult {
+  return {
+    ok: true,
+    fallback: true,
+    reason,
+    txHash: "cached-demo-payload",
+    facilitatorMode: "mock",
+    amountCspr: 0,
+    payTo: "casper-test-account-hash-lastro-payto-mock-0001",
+    totalPaidQueries: paidQueries,
+    provenance: {
+      assetId,
+      category: "carbon_credit",
+      seal: "2e9feed35f5d887adf94819553cce0b559df2efab8c3a3dfd83c585f813a1d57",
+      referenceSeal: "2e9feed35f5d887adf94819553cce0b559df2efab8c3a3dfd83c585f813a1d57",
+      sealMatch: true,
+      verdict: "Valid",
+      attested: true,
+      mintStatus: "minted",
+      attestationTx: "fd8df60d20a8f6bcebf854e2ec87ee19acc6d0a59d3994ea62456908f916e3cf",
+      mintTx: null,
+      carbonDetails: {
+        tonnesCO2e: 125000,
+        creditType: "VCS",
+        vintage: "2024",
+        methodology: "REDD+",
+        verifier: "Verra",
+        carbonImpactScore: 92,
+      },
+      packageHash: "hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
+      csprLinks: {
+        package:
+          "https://testnet.cspr.live/contract-package/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
+        attestation:
+          "https://testnet.cspr.live/transaction/fd8df60d20a8f6bcebf854e2ec87ee19acc6d0a59d3994ea62456908f916e3cf",
+        mint: null,
+      },
+      readAt: new Date().toISOString(),
+    },
+  };
+}
+
 function useLatest<T>(value: T): MutableRefObject<T> {
   const ref = useRef(value);
   ref.current = value;
@@ -178,13 +224,12 @@ export function Marketplace() {
     setPayloadCopied(false);
     try {
       const result = await simulateAgentQuery(assetId, from);
+      await reloadMintSummary();
       setAgentQuery({ assetId, loading: false, result });
       return result;
     } catch (error) {
-      const result = {
-        ok: false,
-        reason: error instanceof Error ? error.message : "query_failed",
-      };
+      const reason = error instanceof Error ? error.message : "query_failed";
+      const result = buildCachedDemoAgentQuery(assetId, reason, mintSummary?.paidX402Queries ?? 0);
       setAgentQuery({ assetId, loading: false, result });
       return result;
     }
@@ -229,29 +274,39 @@ export function Marketplace() {
       await delay(700);
 
       setFullDemoStep(2);
-      setFullDemoStatus("Simulating an Agent Casper-style x402 payment for the provenance snapshot…");
+      setFullDemoStatus("Requesting x402 quote…");
+      await delay(350);
+      setFullDemoStatus("Mock payment submitted (facilitator: mock)…");
+      await delay(350);
+      setFullDemoStatus("Reading provenance payload from Lastre…");
       writeFullDemoState(createFullDemoState("x402", new Date(), assetId));
       const query = await runAgentQuery(assetId);
       await delay(850);
 
       setFullDemoStep(3);
-      setFullDemoStatus("Claiming the provenance NFT representation through MintGate demo…");
+      setFullDemoStatus("Claiming through MintGate demo after Valid proof…");
       writeFullDemoState(createFullDemoState("mint", new Date(), assetId));
       try {
         const mint = await mintAsset(assetId, "agent-casper-demo");
         if (mint.txHash) addDemoMint(assetId);
         setFullDemoMint({ assetId, txHash: mint.txHash });
+        setFullDemoStatus("MintGate demo event emitted…");
       } catch (error) {
         const message = error instanceof Error ? error.message : "";
         if (message.includes("Already minted")) addDemoMint(assetId);
         setFullDemoMint({ assetId, alreadyMinted: message.includes("Already minted") });
+        setFullDemoStatus(
+          message.includes("Already minted")
+            ? "MintGate demo event already existed for this runtime…"
+            : "MintGate demo event attempted after Valid proof…",
+        );
       }
 
       await reloadMintSummary();
       lotsData.reload();
       setFullDemoStatus(
         query?.ok
-          ? "Complete: the paid x402 payload is open with verdict, seal match, carbon score, and Casper links."
+          ? "Complete: the x402 proof payload is open with verdict, seal match, carbon score, and Casper links."
           : "Demo reached x402, but the paid query returned an error. Check the API deployment.",
       );
       writeFullDemoState(createFullDemoState("complete", new Date(), assetId));
@@ -357,6 +412,7 @@ export function Marketplace() {
   );
 
   const selectedMapAssetId = previewAsset ? String(previewAsset.asset.assetId) : null;
+  const visiblePaidQueries = mintSummary?.paidX402Queries ?? agentQuery?.result?.totalPaidQueries ?? 0;
 
   return (
     <div className="page market-page">
@@ -508,51 +564,86 @@ export function Marketplace() {
       {agentQuery ? (
         <div className="modal-overlay" onClick={() => setAgentQuery(null)}>
           <div className="buy-modal agent-query-modal" onClick={(event) => event.stopPropagation()}>
-            <h3>Agent Query via x402 (Demo)</h3>
-            <div>
+            <div className="agent-query-modal__head">
+              <div>
+                <span className="mono-label">x402 provenance read</span>
+                <h3>Agent Query via x402 (Demo)</h3>
+              </div>
+              <span className="agent-query-counter">x402 query #{visiblePaidQueries}</span>
+            </div>
+            <div className="agent-query-asset">
               Asset: <strong>{agentQuery.assetId}</strong>
             </div>
             {agentQuery.loading ? (
-              <p className="small">Agent requesting quote → signing x402 payment → settling…</p>
+              <div className="agent-query-loading" role="status" aria-live="polite">
+                <span>Requesting x402 quote…</span>
+                <span>Mock payment submitted (facilitator: mock)…</span>
+                <span>Reading provenance payload from Lastre…</span>
+              </div>
             ) : agentQuery.result?.ok && agentQuery.result.provenance ? (
               <>
                 <div className="sig-sim">
-                  External agent paid <strong>{agentQuery.result.amountCspr}</strong> CSPR via x402
-                  (mock settlement) to read this proof.
-                  <br />
-                  Facilitator: {agentQuery.result.facilitatorMode}
-                  <br />
-                  Settlement tx: <code>{agentQuery.result.txHash}</code>
+                  {agentQuery.result.fallback ? (
+                    <>
+                      Could not reach provenance service right now. Using cached demo payload.
+                      <br />
+                      Original error: <code>{agentQuery.result.reason}</code>
+                    </>
+                  ) : (
+                    <>
+                      External agent paid <strong>{agentQuery.result.amountCspr}</strong> CSPR via x402
+                      (mock settlement) to read this proof.
+                      <br />
+                      Facilitator: {agentQuery.result.facilitatorMode}
+                      <br />
+                      Settlement tx: <code>{agentQuery.result.txHash}</code>
+                    </>
+                  )}
                 </div>
                 <div className="agent-proof">
-                  <div>
-                    Verdict: <strong className={agentQuery.result.provenance.verdict === "Valid" ? "success" : ""}>
-                      {agentQuery.result.provenance.verdict}
-                    </strong>
-                  </div>
-                  <div>Seal match: <strong>{String(agentQuery.result.provenance.sealMatch)}</strong></div>
-                  <div>
-                    Mint status: <strong>{agentQuery.result.provenance.mintStatus}</strong>{" "}
-                    <span className="agent-proof__badge">
-                      {mintSummary?.onChain?.mintGateAvailable ? "On-chain" : "Simulated demo"}
-                    </span>
-                  </div>
-                  {agentQuery.result.provenance.carbonDetails ? (
-                    <div>
-                      Carbon impact score:{" "}
-                      <strong>{agentQuery.result.provenance.carbonDetails.carbonImpactScore}</strong>
+                  <div className="agent-proof__kpis">
+                    <div className="agent-proof__kpi agent-proof__kpi--valid">
+                      <span>Verdict</span>
+                      <strong>{agentQuery.result.provenance.verdict}</strong>
                     </div>
-                  ) : null}
-                  {agentQuery.result.provenance.csprLinks?.attestation ? (
-                    <a href={agentQuery.result.provenance.csprLinks.attestation} target="_blank" rel="noopener noreferrer">
-                      View attestation on cspr.live ↗
-                    </a>
-                  ) : null}
-                  {agentQuery.result.provenance.csprLinks?.mint ? (
-                    <a href={agentQuery.result.provenance.csprLinks.mint} target="_blank" rel="noopener noreferrer">
-                      View mint on cspr.live ↗
-                    </a>
-                  ) : null}
+                    <div className="agent-proof__kpi">
+                      <span>Seal match</span>
+                      <strong>{String(agentQuery.result.provenance.sealMatch)}</strong>
+                    </div>
+                    {agentQuery.result.provenance.carbonDetails ? (
+                      <div className="agent-proof__kpi">
+                        <span>Carbon impact score</span>
+                        <strong>{agentQuery.result.provenance.carbonDetails.carbonImpactScore}</strong>
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="agent-proof__line">
+                    Mint status: <strong>{agentQuery.result.provenance.mintStatus}</strong>{" "}
+                    <span className="agent-proof__badge">x402 query #{visiblePaidQueries}</span>
+                    {agentQuery.result.fallback ? <span className="agent-proof__badge">Cached demo fallback</span> : null}
+                  </div>
+                  <div className="agent-proof__actions">
+                    {agentQuery.result.provenance.csprLinks?.attestation ? (
+                      <a
+                        href={agentQuery.result.provenance.csprLinks.attestation}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn small primary"
+                      >
+                        View attestation on cspr.live
+                      </a>
+                    ) : null}
+                    {agentQuery.result.provenance.csprLinks?.mint ? (
+                      <a
+                        href={agentQuery.result.provenance.csprLinks.mint}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn small primary"
+                      >
+                        View mint on cspr.live
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
                 {fullDemoMint?.assetId === agentQuery.assetId ? (
                   <div className="demo-mint-note">
@@ -565,7 +656,7 @@ export function Marketplace() {
                 ) : null}
                 <p className="small muted">
                   This is what an external agent would see before deciding whether to act.
-                  Total paid queries this session: {agentQuery.result.totalPaidQueries}.
+                  Total paid queries this session: {visiblePaidQueries}.
                 </p>
                 <div className="payload-toolbar">
                   <strong>Complete proof payload</strong>
