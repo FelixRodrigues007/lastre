@@ -1,6 +1,6 @@
 # Lastre 90-second judge demo script
 
-Date: 2026-07-04
+Date: 2026-07-05
 Guardrail: demonstration only. Fictional data. No real asset sale, valuation, yield, or financial advice.
 
 ## Goal
@@ -14,43 +14,86 @@ Capture/proof preset -> agent decision -> x402 paid provenance query -> MintGate
 1. Deploy latest `main` to Cloudflare Pages (`lastre-app`).
 2. Deploy latest `main` to Render (`lastre-app-api`).
 3. Hard refresh `https://app.lastre.io/marketplace`.
-4. If API was asleep, open `https://app-api.lastre.io/api/health` once.
+4. Warm the API once: `https://app-api.lastre.io/api/health`.
+5. Optional smoke before opening the demo:
 
-## 90-second flow
+```bash
+curl -s https://app-api.lastre.io/api/mint/summary
+```
+
+Expected summary shape after one x402 simulate/read in the same runtime:
+
+```json
+{
+  "source": "hybrid-demo",
+  "paidX402Queries": 1,
+  "onChain": {
+    "proofOfOriginAccepted": 2,
+    "proofOfOriginRejected": 1,
+    "mintGateAvailable": false
+  }
+}
+```
+
+Note: `paidX402Queries` starts at `0` after a fresh Render runtime and increments when the demo or simulate endpoint performs an x402 read.
+
+## 90-second spoken script
 
 ### 0:00-0:15 — Open Marketplace
 
 Open `https://app.lastre.io/marketplace`.
+
 Say:
 
 > Lastre is proof before token. It proves a physical or carbon record before an autonomous agent or token flow acts on it.
 
+Point to:
+
+- `ProofOfOrigin` source: `Live testnet` or `Fallback snapshot`.
+- `Accepted` and `Rejected` counters.
+- `MintGate: Demo simulated`.
+- `x402 paid queries`.
+
 ### 0:15-0:45 — Run full demo
 
-Click **Run Demo**.
-Let it complete and keep the x402 modal visible.
+Click **Run Demo** and keep the modal visible.
+
 Say:
 
-> The demo focuses a fictional VCS carbon record, ensures the agent path has a Valid proof, then simulates an external agent paying via x402 to read the provenance payload.
+> This single button runs the judge flow: a fictional VCS carbon proof, an agent decision, an x402 paid proof query, and a MintGate demo event. Notice the loading states: quote, mock payment, provenance read, then MintGate demo event.
 
-Point at:
+Point at the modal status messages:
 
-- `verdict: Valid`
-- `sealMatch: true`
-- `carbonImpactScore`
-- Casper links / simulated MintGate note
-- The **View in MyAssets** CTA shown after the demo finishes
+- `Requesting x402 quote...`
+- `Mock payment submitted (facilitator: mock)...`
+- `Reading provenance payload from Lastre...`
+- `MintGate demo event emitted...`
 
 ### 0:45-1:05 — Explain the x402 payload
 
 Say:
 
-> This is what an Agent Casper-style executor would see before taking any downstream action. The agent does not need to trust a marketplace card. It pays for a machine-readable proof.
+> This is what an Agent Casper-style executor would see before taking a downstream action. The agent does not need to trust a marketplace card. It pays for a machine-readable proof.
 
-### 1:05-1:25 — My Assets / DeFi loop
+Point at:
+
+- `Verdict: Valid`
+- `Seal match: true`
+- `Carbon impact score: 92`
+- `x402 query #N`
+- `Casper ProofOfOrigin evidence`
+- `MintGate: demo event`
+- `View attestation on cspr.live`
+
+### 1:05-1:25 — My Assets / collateral UX
 
 Click **View in MyAssets** from the finished demo modal.
 Select the carbon asset.
+
+Say:
+
+> This closes the product loop. The symbolic asset appears in My Assets with proof details and demo collateral UX. Collateral values are simulated and the screen says so.
+
 Show:
 
 - `X claimed • Y locked`
@@ -58,18 +101,15 @@ Show:
 - Verdict
 - Seal
 - Collateral status
+- **Lock as Collateral** and **Release Collateral**
 
-Click **Lock as Collateral** if available, then **Release Collateral**.
+### 1:25-1:30 — Agents page close
+
+Open `https://app.lastre.io/agents`.
+
 Say:
 
-> This closes the DeFi demo loop. The asset can only enter collateral UX after a Valid proof. Values are simulated and demo-only.
-
-### 1:25-1:30 — Close
-
-Open `/agents` or mention it.
-Say:
-
-> The dedicated Agents page shows how another builder can integrate Lastre: quote, X-PAYMENT, proof payload, then decide.
+> Other agents execute. Lastre lets them verify the source before they move. The Agents page shows the exact quote, X-PAYMENT, proof payload flow builders can integrate.
 
 ## Production smoke commands
 
@@ -85,6 +125,8 @@ Expected x402 result after the API has seeded/processed demo state:
 
 - `ok: true`
 - `provenance.verdict: Valid`
+- `provenance.sealMatch: true`
 - `provenance.carbonDetails.carbonImpactScore: 92`
+- `totalPaidQueries` increments in the same runtime
 
-If the API runtime is cold, first run Process or click Run Demo in the UI.
+If the API runtime is cold, click **Run Demo** once in the UI; it seeds the demo and opens the x402 payload for judges.
