@@ -1344,6 +1344,14 @@
   font-style: normal;
 }
 
+.market-mint-summary__note {
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+  color: var(--lastro-text-secondary);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
 .full-demo-overlay {
   z-index: 1100;
 }
@@ -1562,6 +1570,43 @@
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+}
+
+.agent-evidence-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.agent-evidence-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  font-size: 0.72rem;
+  font-weight: var(--lastro-weight-semibold);
+  text-decoration: none;
+}
+
+.agent-evidence-badge--chain {
+  border-color: color-mix(in srgb, var(--lastro-status-valid) 50%, var(--lastro-border-subtle));
+  background: color-mix(in srgb, var(--lastro-status-valid) 10%, transparent);
+  color: var(--lastro-status-valid);
+}
+
+.agent-evidence-badge--demo {
+  border-color: color-mix(in srgb, var(--lastro-accent-warn) 50%, var(--lastro-border-subtle));
+  background: color-mix(in srgb, var(--lastro-accent-warn) 10%, transparent);
+  color: var(--lastro-accent-warn);
+}
+
+.agent-proof__note {
+  margin: -2px 0 0;
+  color: var(--lastro-text-secondary);
+  font-size: 0.74rem;
+  line-height: 1.5;
 }
 
 .agent-proof__actions .btn {

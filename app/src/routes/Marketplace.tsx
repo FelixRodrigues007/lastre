@@ -477,25 +477,32 @@ export function Marketplace() {
 
         <section className="market-mint-summary" aria-label="MintGate summary">
           <span>
-            <strong>{mintSummary?.mintCount ?? "—"}</strong>
-            Simulated mints
-          </span>
-          <span>
-            <strong>{mintSummary?.events?.length ? mintSummary.events.slice(0, 3).length : 0}</strong>
-            LotMinted events
+            <strong>{mintSummary?.onChain?.source === "live" ? "Live testnet" : "Fallback snapshot"}</strong>
+            ProofOfOrigin
           </span>
           <span>
             <strong>{mintSummary?.onChain?.proofOfOriginAccepted ?? "—"}</strong>
-            Real accepted proofs
+            Accepted
           </span>
           <span>
-            <strong>{mintSummary?.onChain?.source === "live" ? "Live" : "Fallback"}</strong>
-            On-chain source
+            <strong>{mintSummary?.onChain?.proofOfOriginRejected ?? "—"}</strong>
+            Rejected
+          </span>
+          <span>
+            <strong>Demo simulated</strong>
+            MintGate
           </span>
           <span>
             <strong>{mintSummary?.paidX402Queries ?? 0}</strong>
             x402 paid queries
           </span>
+          <span>
+            <strong>{mintSummary?.mintCount ?? "—"}</strong>
+            Demo LotMinted
+          </span>
+          <p className="market-mint-summary__note">
+            Live query reads ProofOfOrigin attestations. MintGate events are demo-only for this hackathon.
+          </p>
           {mintSummaryError ? <em>{mintSummaryError}</em> : null}
         </section>
 
@@ -622,6 +629,22 @@ export function Marketplace() {
                     <span className="agent-proof__badge">x402 query #{visiblePaidQueries}</span>
                     {agentQuery.result.fallback ? <span className="agent-proof__badge">Cached demo fallback</span> : null}
                   </div>
+                  <div className="agent-evidence-badges">
+                    <a
+                      href={agentQuery.result.provenance.csprLinks.package}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="agent-evidence-badge agent-evidence-badge--chain"
+                    >
+                      Casper ProofOfOrigin evidence
+                    </a>
+                    <span className="agent-evidence-badge agent-evidence-badge--demo">
+                      MintGate: demo event
+                    </span>
+                  </div>
+                  <p className="agent-proof__note">
+                    This proof is anchored to a Casper package. Mint event is simulated for this demo.
+                  </p>
                   <div className="agent-proof__actions">
                     {agentQuery.result.provenance.csprLinks?.attestation ? (
                       <a
