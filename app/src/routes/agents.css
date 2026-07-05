@@ -34,6 +34,13 @@
   line-height: 1.55;
 }
 
+.agents-hero__thesis {
+  margin: 0 0 0.65rem;
+  color: var(--lastro-text-primary) !important;
+  font-size: clamp(0.98rem, 0.9rem + 0.35vw, 1.15rem);
+  font-weight: var(--lastro-weight-semibold);
+}
+
 .agents-hero__stats {
   display: grid;
   gap: 0.65rem;
@@ -145,4 +152,18 @@
 .agents-compare__row p {
   margin: 0.45rem 0 0;
   font-size: 0.82rem;
+}
+
+.agents-compare__role {
+  display: inline-flex;
+  margin-bottom: 0.25rem;
+  padding: 4px 8px;
+  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-accent-brand) 45%, var(--lastro-border-subtle));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--lastro-accent-brand) 9%, transparent);
+  color: var(--lastro-text-primary);
+  font-family: var(--lastro-font-mono, ui-monospace, monospace);
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }

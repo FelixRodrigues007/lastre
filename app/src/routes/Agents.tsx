@@ -5,7 +5,8 @@ import { BtnIcon } from "../components/ui/BtnIcon";
 import { FULL_DEMO_ASSET_ID } from "../lib/fullDemo";
 import "./agents.css";
 
-const AGENT_SNIPPET = `const assetId = "${FULL_DEMO_ASSET_ID}";
+const AGENT_SNIPPET = `// Example: an external agent only proceeds if Lastre says "Valid".
+const assetId = "${FULL_DEMO_ASSET_ID}";
 const url = "https://app-api.lastre.io/api/x402/provenance/" + assetId;
 
 // 1) Ask Lastre for the quote. No X-PAYMENT -> HTTP 402.
@@ -40,24 +41,22 @@ if (
 
 const COMPETITORS = [
   {
-    name: "Agent Casper-style executors",
-    strength: "Strong autonomous execution and x402 loops.",
-    lastre: "Lastre supplies the physical/carbon provenance proof those executors need before acting.",
+    name: "Agent Casper-style agents",
+    role: "Executors",
+    strength: "Great at acting, routing, and running x402 loops.",
+    lastre: "Provenance trust layer — what executors should query before they move.",
   },
   {
     name: "Helios-style agent swarms",
-    strength: "Strong coordination across autonomous agents.",
-    lastre: "Lastre gives the swarm a shared proof payload: verdict, seal match, carbon fields, and Casper links.",
+    role: "Swarm coordinators",
+    strength: "Great at coordinating many autonomous agents.",
+    lastre: "Shared proof checkpoint — verdict, seal match, carbon fields, and Casper links.",
   },
   {
-    name: "GhostShift-style autonomous flows",
-    strength: "Strong automated workflows and agent handoffs.",
-    lastre: "Lastre adds the trust checkpoint: a paid provenance read before any automated workflow treats a carbon/RWA record as usable.",
-  },
-  {
-    name: "ProofPay-style escrow flows",
-    strength: "Strong milestone and payment logic.",
-    lastre: "Lastre starts earlier: it proves the source document and carbon/mineral record before any downstream workflow.",
+    name: "ProofPay-style flows",
+    role: "Milestone escrows",
+    strength: "Great at milestone and payment logic.",
+    lastre: "Earlier trust primitive — prove the source document and carbon/mineral record first.",
   },
 ];
 
@@ -75,7 +74,7 @@ export function Agents() {
     <div className="page agents-page">
       <PageHeader
         kicker="For autonomous agents"
-        title="Lastre is the provenance layer autonomous agents query before acting."
+        title="Other agents execute. Lastre lets them verify the source before they move."
         lead="Agents pay via x402 to read a proof payload — verdict, seal match, carbon score, and Casper links — before touching a fictional RWA/carbon workflow."
         actions={
           <Link className="route-cta" to={`/marketplace?demo=full&assetId=${encodeURIComponent(FULL_DEMO_ASSET_ID)}`}>
@@ -87,7 +86,10 @@ export function Agents() {
       <section className="agents-hero panel">
         <div>
           <span className="mono-label">Proof before token · proof before agent action</span>
-          <h2>Agents should not act on a physical or carbon record until provenance is machine-verifiable.</h2>
+          <h2>Executors move. Lastre verifies before they move.</h2>
+          <p className="agents-hero__thesis">
+            Lastre is not competing to be the fastest executor. It is the trust layer those executors query first.
+          </p>
           <p>
             Lastre turns fictional source documents into deterministic SHA-256 seals, agent-readable verdicts,
             Casper attestation links, and x402-paid proof snapshots. The demo uses a mock facilitator but keeps the
@@ -133,6 +135,7 @@ export function Agents() {
         <div className="agents-compare">
           {COMPETITORS.map((item) => (
             <article key={item.name} className="agents-compare__row">
+              <span className="agents-compare__role">{item.role}</span>
               <h3>{item.name}</h3>
               <p><strong>They bring:</strong> {item.strength}</p>
               <p><strong>Lastre adds:</strong> {item.lastre}</p>
