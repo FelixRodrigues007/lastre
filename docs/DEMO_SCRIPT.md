@@ -1,6 +1,6 @@
 # Lastre 90-second judge demo script
 
-Date: 2026-07-05
+Date: 2026-07-06
 Guardrail: demonstration only. Fictional data. No real asset sale, valuation, yield, or financial advice.
 
 ## Goal

@@ -1,12 +1,12 @@
 # Lastre Judge One-Pager
 
-Date: 2026-07-05
+Date: 2026-07-06
 
 ## One-line thesis
 
 **Other agents execute. Lastre lets them verify the source before they move: proof before token, proof before agent action.**
 
-## Current production state (05/07/2026)
+## Current production state (06/07/2026)
 
 - Cloudflare frontend: OK — `https://app.lastre.io`
 - Render API: OK — `https://app-api.lastre.io/api/health`
