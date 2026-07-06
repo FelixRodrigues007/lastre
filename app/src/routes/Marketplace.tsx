@@ -114,7 +114,7 @@ function buildCachedDemoAgentQuery(
       packageHash: "hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
       csprLinks: {
         package:
-          "https://testnet.cspr.live/contract-package/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
+          "https://testnet.cspr.live/contract-package/b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
         attestation:
           "https://testnet.cspr.live/transaction/fd8df60d20a8f6bcebf854e2ec87ee19acc6d0a59d3994ea62456908f916e3cf",
         mint: null,
