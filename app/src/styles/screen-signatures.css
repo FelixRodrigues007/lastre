@@ -411,9 +411,6 @@
   transition: box-shadow var(--dur-normal) var(--ease-out);
 }
 
-  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
-}
-
 [data-screen="process"] .process-ledger__row--running .process-ledger__index {
   animation: seal-glow 2s var(--ease-in-out) infinite;
 }

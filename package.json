@@ -1,7 +1,11 @@
 {
   "scripts": {
     "build": "npm --prefix web ci && npm --prefix web run build",
-    "build:web": "npm --prefix web run build"
+    "build:web": "npm --prefix web run build",
+    "build:app": "npm --prefix app run build",
+    "lint": "npm --prefix web run lint && npm --prefix app run lint",
+    "lint:web": "npm --prefix web run lint",
+    "lint:app": "npm --prefix app run lint"
   },
   "devDependencies": {
     "shadcn": "^4.12.0"
