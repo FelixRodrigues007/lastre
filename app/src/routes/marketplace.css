@@ -22,7 +22,7 @@
   opacity: 0.75;
 }
 
-/* Desktop: fixed map + pinned list footer; only asset rows scroll */
+/* Desktop: fixed map + independently scrollable marketplace column */
 @media (min-width: 961px) {
   .app-content:has(.market-page) {
     overflow: hidden;
@@ -72,9 +72,10 @@
     grid-column: 1;
     grid-row: 2;
     min-height: 0;
-    overflow: hidden;
+    overflow-y: auto;
     padding-right: clamp(12px, 1.4vw, 18px);
-    padding-bottom: 0;
+    padding-bottom: clamp(1rem, 2vh, 1.5rem);
+    scrollbar-gutter: stable;
   }
 
   .market-list__search,
@@ -131,7 +132,8 @@
     flex: 1;
     min-height: 0;
     max-height: none;
-    overflow: hidden;
+    overflow-y: auto;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
   .market-map {
@@ -162,9 +164,9 @@
 .market-list__scroll {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: visible;
   min-height: 0;
-  flex: 1;
+  flex: 0 0 auto;
   border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   margin-top: 4px;
 }
