@@ -66,5 +66,8 @@ fn main() {
         attestations,
     };
 
-    println!("{}", serde_json::to_string(&snapshot).expect("serialize snapshot"));
+    println!(
+        "{}",
+        serde_json::to_string(&snapshot).expect("serialize snapshot")
+    );
 }

@@ -150,7 +150,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-  repo["GitHub\nFelixRodrigues007/lastro"] --> vercel["Vercel project\nlastre.io"]
+  repo["GitHub\nFelixRodrigues007/lastre"] --> vercel["Vercel project\nlastre.io"]
   repo --> render["Render Docker service\nlastro.onrender.com"]
   vercel -->|"fetch JSON"| render
   render --> casper["Casper Testnet RPC"]

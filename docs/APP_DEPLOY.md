@@ -53,7 +53,7 @@ CNAME  app  <console-project>.pages.dev   Proxied
 Create a second Render Web Service using Docker:
 
 ```text
-Repo:             FelixRodrigues007/lastro
+Repo:             FelixRodrigues007/lastre
 Runtime:          Docker
 Dockerfile path:  Dockerfile.app-api
 Health check:     /api/health

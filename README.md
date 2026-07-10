@@ -39,6 +39,8 @@ deployment, roadmap, API, and architecture handoff:
 - [Deployment runbook](docs/DEPLOYMENT_RUNBOOK.md)
 - [90-second demo script](docs/DEMO_SCRIPT.md)
 - [Judge one-pager](docs/JUDGE_ONE_PAGER.md)
+- [Final-round judge playbook](JUDGES_PLAYBOOK.md)
+- [Buildathon readiness checklist](docs/FINAL_ROUND_CHECKLIST.md)
 
 Public brand is **Lastre**. Some internal package names and paths still use the
 legacy `lastro` namespace for compatibility with deployed contracts, package
@@ -123,6 +125,10 @@ agent-driven `LOTE-002` attestation. The latest `LOTE-001` attestation is
 
 **both Valid and Invalid verdicts are written on-chain — a rejection is permanent, verifiable proof, not a discarded error.**
 
+For final-round review, use the concise [judge playbook](JUDGES_PLAYBOOK.md).
+It includes the UI test flow, contract package hash, and sample Casper Testnet
+transactions in copy/paste format for the BUIDL page.
+
 Fresh read-only output from `make query`:
 
 ```text
@@ -147,7 +153,7 @@ Prerequisites on macOS:
   missing, `cargo install cargo-odra` can populate the local tool cache.
 
 ```bash
-git clone https://github.com/FelixRodrigues007/lastro.git
+git clone https://github.com/FelixRodrigues007/lastre.git
 cd lastro
 make
 ```

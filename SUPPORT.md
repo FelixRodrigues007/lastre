@@ -7,7 +7,7 @@ Lastre is currently a demonstration/prototype proof-of-provenance stack.
 If the frontend is unavailable:
 
 1. Check `https://lastre.io` in an incognito window.
-2. Check `https://lastro.onrender.com/health`.
+2. Check `https://app-api.lastre.io/api/health`.
 3. Review `docs/DEPLOYMENT_RUNBOOK.md`.
 
 ## Developer support

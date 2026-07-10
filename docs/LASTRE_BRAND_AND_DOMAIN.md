@@ -16,7 +16,7 @@ scripts.
 |---|---|
 | Public product, website, pitch, UI copy | `Lastre` |
 | Domain | `lastre.io` |
-| GitHub repository URL | Keep `FelixRodrigues007/lastro` unless a repo migration is explicitly planned |
+| GitHub repository URL | Use `FelixRodrigues007/lastre`; legacy local/package paths may still use `lastro` |
 | Contract path | Keep `contracts/lastro_origin` for now |
 | CSS variables | Keep `--lastro-*` for now |
 | NPM packages | Keep `@lastro/*` for now |

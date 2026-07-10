@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend build and type checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - web
+          - app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ matrix.project }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.project }}
+        run: npm ci
+
+      - name: Build
+        working-directory: ${{ matrix.project }}
+        run: npm run build
+
+      - name: Lint / type-check
+        working-directory: ${{ matrix.project }}
+        run: npm run lint
+
+      - name: Audit high and critical vulnerabilities
+        working-directory: ${{ matrix.project }}
+        run: npm audit --audit-level=high
+
+  agents:
+    name: Agent package tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - agent/sealer
+          - agent/x402
+          - agent/orchestrator
+          - agent/gateway
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ matrix.package }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.package }}
+        run: npm ci
+
+      - name: Build sealer first for dependent packages
+        if: ${{ matrix.package == 'agent/x402' || matrix.package == 'agent/gateway' }}
+        working-directory: agent/sealer
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build x402 first for orchestrator
+        if: ${{ matrix.package == 'agent/orchestrator' }}
+        run: |
+          npm ci --prefix agent/sealer
+          npm run build --prefix agent/sealer
+          npm ci --prefix agent/x402
+          npm run build --prefix agent/x402
+
+      - name: Test package
+        working-directory: ${{ matrix.package }}
+        run: npm test
+
+      - name: Audit high and critical vulnerabilities
+        working-directory: ${{ matrix.package }}
+        run: npm audit --audit-level=high
+
+  root-security:
+    name: Root package security audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Audit high and critical vulnerabilities
+        run: npm audit --audit-level=high
+
+  contracts:
+    name: Casper contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pinned Rust toolchain
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          toolchain: nightly-2026-01-01
+          targets: wasm32-unknown-unknown
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: contracts/lastro_origin
+
+      - name: Check contracts
+        working-directory: contracts/lastro_origin
+        run: cargo +nightly-2026-01-01 check --all-targets --features livenet
+
+      - name: Test contracts
+        working-directory: contracts/lastro_origin
+        run: cargo +nightly-2026-01-01 test
+
+      - name: Check Rust formatting
+        working-directory: contracts/lastro_origin
+        run: cargo +nightly-2026-01-01 fmt -- --check
