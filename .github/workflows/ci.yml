@@ -42,6 +42,16 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: npm run build
 
+      - name: Build app server dependencies
+        if: ${{ matrix.project == 'app' }}
+        run: |
+          npm ci --prefix agent/sealer
+          npm run build --prefix agent/sealer
+          npm ci --prefix agent/x402
+          npm run build --prefix agent/x402
+          npm ci --prefix agent/orchestrator
+          npm run build --prefix agent/orchestrator
+
       - name: Lint / type-check
         working-directory: ${{ matrix.project }}
         run: npm run lint
