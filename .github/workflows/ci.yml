@@ -141,6 +141,7 @@ jobs:
         with:
           toolchain: nightly-2026-01-01
           targets: wasm32-unknown-unknown
+          components: rustfmt
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
