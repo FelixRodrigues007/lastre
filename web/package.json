@@ -10,7 +10,7 @@
     "lint": "tsc --noEmit && node scripts/verify-casper-landing-evidence.mjs"
   },
   "dependencies": {
-    "cobe": "^0.6.5",
+    "cobe": "^2.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
