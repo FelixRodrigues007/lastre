@@ -1,0 +1,49 @@
+You are Fugu in FULL EXECUTION mode for Lastre (repo lastre / lastro).
+
+PRIMARY SPEC (read completely, obey order and DONE gates):
+  docs/FUGU_FULL_BEAT_CLAROS_EXECUTION.md
+
+Also skim:
+  docs/RANKING_UPDATE_2026-07-15.md
+  docs/SCORECARD_CDE_EPICS.md
+  docs/X402_CASPER_REAL.md
+  app/server/operators.ts
+  app/server/receipts.ts
+  app/server/mint-economics.ts
+  contracts/lastro_origin/src/mint_gate.rs
+
+CONTEXT (already shipped on main — do NOT reimplement or regress):
+  - Real CSPR settle prod (casper_deploy) + CLI lastre.mjs
+  - operators[] dual-key CONFIG (distinct sealer≠attester) + 2-hop receipts + MintGate economics parity
+  - Honesty: simulate mock; no fake mint explorer links
+  - Evidence live-RPC fullyVerified
+  - Payment tx: 27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c
+  - PoO package: hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
+
+MISSION:
+  Close residual gaps so a demanding judge can no longer prefer Claros solely for
+  "multi-party / economics / composition density" while Lastre keeps proof-before-token.
+
+PREFLIGHT (mandatory):
+  Re-run evidence/health curls from the spec §1. If dualKey/fullyVerified fail, STOP and report.
+
+EXECUTE Tier 0 in order T0.1 → T0.6:
+  T0.1 Dual-key OPERATIONAL pipeline (two real account-hashes, dual-key-run.json, script)
+  T0.2 MintGate LIVE deploy + ≥1 mint_lot tx on testnet + LASTRE_MINTGATE_PACKAGE_HASH
+  T0.3 Anchor composition chainRoot on-chain + evidence.composition.anchorTx
+  T0.4 Compete framing UI (honest vs Claros/AgentGate/CasCet)
+  T0.5 Update BUIDL docs with ONLY real new hashes
+  T0.6 Smoke checklist + write docs/FUGU_HANDOFF_BEAT_CLAROS.md for Grok validator
+
+RULES:
+  - Never invent Casper hashes or package ids
+  - Never break judge simulate mock path
+  - Never commit secrets (PEM/B64)
+  - If MintGate deploy blocked, mark T0.2 FAIL with logs — do not fake
+  - Prefer minimal surgical code; match existing style
+  - Tests for new logic; open PR to main when green
+  - Do not claim official DoraHacks #1
+
+END STATE:
+  All DONE checkboxes in §2 of docs/FUGU_FULL_BEAT_CLAROS_EXECUTION.md
+  + docs/FUGU_HANDOFF_BEAT_CLAROS.md complete for Grok validation (§13 of the spec).
