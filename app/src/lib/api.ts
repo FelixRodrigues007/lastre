@@ -234,6 +234,7 @@ export type ProvenanceSnapshot = {
   } | null;
   packageHash: string;
   csprLinks: { package: string; attestation: string | null; mint: string | null };
+  mintNote?: string | null;
   readAt: string;
 };
 

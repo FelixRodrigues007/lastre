@@ -259,6 +259,7 @@ export const translations = {
     "audit.evidence.col.action": "Actions",
     "audit.evidence.onChain.awaiting": "Awaiting",
     "audit.evidence.onChain.viewAttestation": "View attestation",
+    "audit.evidence.onChain.sessionReceipt": "Demo/session receipt — not on Casper",
     "audit.evidence.viewEvidence": "View evidence",
     "audit.evidence.owner.rule": "Rule engine",
     "audit.evidence.owner.llm": "LLM agent",
@@ -692,6 +693,7 @@ export const translations = {
     "chain.timeline.copied": "Copied",
     "chain.timeline.copySeal": "Copy on-chain seal hash",
     "chain.timeline.viewAttestation": "View attestation",
+    "chain.timeline.sessionReceipt": "Demo/session receipt — not on Casper",
     "chain.empty.title": "No session proof yet",
     "chain.empty.hint":
       "Chain shows permanent Casper attestations. Run a demo batch to record your first proof this session.",
@@ -959,6 +961,7 @@ export const translations = {
     "audit.evidence.col.action": "Ações",
     "audit.evidence.onChain.awaiting": "Aguardando",
     "audit.evidence.onChain.viewAttestation": "Ver attestation",
+    "audit.evidence.onChain.sessionReceipt": "Recibo de demo/sessão — não está na Casper",
     "audit.evidence.viewEvidence": "Ver evidência",
     "audit.evidence.owner.rule": "Motor de regras",
     "audit.evidence.owner.llm": "Agente LLM",
@@ -1393,6 +1396,7 @@ export const translations = {
     "chain.timeline.copied": "Copiado",
     "chain.timeline.copySeal": "Copiar hash do selo on-chain",
     "chain.timeline.viewAttestation": "Ver attestation",
+    "chain.timeline.sessionReceipt": "Recibo de demo/sessão — não está na Casper",
     "chain.empty.title": "Nenhuma prova nesta sessão",
     "chain.empty.hint":
       "A Cadeia mostra atestações permanentes no Casper. Rode um lote de demonstração para registrar sua primeira prova nesta sessão.",

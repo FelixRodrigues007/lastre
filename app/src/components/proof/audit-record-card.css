@@ -96,3 +96,9 @@
 .audit-card__explorer:hover {
   text-decoration: underline;
 }
+
+.audit-card__session {
+  font-size: 0.75rem;
+  color: var(--lastro-text-muted);
+  font-style: italic;
+}

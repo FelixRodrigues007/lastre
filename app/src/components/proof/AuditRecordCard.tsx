@@ -4,6 +4,7 @@ import { getEvidenceStatus, evidenceSubtitle } from "../../lib/auditEvidence";
 import type { AuditRecord } from "../../lib/types";
 import { shortHash } from "../../lib/format";
 import { useLocaleContext } from "../../context/LocaleContext";
+import { explorerUrlFromTx, resolveAttestationUrl } from "../../lib/chainTimeline";
 import { ActionBadge, VerdictBadge } from "./Badges";
 import { SealChip } from "./SealChip";
 import "./audit-record-card.css";
@@ -23,6 +24,9 @@ export function AuditRecordCard({
 }: AuditRecordCardProps) {
   const { t } = useLocaleContext();
   const verdict = record.verification?.verdict ?? record.onChain?.verdict ?? null;
+  const attestationUrl = record.onChain
+    ? resolveAttestationUrl(record.assetId, explorerUrlFromTx(record.onChain.txHash))
+    : null;
 
   return (
     <article className={`audit-card panel${compact ? " audit-card--compact" : ""}`}>
@@ -80,15 +84,21 @@ export function AuditRecordCard({
             <VerdictBadge verdict={record.onChain.verdict} />
             <code className="audit-card__tx">tx {shortHash(record.onChain.txHash)}</code>
           </div>
-          <a
-            className="audit-card__explorer"
-            href={`https://testnet.cspr.live/deploy/${record.onChain.txHash}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(event) => event.stopPropagation()}
-          >
-            {t("audit.evidence.onChain.viewAttestation")}
-          </a>
+          {attestationUrl ? (
+            <a
+              className="audit-card__explorer"
+              href={attestationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(event) => event.stopPropagation()}
+            >
+              {t("audit.evidence.onChain.viewAttestation")}
+            </a>
+          ) : (
+            <span className="audit-card__session" onClick={(event) => event.stopPropagation()}>
+              {t("audit.evidence.onChain.sessionReceipt")}
+            </span>
+          )}
         </section>
       ) : null}
     </article>

@@ -65,6 +65,10 @@ export function ChainTimelineItem({ entry }: ChainTimelineItemProps) {
           {t("chain.timeline.viewAttestation")}
           <Icon name="external" size={12} />
         </a>
+      ) : entry.sessionReceipt ? (
+        <span className="chain-list__attestation chain-list__attestation--session">
+          {t("chain.timeline.sessionReceipt")}
+        </span>
       ) : null}
     </li>
   );

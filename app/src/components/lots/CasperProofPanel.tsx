@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { LotDetail } from "../../lib/types";
 import { shortHash } from "../../lib/format";
 import { CSPR_PACKAGE_URL } from "../../lib/navigation";
+import { explorerUrlFromTx, resolveAttestationUrl } from "../../lib/chainTimeline";
 import { MutedStatusBadge, VerdictBadge } from "../proof/Badges";
 import { CopyBlock } from "../ui/CopyBlock";
 import { SectionHead } from "../ui/SectionHead";
@@ -16,6 +17,15 @@ export function CasperProofPanel({ lot, flat = false }: CasperProofPanelProps) {
   const onChain = lot.testnetAttestation ?? lot.auditRecord?.onChain ?? null;
   const invalidOnChain = onChain?.verdict === "Invalid";
   const awaiting = !onChain;
+  const rawExplorer =
+    onChain && "explorerUrl" in onChain && onChain.explorerUrl
+      ? onChain.explorerUrl
+      : onChain && "txHash" in onChain && onChain.txHash
+        ? explorerUrlFromTx(onChain.txHash)
+        : null;
+  const attestationUrl = resolveAttestationUrl(lot.artifact.assetId, rawExplorer);
+  const hasSessionReceipt =
+    !attestationUrl && Boolean(onChain && "txHash" in onChain && onChain.txHash);
 
   return (
     <section
@@ -66,24 +76,22 @@ export function CasperProofPanel({ lot, flat = false }: CasperProofPanelProps) {
           ) : null}
 
           <div className="casper-proof__links">
-            {"explorerUrl" in onChain && onChain.explorerUrl ? (
+            {attestationUrl ? (
               <a
                 className="casper-proof__link"
-                href={onChain.explorerUrl}
+                href={attestationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 View attestation on cspr.live
               </a>
-            ) : "txHash" in onChain && onChain.txHash ? (
-              <a
-                className="casper-proof__link"
-                href={`https://testnet.cspr.live/deploy/${onChain.txHash}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on Casper testnet ({shortHash(onChain.txHash, 8, 6)})
-              </a>
+            ) : hasSessionReceipt ? (
+              <p className="casper-proof__session">
+                Demo/session receipt — not on Casper
+                {onChain && "txHash" in onChain && onChain.txHash
+                  ? ` (${shortHash(onChain.txHash, 8, 6)})`
+                  : ""}
+              </p>
             ) : null}
 
             {lot.auditRecord ? (

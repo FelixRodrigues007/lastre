@@ -32,3 +32,9 @@
 .audit-on-chain__link:hover {
   text-decoration: underline;
 }
+
+.audit-on-chain__session {
+  font-size: 0.75rem;
+  color: var(--lastro-text-muted);
+  font-style: italic;
+}
