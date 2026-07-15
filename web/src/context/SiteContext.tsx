@@ -9,6 +9,7 @@ import {
 } from "react";
 import { translations, type Locale, type TranslationKey } from "../i18n/translations";
 import { getContent, type SiteContent } from "../i18n/content";
+import { getStoredLocale, persistLocale } from "../lib/locale";
 
 type Toast = { id: number; message: string };
 
@@ -31,10 +32,7 @@ type SiteContextValue = {
 const SiteContext = createContext<SiteContextValue | null>(null);
 
 export function SiteProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(() => {
-    const saved = localStorage.getItem("lastro-locale");
-    return saved === "pt" ? "pt" : "en";
-  });
+  const [locale, setLocaleState] = useState<Locale>(() => getStoredLocale());
   const [highContrast, setHighContrast] = useState(() =>
     document.documentElement.dataset.contrast === "high",
   );
@@ -44,7 +42,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
-    localStorage.setItem("lastro-locale", next);
+    persistLocale(next);
     document.documentElement.lang = next === "pt" ? "pt-BR" : "en";
     const meta = getContent(next).meta;
     document.title = meta.title;
