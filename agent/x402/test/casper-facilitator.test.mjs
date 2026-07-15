@@ -1,6 +1,6 @@
 import test from "node:test";
 import { equal, match, ok } from "node:assert/strict";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import {
@@ -9,6 +9,7 @@ import {
   transferIdFromNonce,
   signMockPayment,
   createFacilitatorFromEnv,
+  prepareX402SecretsFromEnv,
   MockFacilitator,
 } from "../dist/index.js";
 
@@ -88,4 +89,18 @@ test("createFacilitatorFromEnv casper without key falls back to mock", () => {
     LASTRE_X402_PAY_TO: "01" + "cd".repeat(32),
   });
   equal(f.mode, "mock");
+});
+
+test("createFacilitatorFromEnv materializes PEM secret", () => {
+  const env = {
+    LASTRE_X402_MODE: "casper",
+    LASTRE_X402_SECRET_KEY_PEM:
+      "-----BEGIN PRIVATE KEY-----\\nAAECAwQFBgc=\\n-----END PRIVATE KEY-----",
+    LASTRE_X402_PAY_TO: "01" + "ef".repeat(32),
+  };
+  const path = prepareX402SecretsFromEnv(env);
+  ok(path && existsSync(path));
+  // Key file is fake PEM so CasperFacilitator still constructs (existsSync only)
+  const f = createFacilitatorFromEnv(env);
+  equal(f.mode, "casper");
 });

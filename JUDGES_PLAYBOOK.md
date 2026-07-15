@@ -158,8 +158,10 @@ make query
 - The deterministic SHA-256 seal decides `Valid` or `Invalid`; the LLM does not decide or rewrite verdicts.
 - The LLM/orchestrator can choose an operational action such as `pay`, `skip`,
   or `escalate`; it cannot overwrite the seal verdict.
-- x402 settlement currently uses a mock facilitator. The API shape and payment
-  seam are implemented, but it does not move real CSPR.
+- x402 **judge UI / simulate** uses a mock facilitator (`synthetic_receipt`, no CSPR moved).
+  Real testnet CSPR is available via `LASTRE_X402_MODE=casper` + keys on the API
+  (`settlementKind: casper_deploy`). See `docs/X402_CASPER_REAL.md` and sample
+  payment tx in `docs/BUIDL_PAGE_PASTE.md`.
 - MintGate, collateral, and My Assets flows in the public app are labeled demo
   events.
 - Both accepted and rejected attestations are useful evidence. An `Invalid`

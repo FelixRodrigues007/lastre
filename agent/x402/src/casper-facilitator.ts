@@ -136,6 +136,13 @@ export class CasperFacilitator implements Facilitator {
     const transferId = transferIdFromNonce(payment.nonce);
     const amount = String(payment.amount);
 
+    // Casper native transfer minimum is typically 2.5e9 motes; never send less
+    // even if a misconfigured quote is lower (verify still enforces maxAmountRequired).
+    const MIN_TRANSFER_MOTES = 2_500_000_000n;
+    const amountBig = BigInt(amount);
+    const transferAmount =
+      amountBig < MIN_TRANSFER_MOTES ? MIN_TRANSFER_MOTES.toString(10) : amount;
+
     const args = [
       "transfer",
       "--node-address",
@@ -145,7 +152,7 @@ export class CasperFacilitator implements Facilitator {
       "--secret-key",
       this.secretKeyPath,
       "--amount",
-      amount,
+      transferAmount,
       "--target-account",
       this.targetAccount,
       "--transfer-id",

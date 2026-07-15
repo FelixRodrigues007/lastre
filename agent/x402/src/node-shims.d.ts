@@ -24,7 +24,21 @@ declare module "node:crypto" {
 
 declare module "node:fs" {
   export function readFileSync(path: string | URL, encoding: "utf8"): string;
+  export function writeFileSync(
+    path: string | URL,
+    data: string | Uint8Array,
+    options?: { mode?: number } | string,
+  ): void;
+  export function mkdirSync(path: string | URL, options?: { recursive?: boolean }): void;
   export function existsSync(path: string | URL): boolean;
+}
+
+declare module "node:os" {
+  export function tmpdir(): string;
+}
+
+declare module "node:path" {
+  export function join(...parts: string[]): string;
 }
 
 declare module "node:util" {

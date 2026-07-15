@@ -27,13 +27,17 @@ node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001
 # Pay + read proof (judge-safe mock via /simulate)
 node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay
 
+# Real CSPR settle (API must be LASTRE_X402_MODE=casper + keys)
+node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay --mode casper
+
 # Live-RPC evidence pack
 node packages/cli/bin/lastre.mjs evidence
 ```
 
 Real testnet CSPR settle (optional): set on the **API host**  
-`LASTRE_X402_MODE=casper`, `LASTRE_X402_SECRET_KEY_PATH`, `LASTRE_X402_PAY_TO`.  
-UI `/simulate` always stays **mock**. See `scripts/x402-real-smoke.sh`.
+`LASTRE_X402_MODE=casper`, `LASTRE_X402_SECRET_KEY_PATH` (or `LASTRE_X402_SECRET_KEY_PEM`),  
+`LASTRE_X402_PAY_TO`. UI `/simulate` always stays **mock**.  
+Runbook: [docs/X402_CASPER_REAL.md](./docs/X402_CASPER_REAL.md) · smoke: `scripts/x402-real-smoke.sh`.
 
 DEMONSTRATION ONLY — fictional assets; no investment, yield, ownership sale, or financial promise.
 
