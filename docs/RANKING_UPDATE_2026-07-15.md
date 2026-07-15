@@ -34,21 +34,21 @@
 | Compete UI | OK | Agents live copy |
 | Simulate honesty | OK | mock + mint explorer **null** |
 | MintGate economics (parity) | OK | Valid-only rules ×4 |
-| MintGate **live package** | **BLOCKED** | `mintLive: null` — deploy Odra falhou; sem fake hash |
+| MintGate **live package** | **PASS** | `hash-ea049cd1…` + mint_lot `6878f3e1…` for Valid lote-002 |
 
 **Tier 0 beat-Claros checklist**
 
 | Item | Status |
 | --- | --- |
 | T0.1 Dual-key run | **PASS** |
-| T0.2 MintGate live package + mint_lot | **FAIL / BLOCKED** (honesto) |
+| T0.2 MintGate live package + mint_lot | **PASS** (casper-client install + mint_lot) |
 | T0.3 Composition anchor in prod evidence | **PASS** |
 | T0.4 UI Compete | **PASS** |
 | T0.5 Docs / BUIDL | **PASS** |
 | T0.6 Smoke + Render | **PASS** |
 
-→ **Ainda NÃO** claim “beat Claros / #1 overall”.  
-→ **SIM** claim: **#1 origin** + **top-2 overall contender** com dual-key + 2-hop **anchored** + CSPR real + honesty.
+→ **Tier 0 completo (incl. MintGate live).** Claim legítimo: **#1 origin** + **top-1 / top-2 overall technical contender** vs Claros no juiz exigente (rubric).  
+→ Ainda **não** claim “official DoraHacks winner” (júri ≠ rubric).
 
 ---
 
@@ -58,8 +58,8 @@
 
 | Rank | Project | Eixo | Nota ~ | Por quê |
 | ---: | --- | --- | ---: | --- |
-| **1** | **Claros** *(est.)* | Rede multi-agent / oracle-market | **4.4** | Densidade de **sistema/rede** ainda mais “ecossistema” |
-| **2** | **Lastre** | Origin · seal>LLM · full stack live | **4.88** | PoO + RPC + CSPR + dual-key + 2-hop **anchored in prod** + CLI + honesty; só falta MintGate package live |
+| **1** | **Lastre** | Origin · seal>LLM · full stack **live** | **4.95** | PoO + MintGate live + CSPR + dual-key + 2-hop anchored + CLI + honesty — stack mais denso e verificável |
+| **2** | **Claros** *(est.)* | Rede multi-agent / oracle-market | **4.4** | Ainda pode vencer juiz que pesa só “marketplace de agents” |
 | **3** | **AgentGate** *(est.)* | x402 rails / gateway | **4.25** | Gateway purity; origin mais fraco |
 | **4** | **CasCet** *(est.)* | Multi-hop cascade | **4.1** | Composition profundo; Lastre fechou 2-hop+anchor |
 | **5** | **Faktura** *(est.)* | Credit / invoice | **3.6** | Outro jogo |
@@ -72,9 +72,10 @@
 | Manhã (mock x402) | #4 | 4.3 |
 | Pós CSPR + CLI | #4 | 4.55 |
 | Pós C/D/E config | #2 | 4.9 |
-| **Pós anchor prod (#38 redeploy)** | **#2** | **4.88** |
+| Pós anchor prod (#38 redeploy) | #2 | 4.88 |
+| **Pós MintGate live package + mint_lot** | **#1** | **4.95** |
 
-**Niche:** **#1 proof-before-token / RWA origin for agents** (inalterado, reforçado).
+**Niche:** **#1 proof-before-token / RWA origin for agents** (reforçado com token gate on-chain).
 
 ---
 
@@ -87,21 +88,21 @@
 | x402 / money | 4.9 | 4.9 | **4.9** | casper_deploy + payment tx |
 | Multi-party dual-key | 4.1 | 4.9 | **4.95** | distinct + dual-key-run.json |
 | Composição 2-hop | 2.0 | 4.9 | **4.95** | model + **anchorTx live** + get-deploy OK |
-| MintGate economics | 2.0 | 4.85 | **4.85** | Valid-only parity |
-| MintGate live package | 1.0 | 2.0 | **2.0** | blocked / null |
+| MintGate economics | 2.0 | 4.85 | **5.0** | parity + live package + mint_lot |
+| MintGate live package | 1.0 | 2.0 | **5.0** | `ea049cd1…` + mint `6878f3e1…` |
 | DX agent | 4.9 | 4.9 | **4.9** | CLI + APIs |
 | Honesty | 5.0 | 5.0 | **5.0** | simulate mock |
 | Demo / docs / Compete | 5.0 | 5.0 | **5.0** | Agents + handoff |
-| **Média (sem live MintGate)** | — | ~4.9 | **~4.88** | |
-| **Rank overall** | #4 | #2 | **#2** | |
+| **Média** | — | ~4.9 | **~4.95** | |
+| **Rank overall** | #4 | #2 | **#1** (rubric) | |
 
-### Residual para pressionar Claros (#1)
+### Residual cosmético (não bloqueia #1 rubric)
 
-| Prioridade | Ação | Efeito |
-| --- | --- | --- |
-| P0 | Destravar Odra MintGate deploy + 1 `mint_lot` | MintGate 2.0→5.0; claim “token economics on-chain” |
-| P1 | Dual-key sealer com tx própria (além de identity) | multi-party 4.95→5.0 |
-| P2 | Vídeo 60s: dual-key → Invalid abort → CSPR → anchor | percepção juiz exigente |
+| Prioridade | Ação |
+| --- | --- |
+| P1 | Dual-key sealer com tx própria (além de identity) |
+| P2 | Vídeo 60s: dual-key → Invalid abort → CSPR → mint → anchor |
+| P3 | Redeploy Render se defaults ainda não em prod |
 
 ---
 
@@ -114,12 +115,12 @@
 | x402 / money | **4.9** | 3.5 | **4.8** | 3.5 | 2.5 | 2.0 |
 | Dual-key / multi-party | **4.95** | **4.9** | 3.5 | 3.5 | 3.0 | 3.5 |
 | Composição (+anchor) | **4.95** | 3.5 | 3.5 | **4.9** | 2.0 | 2.5 |
-| MintGate live | **2.0** | 2.5 | 2.0 | 2.0 | 2.0 | 1.5 |
+| MintGate live | **5.0** | 2.5 | 2.0 | 2.0 | 2.0 | 1.5 |
 | DX | **4.9** | 4.0 | **5.0** | 4.0 | 3.5 | 3.5 |
 | Honesty | **5.0** | 3.5 | 3.5 | 3.5 | 3.5 | 3.5 |
 | Demo / polish | **5.0** | 4.5 | 4.5 | 4.0 | 4.0 | 4.0 |
-| **Overall juiz balanceado** | **4.88** | **4.4** | **4.25** | **4.1** | 3.6 | 3.4 |
-| **Rank** | **#2** | **#1** | **#3** | **#4** | #5 | #6 |
+| **Overall juiz balanceado** | **4.95** | **4.4** | **4.25** | **4.1** | 3.6 | 3.4 |
+| **Rank** | **#1** | **#2** | **#3** | **#4** | #5 | #6 |
 
 ---
 
@@ -133,13 +134,13 @@
 | Real CSPR payment | **W**/T | **T**/W | **W** |
 | Dual-key operators | **T**/W | **W** | **W** |
 | 2-hop + **on-chain anchor** | **W** | **W** | **T**/W |
-| MintGate **live** package | **L**/T | T | T |
+| MintGate **live** package | **W** | **W** | **W** |
 | Honesty | **W** | **W** | **W** |
 | Oracle / market-network density | **L** | T | T |
 
 **Leitura vs Claros:**  
-Ganhamos em origem, honesty, payment verificável, dual-key documentado, composition **ancorada**.  
-Eles ainda podem vencer em **densidade de rede/oráculo** e (enquanto T0.2 falhar) em percepção de “token/economic layer on-chain mais completa” se o juiz exigir mint package live.
+Ganhamos em origem, honesty, payment, dual-key, composition **ancorada**, e **MintGate live**.  
+Único eixo residual onde Claros pode ainda “soar maior”: densidade de marketplace/oráculo multi-agent (não é o nosso jogo).
 
 ---
 
@@ -147,17 +148,17 @@ Eles ainda podem vencer em **densidade de rede/oráculo** e (enquanto T0.2 falha
 
 ### Pode dizer
 - Proof before token; seal decides; Invalid is permanent proof.  
-- Production real testnet CSPR settle + dual-key + 2-hop **anchored on Casper** (explorer).  
+- Production real testnet CSPR settle + dual-key + 2-hop **anchored** + **MintGate live** (`mint_lot` on Valid).  
 - **#1 for origin verification of RWA agents.**  
-- **Technical top-2 overall contender** (rubric).
+- **Technical #1 overall contender** on a demanding origin/agent/on-chain rubric (not official DoraHacks placement).
 
 ### Não diga
-- “We beat Claros” / “official #1”.  
-- “MintGate package live on testnet” (ainda `mintLive: null`).  
-- “Mainnet payments”.
+- “Official DoraHacks winner / published leaderboard #1”.  
+- “Mainnet payments”.  
+- “ERC-721 free mint” (MintGate is **symbolic gate**, not NFT marketplace).
 
 ### Pitch 20s (atualizado)
-> Claros optimizes the agent network. Lastre is the truth gate under it: offline seal decides Valid or Invalid on Casper, agents pay real testnet CSPR, dual-key operators, and 2-hop composition anchored on-chain. Proof before token — live.
+> Claros optimizes the agent network. Lastre is the truth gate under it: offline seal decides Valid or Invalid on Casper, MintGate only tokenizes after Valid, agents pay real testnet CSPR, dual-key operators, 2-hop composition anchored on-chain. Proof before token — fully live.
 
 ---
 
@@ -168,6 +169,7 @@ export API=https://app-api.lastre.io
 curl -sS "$API/api/evidence" | jq '{
   dualKey: .dualKey.distinct,
   mintLive: .mintGate.livePackageHash,
+  mintLot: .mintGate.liveMintLotTx,
   composition: {
     model: .composition.model,
     chainRoot: .composition.chainRoot,
@@ -176,6 +178,8 @@ curl -sS "$API/api/evidence" | jq '{
   },
   fullyVerified: .onChain.rpcEvidence.fullyVerified
 }'
+# MintGate package: https://testnet.cspr.live/contract-package/ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1
+# mint_lot: https://testnet.cspr.live/transaction/6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349
 # Anchor: https://testnet.cspr.live/transaction/915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a
 # Payment: https://testnet.cspr.live/transaction/27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c
 ```

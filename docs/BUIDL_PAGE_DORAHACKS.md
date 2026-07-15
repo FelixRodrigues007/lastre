@@ -189,8 +189,14 @@ A real Casper Testnet native transfer anchors the demo `chainRoot` via `transfer
 
 `casper-client get-deploy` confirms execution success. This is a real Casper Testnet Deploy hash, not a synthetic receipt.
 
-### MintGate live status
+### MintGate live (Casper Testnet)
 
-MintGate economics are implemented and enforced in the API/contract tests, but **live MintGate deployment is still blocked**. See `docs/MINTGATE_LIVE.md`.
+| Field | Value |
+| --- | --- |
+| Package | `hash-ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1` |
+| Package explorer | https://testnet.cspr.live/contract-package/ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1 |
+| Install tx | `13955752c3836b5fbc0da7281af102cc5f8953eae7ba543232697d3f3f81e8b7` |
+| **mint_lot** (Valid `MINA-VALEDOURO-LOTE-002`) | `6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349` |
+| mint_lot explorer | https://testnet.cspr.live/transaction/6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349 |
 
-No MintGate package hash or `mint_lot` transaction is claimed until a real deploy + real mint transaction exists.
+Cross-contract gate: only **Valid** ProofOfOrigin can pass `mint_lot`. Session/demo mint IDs still omit fake explorer links. See `docs/MINTGATE_LIVE.md`.
