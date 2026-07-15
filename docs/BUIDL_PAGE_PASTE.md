@@ -20,6 +20,7 @@ Other agents execute. Lastre lets them verify the source first — proof before 
 | API health | https://app-api.lastre.io/api/health |
 | Mint summary | https://app-api.lastre.io/api/mint/summary |
 | Evidence pack (trust stack + live RPC) | https://app-api.lastre.io/api/evidence |
+| Agent CLI | `node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay` |
 | GitHub repo | https://github.com/FelixRodrigues007/lastre |
 | GitHub community profile | https://github.com/FelixRodrigues007/lastre/community |
 | Demo video | https://youtu.be/UzhKMsKA6QE |
@@ -111,7 +112,8 @@ Transaction explorer format:
 - The deterministic SHA-256 seal decides `Valid` or `Invalid`.
 - The LLM/orchestrator chooses action only: `pay`, `skip`, or `escalate`.
 - The LLM cannot overwrite a seal verdict.
-- x402 judge demo uses `MockFacilitator` → `settlementKind: synthetic_receipt` (no CSPR moved). HTTP 402 seam is real.
+- x402 judge demo / UI simulate uses `MockFacilitator` → `settlementKind: synthetic_receipt` (no CSPR moved). HTTP 402 seam is real.
+- Optional real testnet CSPR: `LASTRE_X402_MODE=casper` + secret key + `LASTRE_X402_PAY_TO` on the API host (`CasperFacilitator`). Falls back to mock if keys missing. CLI: `packages/cli/bin/lastre.mjs`.
 - Paid responses attach `chainEvidence` / `rpcEvidence`: public Casper Testnet JSON-RPC verification of install + Invalid + Valid sample txs (when the node responds). Payment mock ≠ fake chain package.
 - Multi-party protocol roles: field sealer → chain attester → paying agent → human escalation (`GET /api/evidence` → `trustStack`).
 - MintGate, collateral, and MyAssets paths are demo/simulated where not full on-chain economics.

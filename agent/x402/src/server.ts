@@ -29,11 +29,8 @@ export function createLastroX402Server(options: CreateServerOptions = {}): {
   server: Server;
   facilitator: Facilitator;
 } {
+  // Default mock. For real CSPR: createLastroX402Server({ facilitator: createFacilitatorFromEnv() }).
   const facilitator = options.facilitator ?? new MockFacilitator();
-  // INTEGRATION SEAM (x402 facilitator): by default we use the local MOCK.
-  // TODO(casper-facilitator): for production, inject a real Casper facilitator
-  // via `createLastroX402Server({ facilitator: new CasperFacilitator(...) })`.
-  // The server depends only on the `Facilitator` interface, so nothing below changes.
   const nonceFactory = options.nonceFactory ?? randomUUID;
   const issuedRequirements = new Map<string, PaymentRequirements>();
 

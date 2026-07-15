@@ -3,9 +3,20 @@ declare const Buffer: {
   from(input: string, encoding?: string): Uint8Array & { toString(encoding?: string): string };
 };
 
+declare const process: {
+  env: Record<string, string | undefined>;
+};
+
+declare namespace NodeJS {
+  type ProcessEnv = Record<string, string | undefined>;
+}
+
 declare module "node:crypto" {
   export function createHash(algorithm: string): {
-    update(data: string | Uint8Array): { digest(encoding: "hex"): string };
+    update(data: string | Uint8Array, encoding?: string): {
+      update(data: string | Uint8Array, encoding?: string): { digest(encoding: "hex"): string };
+      digest(encoding: "hex"): string;
+    };
     digest(encoding: "hex"): string;
   };
   export function randomUUID(): string;
@@ -13,6 +24,27 @@ declare module "node:crypto" {
 
 declare module "node:fs" {
   export function readFileSync(path: string | URL, encoding: "utf8"): string;
+  export function existsSync(path: string | URL): boolean;
+}
+
+declare module "node:util" {
+  export function promisify<T extends (...args: never[]) => unknown>(fn: T): (...args: Parameters<T>) => Promise<unknown>;
+}
+
+declare module "node:child_process" {
+  export type ExecFileOptions = {
+    encoding?: string;
+    timeout?: number;
+    maxBuffer?: number;
+    cwd?: string;
+    env?: Record<string, string | undefined>;
+  };
+  export function execFile(
+    command: string,
+    args: string[],
+    options: ExecFileOptions,
+    callback: (error: Error | null, stdout: string, stderr: string) => void,
+  ): void;
 }
 
 declare module "node:http" {
