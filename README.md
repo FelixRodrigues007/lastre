@@ -13,6 +13,7 @@
 | Step-by-step testing (no marketing) | [JUDGES_PLAYBOOK.md](./JUDGES_PLAYBOOK.md) |
 | BUIDL paste pack | [docs/BUIDL_PAGE_PASTE.md](./docs/BUIDL_PAGE_PASTE.md) |
 | API health | https://app-api.lastre.io/api/health |
+| Evidence pack (RPC + trust stack) | https://app-api.lastre.io/api/evidence |
 | Casper ProofOfOrigin package | `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561` |
 | Community standards | https://github.com/FelixRodrigues007/lastre/community |
 

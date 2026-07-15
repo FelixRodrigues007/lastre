@@ -47,6 +47,12 @@ curl -fsS -X POST "$API_BASE/api/x402/simulate/CARBON-VCS-AMAZONIA-2024-001" \
   -H "Content-Type: application/json" \
   -d '{"from":"casper-buildathon-final-smoke"}' >/dev/null || fail "x402 simulate failed"
 
+log "checking evidence pack (local or deployed)"
+# Prefer local typecheck path: if API is production, /api/evidence must exist after deploy.
+if ! curl -fsS "$API_BASE/api/evidence" | head -c 200 >/dev/null 2>&1; then
+  log "WARN: /api/evidence not available on $API_BASE yet (deploy pending) — not failing smoke"
+fi
+
 log "checking landing and app HTTP responses"
 curl -fsSI "$LANDING_URL" >/dev/null || fail "landing HEAD failed"
 curl -fsSI "$APP_URL" >/dev/null || fail "app HEAD failed"

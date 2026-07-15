@@ -27,6 +27,34 @@ import {
   type PaymentRequirements,
 } from "../../agent/x402/dist/index.js";
 
+/** Multi-party trust stack — protocol roles, not fake second operators. */
+export const TRUST_STACK = [
+  {
+    role: "field_sealer",
+    party: "Field / offline capture",
+    duty: "Build canonical provenance artifact and offline SHA-256 seal",
+    trust: "Deterministic, no LLM, no network",
+  },
+  {
+    role: "chain_attester",
+    party: "ProofOfOrigin (Casper Testnet)",
+    duty: "Store reference seal; record Valid and Invalid permanently",
+    trust: "On-chain package — live-RPC verified sample txs",
+  },
+  {
+    role: "paying_agent",
+    party: "External agent / consumer",
+    duty: "HTTP 402 → X-PAYMENT → read proof before acting",
+    trust: "Mock facilitator in judge demo; production seam is Facilitator interface",
+  },
+  {
+    role: "human_escalation",
+    party: "Human reviewer",
+    duty: "Handle escalate outcomes (e.g. out-of-region) without rewriting seal truth",
+    trust: "HITL only for action uncertainty — never overwrites Valid/Invalid",
+  },
+] as const;
+
 export type DeciderMode = "rule" | "llm";
 
 export type LotListItem = {
@@ -272,6 +300,7 @@ export class AppRuntime {
       events: this.lotMintedEvents.slice(0, 20),
       paidX402Queries: this.x402QueryCount,
       source: "hybrid-demo",
+      trustStack: TRUST_STACK,
       onChain: {
         source: testnet.source,
         fetchedAt: testnet.fetchedAt,
@@ -282,8 +311,40 @@ export class AppRuntime {
         attestedAssetIds: testnet.attestations.map((row) => row.assetId),
         mintGateAvailable: false,
         mintCount: null,
-        note: "Live query_snapshot currently reads ProofOfOrigin attestations. MintGate mints remain simulated until a MintGate reader/package is wired.",
+        rpcEvidence: testnet.rpcEvidence ?? null,
+        note:
+          testnet.source === "live"
+            ? "Live query_snapshot reads ProofOfOrigin attestations. MintGate mints remain simulated until a MintGate reader is wired."
+            : testnet.source === "live-rpc"
+              ? "Public Casper Testnet RPC verified install + Invalid + Valid sample txs. Counters from verified deploy snapshot; MintGate mints remain simulated."
+              : "Casper RPC/binary unavailable — README fallback counters. MintGate mints remain simulated.",
       },
+    };
+  }
+
+  /** Judge-facing evidence bundle: multi-party roles + live-RPC checks. */
+  async getEvidencePack() {
+    const testnet = await getLiveTestnetSnapshot();
+    return {
+      thesis: "Proof before token — seal decides Valid/Invalid; LLM only chooses pay/skip/escalate.",
+      packageHash: PACKAGE_HASH,
+      packageUrl: PACKAGE_URL,
+      trustStack: TRUST_STACK,
+      onChain: {
+        source: testnet.source,
+        fetchedAt: testnet.fetchedAt,
+        accepted: testnet.accepted,
+        rejected: testnet.rejected,
+        attestations: testnet.attestations,
+        rpcEvidence: testnet.rpcEvidence ?? null,
+      },
+      x402: {
+        facilitatorMode: this.x402Facilitator.mode,
+        settlementKind: "synthetic_receipt",
+        honestNote:
+          "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence.",
+      },
+      invalidIsProof: true,
     };
   }
 
@@ -340,7 +401,7 @@ export class AppRuntime {
 
   /**
    * Provenance snapshot an external agent pays to read via x402 before it acts
-   * on a physical/carbon RWA. This is the Lastro "foundation layer" payload.
+   * on a physical/carbon RWA. This is the Lastre "foundation layer" payload.
    */
   getProvenanceSnapshot(assetId: string) {
     const lot = this.getLot(assetId);
@@ -376,7 +437,13 @@ export class AppRuntime {
           ? `https://testnet.cspr.live/transaction/${lot.auditRecord.onChain.txHash}`
           : null,
         mint: mintTx ? `https://testnet.cspr.live/transaction/${mintTx}` : null,
+        /** Always surface the canonical Invalid sample so agents see rejection is proof. */
+        invalidSample:
+          "https://testnet.cspr.live/transaction/5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd",
+        validSample:
+          "https://testnet.cspr.live/transaction/43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4",
       },
+      trustRule: "Seal decides Valid/Invalid. Agent chooses pay/skip/escalate only.",
       readAt: new Date().toISOString(),
     };
   }
@@ -402,7 +469,14 @@ export class AppRuntime {
     assetId: string,
     payment: PaymentPayload,
   ): Promise<
-    | { ok: true; txHash: string; provenance: ReturnType<AppRuntime["getProvenanceSnapshot"]>; facilitatorMode: string }
+    | {
+        ok: true;
+        txHash: string;
+        settlementKind: "synthetic_receipt" | "casper_deploy";
+        provenance: ReturnType<AppRuntime["getProvenanceSnapshot"]>;
+        facilitatorMode: string;
+        chainEvidence: Awaited<ReturnType<AppRuntime["getMintSummary"]>>["onChain"];
+      }
     | { ok: false; reason: string; requirements?: PaymentRequirements }
   > {
     const requirements = this.x402Issued.get(payment.nonce);
@@ -419,11 +493,14 @@ export class AppRuntime {
     const settlement = await this.x402Facilitator.settlePayment(payment, requirements);
     this.x402Issued.delete(payment.nonce);
     this.x402QueryCount += 1;
+    const summary = await this.getMintSummary();
     return {
       ok: true,
       txHash: settlement.txHash,
+      settlementKind: settlement.kind,
       provenance: this.getProvenanceSnapshot(assetId),
       facilitatorMode: this.x402Facilitator.mode,
+      chainEvidence: summary.onChain,
     };
   }
 
@@ -454,6 +531,8 @@ export class AppRuntime {
       amountCspr: requirements.maxAmountRequired / 1_000_000_000,
       payTo: requirements.payTo,
       totalPaidQueries: this.x402QueryCount,
+      honestNote:
+        "x402 payment is mock (synthetic_receipt). chainEvidence is live-RPC-verified Casper ProofOfOrigin when available.",
     };
   }
 

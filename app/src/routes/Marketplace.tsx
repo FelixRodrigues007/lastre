@@ -90,7 +90,7 @@ function buildCachedDemoAgentQuery(
     txHash: "cached-demo-payload",
     facilitatorMode: "mock",
     amountCspr: 0,
-    payTo: "casper-test-account-hash-lastro-payto-mock-0001",
+    payTo: "casper-test-account-hash-lastre-payto-mock-0001",
     totalPaidQueries: paidQueries,
     provenance: {
       assetId,
