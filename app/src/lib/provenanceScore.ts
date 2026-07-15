@@ -190,6 +190,7 @@ export function buildTimeline(lot: LotDetail): TimelineEvent[] {
         resolveAttestationUrl(
           lot.artifact.assetId,
           lot.testnetAttestation?.explorerUrl ?? null,
+          lot.testnetAttestation?.verdict ?? lot.latestVerdict ?? null,
         ) ?? undefined,
     },
     {

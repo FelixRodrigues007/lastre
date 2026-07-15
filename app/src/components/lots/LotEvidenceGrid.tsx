@@ -20,7 +20,7 @@ export function LotEvidenceGrid({ lot }: LotEvidenceGridProps) {
       : onChain && "txHash" in onChain && onChain.txHash
         ? explorerUrlFromTx(onChain.txHash)
         : null;
-  const attestationUrl = resolveAttestationUrl(lot.artifact.assetId, rawExplorer);
+  const attestationUrl = resolveAttestationUrl(lot.artifact.assetId, rawExplorer, onChain?.verdict ?? null);
   const hasSessionReceipt =
     !attestationUrl && Boolean(onChain && "txHash" in onChain && onChain.txHash);
 

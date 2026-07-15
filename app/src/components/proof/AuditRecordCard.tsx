@@ -25,7 +25,7 @@ export function AuditRecordCard({
   const { t } = useLocaleContext();
   const verdict = record.verification?.verdict ?? record.onChain?.verdict ?? null;
   const attestationUrl = record.onChain
-    ? resolveAttestationUrl(record.assetId, explorerUrlFromTx(record.onChain.txHash))
+    ? resolveAttestationUrl(record.assetId, explorerUrlFromTx(record.onChain.txHash), record.onChain.verdict)
     : null;
 
   return (

@@ -23,7 +23,7 @@ export function AuditOnChainCell({ record }: AuditOnChainCellProps) {
 
   // Only link canonical on-chain txs. Session `synthetic_receipt` hashes are
   // NOT on Casper — linking them yields a dead explorer page.
-  const explorerUrl = resolveAttestationUrl(record.assetId, explorerUrlFromTx(onChain.txHash));
+  const explorerUrl = resolveAttestationUrl(record.assetId, explorerUrlFromTx(onChain.txHash), onChain.verdict);
 
   return (
     <div

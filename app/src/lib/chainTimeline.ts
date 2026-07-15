@@ -28,10 +28,33 @@ export const CANONICAL_TESTNET_TX_HASHES: ReadonlySet<string> = new Set([
 
 const CSPR_TX_BASE = "https://testnet.cspr.live/transaction/";
 
-/** Verified Casper Testnet attestation links keyed by known lot id. */
+/**
+ * Verified Casper Testnet attestation links keyed by known lot id.
+ *
+ * Compatibility map for callers that do not know the verdict. Prefer
+ * `KNOWN_ATTESTATION_URLS_BY_VERDICT` when rendering an attestation result,
+ * because the same lot can have both a historical Valid attest and a later
+ * tampered Invalid attest.
+ */
 export const KNOWN_ATTESTATION_URLS: Record<string, string> = {
   "MINA-VALEDOURO-LOTE-001": `${CSPR_TX_BASE}5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd`,
   "MINA-VALEDOURO-LOTE-002": `${CSPR_TX_BASE}43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4`,
+};
+
+/** Verified Casper Testnet attestation links keyed by lot id + verdict. */
+export const KNOWN_ATTESTATION_URLS_BY_VERDICT: Partial<
+  Record<string, Partial<Record<VerificationVerdict, string>>>
+> = {
+  "MINA-VALEDOURO-LOTE-001": {
+    Valid: `${CSPR_TX_BASE}8c619f508443ded0ecd732050b976cb49e44a98501589e386516971351b4e32f`,
+    Invalid: `${CSPR_TX_BASE}5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd`,
+  },
+  "MINA-VALEDOURO-LOTE-001-TAMPERED": {
+    Invalid: `${CSPR_TX_BASE}5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd`,
+  },
+  "MINA-VALEDOURO-LOTE-002": {
+    Valid: `${CSPR_TX_BASE}43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4`,
+  },
 };
 
 /**
@@ -80,10 +103,14 @@ export function explorerUrlFromTx(txHash: string | null | undefined): string | n
 export function resolveAttestationUrl(
   assetId: string,
   explorerUrl: string | null | undefined,
+  verdict?: VerificationVerdict | null,
 ): string | null {
   if (explorerUrl && isCanonicalTestnetTx(explorerUrl)) {
     const hash = extractHash(explorerUrl);
     if (hash) return `${CSPR_TX_BASE}${hash}`;
+  }
+  if (verdict) {
+    return KNOWN_ATTESTATION_URLS_BY_VERDICT[assetId]?.[verdict] ?? null;
   }
   return KNOWN_ATTESTATION_URLS[assetId] ?? null;
 }
@@ -117,6 +144,7 @@ export function buildSessionEntries(records: AuditRecord[]): ChainTimelineEntry[
       const explorerUrl = resolveAttestationUrl(
         record.assetId,
         explorerUrlFromTx(onChain.txHash),
+        onChain.verdict,
       );
       return {
         key: `session-${record.assetId}`,
@@ -136,7 +164,7 @@ export function buildHistoryEntries(attestations: TestnetAttestation[]): ChainTi
   return [...attestations]
     .reverse()
     .map((row) => {
-      const explorerUrl = resolveAttestationUrl(row.assetId, row.explorerUrl);
+      const explorerUrl = resolveAttestationUrl(row.assetId, row.explorerUrl, row.verdict);
       return {
         key: `history-${row.assetId}`,
         assetId: row.assetId,
