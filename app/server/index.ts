@@ -322,7 +322,14 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
       return;
     }
     res.setHeader("X-PAYMENT-RESPONSE", settled.txHash);
-    sendJson(res, 200, { paid: true, txHash: settled.txHash, facilitator: settled.facilitatorMode, provenance: settled.provenance });
+    sendJson(res, 200, {
+      paid: true,
+      txHash: settled.txHash,
+      settlementKind: settled.settlementKind,
+      facilitator: settled.facilitatorMode,
+      provenance: settled.provenance,
+      chainEvidence: settled.chainEvidence,
+    });
     return;
   }
 
@@ -334,6 +341,12 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     const body = await readJsonBody<{ from?: string }>(req);
     const result = await runtime.simulateAgentProvenanceQuery(assetId, body?.from || undefined);
     sendJson(res, result.ok ? 200 : 404, result);
+    return;
+  }
+
+  // Judge evidence pack: trust stack + live-RPC verification of canonical txs
+  if (method === "GET" && pathname === "/api/evidence") {
+    sendJson(res, 200, await runtime.getEvidencePack());
     return;
   }
 

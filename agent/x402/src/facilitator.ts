@@ -9,7 +9,7 @@ export type PaymentRequirements = {
   payTo: string;
   resource: "/verify";
   nonce: string;
-  description: "Lastro provenance verification";
+  description: "Lastre provenance verification";
 };
 
 /** Mock payload sent by the client in the X-PAYMENT header. */
@@ -25,7 +25,13 @@ export type PaymentVerification =
   | { ok: false; reason: "nonce_mismatch" | "amount_insufficient" | "bad_signature" | "nonce_replayed" };
 
 export type Settlement = {
+  /** Settlement receipt hash (synthetic for mock; real deploy hash for casper mode). */
   txHash: string;
+  /**
+   * - synthetic_receipt: local facilitator receipt (judge demo; no CSPR moved)
+   * - casper_deploy: reserved for a real on-chain payment deploy
+   */
+  kind: "synthetic_receipt" | "casper_deploy";
 };
 
 /**
@@ -74,7 +80,7 @@ export interface Facilitator {
  * MOCK secret. This is not a real key: it only lets the mock sign/validate the
  * X-PAYMENT header locally and deterministically.
  */
-export const MOCK_PAYMENT_SECRET = "lastro-local-x402-mock-secret";
+export const MOCK_PAYMENT_SECRET = "lastre-local-x402-mock-secret";
 
 /**
  * ============================ MOCK ============================
@@ -134,10 +140,11 @@ export class MockFacilitator implements Facilitator {
     this.settledNonces.add(payment.nonce);
 
     return {
+      kind: "synthetic_receipt",
       txHash: createHash("sha256")
         .update(
           [
-            "lastro-x402-settlement",
+            "lastre-x402-settlement",
             requirements.network,
             requirements.resource,
             requirements.payTo,
@@ -153,7 +160,7 @@ export class MockFacilitator implements Facilitator {
 
 export function signMockPayment(input: { nonce: string; amount: number; from: string }): string {
   return createHash("sha256")
-    .update(["lastro-x402-payment", input.nonce, input.amount.toString(), input.from, MOCK_PAYMENT_SECRET].join("|"))
+    .update(["lastre-x402-payment", input.nonce, input.amount.toString(), input.from, MOCK_PAYMENT_SECRET].join("|"))
     .digest("hex");
 }
 
@@ -192,7 +199,7 @@ export function createMockPaymentHeader(
   options: { from?: string; amount?: number } = {},
 ): string {
   const amount = options.amount ?? requirements.maxAmountRequired;
-  const from = options.from ?? "lastro-consumer-mock";
+  const from = options.from ?? "lastre-consumer-mock";
   const payload: PaymentPayload = {
     nonce: requirements.nonce,
     amount,

@@ -19,6 +19,7 @@ Other agents execute. Lastre lets them verify the source first — proof before 
 | Agents integration | https://app.lastre.io/agents |
 | API health | https://app-api.lastre.io/api/health |
 | Mint summary | https://app-api.lastre.io/api/mint/summary |
+| Evidence pack (trust stack + live RPC) | https://app-api.lastre.io/api/evidence |
 | GitHub repo | https://github.com/FelixRodrigues007/lastre |
 | GitHub community profile | https://github.com/FelixRodrigues007/lastre/community |
 | Demo video | https://youtu.be/UzhKMsKA6QE |
@@ -36,7 +37,8 @@ Other agents execute. Lastre lets them verify the source first — proof before 
    - `MintGate: demo event`
 4. Click **View in MyAssets** and confirm the fictional carbon asset appears with proof details.
 5. Open https://app.lastre.io/agents and inspect the quote → `X-PAYMENT` → proof payload flow.
-6. For the Invalid path, open the tampered transaction listed below and confirm Invalid was recorded on-chain.
+6. Open https://app-api.lastre.io/api/evidence — confirm `trustStack` (4 roles) and `onChain.rpcEvidence` with live-RPC checks when the public node responds.
+7. For the Invalid path: open the tampered transaction below **and** marketplace lot `MINA-VALEDOURO-LOTE-001`.
 
 ## Casper Testnet evidence
 
@@ -109,7 +111,9 @@ Transaction explorer format:
 - The deterministic SHA-256 seal decides `Valid` or `Invalid`.
 - The LLM/orchestrator chooses action only: `pay`, `skip`, or `escalate`.
 - The LLM cannot overwrite a seal verdict.
-- x402 settlement currently uses a mock facilitator. The HTTP 402 seam and API flow are implemented, but no real CSPR is moved in the judge demo.
+- x402 judge demo uses `MockFacilitator` → `settlementKind: synthetic_receipt` (no CSPR moved). HTTP 402 seam is real.
+- Paid responses attach `chainEvidence` / `rpcEvidence`: public Casper Testnet JSON-RPC verification of install + Invalid + Valid sample txs (when the node responds). Payment mock ≠ fake chain package.
+- Multi-party protocol roles: field sealer → chain attester → paying agent → human escalation (`GET /api/evidence` → `trustStack`).
 - MintGate, collateral, and MyAssets paths are demo/simulated where not full on-chain economics.
 - Public assets, operators, locations, payments, and collateral values are fictional unless explicitly labeled as Casper Testnet evidence.
 - Invalid verdicts are intentionally written on-chain. A rejection is permanent verifiable proof, not a discarded error.

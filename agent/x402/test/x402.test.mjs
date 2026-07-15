@@ -39,7 +39,7 @@ test("GET /verify without payment returns 402 with well-formed x402 requirements
     equal(requirements.network, "casper-test");
     equal(requirements.asset, "CSPR");
     equal(requirements.resource, "/verify");
-    equal(requirements.description, "Lastro provenance verification");
+    equal(requirements.description, "Lastre provenance verification");
     equal(requirements.maxAmountRequired, DEFAULT_PAYMENT_REQUIREMENTS.maxAmountRequired);
     ok(requirements.nonce);
     ok(requirements.payTo);

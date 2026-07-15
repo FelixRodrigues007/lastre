@@ -14,9 +14,9 @@ export const DEFAULT_PAYMENT_REQUIREMENTS = {
   network: "casper-test",
   maxAmountRequired: 100_000_000,
   asset: "CSPR",
-  payTo: "casper-test-account-hash-lastro-payto-mock-0001",
+  payTo: "casper-test-account-hash-lastre-payto-mock-0001",
   resource: "/verify",
-  description: "Lastro provenance verification",
+  description: "Lastre provenance verification",
 } as const;
 
 type CreateServerOptions = {
