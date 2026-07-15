@@ -168,3 +168,26 @@ Manual checks:
 ## Demo guardrail
 
 DEMONSTRATION ONLY. Simulated assets, no investment offered. No yield, return, ownership sale, or financial promise is made.
+
+## Tier 0 Beat-Claros evidence update (2026-07-15)
+
+Dual-key run:
+
+- Script: `scripts/dual-key-pipeline.sh`
+- Output: `output/dual-key-run.json`
+- Field sealer account: `account-hash-4c8631b8d684faba4f3087c6be0fed6c506a9669bb378e6ee5fff7977b7d1657`
+- Chain attester account: `account-hash-6de6ee75f7d41407d9e0643d24fe7debc36bbe75695950e544c4ebd11850e1b2`
+- Rule: `Two keys, one seal rule`
+
+Composition anchor:
+
+- chainRoot: `0c40eb1b4164b95305b0c98908dd6c17ce6bfa37b3900095d87304ea566f8d33`
+- anchor tx / deploy hash: `915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a`
+- explorer: https://testnet.cspr.live/transaction/915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a
+- verification: `casper-client get-deploy` shows `execution_result.error_message: null` and transfer id `17290909242139064466`.
+
+MintGate live:
+
+- Status: **blocked** (`ContractDeploymentError` during Odra livenet deploy).
+- No MintGate package hash or `mint_lot` tx is claimed yet.
+- Details: `docs/MINTGATE_LIVE.md`.

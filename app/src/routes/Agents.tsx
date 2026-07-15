@@ -83,6 +83,51 @@ const STACK_POSITION = [
   },
 ];
 
+const COMPETE_MATRIX = [
+  {
+    axis: "Origin seal",
+    lastre: "W — deterministic field seal before token/payment",
+    claros: "L — market/oracle network first",
+    agentGate: "W — rails monetize calls; Lastre verifies source",
+    casCet: "W — tool cascade still needs truth gate",
+  },
+  {
+    axis: "Invalid-as-proof",
+    lastre: "W — Invalid is a permanent Casper attestation",
+    claros: "W — unique rejection evidence vs oracle feeds",
+    agentGate: "W — not just payment success/failure",
+    casCet: "W — kill-switch aborts downstream hops",
+  },
+  {
+    axis: "CSPR settle",
+    lastre: "W — prod casper_deploy tx + mock simulate for judges",
+    claros: "Tie — economics present, different layer",
+    agentGate: "Tie/L — AgentGate is purer gateway DX",
+    casCet: "W — payment + proof in same origin flow",
+  },
+  {
+    axis: "Dual-key",
+    lastre: "W — sealer ≠ attester; output/dual-key-run.json",
+    claros: "Tie — larger network, Lastre has role separation",
+    agentGate: "W — separate field proof from payer",
+    casCet: "W — provenance operators are explicit",
+  },
+  {
+    axis: "2-hop composition",
+    lastre: "W — tool_receipt → lastre_receipt + chainRoot anchor",
+    claros: "Tie/L — Claros has broader network density",
+    agentGate: "W — composition is not just charging an API",
+    casCet: "Tie — CasCet may go deeper; Lastre gates truth",
+  },
+  {
+    axis: "Oracle network",
+    lastre: "L — intentionally not a broad oracle marketplace",
+    claros: "W — Claros optimizes the agent/oracle network",
+    agentGate: "Tie — both can sit under/over other agents",
+    casCet: "Tie — depends on tool ecosystem",
+  },
+];
+
 export function Agents() {
   const [copied, setCopied] = useState(false);
 
@@ -192,6 +237,32 @@ export function Agents() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="agents-win panel" aria-label="Compete matrix">
+        <span className="mono-label">Compete honestly</span>
+        <h2>Claros optimizes the agent network. Lastre is the truth gate under it.</h2>
+        <p className="agents-hero__thesis">
+          This is not a claim of official DoraHacks rank. It is the judge-facing rubric: origin seal,
+          Invalid-as-proof, real CSPR settlement, dual-key operation, and 2-hop composition.
+          Lastre still loses the broad oracle-network axis to Claros-style systems by design.
+        </p>
+        <div className="agents-compare agents-compare--matrix">
+          {COMPETE_MATRIX.map((row) => (
+            <article key={row.axis} className="agents-compare__row">
+              <h3>{row.axis}</h3>
+              <p><strong>Lastre:</strong> {row.lastre}</p>
+              <p><strong>Claros:</strong> {row.claros}</p>
+              <p><strong>AgentGate:</strong> {row.agentGate}</p>
+              <p><strong>CasCet:</strong> {row.casCet}</p>
+            </article>
+          ))}
+        </div>
+        <ul className="agents-payload-list">
+          <li><strong>Evidence</strong><span><a href="https://app-api.lastre.io/api/evidence" target="_blank" rel="noreferrer">GET /api/evidence</a> — operators, dualKey, composition, MintGate economics.</span></li>
+          <li><strong>Payment</strong><span><a href="https://testnet.cspr.live/transaction/27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c" target="_blank" rel="noreferrer">real CSPR settle tx</a> — UI simulate remains mock.</span></li>
+          <li><strong>Anchor</strong><span><a href="https://testnet.cspr.live/transaction/915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a" target="_blank" rel="noreferrer">composition chainRoot anchor</a> — Casper Deploy hash confirmed by get-deploy.</span></li>
+        </ul>
       </section>
 
       <section className="agents-card panel">

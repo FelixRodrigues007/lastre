@@ -149,3 +149,48 @@ curl -sS https://app-api.lastre.io/api/evidence | jq '.x402, .onChain.source, .o
 ```
 
 **Lastre** — proof of provenance for RWA agents on Casper.
+
+---
+
+## Tier 0 Beat-Claros evidence update (2026-07-15)
+
+### Dual-key operational run
+
+Lastre now includes a reproducible dual-key run artifact:
+
+```bash
+bash scripts/dual-key-pipeline.sh
+jq -e '.sealer.accountHash != .attester.accountHash' output/dual-key-run.json
+```
+
+| Role | Account hash |
+| --- | --- |
+| Field sealer | `account-hash-4c8631b8d684faba4f3087c6be0fed6c506a9669bb378e6ee5fff7977b7d1657` |
+| Chain attester | `account-hash-6de6ee75f7d41407d9e0643d24fe7debc36bbe75695950e544c4ebd11850e1b2` |
+
+Rule: **Two keys, one seal rule**. The field sealer computes the deterministic offline seal; the chain attester authorizes the Casper write. The accounts are distinct.
+
+### Composition chainRoot anchor
+
+The 2-hop receipt model remains:
+
+```text
+tool_receipt → lastre_receipt
+```
+
+A real Casper Testnet native transfer anchors the demo `chainRoot` via `transfer-id`:
+
+| Field | Value |
+| --- | --- |
+| chainRoot | `0c40eb1b4164b95305b0c98908dd6c17ce6bfa37b3900095d87304ea566f8d33` |
+| anchor tx / deploy hash | `915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a` |
+| explorer | https://testnet.cspr.live/transaction/915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a |
+| transfer-id | `17290909242139064466` |
+
+`casper-client get-deploy` confirms execution success. This is a real Casper Testnet Deploy hash, not a synthetic receipt.
+
+### MintGate live status
+
+MintGate economics are implemented and enforced in the API/contract tests, but **live MintGate deployment is still blocked**. See `docs/MINTGATE_LIVE.md`.
+
+No MintGate package hash or `mint_lot` transaction is claimed until a real deploy + real mint transaction exists.
