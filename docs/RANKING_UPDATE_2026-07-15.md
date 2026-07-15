@@ -1,168 +1,235 @@
-# Ranking & scorecard — Casper Agentic Buildathon
+# Ranking ultra-crítico — Casper Agentic Buildathon
 
-**Updated:** 2026-07-15 (post Render redeploy of #38 — composition **anchor live in prod**)  
-**Scope:** Lastre vs Claros · AgentGate · CasCet · Faktura · Vouch · ~254 BUIDLs  
-**Method:** Lastre **VERIFIED** on `app-api.lastre.io`; rivals = competitive audit (no official DoraHacks placement public).  
-**Rule:** Ranks/scores are **rubric estimates**, not DoraHacks points.
+**Updated:** 2026-07-15 (final stack + BUIDL Tier 0 complete)  
+**Scope:** Lastre vs Claros · AgentGate · CasCet · Faktura · Vouch · campo ~254 BUIDLs  
+**Method:** Lastre = **prod curls + explorer txs + BUIDL public**; rivals = prior competitive audit (Dora list WAF-gated; **no official scoreboard**).  
+**Discipline:** scores are **rubric estimates**. Inflating to 5.0 without proof is forbidden. Residual gaps stay visible.
 
 ---
 
-## 0. Snapshot Lastre — VERIFIED prod (agora)
+## 0. Snapshot VERIFIED (prod agora)
 
 ```json
 {
   "dualKey": true,
-  "mintLive": null,
-  "composition": {
-    "model": "tool_receipt → lastre_receipt",
-    "chainRoot": "0c40eb1b4164b95305b0c98908dd6c17ce6bfa37b3900095d87304ea566f8d33",
-    "anchor": "915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a",
-    "anchored": true
-  },
-  "fullyVerified": true
+  "mintLive": "hash-ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1",
+  "mintLot": "6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349",
+  "anchor": "915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a",
+  "anchored": true,
+  "fullyVerified": true,
+  "x402": "casper"
 }
 ```
 
-| Gate | Status | Prova |
+Simulate honesty: `settlementKind=synthetic_receipt`, `facilitatorMode=mock`, `mint=null`.
+
+| Surface | Status | Proof |
 | --- | --- | --- |
-| Health casper + PEM | OK | `secretPemLooksValid: true` |
-| Live-RPC evidence | OK | `fullyVerified: true` |
-| Real CSPR payment prod | OK | `27461bd7…199c` |
-| Dual-key operators | OK | `dualKey.distinct: true` + run sealer≠attester |
-| 2-hop + **anchor on-chain** | OK | deploy `915c9736…` + evidence `anchored: true` |
-| CLI | OK | `packages/cli/bin/lastre.mjs` |
-| Compete UI | OK | Agents live copy |
-| Simulate honesty | OK | mock + mint explorer **null** |
-| MintGate economics (parity) | OK | Valid-only rules ×4 |
-| MintGate **live package** | **PASS** | `hash-ea049cd1…` + mint_lot `6878f3e1…` for Valid lote-002 |
+| API evidence | PASS | dualKey + mintLive + anchor + fullyVerified |
+| Simulate mock | PASS | no fake mint explorer |
+| Payment CSPR | PASS | `27461bd7…199c` |
+| MintGate package + mint_lot | PASS | `ea049cd1…` + `6878f3e1…` |
+| Composition anchor | PASS | `915c9736…` get-deploy OK |
+| Dual-key accounts | PASS | sealer ≠ attester |
+| CLI | PASS | prove / pay mock / pay casper / evidence |
+| BUIDL public | PASS | Tier 0 hashes on dorahacks.io/buidl/46748 |
+| Team Dora profiles | WEAK | “Hacker does not exist” residual |
+| Official Dora placement | UNKNOWN | not published to us |
 
-**Tier 0 beat-Claros checklist**
-
-| Item | Status |
-| --- | --- |
-| T0.1 Dual-key run | **PASS** |
-| T0.2 MintGate live package + mint_lot | **PASS** (casper-client install + mint_lot) |
-| T0.3 Composition anchor in prod evidence | **PASS** |
-| T0.4 UI Compete | **PASS** |
-| T0.5 Docs / BUIDL | **PASS** |
-| T0.6 Smoke + Render | **PASS** |
-
-→ **Tier 0 completo (incl. MintGate live).** Claim legítimo: **#1 origin** + **top-1 / top-2 overall technical contender** vs Claros no juiz exigente (rubric).  
-→ Ainda **não** claim “official DoraHacks winner” (júri ≠ rubric).
+**Tier 0 checklist:** T0.1–T0.6 **all PASS** (technical).  
+**Official winner claim:** still **NOT** authorized (no jury data).
 
 ---
 
-## 1. Ranking overall (OPINIÃO calibrada)
+## 1. Escala 0–5 (critério hostil)
 
-### Tier S
+| Nota | Significado |
+| ---: | --- |
+| **5.0** | Melhor do campo **e** prova on-chain/API irrefutável no eixo |
+| **4.7–4.9** | Top-tier verificável; residual cosmético ou 1 gap não-estrutural |
+| **4.0–4.6** | Forte e demoável; falta densidade ou 1 eixo estrutural |
+| **3.0–3.9** | Crível mas incompleto / semi-demo |
+| **≤2.9** | Frágil, marketing > prova |
 
-| Rank | Project | Eixo | Nota ~ | Por quê |
-| ---: | --- | --- | ---: | --- |
-| **1** | **Lastre** | Origin · seal>LLM · full stack **live** | **4.95** | PoO + MintGate live + CSPR + dual-key + 2-hop anchored + CLI + honesty — stack mais denso e verificável |
-| **2** | **Claros** *(est.)* | Rede multi-agent / oracle-market | **4.4** | Ainda pode vencer juiz que pesa só “marketplace de agents” |
-| **3** | **AgentGate** *(est.)* | x402 rails / gateway | **4.25** | Gateway purity; origin mais fraco |
-| **4** | **CasCet** *(est.)* | Multi-hop cascade | **4.1** | Composition profundo; Lastre fechou 2-hop+anchor |
-| **5** | **Faktura** *(est.)* | Credit / invoice | **3.6** | Outro jogo |
-| **6** | **Vouch** *(est.)* | Agent reputation | **3.4** | Julga agents, não o seal |
+**Pesos do overall balanceado (juiz exigente “agentic + on-chain”):**
 
-### Movimento do dia
+| Eixo | Peso | Por quê |
+| --- | ---: | --- |
+| Tese / diferenciação | 1.0 | buildathon agentic |
+| On-chain verify denso | 1.2 | Casper track |
+| Money path (x402) | 1.1 | agent payments |
+| Multi-party dual-key | 1.0 | vs Claros-class systems |
+| Composition | 1.0 | vs CasCet-class |
+| Token/gate economics | 1.0 | MintGate / RWA |
+| DX agent | 0.9 | AgentGate-class |
+| Honesty / anti-teatro | 1.1 | juiz hostil |
+| Demo + BUIDL completeness | 0.9 | submission surface |
+| Network/oracle density | 0.8 | Claros-class (Lastre **aceita L**) |
 
-| Momento | Rank | Média ~ |
+---
+
+## 2. Notas Lastre — ultra-críticas (0–5)
+
+| Dimensão | Nota | Cap 5.0? | Por quê **não** 5.0 pleno (se <5) |
+| --- | ---: | --- | --- |
+| Tese origin / seal > LLM | **5.0** | sim | Mais coerente e defensável do campo |
+| On-chain verify (PoO + live-RPC) | **5.0** | sim | fullyVerified + samples canônicos |
+| Invalid-as-proof | **5.0** | sim | Invalid permanente on-chain + narrativa |
+| x402 / real CSPR settle | **4.9** | quase | Prod `casper_deploy` + tx; path still “server-as-payer demo” (não wallet UX end-user) |
+| Dual-key multi-party | **4.85** | quase | Contas distintas + run; sealer **não** assina tx de attest própria (só identity + attester writes) |
+| Composition 2-hop | **4.9** | quase | Hop + kill-switch + anchor real; anchor = transfer-id (não Merkle put custom); 2 hops, não cascade N |
+| MintGate live + economics | **4.95** | quase | Package + mint_lot real Valid-only; **symbolic** mint (não NFT marketplace / supply economics rico) |
+| DX agent (CLI/API) | **4.85** | quase | CLI forte; sem SDK npm publicado / standards x402 full client ecosystem |
+| Honesty / anti-teatro | **5.0** | sim | simulate mock; null fake mint; docs honestos |
+| Demo / BUIDL / vídeo | **4.9** | quase | BUIDL completo; vídeo pode não cobrir dual-key/mint/anchor novos |
+| **Network / oracle density** | **2.8** | não | **Propositalmente fraco** vs Claros — não é o produto |
+| Mainnet / production money | **1.5** | não | Testnet only |
+
+### Médias Lastre
+
+| Agregado | Nota | Como |
+| --- | ---: | --- |
+| Média aritmética (eixos core, **excl.** network + mainnet) | **~4.93** | 10 eixos fortes |
+| **Overall weighted (incl. network 2.8)** | **~4.72** | juiz que ainda pesa “rede” |
+| **Overall origin/RWA agentic rubric** (network peso 0) | **~4.93** | juiz focado em prova + chain + agent path |
+| **Rank overall (rubric hostil balanceado)** | **#1–#2** | ver §3 |
+| **Rank origin niche** | **#1** | sem contender sério |
+
+**Leitura hostil:**  
+Não damos **5.0 overall cego**. Lastre é **#1 no eixo que o projeto escolheu** e **#1 ou empate técnico no topo overall** *se* o juiz valoriza prova on-chain verificável. Claros ainda pode vencer um juiz de “ecossistema multi-agent marketplace”.
+
+---
+
+## 3. Ranking overall (opinião calibrada · hostil)
+
+Campo ~254. Rank = probabilidade de um juiz **técnico exigente** preferir o projeto **sem** upvotes/social.
+
+| Rank | Projeto | Overall ~ | Força real | Fraqueza hostil |
+| ---: | --- | ---: | --- | --- |
+| **1** | **Lastre** | **4.72–4.93** | Prova end-to-end: seal → PoO → MintGate → pay → 2-hop anchor → dual-key → evidence API → BUIDL | Network density; mint symbolic; sealer sem write tx; vídeo pode estar stale |
+| **2** | **Claros** *(est.)* | **4.35–4.50** | Densidade de rede / multi-agent / market-oracle *vibe* | Origin seal first fraco; Invalid-as-proof; honesty mint; payment+gate RWA menos fechado |
+| **3** | **AgentGate** *(est.)* | **4.20–4.35** | Rails x402 / gateway DX | Origin truth; dual-key RWA; mint gate |
+| **4** | **CasCet** *(est.)* | **4.05–4.20** | Cascade composition | Origin RWA; permanent Invalid; full stack live |
+| **5** | **Faktura** *(est.)* | **3.5–3.7** | Credit desk narrative | Pre-token provenance |
+| **6** | **Vouch** *(est.)* | **3.3–3.5** | Agent courts | Asset seal, not agent score |
+| 7–254 | Restante | ≤3.5 | Varia | Sem package denso + payment + gate + honesty |
+
+### Movimento do dia (honesto)
+
+| Momento | Rank | Overall ~ |
 | --- | ---: | ---: |
-| Manhã (mock x402) | #4 | 4.3 |
-| Pós CSPR + CLI | #4 | 4.55 |
-| Pós C/D/E config | #2 | 4.9 |
-| Pós anchor prod (#38 redeploy) | #2 | 4.88 |
-| **Pós MintGate live package + mint_lot** | **#1** | **4.95** |
+| Manhã (mock x402) | #4 | ~4.3 |
+| Pós CSPR + CLI | #4 | ~4.55 |
+| Pós C/D/E config | #2 | ~4.9 |
+| Pós anchor prod | #2 | ~4.88 |
+| **Pós MintGate live + BUIDL completo** | **#1 rubric** | **~4.72–4.93** |
 
-**Niche:** **#1 proof-before-token / RWA origin for agents** (reforçado com token gate on-chain).
-
----
-
-## 2. Notas 0–5 — Lastre
-
-| Dimensão | Pré-Tier0 | Pós C/D/E | **Agora (anchor prod)** | Evidência |
-| --- | ---: | ---: | ---: | --- |
-| Tese origin / seal>LLM | 5.0 | 5.0 | **5.0** | thesis + Agents |
-| On-chain verify (RPC) | 5.0 | 5.0 | **5.0** | fullyVerified |
-| x402 / money | 4.9 | 4.9 | **4.9** | casper_deploy + payment tx |
-| Multi-party dual-key | 4.1 | 4.9 | **4.95** | distinct + dual-key-run.json |
-| Composição 2-hop | 2.0 | 4.9 | **4.95** | model + **anchorTx live** + get-deploy OK |
-| MintGate economics | 2.0 | 4.85 | **5.0** | parity + live package + mint_lot |
-| MintGate live package | 1.0 | 2.0 | **5.0** | `ea049cd1…` + mint `6878f3e1…` |
-| DX agent | 4.9 | 4.9 | **4.9** | CLI + APIs |
-| Honesty | 5.0 | 5.0 | **5.0** | simulate mock |
-| Demo / docs / Compete | 5.0 | 5.0 | **5.0** | Agents + handoff |
-| **Média** | — | ~4.9 | **~4.95** | |
-| **Rank overall** | #4 | #2 | **#1** (rubric) | |
-
-### Residual cosmético (não bloqueia #1 rubric)
-
-| Prioridade | Ação |
-| --- | --- |
-| P1 | Dual-key sealer com tx própria (além de identity) |
-| P2 | Vídeo 60s: dual-key → Invalid abort → CSPR → mint → anchor |
-| P3 | Redeploy Render se defaults ainda não em prod |
+**Empate teórico com Claros** só se o juiz **desprezar** prova on-chain e **superponderar** marketplace multi-agent.  
+**Derrota teórica de Lastre** se o júri for social/upvote-only (não modelado aqui).
 
 ---
 
-## 3. Campo — mesmas dimensões (0–5)
+## 4. Campo — matriz 0–5 (hostil)
 
 | Dimensão | **Lastre** | Claros | AgentGate | CasCet | Faktura | Vouch |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Tese origin | **5.0** | 2.5 | 2.0 | 2.0 | 2.5 | 1.5 |
-| On-chain verify | **5.0** | 3.5 | 3.0 | 3.0 | 2.5 | 2.5 |
+| Tese origin / seal>LLM | **5.0** | 2.5 | 2.0 | 2.0 | 2.5 | 1.5 |
+| On-chain verify denso | **5.0** | 3.5 | 3.0 | 3.0 | 2.5 | 2.5 |
 | x402 / money | **4.9** | 3.5 | **4.8** | 3.5 | 2.5 | 2.0 |
-| Dual-key / multi-party | **4.95** | **4.9** | 3.5 | 3.5 | 3.0 | 3.5 |
-| Composição (+anchor) | **4.95** | 3.5 | 3.5 | **4.9** | 2.0 | 2.5 |
-| MintGate live | **5.0** | 2.5 | 2.0 | 2.0 | 2.0 | 1.5 |
-| DX | **4.9** | 4.0 | **5.0** | 4.0 | 3.5 | 3.5 |
+| Dual-key multi-party | **4.85** | **4.7** | 3.5 | 3.5 | 3.0 | 3.5 |
+| Composition | **4.9** | 3.5 | 3.5 | **4.85** | 2.0 | 2.5 |
+| Mint / token gate | **4.95** | 2.5 | 2.0 | 2.0 | 2.5 | 1.5 |
+| DX agent | **4.85** | 4.0 | **5.0** | 4.0 | 3.5 | 3.5 |
 | Honesty | **5.0** | 3.5 | 3.5 | 3.5 | 3.5 | 3.5 |
-| Demo / polish | **5.0** | 4.5 | 4.5 | 4.0 | 4.0 | 4.0 |
-| **Overall juiz balanceado** | **4.95** | **4.4** | **4.25** | **4.1** | 3.6 | 3.4 |
-| **Rank** | **#1** | **#2** | **#3** | **#4** | #5 | #6 |
+| Demo + BUIDL | **4.9** | 4.5 | 4.5 | 4.0 | 4.0 | 4.0 |
+| Network/oracle density | **2.8** | **4.9** | 3.5 | 3.5 | 3.0 | 3.0 |
+| **Weighted overall** | **~4.8** | **~4.4** | **~4.2** | **~4.1** | **~3.5** | **~3.4** |
+
+*Claros dual-key 4.7 = “rede multi-op” plausível, não revalidado live nesta sessão.*
 
 ---
 
-## 4. Cruzamento (battle matrix)
+## 5. Cruzamento (W / T / L) — juiz hostil
 
 | Eixo | vs Claros | vs AgentGate | vs CasCet |
 | --- | --- | --- | --- |
 | Origin seal before action | **W** | **W** | **W** |
 | Invalid permanent on-chain | **W** | **W** | **W** |
-| Live package + RPC samples | **W** | **W** | **W** |
+| Live PoO + RPC samples | **W** | **W** | **W** |
 | Real CSPR payment | **W**/T | **T**/W | **W** |
-| Dual-key operators | **T**/W | **W** | **W** |
-| 2-hop + **on-chain anchor** | **W** | **W** | **T**/W |
-| MintGate **live** package | **W** | **W** | **W** |
-| Honesty | **W** | **W** | **W** |
-| Oracle / market-network density | **L** | T | T |
+| Dual-key (documented + distinct) | **T**/W | **W** | **W** |
+| 2-hop + on-chain anchor | **W** | **W** | **T**/W |
+| MintGate live Valid-only | **W** | **W** | **W** |
+| Honesty / anti-teatro | **W** | **W** | **W** |
+| BUIDL evidence completeness | **W**/T | **W** | **W** |
+| Network / oracle marketplace | **L** | T | T |
+| Pure payment-gateway UX | T | **L**/T | T |
+| Deep N-hop tool cascade | T | T | **L**/T |
 
-**Leitura vs Claros:**  
-Ganhamos em origem, honesty, payment, dual-key, composition **ancorada**, e **MintGate live**.  
-Único eixo residual onde Claros pode ainda “soar maior”: densidade de marketplace/oráculo multi-agent (não é o nosso jogo).
+**Ataques hostis que ainda colam (parciais):**
 
----
+1. *“Sealer key never writes on-chain.”* → dual-key 4.85 not 5.0  
+2. *“Mint is symbolic, not a real asset token.”* → mint 4.95 not 5.0  
+3. *“Anchor is a transfer-id, not a custom receipt contract.”* → composition 4.9  
+4. *“No multi-agent market like Claros.”* → network 2.8 (aceito)  
+5. *“Video may not show new Tier 0.”* → demo 4.9  
 
-## 5. Claims
+**Ataques que **não** colam mais:**
 
-### Pode dizer
-- Proof before token; seal decides; Invalid is permanent proof.  
-- Production real testnet CSPR settle + dual-key + 2-hop **anchored** + **MintGate live** (`mint_lot` on Valid).  
-- **#1 for origin verification of RWA agents.**  
-- **Technical #1 overall contender** on a demanding origin/agent/on-chain rubric (not official DoraHacks placement).
-
-### Não diga
-- “Official DoraHacks winner / published leaderboard #1”.  
-- “Mainnet payments”.  
-- “ERC-721 free mint” (MintGate is **symbolic gate**, not NFT marketplace).
-
-### Pitch 20s (atualizado)
-> Claros optimizes the agent network. Lastre is the truth gate under it: offline seal decides Valid or Invalid on Casper, MintGate only tokenizes after Valid, agents pay real testnet CSPR, dual-key operators, 2-hop composition anchored on-chain. Proof before token — fully live.
+- Fake mint explorer  
+- x402 só mock em prod settle  
+- Sem dual-key  
+- Sem composition  
+- Sem MintGate package  
+- BUIDL sem hashes  
 
 ---
 
-## 6. Revalidação
+## 6. Claims — o que pode / não pode dizer
+
+### Autorizado (fiel ao rigor)
+
+- Proof before token; seal decides; Invalid is permanent on-chain proof.  
+- Full live stack: PoO + MintGate + CSPR settle + dual-key + 2-hop anchored + evidence API.  
+- **#1 in origin verification for RWA / agentic provenance** in this field.  
+- **Technical #1 overall on a demanding on-chain + agent + honesty rubric** (estimate).  
+- Contender that closes Claros-class gaps on multi-party / mint / composition **without** becoming an oracle marketplace.
+
+### Proibido (mesmo com stack full)
+
+- “Official DoraHacks #1 / we won the prize.”  
+- “Mainnet production money.”  
+- “We are better than Claros at multi-agent markets.”  
+- “Full NFT / DeFi mint economy.”  
+- “Sealer key has attest txs on-chain.” (unless you add them later)
+
+### Pitch 20s (rigoroso)
+
+> Claros optimizes the agent network. Lastre is the truth gate under it. Offline seal decides Valid or Invalid on Casper; MintGate only passes Valid; agents pay real testnet CSPR; dual-key operators; 2-hop composition anchored on-chain; full evidence API. Proof before token — live, honest, judge-mock where it should be mock.
+
+---
+
+## 7. Scorecard final (entrega)
+
+| Dimensão | Manhã | Meio-dia | **Noite (agora)** |
+| --- | ---: | ---: | ---: |
+| Tese | 5.0 | 5.0 | **5.0** |
+| On-chain RPC | 5.0 | 5.0 | **5.0** |
+| x402 money | 4.2 | 4.9 | **4.9** |
+| Dual-key | 2.5 | 4.9 | **4.85** |
+| 2-hop | 1.5 | 4.9 | **4.9** |
+| MintGate | 2.0 | 4.85→5.0 live | **4.95** |
+| DX | 4.5 | 4.9 | **4.85** |
+| Honesty | 5.0 | 5.0 | **5.0** |
+| Demo/BUIDL | 5.0 | 4.9 | **4.9** |
+| Network density | 2.5 | 2.8 | **2.8** |
+| **Weighted overall** | ~4.3 | ~4.7 | **~4.8** |
+| **Rank overall (rubric)** | #4 | #2 | **#1** |
+| **Rank origin niche** | #1 | #1 | **#1** |
+
+---
+
+## 8. Revalidação (não negociável)
 
 ```bash
 export API=https://app-api.lastre.io
@@ -170,20 +237,28 @@ curl -sS "$API/api/evidence" | jq '{
   dualKey: .dualKey.distinct,
   mintLive: .mintGate.livePackageHash,
   mintLot: .mintGate.liveMintLotTx,
-  composition: {
-    model: .composition.model,
-    chainRoot: .composition.chainRoot,
-    anchor: .composition.anchorTx,
-    anchored: .composition.anchored
-  },
+  anchor: .composition.anchorTx,
   fullyVerified: .onChain.rpcEvidence.fullyVerified
 }'
-# MintGate package: https://testnet.cspr.live/contract-package/ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1
-# mint_lot: https://testnet.cspr.live/transaction/6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349
-# Anchor: https://testnet.cspr.live/transaction/915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a
-# Payment: https://testnet.cspr.live/transaction/27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c
+curl -sS -X POST "$API/api/x402/simulate/CARBON-VCS-AMAZONIA-2024-001" \
+  -H 'content-type: application/json' -d '{}' \
+  | jq '{settlementKind, facilitatorMode, mint: .provenance.csprLinks.mint}'
 ```
+
+| Explorer | URL |
+| --- | --- |
+| Payment | https://testnet.cspr.live/transaction/27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c |
+| Anchor | https://testnet.cspr.live/transaction/915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a |
+| MintGate package | https://testnet.cspr.live/contract-package/ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1 |
+| mint_lot | https://testnet.cspr.live/transaction/6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349 |
+| BUIDL | https://dorahacks.io/buidl/46748 |
 
 ---
 
-*Opinion ranking + verified Lastre production facts. Not official DoraHacks scoreboard.*
+## 9. Veredito em uma frase
+
+**Lastre is rubric #1 for proof-before-token agentic RWA on Casper with a fully live, honest stack; Claros remains the only plausible #1 alternative if the jury optimizes for multi-agent market density over verifiable origin truth.**
+
+---
+
+*Ultra-critical estimate. Not an official DoraHacks ranking. Rivals not re-scraped live this pass.*
