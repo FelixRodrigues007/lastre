@@ -164,6 +164,12 @@ export function Agents() {
       <section className="agents-win panel" aria-label="Multi-party trust stack">
         <span className="mono-label">Multi-party protocol (not a single black box)</span>
         <h2>Four roles. One seal. No LLM on the verdict.</h2>
+        <p className="agents-hero__thesis">
+          <strong>Two keys, one seal rule:</strong> field sealer ≠ chain attester account-hash.
+          See <code className="mono-label">GET /api/evidence → operators[]</code> and{" "}
+          <code className="mono-label">dualKey.distinct</code>. Composition:{" "}
+          <code className="mono-label">tool_receipt → lastre_receipt</code> (Invalid aborts hop).
+        </p>
         <div className="agents-compare">
           {TRUST_STACK.map((item) => (
             <article key={item.role} className="agents-compare__row">

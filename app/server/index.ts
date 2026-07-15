@@ -400,9 +400,56 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     return;
   }
 
-  // Judge evidence pack: trust stack + live-RPC verification of canonical txs
+  // Judge evidence pack: trust stack + operators + composition + live-RPC
   if (method === "GET" && pathname === "/api/evidence") {
     sendJson(res, 200, await runtime.getEvidencePack());
+    return;
+  }
+
+  // MintGate economics (contract-logic parity)
+  if (method === "GET" && pathname === "/api/mint/economics") {
+    sendJson(res, 200, runtime.getMintEconomics());
+    return;
+  }
+
+  // 2-hop composition receipts
+  if (method === "GET" && pathname === "/api/receipts") {
+    sendJson(res, 200, { receipts: runtime.listReceipts() });
+    return;
+  }
+
+  if (method === "POST" && pathname === "/api/receipts/tool") {
+    const body = await readJsonBody<{ assetId?: string; payTx?: string; note?: string }>(req);
+    if (!body?.assetId) {
+      sendJson(res, 400, { error: "assetId_required" });
+      return;
+    }
+    sendJson(res, 200, runtime.createToolReceipt(body.assetId, body.payTx, body.note));
+    return;
+  }
+
+  if (method === "POST" && pathname === "/api/receipts/compose") {
+    const body = await readJsonBody<{ parentId?: string; assetId?: string; payTx?: string }>(req);
+    if (!body?.parentId || !body?.assetId) {
+      sendJson(res, 400, { error: "parentId_and_assetId_required" });
+      return;
+    }
+    const result = runtime.composeLastreReceipt(body.parentId, body.assetId, body.payTx);
+    sendJson(res, result.ok ? 200 : 409, result);
+    return;
+  }
+
+  if (method === "POST" && pathname === "/api/receipts/demo") {
+    const body = await readJsonBody<{ assetId?: string }>(req);
+    try {
+      const graph = runtime.seedReceiptDemo(body?.assetId || "CARBON-VCS-AMAZONIA-2024-001");
+      sendJson(res, 200, { ok: true, ...graph });
+    } catch (error) {
+      sendJson(res, 500, {
+        ok: false,
+        error: error instanceof Error ? error.message : "seed_failed",
+      });
+    }
     return;
   }
 
