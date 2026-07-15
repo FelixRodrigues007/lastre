@@ -16,6 +16,24 @@
 | Evidence pack (RPC + trust stack) | https://app-api.lastre.io/api/evidence |
 | Casper ProofOfOrigin package | `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561` |
 | Community standards | https://github.com/FelixRodrigues007/lastre/community |
+| Agent CLI (60s) | `node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay` |
+
+### Agent CLI (60 seconds)
+
+```bash
+# Quote (HTTP 402)
+node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001
+
+# Pay + read proof (judge-safe mock via /simulate)
+node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay
+
+# Live-RPC evidence pack
+node packages/cli/bin/lastre.mjs evidence
+```
+
+Real testnet CSPR settle (optional): set on the **API host**  
+`LASTRE_X402_MODE=casper`, `LASTRE_X402_SECRET_KEY_PATH`, `LASTRE_X402_PAY_TO`.  
+UI `/simulate` always stays **mock**. See `scripts/x402-real-smoke.sh`.
 
 DEMONSTRATION ONLY — fictional assets; no investment, yield, ownership sale, or financial promise.
 

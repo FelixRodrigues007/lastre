@@ -38,31 +38,20 @@ export type Settlement = {
  * Identifies which facilitator implementation is active.
  *
  * - `"mock"`   — deterministic local facilitator (no network, no Casper).
- * - `"casper"` — reserved for a real Casper facilitator that does NOT exist yet.
+ * - `"casper"` — CasperFacilitator (real testnet transfer via casper-client).
  *
- * This lets the server and observability layers report when they are running
- * against the mock.
+ * Select via createFacilitatorFromEnv() / LASTRE_X402_MODE=mock|casper.
  */
 export type FacilitatorMode = "mock" | "casper";
 
 /**
  * x402 payment seam (the single replacement point).
  *
- * This interface is the ONLY boundary between the Lastro server and payment
- * verification/settlement. Today the only implementation is `MockFacilitator`
- * (a local mock). Replacing it with a real Casper facilitator must be ONE
- * implementation of this interface, without rewriting `server.ts`.
+ * Implementations:
+ * - `MockFacilitator` — local synthetic_receipt (judge demo default)
+ * - `CasperFacilitator` — real casper-client transfer (LASTRE_X402_MODE=casper)
  *
- * INTEGRATION SEAM — where the real facilitator would fit:
- * TODO(casper-facilitator): implement `class CasperFacilitator implements
- * Facilitator` in its own file (for example, `casper-facilitator.ts`) that:
- *   - `verifyPayment`: verifies the x402 payment for real
- *     (network, asset, amount, nonce, signature) via the real facilitator /
- *     on-chain checks instead of the local SHA-256 mock signature.
- *   - `settlePayment`: settles the payment for real and returns the real txHash.
- * Then inject it with `createLastroX402Server({ facilitator: new CasperFacilitator(...) })`.
- * Do NOT add an empty stub here — the real implementation should enter only
- * when it actually exists.
+ * Inject with createLastroX402Server({ facilitator }) or createFacilitatorFromEnv().
  */
 export interface Facilitator {
   /** Implementation label. `MockFacilitator` returns `"mock"`. */

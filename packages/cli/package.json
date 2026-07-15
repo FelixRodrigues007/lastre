@@ -1,0 +1,12 @@
+{
+  "name": "@lastre/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "lastre": "./bin/lastre.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}

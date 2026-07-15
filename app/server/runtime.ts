@@ -23,7 +23,9 @@ import { randomUUID } from "node:crypto";
 import {
   DEFAULT_PAYMENT_REQUIREMENTS,
   MockFacilitator,
+  createFacilitatorFromEnv,
   signMockPayment,
+  type Facilitator,
   type PaymentPayload,
   type PaymentRequirements,
 } from "../../agent/x402/dist/index.js";
@@ -148,10 +150,9 @@ export class AppRuntime {
   // Simulated on-chain LotMinted events (mirrors the Odra MintGate LotMinted event).
   private lotMintedEvents: Array<{ assetId: string; minter: string; mintTx: string; at: string }> = [];
 
-  // x402 provenance provider (DEMO): agents pay via x402 to query a proof before
-  // acting. Reuses the real MockFacilitator seam (HMAC sig + nonce anti-replay +
-  // synthetic settlement tx). Not a real Casper settlement.
-  private readonly x402Facilitator = new MockFacilitator();
+  // x402 provenance provider: LASTRE_X402_MODE=mock (default) | casper.
+  // mock → synthetic_receipt; casper → real casper-client transfer when keys set.
+  private readonly x402Facilitator: Facilitator = createFacilitatorFromEnv();
   private readonly x402Issued = new Map<string, PaymentRequirements>();
   private x402QueryCount = 0;
 
@@ -341,9 +342,12 @@ export class AppRuntime {
       },
       x402: {
         facilitatorMode: this.x402Facilitator.mode,
-        settlementKind: "synthetic_receipt",
+        settlementKind:
+          this.x402Facilitator.mode === "casper" ? "casper_deploy" : "synthetic_receipt",
         honestNote:
-          "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence.",
+          this.x402Facilitator.mode === "casper"
+            ? "Server facilitator mode=casper: settleProvenanceQuery can move real testnet CSPR when keys are configured. UI /simulate stays mock."
+            : "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence.",
       },
       invalidIsProof: true,
     };
@@ -457,8 +461,13 @@ export class AppRuntime {
    * calls `settleProvenanceQuery`. Reuses the real x402 requirements contract.
    */
   quoteProvenanceQuery(assetId: string): { requirements: PaymentRequirements; assetId: string } {
+    const payTo =
+      process.env.LASTRE_X402_PAY_TO?.trim() ||
+      process.env.LASTRE_X402_TARGET_ACCOUNT?.trim() ||
+      DEFAULT_PAYMENT_REQUIREMENTS.payTo;
     const requirements: PaymentRequirements = {
       ...DEFAULT_PAYMENT_REQUIREMENTS,
+      payTo,
       nonce: randomUUID(),
     };
     this.x402Issued.set(requirements.nonce, requirements);
@@ -509,14 +518,17 @@ export class AppRuntime {
   }
 
   /**
-   * DEMO helper: run the full x402 handshake locally (quote → sign → settle) so
-   * the UI can show "an agent paid to verify this proof" end-to-end without an
-   * external wallet. Uses the mock signer; not a real Casper payment.
+   * DEMO helper: quote → sign → settle for the UI.
+   * - Default / judge path: always uses a temporary MockFacilitator so Run Demo
+   *   never requires a faucet key (even if LASTRE_X402_MODE=casper on the server).
+   * - Real CSPR path: use settleProvenanceQuery with the env facilitator, or CLI.
    */
   async simulateAgentProvenanceQuery(assetId: string, from = "agent-casper-demo") {
     if (!this.getLot(assetId)) {
       return { ok: false as const, reason: "unknown_asset" };
     }
+    // Force mock for the in-app judge demo so Casper mode never breaks UX.
+    const mock = new MockFacilitator();
     const { requirements } = this.quoteProvenanceQuery(assetId);
     const payment: PaymentPayload = {
       nonce: requirements.nonce,
@@ -528,16 +540,33 @@ export class AppRuntime {
         from,
       }),
     };
-    const settled = await this.settleProvenanceQuery(assetId, payment);
+    // Temporarily settle with mock only (do not use this.x402Facilitator).
+    const verification = await mock.verifyPayment(payment, requirements);
+    if (!verification.ok) {
+      return { ok: false as const, reason: verification.reason };
+    }
+    const settlement = await mock.settlePayment(payment, requirements);
+    this.x402Issued.delete(payment.nonce);
+    this.x402QueryCount += 1;
+    const summary = await this.getMintSummary();
     return {
-      ...settled,
+      ok: true as const,
+      txHash: settlement.txHash,
+      settlementKind: settlement.kind,
+      provenance: this.getProvenanceSnapshot(assetId),
+      facilitatorMode: mock.mode,
+      chainEvidence: summary.onChain,
       requirements,
       amountCspr: requirements.maxAmountRequired / 1_000_000_000,
       payTo: requirements.payTo,
       totalPaidQueries: this.x402QueryCount,
       honestNote:
-        "x402 payment is mock (synthetic_receipt). chainEvidence is live-RPC-verified Casper ProofOfOrigin when available.",
+        "UI simulate path always uses mock synthetic_receipt. For real CSPR set LASTRE_X402_MODE=casper + keys and use CLI/API settle (not simulate).",
     };
+  }
+
+  getX402FacilitatorMode(): string {
+    return this.x402Facilitator.mode;
   }
 
   private buildLotItem(artifact: ProvenanceArtifact, demoRole: string): LotListItem {
