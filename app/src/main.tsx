@@ -6,6 +6,7 @@ import "@design-system/tokens/lastro.css";
 import { initLocale } from "./lib/locale";
 import { initTheme } from "./lib/theme";
 import { initDemoSession } from "./lib/initDemoSession";
+import { APP_BUILD_STAMP } from "./lib/buildStamp";
 import "./styles/app.css";
 import "./styles/app-craft.css";
 import "./styles/motion.css";
@@ -17,6 +18,8 @@ import "./styles/refine.css";
 initTheme();
 initLocale();
 initDemoSession();
+
+document.documentElement.dataset.appBuild = APP_BUILD_STAMP;
 
 import { App } from "./App";
 import { LocaleProvider } from "./context/LocaleContext";
