@@ -26,6 +26,16 @@ export type MintAttemptResult =
   | { ok: true; event: MintEconomicsEvent; mintCount: number }
   | { ok: false; error: MintGateErrorCode; message: string; mintCount: number };
 
+/** Live MintGate package on Casper Testnet (deployed 2026-07-15). */
+export const DEFAULT_MINTGATE_PACKAGE_HASH =
+  "hash-ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1";
+/** Real mint_lot tx for MINA-VALEDOURO-LOTE-002 (Valid proof → gate pass). */
+export const DEFAULT_MINTGATE_MINT_LOT_TX =
+  "6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349";
+/** Install/deploy session tx for MintGate package. */
+export const DEFAULT_MINTGATE_INSTALL_TX =
+  "13955752c3836b5fbc0da7281af102cc5f8953eae7ba543232697d3f3f81e8b7";
+
 export type MintEconomicsSnapshot = {
   /** Mirrors MintGate contract design */
   contract: {
@@ -38,6 +48,10 @@ export type MintEconomicsSnapshot = {
   };
   livePackageHash: string | null;
   livePackageUrl: string | null;
+  liveInstallTx: string | null;
+  liveMintLotTx: string | null;
+  liveMintLotExplorerUrl: string | null;
+  liveSampleAssetId: string | null;
   mintCount: number;
   mintedAssetIds: string[];
   events: MintEconomicsEvent[];
@@ -104,11 +118,16 @@ export class MintEconomicsGate {
   }
 
   snapshot(): MintEconomicsSnapshot {
-    const live =
+    const liveRaw =
       process.env.LASTRE_MINTGATE_PACKAGE_HASH?.trim() ||
       process.env.MINTGATE_PACKAGE_HASH?.trim() ||
-      null;
-    const liveHash = live?.replace(/^hash-/, "") ?? null;
+      DEFAULT_MINTGATE_PACKAGE_HASH;
+    const live = liveRaw.startsWith("hash-") ? liveRaw : `hash-${liveRaw.replace(/^hash-/, "")}`;
+    const liveHash = live.replace(/^hash-/, "");
+    const mintLotTx =
+      process.env.LASTRE_MINTGATE_MINT_LOT_TX?.trim().toLowerCase() || DEFAULT_MINTGATE_MINT_LOT_TX;
+    const installTx =
+      process.env.LASTRE_MINTGATE_INSTALL_TX?.trim().toLowerCase() || DEFAULT_MINTGATE_INSTALL_TX;
 
     return {
       contract: {
@@ -119,10 +138,12 @@ export class MintEconomicsGate {
         crossContractGate: "ProofOfOrigin.get_attestation → require Verdict::Valid",
         errors: ["NoValidProof", "AlreadyMinted", "NotOwner"],
       },
-      livePackageHash: live ? (live.startsWith("hash-") ? live : `hash-${live}`) : null,
-      livePackageUrl: liveHash
-        ? `https://testnet.cspr.live/contract-package/${liveHash}`
-        : null,
+      livePackageHash: live,
+      livePackageUrl: `https://testnet.cspr.live/contract-package/${liveHash}`,
+      liveInstallTx: installTx,
+      liveMintLotTx: mintLotTx,
+      liveMintLotExplorerUrl: `https://testnet.cspr.live/transaction/${mintLotTx}`,
+      liveSampleAssetId: "MINA-VALEDOURO-LOTE-002",
       mintCount: this.count,
       mintedAssetIds: [...this.minted],
       events: this.eventsList(20),
@@ -132,9 +153,8 @@ export class MintEconomicsGate {
         "Invalid / missing attestation → NoValidProof (no token)",
         "Symbolic mint records gate passage — not a free ERC-style mint",
       ],
-      note: live
-        ? "Live MintGate package hash configured — economics gate enforced in API; on-chain package linked."
-        : "MintGate economics enforced in API with full contract-logic parity. Live package optional via LASTRE_MINTGATE_PACKAGE_HASH. WASM + Rust tests ship in repo.",
+      note:
+        "Live MintGate on Casper Testnet. Cross-contract gate over ProofOfOrigin; sample mint_lot for Valid lot-002 on-chain. API still enforces same economics rules for session mints.",
     };
   }
 }

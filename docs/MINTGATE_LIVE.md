@@ -1,78 +1,82 @@
-# MintGate live status — Tier 0 attempt
+# MintGate live — Casper Testnet
 
-Date: 2026-07-15
+**Status: PASS (2026-07-15)**
 
-## Status
+Live MintGate package + real `mint_lot` after Valid ProofOfOrigin attestation.
 
-**T0.2 MintGate live deploy: FAIL / BLOCKED**
-
-No MintGate package hash or `mint_lot` transaction is claimed in this document.
-No fake Casper explorer links were added.
-
-## Existing ProofOfOrigin dependency
+## Package
 
 | Field | Value |
 | --- | --- |
-| ProofOfOrigin package | `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561` |
-| ProofOfOrigin contract version hash (RPC package version) | `contract-27f08307b82295e664fa5d2d7473bd10e393962f7f113f8fd1beadb51fd816b4` |
+| Package hash | `hash-ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1` |
+| Package explorer | https://testnet.cspr.live/contract-package/ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1 |
+| Contract version | `contract-393fe028bd5201b74a619e3ac2dcb11188c5333132a2f1c68b3aa7e60842951b` |
+| Install / deploy tx | `13955752c3836b5fbc0da7281af102cc5f8953eae7ba543232697d3f3f81e8b7` |
+| Install explorer | https://testnet.cspr.live/transaction/13955752c3836b5fbc0da7281af102cc5f8953eae7ba543232697d3f3f81e8b7 |
 
-RPC query used:
+## mint_lot sample
 
-```bash
-casper-client query-global-state \
-  -n https://node.testnet.casper.network/rpc \
-  -k hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
-```
+| Field | Value |
+| --- | --- |
+| asset_id | `MINA-VALEDOURO-LOTE-002` (Valid on ProofOfOrigin) |
+| mint_lot tx | `6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349` |
+| Explorer | https://testnet.cspr.live/transaction/6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349 |
+| execution | `error_message: null` |
 
-## Deploy attempts
+## ProofOfOrigin dependency
 
-### Attempt 1 — contract hash as init proof_contract
+| Field | Value |
+| --- | --- |
+| Package | `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561` |
+| Contract version | `contract-27f08307b82295e664fa5d2d7473bd10e393962f7f113f8fd1beadb51fd816b4` |
 
-```text
-invalid ProofOfOrigin contract address: ExecutionError(AddressCreationFailed)
-```
+## How it was deployed
 
-### Attempt 2/3 — package hash as init proof_contract
+Odra livenet `Deployer` fails on public testnet because it requires the **SSE event stream** (`ODRA_CASPER_LIVENET_EVENTS_URL`) before put-transaction (same class of issue as `bin/attest.rs` writes).
 
-Command shape:
-
-```bash
-cd contracts/lastro_origin
-ODRA_CASPER_LIVENET_SECRET_KEY_PATH="$HOME/.casper-keys/lastro-deploy/secret_key.pem" \
-LASTRE_PROOF_OF_ORIGIN_CONTRACT_HASH="hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561" \
-cargo run --features livenet --bin deploy_mint_gate
-```
-
-Observed output:
-
-```text
-== Lastre MintGate deploy ==
-proof_contract : hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
-note           : using ProofOfOrigin package address accepted by Odra livenet
-Found wasm under "contracts/lastro_origin/wasm/MintGate.wasm".
-Deploying "MintGate".
-Contract init failed ExecutionError(ContractDeploymentError)
-```
-
-Backtrace points to Odra deploy host:
-
-```text
-<lastro_contracts::mint_gate::MintGate as odra_core::host::Deployer<...>>::deploy
-at odra-core-2.8.1/src/host.rs:216:23
-```
-
-## Current production truth
+Working path (mirrors attest writes):
 
 ```bash
-curl -sS https://app-api.lastre.io/api/evidence | jq '.mintGate.livePackageHash, .mintGate.livePackageUrl'
-# null
-# null
+# Install MintGate session wasm with Odra constructor args
+casper-client put-transaction session \
+  --node-address https://node.testnet.casper.network/rpc \
+  --chain-name casper-test \
+  --secret-key "$HOME/.casper-keys/lastro-deploy/secret_key.pem" \
+  --wasm-path contracts/lastro_origin/wasm/MintGate.wasm \
+  --install-upgrade \
+  --pricing-mode classic --standard-payment true \
+  --payment-amount 500000000000 --gas-price-tolerance 1 \
+  --session-arg "proof_contract:key='hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561'" \
+  --session-arg "odra_cfg_package_hash_key_name:string='MintGate'" \
+  --session-arg "odra_cfg_is_upgradable:bool='false'" \
+  --session-arg "odra_cfg_is_upgrade:bool='false'" \
+  --session-arg "odra_cfg_allow_key_override:bool='true'" \
+  --session-arg "odra_cfg_constructor:string='init'"
+
+# mint_lot (package- prefix required by casper-client)
+casper-client put-transaction package \
+  --package-address package-ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1 \
+  --session-entry-point mint_lot \
+  --session-arg "asset_id:string='MINA-VALEDOURO-LOTE-002'" \
+  # ... same node/key/payment flags
 ```
 
-## Required before PASS
+Helper: `scripts/deploy-mintgate-casper.sh`
 
-- Fix/validate the Odra livenet MintGate init argument/address format.
-- Deploy a real MintGate package on Casper Testnet.
-- Execute at least one real `mint_lot` on a Valid ProofOfOrigin asset.
-- Record only the resulting real package hash and real 64-hex transaction hash.
-- Set `LASTRE_MINTGATE_PACKAGE_HASH` on Render after package is verified.
+## API / Render
+
+Defaults are baked into `app/server/mint-economics.ts` (`DEFAULT_MINTGATE_*`).  
+Optional env override: `LASTRE_MINTGATE_PACKAGE_HASH`.
+
+After API redeploy:
+
+```bash
+curl -sS https://app-api.lastre.io/api/mint/economics | jq '{
+  livePackageHash, liveMintLotTx, livePackageUrl, note
+}'
+curl -sS https://app-api.lastre.io/api/evidence | jq '.mintGate | {livePackageHash, liveMintLotTx, livePackageUrl}'
+```
+
+## Economics rule (unchanged)
+
+`mint_lot` only succeeds when ProofOfOrigin has **Valid** for that `asset_id`. Invalid/missing → `NoValidProof`. Already gated → `AlreadyMinted`.

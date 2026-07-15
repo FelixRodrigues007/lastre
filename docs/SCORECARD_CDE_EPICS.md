@@ -5,7 +5,7 @@
 
 | Dimensão | Antes | **Agora** | O que subiu a nota |
 | --- | ---: | ---: | --- |
-| MintGate economics real | 2.0 | **4.85** | Gate Valid-only = parity com `mint_gate.rs`; NoValidProof / AlreadyMinted; `/api/mint/economics`; eventos LotMinted; WASM+testes Rust no repo; explorer mint continua **null** (honesty). Live package opcional via `LASTRE_MINTGATE_PACKAGE_HASH`. |
+| MintGate economics real | 2.0 | **5.0** | Live package `hash-ea049cd1…` + install tx + `mint_lot` `6878f3e1…` (Valid lote-002); gate Valid-only parity; `/api/mint/economics`; honesty: session mint explorer still null for demo ids. |
 | Dual-key operators | 2.5 | **4.9** | Sealer ≠ attester (pubkeys + account-hash); `GET /api/evidence → operators[]` + `dualKey.distinct`; sample lastTx attester/payment; Agents UI “two keys, one seal rule”; `scripts/dual-key-operators.md`. |
 | 2-hop receipts | 1.5 | **4.9** | Model `{id,parentId,payTx,assetId,verdict,chainRoot}`; hop tool→lastre; kill-switch Invalid→Aborted; API `/api/receipts/*`; evidence `composition`; unit tests. |
 
