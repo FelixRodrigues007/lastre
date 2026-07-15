@@ -104,3 +104,30 @@ test("createFacilitatorFromEnv materializes PEM secret", () => {
   const f = createFacilitatorFromEnv(env);
   equal(f.mode, "casper");
 });
+
+test("normalizePem repairs single-line and quoted PEMs", async () => {
+  const { normalizePem } = await import("../dist/index.js");
+  const oneLine =
+    "-----BEGIN PRIVATE KEY-----AAECAwQFBgc=-----END PRIVATE KEY-----";
+  const n = normalizePem(oneLine);
+  ok(n.includes("\n"));
+  ok(n.startsWith("-----BEGIN PRIVATE KEY-----\n"));
+  ok(n.trimEnd().endsWith("-----END PRIVATE KEY-----"));
+
+  const quoted = '"-----BEGIN PRIVATE KEY-----\\nAAEC\\n-----END PRIVATE KEY-----"';
+  const n2 = normalizePem(quoted);
+  equal(n2.split("\n").filter(Boolean).length, 3);
+});
+
+test("createFacilitatorFromEnv materializes B64 secret", () => {
+  const pem = "-----BEGIN PRIVATE KEY-----\nAAECAwQFBgc=\n-----END PRIVATE KEY-----\n";
+  const b64 = Buffer.from(pem, "utf8").toString("base64");
+  const env = {
+    LASTRE_X402_MODE: "casper",
+    LASTRE_X402_SECRET_KEY_B64: b64,
+    LASTRE_X402_PAY_TO: "01" + "ab".repeat(32),
+  };
+  const path = prepareX402SecretsFromEnv(env);
+  ok(path && existsSync(path));
+  equal(createFacilitatorFromEnv(env).mode, "casper");
+});
