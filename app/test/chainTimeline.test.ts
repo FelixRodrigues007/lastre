@@ -7,6 +7,7 @@ import {
   isCanonicalTestnetTx,
   resolveAttestationUrl,
   KNOWN_ATTESTATION_URLS,
+  KNOWN_ATTESTATION_URLS_BY_VERDICT,
   CANONICAL_TESTNET_TX_HASHES,
 } from "../src/lib/chainTimeline";
 import type { AuditRecord } from "../src/lib/types";
@@ -14,6 +15,7 @@ import type { AuditRecord } from "../src/lib/types";
 // A real, on-chain Version1 hash (canonical Invalid sample for LOTE-001).
 const CANONICAL_INVALID = "5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd";
 const CANONICAL_VALID = "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4";
+const CANONICAL_VALID_LOTE_001 = "8c619f508443ded0ecd732050b976cb49e44a98501589e386516971351b4e32f";
 // 64-hex SHA-256 that is NOT on chain (looks real; the exact dead-link bug).
 const SYNTHETIC_RECEIPT = "3e64abf8ad14fe35653ca7b600d622e247e1b65f1989254be34ced1cac254d7f";
 
@@ -101,6 +103,28 @@ test("resolveAttestationUrl falls back to KNOWN_ATTESTATION_URLS for known lots"
   );
 });
 
+test("resolveAttestationUrl uses assetId + verdict when the same lot has Valid and Invalid attests", () => {
+  assert.equal(
+    resolveAttestationUrl("MINA-VALEDOURO-LOTE-001", null, "Valid"),
+    `https://testnet.cspr.live/transaction/${CANONICAL_VALID_LOTE_001}`,
+  );
+  assert.equal(
+    resolveAttestationUrl("MINA-VALEDOURO-LOTE-001", null, "Invalid"),
+    `https://testnet.cspr.live/transaction/${CANONICAL_INVALID}`,
+  );
+});
+
+test("resolveAttestationUrl maps the tampered audit row to the canonical Invalid attest", () => {
+  assert.equal(
+    resolveAttestationUrl("MINA-VALEDOURO-LOTE-001-TAMPERED", null, "Invalid"),
+    `https://testnet.cspr.live/transaction/${CANONICAL_INVALID}`,
+  );
+});
+
+test("resolveAttestationUrl keeps Carbon session receipts honest until Carbon has an asset-specific attest", () => {
+  assert.equal(resolveAttestationUrl("CARBON-VCS-AMAZONIA-2024-001", null, "Valid"), null);
+});
+
 test("resolveAttestationUrl uses the known-lot URL even when a synthetic hash is provided", () => {
   // Known lot + dead session hash => still resolves to the canonical known URL.
   assert.equal(
@@ -118,6 +142,16 @@ test("KNOWN_ATTESTATION_URLS only contains canonical /transaction/ links", () =>
     assert.ok(url.startsWith("https://testnet.cspr.live/transaction/"));
     assert.ok(!url.includes("/deploy/"));
     assert.equal(isCanonicalTestnetTx(url), true);
+  }
+});
+
+test("KNOWN_ATTESTATION_URLS_BY_VERDICT only contains canonical /transaction/ links", () => {
+  for (const byVerdict of Object.values(KNOWN_ATTESTATION_URLS_BY_VERDICT)) {
+    for (const url of Object.values(byVerdict ?? {})) {
+      assert.ok(url.startsWith("https://testnet.cspr.live/transaction/"));
+      assert.ok(!url.includes("/deploy/"));
+      assert.equal(isCanonicalTestnetTx(url), true);
+    }
   }
 });
 
@@ -140,9 +174,9 @@ test("buildSessionEntries: synthetic receipt yields no live link but a session-r
   assert.equal(entry.receiptTxHash, SYNTHETIC_RECEIPT);
 });
 
-test("buildSessionEntries: known lot resolves canonical link even with session hash", () => {
+test("buildSessionEntries: known tampered lot resolves canonical Invalid link even with session hash", () => {
   const record: AuditRecord = {
-    assetId: "MINA-VALEDOURO-LOTE-001",
+    assetId: "MINA-VALEDOURO-LOTE-001-TAMPERED",
     decision: { action: "pay", reasoning: "demo", decidedBy: "rule" },
     verification: {
       verdict: "Invalid",
@@ -154,7 +188,26 @@ test("buildSessionEntries: known lot resolves canonical link even with session h
     outcome: "rejected",
   };
   const [entry] = buildSessionEntries([record]);
-  assert.equal(entry.explorerUrl, KNOWN_ATTESTATION_URLS["MINA-VALEDOURO-LOTE-001"]);
+  assert.equal(entry.explorerUrl, `https://testnet.cspr.live/transaction/${CANONICAL_INVALID}`);
+  assert.equal(entry.sessionReceipt, false);
+  assert.equal(entry.receiptTxHash, null);
+});
+
+test("buildSessionEntries: known Valid lot resolves historical Valid attest, not Invalid", () => {
+  const record: AuditRecord = {
+    assetId: "MINA-VALEDOURO-LOTE-001",
+    decision: { action: "pay", reasoning: "demo", decidedBy: "rule" },
+    verification: {
+      verdict: "Valid",
+      seal: "abc",
+      referenceSeal: "abc",
+      txHash: SYNTHETIC_RECEIPT,
+    },
+    onChain: { verdict: "Valid", txHash: SYNTHETIC_RECEIPT },
+    outcome: "tokenizable",
+  };
+  const [entry] = buildSessionEntries([record]);
+  assert.equal(entry.explorerUrl, `https://testnet.cspr.live/transaction/${CANONICAL_VALID_LOTE_001}`);
   assert.equal(entry.sessionReceipt, false);
   assert.equal(entry.receiptTxHash, null);
 });

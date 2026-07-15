@@ -23,7 +23,7 @@ export function ProcessRecordPanel({ record, index }: ProcessRecordPanelProps) {
   const sealNote = sealMatchLabel(record);
   const isInvalidProof = verdict === "Invalid";
   const attestationUrl = record.onChain
-    ? resolveAttestationUrl(record.assetId, explorerUrlFromTx(record.onChain.txHash))
+    ? resolveAttestationUrl(record.assetId, explorerUrlFromTx(record.onChain.txHash), record.onChain.verdict)
     : null;
 
   return (

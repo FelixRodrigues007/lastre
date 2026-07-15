@@ -332,13 +332,13 @@ function ChainTab({ lot }: { lot: LotDetail }) {
             <dt>Testnet attester</dt>
             <dd>{attestation.attester}</dd>
           </div>
-          {resolveAttestationUrl(lot.artifact.assetId, attestation.explorerUrl) ? (
+          {resolveAttestationUrl(lot.artifact.assetId, attestation.explorerUrl, attestation.verdict) ? (
             <div>
               <dt>Explorer</dt>
               <dd>
                 <a
                   href={
-                    resolveAttestationUrl(lot.artifact.assetId, attestation.explorerUrl) as string
+                    resolveAttestationUrl(lot.artifact.assetId, attestation.explorerUrl, attestation.verdict) as string
                   }
                   target="_blank"
                   rel="noopener noreferrer"
