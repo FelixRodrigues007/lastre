@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
-import { CSPR_EXPLORER_EMBED, CSPR_PACKAGE_URL, GITHUB_URL } from "../../site-links";
+import { CASPER_TESTNET_EVIDENCE, CSPR_PACKAGE_URL, GITHUB_URL } from "../../site-links";
 import { useSite } from "../../context/SiteContext";
 import { Button } from "../ui/Button";
 import { LiveGatewayPanel } from "../gateway/LiveGatewayPanel";
@@ -10,11 +10,50 @@ import "./demonstration.css";
 import "../content/content-sections.css";
 import "../visual/visual.css";
 
+function shortHash(hash: string) {
+  const clean = hash.startsWith("hash-") ? hash.slice(5) : hash;
+  return `${clean.slice(0, 10)}…${clean.slice(-8)}`;
+}
+
+function TestnetEvidenceBoard() {
+  const { content } = useSite();
+  const c = content.demonstration;
+
+  return (
+    <aside className="testnet-proof panel panel--elevated" aria-label={c.evidenceAria}>
+      <header className="panel__head testnet-proof__head">
+        <span className="mono-label">{c.evidenceKicker}</span>
+        <span className="status-chip status-chip--valid">{c.evidenceLive}</span>
+      </header>
+
+      <p className="testnet-proof__lead">{c.evidenceLead}</p>
+
+      <div className="testnet-proof__grid">
+        {CASPER_TESTNET_EVIDENCE.map((item) => (
+          <a
+            className={`testnet-proof__row testnet-proof__row--${item.kind}`}
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            key={item.hash}
+          >
+            <span className="testnet-proof__label">{item.label}</span>
+            <code className="testnet-proof__hash">{shortHash(item.hash)}</code>
+            <strong className="testnet-proof__verdict">{item.verdict}</strong>
+          </a>
+        ))}
+      </div>
+
+      <p className="testnet-proof__note">{c.evidenceNote}</p>
+    </aside>
+  );
+}
+
 export function Demonstration() {
   const baseId = useId();
   const { t, content } = useSite();
   const c = content.demonstration;
-  const [showEmbed, setShowEmbed] = useState(false);
+  const [showEvidence, setShowEvidence] = useState(false);
 
   return (
     <div className="demonstration section--band" data-theme="light">
@@ -94,8 +133,8 @@ export function Demonstration() {
               <Button href={GITHUB_URL} variant="tertiary" external>
                 {c.readCode}
               </Button>
-              <button type="button" className="btn btn--secondary btn--sm" onClick={() => setShowEmbed((v) => !v)}>
-                {showEmbed ? c.hideExplorer : c.showExplorer}
+              <button type="button" className="btn btn--secondary btn--sm" onClick={() => setShowEvidence((v) => !v)}>
+                {showEvidence ? c.hideExplorer : c.showExplorer}
               </button>
             </div>
           </div>
@@ -107,26 +146,7 @@ export function Demonstration() {
             <div className="dither-panel">
               <DitherField variant="valid" />
               <div className="dither-panel__content">
-                {showEmbed ? (
-                  <>
-                    <iframe
-                      className="expl__embed"
-                      src={CSPR_EXPLORER_EMBED}
-                      title={c.embedTitle}
-                      sandbox="allow-scripts allow-same-origin allow-popups"
-                      loading="lazy"
-                    />
-                    <p className="expl__embed-fallback">
-                      {c.embedFallback}{" "}
-                      <a href={CSPR_PACKAGE_URL} target="_blank" rel="noopener noreferrer">
-                        {c.embedFallbackLink}
-                      </a>
-                      .
-                    </p>
-                  </>
-                ) : (
-                  <LiveGatewayPanel />
-                )}
+                {showEvidence ? <TestnetEvidenceBoard /> : <LiveGatewayPanel />}
               </div>
             </div>
           </div>
