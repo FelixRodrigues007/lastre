@@ -1,6 +1,6 @@
 import test from "node:test";
 import { equal, match, ok } from "node:assert/strict";
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import {
@@ -130,4 +130,23 @@ test("createFacilitatorFromEnv materializes B64 secret", () => {
   const path = prepareX402SecretsFromEnv(env);
   ok(path && existsSync(path));
   equal(createFacilitatorFromEnv(env).mode, "casper");
+});
+
+test("prepare repairs path file that is base64-of-pem", () => {
+  const pem = "-----BEGIN PRIVATE KEY-----\nAAECAwQFBgc=\n-----END PRIVATE KEY-----\n";
+  const dir = join(tmpdir(), `lastre-x402-repair-${Date.now()}`);
+  mkdirSync(dir, { recursive: true });
+  const badPath = join(dir, "secret_key.pem");
+  // Wrong: wrote base64 text instead of PEM
+  writeFileSync(badPath, Buffer.from(pem, "utf8").toString("base64"));
+  const env = {
+    LASTRE_X402_MODE: "casper",
+    LASTRE_X402_SECRET_KEY_PATH: badPath,
+    LASTRE_X402_PAY_TO: "01" + "11".repeat(32),
+  };
+  const fixed = prepareX402SecretsFromEnv(env);
+  ok(fixed);
+  const body = readFileSync(fixed, "utf8");
+  ok(body.includes("BEGIN PRIVATE KEY"));
+  ok(body.includes("\n"));
 });

@@ -23,9 +23,12 @@ export {
 } from "./casper-facilitator.js";
 export {
   createFacilitatorFromEnv,
+  inspectSecretMaterial,
   normalizePem,
+  pemLooksValid,
   prepareX402SecretsFromEnv,
   resolveX402Mode,
+  type SecretMaterialStatus,
   type X402Mode,
 } from "./create-facilitator.js";
 export { TAMPERED_ASSET_ID, VALID_ASSET_ID } from "./registry.js";

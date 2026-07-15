@@ -1,11 +1,14 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { URL } from "node:url";
-import { prepareX402SecretsFromEnv } from "../../agent/x402/dist/index.js";
+import {
+  inspectSecretMaterial,
+  prepareX402SecretsFromEnv,
+} from "../../agent/x402/dist/index.js";
 import { AppRuntime, type DeciderMode } from "./runtime.js";
 import { getLiveTestnetSnapshot } from "./casper-read.js";
 import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
 
-// Materialize PEM secrets (Render) before AppRuntime constructs the facilitator.
+// Materialize PEM/B64 secrets (Render) before AppRuntime constructs the facilitator.
 prepareX402SecretsFromEnv();
 
 const PORT = readPort();
@@ -62,7 +65,23 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
       return;
     }
 
-    sendJson(res, 200, { ok: true });
+    // Re-run secret materialization so a fixed env takes effect without full image rebuild
+    // when only secrets change + process restart. Never includes key bytes.
+    prepareX402SecretsFromEnv();
+    const secret = inspectSecretMaterial();
+    sendJson(res, 200, {
+      ok: true,
+      x402: {
+        facilitatorMode: runtime.getX402FacilitatorMode(),
+        secretSource: secret.source,
+        secretPemLooksValid: secret.pemLooksValid,
+        secretBytes: secret.bytes,
+        secretNewlines: secret.newlines,
+        secretHasBegin: secret.hasBegin,
+        secretHasEnd: secret.hasEnd,
+        secretHint: secret.hint,
+      },
+    });
     return;
   }
 

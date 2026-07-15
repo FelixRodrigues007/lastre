@@ -11,7 +11,7 @@
  * MockFacilitator so the judge demo never dies.
  */
 
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { CasperFacilitator } from "./casper-facilitator.js";
@@ -19,7 +19,22 @@ import { MockFacilitator, type Facilitator } from "./facilitator.js";
 
 export type X402Mode = "mock" | "casper";
 
+export type SecretMaterialStatus = {
+  mode: X402Mode;
+  source: "b64" | "pem" | "path" | "none";
+  pathSet: boolean;
+  pathExists: boolean;
+  /** Structural PEM check only — never logs key bytes. */
+  pemLooksValid: boolean;
+  bytes: number | null;
+  newlines: number | null;
+  hasBegin: boolean;
+  hasEnd: boolean;
+  hint: string | null;
+};
+
 const PEM_BOOTSTRAP_PATH = join(tmpdir(), "lastre-x402-secret_key.pem");
+const SECRETS_BOOTSTRAP_PATH = "/secrets/x402_secret_key.pem";
 
 export function resolveX402Mode(raw = process.env.LASTRE_X402_MODE): X402Mode {
   const mode = (raw ?? "mock").trim().toLowerCase();
@@ -58,17 +73,54 @@ export function normalizePem(raw: string): string {
   return s;
 }
 
+/** True when text looks like a framed PEM casper-client can parse. */
+export function pemLooksValid(text: string): boolean {
+  const t = text.replace(/\r/g, "");
+  if (!t.includes("-----BEGIN ") || !t.includes("-----END ")) return false;
+  // casper-client rejects single-line / unframed bodies ("malformedframing")
+  if (!t.includes("\n")) return false;
+  const lines = t.split("\n").map((l) => l.trim()).filter(Boolean);
+  if (lines.length < 3) return false;
+  if (!lines[0].startsWith("-----BEGIN ")) return false;
+  if (!lines[lines.length - 1].startsWith("-----END ")) return false;
+  return true;
+}
+
 function writeSecretFile(body: string, env: NodeJS.ProcessEnv): string | null {
+  const targets = [PEM_BOOTSTRAP_PATH, SECRETS_BOOTSTRAP_PATH];
+  let written: string | null = null;
+  for (const target of targets) {
+    try {
+      const dir = target.includes("/") ? target.slice(0, target.lastIndexOf("/")) : ".";
+      if (dir && dir !== ".") {
+        try {
+          mkdirSync(dir, { recursive: true });
+        } catch {
+          /* /secrets may not exist or not be writable outside Docker */
+        }
+      }
+      writeFileSync(target, body, { mode: 0o600 });
+      written = target;
+    } catch {
+      /* try next target */
+    }
+  }
+  if (written) {
+    env.LASTRE_X402_SECRET_KEY_PATH = written;
+  }
+  return written;
+}
+
+function decodeB64ToPem(b64: string): string | null {
   try {
-    mkdirSync(tmpdir(), { recursive: true });
-    writeFileSync(PEM_BOOTSTRAP_PATH, body, { mode: 0o600 });
-    env.LASTRE_X402_SECRET_KEY_PATH = PEM_BOOTSTRAP_PATH;
-    return PEM_BOOTSTRAP_PATH;
-  } catch (error) {
-    console.warn(
-      "[lastre-x402] failed to write secret key file:",
-      error instanceof Error ? error.message : error,
-    );
+    const cleaned = b64
+      .trim()
+      .replace(/^["']|["']$/g, "")
+      .replace(/\s+/g, "");
+    const decoded = Buffer.from(cleaned, "base64").toString("utf8");
+    const body = normalizePem(decoded);
+    return pemLooksValid(body) ? body : null;
+  } catch {
     return null;
   }
 }
@@ -79,43 +131,143 @@ function writeSecretFile(body: string, env: NodeJS.ProcessEnv): string | null {
  * Mutates `env` (default process.env).
  */
 export function prepareX402SecretsFromEnv(env: NodeJS.ProcessEnv = process.env): string | null {
+  // 1) Base64 of entire PEM file (recommended for Render)
   const b64 = env.LASTRE_X402_SECRET_KEY_B64?.trim();
   if (b64) {
-    try {
-      const decoded = Buffer.from(b64.replace(/\s+/g, ""), "base64").toString("utf8");
-      const body = normalizePem(decoded);
-      if (!body.includes("BEGIN")) {
-        console.warn("[lastre-x402] LASTRE_X402_SECRET_KEY_B64 did not decode to a PEM");
-        return null;
-      }
-      return writeSecretFile(body, env);
-    } catch (error) {
+    const body = decodeB64ToPem(b64);
+    if (!body) {
       console.warn(
-        "[lastre-x402] failed to decode LASTRE_X402_SECRET_KEY_B64:",
-        error instanceof Error ? error.message : error,
+        "[lastre-x402] LASTRE_X402_SECRET_KEY_B64 did not decode to a valid framed PEM. " +
+          "Regenerate with: base64 -i secret_key.pem | tr -d '\\n'",
       );
-      return null;
+      // fall through — maybe PEM/path still works
+    } else {
+      const path = writeSecretFile(body, env);
+      if (path) return path;
     }
   }
 
+  // 2) Raw PEM (often mangled)
   const pem = env.LASTRE_X402_SECRET_KEY_PEM?.trim();
   if (pem) {
-    const body = normalizePem(pem);
-    if (!body.includes("BEGIN") || !body.includes("END")) {
-      console.warn(
-        "[lastre-x402] LASTRE_X402_SECRET_KEY_PEM missing BEGIN/END markers; check the secret value",
-      );
-      return null;
+    // Maybe the "PEM" field actually contains base64 of the file
+    if (!pem.includes("BEGIN") && /^[A-Za-z0-9+/=\s]+$/.test(pem) && pem.replace(/\s/g, "").length > 80) {
+      const fromB64 = decodeB64ToPem(pem);
+      if (fromB64) {
+        const path = writeSecretFile(fromB64, env);
+        if (path) return path;
+      }
     }
-    return writeSecretFile(body, env);
+    const body = normalizePem(pem);
+    if (!pemLooksValid(body)) {
+      console.warn(
+        "[lastre-x402] LASTRE_X402_SECRET_KEY_PEM failed framing checks after normalize. Prefer LASTRE_X402_SECRET_KEY_B64.",
+      );
+    } else {
+      const path = writeSecretFile(body, env);
+      if (path) return path;
+    }
   }
 
+  // 3) Existing path — try to repair in place if framing is bad
   const existing =
     env.LASTRE_X402_SECRET_KEY_PATH?.trim() || env.SANDBOX_SECRET_KEY_PATH?.trim() || "";
   if (existing && existsSync(existing)) {
+    try {
+      const raw = readFileSync(existing, "utf8");
+      if (pemLooksValid(raw)) {
+        return existing;
+      }
+      // File might be raw base64 of PEM
+      if (!raw.includes("BEGIN") && /^[A-Za-z0-9+/=\s]+$/.test(raw)) {
+        const fromB64 = decodeB64ToPem(raw);
+        if (fromB64) {
+          const path = writeSecretFile(fromB64, env);
+          if (path) return path;
+        }
+      }
+      const fixed = normalizePem(raw);
+      if (pemLooksValid(fixed)) {
+        const path = writeSecretFile(fixed, env);
+        if (path) return path;
+      }
+      console.warn(
+        "[lastre-x402] secret key file at path exists but PEM framing is invalid (casper-client will fail with malformedframing).",
+      );
+    } catch (error) {
+      console.warn(
+        "[lastre-x402] could not read secret key path:",
+        error instanceof Error ? error.message : error,
+      );
+    }
     return existing;
   }
+
   return existing || null;
+}
+
+/**
+ * Safe diagnostic for /api/health — never includes key material.
+ */
+export function inspectSecretMaterial(env: NodeJS.ProcessEnv = process.env): SecretMaterialStatus {
+  const mode = resolveX402Mode(env.LASTRE_X402_MODE);
+  let source: SecretMaterialStatus["source"] = "none";
+  if (env.LASTRE_X402_SECRET_KEY_B64?.trim()) source = "b64";
+  else if (env.LASTRE_X402_SECRET_KEY_PEM?.trim()) source = "pem";
+  else if (env.LASTRE_X402_SECRET_KEY_PATH?.trim() || env.SANDBOX_SECRET_KEY_PATH?.trim()) {
+    source = "path";
+  }
+
+  const path =
+    env.LASTRE_X402_SECRET_KEY_PATH?.trim() || env.SANDBOX_SECRET_KEY_PATH?.trim() || "";
+  const pathExists = Boolean(path && existsSync(path));
+
+  let bytes: number | null = null;
+  let newlines: number | null = null;
+  let hasBegin = false;
+  let hasEnd = false;
+  let pemOk = false;
+
+  if (pathExists) {
+    try {
+      const raw = readFileSync(path, "utf8");
+      bytes = raw.length;
+      newlines = (raw.match(/\n/g) ?? []).length;
+      hasBegin = raw.includes("-----BEGIN ");
+      hasEnd = raw.includes("-----END ");
+      pemOk = pemLooksValid(raw);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  let hint: string | null = null;
+  if (mode === "casper" && !pemOk) {
+    if (source === "none") {
+      hint = "Set LASTRE_X402_SECRET_KEY_B64 (preferred) or PEM/path.";
+    } else if (source === "pem") {
+      hint =
+        "PEM secret likely lost newlines. Use LASTRE_X402_SECRET_KEY_B64 from: base64 -i secret_key.pem | tr -d '\\n'";
+    } else if (source === "b64") {
+      hint =
+        "B64 present but file still invalid after decode — re-copy base64 (single line, no quotes) and redeploy.";
+    } else {
+      hint = "Key path set but PEM framing invalid (malformedframing).";
+    }
+  }
+
+  return {
+    mode,
+    source,
+    pathSet: Boolean(path),
+    pathExists,
+    pemLooksValid: pemOk,
+    bytes,
+    newlines,
+    hasBegin,
+    hasEnd,
+    hint,
+  };
 }
 
 function isMockPayTo(target: string): boolean {
@@ -146,6 +298,14 @@ export function createFacilitatorFromEnv(env: NodeJS.ProcessEnv = process.env): 
       "[lastre-x402] LASTRE_X402_MODE=casper but secret key path is missing or unreadable; falling back to MockFacilitator.",
     );
     return new MockFacilitator();
+  }
+
+  const status = inspectSecretMaterial(env);
+  if (!status.pemLooksValid) {
+    console.warn(
+      "[lastre-x402] secret key PEM framing looks invalid — casper-client will fail at settle:",
+      status.hint,
+    );
   }
 
   if (isMockPayTo(targetAccount)) {
