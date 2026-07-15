@@ -106,13 +106,16 @@ All sample transactions below are official existing evidence. Do not replace the
 
 7. **x402 real CSPR payment** (CasperFacilitator → native transfer, 2.5 CSPR)
 
+   Local proof (dev API):  
    `a30d83c78c269caf922d020a96d2ffd8e3eb4654d3c53e8faf3059ea80101f02`
 
-   Explorer: https://testnet.cspr.live/transaction/a30d83c78c269caf922d020a96d2ffd8e3eb4654d3c53e8faf3059ea80101f02
+   **Production** (`app-api.lastre.io`, 2026-07-15):  
+   `27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c`
 
-   Expected: `settlementKind=casper_deploy`, paid provenance for `CARBON-VCS-AMAZONIA-2024-001` (Valid + sealMatch).  
+   Explorer (prod): https://testnet.cspr.live/transaction/27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c
+
+   Expected: `settlementKind=casper_deploy`, `facilitator=casper`, paid provenance for `CARBON-VCS-AMAZONIA-2024-001` (Valid + sealMatch).  
    Path: `POST /api/x402/settle/:assetId` or `lastre prove … --pay --mode casper` (not UI `/simulate`).
-
 Transaction explorer format:
 
 `https://testnet.cspr.live/transaction/<hash>`
