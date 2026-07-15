@@ -18,6 +18,7 @@ import type { ProvenanceArtifact } from "../../agent/sealer/dist/src/sealer.js";
 import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
 
 import { PACKAGE_HASH, PACKAGE_URL } from "./constants.js";
+import { explorerTxUrlIfCanonical } from "./casper-rpc.js";
 import { randomUUID } from "node:crypto";
 import {
   DEFAULT_PAYMENT_REQUIREMENTS,
@@ -433,16 +434,19 @@ export class AppRuntime {
       packageHash: PACKAGE_HASH,
       csprLinks: {
         package: PACKAGE_URL,
-        attestation: lot.auditRecord?.onChain?.txHash
-          ? `https://testnet.cspr.live/transaction/${lot.auditRecord.onChain.txHash}`
-          : null,
-        mint: mintTx ? `https://testnet.cspr.live/transaction/${mintTx}` : null,
+        // Only link a real on-chain attestation. Session `synthetic_receipt`
+        // hashes are not on Casper, so they must not become explorer links.
+        attestation: explorerTxUrlIfCanonical(lot.auditRecord?.onChain?.txHash ?? null),
+        // MintGate mints are simulated (`mint-*`); never link them as live txs.
+        mint: explorerTxUrlIfCanonical(mintTx),
         /** Always surface the canonical Invalid sample so agents see rejection is proof. */
         invalidSample:
           "https://testnet.cspr.live/transaction/5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd",
         validSample:
           "https://testnet.cspr.live/transaction/43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4",
       },
+      /** Honest label: the mint event is a simulated MintGate demo, not on-chain. */
+      mintNote: mintTx ? "MintGate demo event (simulated) — not a Casper transaction." : null,
       trustRule: "Seal decides Valid/Invalid. Agent chooses pay/skip/escalate only.",
       readAt: new Date().toISOString(),
     };

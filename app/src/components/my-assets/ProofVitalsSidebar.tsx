@@ -1,4 +1,5 @@
 import type { ProofLayer } from "../../lib/provenanceScore";
+import { explorerUrlFromTx } from "../../lib/chainTimeline";
 import "./proof-vitals-sidebar.css";
 
 type ProofVitalsSidebarProps = {
@@ -46,17 +47,17 @@ export function ProofVitalsSidebar({ layers, score, mintTx }: ProofVitalsSidebar
       </ul>
 
       <footer className="proof-vitals__foot">
-        {mintTx ? (
+        {mintTx && explorerUrlFromTx(mintTx) ? (
           <a
             className="proof-vitals__link"
-            href={`https://testnet.cspr.live/transaction/${mintTx}`}
+            href={explorerUrlFromTx(mintTx) as string}
             target="_blank"
             rel="noopener noreferrer"
           >
             View mint tx ↗
           </a>
         ) : (
-          <span className="proof-vitals__hint">Demo session · symbolic NFT</span>
+          <span className="proof-vitals__hint">Demo session · symbolic NFT · not on Casper</span>
         )}
       </footer>
     </aside>

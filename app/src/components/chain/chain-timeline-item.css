@@ -132,3 +132,9 @@
     transition: none;
   }
 }
+
+.chain-list__attestation--session {
+  color: var(--lastro-text-muted);
+  font-style: italic;
+  cursor: default;
+}

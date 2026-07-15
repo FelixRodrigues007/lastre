@@ -1670,3 +1670,11 @@
   justify-content: flex-end;
   margin-top: 0.9rem;
 }
+
+.agent-proof__session {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--lastro-text-muted);
+  font-style: italic;
+  margin-top: 0.35rem;
+}

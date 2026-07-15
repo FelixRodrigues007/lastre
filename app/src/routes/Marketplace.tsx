@@ -101,7 +101,7 @@ function buildCachedDemoAgentQuery(
       verdict: "Valid",
       attested: true,
       mintStatus: "minted",
-      attestationTx: "fd8df60d20a8f6bcebf854e2ec87ee19acc6d0a59d3994ea62456908f916e3cf",
+      attestationTx: null,
       mintTx: null,
       carbonDetails: {
         tonnesCO2e: 125000,
@@ -115,8 +115,9 @@ function buildCachedDemoAgentQuery(
       csprLinks: {
         package:
           "https://testnet.cspr.live/contract-package/b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
-        attestation:
-          "https://testnet.cspr.live/transaction/fd8df60d20a8f6bcebf854e2ec87ee19acc6d0a59d3994ea62456908f916e3cf",
+        // This cached fallback has no confirmed on-chain attestation tx. Do not
+        // fabricate an explorer link — surface the canonical package instead.
+        attestation: null,
         mint: null,
       },
       readAt: new Date().toISOString(),
@@ -665,6 +666,12 @@ export function Marketplace() {
                       >
                         View mint on cspr.live
                       </a>
+                    ) : null}
+                    {!agentQuery.result.provenance.csprLinks?.attestation ? (
+                      <span className="agent-proof__session">
+                        Session attestation is a demo receipt — not on Casper. See the canonical
+                        Invalid/Valid samples on the Agents page.
+                      </span>
                     ) : null}
                   </div>
                 </div>

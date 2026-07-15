@@ -16,6 +16,36 @@ export const CANONICAL_EVIDENCE = {
   register002: "bd6d476ee1fddcb1b0deae0185eefc6fecfcbefe616d2b80ebb75fc736fb9101",
 } as const;
 
+/**
+ * Every Casper Testnet transaction hash we have confirmed exists on-chain via
+ * public JSON-RPC. Only these may be rendered as live cspr.live links. Session
+ * `synthetic_receipt` and simulated `mint-*` hashes are intentionally excluded
+ * so we never publish a dead explorer link.
+ */
+export const CANONICAL_TESTNET_TX_HASHES: ReadonlySet<string> = new Set([
+  CANONICAL_EVIDENCE.installTx,
+  "23d265beb8bd2e6d292975ded281bd9a63148d93870dd9ac262baf73154caede", // register001
+  CANONICAL_EVIDENCE.invalidTx,
+  CANONICAL_EVIDENCE.register002,
+  CANONICAL_EVIDENCE.validTx,
+  "8c619f508443ded0ecd732050b976cb49e44a98501589e386516971351b4e32f", // earlier valid001
+]);
+
+/** True only for a confirmed on-chain tx hash (not synthetic/mock receipts). */
+export function isCanonicalTestnetTx(hash: string | null | undefined): boolean {
+  if (!hash) return false;
+  return CANONICAL_TESTNET_TX_HASHES.has(hash.trim().toLowerCase());
+}
+
+/**
+ * Build a live cspr.live `/transaction/` link only for a canonical on-chain
+ * hash; otherwise null so callers omit the link instead of publishing a dead
+ * explorer page.
+ */
+export function explorerTxUrlIfCanonical(hash: string | null | undefined): string | null {
+  return isCanonicalTestnetTx(hash) ? explorerTx((hash as string).trim().toLowerCase()) : null;
+}
+
 export type RpcTxCheck = {
   hash: string;
   purpose: string;

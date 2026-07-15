@@ -134,3 +134,10 @@
 .lot-evidence__link:hover {
   color: var(--lastro-brand-seal);
 }
+
+.lot-evidence__session {
+  font-size: 0.75rem;
+  color: var(--lastro-text-muted);
+  font-style: italic;
+  margin: 0.25rem 0 0;
+}

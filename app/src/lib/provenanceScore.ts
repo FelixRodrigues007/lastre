@@ -1,4 +1,5 @@
 import type { LotDetail, LotListItem } from "./types";
+import { explorerUrlFromTx, resolveAttestationUrl } from "./chainTimeline";
 
 export type ProofLayerId = "capture" | "seal" | "verify" | "casper" | "mint";
 export type ProofLayerStatus = "good" | "partial" | "poor";
@@ -185,14 +186,19 @@ export function buildTimeline(lot: LotDetail): TimelineEvent[] {
       label: "Casper attested",
       timestamp: lot.attested ? lot.artifact.capturedAtISO : null,
       status: lot.attested ? "good" : "partial",
-      href: lot.testnetAttestation?.explorerUrl ?? undefined,
+      href:
+        resolveAttestationUrl(
+          lot.artifact.assetId,
+          lot.testnetAttestation?.explorerUrl ?? null,
+        ) ?? undefined,
     },
     {
       id: "mint",
       label: "NFT minted",
       timestamp: lot.isMinted ? lot.artifact.capturedAtISO : null,
       status: lot.isMinted ? "good" : "partial",
-      href: lot.mintTx ? `https://testnet.cspr.live/transaction/${lot.mintTx}` : undefined,
+      // MintGate mints are simulated; only link a mint tx if it is canonical.
+      href: explorerUrlFromTx(lot.mintTx) ?? undefined,
     },
   ];
 
