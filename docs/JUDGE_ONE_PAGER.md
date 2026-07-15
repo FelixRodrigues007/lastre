@@ -1,12 +1,12 @@
 # Lastre Judge One-Pager
 
-Date: 2026-07-06
+Date: 2026-07-15
 
 ## One-line thesis
 
 **Other agents execute. Lastre lets them verify the source before they move: proof before token, proof before agent action.**
 
-## Current production state (06/07/2026)
+## Current production state (2026-07-15)
 
 - Cloudflare frontend: OK — `https://app.lastre.io`
 - Render API: OK — `https://app-api.lastre.io/api/health`
@@ -63,6 +63,8 @@ Expected `/api/mint/summary` shape after one x402 simulate/read in the same runt
 - Agents page: `https://app.lastre.io/agents`
 - API health: `https://app-api.lastre.io/api/health`
 - Mint summary: `https://app-api.lastre.io/api/mint/summary`
+- Demo video: `https://youtu.be/UzhKMsKA6QE`
+- BUIDL paste pack: [`docs/BUIDL_PAGE_PASTE.md`](./BUIDL_PAGE_PASTE.md)
 - Demo script: [`docs/DEMO_SCRIPT.md`](./DEMO_SCRIPT.md)
 
 ## Recommended 90-second path
@@ -97,3 +99,22 @@ Expected `/api/mint/summary` shape after one x402 simulate/read in the same runt
 - Simulated collateral values.
 - Mock x402 settlement seam.
 - No investment, yield, ROI, or real ownership-sale claims.
+
+## Differentiation
+
+Most buildathon projects improve payment rails, market feeds, credit desks, or
+agent reputation. Lastre focuses on the upstream question: was the physical
+origin of this RWA verified before any token, payment, or agent action?
+
+- Rails monetize calls; Lastre verifies origin.
+- Oracles publish feeds; Lastre gates asset-origin proof and permanent Invalid.
+- Desks underwrite cash flow; Lastre is pre-token provenance evidence.
+- Reputation systems judge agents; Lastre judges the asset seal.
+
+## 90-day launch plan
+
+1. Keep Casper Testnet evidence growing and evaluate a mainnet package when safe.
+2. Align a real Casper x402 facilitator path behind a feature flag.
+3. Harden the offline field-operator capture kit and sealer runbook.
+4. Add partner-agent integrations that query provenance before mint/finance flows.
+5. Maintain public site, demo video, and community updates without fake TVL or yield claims.

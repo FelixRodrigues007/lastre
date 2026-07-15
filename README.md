@@ -2,6 +2,22 @@
 
 # Lastre
 
+## Final-round judge entry
+
+| Item | Link |
+| --- | --- |
+| Live app demo | https://app.lastre.io/marketplace → **Run Demo** |
+| Agents integration | https://app.lastre.io/agents |
+| Landing | https://lastre.io |
+| Demo video | https://youtu.be/UzhKMsKA6QE |
+| Step-by-step testing (no marketing) | [JUDGES_PLAYBOOK.md](./JUDGES_PLAYBOOK.md) |
+| BUIDL paste pack | [docs/BUIDL_PAGE_PASTE.md](./docs/BUIDL_PAGE_PASTE.md) |
+| API health | https://app-api.lastre.io/api/health |
+| Casper ProofOfOrigin package | `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561` |
+| Community standards | https://github.com/FelixRodrigues007/lastre/community |
+
+DEMONSTRATION ONLY — fictional assets; no investment, yield, ownership sale, or financial promise.
+
 **Proof before token — the chain of proof from land to token, verified offline and anchored on Casper.**
 
 [![License: Apache-2.0 + BUSL-1.1](https://img.shields.io/badge/license-Apache--2.0%20%2B%20BUSL--1.1-gold)](#licensing)
@@ -41,6 +57,7 @@ deployment, roadmap, API, and architecture handoff:
 - [Judge one-pager](docs/JUDGE_ONE_PAGER.md)
 - [Final-round judge playbook](JUDGES_PLAYBOOK.md)
 - [Buildathon readiness checklist](docs/FINAL_ROUND_CHECKLIST.md)
+- [BUIDL paste pack](docs/BUIDL_PAGE_PASTE.md)
 
 Public brand is **Lastre**. Some internal package names and paths still use the
 legacy `lastro` namespace for compatibility with deployed contracts, package
@@ -154,7 +171,7 @@ Prerequisites on macOS:
 
 ```bash
 git clone https://github.com/FelixRodrigues007/lastre.git
-cd lastro
+cd lastre
 make
 ```
 

@@ -1,6 +1,6 @@
 # Lastre Final-Round Judge Playbook
 
-Date: 2026-07-10
+Date: 2026-07-15
 
 This is the concise, step-by-step testing guide for Casper Agentic Buildathon
 judges. It is intentionally operational, not marketing copy.
@@ -19,8 +19,10 @@ judges. It is intentionally operational, not marketing copy.
 | Agents integration page | `https://app.lastre.io/agents` |
 | API health | `https://app-api.lastre.io/api/health` |
 | Mint / x402 summary | `https://app-api.lastre.io/api/mint/summary` |
+| Demo video | `https://youtu.be/UzhKMsKA6QE` |
 | Demo script | [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md) |
 | Judge one-pager | [`docs/JUDGE_ONE_PAGER.md`](docs/JUDGE_ONE_PAGER.md) |
+| Final smoke script | [`scripts/final-smoke.sh`](scripts/final-smoke.sh) |
 
 ## 2. Casper Testnet contract
 
@@ -54,7 +56,7 @@ https://testnet.cspr.live/transaction/<transaction-hash>
 Open the package at:
 
 ```text
-https://testnet.cspr.live/contract-package/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
+https://testnet.cspr.live/contract-package/b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
 ```
 
 ## 4. UI testing flow, no local setup
@@ -119,6 +121,20 @@ Expected:
 `paidX402Queries` may be `0` immediately after a cold Render runtime and then
 increments after the UI demo or simulate endpoint runs.
 
+
+### Flow D — Verify Invalid proof path in 2 minutes
+
+This flow proves Lastre does not discard rejections. An `Invalid` verdict is
+permanent Casper Testnet evidence.
+
+1. Open the tampered attest transaction:
+   `https://testnet.cspr.live/transaction/5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd`
+2. Confirm it is a successful Testnet transaction for `MINA-VALEDOURO-LOTE-001`.
+3. Compare it with the Valid `MINA-VALEDOURO-LOTE-002` agent-driven transaction:
+   `https://testnet.cspr.live/transaction/43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4`
+4. Expected result: both are useful proof. Valid enables downstream demo mint
+   flows; Invalid records that the provided seal did not match the reference.
+
 ## 5. Optional local verification
 
 Prerequisites: Node.js/npm, Rust/rustup, and network access for first-time tool
@@ -127,6 +143,7 @@ installation.
 ```bash
 git clone https://github.com/FelixRodrigues007/lastre.git
 cd lastre
+bash scripts/final-smoke.sh
 make setup
 make build
 make test
@@ -138,7 +155,7 @@ make query
 
 ## 6. Important trust boundaries
 
-- The deterministic SHA-256 seal decides `Valid` or `Invalid`.
+- The deterministic SHA-256 seal decides `Valid` or `Invalid`; the LLM does not decide or rewrite verdicts.
 - The LLM/orchestrator can choose an operational action such as `pay`, `skip`,
   or `escalate`; it cannot overwrite the seal verdict.
 - x402 settlement currently uses a mock facilitator. The API shape and payment
