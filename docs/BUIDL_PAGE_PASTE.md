@@ -20,7 +20,8 @@ Other agents execute. Lastre lets them verify the source first — proof before 
 | API health | https://app-api.lastre.io/api/health |
 | Mint summary | https://app-api.lastre.io/api/mint/summary |
 | Evidence pack (trust stack + live RPC) | https://app-api.lastre.io/api/evidence |
-| Agent CLI | `node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay` |
+| Agent CLI (mock pay) | `node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay` |
+| Agent CLI (real CSPR) | `node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay --mode casper` (API must be casper-mode; see docs/X402_CASPER_REAL.md) |
 | GitHub repo | https://github.com/FelixRodrigues007/lastre |
 | GitHub community profile | https://github.com/FelixRodrigues007/lastre/community |
 | Demo video | https://youtu.be/UzhKMsKA6QE |
@@ -103,6 +104,15 @@ All sample transactions below are official existing evidence. Do not replace the
 
    Expected: Valid recorded on-chain.
 
+7. **x402 real CSPR payment** (CasperFacilitator → native transfer, 2.5 CSPR)
+
+   `a30d83c78c269caf922d020a96d2ffd8e3eb4654d3c53e8faf3059ea80101f02`
+
+   Explorer: https://testnet.cspr.live/transaction/a30d83c78c269caf922d020a96d2ffd8e3eb4654d3c53e8faf3059ea80101f02
+
+   Expected: `settlementKind=casper_deploy`, paid provenance for `CARBON-VCS-AMAZONIA-2024-001` (Valid + sealMatch).  
+   Path: `POST /api/x402/settle/:assetId` or `lastre prove … --pay --mode casper` (not UI `/simulate`).
+
 Transaction explorer format:
 
 `https://testnet.cspr.live/transaction/<hash>`
@@ -113,8 +123,8 @@ Transaction explorer format:
 - The LLM/orchestrator chooses action only: `pay`, `skip`, or `escalate`.
 - The LLM cannot overwrite a seal verdict.
 - x402 judge demo / UI simulate uses `MockFacilitator` → `settlementKind: synthetic_receipt` (no CSPR moved). HTTP 402 seam is real.
-- Optional real testnet CSPR: `LASTRE_X402_MODE=casper` + secret key + `LASTRE_X402_PAY_TO` on the API host (`CasperFacilitator`). Falls back to mock if keys missing. CLI: `packages/cli/bin/lastre.mjs`.
-- Paid responses attach `chainEvidence` / `rpcEvidence`: public Casper Testnet JSON-RPC verification of install + Invalid + Valid sample txs (when the node responds). Payment mock ≠ fake chain package.
+- Real testnet CSPR is live behind `LASTRE_X402_MODE=casper` + keys (`CasperFacilitator` → `casper_deploy`). Sample payment tx listed above. Runbook: `docs/X402_CASPER_REAL.md`. CLI: `lastre prove <id> --pay --mode casper`.
+- Paid responses attach `chainEvidence` / `rpcEvidence`: public Casper Testnet JSON-RPC verification of install + Invalid + Valid sample txs (when the node responds).
 - Multi-party protocol roles: field sealer → chain attester → paying agent → human escalation (`GET /api/evidence` → `trustStack`).
 - MintGate, collateral, and MyAssets paths are demo/simulated where not full on-chain economics.
 - Public assets, operators, locations, payments, and collateral values are fictional unless explicitly labeled as Casper Testnet evidence.
@@ -134,7 +144,7 @@ Proof before token. Seal decides. LLM only acts. Invalid is permanent on-chain p
 ## After-buildathon plan
 
 1. Keep Casper Testnet evidence growing and evaluate a mainnet ProofOfOrigin package only when safe.
-2. Align a real Casper x402 facilitator path behind a feature flag while keeping the current judge demo stable.
+2. Keep judge UI on mock simulate; expand real CSPR settle ops (Render secrets, dual-key operator docs).
 3. Harden the offline field-operator capture kit and deterministic sealer runbook.
 4. Add partner-agent integrations that query Lastre provenance before mint, finance, or collateral flows.
 5. Maintain the public site, demo video, and community updates without fake TVL, yield, or investment claims.

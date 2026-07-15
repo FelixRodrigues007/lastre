@@ -1,8 +1,12 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { URL } from "node:url";
+import { prepareX402SecretsFromEnv } from "../../agent/x402/dist/index.js";
 import { AppRuntime, type DeciderMode } from "./runtime.js";
 import { getLiveTestnetSnapshot } from "./casper-read.js";
 import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
+
+// Materialize PEM secrets (Render) before AppRuntime constructs the facilitator.
+prepareX402SecretsFromEnv();
 
 const PORT = readPort();
 const HOST = process.env.LASTRO_APP_API_HOST ?? "0.0.0.0";
@@ -316,9 +320,17 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
 
     const settled = await runtime.settleProvenanceQuery(assetId, payment);
     if (!settled.ok) {
-      res.statusCode = 402;
+      const status = settled.reason === "settle_failed" ? 502 : 402;
+      res.statusCode = status;
       res.setHeader("Content-Type", "application/json; charset=utf-8");
-      res.end(JSON.stringify({ x402Version: 1, error: settled.reason, accepts: settled.requirements ? [settled.requirements] : [] }));
+      res.end(
+        JSON.stringify({
+          x402Version: 1,
+          error: settled.reason,
+          message: settled.message,
+          accepts: settled.requirements ? [settled.requirements] : [],
+        }),
+      );
       return;
     }
     res.setHeader("X-PAYMENT-RESPONSE", settled.txHash);
@@ -326,10 +338,35 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
       paid: true,
       txHash: settled.txHash,
       settlementKind: settled.settlementKind,
+      paymentExplorerUrl: settled.paymentExplorerUrl,
       facilitator: settled.facilitatorMode,
       provenance: settled.provenance,
       chainEvidence: settled.chainEvidence,
     });
+    return;
+  }
+
+  // Real CSPR settle (server-as-agent). Requires LASTRE_X402_MODE=casper + keys.
+  // Judge UI must keep using /api/x402/simulate (always mock).
+  const x402SettleMatch = pathname.match(/^\/api\/x402\/settle\/([^/]+)$/u);
+  if (method === "POST" && x402SettleMatch) {
+    const assetId = decodeURIComponent(x402SettleMatch[1]);
+    const body = await readJsonBody<{ from?: string }>(req);
+    const result = await runtime.settleAsAgent(assetId, body?.from || "lastre-cli-agent");
+    if (!result.ok) {
+      const status =
+        result.reason === "unknown_asset"
+          ? 404
+          : result.reason === "facilitator_not_casper"
+            ? 409
+            : result.reason === "settle_failed"
+              ? 502
+              : 402;
+      sendJson(res, status, result);
+      return;
+    }
+    res.setHeader("X-PAYMENT-RESPONSE", result.txHash);
+    sendJson(res, 200, result);
     return;
   }
 

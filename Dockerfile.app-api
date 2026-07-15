@@ -5,7 +5,7 @@
 # The console API is a Node server and needs the built agent packages plus the
 # Casper query_snapshot binary, so it runs as a separate Render Docker service.
 
-# --- Stage A: build the Casper testnet snapshot query binary ---
+# --- Stage A: build the Casper testnet snapshot query binary + casper-client ---
 FROM rust:bookworm AS rust-builder
 
 RUN rustup toolchain install nightly-2026-01-01 --profile minimal \
@@ -20,6 +20,11 @@ RUN cargo +nightly-2026-01-01 build \
   --features livenet \
   --bin query_snapshot \
   --manifest-path contracts/lastro_origin/Cargo.toml
+
+# casper-client for real x402 CSPR transfers (LASTRE_X402_MODE=casper).
+# Install into a fixed prefix so the runtime image can copy a single binary.
+RUN cargo install casper-client --version 5.0.1 --locked --root /opt/casper-client \
+  || cargo install casper-client --version 5.0.1 --root /opt/casper-client
 
 # --- Stage B: build agent packages + app API TypeScript ---
 FROM node:22-bookworm AS node-builder
@@ -74,22 +79,28 @@ COPY --from=node-builder /app/agent/x402/dist ./agent/x402/dist
 COPY --from=node-builder /app/agent/orchestrator/dist ./agent/orchestrator/dist
 COPY --from=node-builder /app/app/server-dist ./app/server-dist
 COPY --from=rust-builder /app/contracts/lastro_origin/target/release/query_snapshot /app/bin/query_snapshot
+COPY --from=rust-builder /opt/casper-client/bin/casper-client /app/bin/casper-client
+COPY scripts/docker-app-api-entrypoint.sh /app/bin/docker-app-api-entrypoint.sh
 
 # casper-read runs the binary with cwd=/app/contracts/lastro_origin. The
 # release image does not need contract sources, but the cwd must exist.
-RUN mkdir -p /app/contracts/lastro_origin \
-  && chmod +x /app/bin/query_snapshot
+RUN mkdir -p /app/contracts/lastro_origin /secrets \
+  && chmod +x /app/bin/query_snapshot /app/bin/casper-client /app/bin/docker-app-api-entrypoint.sh
 
 ENV NODE_ENV=production
 ENV PORT=10000
+ENV PATH="/app/bin:${PATH}"
 ENV LASTRO_QUERY_SNAPSHOT_BIN=/app/bin/query_snapshot
+ENV CASPER_CLIENT_BIN=/app/bin/casper-client
 ENV PACKAGE_HASH=hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561
 ENV NODE_ADDRESS=https://node.testnet.casper.network/rpc
 ENV CHAIN_NAME=casper-test
 ENV ODRA_CASPER_LIVENET_NODE_ADDRESS=https://node.testnet.casper.network/rpc
 ENV ODRA_CASPER_LIVENET_CHAIN_NAME=casper-test
 ENV ODRA_CASPER_LIVENET_EVENTS_URL=https://node.testnet.casper.network/events/main
+# Default remains mock. Opt in on Render: LASTRE_X402_MODE=casper + secrets.
+ENV LASTRE_X402_MODE=mock
 
 EXPOSE 10000
 
-CMD ["node", "app/server-dist/index.js"]
+CMD ["/app/bin/docker-app-api-entrypoint.sh"]

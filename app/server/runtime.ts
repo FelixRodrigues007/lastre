@@ -486,11 +486,12 @@ export class AppRuntime {
         ok: true;
         txHash: string;
         settlementKind: "synthetic_receipt" | "casper_deploy";
+        paymentExplorerUrl: string | null;
         provenance: ReturnType<AppRuntime["getProvenanceSnapshot"]>;
         facilitatorMode: string;
         chainEvidence: Awaited<ReturnType<AppRuntime["getMintSummary"]>>["onChain"];
       }
-    | { ok: false; reason: string; requirements?: PaymentRequirements }
+    | { ok: false; reason: string; message?: string; requirements?: PaymentRequirements }
   > {
     const requirements = this.x402Issued.get(payment.nonce);
     if (!requirements) {
@@ -503,7 +504,18 @@ export class AppRuntime {
       return { ok: false, reason: verification.reason, requirements };
     }
 
-    const settlement = await this.x402Facilitator.settlePayment(payment, requirements);
+    let settlement: { kind: "synthetic_receipt" | "casper_deploy"; txHash: string };
+    try {
+      settlement = await this.x402Facilitator.settlePayment(payment, requirements);
+    } catch (error) {
+      return {
+        ok: false,
+        reason: "settle_failed",
+        message: error instanceof Error ? error.message : String(error),
+        requirements,
+      };
+    }
+
     this.x402Issued.delete(payment.nonce);
     this.x402QueryCount += 1;
     const summary = await this.getMintSummary();
@@ -511,9 +523,85 @@ export class AppRuntime {
       ok: true,
       txHash: settlement.txHash,
       settlementKind: settlement.kind,
+      paymentExplorerUrl:
+        settlement.kind === "casper_deploy" ? explorerTxUrlIfCanonical(settlement.txHash) : null,
       provenance: this.getProvenanceSnapshot(assetId),
       facilitatorMode: this.x402Facilitator.mode,
       chainEvidence: summary.onChain,
+    };
+  }
+
+  /**
+   * Server-as-agent payer: quote → sign mock X-PAYMENT → settle via env facilitator.
+   * - mock mode: refuses (use /api/x402/simulate — keeps paths honest)
+   * - casper mode: real testnet CSPR transfer via CasperFacilitator
+   */
+  async settleAsAgent(
+    assetId: string,
+    from = "lastre-cli-agent",
+  ): Promise<
+    | {
+        ok: true;
+        txHash: string;
+        settlementKind: "synthetic_receipt" | "casper_deploy";
+        paymentExplorerUrl: string | null;
+        provenance: ReturnType<AppRuntime["getProvenanceSnapshot"]>;
+        facilitatorMode: string;
+        chainEvidence: Awaited<ReturnType<AppRuntime["getMintSummary"]>>["onChain"];
+        requirements: PaymentRequirements;
+        amountCspr: number;
+        payTo: string;
+        totalPaidQueries: number;
+      }
+    | { ok: false; reason: string; message?: string; facilitatorMode: string }
+  > {
+    if (!this.getLot(assetId)) {
+      return { ok: false, reason: "unknown_asset", facilitatorMode: this.x402Facilitator.mode };
+    }
+    if (this.x402Facilitator.mode !== "casper") {
+      return {
+        ok: false,
+        reason: "facilitator_not_casper",
+        message:
+          "Server is in mock mode. Set LASTRE_X402_MODE=casper + keys for real settle, or use POST /api/x402/simulate for judge-safe mock.",
+        facilitatorMode: this.x402Facilitator.mode,
+      };
+    }
+
+    const { requirements } = this.quoteProvenanceQuery(assetId);
+    const payment: PaymentPayload = {
+      nonce: requirements.nonce,
+      amount: requirements.maxAmountRequired,
+      from,
+      sig: signMockPayment({
+        nonce: requirements.nonce,
+        amount: requirements.maxAmountRequired,
+        from,
+      }),
+    };
+
+    const settled = await this.settleProvenanceQuery(assetId, payment);
+    if (!settled.ok) {
+      return {
+        ok: false,
+        reason: settled.reason,
+        message: settled.message,
+        facilitatorMode: this.x402Facilitator.mode,
+      };
+    }
+
+    return {
+      ok: true,
+      txHash: settled.txHash,
+      settlementKind: settled.settlementKind,
+      paymentExplorerUrl: settled.paymentExplorerUrl,
+      provenance: settled.provenance,
+      facilitatorMode: settled.facilitatorMode,
+      chainEvidence: settled.chainEvidence,
+      requirements,
+      amountCspr: requirements.maxAmountRequired / 1_000_000_000,
+      payTo: requirements.payTo,
+      totalPaidQueries: this.x402QueryCount,
     };
   }
 
