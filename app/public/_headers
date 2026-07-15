@@ -1,6 +1,9 @@
 # Cloudflare Pages — response headers for the Lastro console.
 /assets/*
-  Cache-Control: public, max-age=31536000, immutable
+  # Keep hashed assets revalidating instead of immutable. If an edge briefly
+  # serves the SPA fallback for a just-deployed asset path, immutable caching
+  # can poison the JS URL as text/html and blank the app.
+  Cache-Control: public, max-age=0, must-revalidate
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
