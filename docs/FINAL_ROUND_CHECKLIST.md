@@ -1,6 +1,9 @@
 # Casper Buildathon Final-Round Readiness Checklist
 
 Date: 2026-07-10
+**Updated:** 2026-07-15 — full execution SDD for Fugu close-out:
+
+→ [`docs/superpowers/specs/2026-07-15-final-round-qualification-sdd.md`](superpowers/specs/2026-07-15-final-round-qualification-sdd.md)
 
 This checklist maps the Casper Agentic Buildathon final-round requirements to
 the current Lastre repository state.
@@ -19,6 +22,7 @@ the current Lastre repository state.
 | CodeQL | Done | [`.github/workflows/codeql.yml`](../.github/workflows/codeql.yml). |
 | Dependabot alerts / updates | Done | GitHub vulnerability alerts and automated security fixes are enabled; config lives in [`.github/dependabot.yml`](../.github/dependabot.yml). |
 | CI/security tooling | Done | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) builds/tests web, app, agent packages, contracts, and runs npm high/critical audits. |
+| Final smoke script | Done | [`scripts/final-smoke.sh`](../scripts/final-smoke.sh) checks repo metadata, high/critical Dependabot count, API health, mint summary, x402 simulate, landing, and app. |
 | Fix High+ security alerts | Verified locally | `npm audit --audit-level=high` returns 0 high/critical vulnerabilities for root, web, app, and agent packages checked. GitHub Dependabot alert API was not accessible with the current token (`404`), so confirm the Security tab after push. |
 
 ## Application
@@ -28,10 +32,10 @@ the current Lastre repository state.
 | Functional MVP | Done | `https://app.lastre.io/marketplace` → **Run Demo**. |
 | Deployed on Casper Testnet | Done | `ProofOfOrigin` package hash `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561`. |
 | Intuitive UI workflows | Done | Marketplace → Run Demo → View in MyAssets; Agents page integration flow. |
-| Demo video or playbook | Done | [`JUDGES_PLAYBOOK.md`](../JUDGES_PLAYBOOK.md) and [`docs/DEMO_SCRIPT.md`](DEMO_SCRIPT.md). |
+| Demo video or playbook | Done | Demo video `https://youtu.be/UzhKMsKA6QE`, [`JUDGES_PLAYBOOK.md`](../JUDGES_PLAYBOOK.md), and [`docs/DEMO_SCRIPT.md`](DEMO_SCRIPT.md). |
 | Concise testing instructions | Done | [`JUDGES_PLAYBOOK.md`](../JUDGES_PLAYBOOK.md). |
-| Contract package hashes on BUIDL page | Manual | Copy from [`JUDGES_PLAYBOOK.md`](../JUDGES_PLAYBOOK.md) section 2. |
-| Sample Testnet transactions on BUIDL page | Manual | Copy from [`JUDGES_PLAYBOOK.md`](../JUDGES_PLAYBOOK.md) section 3. |
+| Contract package hashes on BUIDL page | Manual | Copy from [`docs/BUIDL_PAGE_PASTE.md`](BUIDL_PAGE_PASTE.md). |
+| Sample Testnet transactions on BUIDL page | Manual | Copy from [`docs/BUIDL_PAGE_PASTE.md`](BUIDL_PAGE_PASTE.md). |
 
 ## Must paste into DoraHacks/BUIDL page
 

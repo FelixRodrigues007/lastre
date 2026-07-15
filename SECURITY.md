@@ -10,7 +10,13 @@ Testnet contracts, a Render gateway, and a Vercel frontend.
 Do not open a public issue for suspected secrets exposure, key handling problems,
 or vulnerabilities that could affect deployed infrastructure.
 
-Contact the maintainers privately through the project owner before disclosure.
+Report vulnerabilities privately to Felix Rodrigues before disclosure:
+
+- GitHub owner: `@FelixRodrigues007`
+- Security contact: `FelixRodrigues007` through the repository owner profile/contact channel
+- If you already have the buildathon contact email, use that same private thread
+
+Do not post secrets, keys, dashboard links, or exploit details in public issues.
 
 ## Secret handling rules
 
