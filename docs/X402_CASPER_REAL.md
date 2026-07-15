@@ -32,8 +32,9 @@ Header `X-PAYMENT` uses the deterministic **mock signature** (quote knowledge).
 | --- | --- | --- |
 | `LASTRE_X402_MODE` | yes | `casper` (default `mock`) |
 | `LASTRE_X402_PAY_TO` | yes | Recipient public key hex or account-hash |
-| `LASTRE_X402_SECRET_KEY_PATH` | one of | Path to payer PEM |
-| `LASTRE_X402_SECRET_KEY_PEM` | one of | PEM body (Render secret → file at boot) |
+| `LASTRE_X402_SECRET_KEY_PATH` | one of | Path to payer PEM (local) |
+| `LASTRE_X402_SECRET_KEY_B64` | **preferred on Render** | `base64` of the entire PEM file (single line, no newlines issues) |
+| `LASTRE_X402_SECRET_KEY_PEM` | one of | Raw PEM (Render often mangles newlines → `malformedframing`) |
 | `CASPER_CLIENT_BIN` | no | Default `/app/bin/casper-client` in Docker |
 | `NODE_ADDRESS` / `CASPER_RPC_URL` | no | Default public testnet RPC |
 | `CHAIN_NAME` | no | Default `casper-test` |
@@ -72,15 +73,23 @@ Expected CLI fields:
 ## Render
 
 1. Redeploy service using `Dockerfile.app-api` (includes `casper-client` + entrypoint).
-2. Environment → Secret:
+2. Environment → Secret — **use base64** (avoids PEM newline corruption):
+
+```bash
+# On your Mac only — copy the single line output into Render:
+base64 -i ~/.casper-keys/lastro-deploy/secret_key.pem | tr -d '\n'
+echo   # newline after paste
+```
 
 ```text
 LASTRE_X402_MODE=casper
 LASTRE_X402_PAY_TO=<recipient public_key_hex>
-LASTRE_X402_SECRET_KEY_PEM=<full PEM including BEGIN/END lines>
+LASTRE_X402_SECRET_KEY_B64=<paste single-line base64 from command above>
 ```
 
-Or mount a secret file and set `LASTRE_X402_SECRET_KEY_PATH`.
+Optional: remove `LASTRE_X402_SECRET_KEY_PEM` if you set B64 (B64 wins).
+
+If you still use PEM and see `malformedframing`, switch to B64.
 
 3. Confirm:
 

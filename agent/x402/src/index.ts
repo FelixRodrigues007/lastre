@@ -23,6 +23,7 @@ export {
 } from "./casper-facilitator.js";
 export {
   createFacilitatorFromEnv,
+  normalizePem,
   prepareX402SecretsFromEnv,
   resolveX402Mode,
   type X402Mode,
