@@ -32,7 +32,7 @@ judges. It is intentionally operational, not marketing copy.
 | ProofOfOrigin package hash | `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561` |
 | Package address form | `package-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561` |
 | Deployer public key | `01825d5caa210121ea1e493223af5a76f7ff23c70322c5fd0f02eb09f2818f68ad` |
-| Current read-only counters | `accepted=2`, `rejected=1` |
+| Current read-only counters | `accepted=3`, `rejected=1` (may grow) |
 
 ## 3. Sample Testnet transactions
 
@@ -46,6 +46,9 @@ All transactions below are successful Casper Testnet transactions.
 | Register reference for `MINA-VALEDOURO-LOTE-002` | `bd6d476ee1fddcb1b0deae0185eefc6fecfcbefe616d2b80ebb75fc736fb9101` | Reference seal stored |
 | Agent-driven attest for `MINA-VALEDOURO-LOTE-002` | `43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4` | `Valid` recorded on-chain |
 | Earlier genuine attest for `MINA-VALEDOURO-LOTE-001` | `8c619f508443ded0ecd732050b976cb49e44a98501589e386516971351b4e32f` | `Valid` recorded on-chain |
+| Register reference for `CARBON-VCS-AMAZONIA-2024-001` | `f9fdf121951d95c2d10dff6843ef3b7d6d92e292bef21b73aaf103b822c22c88` | Carbon reference seal stored |
+| Agent-driven attest for `CARBON-VCS-AMAZONIA-2024-001` | `a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e` | Carbon `Valid` recorded on-chain |
+| Field sealer identity write (dual-key) | `e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e` | Sealer key ≠ attester; sealer-signed tx |
 
 Open any transaction by appending the hash to:
 
