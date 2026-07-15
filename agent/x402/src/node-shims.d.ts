@@ -23,7 +23,7 @@ declare module "node:crypto" {
 }
 
 declare module "node:fs" {
-  export function readFileSync(path: string | URL, encoding: "utf8"): string;
+  export function readFileSync(path: string | URL, encoding?: "utf8" | string): string;
   export function writeFileSync(
     path: string | URL,
     data: string | Uint8Array,
