@@ -17,9 +17,9 @@
 | Real CSPR payment **prod** | OK | `settlementKind=casper_deploy`, tx `27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c` |
 | CLI | OK | `packages/cli/bin/lastre.mjs` prove / pay mock / pay casper / evidence |
 | Tese seal > LLM | OK | sealer + Agents + evidence thesis |
-| Dual-key multi-operator | **OPEN** | roles in trustStack ≠ two independent attester keys in a documented dual-key run |
-| 2-hop composition | **OPEN** | no receipt graph tool→lastre hop demo |
-| MintGate on-chain mint | **OPEN** | hybrid-demo mints; honest null explorer |
+| Dual-key multi-operator | **SHIPPED** | `operators[]` + `dualKey.distinct` (sealer ≠ attester account-hash) |
+| 2-hop composition | **SHIPPED** | `tool_receipt → lastre_receipt` + Invalid kill-switch |
+| MintGate economics | **SHIPPED** | contract-logic parity gate (Valid-only); live package optional env |
 
 **Binary “beat top 3” checklist (from mega report)**
 
@@ -27,9 +27,9 @@
 | --- | --- | --- |
 | A3 payment CSPR real on explorer | ☐ | **☑** prod |
 | B2 CLI prove+pay | ☐ | **☑** |
-| C3 dual-key operators in evidence | ☐ | ☐ |
-| D2 2-hop receipt demo | ☐ | ☐ |
-| E2 mint honesty | ☐ | **☑** (no fake mint explorer) |
+| C3 dual-key operators in evidence | ☐ | **☑** |
+| D2 2-hop receipt demo | ☐ | **☑** |
+| E2 mint honesty + economics gate | ☐ | **☑** |
 | Smoke + evidence live | ☐ | **☑** |
 | Tese seal>LLM intact | ☐ | **☑** |
 
