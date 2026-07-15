@@ -121,8 +121,11 @@ test("resolveAttestationUrl maps the tampered audit row to the canonical Invalid
   );
 });
 
-test("resolveAttestationUrl keeps Carbon session receipts honest until Carbon has an asset-specific attest", () => {
-  assert.equal(resolveAttestationUrl("CARBON-VCS-AMAZONIA-2024-001", null, "Valid"), null);
+test("resolveAttestationUrl maps Carbon to its live asset-specific Valid attest", () => {
+  assert.equal(
+    resolveAttestationUrl("CARBON-VCS-AMAZONIA-2024-001", null, "Valid"),
+    "https://testnet.cspr.live/transaction/a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e",
+  );
 });
 
 test("resolveAttestationUrl uses the known-lot URL even when a synthetic hash is provided", () => {
@@ -155,7 +158,7 @@ test("KNOWN_ATTESTATION_URLS_BY_VERDICT only contains canonical /transaction/ li
   }
 });
 
-test("buildSessionEntries: synthetic receipt yields no live link but a session-receipt flag", () => {
+test("buildSessionEntries: carbon Valid resolves asset-specific attest; session hash kept as receipt", () => {
   const record: AuditRecord = {
     assetId: "CARBON-VCS-AMAZONIA-2024-001",
     decision: { action: "pay", reasoning: "demo", decidedBy: "rule" },
@@ -169,9 +172,13 @@ test("buildSessionEntries: synthetic receipt yields no live link but a session-r
     outcome: "tokenizable",
   };
   const [entry] = buildSessionEntries([record]);
-  assert.equal(entry.explorerUrl, null);
-  assert.equal(entry.sessionReceipt, true);
-  assert.equal(entry.receiptTxHash, SYNTHETIC_RECEIPT);
+  assert.equal(
+    entry.explorerUrl,
+    "https://testnet.cspr.live/transaction/a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e",
+  );
+  assert.equal(entry.sessionReceipt, false);
+  // Canonical asset link wins; session synthetic hash is not exposed as receipt.
+  assert.equal(entry.receiptTxHash, null);
 });
 
 test("buildSessionEntries: known tampered lot resolves canonical Invalid link even with session hash", () => {

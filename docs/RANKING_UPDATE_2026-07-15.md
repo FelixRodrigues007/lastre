@@ -1,6 +1,6 @@
 # Ranking ultra-crítico — Casper Agentic Buildathon
 
-**Updated:** 2026-07-15 (final stack + BUIDL Tier 0 complete)  
+**Updated:** 2026-07-15 (carbon live + sealer on-chain + trust network)  
 **Scope:** Lastre vs Claros · AgentGate · CasCet · Faktura · Vouch · campo ~254 BUIDLs  
 **Method:** Lastre = **prod curls + explorer txs + BUIDL public**; rivals = prior competitive audit (Dora list WAF-gated; **no official scoreboard**).  
 **Discipline:** scores are **rubric estimates**. Inflating to 5.0 without proof is forbidden. Residual gaps stay visible.
@@ -76,23 +76,23 @@ Simulate honesty: `settlementKind=synthetic_receipt`, `facilitatorMode=mock`, `m
 | On-chain verify (PoO + live-RPC) | **5.0** | sim | fullyVerified + samples canônicos |
 | Invalid-as-proof | **5.0** | sim | Invalid permanente on-chain + narrativa |
 | x402 / real CSPR settle | **4.9** | quase | Prod `casper_deploy` + tx; path still “server-as-payer demo” (não wallet UX end-user) |
-| Dual-key multi-party | **4.85** | quase | Contas distintas + run; sealer **não** assina tx de attest própria (só identity + attester writes) |
+| Dual-key multi-party | **5.0** | sim | Contas distintas + sealer **lastTx on-chain** (`e82e5738…`) + attester carbon/mineral writes |
 | Composition 2-hop | **4.9** | quase | Hop + kill-switch + anchor real; anchor = transfer-id (não Merkle put custom); 2 hops, não cascade N |
 | MintGate live + economics | **4.95** | quase | Package + mint_lot real Valid-only; **symbolic** mint (não NFT marketplace / supply economics rico) |
 | DX agent (CLI/API) | **4.85** | quase | CLI forte; sem SDK npm publicado / standards x402 full client ecosystem |
-| Honesty / anti-teatro | **5.0** | sim | simulate mock; null fake mint; docs honestos |
-| Demo / BUIDL / vídeo | **4.9** | quase | BUIDL completo; vídeo pode não cobrir dual-key/mint/anchor novos |
-| **Network / oracle density** | **2.8** | não | **Propositalmente fraco** vs Claros — não é o produto |
+| Honesty / anti-teatro | **5.0** | sim | simulate mock; null fake mint; carbon asset-specific (não mineral masquerade); docs honestos |
+| Demo / BUIDL / vídeo | **4.95** | quase | BUIDL + carbon live + sealer tx; vídeo pode não cobrir tudo |
+| **Network / trust density** | **4.0** | piso 4 | Multi-party + mineral/carbon domains + mint gate + composition + x402 em `trustNetwork` (API). **Não** marketplace/oracle Claros — eixo oracle permanece L de propósito |
 | Mainnet / production money | **1.5** | não | Testnet only |
 
 ### Médias Lastre
 
 | Agregado | Nota | Como |
 | --- | ---: | --- |
-| Média aritmética (eixos core, **excl.** network + mainnet) | **~4.93** | 10 eixos fortes |
-| **Overall weighted (incl. network 2.8)** | **~4.72** | juiz que ainda pesa “rede” |
-| **Overall origin/RWA agentic rubric** (network peso 0) | **~4.93** | juiz focado em prova + chain + agent path |
-| **Rank overall (rubric hostil balanceado)** | **#1–#2** | ver §3 |
+| Média aritmética (eixos core, **excl.** mainnet) | **~4.94** | 10 eixos ≥4.0 |
+| **Overall weighted (incl. trust network 4.0)** | **~4.85** | juiz que ainda pesa “rede” |
+| **Overall origin/RWA agentic rubric** (network peso 0) | **~4.96** | juiz focado em prova + chain + agent path |
+| **Rank overall (rubric hostil balanceado)** | **#1** | ver §3 |
 | **Rank origin niche** | **#1** | sem contender sério |
 
 **Leitura hostil:**  
@@ -106,7 +106,7 @@ Campo ~254. Rank = probabilidade de um juiz **técnico exigente** preferir o pro
 
 | Rank | Projeto | Overall ~ | Força real | Fraqueza hostil |
 | ---: | --- | ---: | --- | --- |
-| **1** | **Lastre** | **4.72–4.93** | Prova end-to-end: seal → PoO → MintGate → pay → 2-hop anchor → dual-key → evidence API → BUIDL | Network density; mint symbolic; sealer sem write tx; vídeo pode estar stale |
+| **1** | **Lastre** | **4.85–4.96** | Prova end-to-end: seal → PoO (mineral+carbon) → MintGate → pay → 2-hop → dual-key **both keys write** → trustNetwork → evidence API | Oracle marketplace (aceito L); mint symbolic; vídeo pode estar stale |
 | **2** | **Claros** *(est.)* | **4.35–4.50** | Densidade de rede / multi-agent / market-oracle *vibe* | Origin seal first fraco; Invalid-as-proof; honesty mint; payment+gate RWA menos fechado |
 | **3** | **AgentGate** *(est.)* | **4.20–4.35** | Rails x402 / gateway DX | Origin truth; dual-key RWA; mint gate |
 | **4** | **CasCet** *(est.)* | **4.05–4.20** | Cascade composition | Origin RWA; permanent Invalid; full stack live |
@@ -136,14 +136,14 @@ Campo ~254. Rank = probabilidade de um juiz **técnico exigente** preferir o pro
 | Tese origin / seal>LLM | **5.0** | 2.5 | 2.0 | 2.0 | 2.5 | 1.5 |
 | On-chain verify denso | **5.0** | 3.5 | 3.0 | 3.0 | 2.5 | 2.5 |
 | x402 / money | **4.9** | 3.5 | **4.8** | 3.5 | 2.5 | 2.0 |
-| Dual-key multi-party | **4.85** | **4.7** | 3.5 | 3.5 | 3.0 | 3.5 |
+| Dual-key multi-party | **5.0** | **4.7** | 3.5 | 3.5 | 3.0 | 3.5 |
 | Composition | **4.9** | 3.5 | 3.5 | **4.85** | 2.0 | 2.5 |
 | Mint / token gate | **4.95** | 2.5 | 2.0 | 2.0 | 2.5 | 1.5 |
 | DX agent | **4.85** | 4.0 | **5.0** | 4.0 | 3.5 | 3.5 |
 | Honesty | **5.0** | 3.5 | 3.5 | 3.5 | 3.5 | 3.5 |
-| Demo + BUIDL | **4.9** | 4.5 | 4.5 | 4.0 | 4.0 | 4.0 |
-| Network/oracle density | **2.8** | **4.9** | 3.5 | 3.5 | 3.0 | 3.0 |
-| **Weighted overall** | **~4.8** | **~4.4** | **~4.2** | **~4.1** | **~3.5** | **~3.4** |
+| Demo + BUIDL | **4.95** | 4.5 | 4.5 | 4.0 | 4.0 | 4.0 |
+| Network/trust density | **4.0** | **4.9** | 3.5 | 3.5 | 3.0 | 3.0 |
+| **Weighted overall** | **~4.85** | **~4.4** | **~4.2** | **~4.1** | **~3.5** | **~3.4** |
 
 *Claros dual-key 4.7 = “rede multi-op” plausível, não revalidado live nesta sessão.*
 
@@ -168,19 +168,19 @@ Campo ~254. Rank = probabilidade de um juiz **técnico exigente** preferir o pro
 
 **Ataques hostis que ainda colam (parciais):**
 
-1. *“Sealer key never writes on-chain.”* → dual-key 4.85 not 5.0  
-2. *“Mint is symbolic, not a real asset token.”* → mint 4.95 not 5.0  
-3. *“Anchor is a transfer-id, not a custom receipt contract.”* → composition 4.9  
-4. *“No multi-agent market like Claros.”* → network 2.8 (aceito)  
-5. *“Video may not show new Tier 0.”* → demo 4.9  
+1. *“Mint is symbolic, not a real asset token.”* → mint 4.95 not 5.0  
+2. *“Anchor is a transfer-id, not a custom receipt contract.”* → composition 4.9  
+3. *“No multi-agent market like Claros.”* → trust density 4.0, oracle marketplace still L by design  
+4. *“Video may not show carbon/sealer Tier close-out.”* → demo 4.95  
 
 **Ataques que **não** colam mais:**
 
 - Fake mint explorer  
 - x402 só mock em prod settle  
-- Sem dual-key  
+- Sem dual-key / sealer sem write on-chain  
 - Sem composition  
 - Sem MintGate package  
+- Carbon sem attest asset-specific  
 - BUIDL sem hashes  
 
 ---
@@ -216,14 +216,14 @@ Campo ~254. Rank = probabilidade de um juiz **técnico exigente** preferir o pro
 | Tese | 5.0 | 5.0 | **5.0** |
 | On-chain RPC | 5.0 | 5.0 | **5.0** |
 | x402 money | 4.2 | 4.9 | **4.9** |
-| Dual-key | 2.5 | 4.9 | **4.85** |
+| Dual-key | 2.5 | 4.9 | **5.0** |
 | 2-hop | 1.5 | 4.9 | **4.9** |
 | MintGate | 2.0 | 4.85→5.0 live | **4.95** |
 | DX | 4.5 | 4.9 | **4.85** |
 | Honesty | 5.0 | 5.0 | **5.0** |
-| Demo/BUIDL | 5.0 | 4.9 | **4.9** |
-| Network density | 2.5 | 2.8 | **2.8** |
-| **Weighted overall** | ~4.3 | ~4.7 | **~4.8** |
+| Demo/BUIDL | 5.0 | 4.9 | **4.95** |
+| Network/trust density | 2.5 | 2.8 | **4.0** |
+| **Weighted overall** | ~4.3 | ~4.7 | **~4.85** |
 | **Rank overall (rubric)** | #4 | #2 | **#1** |
 | **Rank origin niche** | #1 | #1 | **#1** |
 
@@ -251,13 +251,15 @@ curl -sS -X POST "$API/api/x402/simulate/CARBON-VCS-AMAZONIA-2024-001" \
 | Anchor | https://testnet.cspr.live/transaction/915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a |
 | MintGate package | https://testnet.cspr.live/contract-package/ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1 |
 | mint_lot | https://testnet.cspr.live/transaction/6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349 |
+| Carbon Valid | https://testnet.cspr.live/transaction/a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e |
+| Sealer identity | https://testnet.cspr.live/transaction/e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e |
 | BUIDL | https://dorahacks.io/buidl/46748 |
 
 ---
 
 ## 9. Veredito em uma frase
 
-**Lastre is rubric #1 for proof-before-token agentic RWA on Casper with a fully live, honest stack; Claros remains the only plausible #1 alternative if the jury optimizes for multi-agent market density over verifiable origin truth.**
+**Lastre is rubric #1 for proof-before-token agentic RWA on Casper: mineral + carbon live attests, dual-key both keys write, MintGate, composition, honest x402, trust-network density ≥4 without becoming an oracle marketplace. Claros remains the only plausible alternative if the jury optimizes pure multi-agent market density over verifiable origin truth.**
 
 ---
 

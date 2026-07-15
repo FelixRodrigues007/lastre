@@ -7,7 +7,8 @@ cd "$repo_root"
 SEALER_KEY_DIR="${LASTRE_SEALER_KEY_DIR:-$HOME/.casper-keys/lastro-sealer}"
 ATTESTER_KEY_DIR="${LASTRE_ATTESTER_KEY_DIR:-$HOME/.casper-keys/lastro-deploy}"
 ASSET_ID="${LASTRE_DUAL_KEY_ASSET_ID:-CARBON-VCS-AMAZONIA-2024-001}"
-ATTESTER_LAST_TX="${LASTRE_ATTESTER_LAST_TX:-43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4}"
+ATTESTER_LAST_TX="${LASTRE_ATTESTER_LAST_TX:-a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e}"
+SEALER_LAST_TX="${LASTRE_SEALER_LAST_TX:-e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e}"
 RULE="Two keys, one seal rule"
 OUT="${LASTRE_DUAL_KEY_OUTPUT:-output/dual-key-run.json}"
 ARTIFACT_OUT="${LASTRE_DUAL_KEY_ARTIFACT:-output/dual-key-artifact.json}"
@@ -64,7 +65,9 @@ out=pathlib.Path("$OUT")
 run={
   "sealer": {
     "publicKey": "$SEALER_PUBLIC_KEY",
-    "accountHash": "$SEALER_ACCOUNT"
+    "accountHash": "$SEALER_ACCOUNT",
+    "lastTx": "$SEALER_LAST_TX",
+    "lastTxExplorerUrl": "https://testnet.cspr.live/transaction/$SEALER_LAST_TX"
   },
   "attester": {
     "publicKey": "$ATTESTER_PUBLIC_KEY",
@@ -78,8 +81,10 @@ run={
   "rule": "$RULE",
   "notes": [
     "Sealer key generated/held separately from attester key.",
+    "Sealer lastTx is sealer-signed identity transfer on Casper Testnet.",
+    "Attester lastTx is carbon Valid ProofOfOrigin attest (CARBON-VCS-AMAZONIA-2024-001).",
     "Seal is computed offline from output/dual-key-artifact.json.",
-    "Register/attest writes are authorized by the attester key; no secret material is written to this output."
+    "No secret material is written to this output."
   ]
 }
 out.parent.mkdir(parents=True, exist_ok=True)

@@ -38,3 +38,8 @@
   color: var(--lastro-text-muted);
   font-style: italic;
 }
+
+.audit-on-chain__link--sample {
+  color: var(--lastro-text-muted);
+  font-weight: var(--lastro-weight-regular, 400);
+}

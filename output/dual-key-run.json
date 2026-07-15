@@ -1,13 +1,15 @@
 {
   "sealer": {
     "publicKey": "0193d8172e0e3aa24a7b1894331324ef17cb49d44ac4899b75083d1987b1725176",
-    "accountHash": "account-hash-4c8631b8d684faba4f3087c6be0fed6c506a9669bb378e6ee5fff7977b7d1657"
+    "accountHash": "account-hash-4c8631b8d684faba4f3087c6be0fed6c506a9669bb378e6ee5fff7977b7d1657",
+    "lastTx": "e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e",
+    "lastTxExplorerUrl": "https://testnet.cspr.live/transaction/e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e"
   },
   "attester": {
     "publicKey": "01825d5caa210121ea1e493223af5a76f7ff23c70322c5fd0f02eb09f2818f68ad",
     "accountHash": "account-hash-6de6ee75f7d41407d9e0643d24fe7debc36bbe75695950e544c4ebd11850e1b2",
-    "lastTx": "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4",
-    "lastTxExplorerUrl": "https://testnet.cspr.live/transaction/43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4"
+    "lastTx": "a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e",
+    "lastTxExplorerUrl": "https://testnet.cspr.live/transaction/a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e"
   },
   "assetId": "CARBON-VCS-AMAZONIA-2024-001",
   "artifactPath": "output/dual-key-artifact.json",
@@ -15,7 +17,8 @@
   "rule": "Two keys, one seal rule",
   "notes": [
     "Sealer key generated/held separately from attester key.",
-    "Seal is computed offline from output/dual-key-artifact.json.",
-    "Register/attest writes are authorized by the attester key; no secret material is written to this output."
+    "Sealer lastTx is sealer-signed identity transfer on Casper Testnet.",
+    "Attester lastTx is carbon Valid ProofOfOrigin attest for CARBON-VCS-AMAZONIA-2024-001.",
+    "Seal decides Valid/Invalid; keys only authorize roles."
   ]
 }

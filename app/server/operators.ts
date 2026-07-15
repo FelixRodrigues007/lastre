@@ -44,6 +44,10 @@ const SAMPLE_ATTEST_VALID =
   "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4";
 const SAMPLE_ATTEST_INVALID =
   "5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd";
+const SAMPLE_ATTEST_CARBON_VALID =
+  "a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e";
+const SAMPLE_SEALER_IDENTITY =
+  "e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e";
 const SAMPLE_PAYMENT =
   "27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c";
 
@@ -67,6 +71,8 @@ export function getOperators(): {
   relatedSampleTxs: {
     invalidAttest: string;
     validAttest: string;
+    carbonValidAttest: string;
+    sealerIdentity: string;
     payment: string;
   };
 } {
@@ -95,9 +101,9 @@ export function getOperators(): {
       label: "Field sealer (offline)",
       publicKey: sealerPk,
       accountHash: sealerAccount,
-      lastTx: null,
-      lastTxExplorerUrl: null,
-      duty: "Build canonical artifact + offline SHA-256 seal. No LLM. Separate key from attester.",
+      lastTx: SAMPLE_SEALER_IDENTITY,
+      lastTxExplorerUrl: explorerTx(SAMPLE_SEALER_IDENTITY),
+      duty: "Build canonical artifact + offline SHA-256 seal. No LLM. Separate key from attester — lastTx is sealer-signed on-chain identity.",
       keySeparation: "required",
     },
     {
@@ -105,9 +111,9 @@ export function getOperators(): {
       label: "Chain attester (ProofOfOrigin)",
       publicKey: attesterPk,
       accountHash: attesterAccount,
-      lastTx: SAMPLE_ATTEST_VALID,
-      lastTxExplorerUrl: explorerTx(SAMPLE_ATTEST_VALID),
-      duty: "Anchor Valid/Invalid on Casper. Sample Invalid tx also from this operator class.",
+      lastTx: SAMPLE_ATTEST_CARBON_VALID,
+      lastTxExplorerUrl: explorerTx(SAMPLE_ATTEST_CARBON_VALID),
+      duty: "Anchor Valid/Invalid on Casper. Sample lastTx = carbon Valid; mineral Valid + Invalid samples also from this operator class.",
       keySeparation: "required",
     },
     {
@@ -136,12 +142,102 @@ export function getOperators(): {
     operators,
     dualKeyDistinct,
     rule: dualKeyDistinct
-      ? "Two keys, one seal rule: field sealer ≠ chain attester account. Seal decides; keys only authorize roles."
+      ? "Two keys, one seal rule: field sealer ≠ chain attester account. Seal decides; keys only authorize roles. Both keys have distinct on-chain lastTx."
       : "WARNING: sealer and attester public keys are identical — dual-key separation not met.",
     relatedSampleTxs: {
       invalidAttest: SAMPLE_ATTEST_INVALID,
       validAttest: SAMPLE_ATTEST_VALID,
+      carbonValidAttest: SAMPLE_ATTEST_CARBON_VALID,
+      sealerIdentity: SAMPLE_SEALER_IDENTITY,
       payment: SAMPLE_PAYMENT,
     },
+  };
+}
+
+/**
+ * Honest trust-network graph for judges: multi-party operators + multi-domain
+ * origin (mineral + carbon) + composition hop + mint gate + agent pay.
+ * This is NOT a Claros-style multi-agent marketplace — it is the Lastre trust
+ * density surface (roles, domains, gates) with live explorer links.
+ */
+export function getTrustNetwork() {
+  const ops = getOperators();
+  const nodes = [
+    {
+      id: "field_sealer",
+      kind: "operator",
+      label: "Field sealer",
+      lastTx: SAMPLE_SEALER_IDENTITY,
+      explorerUrl: explorerTx(SAMPLE_SEALER_IDENTITY),
+    },
+    {
+      id: "chain_attester",
+      kind: "operator",
+      label: "Chain attester",
+      lastTx: SAMPLE_ATTEST_CARBON_VALID,
+      explorerUrl: explorerTx(SAMPLE_ATTEST_CARBON_VALID),
+    },
+    {
+      id: "domain_mineral",
+      kind: "domain",
+      label: "Mineral origin (MINA lots)",
+      lastTx: SAMPLE_ATTEST_VALID,
+      explorerUrl: explorerTx(SAMPLE_ATTEST_VALID),
+    },
+    {
+      id: "domain_carbon",
+      kind: "domain",
+      label: "Carbon origin (VCS Amazonia)",
+      lastTx: SAMPLE_ATTEST_CARBON_VALID,
+      explorerUrl: explorerTx(SAMPLE_ATTEST_CARBON_VALID),
+    },
+    {
+      id: "paying_agent",
+      kind: "operator",
+      label: "Paying agent (x402)",
+      lastTx: SAMPLE_PAYMENT,
+      explorerUrl: explorerTx(SAMPLE_PAYMENT),
+    },
+    {
+      id: "mint_gate",
+      kind: "gate",
+      label: "MintGate (Valid-only)",
+      lastTx: "6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349",
+      explorerUrl: explorerTx("6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349"),
+    },
+    {
+      id: "composition",
+      kind: "composition",
+      label: "2-hop composition anchor",
+      lastTx: "915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a",
+      explorerUrl: explorerTx("915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a"),
+    },
+    {
+      id: "human_escalation",
+      kind: "operator",
+      label: "Human escalation",
+      lastTx: null,
+      explorerUrl: null,
+    },
+  ];
+  const edges = [
+    { from: "field_sealer", to: "domain_mineral", relation: "seals_offline" },
+    { from: "field_sealer", to: "domain_carbon", relation: "seals_offline" },
+    { from: "chain_attester", to: "domain_mineral", relation: "attests_on_chain" },
+    { from: "chain_attester", to: "domain_carbon", relation: "attests_on_chain" },
+    { from: "paying_agent", to: "domain_carbon", relation: "pays_to_verify" },
+    { from: "domain_mineral", to: "mint_gate", relation: "valid_only_mint" },
+    { from: "domain_carbon", to: "composition", relation: "receipt_hop" },
+    { from: "paying_agent", to: "human_escalation", relation: "escalate_path" },
+  ];
+  return {
+    model: "trust_network",
+    note: "Multi-party + multi-domain trust density. Not an oracle marketplace (that axis stays Claros-class).",
+    dualKeyDistinct: ops.dualKeyDistinct,
+    nodeCount: nodes.length,
+    edgeCount: edges.length,
+    domains: ["mineral", "carbon"],
+    nodes,
+    edges,
   };
 }

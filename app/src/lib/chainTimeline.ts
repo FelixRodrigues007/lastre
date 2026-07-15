@@ -24,6 +24,12 @@ export const CANONICAL_TESTNET_TX_HASHES: ReadonlySet<string> = new Set([
   "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4",
   // Earlier genuine attest MINA-VALEDOURO-LOTE-001 -> Valid
   "8c619f508443ded0ecd732050b976cb49e44a98501589e386516971351b4e32f",
+  // Register reference CARBON-VCS-AMAZONIA-2024-001
+  "f9fdf121951d95c2d10dff6843ef3b7d6d92e292bef21b73aaf103b822c22c88",
+  // Agent-driven attest CARBON-VCS-AMAZONIA-2024-001 -> Valid
+  "a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e",
+  // Field sealer identity write (separate key from attester)
+  "e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e",
 ]);
 
 const CSPR_TX_BASE = "https://testnet.cspr.live/transaction/";
@@ -39,6 +45,7 @@ const CSPR_TX_BASE = "https://testnet.cspr.live/transaction/";
 export const KNOWN_ATTESTATION_URLS: Record<string, string> = {
   "MINA-VALEDOURO-LOTE-001": `${CSPR_TX_BASE}5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd`,
   "MINA-VALEDOURO-LOTE-002": `${CSPR_TX_BASE}43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4`,
+  "CARBON-VCS-AMAZONIA-2024-001": `${CSPR_TX_BASE}a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e`,
 };
 
 /** Verified Casper Testnet attestation links keyed by lot id + verdict. */
@@ -54,6 +61,9 @@ export const KNOWN_ATTESTATION_URLS_BY_VERDICT: Partial<
   },
   "MINA-VALEDOURO-LOTE-002": {
     Valid: `${CSPR_TX_BASE}43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4`,
+  },
+  "CARBON-VCS-AMAZONIA-2024-001": {
+    Valid: `${CSPR_TX_BASE}a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e`,
   },
 };
 

@@ -9,10 +9,16 @@
 
 **Rule:** sealer ≠ attester. Seal decides Valid/Invalid; keys only authorize roles.
 
-## Attester sample txs (on-chain)
+## On-chain sample txs (both keys write)
 
-- Valid: `43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4`
-- Invalid: `5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd`
+| Role | Tx | Purpose |
+| --- | --- | --- |
+| Field sealer | `e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e` | Sealer identity write (initiator = sealer pubkey) |
+| Chain attester — carbon Valid | `a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e` | `CARBON-VCS-AMAZONIA-2024-001` attest |
+| Chain attester — mineral Valid | `43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4` | `MINA-VALEDOURO-LOTE-002` attest |
+| Chain attester — Invalid | `5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd` | Tampered permanent proof |
+
+Carbon register (attester): `f9fdf121951d95c2d10dff6843ef3b7d6d92e292bef21b73aaf103b822c22c88`
 
 ## API
 

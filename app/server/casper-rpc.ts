@@ -14,6 +14,11 @@ export const CANONICAL_EVIDENCE = {
   invalidTx: "5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd",
   validTx: "43b00eddb1371533584c673e1a77f77e479cf8829748bff8da835fd42e16f6f4",
   register002: "bd6d476ee1fddcb1b0deae0185eefc6fecfcbefe616d2b80ebb75fc736fb9101",
+  /** Carbon VCS demo lot — asset-specific Valid attest (same seal as /api simulate). */
+  carbonRegister: "f9fdf121951d95c2d10dff6843ef3b7d6d92e292bef21b73aaf103b822c22c88",
+  carbonValidTx: "a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e",
+  /** Field sealer key write — proves sealer ≠ attester on-chain. */
+  sealerIdentityTx: "e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e",
 } as const;
 
 /**
@@ -29,6 +34,9 @@ export const CANONICAL_TESTNET_TX_HASHES: ReadonlySet<string> = new Set([
   CANONICAL_EVIDENCE.register002,
   CANONICAL_EVIDENCE.validTx,
   "8c619f508443ded0ecd732050b976cb49e44a98501589e386516971351b4e32f", // earlier valid001
+  CANONICAL_EVIDENCE.carbonRegister,
+  CANONICAL_EVIDENCE.carbonValidTx,
+  CANONICAL_EVIDENCE.sealerIdentityTx,
 ]);
 
 /** True only for a confirmed on-chain tx hash (not synthetic/mock receipts). */
@@ -124,7 +132,15 @@ export async function getLiveRpcEvidence(): Promise<LiveRpcEvidence> {
   const targets: Array<{ hash: string; purpose: string }> = [
     { hash: CANONICAL_EVIDENCE.installTx, purpose: "Install ProofOfOrigin package" },
     { hash: CANONICAL_EVIDENCE.invalidTx, purpose: "Tampered attest → Invalid (permanent proof)" },
-    { hash: CANONICAL_EVIDENCE.validTx, purpose: "Agent-driven attest → Valid" },
+    { hash: CANONICAL_EVIDENCE.validTx, purpose: "Agent-driven attest MINA-002 → Valid" },
+    {
+      hash: CANONICAL_EVIDENCE.carbonValidTx,
+      purpose: "Agent-driven attest CARBON-VCS-AMAZONIA-2024-001 → Valid",
+    },
+    {
+      hash: CANONICAL_EVIDENCE.sealerIdentityTx,
+      purpose: "Field sealer identity write (dual-key, sealer ≠ attester)",
+    },
   ];
 
   const checks = await Promise.all(

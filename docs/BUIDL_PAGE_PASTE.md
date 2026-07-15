@@ -171,13 +171,23 @@ DEMONSTRATION ONLY. Simulated assets, no investment offered. No yield, return, o
 
 ## Tier 0 Beat-Claros evidence update (2026-07-15)
 
-Dual-key run:
+Dual-key run (both keys write on-chain):
 
 - Script: `scripts/dual-key-pipeline.sh`
 - Output: `output/dual-key-run.json`
 - Field sealer account: `account-hash-4c8631b8d684faba4f3087c6be0fed6c506a9669bb378e6ee5fff7977b7d1657`
 - Chain attester account: `account-hash-6de6ee75f7d41407d9e0643d24fe7debc36bbe75695950e544c4ebd11850e1b2`
+- Sealer identity tx: `e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e`
+- Sealer explorer: https://testnet.cspr.live/transaction/e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e
 - Rule: `Two keys, one seal rule`
+
+Carbon domain (asset-specific, live):
+
+- Asset: `CARBON-VCS-AMAZONIA-2024-001`
+- Seal: `2e9feed35f5d887adf94819553cce0b559df2efab8c3a3dfd83c585f813a1d57`
+- Register: `f9fdf121951d95c2d10dff6843ef3b7d6d92e292bef21b73aaf103b822c22c88`
+- Attest Valid: `a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e`
+- Explorer: https://testnet.cspr.live/transaction/a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e
 
 Composition anchor:
 
@@ -188,6 +198,12 @@ Composition anchor:
 
 MintGate live:
 
-- Status: **blocked** (`ContractDeploymentError` during Odra livenet deploy).
-- No MintGate package hash or `mint_lot` tx is claimed yet.
+- Status: **PASS**
+- Package: `hash-ea049cd14a502412ed53b4ebc00abb6639a83ca2f07aa3c2113693c94b995ae1`
+- mint_lot (MINA-002 Valid): `6878f3e146dc7baa0ef98eb57a53485806755cf389960bb2507bae2b81e36349`
 - Details: `docs/MINTGATE_LIVE.md`.
+
+Trust network (evidence API):
+
+- `GET /api/evidence` → `trustNetwork` (multi-party + mineral/carbon domains + mint gate + composition + x402 pay)
+- Honest note: not a Claros-style oracle marketplace; origin trust density with live explorer links.

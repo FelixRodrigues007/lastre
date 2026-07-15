@@ -29,7 +29,7 @@ import {
   type PaymentPayload,
   type PaymentRequirements,
 } from "../../agent/x402/dist/index.js";
-import { getOperators } from "./operators.js";
+import { getOperators, getTrustNetwork } from "./operators.js";
 import { MintEconomicsGate } from "./mint-economics.js";
 import { ReceiptStore } from "./receipts.js";
 import { getCompositionAnchorEvidence } from "./composition-anchor.js";
@@ -378,7 +378,11 @@ export class AppRuntime {
         distinct: ops.dualKeyDistinct,
         rule: ops.rule,
         relatedSampleTxs: ops.relatedSampleTxs,
+        sealerHasOnChainTx: Boolean(
+          ops.operators.find((o) => o.role === "field_sealer")?.lastTx,
+        ),
       },
+      trustNetwork: getTrustNetwork(),
       composition: {
         model: "tool_receipt → lastre_receipt",
         killSwitch: "Invalid lastre hop aborts composition (verdict=Aborted)",
