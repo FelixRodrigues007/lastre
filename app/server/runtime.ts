@@ -32,6 +32,7 @@ import {
 import { getOperators } from "./operators.js";
 import { MintEconomicsGate } from "./mint-economics.js";
 import { ReceiptStore } from "./receipts.js";
+import { getCompositionAnchorEvidence } from "./composition-anchor.js";
 
 /** Multi-party trust stack — protocol roles, not fake second operators. */
 export const TRUST_STACK = [
@@ -358,6 +359,7 @@ export class AppRuntime {
     const testnet = await getLiveTestnetSnapshot();
     const ops = getOperators();
     const economics = this.mintGate.snapshot();
+    const anchor = getCompositionAnchorEvidence();
     // Ensure a demo 2-hop graph exists for judges
     if (this.receipts.list().length === 0) {
       try {
@@ -380,6 +382,11 @@ export class AppRuntime {
       composition: {
         model: "tool_receipt → lastre_receipt",
         killSwitch: "Invalid lastre hop aborts composition (verdict=Aborted)",
+        chainRoot: anchor.chainRoot,
+        anchorTx: anchor.anchorTx,
+        anchorExplorerUrl: anchor.anchorExplorerUrl,
+        anchored: anchor.anchored,
+        anchorNote: anchor.note,
         receipts: this.receipts.list().slice(0, 10),
       },
       mintGate: economics,

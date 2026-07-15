@@ -1,0 +1,9 @@
+{
+  "assetId": "CARBON-VCS-AMAZONIA-2024-001",
+  "category": "dual_key_operational_run",
+  "capturedAtISO": "2026-07-15T00:00:00.000Z",
+  "operator": "Lastre field sealer",
+  "sealerPublicKey": "0193d8172e0e3aa24a7b1894331324ef17cb49d44ac4899b75083d1987b1725176",
+  "attesterPublicKey": "01825d5caa210121ea1e493223af5a76f7ff23c70322c5fd0f02eb09f2818f68ad",
+  "rule": "Two keys, one seal rule"
+}
