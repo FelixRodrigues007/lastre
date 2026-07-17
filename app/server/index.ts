@@ -406,6 +406,27 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     return;
   }
 
+  // Origin autonomy loop (session log + dense proof cycles). Additive; read-only GET.
+  if (method === "GET" && pathname === "/api/agent/autonomy") {
+    sendJson(res, 200, {
+      ...runtime.getAutonomySummary(),
+      recent: runtime.listAutonomyCycles(10),
+    });
+    return;
+  }
+
+  // Run one autonomy cycle (mock pay + isolated agent scenarios). Never casper settle.
+  if (method === "POST" && pathname === "/api/agent/autonomy/cycle") {
+    const body = await readJsonBody<{ source?: string }>(req);
+    const cycle = await runtime.runAutonomyCycle(body?.source || "api");
+    sendJson(res, cycle.ok ? 200 : 207, {
+      ok: cycle.ok,
+      cycle,
+      summary: runtime.getAutonomySummary(),
+    });
+    return;
+  }
+
   // MintGate economics (contract-logic parity)
   if (method === "GET" && pathname === "/api/mint/economics") {
     sendJson(res, 200, runtime.getMintEconomics());

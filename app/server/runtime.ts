@@ -33,6 +33,13 @@ import { getOperators, getTrustNetwork } from "./operators.js";
 import { MintEconomicsGate } from "./mint-economics.js";
 import { ReceiptStore } from "./receipts.js";
 import { getCompositionAnchorEvidence } from "./composition-anchor.js";
+import {
+  AutonomyStore,
+  newCycleId,
+  type AutonomyCycleRecord,
+  type AutonomyScenarioResult,
+  type AutonomySummary,
+} from "./autonomy.js";
 
 /** Multi-party trust stack — protocol roles, not fake second operators. */
 export const TRUST_STACK = [
@@ -153,6 +160,9 @@ export class AppRuntime {
 
   // 2-hop composition receipts
   private readonly receipts = new ReceiptStore();
+
+  /** Session-only origin autonomy cycle log (not oracle feed counter). */
+  private readonly autonomy = new AutonomyStore();
 
   // x402 provenance provider: LASTRE_X402_MODE=mock (default) | casper.
   // mock → synthetic_receipt; casper → real casper-client transfer when keys set.
@@ -412,7 +422,180 @@ export class AppRuntime {
             : "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence.",
       },
       invalidIsProof: true,
+      /** Additive: origin autonomy loop summary (session). Does not replace on-chain counters. */
+      originAutonomy: this.autonomy.summary(),
     };
+  }
+
+  /** Public autonomy surface for judges / CI — never invents on-chain counters. */
+  getAutonomySummary(): AutonomySummary {
+    return this.autonomy.summary();
+  }
+
+  listAutonomyCycles(limit = 20): AutonomyCycleRecord[] {
+    return this.autonomy.list(limit);
+  }
+
+  /**
+   * One autonomous origin cycle (session-side).
+   * - Isolated agent stack for seal/decide/verdict scenarios (does not mutate demo origin chain)
+   * - Mock x402 simulate for a known asset (judge-safe; no casper settle)
+   * - MintGate dry-run NoValidProof only (no free mints)
+   * - Live RPC evidence re-check when public node responds
+   */
+  async runAutonomyCycle(source = "api"): Promise<AutonomyCycleRecord> {
+    const scenarios: AutonomyScenarioResult[] = [];
+    const demos = createDemoArtifacts();
+    const refs = createDemoReferenceArtifacts();
+    const isolatedChain = createOriginChainWithReferences(refs);
+    const isolatedGateway = new LocalGateway(refs);
+    const agent = new Agent(new RuleDecider(), isolatedGateway, isolatedChain);
+
+    const runLot = async (
+      scenario: AutonomyScenarioResult["scenario"],
+      artifact: ProvenanceArtifact,
+      expect: { outcome: string; verdict?: string | null },
+    ) => {
+      try {
+        const record = await agent.processLot(structuredClone(artifact));
+        const verdict = record.verification?.verdict ?? null;
+        const ok =
+          record.outcome === expect.outcome &&
+          (expect.verdict === undefined || verdict === expect.verdict);
+        scenarios.push({
+          scenario,
+          ok,
+          outcome: record.outcome,
+          detail: verdict ? `verdict=${verdict}` : record.decision.action,
+          assetId: artifact.assetId,
+        });
+      } catch (error) {
+        scenarios.push({
+          scenario,
+          ok: false,
+          outcome: "error",
+          detail: error instanceof Error ? error.message : String(error),
+          assetId: artifact.assetId,
+        });
+      }
+    };
+
+    await runLot("VALID_MINA", demos.valid, { outcome: "tokenizable", verdict: "Valid" });
+    await runLot("INVALID_TAMPER", demos.tampered, { outcome: "rejected", verdict: "Invalid" });
+    await runLot("VALID_CARBON", demos.carbonValid, { outcome: "tokenizable", verdict: "Valid" });
+    await runLot("DUPLICATE_SKIP", demos.validDuplicate, { outcome: "skipped" });
+    await runLot("OUT_OF_PERIMETER", demos.outOfRegion, { outcome: "escalated" });
+
+    // Seal honesty: tamper breaks deterministic seal vs reference
+    try {
+      const validSeal = computeSeal(demos.valid);
+      const tamperedSeal = computeSeal(demos.tampered);
+      const sealOk = validSeal !== tamperedSeal && validSeal.length === 64;
+      scenarios.push({
+        scenario: "INVALID_TAMPER",
+        ok: sealOk,
+        outcome: sealOk ? "seal_mismatch_detected" : "seal_check_failed",
+        detail: `valid=${validSeal.slice(0, 12)}… tampered=${tamperedSeal.slice(0, 12)}…`,
+        assetId: demos.tampered.assetId,
+      });
+    } catch (error) {
+      scenarios.push({
+        scenario: "INVALID_TAMPER",
+        ok: false,
+        outcome: "seal_error",
+        detail: error instanceof Error ? error.message : String(error),
+      });
+    }
+
+    // MintGate dry-run: Invalid never mints (isolated gate — does not touch session mintGate)
+    const dryGate = new MintEconomicsGate();
+    const noProof = dryGate.mintLot({
+      assetId: demos.tampered.assetId,
+      minter: "autonomy-dry-run",
+      hasValidProof: false,
+    });
+    const noProofOk = !noProof.ok && noProof.error === "NoValidProof";
+    scenarios.push({
+      scenario: "INVALID_TAMPER",
+      ok: noProofOk,
+      outcome: noProof.ok ? "mint_unexpected" : noProof.error,
+      detail: noProof.ok ? "minted without proof" : noProof.message,
+      assetId: demos.tampered.assetId,
+    });
+
+    // Mock pay (real runtime path — always synthetic; never casper settle from autonomy)
+    let mockPayOk: boolean | null = null;
+    try {
+      const pay = await this.simulateAgentProvenanceQuery(
+        "CARBON-VCS-AMAZONIA-2024-001",
+        `autonomy-${source}`,
+      );
+      mockPayOk = Boolean(
+        pay.ok &&
+          pay.settlementKind === "synthetic_receipt" &&
+          pay.facilitatorMode === "mock",
+      );
+      scenarios.push({
+        scenario: "MOCK_PAY",
+        ok: mockPayOk,
+        outcome: pay.ok ? String(pay.settlementKind) : "pay_failed",
+        detail: pay.ok
+          ? `facilitator=${pay.facilitatorMode}; mint=${pay.provenance?.csprLinks?.mint ?? null}`
+          : "simulate_failed",
+        assetId: "CARBON-VCS-AMAZONIA-2024-001",
+      });
+    } catch (error) {
+      mockPayOk = false;
+      scenarios.push({
+        scenario: "MOCK_PAY",
+        ok: false,
+        outcome: "pay_error",
+        detail: error instanceof Error ? error.message : String(error),
+        assetId: "CARBON-VCS-AMAZONIA-2024-001",
+      });
+    }
+
+    // Live RPC re-verify (read-only)
+    let evidenceFullyVerified: boolean | null = null;
+    try {
+      const testnet = await getLiveTestnetSnapshot();
+      evidenceFullyVerified = testnet.rpcEvidence?.fullyVerified ?? null;
+      const rpcOk = evidenceFullyVerified === true;
+      scenarios.push({
+        scenario: "EVIDENCE_RPC",
+        ok: rpcOk || evidenceFullyVerified === null,
+        outcome: rpcOk
+          ? "fullyVerified"
+          : evidenceFullyVerified === null
+            ? "rpc_unavailable"
+            : "not_fully_verified",
+        detail: `accepted=${testnet.accepted}; rejected=${testnet.rejected}; source=${testnet.source}`,
+      });
+    } catch (error) {
+      scenarios.push({
+        scenario: "EVIDENCE_RPC",
+        ok: false,
+        outcome: "rpc_error",
+        detail: error instanceof Error ? error.message : String(error),
+      });
+    }
+
+    // Core agent + mock-pay must pass. Live RPC is informational (node can be flaky).
+    const hard = scenarios.filter((s) => s.scenario !== "EVIDENCE_RPC");
+    const cycleOk = hard.every((s) => s.ok);
+
+    const record: AutonomyCycleRecord = {
+      cycleId: newCycleId(),
+      at: new Date().toISOString(),
+      source,
+      ok: cycleOk,
+      scenarios,
+      evidenceFullyVerified,
+      mockPayOk,
+      facilitatorMode: "mock",
+    };
+    this.autonomy.record(record);
+    return record;
   }
 
   // Simple DeFi collateral simulation (checks minted + proof)
