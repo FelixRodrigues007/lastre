@@ -5,6 +5,8 @@
  *   lastre prove <assetId>
  *   lastre prove <assetId> --pay [--mode mock|casper]
  *   lastre evidence
+ *   lastre autonomy              GET /api/agent/autonomy
+ *   lastre autonomy --run         POST /api/agent/autonomy/cycle (mock only)
  *
  * Env:
  *   LASTRE_API_BASE   default https://app-api.lastre.io
@@ -26,6 +28,8 @@ Usage:
                                       Real settle: X-PAYMENT against casper-mode API
                                       (or POST /api/x402/settle when server has keys)
   lastre evidence                     GET /api/evidence (exit 0 if rpc fullyVerified)
+  lastre autonomy                     GET /api/agent/autonomy summary
+  lastre autonomy --run               POST one origin cycle (mock pay only; never casper settle)
 
 Env:
   LASTRE_API_BASE   (default ${API_BASE})
@@ -60,6 +64,10 @@ async function main() {
   const cmd = args[0];
   if (cmd === "evidence") {
     await cmdEvidence();
+    return;
+  }
+  if (cmd === "autonomy") {
+    await cmdAutonomy(args.includes("--run"));
     return;
   }
   if (cmd === "prove") {
@@ -247,6 +255,26 @@ async function cmdEvidence() {
   if (body.onChain?.rpcEvidence && body.onChain.rpcEvidence.fullyVerified === false) {
     process.exit(4);
   }
+}
+
+/** Origin autonomy loop summary / one mock-only cycle (never casper settle). */
+async function cmdAutonomy(run) {
+  if (run) {
+    const res = await fetch(`${API_BASE}/api/agent/autonomy/cycle`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ source: "lastre-cli" }),
+    });
+    const body = await res.json();
+    console.log(JSON.stringify({ httpStatus: res.status, ...body }, null, 2));
+    if (!res.ok && res.status !== 207) process.exit(1);
+    if (body.ok === false) process.exit(2);
+    return;
+  }
+  const res = await fetch(`${API_BASE}/api/agent/autonomy`);
+  const body = await res.json();
+  console.log(JSON.stringify({ httpStatus: res.status, ...body }, null, 2));
+  if (!res.ok) process.exit(1);
 }
 
 main().catch((err) => {

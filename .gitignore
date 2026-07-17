@@ -6,6 +6,8 @@ target/
 node_modules/
 dist/
 app/server-dist/
+# Local autonomy cycle log (optional)
+output/autonomy-log.jsonl
 # Env & secrets
 .env
 .env.*
