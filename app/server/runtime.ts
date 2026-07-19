@@ -18,7 +18,7 @@ import type { ProvenanceArtifact } from "../../agent/sealer/dist/src/sealer.js";
 import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
 
 import { PACKAGE_HASH, PACKAGE_URL } from "./constants.js";
-import { explorerTxUrlIfCanonical } from "./casper-rpc.js";
+import { explorerTxUrlIfCanonical, explorerTxUrlIfDeployHash } from "./casper-rpc.js";
 import { randomUUID } from "node:crypto";
 import {
   DEFAULT_PAYMENT_REQUIREMENTS,
@@ -769,7 +769,9 @@ export class AppRuntime {
       txHash: settlement.txHash,
       settlementKind: settlement.kind,
       paymentExplorerUrl:
-        settlement.kind === "casper_deploy" ? explorerTxUrlIfCanonical(settlement.txHash) : null,
+        settlement.kind === "casper_deploy"
+          ? explorerTxUrlIfDeployHash(settlement.txHash)
+          : null,
       provenance: this.getProvenanceSnapshot(assetId),
       facilitatorMode: this.x402Facilitator.mode,
       chainEvidence: summary.onChain,

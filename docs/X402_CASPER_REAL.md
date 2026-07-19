@@ -115,3 +115,30 @@ node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay --mode
 
 Quote amount is `2_500_000_000` motes (**2.5 CSPR**) — Casper Testnet minimum native transfer — plus standard payment gas (~2.5 CSPR).  
 Payer purse must be funded on testnet.
+
+## Live production sample (2026-07-19)
+
+```bash
+curl -sS -X POST https://app-api.lastre.io/api/x402/settle/CARBON-VCS-AMAZONIA-2024-001
+```
+
+| Field | Value |
+| --- | --- |
+| `ok` | `true` |
+| `settlementKind` | `casper_deploy` |
+| `facilitatorMode` | `casper` |
+| `txHash` | `4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6` |
+| Explorer | https://testnet.cspr.live/transaction/4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6 |
+| On-chain action | **Transfer 2.50 CSPR** (native) · `casper-test` · ~19:03:34 UTC |
+| Provenance | `verdict=Valid`, `sealMatch=true` for carbon asset |
+
+## vs MAKE / CSPR.cloud official x402 facilitator
+
+| | Lastre prod today | MAKE path (Telegram David H) |
+| --- | --- | --- |
+| Settlement | `casper-client transfer` native **CSPR** | Facilitator HTTP **verify/settle** |
+| Asset | Native CSPR | **WCSPR** (CEP-18) |
+| Endpoint | Our API + casper-client | `https://x402-facilitator.cspr.cloud` |
+| Proof for jury | **Real testnet tx hash** | Same class of proof if adopted |
+
+Both move real testnet value. Lastre already proves paid provenance with on-chain transfer. Optional later: wire WCSPR + CSPR.cloud for full parity with Linux Foundation / MAKE examples — **not required to claim real settle today**.

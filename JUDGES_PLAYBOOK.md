@@ -163,8 +163,9 @@ make query
   or `escalate`; it cannot overwrite the seal verdict.
 - x402 **judge UI / simulate** uses a mock facilitator (`synthetic_receipt`, no CSPR moved).
   Real testnet CSPR is available via `LASTRE_X402_MODE=casper` + keys on the API
-  (`settlementKind: casper_deploy`). See `docs/X402_CASPER_REAL.md` and sample
-  payment tx in `docs/BUIDL_PAGE_PASTE.md`.
+  (`settlementKind: casper_deploy`). Sample prod settle (2026-07-19):  
+  https://testnet.cspr.live/transaction/4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6  
+  (native 2.5 CSPR transfer; see `docs/X402_CASPER_REAL.md` and `docs/BUIDL_PAGE_PASTE.md`).
 - MintGate, collateral, and My Assets flows in the public app are labeled demo
   events.
 - Both accepted and rejected attestations are useful evidence. An `Invalid`

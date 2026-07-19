@@ -18,3 +18,4 @@ output/autonomy-log.jsonl
 *.log
 .vercel
 .gstack/
+.cache/
