@@ -19,6 +19,9 @@ export const CANONICAL_EVIDENCE = {
   carbonValidTx: "a4124ea9ce1de42e4b5007bd5bf618dc770b6c8c8f5c30ec452a373c432dc02e",
   /** Field sealer key write — proves sealer ≠ attester on-chain. */
   sealerIdentityTx: "e82e5738d604fcd7f0bf68e27e8f458ecf046bbf97fe8fb29690e88a6767b83e",
+  /** x402 real CSPR settles (CasperFacilitator native transfer) — verified on explorer. */
+  x402PayProd20260715: "27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c",
+  x402PayProd20260719: "4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6",
 } as const;
 
 /**
@@ -26,6 +29,9 @@ export const CANONICAL_EVIDENCE = {
  * public JSON-RPC. Only these may be rendered as live cspr.live links. Session
  * `synthetic_receipt` and simulated `mint-*` hashes are intentionally excluded
  * so we never publish a dead explorer link.
+ *
+ * Note: new casper_deploy settles are real on-chain but only get explorer links
+ * after we add their hash here (or switch to "64-hex + live RPC verify" later).
  */
 export const CANONICAL_TESTNET_TX_HASHES: ReadonlySet<string> = new Set([
   CANONICAL_EVIDENCE.installTx,
@@ -37,12 +43,22 @@ export const CANONICAL_TESTNET_TX_HASHES: ReadonlySet<string> = new Set([
   CANONICAL_EVIDENCE.carbonRegister,
   CANONICAL_EVIDENCE.carbonValidTx,
   CANONICAL_EVIDENCE.sealerIdentityTx,
+  CANONICAL_EVIDENCE.x402PayProd20260715,
+  CANONICAL_EVIDENCE.x402PayProd20260719,
+  "a30d83c78c269caf922d020a96d2ffd8e3eb4654d3c53e8faf3059ea80101f02", // local x402 pay sample
 ]);
 
 /** True only for a confirmed on-chain tx hash (not synthetic/mock receipts). */
 export function isCanonicalTestnetTx(hash: string | null | undefined): boolean {
   if (!hash) return false;
   return CANONICAL_TESTNET_TX_HASHES.has(hash.trim().toLowerCase());
+}
+
+/** True for a plausible Casper deploy hash (64 hex) — not synthetic mint-* / sha labels. */
+export function isPlausibleDeployHash(hash: string | null | undefined): boolean {
+  if (!hash) return false;
+  const h = hash.trim().toLowerCase();
+  return /^[0-9a-f]{64}$/.test(h);
 }
 
 /**
@@ -52,6 +68,15 @@ export function isCanonicalTestnetTx(hash: string | null | undefined): boolean {
  */
 export function explorerTxUrlIfCanonical(hash: string | null | undefined): string | null {
   return isCanonicalTestnetTx(hash) ? explorerTx((hash as string).trim().toLowerCase()) : null;
+}
+
+/**
+ * Explorer link for a real casper_deploy settlement (any new 64-hex hash).
+ * Prefer this over the allowlist for payment settles so every live transfer links.
+ */
+export function explorerTxUrlIfDeployHash(hash: string | null | undefined): string | null {
+  if (!isPlausibleDeployHash(hash)) return null;
+  return explorerTx((hash as string).trim().toLowerCase());
 }
 
 export type RpcTxCheck = {
