@@ -1,5 +1,9 @@
 # Ranking hostil atualizado — Final Round (2026-07-21)
 
+> **Atualização noturna (pós-deploy):** ver  
+> [`RANKING_UPDATE_2026-07-21-post-deploy.md`](./RANKING_UPDATE_2026-07-21-post-deploy.md)  
+> Lastre **4.55** · Claros **4.35** · grid **50** BUIDLs.
+
 **Escopo:** ~175 finalistas oficiais · grid pública ~48 (goteira resubmit)  
 **Método:** tese Casper (RWA + agent rails + constraints) · prova on-chain · clareza demo · honesty · overlap com Lastre  
 **Disciplina:** **estimativas 0–5, não ranking oficial Dora.** Não claim #1 público.
