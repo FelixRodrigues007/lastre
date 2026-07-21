@@ -1,13 +1,30 @@
 # Lastre — BUIDL Page Paste Pack
 
-Date: 2026-07-15
+Date: 2026-07-21 (Final Round — finance/Wardens counters + settle samples)
 
 Use this as the single copy-paste source for the DoraHacks/BUIDL page. It is
 operational evidence for judges, not marketing copy.
 
+## Dora short description (Edit BUIDL — paste this)
+
+```
+Lastre is the origin trust layer for hard RWAs on Casper.
+
+Proof before token — and proof before finance. A deterministic seal decides Valid or Invalid (Invalid is permanent on-chain proof). Dual-key sealer ≠ attester. MintGate refuses mint without Valid ProofOfOrigin. Agents may pay via x402 to read provenance; the LLM only chooses pay / skip / escalate — the seal decides truth.
+
+Not an oracle marketplace. Not invoice underwriting. Not continuous collateral monitoring. Those layers come after origin is proven.
+
+Demo: https://app.lastre.io/marketplace
+Evidence: https://app-api.lastre.io/api/evidence
+Health: https://app-api.lastre.io/api/health
+Real testnet settle (2.5 CSPR, latest): https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c
+(Also: https://testnet.cspr.live/transaction/fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1)
+Honesty: UI simulate = mock receipt; production API can settle real testnet CSPR.
+```
+
 ## One-line thesis
 
-Other agents execute. Lastre lets them verify the source first — proof before token.
+Other agents execute. Lastre lets them verify the source first — proof before token (and before finance).
 
 ## Live links
 
@@ -27,7 +44,15 @@ Other agents execute. Lastre lets them verify the source first — proof before 
 | Demo video | https://youtu.be/UzhKMsKA6QE |
 | Step-by-step judge playbook | https://github.com/FelixRodrigues007/lastre/blob/main/JUDGES_PLAYBOOK.md |
 
-## How to test in 5 minutes
+## How to test in 90 seconds (demo day)
+
+1. Open https://app.lastre.io/marketplace → **Run Demo** (Valid carbon, seal match).
+2. Open Invalid sample tx: https://testnet.cspr.live/transaction/5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd (permanent rejection proof).
+3. Open https://app-api.lastre.io/api/evidence → `dualKey` / `trustStack` (sealer ≠ attester).
+4. Point to real settle: https://testnet.cspr.live/transaction/fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1
+5. One sentence: *Seal decides Valid/Invalid; MintGate blocks mint without Valid; agent only pay/skip/escalate.*
+
+## How to test in 5 minutes (full)
 
 1. Open https://app.lastre.io/marketplace
 2. Click **Run Demo**.
@@ -112,16 +137,21 @@ All sample transactions below are official existing evidence. Do not replace the
    **Production** (`app-api.lastre.io`, 2026-07-15):  
    `27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c`
 
-   **Production** (`app-api.lastre.io`, 2026-07-19 — Final Round refresh):  
+   **Production** (`app-api.lastre.io`, 2026-07-19):  
    `4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6`  
-   Action: Transfer **2.50 CSPR** · chain `casper-test` · block height ~8558383
+   Explorer: https://testnet.cspr.live/transaction/4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6
 
-   Explorer (prod 2026-07-19):  
-   https://testnet.cspr.live/transaction/4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6
+   **Production** (post-deploy, 2026-07-19 later — `paymentExplorerUrl` fix live):  
+   `fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1`  
+   Explorer: https://testnet.cspr.live/transaction/fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1
+
+   **Production** (2026-07-21 density pass):  
+   `5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c`  
+   Explorer: https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c
 
    Expected: `settlementKind=casper_deploy`, `facilitatorMode=casper`, paid provenance for `CARBON-VCS-AMAZONIA-2024-001` (Valid + sealMatch).  
    Path: `POST /api/x402/settle/:assetId` or `lastre prove … --pay --mode casper` (not UI `/simulate`).  
-   **Honesty:** this is **native CSPR transfer** via `casper-client` (server-as-payer demo). Official MAKE/CSPR.cloud path uses **WCSPR + HTTP facilitator** (`docs.cspr.cloud/x402-facilitator-api`) — alignment is optional next; jury already has real on-chain payment evidence.
+   **Honesty:** **native CSPR transfer** via `casper-client` (server-as-payer demo). MAKE/CSPR.cloud **WCSPR** path is optional next.
 Transaction explorer format:
 
 `https://testnet.cspr.live/transaction/<hash>`
@@ -139,14 +169,20 @@ Transaction explorer format:
 - Public assets, operators, locations, payments, and collateral values are fictional unless explicitly labeled as Casper Testnet evidence.
 - Invalid verdicts are intentionally written on-chain. A rejection is permanent verifiable proof, not a discarded error.
 
-## Differentiation
+## Differentiation (Final Round field)
 
-Most buildathon projects improve how agents pay, compose tools, publish market data, underwrite invoices, or rate agents. Lastre answers a different upstream question: was the physical origin of this RWA verified before any token, payment, or agent action?
+Most finalists improve how agents pay, compose tools, publish market data, underwrite invoices, monitor collateral, or rate agents. Lastre answers a different **upstream** question: was the physical origin of this RWA verified **before** any token, payment, or financing action?
 
-- Payment rails monetize calls; Lastre verifies origin before calls matter.
-- Market-data oracles publish feeds; Lastre gates asset-origin proof and permanent Invalid evidence.
-- Credit desks underwrite cash flow; Lastre is pre-token provenance evidence.
-- Agent reputation systems judge agents; Lastre judges the seal of the asset.
+| Rival cluster | Their job | Lastre |
+| --- | --- | --- |
+| Oracles (e.g. Claros) | Densify feeds / paid reads | Origin gate before mint/pay |
+| Invoice / ag finance (Faktura, AgriTrust, Runway) | Underwrite cash flow / unlock capital | **Proof before finance** — seal Valid/Invalid first |
+| Continuous collateral (e.g. Wardens) | Fight stale post-token audits | One-shot dual-key origin + **Invalid is permanent proof** (different layer) |
+| Agent pay rails (AgentPay*, Pico, AiFinPay) | Safe micropayments | Agents may pay for **provenance**, not instead of proof |
+| Policy / leash / shield | Cap spend / block bad calls | Constraints on **content of origin**, not only wallet policy |
+
+**Vs finance (one line):** Before invoices or tokens finance origin, the seal decides Valid/Invalid.  
+**Vs Wardens (one line):** We decide origin truth with dual-key on-chain Valid/Invalid; continuous collateral monitoring is a different layer after tokenization.
 
 Proof before token. Seal decides. LLM only acts. Invalid is permanent on-chain proof.
 

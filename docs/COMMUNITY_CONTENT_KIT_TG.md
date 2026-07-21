@@ -1,6 +1,6 @@
 # Lastre — Content Kit + FAQ Telegram (Casper stakeholders)
 
-**Data:** 2026-07-19  
+**Data:** 2026-07-21 (Final Round counters: finance / Wardens / oracles)  
 **Audiência:** admins TG (`@Jamesbriton`, `@davidatwhiletrue`, `@Alfirins`), ecosystem (`@Tamcarmel`), content (Berkay), eng (Ed Hastings), CTO (Michael)  
 **Regra de ouro:** útil primeiro · zero shill · honesty mock vs settle · não claim ranking oficial  
 
@@ -22,8 +22,9 @@
 | x402 facilitator (MAKE) | https://docs.cspr.cloud/x402-facilitator-api/reference |
 | x402 examples | https://github.com/make-software/casper-x402 |
 
-**Sample settle real (prod 2026-07-19, native CSPR 2.5 transfer):**  
-https://testnet.cspr.live/transaction/4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6  
+**Sample settle real (native CSPR 2.5 transfer):**  
+- https://testnet.cspr.live/transaction/fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1  
+- https://testnet.cspr.live/transaction/4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6  
 
 **Honesty:** native CSPR via CasperFacilitator (`casper_deploy`). MAKE path WCSPR+CSPR.cloud = optional next.
 
@@ -36,27 +37,27 @@ Use **só** se pedirem o projeto, ou após ser útil numa thread (ex. x402). Nã
 ```
 Lastre — origin trust layer for hard RWAs on Casper
 
-Proof before token: dual-key sealer ≠ attester. Seal decides Valid/Invalid (LLM only chooses pay / skip / escalate). Invalid is permanent on-chain proof — MintGate refuses mint without Valid ProofOfOrigin.
+Proof before token — and proof before finance. Dual-key sealer ≠ attester. Seal decides Valid/Invalid (LLM only pay/skip/escalate). Invalid is permanent on-chain proof — MintGate refuses mint without Valid ProofOfOrigin.
+
+Not invoice underwriting. Not continuous collateral monitoring. Those layers come after origin is proven.
 
 Live:
 • App: https://app.lastre.io/marketplace  (Run Demo)
 • Evidence: https://app-api.lastre.io/api/evidence
 • Health: https://app-api.lastre.io/api/health  (x402 facilitatorMode=casper)
 • Autonomy: https://app-api.lastre.io/api/agent/autonomy
+• Settle: https://testnet.cspr.live/transaction/fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1
 
-Honesty: judge UI simulate = mock receipt; production API settles real testnet CSPR (native transfer).
-Sample settle: https://testnet.cspr.live/transaction/4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6
-(MAKE WCSPR + CSPR.cloud path = optional next — we already move real testnet value.)
-
-Not an oracle marketplace. Agents pay for provenance, not for fake counters.
+Honesty: UI simulate = mock; production API can settle real testnet CSPR.
 ```
 
 **Versão micro (reply rápido):**
 
 ```
-Lastre = proof before token on Casper (dual-key + Invalid-as-proof + MintGate).
+Lastre = proof before token/finance on Casper (dual-key + Invalid-as-proof + MintGate).
 Demo: https://app.lastre.io/marketplace | Evidence: https://app-api.lastre.io/api/evidence
-UI simulate is mock by design; API can run casper settle. Happy to share settle tx when we post the WCSPR path sample.
+Settle: https://testnet.cspr.live/transaction/fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1
+UI simulate is mock by design.
 ```
 
 ---
@@ -77,6 +78,12 @@ UI simulate is mock by design; API can run casper settle. Happy to share settle 
 
 ### “Vs Claros / oracles?”
 > Different layer. Oracles densify feeds. Lastre is the origin gate under mint/pay: proof before token. We don’t farm fake marketplace counters.
+
+### “Vs Faktura / AgriTrust / invoice finance?”
+> They underwrite cash flow / unlock capital. Lastre is **proof before finance**: seal Valid/Invalid before token or invoice financing claims origin.
+
+### “Vs Wardens / continuous collateral?”
+> Continuous post-token collateral monitoring is a different layer. Lastre dual-key origin + permanent Invalid proof decides whether the asset may exist as a tokenizable claim at all.
 
 ### “Mainnet?”
 > Testnet evidence live today. Mainnet when settlement + ops are safe — honest roadmap, not a claim of mainnet money now.
