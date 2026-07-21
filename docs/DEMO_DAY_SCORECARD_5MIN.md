@@ -1,8 +1,8 @@
 # Demo Day Scorecard — 5 minutes (Agentic Final Round)
 
-**Date:** 2026-07-17  
+**Date:** 2026-07-21  
 **Audience:** Casper Agentic Buildathon professional jury  
-**Thesis (20s max):** *Claros optimizes the agent network. Lastre is the truth gate under it — proof before token, seal decides, Invalid is permanent on-chain proof.*
+**Thesis (20s max):** *Proof before token — and before finance. Seal decides Valid/Invalid; dual-key sealer ≠ attester; Invalid is permanent; MintGate blocks mint without Valid. Oracles densify feeds; invoice desks underwrite cash flow; we gate origin first.*
 
 > DEMONSTRATION ONLY. Simulated assets; no investment. Only Casper Testnet hashes labeled as evidence are real.
 

@@ -18,7 +18,12 @@ import type { ProvenanceArtifact } from "../../agent/sealer/dist/src/sealer.js";
 import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
 
 import { PACKAGE_HASH, PACKAGE_URL } from "./constants.js";
-import { explorerTxUrlIfCanonical, explorerTxUrlIfDeployHash } from "./casper-rpc.js";
+import {
+  CANONICAL_EVIDENCE,
+  LATEST_CANONICAL_SETTLE_TX,
+  explorerTxUrlIfCanonical,
+  explorerTxUrlIfDeployHash,
+} from "./casper-rpc.js";
 import { randomUUID } from "node:crypto";
 import {
   DEFAULT_PAYMENT_REQUIREMENTS,
@@ -169,6 +174,13 @@ export class AppRuntime {
   private readonly x402Facilitator: Facilitator = createFacilitatorFromEnv();
   private readonly x402Issued = new Map<string, PaymentRequirements>();
   private x402QueryCount = 0;
+  /** Session last real casper_deploy settle (null until one succeeds this process). */
+  private lastCasperSettle: {
+    txHash: string;
+    assetId: string;
+    at: string;
+    paymentExplorerUrl: string | null;
+  } | null = null;
 
   getDeciderMode(): DeciderMode {
     return this.deciderMode;
@@ -378,10 +390,47 @@ export class AppRuntime {
         /* ignore if store race */
       }
     }
+    const x402Mode = this.x402Facilitator.mode;
+    const sessionSettle = this.lastCasperSettle;
+    const canonicalSettleTx = LATEST_CANONICAL_SETTLE_TX;
+    const lastCasperSettle = sessionSettle
+      ? {
+          source: "session" as const,
+          txHash: sessionSettle.txHash,
+          assetId: sessionSettle.assetId,
+          at: sessionSettle.at,
+          paymentExplorerUrl: sessionSettle.paymentExplorerUrl,
+          settlementKind: "casper_deploy" as const,
+        }
+      : {
+          source: "canonical" as const,
+          txHash: canonicalSettleTx,
+          assetId: "CARBON-VCS-AMAZONIA-2024-001",
+          at: null as string | null,
+          paymentExplorerUrl: explorerTxUrlIfDeployHash(canonicalSettleTx),
+          settlementKind: "casper_deploy" as const,
+        };
+
     return {
-      thesis: "Proof before token — seal decides Valid/Invalid; LLM only chooses pay/skip/escalate.",
+      thesis:
+        "Proof before token — and proof before finance. Seal decides Valid/Invalid; LLM only chooses pay/skip/escalate.",
       packageHash: PACKAGE_HASH,
       packageUrl: PACKAGE_URL,
+      /** Access-rights framing (copy layer; contracts unchanged). */
+      accessRights: {
+        dualKey: "Separation of duties: field sealer ≠ chain attester",
+        mintGate: "Mint access requires Valid origin attestation",
+        invalid: "Negative attestation is first-class on-chain state",
+        agent: "Agent decides action only (pay / skip / escalate) — never seal truth",
+      },
+      mainnetRoadmap:
+        "Live on Casper Testnet today. Mainnet when facilitator ops + keys + monitoring are production-safe. No mainnet money claims in demo.",
+      honesty: {
+        uiSimulate: "mock",
+        apiSettle: x402Mode === "casper" ? "real_testnet_cspr_when_keys" : "mock_only",
+        phrase:
+          "UI / POST /api/x402/simulate = mock synthetic_receipt. POST /api/x402/settle = real testnet CSPR only when facilitatorMode=casper.",
+      },
       trustStack: TRUST_STACK,
       operators: ops.operators,
       dualKey: {
@@ -412,18 +461,60 @@ export class AppRuntime {
         attestations: testnet.attestations,
         rpcEvidence: testnet.rpcEvidence ?? null,
       },
+      /** Jury-mode aliases (explicit). */
+      x402Mode,
+      lastCasperSettle,
+      sampleSettles: [
+        {
+          label: "latest",
+          txHash: CANONICAL_EVIDENCE.x402PayProd20260721b,
+          explorerUrl: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.x402PayProd20260721b),
+        },
+        {
+          label: "2026-07-21",
+          txHash: CANONICAL_EVIDENCE.x402PayProd20260721,
+          explorerUrl: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.x402PayProd20260721),
+        },
+        {
+          label: "2026-07-19b",
+          txHash: CANONICAL_EVIDENCE.x402PayProd20260719b,
+          explorerUrl: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.x402PayProd20260719b),
+        },
+        {
+          label: "2026-07-19",
+          txHash: CANONICAL_EVIDENCE.x402PayProd20260719,
+          explorerUrl: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.x402PayProd20260719),
+        },
+        {
+          label: "2026-07-15",
+          txHash: CANONICAL_EVIDENCE.x402PayProd20260715,
+          explorerUrl: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.x402PayProd20260715),
+        },
+      ],
       x402: {
-        facilitatorMode: this.x402Facilitator.mode,
-        settlementKind:
-          this.x402Facilitator.mode === "casper" ? "casper_deploy" : "synthetic_receipt",
+        facilitatorMode: x402Mode,
+        x402Mode,
+        settlementKind: x402Mode === "casper" ? "casper_deploy" : "synthetic_receipt",
+        lastCasperSettle,
         honestNote:
-          this.x402Facilitator.mode === "casper"
+          x402Mode === "casper"
             ? "Server facilitator mode=casper: settleProvenanceQuery can move real testnet CSPR when keys are configured. UI /simulate stays mock."
             : "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence.",
       },
       invalidIsProof: true,
       /** Additive: origin autonomy loop summary (session). Does not replace on-chain counters. */
       originAutonomy: this.autonomy.summary(),
+      juryLinks: {
+        marketplace: "https://app.lastre.io/marketplace",
+        agents: "https://app.lastre.io/agents",
+        health: "https://app-api.lastre.io/api/health",
+        evidence: "https://app-api.lastre.io/api/evidence",
+        autonomy: "https://app-api.lastre.io/api/agent/autonomy",
+        invalidSample: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.invalidTx),
+        carbonValid: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.carbonValidTx),
+        latestSettle: explorerTxUrlIfDeployHash(canonicalSettleTx),
+        package: PACKAGE_URL,
+      },
     };
   }
 
@@ -763,15 +854,24 @@ export class AppRuntime {
 
     this.x402Issued.delete(payment.nonce);
     this.x402QueryCount += 1;
+    const paymentExplorerUrl =
+      settlement.kind === "casper_deploy"
+        ? explorerTxUrlIfDeployHash(settlement.txHash)
+        : null;
+    if (settlement.kind === "casper_deploy") {
+      this.lastCasperSettle = {
+        txHash: settlement.txHash,
+        assetId,
+        at: new Date().toISOString(),
+        paymentExplorerUrl,
+      };
+    }
     const summary = await this.getMintSummary();
     return {
       ok: true,
       txHash: settlement.txHash,
       settlementKind: settlement.kind,
-      paymentExplorerUrl:
-        settlement.kind === "casper_deploy"
-          ? explorerTxUrlIfDeployHash(settlement.txHash)
-          : null,
+      paymentExplorerUrl,
       provenance: this.getProvenanceSnapshot(assetId),
       facilitatorMode: this.x402Facilitator.mode,
       chainEvidence: summary.onChain,

@@ -132,6 +132,15 @@ curl -sS -X POST https://app-api.lastre.io/api/x402/settle/CARBON-VCS-AMAZONIA-2
 | On-chain action | **Transfer 2.50 CSPR** (native) · `casper-test` · ~19:03:34 UTC |
 | Provenance | `verdict=Valid`, `sealMatch=true` for carbon asset |
 
+### Density pass (2026-07-21)
+
+| Field | Value |
+| --- | --- |
+| `txHash` | `b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106` |
+| Explorer | https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106 |
+| Prior | https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c |
+| `settlementKind` | `casper_deploy` · `paymentExplorerUrl` set |
+
 ## vs MAKE / CSPR.cloud official x402 facilitator
 
 | | Lastre prod today | MAKE path (Telegram David H) |
