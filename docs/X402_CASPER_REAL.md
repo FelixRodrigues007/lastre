@@ -136,8 +136,9 @@ curl -sS -X POST https://app-api.lastre.io/api/x402/settle/CARBON-VCS-AMAZONIA-2
 
 | Field | Value |
 | --- | --- |
-| `txHash` | `5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c` |
-| Explorer | https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c |
+| `txHash` | `b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106` |
+| Explorer | https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106 |
+| Prior | https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c |
 | `settlementKind` | `casper_deploy` · `paymentExplorerUrl` set |
 
 ## vs MAKE / CSPR.cloud official x402 facilitator

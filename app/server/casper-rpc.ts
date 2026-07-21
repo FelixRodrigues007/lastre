@@ -22,7 +22,15 @@ export const CANONICAL_EVIDENCE = {
   /** x402 real CSPR settles (CasperFacilitator native transfer) — verified on explorer. */
   x402PayProd20260715: "27461bd7d679dfd970dadb195f46a8513f53a916b01643c6f5b6beee1b3f199c",
   x402PayProd20260719: "4caa70467db2f1d6088df150c524f362765d48bfef8b54e2e98d1531304991f6",
+  /** Additional densify settles (Final Round). */
+  x402PayProd20260719b: "fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1",
+  x402PayProd20260721: "5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c",
+  /** Plan-exec densify settle (2026-07-21). */
+  x402PayProd20260721b: "b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106",
 } as const;
+
+/** Newest canonical real CSPR settle for jury evidence pack (update when densifying). */
+export const LATEST_CANONICAL_SETTLE_TX = CANONICAL_EVIDENCE.x402PayProd20260721b;
 
 /**
  * Every Casper Testnet transaction hash we have confirmed exists on-chain via
@@ -45,6 +53,9 @@ export const CANONICAL_TESTNET_TX_HASHES: ReadonlySet<string> = new Set([
   CANONICAL_EVIDENCE.sealerIdentityTx,
   CANONICAL_EVIDENCE.x402PayProd20260715,
   CANONICAL_EVIDENCE.x402PayProd20260719,
+  CANONICAL_EVIDENCE.x402PayProd20260719b,
+  CANONICAL_EVIDENCE.x402PayProd20260721,
+  CANONICAL_EVIDENCE.x402PayProd20260721b,
   "a30d83c78c269caf922d020a96d2ffd8e3eb4654d3c53e8faf3059ea80101f02", // local x402 pay sample
 ]);
 

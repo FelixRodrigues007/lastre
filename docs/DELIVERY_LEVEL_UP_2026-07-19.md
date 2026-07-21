@@ -139,14 +139,16 @@ Uma slide/linha:
 
 ## Definition of Done — “nível de entrega elevado”
 
-- [ ] Judge roda marketplace demo < 90s sem instalar nada  
-- [ ] `/api/evidence` + health + autonomy respondem  
-- [x] **1 settle hash** real (testnet) no BUIDL paste + X402 doc (`4caa7046…991f6`)  
-- [ ] Texto em 3 lugares distingue mock UI vs casper settle  
-- [ ] Pitch 20s usa: proof before token + constraints + Invalid-as-proof  
-- [ ] Content kit (video ou stills) pronto para Berkay/Tamara  
-- [ ] FAQ TG copiável sem inventar claims  
-- [ ] Zero claim de ranking oficial / mainnet money  
+- [x] Judge roda marketplace demo < 90s sem instalar nada (playbook + smoke)  
+- [x] `/api/evidence` + health + autonomy respondem  
+- [x] **1 settle hash** real (testnet) no BUIDL paste + X402 doc (`5c12586d…` latest + prior)  
+- [x] Texto em 3 lugares distingue mock UI vs casper settle (Marketplace + Agents + evidence honesty)  
+- [x] Pitch 20s usa: proof before token + constraints + Invalid-as-proof (DEMO_DAY + paste)  
+- [x] Content kit (video **script** + stills checklist) — `docs/VIDEO_60S_SCRIPT.md`  
+- [x] FAQ TG copiável sem inventar claims  
+- [x] Zero claim de ranking oficial / mainnet money  
+- [ ] **Dora Edit BUIDL** — colar short description (manual Felix)  
+- [x] Jury smoke script: `bash scripts/jury-smoke.sh`  
 
 ---
 

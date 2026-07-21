@@ -59,12 +59,14 @@ const MARKETPLACE_DEMO_STEPS: FullDemoStep[] = [
     detail: "Run the Lastre agent path so the action is decided before the deterministic seal verdict.",
   },
   {
-    label: "Paid x402 query",
-    detail: "Simulate an external agent paying via x402 to read the provenance snapshot.",
+    label: "Paid x402 query (mock)",
+    detail:
+      "Judge path: mock facilitator pays to read provenance (synthetic_receipt). Real CSPR settle is API/CLI only.",
   },
   {
     label: "MintGate claim",
-    detail: "Emit the demo LotMinted event only after the proof is Valid.",
+    detail:
+      "Mint access requires Valid origin. Demo LotMinted only after seal Valid (Invalid would block).",
   },
 ];
 
@@ -503,6 +505,9 @@ export function Marketplace() {
           </span>
           <p className="market-mint-summary__note">
             Live query reads ProofOfOrigin attestations. MintGate events are demo-only for this hackathon.
+            Honesty freeze: Run Demo / x402 simulate = mock facilitator (no CSPR moved). Real testnet CSPR
+            settles only via production API settle path (facilitatorMode=casper) — not this UI button.
+            Proof before token and before finance.
           </p>
           {mintSummaryError ? <em>{mintSummaryError}</em> : null}
         </section>

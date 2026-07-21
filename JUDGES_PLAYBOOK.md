@@ -164,7 +164,7 @@ make query
 - x402 **judge UI / simulate** uses a mock facilitator (`synthetic_receipt`, no CSPR moved).
   Real testnet CSPR is available via `LASTRE_X402_MODE=casper` + keys on the API
   (`settlementKind: casper_deploy`). Latest prod settle (2026-07-21):  
-  https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c  
+  https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106  
   (native 2.5 CSPR transfer; see `docs/X402_CASPER_REAL.md` and `docs/BUIDL_PAGE_PASTE.md`).
 - MintGate, collateral, and My Assets flows in the public app are labeled demo
   events.

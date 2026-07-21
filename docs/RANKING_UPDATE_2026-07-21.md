@@ -13,7 +13,7 @@
 | BUIDL | https://dorahacks.io/buidl/46748 público |
 | Health | `facilitatorMode=casper` |
 | Autonomy | densificado (ciclo post-ajuste: ≥3 ok na sessão; in-memory) |
-| Settle latest | `5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c` |
+| Settle latest | `b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106` |
 | Copy | “proof before token **and finance**” + vs Wardens/oracles |
 
 ---
@@ -87,4 +87,37 @@
 - [ ] Colar bloco **Dora short description** de `BUIDL_PAGE_PASTE.md` no Edit BUIDL  
 - [ ] Dry-run 90s demo  
 - [ ] Autonomy 3× no dia do jury (in-memory)  
-- [ ] Monitor 5h continua DELTA  
+- [x] Monitor 5h reativado (scheduler `019f863af4cf`)  
+
+---
+
+## 7. Monitor DELTA — 2026-07-21 ~19:50 UTC
+
+| Campo | Valor |
+| --- | --- |
+| Badge BUIDLs | **50** (era 48) · hackers **158** (era 154) |
+| Scraped 1ª página | 24 IDs |
+| NEW | **46667 XELT** — VPN pay-per-minute x402/Casper (periférico; não ameaça origin) |
+| REMOVED scrape | 46441 Faktura — **ignorado** (paginação; mantido em known) |
+| Lastre 46748 | presente na grid pública |
+| Prod health | `ok` · `facilitatorMode=casper` |
+| dualKey.distinct | true · on-chain accepted=2 rejected=1 (live-rpc) |
+| Autonomy | PASS · cyclesTotal=2 cyclesOk=2 (in-memory pós cold start) |
+
+**Ajuste de ranking:** nenhum. XELT não entra Tier A/S (commerce/VPN rails). AgriTrust/Wardens continuam os counters de copy.
+
+---
+
+## 8. Macro L1 — CSPR × Kraken (2026-07-21)
+
+**Fato (ecossistema, não produto Lastre):** `$CSPR` anunciado/disponível em `@krakenfx` — venue top-tier, narrativa “infra pra machine economy + RWAs”.
+
+| Uso na Lastre | Sim / Não |
+| --- | --- |
+| Mudar score hostil de projeto | **Não** (não é feature de finalista) |
+| Argumento “why Casper” pra jury/TG | **Sim** — acesso a CSPR → gas/agent rails mais realistas |
+| Claim no Dora “Lastre on Kraken” | **NUNCA** |
+| Ajuste de copy | Opcional 1 linha no BUIDL *Why Casper*: liquidity/access tailwind |
+
+**Frase segura (interna → cola se pedirem why-Casper):**  
+*Casper is deepening real access (CSPR on major venues) while the Final Round ships agent + RWA rails — Lastre is the origin gate on that stack: proof before token and finance.*

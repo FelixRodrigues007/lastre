@@ -10,16 +10,17 @@ operational evidence for judges, not marketing copy.
 ```
 Lastre is the origin trust layer for hard RWAs on Casper.
 
-Proof before token — and proof before finance. A deterministic seal decides Valid or Invalid (Invalid is permanent on-chain proof). Dual-key sealer ≠ attester. MintGate refuses mint without Valid ProofOfOrigin. Agents may pay via x402 to read provenance; the LLM only chooses pay / skip / escalate — the seal decides truth.
+Proof before token — and proof before finance. A deterministic seal decides Valid or Invalid (Invalid is permanent on-chain proof). Separation of duties: field sealer ≠ chain attester. Mint access requires Valid origin (MintGate). Agents may pay via x402 to read provenance; the LLM only chooses pay / skip / escalate — the seal decides truth.
 
 Not an oracle marketplace. Not invoice underwriting. Not continuous collateral monitoring. Those layers come after origin is proven.
 
 Demo: https://app.lastre.io/marketplace
 Evidence: https://app-api.lastre.io/api/evidence
 Health: https://app-api.lastre.io/api/health
-Real testnet settle (2.5 CSPR, latest): https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c
-(Also: https://testnet.cspr.live/transaction/fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1)
+Real testnet settle (2.5 CSPR, latest): https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106
+(Also: https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c)
 Honesty: UI simulate = mock receipt; production API can settle real testnet CSPR.
+Roadmap: Casper Testnet live today. Mainnet when facilitator ops + keys + monitoring are production-safe — no mainnet money in demo.
 ```
 
 ## One-line thesis
@@ -146,8 +147,8 @@ All sample transactions below are official existing evidence. Do not replace the
    Explorer: https://testnet.cspr.live/transaction/fd23cf3f76d212094da74f3d1f7ad54bad2b07265643a1434857a925dc4b23e1
 
    **Production** (2026-07-21 density pass):  
-   `5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c`  
-   Explorer: https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c
+   `b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106`  
+   Explorer: https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106
 
    Expected: `settlementKind=casper_deploy`, `facilitatorMode=casper`, paid provenance for `CARBON-VCS-AMAZONIA-2024-001` (Valid + sealMatch).  
    Path: `POST /api/x402/settle/:assetId` or `lastre prove … --pay --mode casper` (not UI `/simulate`).  

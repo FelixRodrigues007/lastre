@@ -165,7 +165,8 @@ export function Agents() {
           </p>
           <p>
             Deterministic SHA-256 seals decide <strong>Valid</strong> or <strong>Invalid</strong>. The agent only chooses
-            operational action: pay, skip, or escalate. Judge demo uses a <strong>mock facilitator</strong> (no CSPR moved)
+            operational action: pay, skip, or escalate (never seal truth). Separation of duties: field sealer ≠ chain attester.
+            Judge demo uses a <strong>mock facilitator</strong> (no CSPR moved)
             but attaches <strong>live-RPC-verified</strong> ProofOfOrigin transactions as chain evidence when the public
             Casper node responds.
           </p>

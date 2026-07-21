@@ -88,6 +88,35 @@ UI simulate is mock by design.
 ### “Mainnet?”
 > Testnet evidence live today. Mainnet when settlement + ops are safe — honest roadmap, not a claim of mainnet money now.
 
+### “CSPR listou na Kraken — o que isso muda pro Lastre?”
+> Nada no produto Lastre em si. É **tailwind do L1**: mais acesso a CSPR = mais liquidez e credibilidade da base onde origin proof / x402 / MintGate rodam. Lastre continua proof-before-token on Casper Testnet; listing ≠ mainnet money no demo. Bom momento pra lembrar: agents + RWA need a chain people can actually fund.
+
+---
+
+## 3b. Reação TG — CSPR × Kraken (2026-07-21) — **só se a thread for sobre listing**
+
+**Regra:** celebrar ecossistema · zero claim “Lastre listou” · zero price talk · 1 link Lastre no máximo.
+
+**EN (curta):**
+```
+Good for Casper infrastructure credibility — more people can actually get $CSPR on a trusted venue.
+
+That matters for agent rails + RWA work: settlement and gas access are real constraints. Lastre still ships origin proof before token/finance on Casper (testnet evidence live) — listing is L1 tailwind, not a product claim.
+
+Demo for judges/builders: https://app.lastre.io/marketplace
+```
+
+**PT (curta):**
+```
+Bom pro L1: $CSPR em venue confiável (@krakenfx) amplia acesso real à rede — relevante pra agents, gas e qualquer stack RWA.
+
+Lastre não “listou” nada. Continuamos origin proof before token/finance no Casper (testnet). Listing = tailwind de infraestrutura, não feature do demo.
+
+Se quiser ver o gate de origem: https://app.lastre.io/marketplace
+```
+
+**Não postar:** preço, “pump”, “Lastre on Kraken”, ranking #1, mainnet money.
+
 ---
 
 ## 4. Content kit por stakeholder (headline + 3 bullets)
