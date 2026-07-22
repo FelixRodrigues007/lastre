@@ -1,5 +1,8 @@
 # Ranking hostil geral — Final Round (2026-07-22 ~00:36 UTC)
 
+> **Atualização jury-lens + Direção:** ver [`RANKING_UPDATE_2026-07-22-jury-lens.md`](./RANKING_UPDATE_2026-07-22-jury-lens.md) e [`JURY_LENS_CASPER_DIRECAO_2026-07-22.md`](./JURY_LENS_CASPER_DIRECAO_2026-07-22.md) — Lastre **4.62** combo.
+
+
 **Escopo:** ~175 finalistas oficiais · grid pública **BUIDLs 50** · **Hackers 160**  
 **Método:** tese Casper (RWA origin + agent rails + constraints) · prova on-chain · clareza demo · honesty · narrative pública Dora · overlap com Lastre  
 **Disciplina:** **estimativas 0–5, não ranking oficial Dora.** Não publicar “#1” no Dora/TG.
