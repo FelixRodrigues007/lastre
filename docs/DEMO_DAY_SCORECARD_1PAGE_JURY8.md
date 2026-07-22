@@ -21,7 +21,11 @@
 | ☐ | Smoke | `bash scripts/jury-smoke.sh` (opcional T−30) |
 
 **Latest settle (falar se pedirem pay real):**  
-https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106  
+https://testnet.cspr.live/transaction/25088a6a3710e40d586b50ab325a82240a36e82f07c42f561a7194b6e48b509a  
+
+**Vs CanopyMRV (se perguntarem carbon MRV):**  
+*They ISSUE/FREEZE credits after MRV hash. We dual-key seal origin + permanent Invalid before any mint/credit.*  
+
 
 **Invalid sample:**  
 https://testnet.cspr.live/transaction/5a7b0e01ba1a40fcf784e7b01a4a4b5da7ecb5eaf201c1e3b56ab3a2628773cd  

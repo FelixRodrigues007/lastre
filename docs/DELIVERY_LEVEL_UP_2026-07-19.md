@@ -147,7 +147,8 @@ Uma slide/linha:
 - [x] Content kit (video **script** + stills checklist) — `docs/VIDEO_60S_SCRIPT.md`  
 - [x] FAQ TG copiável sem inventar claims  
 - [x] Zero claim de ranking oficial / mainnet money  
-- [ ] **Dora Edit BUIDL** — colar short description (manual Felix)  
+- [x] **Dora Edit BUIDL** — pack live 46748 (2026-07-21)  
+
 - [x] Jury smoke script: `bash scripts/jury-smoke.sh`  
 
 ---

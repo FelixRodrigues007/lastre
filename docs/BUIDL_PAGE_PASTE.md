@@ -17,8 +17,8 @@ Not an oracle marketplace. Not invoice underwriting. Not continuous collateral m
 Demo: https://app.lastre.io/marketplace
 Evidence: https://app-api.lastre.io/api/evidence
 Health: https://app-api.lastre.io/api/health
-Real testnet settle (2.5 CSPR, latest): https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106
-(Also: https://testnet.cspr.live/transaction/5c12586dd5b61fc82f5c818d46b0141af68ea8610f715d47653544540526649c)
+Real testnet settle (2.5 CSPR, latest): https://testnet.cspr.live/transaction/25088a6a3710e40d586b50ab325a82240a36e82f07c42f561a7194b6e48b509a
+(Also: https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106)
 Honesty: UI simulate = mock receipt; production API can settle real testnet CSPR.
 Roadmap: Casper Testnet live today. Mainnet when facilitator ops + keys + monitoring are production-safe — no mainnet money in demo.
 ```
@@ -150,6 +150,10 @@ All sample transactions below are official existing evidence. Do not replace the
    `b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106`  
    Explorer: https://testnet.cspr.live/transaction/b1967b6379c67f64a1b4f28767450f18d9aaca137a841f8c2b107765c18f2106
 
+   **Production** (2026-07-22 priority-close densify):  
+   `25088a6a3710e40d586b50ab325a82240a36e82f07c42f561a7194b6e48b509a`  
+   Explorer: https://testnet.cspr.live/transaction/25088a6a3710e40d586b50ab325a82240a36e82f07c42f561a7194b6e48b509a
+
    Expected: `settlementKind=casper_deploy`, `facilitatorMode=casper`, paid provenance for `CARBON-VCS-AMAZONIA-2024-001` (Valid + sealMatch).  
    Path: `POST /api/x402/settle/:assetId` or `lastre prove … --pay --mode casper` (not UI `/simulate`).  
    **Honesty:** **native CSPR transfer** via `casper-client` (server-as-payer demo). MAKE/CSPR.cloud **WCSPR** path is optional next.
@@ -179,11 +183,13 @@ Most finalists improve how agents pay, compose tools, publish market data, under
 | Oracles (e.g. Claros) | Densify feeds / paid reads | Origin gate before mint/pay |
 | Invoice / ag finance (Faktura, AgriTrust, Runway) | Underwrite cash flow / unlock capital | **Proof before finance** — seal Valid/Invalid first |
 | Continuous collateral (e.g. Wardens) | Fight stale post-token audits | One-shot dual-key origin + **Invalid is permanent proof** (different layer) |
+| Carbon MRV registry (e.g. CanopyMRV) | ISSUE/FREEZE credits after MRV hash | Dual-key origin + permanent Invalid + Valid-only MintGate **before** any credit/finance |
 | Agent pay rails (AgentPay*, Pico, AiFinPay) | Safe micropayments | Agents may pay for **provenance**, not instead of proof |
 | Policy / leash / shield | Cap spend / block bad calls | Constraints on **content of origin**, not only wallet policy |
 
 **Vs finance (one line):** Before invoices or tokens finance origin, the seal decides Valid/Invalid.  
-**Vs Wardens (one line):** We decide origin truth with dual-key on-chain Valid/Invalid; continuous collateral monitoring is a different layer after tokenization.
+**Vs Wardens (one line):** We decide origin truth with dual-key on-chain Valid/Invalid; continuous collateral monitoring is a different layer after tokenization.  
+**Vs CanopyMRV (one line):** Canopy freezes/issues carbon credits after MRV hash; Lastre dual-key seals mineral+carbon origin with permanent Invalid before mint/credit.
 
 Proof before token. Seal decides. LLM only acts. Invalid is permanent on-chain proof.
 

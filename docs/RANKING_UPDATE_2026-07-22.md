@@ -128,8 +128,10 @@ Arquivos irmãos:
 
 ## 8. Próximos (só residual)
 
-- [ ] Dry-run demo day scorecard (visual)  
-- [ ] Autonomy ×3 no dia do jury (pós cold start)  
+- [x] Dry-run técnico scorecard (API) — `DRY_RUN_CLOSEOUT_2026-07-22.md`  
+- [ ] Autonomy ×3 **no dia do jury** (cold start)  
+- [ ] Vídeo novo (Felix)  
+
 - [x] Dora pack live 46748  
 - [x] Render + jury evidence  
 - [x] Ranking 22/07  
