@@ -34,6 +34,7 @@ import {
   CSPR_CLOUD_FACILITATOR_URL,
   WCSPR_TESTNET_PACKAGE_HASH,
   buildCloudQuoteMeta,
+  createOptionalCsprCloudFromEnv,
   type Facilitator,
   type PaymentPayload,
   type PaymentRequirements,
@@ -183,9 +184,12 @@ export class AppRuntime {
   /** Session-only origin autonomy cycle log (not oracle feed counter). */
   private readonly autonomy = new AutonomyStore();
 
-  // x402 provenance provider: LASTRE_X402_MODE=mock (default) | casper.
-  // mock → synthetic_receipt; casper → real casper-client transfer when keys set.
+  // x402: primary facilitator from LASTRE_X402_MODE (mock | casper | cspr_cloud).
+  // Optional side-car CSPR.cloud facilitator when CSPR_CLOUD_API_TOKEN is set —
+  // enables WCSPR settle alongside native CSPR without switching mode.
   private readonly x402Facilitator: Facilitator = createFacilitatorFromEnv();
+  private readonly x402CloudFacilitator: CsprCloudFacilitator | null =
+    createOptionalCsprCloudFromEnv();
   private readonly x402Issued = new Map<string, PaymentRequirements>();
   private x402QueryCount = 0;
   /** Session last real casper_deploy settle (null until one succeeds this process). */
@@ -1194,22 +1198,33 @@ export class AppRuntime {
       nonce: randomUUID(),
     };
 
-    if (this.x402Facilitator.mode === "cspr_cloud" && this.x402Facilitator instanceof CsprCloudFacilitator) {
-      const cloud = this.x402Facilitator.getQuoteMeta();
-      requirements.asset = "WCSPR";
-      requirements.network = cloud.network;
-      requirements.description =
-        "Lastre provenance verification (WCSPR via CSPR.cloud facilitator)";
+    // Always attach official cloud quote meta when side-car (or primary) cloud is live.
+    const cloudFacilitator = this.getCloudFacilitator();
+    if (cloudFacilitator) {
+      const cloud = cloudFacilitator.getQuoteMeta();
       requirements.cloud = cloud;
-      // maxAmountRequired stays numeric for legacy clients; base units live in cloud.amountBaseUnits
-      const base = Number(cloud.amountBaseUnits);
-      if (Number.isFinite(base) && base > 0) {
-        requirements.maxAmountRequired = base;
+      if (this.x402Facilitator.mode === "cspr_cloud") {
+        requirements.asset = "WCSPR";
+        requirements.network = cloud.network;
+        requirements.description =
+          "Lastre provenance verification (WCSPR via CSPR.cloud facilitator)";
+        const base = Number(cloud.amountBaseUnits);
+        if (Number.isFinite(base) && base > 0) {
+          requirements.maxAmountRequired = base;
+        }
       }
     }
 
     this.x402Issued.set(requirements.nonce, requirements);
     return { requirements, assetId };
+  }
+
+  /** Primary or side-car CSPR.cloud facilitator (complete stack). */
+  private getCloudFacilitator(): CsprCloudFacilitator | null {
+    if (this.x402Facilitator instanceof CsprCloudFacilitator) {
+      return this.x402Facilitator;
+    }
+    return this.x402CloudFacilitator;
   }
 
   /** Static + live (if token) CSPR.cloud / WCSPR path info for evidence + health. */
@@ -1220,7 +1235,11 @@ export class AppRuntime {
     examples: string;
     tradeWcspr: string;
     wcsprTestnetPackage: string;
+    /** Primary mode is cspr_cloud */
     modeActive: boolean;
+    /** Token present and facilitator constructed (primary or side-car) */
+    cloudReady: boolean;
+    primaryMode: string;
     quote: CloudQuoteMeta | null;
     envTokenConfigured: boolean;
   } {
@@ -1229,23 +1248,10 @@ export class AppRuntime {
         process.env.LASTRE_CSPR_CLOUD_TOKEN?.trim() ||
         process.env.FACILITATOR_API_KEY?.trim(),
     );
-    const active = this.x402Facilitator.mode === "cspr_cloud";
-    let quote: CloudQuoteMeta | null = null;
-    if (this.x402Facilitator instanceof CsprCloudFacilitator) {
-      quote = this.x402Facilitator.getQuoteMeta();
-    } else {
-      const payTo =
-        process.env.LASTRE_X402_PAY_TO?.trim() ||
-        process.env.LASTRE_X402_TARGET_ACCOUNT?.trim() ||
-        "";
-      if (payTo) {
-        quote = buildCloudQuoteMeta({
-          payTo,
-          assetPackage:
-            process.env.LASTRE_WCSPR_PACKAGE?.trim() || WCSPR_TESTNET_PACKAGE_HASH,
-        });
-      }
-    }
+    const cloud = this.getCloudFacilitator();
+    const quote = cloud
+      ? cloud.getQuoteMeta()
+      : null;
     return {
       path: "official_make",
       facilitatorUrl: CSPR_CLOUD_FACILITATOR_URL,
@@ -1253,7 +1259,9 @@ export class AppRuntime {
       examples: "https://github.com/make-software/casper-x402",
       tradeWcspr: "https://testnet.cspr.trade",
       wcsprTestnetPackage: WCSPR_TESTNET_PACKAGE_HASH,
-      modeActive: active,
+      modeActive: this.x402Facilitator.mode === "cspr_cloud",
+      cloudReady: Boolean(cloud),
+      primaryMode: this.x402Facilitator.mode,
       quote,
       envTokenConfigured: envToken,
     };
@@ -1262,24 +1270,37 @@ export class AppRuntime {
   async probeCsprCloudSupported(): Promise<{
     ok: boolean;
     mode: string;
+    primaryMode: string;
+    cloudReady: boolean;
     supported?: unknown;
     error?: string;
   }> {
-    if (!(this.x402Facilitator instanceof CsprCloudFacilitator)) {
+    const cloud = this.getCloudFacilitator();
+    if (!cloud) {
       return {
         ok: false,
-        mode: this.x402Facilitator.mode,
+        mode: "unavailable",
+        primaryMode: this.x402Facilitator.mode,
+        cloudReady: false,
         error:
-          "Facilitator is not cspr_cloud. Set LASTRE_X402_MODE=cspr_cloud + CSPR_CLOUD_API_TOKEN + LASTRE_X402_PAY_TO.",
+          "Set CSPR_CLOUD_API_TOKEN + LASTRE_WCSPR_PAY_TO (00+64hex account hash). Keep LASTRE_X402_MODE=casper for native settle side-by-side.",
       };
     }
     try {
-      const supported = await this.x402Facilitator.getSupported();
-      return { ok: true, mode: "cspr_cloud", supported };
+      const supported = await cloud.getSupported();
+      return {
+        ok: true,
+        mode: "cspr_cloud",
+        primaryMode: this.x402Facilitator.mode,
+        cloudReady: true,
+        supported,
+      };
     } catch (error) {
       return {
         ok: false,
         mode: "cspr_cloud",
+        primaryMode: this.x402Facilitator.mode,
+        cloudReady: true,
         error: error instanceof Error ? error.message : String(error),
       };
     }
@@ -1309,16 +1330,17 @@ export class AppRuntime {
     if (!this.getLot(assetId)) {
       return { ok: false, reason: "unknown_asset", facilitatorMode: this.x402Facilitator.mode };
     }
-    if (!(this.x402Facilitator instanceof CsprCloudFacilitator)) {
+    const cloud = this.getCloudFacilitator();
+    if (!cloud) {
       return {
         ok: false,
-        reason: "facilitator_not_cspr_cloud",
+        reason: "cloud_facilitator_unavailable",
         message:
-          "Set LASTRE_X402_MODE=cspr_cloud + CSPR_CLOUD_API_TOKEN. Or use mode=casper for native CSPR.",
+          "Set CSPR_CLOUD_API_TOKEN + LASTRE_WCSPR_PAY_TO (00+64hex). Native CSPR: mode=casper + keys.",
         facilitatorMode: this.x402Facilitator.mode,
       };
     }
-    const settled = await this.x402Facilitator.settleOfficial(body);
+    const settled = await cloud.settleOfficial(body);
     if (!settled.ok) {
       return {
         ok: false,
@@ -1450,8 +1472,8 @@ export class AppRuntime {
         ok: false,
         reason: "use_cloud_settle_endpoint",
         message:
-          "facilitatorMode=cspr_cloud requires EIP-712 WCSPR body via POST /api/x402/cloud/settle " +
-          "(see make-software/casper-x402). This endpoint only auto-settles native CSPR (mode=casper). " +
+          "Primary mode is cspr_cloud — use POST /api/x402/cloud/settle with EIP-712 body. " +
+          "For native auto-settle, set LASTRE_X402_MODE=casper (cloud side-car stays available if token set). " +
           "Judge mock: POST /api/x402/simulate.",
         facilitatorMode: "cspr_cloud",
       };

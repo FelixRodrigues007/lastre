@@ -6,7 +6,12 @@ import {
   CSPR_CLOUD_FACILITATOR_URL,
   buildCloudQuoteMeta,
 } from "../src/cspr-cloud-types.js";
-import { createFacilitatorFromEnv, resolveX402Mode } from "../src/create-facilitator.js";
+import {
+  createFacilitatorFromEnv,
+  createOptionalCsprCloudFromEnv,
+  resolveX402Mode,
+  resolveWcsprPayTo,
+} from "../src/create-facilitator.js";
 
 describe("resolveX402Mode", () => {
   it("accepts cspr_cloud aliases", () => {
@@ -164,5 +169,35 @@ describe("createFacilitatorFromEnv cspr_cloud", () => {
       LASTRE_X402_PAY_TO: "00" + "55".repeat(32),
     });
     assert.equal(f.mode, "mock");
+  });
+});
+
+describe("dual stack side-car", () => {
+  it("resolveWcsprPayTo prefers LASTRE_WCSPR_PAY_TO", () => {
+    assert.equal(
+      resolveWcsprPayTo({
+        LASTRE_WCSPR_PAY_TO: "00" + "ab".repeat(32),
+        LASTRE_X402_PAY_TO: "01deadbeef",
+      }),
+      "00" + "ab".repeat(32),
+    );
+  });
+
+  it("createOptionalCsprCloudFromEnv works with casper primary env", () => {
+    const cloud = createOptionalCsprCloudFromEnv({
+      LASTRE_X402_MODE: "casper",
+      CSPR_CLOUD_API_TOKEN: "tok",
+      LASTRE_WCSPR_PAY_TO: "00" + "66".repeat(32),
+    });
+    assert.ok(cloud);
+    assert.equal(cloud!.mode, "cspr_cloud");
+  });
+
+  it("side-car null without 00+64hex payTo", () => {
+    const cloud = createOptionalCsprCloudFromEnv({
+      CSPR_CLOUD_API_TOKEN: "tok",
+      LASTRE_X402_PAY_TO: "013a7fadf901393a1ddecefb3fa967d9d782bbe1d3e0729ed526310840217b47f0",
+    });
+    assert.equal(cloud, null);
   });
 });

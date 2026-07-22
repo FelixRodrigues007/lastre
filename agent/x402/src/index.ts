@@ -44,10 +44,12 @@ export {
 } from "./cspr-cloud-types.js";
 export {
   createFacilitatorFromEnv,
+  createOptionalCsprCloudFromEnv,
   inspectSecretMaterial,
   normalizePem,
   pemLooksValid,
   prepareX402SecretsFromEnv,
+  resolveWcsprPayTo,
   resolveX402Mode,
   type SecretMaterialStatus,
   type X402Mode,

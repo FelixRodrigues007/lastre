@@ -295,6 +295,68 @@ function isMockPayTo(target: string): boolean {
   );
 }
 
+/**
+ * Resolve WCSPR payTo account-hash form (`00` + 64 hex).
+ * Prefers LASTRE_WCSPR_PAY_TO; falls back to LASTRE_X402_PAY_TO if already account-hash shaped.
+ */
+export function resolveWcsprPayTo(env: NodeJS.ProcessEnv = process.env): string {
+  const explicit =
+    env.LASTRE_WCSPR_PAY_TO?.trim() ||
+    env.LASTRE_X402_WCSPR_PAY_TO?.trim() ||
+    "";
+  if (explicit) return explicit;
+  const payTo = env.LASTRE_X402_PAY_TO?.trim() || env.LASTRE_X402_TARGET_ACCOUNT?.trim() || "";
+  // Already account-hash style for CSPR.cloud (00 + 64 hex)
+  if (/^00[0-9a-fA-F]{64}$/.test(payTo)) return payTo;
+  // account-hash-<64hex>
+  const m = payTo.match(/^account-hash-([0-9a-fA-F]{64})$/i);
+  if (m) return `00${m[1].toLowerCase()}`;
+  return payTo;
+}
+
+/** Optional side-car CSPR.cloud facilitator (can run alongside casper mode). */
+export function createOptionalCsprCloudFromEnv(
+  env: NodeJS.ProcessEnv = process.env,
+): CsprCloudFacilitator | null {
+  const apiToken =
+    env.CSPR_CLOUD_API_TOKEN?.trim() ||
+    env.LASTRE_CSPR_CLOUD_TOKEN?.trim() ||
+    env.FACILITATOR_API_KEY?.trim() ||
+    "";
+  if (!apiToken) return null;
+
+  const payTo = resolveWcsprPayTo(env);
+  if (isMockPayTo(payTo) || !/^00[0-9a-fA-F]{64}$/.test(payTo)) {
+    console.warn(
+      "[lastre-x402] CSPR_CLOUD_API_TOKEN set but LASTRE_WCSPR_PAY_TO / payTo is not `00`+64hex account hash; cloud facilitator disabled.",
+    );
+    return null;
+  }
+
+  try {
+    return new CsprCloudFacilitator({
+      apiToken,
+      payTo,
+      facilitatorUrl: env.CSPR_CLOUD_FACILITATOR_URL?.trim() || undefined,
+      assetPackage:
+        env.LASTRE_WCSPR_PACKAGE?.trim() ||
+        env.ASSET_PACKAGE?.trim() ||
+        WCSPR_TESTNET_PACKAGE_HASH,
+      amountBaseUnits: env.LASTRE_WCSPR_AMOUNT?.trim() || undefined,
+      network:
+        env.LASTRE_CAIP2_NETWORK?.trim() === "casper:casper"
+          ? "casper:casper"
+          : "casper:casper-test",
+    });
+  } catch (error) {
+    console.warn(
+      "[lastre-x402] Optional CsprCloudFacilitator init failed:",
+      error instanceof Error ? error.message : error,
+    );
+    return null;
+  }
+}
+
 export function createFacilitatorFromEnv(env: NodeJS.ProcessEnv = process.env): Facilitator {
   prepareX402SecretsFromEnv(env);
   const mode = resolveX402Mode(env.LASTRE_X402_MODE);
@@ -306,50 +368,18 @@ export function createFacilitatorFromEnv(env: NodeJS.ProcessEnv = process.env): 
   const targetAccount =
     env.LASTRE_X402_PAY_TO?.trim() || env.LASTRE_X402_TARGET_ACCOUNT?.trim() || "";
 
-  // ---- Official MAKE path: CSPR.cloud + WCSPR --------------------------------
+  // ---- Official MAKE path as PRIMARY (mode=cspr_cloud only) ------------------
   if (mode === "cspr_cloud") {
-    const apiToken =
-      env.CSPR_CLOUD_API_TOKEN?.trim() ||
-      env.LASTRE_CSPR_CLOUD_TOKEN?.trim() ||
-      env.FACILITATOR_API_KEY?.trim() ||
-      "";
-    if (!apiToken) {
-      console.warn(
-        "[lastre-x402] LASTRE_X402_MODE=cspr_cloud but CSPR_CLOUD_API_TOKEN missing; falling back to MockFacilitator.",
-      );
-      return new MockFacilitator();
-    }
-    if (isMockPayTo(targetAccount)) {
-      console.warn(
-        "[lastre-x402] LASTRE_X402_MODE=cspr_cloud but LASTRE_X402_PAY_TO is missing or mock; falling back to MockFacilitator.",
-      );
-      return new MockFacilitator();
-    }
-    try {
-      return new CsprCloudFacilitator({
-        apiToken,
-        payTo: targetAccount,
-        facilitatorUrl: env.CSPR_CLOUD_FACILITATOR_URL?.trim() || undefined,
-        assetPackage:
-          env.LASTRE_WCSPR_PACKAGE?.trim() ||
-          env.ASSET_PACKAGE?.trim() ||
-          WCSPR_TESTNET_PACKAGE_HASH,
-        amountBaseUnits: env.LASTRE_WCSPR_AMOUNT?.trim() || undefined,
-        network:
-          env.LASTRE_CAIP2_NETWORK?.trim() === "casper:casper"
-            ? "casper:casper"
-            : "casper:casper-test",
-      });
-    } catch (error) {
-      console.warn(
-        "[lastre-x402] CsprCloudFacilitator init failed; falling back to mock:",
-        error instanceof Error ? error.message : error,
-      );
-      return new MockFacilitator();
-    }
+    const cloud = createOptionalCsprCloudFromEnv(env);
+    if (cloud) return cloud;
+    console.warn(
+      "[lastre-x402] LASTRE_X402_MODE=cspr_cloud but cloud facilitator unavailable; falling back to MockFacilitator.",
+    );
+    return new MockFacilitator();
   }
 
-  // ---- Native CSPR path (casper-client transfer) -----------------------------
+  // ---- Native CSPR path as PRIMARY (casper mode) -----------------------------
+  // Note: when CSPR_CLOUD_API_TOKEN is also set, AppRuntime attaches cloud as side-car.
   const secretKeyPath =
     env.LASTRE_X402_SECRET_KEY_PATH?.trim() || env.SANDBOX_SECRET_KEY_PATH?.trim() || "";
 
