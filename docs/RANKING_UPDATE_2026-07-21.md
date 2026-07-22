@@ -88,7 +88,7 @@
 
 ## 6. Próximos 48h (pós-ajuste)
 
-- [ ] Colar bloco **Dora short description** de `BUIDL_PAGE_PASTE.md` no Edit BUIDL  
+- [x] Colar bloco **Dora short description** / pack completo no Edit BUIDL (live 46748)  
 - [ ] Dry-run 90s demo  
 - [ ] Autonomy 3× no dia do jury (in-memory)  
 - [x] Monitor 5h reativado (scheduler `019f863af4cf`)  
