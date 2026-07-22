@@ -78,6 +78,7 @@ export const content = {
       lead2Prefix: "When the data is wrong, the entire stack — agents, escrows, settlements — ",
       lead2Emphasis: "runs on fiction",
       lead2Suffix: ".",
+      lead3: "When origin is false, every agent payment and every finance gate inherits fiction.",
       panelAria:
         "Today's stack: an unverified claim propagating through the system without a proof of origin",
       panelTitle: "Without proof",
@@ -295,6 +296,7 @@ export const content = {
         { label: "Offline proof", lastro: "Yes", oracle: "Partial", api: "No" },
         { label: "Invalid on-chain", lastro: "Permanent", oracle: "Rare", api: "Hidden" },
         { label: "LLM decides truth", lastro: "Never", oracle: "Sometimes", api: "Often" },
+        { label: "Finance without origin", lastro: "Gate closed until Valid", oracle: "Proceeds anyway", api: "Proceeds anyway" },
       ] as const,
     },
     changelog: {
@@ -524,6 +526,7 @@ export const content = {
       lead2Prefix: "Quando os dados estão errados, toda a stack — agentes, escrows, liquidações — ",
       lead2Emphasis: "opera sobre ficção",
       lead2Suffix: ".",
+      lead3: "Quando a origem é falsa, cada pagamento de agente e cada trava financeira herdam ficção.",
       panelAria:
         "Stack atual: uma alegação não verificada propagando pelo sistema sem prova de origem",
       panelTitle: "Sem prova",
@@ -741,6 +744,7 @@ export const content = {
         { label: "Prova offline", lastro: "Sim", oracle: "Parcial", api: "Não" },
         { label: "Invalid on-chain", lastro: "Permanente", oracle: "Raro", api: "Oculto" },
         { label: "LLM decide verdade", lastro: "Nunca", oracle: "Às vezes", api: "Frequentemente" },
+        { label: "Finança sem origem", lastro: "Trava fechada até Valid", oracle: "Segue mesmo assim", api: "Segue mesmo assim" },
       ] as const,
     },
     changelog: {

@@ -1,0 +1,183 @@
+- generic [ref=e4]:
+  - complementary "Console navigation" [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - link "Lastre — home" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e14]: Lastre
+          - button "Collapse sidebar" [expanded] [ref=e15] [cursor=pointer]
+        - separator [ref=e19]
+        - button "Open command palette" [ref=e20] [cursor=pointer]:
+          - generic [ref=e24]: Quick search…
+          - generic [ref=e25]: ⌘K
+      - navigation "Primary" [ref=e26]:
+        - list [ref=e27]:
+          - listitem [ref=e28]:
+            - link "Overview" [ref=e29] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e37]:
+            - link "Lots" [ref=e38] [cursor=pointer]:
+              - /url: /lots
+          - listitem [ref=e44]:
+            - link "Process" [ref=e45] [cursor=pointer]:
+              - /url: /process
+          - listitem [ref=e51]:
+            - link "Audit 4 pending" [ref=e148] [cursor=pointer]:
+              - /url: /audit
+              - generic [ref=e58]: Audit
+              - generic "4 pending" [ref=e149]: "4"
+          - listitem [ref=e59]:
+            - link "Escalations 2 pending" [ref=e150] [cursor=pointer]:
+              - /url: /escalations
+              - generic [ref=e65]: Escalations
+              - generic "2 pending" [ref=e151]: "2"
+          - listitem [ref=e66]:
+            - link "Marketplace" [ref=e67] [cursor=pointer]:
+              - /url: /marketplace
+          - listitem [ref=e73]:
+            - link "My Assets" [ref=e74] [cursor=pointer]:
+              - /url: /my-assets
+      - generic [ref=e80]:
+        - region "Getting started checklist" [ref=e81]:
+          - generic [ref=e82]:
+            - heading "First steps" [level=2] [ref=e83]
+            - generic "0 of 4" [ref=e84]: 0/4
+          - list [ref=e89]:
+            - listitem [ref=e90]:
+              - link "Run the first batch" [ref=e91] [cursor=pointer]:
+                - /url: /process
+            - listitem [ref=e94]:
+              - link "View an Invalid verdict" [ref=e95] [cursor=pointer]:
+                - /url: /lots
+            - listitem [ref=e98]:
+              - link "Check proof on Casper" [ref=e99] [cursor=pointer]:
+                - /url: /audit
+            - listitem [ref=e102]:
+              - link "See the symbolic layer" [ref=e103] [cursor=pointer]:
+                - /url: /marketplace
+        - button "Session menu" [ref=e108] [cursor=pointer]:
+          - generic [ref=e109]:
+            - generic [ref=e110]: Demo
+            - generic [ref=e111]: demo@lastro.io
+  - main [ref=e115]:
+    - generic [ref=e117]:
+      - complementary "Sealed Market Rail · step 4–5" [ref=e118]:
+        - paragraph [ref=e119]: Sealed Market Rail · step 4–5
+        - paragraph [ref=e120]: Claimed demo assets can be locked as demo collateral only when origin is Valid.
+      - generic [ref=e121]:
+        - generic "Asset collection" [ref=e122]:
+          - paragraph [ref=e123]: Selecione o ativo
+          - listbox "Select an asset" [ref=e124]:
+            - option "Gold · Mina Vale do Ouro - Frente Norte Score 99" [selected] [ref=e152] [cursor=pointer]:
+              - generic [ref=e154]:
+                - generic [ref=e155]: Gold · Mina Vale do Ouro - Frente Norte
+                - generic [ref=e156]: Score 99
+            - option "VCS credit Score 99" [ref=e125] [cursor=pointer]:
+              - generic [ref=e127]:
+                - generic [ref=e128]: VCS credit
+                - generic [ref=e129]: Score 99
+            - option "Mineradora Vale do Ouro Score 99" [ref=e130] [cursor=pointer]:
+              - generic [ref=e132]:
+                - generic [ref=e133]: Mineradora Vale do Ouro
+                - generic [ref=e134]: Score 99
+        - generic [ref=e135]:
+          - generic [ref=e157]:
+            - generic [ref=e158]:
+              - generic [ref=e159]: Demo collateral
+              - button "Lock demo collateral" [ref=e160] [cursor=pointer]
+            - paragraph [ref=e161]: Demo collateral — not a lending market. No liquidation, no yield, no investment. Eligible only with Valid origin + demo claim.
+          - article [ref=e162]:
+            - generic [ref=e163]:
+              - complementary "Proof KPIs" [ref=e164]:
+                - generic [ref=e165]:
+                  - generic [ref=e166]: Provenance score
+                  - generic [ref=e167]:
+                    - generic [ref=e168]: "99"
+                    - generic [ref=e169]: P50 percentile
+                - generic [ref=e170]:
+                  - generic [ref=e171]: Good layers
+                  - generic [ref=e172]:
+                    - generic [ref=e173]: "5"
+                    - generic [ref=e174]: P75 percentile
+                - generic [ref=e175]:
+                  - generic [ref=e176]: Partial layers
+                  - generic [ref=e177]:
+                    - generic [ref=e178]: "0"
+                    - generic [ref=e179]: P90 percentile
+                - generic [ref=e180]:
+                  - generic [ref=e181]: Mint
+                  - generic [ref=e182]:
+                    - generic [ref=e183]: "99"
+                    - generic [ref=e184]: P99 percentile
+              - region "Proof traffic" [ref=e186]:
+                - generic [ref=e187]:
+                  - heading [level=2] [ref=e188]:
+                    - text: Gold · Mina Vale do Ouro - Frente Norte
+                    - link "Open evidence room" [ref=e189] [cursor=pointer]:
+                      - /url: /lots?lot=MINA-VALEDOURO-LOTE-001
+                  - generic [ref=e194]:
+                    - button "Last 24 hours (GMT-3)" [disabled] [ref=e195]
+                    - button "Print report" [disabled] [ref=e198]
+                - tablist "Traffic dimensions" [ref=e201]:
+                  - tab "Score" [selected] [ref=e202] [cursor=pointer]
+                  - tab "Layers" [ref=e203] [cursor=pointer]
+                  - tab "Chain" [ref=e204] [cursor=pointer]
+                - generic [ref=e205]:
+                  - heading "Provenance score through proof pipeline" [level=3] [ref=e206]
+                  - group "Summary metrics" [ref=e207]:
+                    - generic [ref=e208]:
+                      - generic [ref=e209]: Total checks
+                      - generic [ref=e210]: "1.593"
+                      - generic [ref=e211]: Previous 24 hours
+                    - generic [ref=e212]:
+                      - generic [ref=e213]: Attested
+                      - generic [ref=e214]: "1.308"
+                      - generic [ref=e215]: Previous 24 hours
+                    - generic [ref=e216]:
+                      - generic [ref=e217]: Pending
+                      - generic [ref=e218]: "285"
+                      - generic [ref=e219]: Previous 24 hours
+                  - generic [ref=e220]:
+                    - generic [ref=e221]:
+                      - generic [ref=e222]: Attested
+                      - generic [ref=e224]: Pending
+                    - img "Provenance score over time" [ref=e226]:
+                      - generic [ref=e227]: "0"
+                      - generic [ref=e229]: "25"
+                      - generic [ref=e231]: "51"
+                      - generic [ref=e233]: "76"
+                      - generic [ref=e235]: "101"
+                      - generic [ref=e241]: Provenance score
+                  - region "Proof layer vitals" [ref=e242]:
+                    - generic [ref=e243]:
+                      - heading "Proof layer vitals" [level=3] [ref=e244]
+                      - link "About proof layers" [ref=e245] [cursor=pointer]:
+                        - /url: "#proof-layers-about"
+                    - paragraph [ref=e246]: Distribution of capture, seal, verification, Casper attestation, and mint layers for this asset.
+                    - group "Layer status distribution" [ref=e247]:
+                      - generic [ref=e248]:
+                        - generic [ref=e249]: Good
+                        - generic [ref=e250]: 100%
+                      - generic [ref=e253]:
+                        - generic [ref=e254]: Needs improvement
+                        - generic [ref=e255]: 0%
+                      - generic [ref=e257]:
+                        - generic [ref=e258]: Poor
+                        - generic [ref=e259]: 0%
+                    - list [ref=e261]:
+                      - listitem [ref=e262]:
+                        - generic [ref=e263]: Capture
+                        - generic [ref=e264]: 2026-06-23T18:30:00.000Z
+                      - listitem [ref=e265]:
+                        - generic [ref=e266]: Seal
+                        - generic [ref=e267]: Computed seal matches reference
+                      - listitem [ref=e268]:
+                        - generic [ref=e269]: Verify
+                        - generic [ref=e270]: Verification returned Valid
+                      - listitem [ref=e271]:
+                        - generic [ref=e272]: Casper
+                        - generic [ref=e273]: On-chain attestation recorded
+                      - listitem [ref=e274]:
+                        - generic [ref=e275]: Mint
+                        - generic [ref=e276]: Minted via MintGate (demo)

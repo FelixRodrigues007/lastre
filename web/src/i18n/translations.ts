@@ -33,7 +33,7 @@ export const translations = {
     heroEyebrow: "Live on Casper Testnet · Proof-of-provenance protocol",
     heroHeadline: "Proof before token.",
     heroSubShort:
-      "Offline deterministic seals. On-chain verdicts. Before any token or agent acts.",
+      "Offline deterministic seals. On-chain verdicts. Before any token, agent, or finance action.",
     heroSubFull:
       "Lastre is the trust layer for real-world assets and autonomous agents. It verifies physical origin offline and deterministically, then anchors the verdict on Casper — before any token or agent acts on the data.",
     readMore: "Read more",
@@ -75,7 +75,7 @@ export const translations = {
     heroEyebrow: "Ao vivo no Casper Testnet · Protocolo de prova de proveniência",
     heroHeadline: "Prova antes do token.",
     heroSubShort:
-      "Selos determinísticos offline. Vereditos on-chain. Antes de qualquer token ou agente agir.",
+      "Selos determinísticos offline. Vereditos on-chain. Antes de qualquer token, agente ou ação financeira.",
     heroSubFull:
       "Lastre é a camada de confiança para ativos do mundo real e agentes autônomos. Verifica origem física offline e deterministicamente, depois ancora o veredito no Casper — antes de qualquer token ou agente agir sobre os dados.",
     readMore: "Ler mais",

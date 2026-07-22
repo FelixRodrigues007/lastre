@@ -1,0 +1,211 @@
+- generic [ref=f3e4]:
+  - complementary "Console navigation" [ref=f3e5]:
+    - generic [ref=f3e6]:
+      - generic [ref=f3e7]:
+        - generic [ref=f3e8]:
+          - link "Lastre — home" [ref=f3e9] [cursor=pointer]:
+            - /url: /
+            - generic [ref=f3e14]: Lastre
+          - button "Collapse sidebar" [expanded] [ref=f3e15] [cursor=pointer]
+        - separator [ref=f3e19]
+        - button "Open command palette" [ref=f3e20] [cursor=pointer]:
+          - generic [ref=f3e24]: Quick search…
+          - generic [ref=f3e25]: ⌘K
+      - navigation "Primary" [ref=f3e26]:
+        - list [ref=f3e27]:
+          - listitem [ref=f3e28]:
+            - link "Overview" [ref=f3e29] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f3e37]:
+            - link "Lots" [ref=f3e38] [cursor=pointer]:
+              - /url: /lots
+          - listitem [ref=f3e44]:
+            - link "Process" [ref=f3e45] [cursor=pointer]:
+              - /url: /process
+          - listitem [ref=f3e51]:
+            - link "Audit 4 pending" [ref=f3e52] [cursor=pointer]:
+              - /url: /audit
+              - generic [ref=f3e58]: Audit
+              - generic "4 pending" [ref=f3e59]: "4"
+          - listitem [ref=f3e60]:
+            - link "Escalations 2 pending" [ref=f3e61] [cursor=pointer]:
+              - /url: /escalations
+              - generic [ref=f3e66]: Escalations
+              - generic "2 pending" [ref=f3e67]: "2"
+          - listitem [ref=f3e68]:
+            - link "Marketplace" [ref=f3e69] [cursor=pointer]:
+              - /url: /marketplace
+          - listitem [ref=f3e75]:
+            - link "My Assets" [ref=f3e76] [cursor=pointer]:
+              - /url: /my-assets
+      - generic [ref=f3e82]:
+        - region "Getting started checklist" [ref=f3e83]:
+          - generic [ref=f3e84]:
+            - heading "First steps" [level=2] [ref=f3e85]
+            - generic "1 of 4" [ref=f3e86]: 1/4
+          - list [ref=f3e91]:
+            - listitem [ref=f3e92]:
+              - link "Run the first batch" [ref=f3e93] [cursor=pointer]:
+                - /url: /process
+            - listitem [ref=f3e96]:
+              - link "View an Invalid verdict" [ref=f3e97] [cursor=pointer]:
+                - /url: /lots
+            - listitem [ref=f3e100]:
+              - link "Check proof on Casper" [ref=f3e101] [cursor=pointer]:
+                - /url: /audit
+            - listitem [ref=f3e104]:
+              - link "See the symbolic layer" [ref=f3e105] [cursor=pointer]:
+                - /url: /marketplace
+        - button "Session menu" [ref=f3e112] [cursor=pointer]:
+          - generic [ref=f3e113]:
+            - generic [ref=f3e114]: Demo
+            - generic [ref=f3e115]: demo@lastro.io
+  - main [ref=f3e119]:
+    - generic [ref=f3e121]:
+      - generic [ref=f3e122]:
+        - generic [ref=f3e123]:
+          - paragraph [ref=f3e124]: Marketplace
+          - generic [ref=f3e125]:
+            - heading "Provenance Marketplace" [level=1] [ref=f3e126]
+            - button "Capture New" [ref=f3e128] [cursor=pointer]
+          - paragraph [ref=f3e129]: Browse verified assets on the map. Select a lot to inspect origin, proof status, and claim options (demo).
+        - region [ref=f3e131]:
+          - complementary "Demo guardrails" [ref=f3e132]:
+            - paragraph [ref=f3e138]:
+              - generic [ref=f3e139]: Demo
+              - text: Fictional data · Seal decides verdict · Not investment or token sale·Reload clears demo session data.
+          - generic [ref=f3e140]:
+            - generic [ref=f3e141]:
+              - heading "Sealed Market Rail" [level=2] [ref=f3e142]
+              - paragraph [ref=f3e143]: Origin-gated path from Valid seal → MintGate claim → demo collateral.
+            - generic [ref=f3e144]:
+              - button "Run Sealed Rail demo" [disabled] [ref=f3e145] [cursor=pointer]
+              - link "Open My Assets" [ref=f3e146] [cursor=pointer]:
+                - /url: /my-assets?asset=MINA-VALEDOURO-LOTE-001&rail=1
+          - list "Chain of proof" [ref=f3e147]:
+            - listitem [ref=f3e148]:
+              - generic [ref=f3e150]: Origin seal
+            - listitem [ref=f3e151]:
+              - generic [ref=f3e153]: Provenance query (Mock x402)
+            - listitem [ref=f3e154]:
+              - generic [ref=f3e156]: MintGate claim (Demo)
+            - listitem [ref=f3e157]:
+              - generic [ref=f3e159]: Sealed asset
+            - listitem [ref=f3e160]:
+              - generic [ref=f3e162]: Demo collateral
+          - paragraph [ref=f3e163]: Rail complete (demo). Review honesty labels before judging live vs simulated.
+          - paragraph [ref=f3e290]: Mock x402 — no CSPR moved · mock · 0.1 CSPR (mock) · 658c9905…32b5
+          - paragraph [ref=f3e291]: Demo MintGate · mint-19f…-001
+          - generic [ref=f3e164]:
+            - button "Try an Invalid seal" [ref=f3e165] [cursor=pointer]
+            - button "Exit DeFi / builder view" [ref=f3e166] [cursor=pointer]
+          - paragraph [ref=f3e167]: DeFi / builder view — show only origin-gated access paths. Finance actions stay demo until a Valid seal exists.
+          - button "Release demo collateral" [ref=f3e294] [cursor=pointer]
+          - paragraph [ref=f3e168]: Demo simulated · 1 claims recorded · package hash-b…0561
+          - paragraph [ref=f3e169]: Mock x402 in UI · Demo MintGate · Demo collateral · Live ProofOfOrigin when source=live
+      - complementary "Marketplace assets":
+        - searchbox "Search marketplace assets" [ref=f3e176]
+        - group "Marketplace filters" [ref=f3e177]:
+          - generic [ref=f3e178]:
+            - generic [ref=f3e179]: Category
+            - combobox "Filter by category" [ref=f3e180] [cursor=pointer]:
+              - option "All (7)" [selected]
+              - option "Minerals (4)"
+              - option "Carbon (3)"
+          - generic [ref=f3e181]:
+            - generic [ref=f3e182]: Status
+            - combobox "Filter by status" [ref=f3e183] [cursor=pointer]:
+              - option "All statuses" [selected]
+              - option "Proven"
+              - option "Minted"
+              - option "Claimable"
+          - generic [ref=f3e184]:
+            - generic [ref=f3e185]: Credit type
+            - combobox "Filter by carbon credit type" [ref=f3e186] [cursor=pointer]:
+              - option "All credits" [selected]
+              - option "VCS"
+              - option "GoldStandard"
+              - option "ARR"
+              - option "IREC"
+              - option "REDD+"
+              - option "CER"
+              - option "VCU"
+              - option "RenewableEnergy"
+              - option "Solar"
+              - option "Wind"
+              - option "Biomass"
+              - option "PCH"
+          - generic [ref=f3e187]:
+            - generic [ref=f3e188]: Buyer role
+            - combobox "Demo buyer role" [ref=f3e189] [cursor=pointer]:
+              - option "Verifier"
+              - option "Claimer / collector"
+              - option "DeFi collateral" [selected]
+              - option "Operator"
+        - generic [ref=f3e190]:
+          - button "Open Mineradora Vale do Ouro" [ref=f3e191] [cursor=pointer]:
+            - generic [ref=f3e193]:
+              - generic [ref=f3e194]: Valid
+              - strong [ref=f3e200]: Mineradora Vale do Ouro
+              - generic [ref=f3e201]: Gold · Score 91
+              - generic [ref=f3e202]: Mina Vale do Ouro — fictional · MINA-VALEDOURO-LOTE-002
+          - button "Open Amazon REDD+ Zone A — fictional" [ref=f3e203] [cursor=pointer]:
+            - generic [ref=f3e205]:
+              - generic [ref=f3e206]: No verdict
+              - strong [ref=f3e212]: Amazon REDD+ Zone A — fictional
+              - generic [ref=f3e213]: VCS · 125.000 tCO₂e · Score 68
+              - generic [ref=f3e214]: Amazon REDD+ Zone A — fictional · CARBON-VCS-AMAZONIA-2024-001
+          - button "Open Northeast Solar Park — fictional" [ref=f3e215] [cursor=pointer]:
+            - generic [ref=f3e217]:
+              - generic [ref=f3e218]: No verdict
+              - strong [ref=f3e224]: Northeast Solar Park — fictional
+              - generic [ref=f3e225]: GoldStandard · 45.000 tCO₂e · Score 62
+              - generic [ref=f3e226]: Northeast Solar Park — fictional · CARBON-GOLDSTANDARD-SOLAR-2025-002
+          - button "Open Patagonia Wind Corridor — fictional" [ref=f3e227] [cursor=pointer]:
+            - generic [ref=f3e229]:
+              - generic [ref=f3e230]: No verdict
+              - strong [ref=f3e236]: Patagonia Wind Corridor — fictional
+              - generic [ref=f3e237]: IREC · 62.000 tCO₂e · Score 62
+              - generic [ref=f3e238]: Patagonia Wind Corridor — fictional · CARBON-IREC-WIND-2024-004
+          - button "Open Mina Vale do Ouro - Frente Norte" [ref=f3e239] [cursor=pointer]:
+            - generic [ref=f3e241]:
+              - generic [ref=f3e242]: Minted
+              - strong [ref=f3e247]: Mina Vale do Ouro - Frente Norte
+              - generic [ref=f3e248]: Gold · 125.000 g · Score 99
+              - generic [ref=f3e249]: Mina Vale do Ouro - Frente Norte · MINA-VALEDOURO-LOTE-001
+        - navigation "Asset list pages" [ref=f3e250]:
+          - button "Previous page" [disabled] [ref=f3e251]: ←
+          - group "Page numbers" [ref=f3e252]:
+            - button "1" [ref=f3e253] [cursor=pointer]
+            - button "2" [ref=f3e254] [cursor=pointer]
+          - button "Next page" [ref=f3e255] [cursor=pointer]: →
+      - generic "Global Mundi provenance map" [ref=f3e256]:
+        - generic [ref=f3e257]:
+          - generic "Interactive provenance map" [ref=f3e259]:
+            - generic [ref=f3e260]:
+              - region "Map" [ref=f3e261]
+              - 'button "Mineradora Vale do Ouro: proven" [ref=f3e262] [cursor=pointer]'
+              - 'button "Amazon REDD+ Zone A — fictional: pending" [ref=f3e263] [cursor=pointer]'
+              - 'button "Northeast Solar Park — fictional: pending" [ref=f3e264] [cursor=pointer]'
+              - 'button "Patagonia Wind Corridor — fictional: pending" [ref=f3e265] [cursor=pointer]'
+              - 'button "Mina Vale do Ouro - Frente Norte: minted" [ref=f3e266] [cursor=pointer]'
+              - 'button "Mina Vale do Ouro - Frente Norte: pending" [ref=f3e267] [cursor=pointer]'
+              - 'button "Ponto suspeito fora da mina: pending" [ref=f3e268] [cursor=pointer]'
+              - img "Casper Testnet anchor" [ref=f3e269]
+            - generic:
+              - generic [ref=f3e270]:
+                - button "Zoom in" [ref=f3e271] [cursor=pointer]
+                - button "Zoom out" [ref=f3e273] [cursor=pointer]
+              - button "Toggle attribution" [ref=f3e276] [cursor=pointer]
+              - link "Mapbox homepage" [ref=f3e279] [cursor=pointer]:
+                - /url: https://www.mapbox.com/
+            - generic: Use two fingers to move the map
+            - generic: Use ⌘ + scroll to zoom the map
+          - generic "Map legend" [ref=f3e280]:
+            - generic [ref=f3e281]:
+              - generic [ref=f3e282]:
+                - text: Declared origin
+                - emphasis [ref=f3e284]: (fictional)
+              - generic [ref=f3e285]: Casper on-chain anchor
+              - generic [ref=f3e287]: Attestation route (demo)
+            - paragraph [ref=f3e289]: Origins are operator-declared demo coordinates — not GPS tracking or real custody.

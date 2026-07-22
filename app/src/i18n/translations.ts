@@ -10,6 +10,7 @@ export const translations = {
     "nav.audit": "Audit",
     "nav.escalations": "Escalations",
     "nav.settings": "Settings",
+    "commands.sealedRail": "Sealed Market Rail",
     "settings.close": "Close settings",
     "settings.lead":
       "Appearance, decider mode, operational limits, and demo guardrails. Audit data resets when the API server restarts.",
@@ -704,6 +705,8 @@ export const translations = {
     "marketplace.rail.btnSecondary": "Open My Assets",
     "marketplace.rail.running": "Running…",
     "marketplace.rail.statusIdle": "Start with a Valid origin seal.",
+    "marketplace.rail.statusMinted":
+      "Valid seal confirmed — MintGate claimed (demo). Lock demo collateral to finish.",
     "marketplace.rail.statusBlocked":
       "Blocked — Invalid origin. Mint and demo collateral stay closed.",
     "marketplace.rail.statusComplete":
@@ -747,6 +750,17 @@ export const translations = {
     "myassets.rail.releaseError": "Unable to release collateral (demo).",
     "myassets.rail.collateralHonesty":
       "Demo collateral — not a lending market. No liquidation, no yield, no investment. Eligible only with Valid origin + demo claim.",
+    "myassets.empty.noAccount.title": "No demo account connected",
+    "myassets.empty.noAccount.hint":
+      "Connect to load a symbolic demo collection with two provenance NFTs — no Marketplace claim required.",
+    "myassets.empty.noAccount.connectCta": "Connect & load demo collection",
+    "myassets.empty.noAccount.marketplaceCta": "Open Marketplace (demo)",
+    "myassets.empty.noAssets.title": "No claimed representations yet",
+    "myassets.empty.noAssets.hint":
+      "Load the demo collection to preview provenance analytics, or claim your own after Valid proof in Marketplace.",
+    "myassets.empty.noAssets.loadCta": "Load demo collection (2 assets)",
+    "myassets.empty.noAssets.marketplaceCta": "Browse Marketplace (demo)",
+    "myassets.detail.selectPrompt": "Select an asset to view provenance analytics.",
   },
   pt: {
     "nav.overview": "Visão geral",
@@ -757,6 +771,7 @@ export const translations = {
     "nav.audit": "Auditoria",
     "nav.escalations": "Escalações",
     "nav.settings": "Configurações",
+    "commands.sealedRail": "Trilho de Mercado Selado",
     "settings.close": "Fechar configurações",
     "settings.lead":
       "Aparência, modo do decider, limites operacionais e avisos da demo. Os dados de auditoria resetam quando o servidor API reinicia.",
@@ -1455,6 +1470,8 @@ export const translations = {
     "marketplace.rail.btnSecondary": "Abrir My Assets",
     "marketplace.rail.running": "Rodando…",
     "marketplace.rail.statusIdle": "Comece com um selo de origem Valid.",
+    "marketplace.rail.statusMinted":
+      "Selo Valid confirmado — MintGate reivindicado (demo). Trave o colateral demo para concluir.",
     "marketplace.rail.statusBlocked":
       "Bloqueado — origem Invalid. Mint e colateral demo permanecem fechados.",
     "marketplace.rail.statusComplete":
@@ -1498,6 +1515,17 @@ export const translations = {
     "myassets.rail.releaseError": "Não foi possível liberar o colateral (demo).",
     "myassets.rail.collateralHonesty":
       "Colateral demo — não é mercado de crédito. Sem liquidação, sem rendimento, sem investimento. Elegível só com origem Valid + claim demo.",
+    "myassets.empty.noAccount.title": "Nenhuma conta demo conectada",
+    "myassets.empty.noAccount.hint":
+      "Conecte para carregar uma coleção demo simbólica com dois NFTs de proveniência — sem precisar de claim no Marketplace.",
+    "myassets.empty.noAccount.connectCta": "Conectar e carregar coleção demo",
+    "myassets.empty.noAccount.marketplaceCta": "Abrir Marketplace (demo)",
+    "myassets.empty.noAssets.title": "Nenhuma representação reivindicada ainda",
+    "myassets.empty.noAssets.hint":
+      "Carregue a coleção demo para pré-visualizar as análises de proveniência, ou reivindique a sua após prova Valid no Marketplace.",
+    "myassets.empty.noAssets.loadCta": "Carregar coleção demo (2 ativos)",
+    "myassets.empty.noAssets.marketplaceCta": "Explorar Marketplace (demo)",
+    "myassets.detail.selectPrompt": "Selecione um ativo para ver as análises de proveniência.",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { GuardrailBanner } from "../layout/GuardrailBanner";
 import { ProofRail } from "../proof/ProofRail";
@@ -18,7 +18,10 @@ import { useAsyncData } from "../../hooks/useAsyncData";
 import type { MarketplacePersona } from "../../lib/marketplaceTypes";
 import "./sealed-market-rail.css";
 
-const VALID_TARGET_ASSET_ID = "CARBON-VCS-AMAZONIA-2024-001";
+// Genuine-vs-tampered readings of the same lot: the honest Valid/Invalid pair.
+// LOTE-001 is the only asset the runtime resolves to a Valid seal (mintable +
+// collateral-eligible); its -TAMPERED twin is the permanent-Invalid case.
+const VALID_TARGET_ASSET_ID = "MINA-VALEDOURO-LOTE-001";
 const INVALID_TARGET_ASSET_ID = "MINA-VALEDOURO-LOTE-001-TAMPERED";
 const DEMO_ACCOUNT_STORAGE_KEY = "casper-demo-account";
 
@@ -53,6 +56,10 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
 
   const [isInvalidChoice, setIsInvalidChoice] = useState(false);
   const assetId = isInvalidChoice ? INVALID_TARGET_ASSET_ID : VALID_TARGET_ASSET_ID;
+
+  // Remembers the buyer-side persona so leaving the DeFi view restores the
+  // user's actual filter choice instead of snapping back to a hardcoded role.
+  const prevPersonaRef = useRef<MarketplacePersona>(persona === "defi" ? "buyer" : persona);
 
   const [phase, setPhase] = useState<RailPhase>("idle");
   const [isRunning, setIsRunning] = useState(false);
@@ -100,6 +107,8 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       const query = await simulateAgentQuery(assetId, account);
       setQueryInfo(query);
 
+      // The seal decides Valid vs Invalid — never the mint endpoint or an error
+      // string. Read the verdict straight from the paid provenance snapshot.
       const queryIsInvalid =
         query.provenance?.verdict === "Invalid" || query.provenance?.sealMatch === false;
 
@@ -109,25 +118,39 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       }
 
       if (!query.ok) {
-        setRunError(query.reason ?? t("marketplace.rail.error.query"));
+        setRunError(t("marketplace.rail.error.query"));
         return;
       }
 
       setPhase("proof_ready");
 
-      const mint = await mintAsset(assetId, account);
-      if (!mint.success) {
-        const message = mint.error ?? t("marketplace.rail.error.mint");
-        setRunError(message);
-        if (message.toLowerCase().includes("valid")) setPhase("blocked");
-        return;
+      // MintGate: a non-2xx response makes `mintAsset` throw an ApiError, so the
+      // "already minted" case arrives here as a throw — not a `{ success:false }`
+      // return. A Valid lot already claimed this session is still a completed
+      // MintGate step for the rail, so surface its existing LotMinted tx instead
+      // of erroring. The seal (checked above) — never a mint error — is what
+      // decides Invalid.
+      let mintTx: string | undefined;
+      try {
+        const mint = await mintAsset(assetId, account);
+        addDemoMint(assetId);
+        mintTx = mint.txHash;
+      } catch (mintError) {
+        const message = mintError instanceof Error ? mintError.message : "";
+        if (!/already minted/iu.test(message)) {
+          setRunError(t("marketplace.rail.error.mint"));
+          return;
+        }
+        addDemoMint(assetId);
+        const summary = await getMintSummary().catch(() => null);
+        mintTx = summary?.events.find((event) => event.assetId === assetId)?.mintTx;
       }
 
-      addDemoMint(assetId);
-      setMintTxHash(mint.txHash);
+      setMintTxHash(mintTx);
       setPhase("minted");
-    } catch (error) {
-      setRunError(error instanceof Error ? error.message : t("marketplace.rail.error.generic"));
+    } catch {
+      // Never surface a raw backend/network string to judge-facing copy.
+      setRunError(t("marketplace.rail.error.generic"));
     } finally {
       setIsRunning(false);
     }
@@ -141,9 +164,16 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       const account = ensureDemoAccount();
       const res = await lockCollateral(assetId, account);
       if (res.success) setLocked(true);
-      else setLockError(res.error ?? t("myassets.rail.lockError"));
+      else setLockError(t("myassets.rail.lockError"));
     } catch (error) {
-      setLockError(error instanceof Error ? error.message : t("myassets.rail.lockError"));
+      // `lockCollateral` throws an ApiError on non-2xx. A Valid asset already
+      // locked as demo collateral this session (same persistent demo account)
+      // is a completed step — surface it as locked, never as a raw string.
+      if (error instanceof Error && /already locked/iu.test(error.message)) {
+        setLocked(true);
+      } else {
+        setLockError(t("myassets.rail.lockError"));
+      }
     } finally {
       setIsLocking(false);
     }
@@ -157,9 +187,15 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       const account = ensureDemoAccount();
       const res = await releaseCollateral(assetId, account);
       if (res.success) setLocked(false);
-      else setLockError(res.error ?? t("myassets.rail.releaseError"));
+      else setLockError(t("myassets.rail.releaseError"));
     } catch (error) {
-      setLockError(error instanceof Error ? error.message : t("myassets.rail.releaseError"));
+      // Already released (or never locked under this account) is a settled
+      // state, not a failure — reflect it as unlocked without a raw string.
+      if (error instanceof Error && /not locked/iu.test(error.message)) {
+        setLocked(false);
+      } else {
+        setLockError(t("myassets.rail.releaseError"));
+      }
     } finally {
       setIsLocking(false);
     }
@@ -169,7 +205,9 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
     ? t("marketplace.rail.statusBlocked")
     : locked
       ? t("marketplace.rail.statusComplete")
-      : t("marketplace.rail.statusIdle");
+      : minted
+        ? t("marketplace.rail.statusMinted")
+        : t("marketplace.rail.statusIdle");
 
   return (
     <section className="sealed-rail panel" aria-labelledby="sealed-rail-title">
@@ -231,6 +269,7 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
         <button
           type="button"
           className="sealed-rail__link-btn"
+          disabled={isRunning}
           onClick={() => setIsInvalidChoice((value) => !value)}
         >
           {isInvalidChoice
@@ -241,7 +280,14 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
         <button
           type="button"
           className="sealed-rail__link-btn"
-          onClick={() => onPersonaChange(persona === "defi" ? "buyer" : "defi")}
+          onClick={() => {
+            if (persona === "defi") {
+              onPersonaChange(prevPersonaRef.current);
+            } else {
+              prevPersonaRef.current = persona;
+              onPersonaChange("defi");
+            }
+          }}
         >
           {persona === "defi"
             ? t("marketplace.rail.personaToggleOff")

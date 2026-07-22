@@ -1,0 +1,80 @@
+- generic [ref=e4]:
+  - complementary "Console navigation" [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - link "Lastre — home" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e14]: Lastre
+          - button "Collapse sidebar" [expanded] [ref=e15] [cursor=pointer]
+        - separator [ref=e19]
+        - button "Open command palette" [ref=e20] [cursor=pointer]:
+          - generic [ref=e24]: Quick search…
+          - generic [ref=e25]: ⌘K
+      - navigation "Primary" [ref=e26]:
+        - list [ref=e27]:
+          - listitem [ref=e28]:
+            - link "Overview" [ref=e29] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e37]:
+            - link "Lots" [ref=e38] [cursor=pointer]:
+              - /url: /lots
+          - listitem [ref=e44]:
+            - link "Process" [ref=e45] [cursor=pointer]:
+              - /url: /process
+          - listitem [ref=e51]:
+            - link "Audit 4 pending" [ref=e52] [cursor=pointer]:
+              - /url: /audit
+              - generic [ref=e58]: Audit
+              - generic "4 pending" [ref=e59]: "4"
+          - listitem [ref=e60]:
+            - link "Escalations 2 pending" [ref=e61] [cursor=pointer]:
+              - /url: /escalations
+              - generic [ref=e66]: Escalations
+              - generic "2 pending" [ref=e67]: "2"
+          - listitem [ref=e68]:
+            - link "Marketplace" [ref=e69] [cursor=pointer]:
+              - /url: /marketplace
+          - listitem [ref=e75]:
+            - link "My Assets" [ref=e76] [cursor=pointer]:
+              - /url: /my-assets
+      - generic [ref=e82]:
+        - region "Getting started checklist" [ref=e83]:
+          - generic [ref=e84]:
+            - heading "First steps" [level=2] [ref=e85]
+            - generic "0 of 4" [ref=e86]: 0/4
+          - list [ref=e91]:
+            - listitem [ref=e92]:
+              - link "Run the first batch" [ref=e93] [cursor=pointer]:
+                - /url: /process
+            - listitem [ref=e96]:
+              - link "View an Invalid verdict" [ref=e97] [cursor=pointer]:
+                - /url: /lots
+            - listitem [ref=e100]:
+              - link "Check proof on Casper" [ref=e101] [cursor=pointer]:
+                - /url: /audit
+            - listitem [ref=e104]:
+              - link "See the symbolic layer" [ref=e105] [cursor=pointer]:
+                - /url: /marketplace
+        - button "Session menu" [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]:
+            - generic [ref=e112]: Demo
+            - generic [ref=e113]: demo@lastro.io
+  - main [ref=e117]:
+    - generic [ref=e119]:
+      - complementary "Sealed Market Rail · step 4–5" [ref=e120]:
+        - paragraph [ref=e121]: Sealed Market Rail · step 4–5
+        - paragraph [ref=e122]: Claimed demo assets can be locked as demo collateral only when origin is Valid.
+      - generic [ref=e123]:
+        - generic "Asset collection" [ref=e124]:
+          - paragraph [ref=e125]: Selecione o ativo
+          - listbox "Select an asset" [ref=e126]:
+            - option "VCS credit Score 99" [selected] [ref=e127] [cursor=pointer]:
+              - generic [ref=e129]:
+                - generic [ref=e130]: VCS credit
+                - generic [ref=e131]: Score 99
+            - option "Mineradora Vale do Ouro Score 99" [ref=e132] [cursor=pointer]:
+              - generic [ref=e134]:
+                - generic [ref=e135]: Mineradora Vale do Ouro
+                - generic [ref=e136]: Score 99
+        - generic "Loading" [ref=e138]

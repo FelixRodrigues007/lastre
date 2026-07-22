@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 160 160" fill="none" role="img" aria-label="Lastre mark">
+  <path d="M80 24L128 52V108L80 136L32 108V52L80 24Z" stroke="#809f91" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M80 47L108 63.5V96.5L80 113L52 96.5V63.5L80 47Z" stroke="#B2ED97" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M54 80H106" stroke="#F1F5EE" stroke-width="6" stroke-linecap="round"/>
+  <path d="M80 54V106" stroke="#F1F5EE" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="80" cy="80" r="9" fill="#B2ED97"/>
+</svg>
