@@ -179,23 +179,131 @@ export async function computeSealForArtifact(artifact: any) {
 }
 
 export async function mintAsset(assetId: string, minter?: string) {
-  return apiFetch<{ success: boolean; txHash?: string; lot?: any; error?: string }>("/api/mint", {
+  return apiFetch<{
+    success: boolean;
+    txHash?: string;
+    lot?: any;
+    error?: string;
+    code?: string;
+    honesty?: string;
+    rail?: SealedRailStatus;
+  }>("/api/mint", {
     method: "POST",
     body: JSON.stringify({ assetId, minter }),
   });
 }
 
 export async function lockCollateral(assetId: string, owner: string) {
-  return apiFetch<{ success: boolean; error?: string }>("/api/defi/lock", {
+  return apiFetch<{
+    success: boolean;
+    error?: string;
+    code?: string;
+    honesty?: string;
+    rail?: SealedRailStatus;
+  }>("/api/defi/lock", {
     method: "POST",
     body: JSON.stringify({ assetId, owner }),
   });
 }
 
 export async function releaseCollateral(assetId: string, owner: string) {
-  return apiFetch<{ success: boolean; error?: string }>("/api/defi/release", {
+  return apiFetch<{
+    success: boolean;
+    error?: string;
+    code?: string;
+    honesty?: string;
+    rail?: SealedRailStatus;
+  }>("/api/defi/release", {
     method: "POST",
     body: JSON.stringify({ assetId, owner }),
+  });
+}
+
+// ---- Sealed Market Rail (proof before finance) ------------------------------
+
+export type SealedRailStep = {
+  id: string;
+  index: number;
+  title: string;
+  detail: string;
+  status: "locked" | "ready" | "complete" | "blocked" | "demo_pending";
+  honesty: string;
+  reason: string | null;
+};
+
+export type SealedRailStatus = {
+  assetId: string;
+  exists: boolean;
+  verdict: string;
+  railOpen: boolean;
+  financeGateOpen: boolean;
+  blockedReason: string | null;
+  gateCode: string;
+  steps: SealedRailStep[];
+  eligibility: {
+    canQuery: boolean;
+    canMint: boolean;
+    canLock: boolean;
+    canRelease: boolean;
+    mintCode: string;
+    lockCode: string;
+  };
+  progress: {
+    completedSteps: number;
+    totalSteps: number;
+    complete: boolean;
+  };
+  links: {
+    marketplace: string;
+    myAssets: string;
+    landing: string;
+  };
+  evaluatedAt: string;
+  honesty?: Record<string, string>;
+  product?: Record<string, unknown>;
+};
+
+export function getSealedRailOverview() {
+  return apiFetch<Record<string, unknown>>("/api/rail");
+}
+
+export function getSealedRailStatus(assetId: string) {
+  return apiFetch<SealedRailStatus>(`/api/rail/${encodeURIComponent(assetId)}`);
+}
+
+export function getDefiEligibility(assetId: string) {
+  return apiFetch<{
+    assetId: string;
+    financeGateOpen: boolean;
+    eligibility: SealedRailStatus["eligibility"];
+    blockedReason: string | null;
+    rail: SealedRailStatus;
+  }>(`/api/defi/eligibility/${encodeURIComponent(assetId)}`);
+}
+
+/** Mock-only server demo: x402 simulate + Valid-only MintGate (optional lock). */
+export function runSealedRailDemo(input: {
+  assetId: string;
+  owner?: string;
+  minter?: string;
+  lock?: boolean;
+}) {
+  return apiFetch<{
+    ok: boolean;
+    assetId: string;
+    stepsRun: Array<{
+      step: string;
+      ok: boolean;
+      detail: string;
+      code?: string;
+      txHash?: string | null;
+    }>;
+    rail: SealedRailStatus;
+    mockOnly: true;
+    honesty: Record<string, string>;
+  }>("/api/rail/run", {
+    method: "POST",
+    body: JSON.stringify(input),
   });
 }
 
