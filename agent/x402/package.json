@@ -9,7 +9,7 @@
     "test": "npm run build && node --test test/*.test.mjs"
   },
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@make-software/casper-x402": "^1.0.0",
