@@ -40,6 +40,23 @@ export const DEMO_CATALOG: CatalogAsset[] = [
     expectedOnChain: "Valid",
     origin: { lat: -20.123456, lng: -43.987654, site: "Mina Vale do Ouro — fictional" },
   },
+  /**
+   * Invalid branch for Sealed Market Rail (offline fallback).
+   * When the API is up, the live lot from seedDemoSession is preferred;
+   * this entry lets Marketplace/rail resolve without 404 offline.
+   */
+  {
+    assetId: "MINA-VALEDOURO-LOTE-001-TAMPERED",
+    name: "Mineradora Vale do Ouro — tampered sample",
+    category: "mineral",
+    mineral: "Gold",
+    expectedOnChain: "Invalid",
+    origin: {
+      lat: -20.123456,
+      lng: -43.987654,
+      site: "Mina Vale do Ouro — fictional (tampered mass)",
+    },
+  },
   {
     assetId: "CARBON-VCS-AMAZONIA-2024-001",
     category: "carbon_credit",
@@ -105,7 +122,10 @@ export function buildDemoLotDetail(assetId: string): LotDetail | null {
     asset.category ?? (asset.creditType ? "carbon_credit" : "mineral");
   const isCarbon = category === "carbon_credit";
   const isValid = asset.expectedOnChain === "Valid";
-  const seal = demoSeal(assetId);
+  const isInvalid = asset.expectedOnChain === "Invalid";
+  const referenceSeal = demoSeal(assetId);
+  // Invalid offline sample: computed seal differs so the rail can show a broken seal.
+  const computedSeal = isInvalid ? demoSeal(`${assetId}:tampered`) : referenceSeal;
 
   const artifact: ProvenanceArtifact = {
     assetId,
@@ -125,21 +145,30 @@ export function buildDemoLotDetail(assetId: string): LotDetail | null {
     if (asset.tonnesCO2e != null) artifact.tonnesCO2e = asset.tonnesCO2e;
   } else if (asset.mineral) {
     artifact.mineral = asset.mineral;
+    // Tampered offline sample: mass diverges from reference narrative.
+    if (isInvalid) artifact.massGrams = 125_500;
+    else artifact.massGrams = 125_000;
   }
 
-  const latestVerdict: VerificationVerdict | null = isValid ? "Valid" : null;
+  const latestVerdict: VerificationVerdict | null = isValid
+    ? "Valid"
+    : isInvalid
+      ? "Invalid"
+      : null;
 
   return {
     artifact,
     referenceArtifact: artifact,
-    referenceSeal: seal,
-    computedSeal: seal,
-    sealMatchesReference: true,
-    attested: isValid,
+    referenceSeal,
+    computedSeal,
+    sealMatchesReference: !isInvalid,
+    attested: isValid || isInvalid,
     latestVerdict,
-    demoRole: isCarbon
-      ? "Catalog carbon credit · fictional demo asset"
-      : "Catalog mineral lot · fictional demo asset",
+    demoRole: isInvalid
+      ? "Catalog mineral lot · fictional Invalid sample (Sealed Rail branch)"
+      : isCarbon
+        ? "Catalog carbon credit · fictional demo asset"
+        : "Catalog mineral lot · fictional demo asset",
     auditRecord: null,
     isMinted: false,
     mintTx: null,
