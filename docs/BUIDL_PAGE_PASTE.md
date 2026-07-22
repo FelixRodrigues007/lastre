@@ -156,7 +156,7 @@ All sample transactions below are official existing evidence. Do not replace the
 
    Expected: `settlementKind=casper_deploy`, `facilitatorMode=casper`, paid provenance for `CARBON-VCS-AMAZONIA-2024-001` (Valid + sealMatch).  
    Path: `POST /api/x402/settle/:assetId` or `lastre prove … --pay --mode casper` (not UI `/simulate`).  
-   **Honesty:** **native CSPR transfer** via `casper-client` (server-as-payer demo). MAKE/CSPR.cloud **WCSPR** path is optional next.
+   **Honesty:** Real settle paths: (1) **native CSPR** via `casper-client` when `LASTRE_X402_MODE=casper`; (2) **WCSPR + CSPR.cloud** official facilitator when `LASTRE_X402_MODE=cspr_cloud` (`POST /api/x402/cloud/settle`, EIP-712, docs.cspr.cloud + make-software/casper-x402). Judge UI `/simulate` stays mock.
 Transaction explorer format:
 
 `https://testnet.cspr.live/transaction/<hash>`

@@ -22,11 +22,34 @@ export {
   type CasperFacilitatorOptions,
 } from "./casper-facilitator.js";
 export {
+  CsprCloudFacilitator,
+  hasCloudPaymentBody,
+  type CsprCloudFacilitatorOptions,
+} from "./cspr-cloud-facilitator.js";
+export {
+  buildCloudQuoteMeta,
+  cloudRequirementsFromMeta,
+  CAIP2_CASPER_MAIN,
+  CAIP2_CASPER_TEST,
+  CSPR_CLOUD_FACILITATOR_URL,
+  DEFAULT_WCSPR_EXTRA,
+  WCSPR_TESTNET_PACKAGE_HASH,
+  type CloudPaymentPayload,
+  type CloudPaymentRequirements,
+  type CloudQuoteMeta,
+  type CloudSettleResponse,
+  type CloudSupportedResponse,
+  type CloudVerifyRequest,
+  type CloudVerifyResponse,
+} from "./cspr-cloud-types.js";
+export {
   createFacilitatorFromEnv,
+  createOptionalCsprCloudFromEnv,
   inspectSecretMaterial,
   normalizePem,
   pemLooksValid,
   prepareX402SecretsFromEnv,
+  resolveWcsprPayTo,
   resolveX402Mode,
   type SecretMaterialStatus,
   type X402Mode,

@@ -30,9 +30,16 @@ import {
   MockFacilitator,
   createFacilitatorFromEnv,
   signMockPayment,
+  CsprCloudFacilitator,
+  CSPR_CLOUD_FACILITATOR_URL,
+  WCSPR_TESTNET_PACKAGE_HASH,
+  buildCloudQuoteMeta,
+  createOptionalCsprCloudFromEnv,
   type Facilitator,
   type PaymentPayload,
   type PaymentRequirements,
+  type CloudVerifyRequest,
+  type CloudQuoteMeta,
 } from "../../agent/x402/dist/index.js";
 import { getOperators, getTrustNetwork } from "./operators.js";
 import { MintEconomicsGate } from "./mint-economics.js";
@@ -45,6 +52,14 @@ import {
   type AutonomyScenarioResult,
   type AutonomySummary,
 } from "./autonomy.js";
+import {
+  evaluateSealedRail,
+  sealedRailOverview,
+  SEALED_RAIL_HONESTY,
+  SEALED_RAIL_PRODUCT,
+  type SealedRailGateCode,
+  type SealedRailStatus,
+} from "./sealed-rail.js";
 
 /** Multi-party trust stack — protocol roles, not fake second operators. */
 export const TRUST_STACK = [
@@ -169,9 +184,12 @@ export class AppRuntime {
   /** Session-only origin autonomy cycle log (not oracle feed counter). */
   private readonly autonomy = new AutonomyStore();
 
-  // x402 provenance provider: LASTRE_X402_MODE=mock (default) | casper.
-  // mock → synthetic_receipt; casper → real casper-client transfer when keys set.
+  // x402: primary facilitator from LASTRE_X402_MODE (mock | casper | cspr_cloud).
+  // Optional side-car CSPR.cloud facilitator when CSPR_CLOUD_API_TOKEN is set —
+  // enables WCSPR settle alongside native CSPR without switching mode.
   private readonly x402Facilitator: Facilitator = createFacilitatorFromEnv();
+  private readonly x402CloudFacilitator: CsprCloudFacilitator | null =
+    createOptionalCsprCloudFromEnv();
   private readonly x402Issued = new Map<string, PaymentRequirements>();
   private x402QueryCount = 0;
   /** Session last real casper_deploy settle (null until one succeeds this process). */
@@ -287,15 +305,46 @@ export class AppRuntime {
     return [...demo, ...this.userArtifacts];
   }
 
-  mintAsset(assetId: string, minter = "demo-minter"): { success: boolean; txHash?: string; error?: string } {
+  mintAsset(
+    assetId: string,
+    minter = "demo-minter",
+  ): {
+    success: boolean;
+    txHash?: string;
+    error?: string;
+    code?: SealedRailGateCode | "NoValidProof" | "AlreadyMinted";
+    honesty: typeof SEALED_RAIL_HONESTY.mintGate;
+    rail?: SealedRailStatus;
+  } {
+    const honesty = SEALED_RAIL_HONESTY.mintGate;
     const lot = this.getLot(assetId);
     const hasValidProof = lot?.latestVerdict === "Valid";
     const result = this.mintGate.mintLot({ assetId, minter, hasValidProof });
     if (!result.ok) {
-      return { success: false, error: `${result.error}: ${result.message}` };
+      const code: SealedRailGateCode | "NoValidProof" | "AlreadyMinted" =
+        result.error === "AlreadyMinted"
+          ? "ALREADY_MINTED"
+          : lot?.latestVerdict === "Invalid"
+            ? "INVALID_ORIGIN"
+            : result.error === "NoValidProof"
+              ? "NoValidProof"
+              : "UNVERIFIED";
+      return {
+        success: false,
+        error: `${result.error}: ${result.message}`,
+        code,
+        honesty,
+        rail: this.getSealedRailStatus(assetId),
+      };
     }
     this.mintTxs.set(assetId, result.event.mintTx);
-    return { success: true, txHash: result.event.mintTx };
+    return {
+      success: true,
+      txHash: result.event.mintTx,
+      code: "OK",
+      honesty,
+      rail: this.getSealedRailStatus(assetId),
+    };
   }
 
   isMinted(assetId: string): boolean {
@@ -411,25 +460,69 @@ export class AppRuntime {
           settlementKind: "casper_deploy" as const,
         };
 
+    const sealedRail = this.getSealedRailStatus(SEALED_RAIL_PRODUCT.defaultDemoAssetId);
+    const sealedRailInvalid = this.getSealedRailStatus(SEALED_RAIL_PRODUCT.defaultInvalidAssetId);
+
     return {
       thesis:
         "Proof before token — and proof before finance. Seal decides Valid/Invalid; LLM only chooses pay/skip/escalate.",
       packageHash: PACKAGE_HASH,
       packageUrl: PACKAGE_URL,
+      /** Sealed Market Rail — origin-gated mint + demo collateral (not a DEX). */
+      sealedMarketRail: {
+        product: SEALED_RAIL_PRODUCT,
+        honesty: SEALED_RAIL_HONESTY,
+        endpoints: {
+          overview: "GET /api/rail",
+          status: "GET /api/rail/:assetId",
+          run: "POST /api/rail/run",
+          eligibility: "GET /api/defi/eligibility/:assetId",
+        },
+        sampleValid: {
+          assetId: SEALED_RAIL_PRODUCT.defaultDemoAssetId,
+          financeGateOpen: sealedRail.financeGateOpen,
+          progress: sealedRail.progress,
+          gateCode: sealedRail.gateCode,
+        },
+        sampleInvalid: {
+          assetId: SEALED_RAIL_PRODUCT.defaultInvalidAssetId,
+          financeGateOpen: sealedRailInvalid.financeGateOpen,
+          blockedReason: sealedRailInvalid.blockedReason,
+          gateCode: sealedRailInvalid.gateCode,
+        },
+      },
       /** Access-rights framing (copy layer; contracts unchanged). */
       accessRights: {
         dualKey: "Separation of duties: field sealer ≠ chain attester",
         mintGate: "Mint access requires Valid origin attestation",
         invalid: "Negative attestation is first-class on-chain state",
         agent: "Agent decides action only (pay / skip / escalate) — never seal truth",
+        sealedRail: "MintGate + demo collateral only after Valid — proof before finance",
       },
       mainnetRoadmap:
         "Live on Casper Testnet today. Mainnet when facilitator ops + keys + monitoring are production-safe. No mainnet money claims in demo.",
       honesty: {
         uiSimulate: "mock",
-        apiSettle: x402Mode === "casper" ? "real_testnet_cspr_when_keys" : "mock_only",
+        apiSettle:
+          x402Mode === "cspr_cloud"
+            ? "cspr_cloud_wcspr_eip712"
+            : x402Mode === "casper"
+              ? "real_testnet_cspr_when_keys"
+              : "mock_only",
         phrase:
-          "UI / POST /api/x402/simulate = mock synthetic_receipt. POST /api/x402/settle = real testnet CSPR only when facilitatorMode=casper.",
+          "UI / POST /api/x402/simulate + /api/rail/run = mock (no value moved). " +
+          "POST /api/x402/settle: native CSPR when facilitatorMode=casper; " +
+          "WCSPR via CSPR.cloud when facilitatorMode=cspr_cloud (EIP-712 body). " +
+          "Official path: docs.cspr.cloud/x402-facilitator-api + make-software/casper-x402.",
+        csprCloud: {
+          facilitatorUrl: CSPR_CLOUD_FACILITATOR_URL,
+          docs: "https://docs.cspr.cloud/x402-facilitator-api/reference",
+          examples: "https://github.com/make-software/casper-x402",
+          tradeWcspr: "https://testnet.cspr.trade",
+          wcsprTestnetPackage: WCSPR_TESTNET_PACKAGE_HASH,
+          note:
+            "WCSPR is fully x402-compatible. Swap CSPR↔WCSPR on testnet.cspr.trade (WCSPR menu).",
+        },
       },
       trustStack: TRUST_STACK,
       operators: ops.operators,
@@ -499,21 +592,37 @@ export class AppRuntime {
       x402: {
         facilitatorMode: x402Mode,
         x402Mode,
-        settlementKind: x402Mode === "casper" ? "casper_deploy" : "synthetic_receipt",
+        settlementKind:
+          x402Mode === "casper" || x402Mode === "cspr_cloud"
+            ? "casper_deploy"
+            : "synthetic_receipt",
+        assetPath:
+          x402Mode === "cspr_cloud"
+            ? "WCSPR_CEP18"
+            : x402Mode === "casper"
+              ? "native_CSPR"
+              : "mock",
         lastCasperSettle,
+        cloud: this.getCsprCloudInfo(),
         honestNote:
-          x402Mode === "casper"
-            ? "Server facilitator mode=casper: settleProvenanceQuery can move real testnet CSPR when keys are configured. UI /simulate stays mock."
-            : "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence.",
+          x402Mode === "cspr_cloud"
+            ? "Server facilitator mode=cspr_cloud: CSPR.cloud /verify+/settle with WCSPR (EIP-712). UI /simulate stays mock. Requires CSPR_CLOUD_API_TOKEN + payTo + client-signed cloud body."
+            : x402Mode === "casper"
+              ? "Server facilitator mode=casper: settleProvenanceQuery can move real testnet native CSPR when keys are configured. UI /simulate stays mock. Optional next: cspr_cloud + WCSPR (MAKE path)."
+              : "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence. Official WCSPR path documented under honesty.csprCloud.",
       },
       invalidIsProof: true,
       /** Additive: origin autonomy loop summary (session). Does not replace on-chain counters. */
       originAutonomy: this.autonomy.summary(),
       juryLinks: {
         marketplace: "https://app.lastre.io/marketplace",
+        marketplaceRail: SEALED_RAIL_PRODUCT.appDeepLink,
+        landingRail: SEALED_RAIL_PRODUCT.landingAnchor,
         agents: "https://app.lastre.io/agents",
         health: "https://app-api.lastre.io/api/health",
         evidence: "https://app-api.lastre.io/api/evidence",
+        rail: "https://app-api.lastre.io/api/rail",
+        railRun: "https://app-api.lastre.io/api/rail/run",
         autonomy: "https://app-api.lastre.io/api/agent/autonomy",
         invalidSample: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.invalidTx),
         carbonValid: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.carbonValidTx),
@@ -694,31 +803,99 @@ export class AppRuntime {
     return record;
   }
 
-  // Simple DeFi collateral simulation (checks minted + proof)
+  // Demo collateral (Sealed Market Rail step 5) — Valid + minted only
   private lockedCollateral = new Map<string, { owner: string; lockedAt: string }>();
 
-  lockCollateral(assetId: string, owner: string): { success: boolean; error?: string } {
+  lockCollateral(
+    assetId: string,
+    owner: string,
+  ): {
+    success: boolean;
+    error?: string;
+    code?: SealedRailGateCode;
+    honesty: typeof SEALED_RAIL_HONESTY.collateral;
+    rail?: SealedRailStatus;
+  } {
+    const honesty = SEALED_RAIL_HONESTY.collateral;
     if (!this.isMinted(assetId)) {
-      return { success: false, error: "Asset must be minted first" };
+      return {
+        success: false,
+        error: "Asset must be minted first (MintGate claim after Valid)",
+        code: "NOT_MINTED",
+        honesty,
+        rail: this.getSealedRailStatus(assetId),
+      };
     }
     const lot = this.getLot(assetId);
     if (!lot || lot.latestVerdict !== "Valid") {
-      return { success: false, error: "Only Valid proven assets can be used as collateral" };
+      const code: SealedRailGateCode =
+        lot?.latestVerdict === "Invalid" ? "INVALID_ORIGIN" : "UNVERIFIED";
+      return {
+        success: false,
+        error:
+          code === "INVALID_ORIGIN"
+            ? "Invalid origin — demo collateral permanently closed"
+            : "Only Valid proven assets can be used as demo collateral",
+        code,
+        honesty,
+        rail: this.getSealedRailStatus(assetId),
+      };
     }
     if (this.lockedCollateral.has(assetId)) {
-      return { success: false, error: "Already locked" };
+      return {
+        success: false,
+        error: "Already locked",
+        code: "ALREADY_LOCKED",
+        honesty,
+        rail: this.getSealedRailStatus(assetId),
+      };
     }
     this.lockedCollateral.set(assetId, { owner, lockedAt: new Date().toISOString() });
-    return { success: true };
+    return {
+      success: true,
+      code: "OK",
+      honesty,
+      rail: this.getSealedRailStatus(assetId),
+    };
   }
 
-  releaseCollateral(assetId: string, owner: string): { success: boolean; error?: string } {
+  releaseCollateral(
+    assetId: string,
+    owner: string,
+  ): {
+    success: boolean;
+    error?: string;
+    code?: SealedRailGateCode;
+    honesty: typeof SEALED_RAIL_HONESTY.collateral;
+    rail?: SealedRailStatus;
+  } {
+    const honesty = SEALED_RAIL_HONESTY.collateral;
     const lock = this.lockedCollateral.get(assetId);
-    if (!lock || lock.owner !== owner) {
-      return { success: false, error: "Not locked by you" };
+    if (!lock) {
+      return {
+        success: false,
+        error: "Not locked",
+        code: "NOT_LOCKED",
+        honesty,
+        rail: this.getSealedRailStatus(assetId),
+      };
+    }
+    if (lock.owner !== owner) {
+      return {
+        success: false,
+        error: "Not locked by you",
+        code: "OWNER_MISMATCH",
+        honesty,
+        rail: this.getSealedRailStatus(assetId),
+      };
     }
     this.lockedCollateral.delete(assetId);
-    return { success: true };
+    return {
+      success: true,
+      code: "OK",
+      honesty,
+      rail: this.getSealedRailStatus(assetId),
+    };
   }
 
   getLockedStatus(assetId: string) {
@@ -729,6 +906,214 @@ export class AppRuntime {
     return Array.from(this.lockedCollateral.entries())
       .filter(([_, lock]) => lock.owner === owner)
       .map(([id, lock]) => ({ assetId: id, ...lock }));
+  }
+
+  /** Sealed Market Rail overview (product + endpoints + honesty). */
+  getSealedRailOverview() {
+    return sealedRailOverview();
+  }
+
+  /** Per-asset 5-step rail status for UI / judges. */
+  getSealedRailStatus(assetId: string): SealedRailStatus {
+    const lot = this.getLot(assetId);
+    const lock = this.lockedCollateral.get(assetId) ?? null;
+    const verdict =
+      lot?.latestVerdict === "Valid" || lot?.latestVerdict === "Invalid"
+        ? lot.latestVerdict
+        : lot
+          ? "Unverified"
+          : null;
+
+    return evaluateSealedRail({
+      assetId,
+      exists: Boolean(lot),
+      verdict,
+      sealMatch: lot?.sealMatchesReference ?? null,
+      attested: Boolean(lot?.attested),
+      minted: this.isMinted(assetId),
+      mintTx: this.getMintTx(assetId),
+      paidQueryCount: this.x402QueryCount,
+      sessionHasPaidQuery: this.x402QueryCount > 0,
+      locked: Boolean(lock),
+      lockedOwner: lock?.owner ?? null,
+      lockedAt: lock?.lockedAt ?? null,
+    });
+  }
+
+  getDefiEligibility(assetId: string) {
+    const rail = this.getSealedRailStatus(assetId);
+    return {
+      assetId,
+      product: SEALED_RAIL_PRODUCT.id,
+      verdict: rail.verdict,
+      financeGateOpen: rail.financeGateOpen,
+      eligibility: rail.eligibility,
+      blockedReason: rail.blockedReason,
+      honesty: SEALED_RAIL_HONESTY,
+      rail,
+    };
+  }
+
+  /**
+   * Server-side Sealed Rail demo (judge-safe):
+   * 1) mock x402 provenance query
+   * 2) MintGate claim only if Valid (skips if already minted / Invalid)
+   * Does NOT lock collateral automatically (UI/judge chooses Lock).
+   */
+  async runSealedRailDemo(input: {
+    assetId: string;
+    owner?: string;
+    minter?: string;
+    lock?: boolean;
+  }): Promise<{
+    ok: boolean;
+    assetId: string;
+    stepsRun: Array<{
+      step: string;
+      ok: boolean;
+      detail: string;
+      code?: string;
+      txHash?: string | null;
+    }>;
+    rail: SealedRailStatus;
+    honesty: typeof SEALED_RAIL_HONESTY;
+    mockOnly: true;
+  }> {
+    const assetId = input.assetId || SEALED_RAIL_PRODUCT.defaultDemoAssetId;
+    const stepsRun: Array<{
+      step: string;
+      ok: boolean;
+      detail: string;
+      code?: string;
+      txHash?: string | null;
+    }> = [];
+
+    const before = this.getSealedRailStatus(assetId);
+    if (!before.exists) {
+      stepsRun.push({
+        step: "origin_seal",
+        ok: false,
+        detail: "Unknown asset",
+        code: "UNKNOWN_ASSET",
+      });
+      return {
+        ok: false,
+        assetId,
+        stepsRun,
+        rail: before,
+        honesty: SEALED_RAIL_HONESTY,
+        mockOnly: true,
+      };
+    }
+
+    stepsRun.push({
+      step: "origin_seal",
+      ok: before.verdict === "Valid" || before.verdict === "Invalid",
+      detail: `verdict=${before.verdict}`,
+      code: before.gateCode,
+    });
+
+    // Step 2 — always mock simulate (never casper settle from rail/run)
+    try {
+      const pay = await this.simulateAgentProvenanceQuery(
+        assetId,
+        input.owner ?? "sealed-rail-demo",
+      );
+      stepsRun.push({
+        step: "provenance_query",
+        ok: Boolean(pay.ok),
+        detail: pay.ok
+          ? `mock x402; facilitator=${pay.facilitatorMode}; settlement=${pay.settlementKind}`
+          : "simulate_failed",
+        txHash: pay.ok ? pay.txHash : null,
+        code: pay.ok ? "OK" : "QUERY_FAILED",
+      });
+    } catch (error) {
+      stepsRun.push({
+        step: "provenance_query",
+        ok: false,
+        detail: error instanceof Error ? error.message : String(error),
+        code: "QUERY_ERROR",
+      });
+    }
+
+    // Step 3 — mint only if Valid
+    if (before.verdict === "Valid") {
+      if (this.isMinted(assetId)) {
+        stepsRun.push({
+          step: "mint_gate",
+          ok: true,
+          detail: "AlreadyMinted — demo event already in session",
+          code: "ALREADY_MINTED",
+          txHash: this.getMintTx(assetId),
+        });
+      } else {
+        const mint = this.mintAsset(assetId, input.minter ?? "sealed-rail-demo");
+        stepsRun.push({
+          step: "mint_gate",
+          ok: mint.success,
+          detail: mint.success
+            ? "MintGate demo LotMinted after Valid"
+            : (mint.error ?? "mint_failed"),
+          code: mint.success ? "OK" : "MINT_FAILED",
+          txHash: mint.txHash ?? null,
+        });
+      }
+    } else {
+      const dry = this.mintAsset(assetId, input.minter ?? "sealed-rail-demo");
+      stepsRun.push({
+        step: "mint_gate",
+        ok: !dry.success,
+        detail: dry.success
+          ? "unexpected mint without Valid"
+          : (dry.error ?? "NoValidProof"),
+        code: before.verdict === "Invalid" ? "INVALID_ORIGIN" : "UNVERIFIED",
+      });
+    }
+
+    stepsRun.push({
+      step: "sealed_asset",
+      ok: this.isMinted(assetId),
+      detail: this.isMinted(assetId)
+        ? "Asset available in My Assets (session mint)"
+        : "Not minted — collection step closed",
+      code: this.isMinted(assetId) ? "OK" : "NOT_MINTED",
+    });
+
+    // Optional lock (only if requested + eligible)
+    if (input.lock && input.owner) {
+      const lock = this.lockCollateral(assetId, input.owner);
+      stepsRun.push({
+        step: "demo_collateral",
+        ok: lock.success,
+        detail: lock.success ? "Demo collateral locked" : (lock.error ?? "lock_failed"),
+        code: lock.code,
+      });
+    } else {
+      const railMid = this.getSealedRailStatus(assetId);
+      stepsRun.push({
+        step: "demo_collateral",
+        ok: true,
+        detail: railMid.eligibility.canLock
+          ? "Eligible — call POST /api/defi/lock or pass lock:true with owner"
+          : (railMid.blockedReason ?? "Not eligible for demo lock"),
+        code: railMid.eligibility.lockCode,
+      });
+    }
+
+    const rail = this.getSealedRailStatus(assetId);
+    const hardOk = stepsRun
+      .filter((s) => s.step !== "demo_collateral" || input.lock)
+      .every((s) => s.ok);
+
+    return {
+      ok: hardOk,
+      assetId,
+      stepsRun,
+      rail,
+      honesty: SEALED_RAIL_HONESTY,
+      mockOnly: true,
+    };
   }
 
   /**
@@ -800,6 +1185,7 @@ export class AppRuntime {
   /**
    * x402 step 1 — issue a payment quote (HTTP 402 body). The caller signs it and
    * calls `settleProvenanceQuery`. Reuses the real x402 requirements contract.
+   * When facilitatorMode=cspr_cloud, attaches official WCSPR / CSPR.cloud quote meta.
    */
   quoteProvenanceQuery(assetId: string): { requirements: PaymentRequirements; assetId: string } {
     const payTo =
@@ -811,8 +1197,178 @@ export class AppRuntime {
       payTo,
       nonce: randomUUID(),
     };
+
+    // Always attach official cloud quote meta when side-car (or primary) cloud is live.
+    const cloudFacilitator = this.getCloudFacilitator();
+    if (cloudFacilitator) {
+      const cloud = cloudFacilitator.getQuoteMeta();
+      requirements.cloud = cloud;
+      if (this.x402Facilitator.mode === "cspr_cloud") {
+        requirements.asset = "WCSPR";
+        requirements.network = cloud.network;
+        requirements.description =
+          "Lastre provenance verification (WCSPR via CSPR.cloud facilitator)";
+        const base = Number(cloud.amountBaseUnits);
+        if (Number.isFinite(base) && base > 0) {
+          requirements.maxAmountRequired = base;
+        }
+      }
+    }
+
     this.x402Issued.set(requirements.nonce, requirements);
     return { requirements, assetId };
+  }
+
+  /** Primary or side-car CSPR.cloud facilitator (complete stack). */
+  private getCloudFacilitator(): CsprCloudFacilitator | null {
+    if (this.x402Facilitator instanceof CsprCloudFacilitator) {
+      return this.x402Facilitator;
+    }
+    return this.x402CloudFacilitator;
+  }
+
+  /** Static + live (if token) CSPR.cloud / WCSPR path info for evidence + health. */
+  getCsprCloudInfo(): {
+    path: "official_make";
+    facilitatorUrl: string;
+    docs: string;
+    examples: string;
+    tradeWcspr: string;
+    wcsprTestnetPackage: string;
+    /** Primary mode is cspr_cloud */
+    modeActive: boolean;
+    /** Token present and facilitator constructed (primary or side-car) */
+    cloudReady: boolean;
+    primaryMode: string;
+    quote: CloudQuoteMeta | null;
+    envTokenConfigured: boolean;
+  } {
+    const envToken = Boolean(
+      process.env.CSPR_CLOUD_API_TOKEN?.trim() ||
+        process.env.LASTRE_CSPR_CLOUD_TOKEN?.trim() ||
+        process.env.FACILITATOR_API_KEY?.trim(),
+    );
+    const cloud = this.getCloudFacilitator();
+    const quote = cloud
+      ? cloud.getQuoteMeta()
+      : null;
+    return {
+      path: "official_make",
+      facilitatorUrl: CSPR_CLOUD_FACILITATOR_URL,
+      docs: "https://docs.cspr.cloud/x402-facilitator-api/reference",
+      examples: "https://github.com/make-software/casper-x402",
+      tradeWcspr: "https://testnet.cspr.trade",
+      wcsprTestnetPackage: WCSPR_TESTNET_PACKAGE_HASH,
+      modeActive: this.x402Facilitator.mode === "cspr_cloud",
+      cloudReady: Boolean(cloud),
+      primaryMode: this.x402Facilitator.mode,
+      quote,
+      envTokenConfigured: envToken,
+    };
+  }
+
+  async probeCsprCloudSupported(): Promise<{
+    ok: boolean;
+    mode: string;
+    primaryMode: string;
+    cloudReady: boolean;
+    supported?: unknown;
+    error?: string;
+  }> {
+    const cloud = this.getCloudFacilitator();
+    if (!cloud) {
+      return {
+        ok: false,
+        mode: "unavailable",
+        primaryMode: this.x402Facilitator.mode,
+        cloudReady: false,
+        error:
+          "Set CSPR_CLOUD_API_TOKEN + LASTRE_WCSPR_PAY_TO (00+64hex account hash). Keep LASTRE_X402_MODE=casper for native settle side-by-side.",
+      };
+    }
+    try {
+      const supported = await cloud.getSupported();
+      return {
+        ok: true,
+        mode: "cspr_cloud",
+        primaryMode: this.x402Facilitator.mode,
+        cloudReady: true,
+        supported,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        mode: "cspr_cloud",
+        primaryMode: this.x402Facilitator.mode,
+        cloudReady: true,
+        error: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Settle with official CSPR.cloud body (EIP-712). Used by agents built on
+   * make-software/casper-x402 — not by mock UI simulate.
+   */
+  async settleCsprCloudOfficial(
+    assetId: string,
+    body: CloudVerifyRequest,
+  ): Promise<
+    | {
+        ok: true;
+        txHash: string;
+        settlementKind: "casper_deploy";
+        paymentExplorerUrl: string | null;
+        provenance: ReturnType<AppRuntime["getProvenanceSnapshot"]>;
+        facilitatorMode: "cspr_cloud";
+        network: string;
+        payer: string;
+        chainEvidence: Awaited<ReturnType<AppRuntime["getMintSummary"]>>["onChain"];
+      }
+    | { ok: false; reason: string; message?: string; facilitatorMode: string }
+  > {
+    if (!this.getLot(assetId)) {
+      return { ok: false, reason: "unknown_asset", facilitatorMode: this.x402Facilitator.mode };
+    }
+    const cloud = this.getCloudFacilitator();
+    if (!cloud) {
+      return {
+        ok: false,
+        reason: "cloud_facilitator_unavailable",
+        message:
+          "Set CSPR_CLOUD_API_TOKEN + LASTRE_WCSPR_PAY_TO (00+64hex). Native CSPR: mode=casper + keys.",
+        facilitatorMode: this.x402Facilitator.mode,
+      };
+    }
+    const settled = await cloud.settleOfficial(body);
+    if (!settled.ok) {
+      return {
+        ok: false,
+        reason: settled.reason,
+        message: settled.message,
+        facilitatorMode: "cspr_cloud",
+      };
+    }
+    this.x402QueryCount += 1;
+    const paymentExplorerUrl = explorerTxUrlIfDeployHash(settled.txHash);
+    this.lastCasperSettle = {
+      txHash: settled.txHash,
+      assetId,
+      at: new Date().toISOString(),
+      paymentExplorerUrl,
+    };
+    const summary = await this.getMintSummary();
+    return {
+      ok: true,
+      txHash: settled.txHash,
+      settlementKind: "casper_deploy",
+      paymentExplorerUrl,
+      provenance: this.getProvenanceSnapshot(assetId),
+      facilitatorMode: "cspr_cloud",
+      network: settled.network,
+      payer: settled.payer,
+      chainEvidence: summary.onChain,
+    };
   }
 
   /**
@@ -886,7 +1442,8 @@ export class AppRuntime {
   /**
    * Server-as-agent payer: quote → sign mock X-PAYMENT → settle via env facilitator.
    * - mock mode: refuses (use /api/x402/simulate — keeps paths honest)
-   * - casper mode: real testnet CSPR transfer via CasperFacilitator
+   * - casper mode: real testnet native CSPR transfer via CasperFacilitator
+   * - cspr_cloud mode: refuses mock-header settle; use POST /api/x402/cloud/settle with EIP-712 body
    */
   async settleAsAgent(
     assetId: string,
@@ -910,12 +1467,25 @@ export class AppRuntime {
     if (!this.getLot(assetId)) {
       return { ok: false, reason: "unknown_asset", facilitatorMode: this.x402Facilitator.mode };
     }
+    if (this.x402Facilitator.mode === "cspr_cloud") {
+      return {
+        ok: false,
+        reason: "use_cloud_settle_endpoint",
+        message:
+          "Primary mode is cspr_cloud — use POST /api/x402/cloud/settle with EIP-712 body. " +
+          "For native auto-settle, set LASTRE_X402_MODE=casper (cloud side-car stays available if token set). " +
+          "Judge mock: POST /api/x402/simulate.",
+        facilitatorMode: "cspr_cloud",
+      };
+    }
     if (this.x402Facilitator.mode !== "casper") {
       return {
         ok: false,
         reason: "facilitator_not_casper",
         message:
-          "Server is in mock mode. Set LASTRE_X402_MODE=casper + keys for real settle, or use POST /api/x402/simulate for judge-safe mock.",
+          "Server is in mock mode. Set LASTRE_X402_MODE=casper + keys for native CSPR settle, " +
+          "or LASTRE_X402_MODE=cspr_cloud + CSPR_CLOUD_API_TOKEN for WCSPR (POST /api/x402/cloud/settle), " +
+          "or use POST /api/x402/simulate for judge-safe mock.",
         facilitatorMode: this.x402Facilitator.mode,
       };
     }

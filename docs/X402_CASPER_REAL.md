@@ -143,11 +143,42 @@ curl -sS -X POST https://app-api.lastre.io/api/x402/settle/CARBON-VCS-AMAZONIA-2
 
 ## vs MAKE / CSPR.cloud official x402 facilitator
 
-| | Lastre prod today | MAKE path (Telegram David H) |
+| | Lastre `casper` mode | Lastre `cspr_cloud` mode (MAKE path) |
 | --- | --- | --- |
-| Settlement | `casper-client transfer` native **CSPR** | Facilitator HTTP **verify/settle** |
+| Settlement | `casper-client transfer` native **CSPR** | CSPR.cloud HTTP **verify/settle** |
 | Asset | Native CSPR | **WCSPR** (CEP-18) |
-| Endpoint | Our API + casper-client | `https://x402-facilitator.cspr.cloud` |
-| Proof for jury | **Real testnet tx hash** | Same class of proof if adopted |
+| Endpoint | `POST /api/x402/settle/:assetId` | `POST /api/x402/cloud/settle/:assetId` |
+| Signature | Mock header + on-chain transfer | **EIP-712** PaymentPayload (x402 v2) |
+| Facilitator | Local casper-client | `https://x402-facilitator.cspr.cloud` |
+| Docs | this file | [CSPR.cloud x402 reference](https://docs.cspr.cloud/x402-facilitator-api/reference) |
+| Examples | scripts/x402-real-smoke.sh | [make-software/casper-x402](https://github.com/make-software/casper-x402) |
 
-Both move real testnet value. Lastre already proves paid provenance with on-chain transfer. Optional later: wire WCSPR + CSPR.cloud for full parity with Linux Foundation / MAKE examples — **not required to claim real settle today**.
+Both modes can move real testnet value. **Judge UI /simulate stays mock.**
+
+### WCSPR + CSPR.cloud env
+
+```bash
+export LASTRE_X402_MODE=cspr_cloud
+export CSPR_CLOUD_API_TOKEN="<token from docs.cspr.cloud authorization>"
+export LASTRE_X402_PAY_TO="00<64-hex account hash>"   # receives WCSPR
+# optional:
+export LASTRE_WCSPR_PACKAGE=3d80df21ba4ee4d66a2a1f60c32570dd5685e4b279f6538162a5fd1314847c1e
+export LASTRE_WCSPR_AMOUNT=1000000000   # 1 WCSPR @ 9 decimals
+```
+
+Swap CSPR↔WCSPR on testnet: https://testnet.cspr.trade (WCSPR menu).
+
+### Cloud API surface
+
+```bash
+# Probe official facilitator (needs mode=cspr_cloud + token)
+curl -s "$API/api/x402/cloud" | jq .
+curl -s "$API/api/x402/cloud/supported" | jq .
+
+# Settle with full EIP-712 body (from casper-x402 client / agent)
+curl -s -X POST "$API/api/x402/cloud/settle/CARBON-VCS-AMAZONIA-2024-001" \
+  -H 'content-type: application/json' \
+  -d @wcspr-payment.json | jq .
+```
+
+Honesty: without a real EIP-712 body, cloud settle fails cleanly — never fakes WCSPR on-chain.
