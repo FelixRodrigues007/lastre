@@ -1,0 +1,31 @@
+.sealed-rail-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 55%, transparent);
+}
+
+.sealed-rail-banner__title {
+  color: var(--lastro-text-muted);
+}
+
+.sealed-rail-banner__body {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+}
+
+.sealed-rail-banner--emphasized {
+  border-color: var(--lastro-border-trust);
+  background: var(--lastro-fill-trust);
+}
+
+.sealed-rail-banner--emphasized .sealed-rail-banner__title {
+  color: var(--lastro-accent-trust);
+}

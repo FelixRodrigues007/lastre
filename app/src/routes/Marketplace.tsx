@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { Map as MapboxMap } from "mapbox-gl";
 import { CaptureWizardTrigger } from "../components/capture/CaptureWizardTrigger";
 import { MarketMapDrawer } from "../components/marketplace/MarketMapDrawer";
 import { MarketplaceAssetBadge } from "../components/marketplace/MarketplaceAssetBadge";
 import { MarketplaceFilters } from "../components/marketplace/MarketplaceFilters";
+import { SealedMarketRail } from "../components/marketplace/SealedMarketRail";
 import { PageHeader } from "../components/layout/PageHeader";
 import { SearchInput } from "../components/ui/SearchInput";
 import { useOnboarding } from "../context/OnboardingContext";
@@ -59,6 +60,8 @@ function readStoredPersona(): MarketplacePersona {
 
 export function Marketplace() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const railAnchorRef = useRef<HTMLDivElement | null>(null);
   const lotsData = useAsyncData(getLots);
   const { completeStep } = useOnboarding();
   const [search, setSearch] = useState("");
@@ -82,6 +85,17 @@ export function Marketplace() {
     writeDemoStorage(DEMO_PERSONA_STORAGE_KEY, nextPersona);
     setPersona(nextPersona);
   }
+
+  // `?rail=1` (e.g. from a landing-page deep link) focuses the Sealed Market
+  // Rail panel: switch to the DeFi/builder persona view and scroll it into
+  // sight. Read once on mount — it must not fight persona changes made later
+  // from the filters dropdown.
+  useEffect(() => {
+    if (searchParams.get("rail") !== "1") return;
+    updatePersona("defi");
+    railAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const lots = lotsData.data?.lots ?? EMPTY_LOTS;
 
@@ -178,6 +192,10 @@ export function Marketplace() {
             <CaptureWizardTrigger className="route-cta">Capture New</CaptureWizardTrigger>
           }
         />
+
+        <div ref={railAnchorRef}>
+          <SealedMarketRail persona={persona} onPersonaChange={updatePersona} />
+        </div>
       </div>
 
       <aside className="market-list" aria-label="Marketplace assets">

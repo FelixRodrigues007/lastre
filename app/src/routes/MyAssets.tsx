@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { AssetAnalyticsReport } from "../components/my-assets/AssetAnalyticsReport";
+import { CollateralControl } from "../components/my-assets/CollateralControl";
 import { MyAssetsAssetList } from "../components/my-assets/MyAssetsAssetList";
+import { SealedRailBanner } from "../components/my-assets/SealedRailBanner";
 import { EmptyState } from "../components/ui/EmptyState";
 import { BtnIcon } from "../components/ui/BtnIcon";
 import { StatePanel } from "../components/layout/StatePanel";
@@ -44,6 +46,13 @@ export function MyAssets() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [connectedAccount, setConnectedAccount] = useState<string | null>(readDemoAccount);
   const [demoMintTick, setDemoMintTick] = useState(0);
+  const [lockedMap, setLockedMap] = useState<Record<string, boolean>>({});
+
+  const railFocus = searchParams.get("rail") === "1";
+
+  const setLockedFor = useCallback((assetId: string, locked: boolean) => {
+    setLockedMap((prev) => ({ ...prev, [assetId]: locked }));
+  }, []);
 
   const apiLots = lotsData.data?.lots ?? [];
   const apiMintedCount = apiLots.filter((lot) => lot.isMinted).length;
@@ -123,6 +132,7 @@ export function MyAssets() {
   if (!connectedAccount) {
     return (
       <div className="page my-assets-page">
+        <SealedRailBanner emphasize={railFocus} />
         <EmptyState
           icon="shield"
           title="No demo account connected"
@@ -144,6 +154,7 @@ export function MyAssets() {
 
   return (
     <div className="page my-assets-page my-assets-page--split">
+      <SealedRailBanner emphasize={railFocus} />
       {myMinted.length === 0 ? (
         <EmptyState
           icon="shield"
@@ -176,7 +187,15 @@ export function MyAssets() {
               onRetry={lotState.reload}
             >
               {lot ? (
-                <AssetAnalyticsReport lot={lot} layers={layers} score={score} />
+                <>
+                  <CollateralControl
+                    lot={lot}
+                    account={connectedAccount}
+                    locked={Boolean(lockedMap[lot.artifact.assetId])}
+                    onLockedChange={setLockedFor}
+                  />
+                  <AssetAnalyticsReport lot={lot} layers={layers} score={score} />
+                </>
               ) : (
                 <p className="my-assets-page__detail-empty panel">Select an asset to view provenance analytics.</p>
               )}

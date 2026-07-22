@@ -1,0 +1,159 @@
+.sealed-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  overflow: hidden;
+}
+
+/* GuardrailBanner is designed as full-bleed app chrome; bleed it to the panel
+   edges here instead of the viewport edges, and drop the sticky behavior —
+   this panel is never the page's own scroll container. */
+.sealed-rail .guardrail {
+  position: static;
+  margin: calc(-1 * var(--panel-pad)) calc(-1 * var(--panel-pad)) 0.15rem;
+  width: auto;
+  border-bottom: 0.5px solid var(--app-stroke-divider);
+  border-radius: var(--panel-radius) var(--panel-radius) 0 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: color-mix(in srgb, var(--lastro-bg-elevated) 60%, transparent);
+}
+
+.sealed-rail .guardrail__inner {
+  width: auto;
+  padding-inline: var(--panel-pad);
+}
+
+.sealed-rail__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.sealed-rail__heading {
+  min-width: 0;
+}
+
+.sealed-rail__title {
+  font-family: var(--lastro-font-display);
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+  font-weight: var(--lastro-weight-semibold);
+  letter-spacing: -0.02em;
+  color: var(--lastro-text-primary);
+}
+
+.sealed-rail__subtitle {
+  margin-top: 0.2rem;
+  max-width: 52ch;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+}
+
+.sealed-rail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.sealed-rail__status {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-secondary);
+}
+
+.sealed-rail__note {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--lastro-text-secondary);
+}
+
+.sealed-rail__note--danger {
+  color: var(--lastro-accent-danger);
+}
+
+.sealed-rail__result {
+  margin: 0;
+  font-size: 0.6875rem;
+  color: var(--lastro-text-muted);
+}
+
+.sealed-rail__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  margin-top: 0.15rem;
+}
+
+.sealed-rail__link-btn {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--lastro-accent-trust);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.sealed-rail__link-btn:hover {
+  color: var(--lastro-accent-brand-bright);
+}
+
+.sealed-rail__link-btn:focus-visible {
+  outline: 2px solid var(--lastro-color-seal-400);
+  outline-offset: 2px;
+}
+
+.sealed-rail__persona-copy {
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--lastro-radius-sm);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-trust);
+  background: var(--lastro-fill-trust);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary);
+}
+
+.sealed-rail__collateral {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.sealed-rail__mint-summary {
+  margin: 0;
+  font-size: 0.625rem;
+  color: var(--lastro-text-muted);
+}
+
+.sealed-rail__honesty {
+  margin: 0.15rem 0 0;
+  padding-top: 0.6rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  color: var(--lastro-text-muted);
+}
+
+@media (max-width: 640px) {
+  .sealed-rail__actions {
+    width: 100%;
+  }
+
+  .sealed-rail__actions .route-cta {
+    flex: 1 1 auto;
+  }
+}

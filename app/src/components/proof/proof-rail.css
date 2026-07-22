@@ -84,7 +84,70 @@
 }
 
 .proof-rail__verdict--invalid {
-  color: var(--lastro-status-invalid);
+  /* --lastro-status-invalid (coral-400/600) dips below 4.5:1 against this
+     step's own --fill-danger background in both themes — bumped to the
+     brighter/darker ends of the same coral scale to hold AA. */
+  color: var(--lastro-color-coral-300);
+}
+
+[data-theme="light"] .proof-rail__verdict--invalid {
+  color: var(--lastro-color-coral-700);
+}
+
+/* Failed / blocked steps — Invalid origin seal cuts the rail short */
+.proof-rail__step--failed {
+  /* Same AA fix as .proof-rail__verdict--invalid above: --lastro-accent-danger
+     (coral-400/600) dips below 4.5:1 against this step's own --fill-danger
+     background in both themes — bumped to the same brighter/darker coral
+     scale ends to hold AA, consistently. */
+  color: var(--lastro-color-coral-300);
+}
+
+.proof-rail__step--failed .proof-rail__node {
+  background: var(--lastro-color-coral-300);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastro-color-coral-300) 20%, transparent);
+}
+
+[data-theme="light"] .proof-rail__step--failed {
+  color: var(--lastro-color-coral-700);
+}
+
+[data-theme="light"] .proof-rail__step--failed .proof-rail__node {
+  background: var(--lastro-color-coral-700);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastro-color-coral-700) 20%, transparent);
+}
+
+.proof-rail__step--blocked {
+  color: var(--lastro-text-muted);
+  opacity: 0.45;
+}
+
+.proof-rail__step--blocked .proof-rail__node {
+  background: var(--lastro-text-muted);
+}
+
+.proof-rail .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (min-width: 768px) {
+  .proof-rail__step--failed {
+    border-color: color-mix(in srgb, var(--lastro-accent-danger) 45%, transparent);
+    background: var(--lastro-fill-danger);
+  }
+}
+
+.proof-rail--vertical .proof-rail__step--failed::before,
+.proof-rail--vertical .proof-rail__step--blocked::before {
+  background: color-mix(in srgb, var(--lastro-accent-danger) 25%, var(--lastro-border-subtle));
 }
 
 /* Vertical timeline — drawer / narrow surfaces */

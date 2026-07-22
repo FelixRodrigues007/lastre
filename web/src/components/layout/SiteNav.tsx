@@ -38,6 +38,7 @@ function LocaleToggle({ className }: { className?: string }) {
 }
 
 const NAV_HREFS = [
+  { href: "#sealed-rail", key: "rail" as const },
   { href: "#problem", key: "protocol" as const },
   { href: "#how", key: "how" as const },
   { href: "#proof", key: "proof" as const },

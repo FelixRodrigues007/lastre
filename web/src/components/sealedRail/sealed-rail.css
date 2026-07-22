@@ -1,0 +1,266 @@
+/* Section 2 — Sealed Market Rail. Dark mineral band, forest-mint accent.
+ * Not registered in section-atmosphere.css: the default (no data-theme)
+ * semantic tokens are already the dark ramp, so this band inherits the same
+ * cream-on-olive text/border tokens as Hero/Problem without needing the
+ * shared per-section override list. Only the wash + base bg are local. */
+
+.sealed-rail {
+  position: relative;
+  color: var(--lastro-text-primary);
+  background:
+    radial-gradient(90% 70% at 50% 0%, rgba(var(--lastro-mint-wash), 0.05) 0%, transparent 55%),
+    radial-gradient(70% 55% at 100% 100%, rgba(var(--lastro-jade-wash), 0.04) 0%, transparent 50%),
+    var(--lastro-color-olive-925, var(--lastro-color-olive-900));
+}
+
+.sealed-rail__eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lastro-space-3);
+}
+
+.sealed-rail__demo-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-pill, 9999px);
+  color: var(--lastro-text-muted);
+  background: color-mix(in oklab, var(--lastro-text-primary) 6%, transparent);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+}
+
+/* ── step rail — vertical stack on mobile, horizontal on desktop ──────── */
+
+.sealed-rail__steps {
+  --rail-gap: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  list-style: none;
+  margin: 0;
+  margin-top: clamp(2.5rem, 1.5rem + 3vw, 3.5rem);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rail-gap);
+}
+
+.sealed-rail__step {
+  position: relative;
+}
+
+.sealed-rail__step-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lastro-space-3);
+  padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-md);
+  background: color-mix(in oklab, var(--lastro-bg-panel) 65%, transparent);
+  transition:
+    transform var(--dur-interact) var(--ease-out-expo),
+    border-color var(--dur-interact) var(--ease-out-expo),
+    background var(--dur-interact) var(--ease-out-expo);
+}
+
+.sealed-rail__step-card:hover {
+  border-color: var(--lastro-border-strong);
+  background: color-mix(in oklab, var(--lastro-bg-panel) 85%, transparent);
+}
+
+.sealed-rail__step-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lastro-space-3);
+}
+
+.sealed-rail__step-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+  background: color-mix(in oklab, var(--lastro-brand-seal) 12%, transparent);
+  color: var(--lastro-brand-seal-text);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.sealed-rail__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--lastro-radius-pill);
+  border: var(--lastro-stroke-hairline) solid transparent;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Step 1 — the one real/live element on the rail (jade = trust/on-chain). */
+.sealed-rail__chip--live {
+  color: var(--lastro-accent-trust);
+  background: var(--lastro-fill-trust);
+  border-color: var(--lastro-border-trust);
+}
+
+/* Steps 2-5 — demo/mock, called out in warm amber so it never reads as live. */
+.sealed-rail__chip--demo {
+  color: var(--lastro-accent-warn);
+  background: var(--lastro-fill-warn);
+  border-color: color-mix(in oklab, var(--lastro-accent-warn) 40%, transparent);
+}
+
+.sealed-rail__step-title {
+  font-family: var(--lastro-font-display);
+  font-size: 1.0625rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-primary);
+}
+
+.sealed-rail__step-detail {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--lastro-text-secondary);
+  text-wrap: pretty;
+}
+
+.sealed-rail__connector {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .sealed-rail__steps {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .sealed-rail__step {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .sealed-rail__connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: calc(var(--rail-gap) / -2 - 0.5rem);
+    transform: translateY(-50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: var(--lastro-stroke-hairline) solid var(--lastro-border-strong);
+    background: var(--lastro-bg-elevated);
+    color: var(--lastro-text-muted);
+  }
+}
+
+/* ── Invalid branch — the differentiator, not an afterthought ─────────── */
+
+.sealed-rail__invalid {
+  margin-top: clamp(1.75rem, 1rem + 2vw, 2.5rem);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lastro-space-4);
+  padding: clamp(1.25rem, 1rem + 1.5vw, 1.75rem) clamp(1.5rem, 1rem + 2vw, 2rem);
+  border: var(--lastro-stroke-hairline) solid color-mix(in oklab, var(--lastro-status-invalid) 40%, transparent);
+  border-radius: var(--lastro-radius-lg);
+  background: color-mix(in oklab, var(--lastro-status-invalid) 8%, var(--lastro-bg-panel));
+}
+
+.sealed-rail__invalid-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: var(--lastro-status-invalid);
+  background: color-mix(in oklab, var(--lastro-status-invalid) 18%, transparent);
+  border: var(--lastro-stroke-hairline) solid color-mix(in oklab, var(--lastro-status-invalid) 45%, transparent);
+}
+
+.sealed-rail__invalid-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.sealed-rail__invalid-label {
+  color: var(--lastro-status-invalid);
+}
+
+.sealed-rail__invalid-title {
+  font-family: var(--lastro-font-display);
+  font-size: 1.125rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-primary);
+}
+
+.sealed-rail__invalid-detail {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--lastro-text-secondary);
+  text-wrap: pretty;
+}
+
+/* ── CTAs ──────────────────────────────────────────────────────────────── */
+
+.sealed-rail__ctas {
+  margin-top: clamp(2rem, 1rem + 2.5vw, 2.75rem);
+}
+
+/* ── honesty note — always fully readable, never truncated ────────────── */
+
+.sealed-rail__honesty {
+  margin-top: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+  padding-top: clamp(1.25rem, 1rem + 1vw, 1.5rem);
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 64ch;
+}
+
+.sealed-rail__honesty li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--lastro-text-muted);
+  text-wrap: pretty;
+}
+
+.sealed-rail__honesty li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lastro-brand-seal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sealed-rail__step-card {
+    transition: none;
+  }
+}

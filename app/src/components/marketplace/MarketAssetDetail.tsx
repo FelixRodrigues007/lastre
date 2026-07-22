@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { MarketSiteDashboard } from "./MarketSiteDashboard";
 import { MarketplaceAssetBadge } from "./MarketplaceAssetBadge";
+import { useLocaleContext } from "../../context/LocaleContext";
 import { shortHash } from "../../lib/format";
 import { resolveMapCredentials, MAPBOX_MARKETPLACE_STYLE } from "../../lib/mapConfig";
 import { getSiteCameras } from "../../lib/siteCameras";
@@ -36,7 +37,9 @@ export function MarketAssetDetail({
   onLock,
   onRelease,
 }: MarketAssetDetailProps) {
+  const { t } = useLocaleContext();
   const assetId = String(asset.asset.assetId);
+  const lockReasonId = `market-lock-reason-${assetId}`;
   const cameras = getSiteCameras({
     isCarbon: asset.isCarbon,
     label: asset.label,
@@ -134,9 +137,22 @@ export function MarketAssetDetail({
                 </button>
               ) : null}
               {asset.isMinted && (persona === "defi" || persona === "buyer") && !locked ? (
-                <button type="button" className="route-cta route-cta--ghost" onClick={onLock}>
-                  Lock collateral
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className="route-cta route-cta--ghost"
+                    onClick={onLock}
+                    disabled={!asset.isValidProof}
+                    aria-describedby={!asset.isValidProof ? lockReasonId : undefined}
+                  >
+                    Lock collateral
+                  </button>
+                  {!asset.isValidProof ? (
+                    <p id={lockReasonId} className="market-detail__hint market-detail__hint--danger">
+                      {t("myassets.rail.lockDisabledReason")}
+                    </p>
+                  ) : null}
+                </>
               ) : null}
               {asset.isMinted && locked ? (
                 <button type="button" className="route-cta route-cta--ghost" onClick={onRelease}>
@@ -144,6 +160,7 @@ export function MarketAssetDetail({
                 </button>
               ) : null}
             </div>
+            <p className="market-detail__hint">{t("myassets.rail.collateralHonesty")}</p>
           </section>
         </aside>
       </div>

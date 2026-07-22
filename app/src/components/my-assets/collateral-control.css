@@ -1,0 +1,45 @@
+.my-assets-collateral {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.my-assets-collateral__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.my-assets-collateral__label {
+  color: var(--lastro-text-muted);
+}
+
+.my-assets-collateral__reason {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--lastro-accent-danger);
+}
+
+.my-assets-collateral__error {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--lastro-accent-danger);
+}
+
+.my-assets-collateral__honesty {
+  margin: 0;
+  padding-top: 0.4rem;
+  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: var(--lastro-text-muted);
+}
+
+.my-assets-collateral .route-cta:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border: 1px dashed var(--lastro-border-strong);
+}

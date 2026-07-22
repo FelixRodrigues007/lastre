@@ -270,6 +270,14 @@ export const content = {
           q: "How do agents interact?",
           a: "Agents submit readings; the seal compares hashes. The LLM never overrides the verdict.",
         },
+        {
+          q: "What is the Sealed Market Rail?",
+          a: "A demo path where MintGate claim and demo collateral only unlock after a Valid origin seal on Casper. It is not a DEX and not an investment product.",
+        },
+        {
+          q: "Does the marketplace move real CSPR?",
+          a: "No. The public Run Demo uses a mock x402 facilitator. Real testnet CSPR settlement is available only via the production API settle path, not the marketplace button.",
+        },
       ] as const,
     },
     useCases: {
@@ -707,6 +715,14 @@ export const content = {
         {
           q: "Como os agentes interagem?",
           a: "Agentes submetem leituras; o selo compara hashes. O LLM nunca sobrescreve o veredito.",
+        },
+        {
+          q: "O que é o Trilho de Mercado Selado?",
+          a: "Um caminho de demonstração em que o claim do MintGate e o colateral demo só se liberam após um selo de origem Valid no Casper. Não é uma DEX nem um produto de investimento.",
+        },
+        {
+          q: "O marketplace movimenta CSPR real?",
+          a: "Não. O Run Demo público usa um facilitador x402 mock. A liquidação real de CSPR no testnet só está disponível pelo caminho settle da API de produção, não pelo botão do marketplace.",
         },
       ] as const,
     },

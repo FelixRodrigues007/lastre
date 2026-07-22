@@ -15,6 +15,13 @@ type ProofRailProps = {
   activeStep?: number;
   verdict?: VerificationVerdict | null;
   layout?: "auto" | "vertical";
+  /**
+   * 0-based index of a step that failed (e.g. an Invalid origin seal). That
+   * step renders in danger tone and every later step renders as blocked —
+   * dimmed and non-interactive. Optional — omit for the normal done/active
+   * progression used elsewhere (e.g. LotProofStatus).
+   */
+  failedStep?: number;
 };
 
 export function ProofRail({
@@ -22,6 +29,7 @@ export function ProofRail({
   activeStep = 0,
   verdict = null,
   layout = "auto",
+  failedStep,
 }: ProofRailProps) {
   return (
     <ol
@@ -29,8 +37,10 @@ export function ProofRail({
       aria-label="Chain of proof"
     >
       {steps.map((label, index) => {
-        const isActive = index === activeStep;
-        const isDone = index < activeStep;
+        const isFailed = failedStep !== undefined && index === failedStep;
+        const isBlocked = failedStep !== undefined && index > failedStep;
+        const isActive = !isFailed && !isBlocked && index === activeStep;
+        const isDone = !isFailed && !isBlocked && index < activeStep;
         const isVerdictStep = index === steps.length - 1 && verdict;
 
         return (
@@ -40,13 +50,19 @@ export function ProofRail({
               "proof-rail__step",
               isDone ? "proof-rail__step--done" : "",
               isActive ? "proof-rail__step--active" : "",
+              isFailed ? "proof-rail__step--failed" : "",
+              isBlocked ? "proof-rail__step--blocked" : "",
             ]
               .filter(Boolean)
               .join(" ")}
           >
             <span className="proof-rail__node" aria-hidden="true" />
             <span className="proof-rail__label">{label}</span>
-            {isVerdictStep ? (
+            {isFailed ? (
+              <span className="proof-rail__verdict proof-rail__verdict--invalid">Invalid</span>
+            ) : isBlocked ? (
+              <span className="sr-only">Blocked</span>
+            ) : isVerdictStep ? (
               <span
                 className={`proof-rail__verdict proof-rail__verdict--${verdict.toLowerCase()}`}
               >

@@ -6,6 +6,7 @@ import { Preloader } from "./components/preloader/Preloader";
 import { SiteNav } from "./components/layout/SiteNav";
 import { SkipLink, ScrollDepthTracker, StickyMobileCta } from "./components/layout/SiteChrome";
 import { Hero } from "./components/hero/Hero";
+import { SealedRail } from "./components/sealedRail/SealedRail";
 import { Problem } from "./components/problem/Problem";
 import { Solution } from "./components/solution/Solution";
 import { Proof } from "./components/proof/Proof";
@@ -36,6 +37,7 @@ export function App() {
         <SiteNav />
         <main>
           <Hero />
+          <SealedRail />
           <Problem />
           <Solution />
           <PartnersBar />
