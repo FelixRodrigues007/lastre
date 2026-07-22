@@ -10,6 +10,7 @@ export const content = {
       faq: "FAQ",
       app: "App",
       docs: "Docs",
+      rail: "Sealed rail",
       openMenu: "Open menu",
       closeMenu: "Close menu",
     },
@@ -24,6 +25,33 @@ export const content = {
         ariaLabel: "Provenance seal — valid on Casper Testnet",
         steps: ["Physical origin", "SHA-256 seal", "Casper anchor"] as const,
       },
+    },
+    sealedRail: {
+      eyebrow: "Sealed Market Rail · Origin-gated access",
+      title: "Proof before token. Proof before finance.",
+      body:
+        "Lastre gates tokenization and demo collateral on a Valid origin seal. Autonomous agents may pay to read provenance — they never decide the verdict. Invalid is permanent proof: the rail stays closed.",
+      stepsAria: "The five steps of the sealed market rail",
+      steps: [
+        { n: "1", title: "Origin seal", detail: "Field data sealed offline; Casper records Valid or Invalid.", chip: "Live testnet" },
+        { n: "2", title: "Provenance query", detail: "Read the verdict before any downstream action.", chip: "Mock x402" },
+        { n: "3", title: "MintGate claim", detail: "Demo mint access only after Valid.", chip: "Demo simulated" },
+        { n: "4", title: "Sealed asset", detail: "Lot appears in My Assets for inspection.", chip: "Demo" },
+        { n: "5", title: "Demo collateral", detail: "Lock/release is simulated; origin must stay Valid.", chip: "Demo collateral" },
+      ] as const,
+      invalid: {
+        label: "Invalid branch",
+        title: "Invalid seal → rail closed",
+        detail: "Mint blocked → finance gate closed → rejection is on-chain proof.",
+      },
+      ctaPrimary: "Open Sealed Rail",
+      ctaSecondary: "Spot the fraud",
+      ctaTertiary: "View on-chain package",
+      honesty: [
+        "Demonstration — simulated assets, no investment offered.",
+        "MintGate, collateral, and marketplace x402 are demo/mock in the public UI.",
+        "Live ProofOfOrigin attestations are on Casper Testnet.",
+      ] as const,
     },
     problem: {
       kicker: "The trust gap",
@@ -420,6 +448,7 @@ export const content = {
       faq: "FAQ",
       app: "App",
       docs: "Docs",
+      rail: "Trilho selado",
       openMenu: "Abrir menu",
       closeMenu: "Fechar menu",
     },
@@ -434,6 +463,33 @@ export const content = {
         ariaLabel: "Selo de proveniência — válido no Casper Testnet",
         steps: ["Origem física", "Selo SHA-256", "Âncora Casper"] as const,
       },
+    },
+    sealedRail: {
+      eyebrow: "Trilho de Mercado Selado · Acesso com trava de origem",
+      title: "Prova antes do token. Prova antes da finança.",
+      body:
+        "A Lastre só libera tokenização e colateral demo após selo de origem Valid. Agentes autônomos podem pagar para ler proveniência — nunca decidem o veredito. Invalid é prova permanente: o trilho permanece fechado.",
+      stepsAria: "As cinco etapas do trilho de mercado selado",
+      steps: [
+        { n: "1", title: "Selo de origem", detail: "Leitura de campo selada offline; Casper registra Valid ou Invalid.", chip: "Testnet ao vivo" },
+        { n: "2", title: "Consulta de proveniência", detail: "Leia o veredito antes de qualquer ação downstream.", chip: "x402 mock" },
+        { n: "3", title: "Claim MintGate", detail: "Acesso a mint demo só após Valid.", chip: "Demo simulado" },
+        { n: "4", title: "Ativo selado", detail: "Lote aparece em My Assets para inspeção.", chip: "Demo" },
+        { n: "5", title: "Colateral demo", detail: "Lock/release é simulado; a origem precisa permanecer Valid.", chip: "Colateral demo" },
+      ] as const,
+      invalid: {
+        label: "Ramo Invalid",
+        title: "Selo Invalid → trilho fechado",
+        detail: "Mint bloqueado → trava financeira fechada → rejeição é prova on-chain.",
+      },
+      ctaPrimary: "Abrir Trilho Selado",
+      ctaSecondary: "Detectar a fraude",
+      ctaTertiary: "Ver package on-chain",
+      honesty: [
+        "DEMONSTRAÇÃO — ativos simulados, sem oferta de investimento.",
+        "MintGate, colateral e x402 do marketplace são demo/mock na UI pública.",
+        "Atestações live de ProofOfOrigin estão no Casper Testnet.",
+      ] as const,
     },
     problem: {
       kicker: "A lacuna de confiança",
