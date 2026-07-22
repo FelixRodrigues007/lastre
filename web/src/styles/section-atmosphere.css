@@ -9,6 +9,7 @@
 .hero,
 .problem,
 .sol,
+.cap,
 .evidence,
 .demonstration,
 .partners,
@@ -55,6 +56,17 @@
   --section-wash-b: rgba(var(--lastro-mint-wash), 0.035);
   --section-kicker: var(--lastro-color-olive-700);
   --section-kicker-bar: var(--lastro-color-olive-500);
+}
+
+/* Capabilities bento sits between How (light) and Proof (evidence) — a dark
+ * glass band with a brighter mesh than its neighbours on purpose: the glass
+ * cards need something lit behind them to refract via backdrop-filter. */
+.cap {
+  --section-bg: var(--lastro-color-olive-900);
+  --section-wash-a: rgba(var(--lastro-mint-wash), 0.07);
+  --section-wash-b: rgba(var(--lastro-jade-wash), 0.06);
+  --section-kicker: var(--lastro-color-sage-300);
+  --section-kicker-bar: var(--lastro-color-seal-400);
 }
 
 .evidence {
@@ -225,6 +237,10 @@
 }
 
 .sol.section--bordered {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.cap.section--bordered {
   border-top-color: rgba(255, 255, 255, 0.1);
 }
 

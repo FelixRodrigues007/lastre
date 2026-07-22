@@ -11,6 +11,7 @@ import { Problem } from "./components/problem/Problem";
 import { Solution } from "./components/solution/Solution";
 import { Proof } from "./components/proof/Proof";
 import { HowItWorks } from "./components/how/HowItWorks";
+import { Capabilities } from "./components/capabilities/Capabilities";
 import { Demonstration } from "./components/demonstration/Demonstration";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { Faq, ComparisonTable } from "./components/content/ContentSections";
@@ -42,6 +43,7 @@ export function App() {
           <Solution />
           <PartnersBar />
           <HowItWorks />
+          <Capabilities />
           <Proof />
           <Personas />
           <ComparisonTable />

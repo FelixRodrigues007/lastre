@@ -145,7 +145,7 @@ export function MarketAssetDetail({
                     disabled={!asset.isValidProof}
                     aria-describedby={!asset.isValidProof ? lockReasonId : undefined}
                   >
-                    Lock collateral
+                    {t("myassets.rail.lockCta")}
                   </button>
                   {!asset.isValidProof ? (
                     <p id={lockReasonId} className="market-detail__hint market-detail__hint--danger">
@@ -156,7 +156,7 @@ export function MarketAssetDetail({
               ) : null}
               {asset.isMinted && locked ? (
                 <button type="button" className="route-cta route-cta--ghost" onClick={onRelease}>
-                  Release collateral
+                  {t("myassets.rail.releaseCta")}
                 </button>
               ) : null}
             </div>

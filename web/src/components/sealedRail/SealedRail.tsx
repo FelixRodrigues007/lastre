@@ -5,22 +5,6 @@ import { trackEvent } from "../../lib/analytics";
 import { APP_URL, APP_URL_IS_EXTERNAL, CSPR_PACKAGE_URL } from "../../site-links";
 import "./sealed-rail.css";
 
-/** Small right-pointing chevron — step connector, desktop rail only. */
-function ConnectorArrow() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-      <path
-        d="M4 2.5L9.5 7L4 11.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /** Blocked-circle glyph — the Invalid branch marker. */
 function BlockedGlyph() {
   return (
@@ -32,12 +16,12 @@ function BlockedGlyph() {
 }
 
 /** Section 2 — Sealed Market Rail. The wedge: proof before token, proof before
- * finance. Five gated steps (live seal → demo mint/collateral), plus the
- * Invalid branch — the differentiator that keeps the rail closed on-chain. */
+ * finance. Five gated steps rendered as one continuous progress rail (live seal
+ * → demo mint/collateral), plus the Invalid branch — the differentiator that
+ * keeps the rail closed on-chain. */
 export function SealedRail() {
   const { content } = useSite();
   const c = content.sealedRail;
-  const lastIndex = c.steps.length - 1;
   // Deep-link into the marketplace rail — strip any trailing slash from
   // APP_URL first so we never emit a double slash before the path.
   const marketplaceUrl = `${APP_URL.replace(/\/$/, "")}/marketplace?rail=1`;
@@ -49,55 +33,62 @@ export function SealedRail() {
       aria-labelledby="sealed-rail-title"
     >
       <div className="shell">
-        <div className="sealed-rail__eyebrow reveal-scroll">
-          <p className="kicker">{c.eyebrow}</p>
-          <span className="sealed-rail__demo-badge mono-label">{content.boundary.chip}</span>
+        {/* Header — big title left, lead right (reference rhythm). */}
+        <div className="sealed-rail__header">
+          <h2
+            id="sealed-rail-title"
+            className="section-title sealed-rail__title reveal-scroll"
+            style={{ "--reveal-delay": "60ms" } as CSSProperties}
+          >
+            {c.title}
+          </h2>
+          <p
+            className="section-lead sealed-rail__lead reveal-scroll"
+            style={{ "--reveal-delay": "110ms" } as CSSProperties}
+          >
+            {c.body}
+          </p>
         </div>
 
-        <h2
-          id="sealed-rail-title"
-          className="section-title reveal-scroll"
-          style={{ "--reveal-delay": "60ms" } as CSSProperties}
-        >
-          {c.title}
-        </h2>
-
-        <p className="section-lead reveal-scroll" style={{ "--reveal-delay": "110ms" } as CSSProperties}>
-          {c.body}
-        </p>
-
-        <ol
-          className="sealed-rail__steps reveal-stagger"
+        {/* Panel — card subheading + primary CTA, then the progress rail. */}
+        <div
+          className="sealed-rail__panel reveal-scroll"
           style={{ "--reveal-delay": "170ms" } as CSSProperties}
-          aria-label={c.stepsAria}
         >
-          {c.steps.map((step, i) => (
-            <li key={step.n} className="sealed-rail__step">
-              <div className="sealed-rail__step-card interactive-lift">
-                <div className="sealed-rail__step-head">
-                  <span className="sealed-rail__step-n" aria-hidden="true">
-                    {step.n}
-                  </span>
-                  <span
-                    className={`sealed-rail__chip sealed-rail__chip--${i === 0 ? "live" : "demo"}`}
-                  >
-                    {step.chip}
-                  </span>
-                </div>
-                <h3 className="sealed-rail__step-title">{step.title}</h3>
-                <p className="sealed-rail__step-detail">{step.detail}</p>
-              </div>
+          <div className="sealed-rail__panel-head">
+            <p className="sealed-rail__panel-title">{c.railHeading}</p>
+            <Button
+              href={marketplaceUrl}
+              external={APP_URL_IS_EXTERNAL}
+              onDark
+              onClick={() => trackEvent("cta_click", { target: "sealed-rail-app" })}
+            >
+              {c.ctaPrimary}
+            </Button>
+          </div>
 
-              {i < lastIndex ? (
-                <span className="sealed-rail__connector" aria-hidden="true">
-                  <ConnectorArrow />
+          <ol className="sealed-rail__track" aria-label={c.stepsAria}>
+            {c.steps.map((step, i) => (
+              <li
+                key={step.n}
+                className={`sealed-rail__col sealed-rail__col--${i === 0 ? "live" : "demo"}`}
+              >
+                <span className="sealed-rail__node" aria-hidden="true" />
+                <span className="sealed-rail__badge">
+                  <span className="sealed-rail__badge-n">{step.n.padStart(2, "0")}</span>
+                  <span className="sealed-rail__badge-label">{step.title}</span>
                 </span>
-              ) : null}
-            </li>
-          ))}
-        </ol>
+                <p className="sealed-rail__col-detail">{step.detail}</p>
+                <span className="sealed-rail__col-meta">{step.chip}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
 
-        <div className="sealed-rail__invalid reveal-scroll" style={{ "--reveal-delay": "230ms" } as CSSProperties}>
+        <div
+          className="sealed-rail__invalid reveal-scroll"
+          style={{ "--reveal-delay": "230ms" } as CSSProperties}
+        >
           <span className="sealed-rail__invalid-icon" aria-hidden="true">
             <BlockedGlyph />
           </span>
@@ -108,15 +99,10 @@ export function SealedRail() {
           </div>
         </div>
 
-        <div className="btn-row sealed-rail__ctas reveal-scroll" style={{ "--reveal-delay": "280ms" } as CSSProperties}>
-          <Button
-            href={marketplaceUrl}
-            external={APP_URL_IS_EXTERNAL}
-            onDark
-            onClick={() => trackEvent("cta_click", { target: "sealed-rail-app" })}
-          >
-            {c.ctaPrimary}
-          </Button>
+        <div
+          className="btn-row sealed-rail__ctas reveal-scroll"
+          style={{ "--reveal-delay": "280ms" } as CSSProperties}
+        >
           <Button
             href="#proof"
             variant="secondary"
@@ -129,12 +115,6 @@ export function SealedRail() {
             {c.ctaTertiary}
           </Button>
         </div>
-
-        <ul className="sealed-rail__honesty">
-          {c.honesty.map((line) => (
-            <li key={line}>{line}</li>
-          ))}
-        </ul>
       </div>
     </section>
   );

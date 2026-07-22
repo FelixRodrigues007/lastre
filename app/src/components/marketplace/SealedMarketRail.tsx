@@ -239,7 +239,15 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
         </div>
       </header>
 
-      <ProofRail steps={steps} activeStep={activeStep} failedStep={blocked ? 0 : undefined} />
+      <div className="sealed-rail__track-wrap">
+        <ProofRail
+          variant="track"
+          steps={steps}
+          activeStep={activeStep}
+          failedStep={blocked ? 0 : undefined}
+          blockedLabel={t("marketplace.rail.blockedSr")}
+        />
+      </div>
 
       <p className="sealed-rail__status">{statusText}</p>
 

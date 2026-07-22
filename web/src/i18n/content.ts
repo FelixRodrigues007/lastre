@@ -32,6 +32,7 @@ export const content = {
       body:
         "Lastre gates tokenization and demo collateral on a Valid origin seal. Autonomous agents may pay to read provenance — they never decide the verdict. Invalid is permanent proof: the rail stays closed.",
       stepsAria: "The five steps of the sealed market rail",
+      railHeading: "Every step gated on a Valid origin seal",
       steps: [
         { n: "1", title: "Origin seal", detail: "Field data sealed offline; Casper records Valid or Invalid.", chip: "Live testnet" },
         { n: "2", title: "Provenance query", detail: "Read the verdict before any downstream action.", chip: "Mock x402" },
@@ -175,6 +176,29 @@ export const content = {
           bodyLead: "A match is accepted, a mismatch is rejected, and both are written to Casper forever. A rejection is ",
           bodyEmphasis: "proof, not a deleted error",
           bodyTail: ".",
+        },
+      ] as const,
+    },
+    capabilities: {
+      kicker: "CAPABILITIES",
+      title: "Proof you can build on",
+      subtitle: "Three primitives. One chain of provenance.",
+      cardsAria: "Lastro core capabilities",
+      cards: [
+        {
+          signal: "sha256 · a1f3…9c2",
+          title: "Offline Seal",
+          body: "A deterministic SHA-256 over the canonical reading. Same reading, same seal — computed with no server and no network.",
+        },
+        {
+          signal: "VALID · anchored on Casper",
+          title: "Permanent Verdict",
+          body: "Every reading is judged against its anchored reference. Valid or Invalid, the verdict is written on-chain forever — a rejection is proof, not a deleted error.",
+        },
+        {
+          signal: "MintGate · valid → mint",
+          title: "Provenance Marketplace",
+          body: "A sealed asset can only mint after a Valid verdict. What you see carries its origin — provenance is the gate, not a label.",
         },
       ] as const,
     },
@@ -480,6 +504,7 @@ export const content = {
       body:
         "A Lastre só libera tokenização e colateral demo após selo de origem Valid. Agentes autônomos podem pagar para ler proveniência — nunca decidem o veredito. Invalid é prova permanente: o trilho permanece fechado.",
       stepsAria: "As cinco etapas do trilho de mercado selado",
+      railHeading: "Cada etapa liberada por um selo de origem Valid",
       steps: [
         { n: "1", title: "Selo de origem", detail: "Leitura de campo selada offline; Casper registra Valid ou Invalid.", chip: "Testnet ao vivo" },
         { n: "2", title: "Consulta de proveniência", detail: "Leia o veredito antes de qualquer ação downstream.", chip: "x402 mock" },
@@ -623,6 +648,29 @@ export const content = {
           bodyLead: "Uma correspondência é aceita, uma divergência é rejeitada, e ambas são escritas no Casper para sempre. Uma rejeição é ",
           bodyEmphasis: "prova, não um erro apagado",
           bodyTail: ".",
+        },
+      ] as const,
+    },
+    capabilities: {
+      kicker: "CAPACIDADES",
+      title: "Prova sobre a qual construir",
+      subtitle: "Três primitivas. Uma cadeia de proveniência.",
+      cardsAria: "Capacidades centrais da Lastro",
+      cards: [
+        {
+          signal: "sha256 · a1f3…9c2",
+          title: "Selo Offline",
+          body: "Um SHA-256 determinístico sobre a leitura canônica. Mesma leitura, mesmo selo — calculado sem servidor e sem rede.",
+        },
+        {
+          signal: "VÁLIDO · ancorado na Casper",
+          title: "Veredito Permanente",
+          body: "Cada leitura é julgada contra sua referência ancorada. Válido ou Inválido, o veredito é gravado on-chain para sempre — uma rejeição é prova, não um erro apagado.",
+        },
+        {
+          signal: "MintGate · válido → mint",
+          title: "Marketplace com Proveniência",
+          body: "Um ativo selado só pode ser mintado após um veredito Válido. O que você vê carrega sua origem — a proveniência é o portão, não um rótulo.",
         },
       ] as const,
     },

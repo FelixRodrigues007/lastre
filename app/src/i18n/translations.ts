@@ -720,6 +720,7 @@ export const translations = {
     "marketplace.rail.step.collateral": "Demo collateral",
     "marketplace.rail.blockedNote":
       "Invalid is permanent proof. MintGate and demo collateral stay closed.",
+    "marketplace.rail.blockedSr": "Blocked",
     "marketplace.rail.invalidToggleOn": "Try an Invalid seal",
     "marketplace.rail.invalidToggleOff": "Back to the Valid demo asset",
     "marketplace.rail.personaToggleOn": "Show DeFi / builder view",
@@ -761,6 +762,7 @@ export const translations = {
     "myassets.empty.noAssets.loadCta": "Load demo collection (2 assets)",
     "myassets.empty.noAssets.marketplaceCta": "Browse Marketplace (demo)",
     "myassets.detail.selectPrompt": "Select an asset to view provenance analytics.",
+    "myassets.list.selectHint": "Select an asset",
   },
   pt: {
     "nav.overview": "Visão geral",
@@ -1485,6 +1487,7 @@ export const translations = {
     "marketplace.rail.step.collateral": "Colateral demo",
     "marketplace.rail.blockedNote":
       "Inválido é prova permanente. MintGate e colateral demo permanecem fechados.",
+    "marketplace.rail.blockedSr": "Bloqueado",
     "marketplace.rail.invalidToggleOn": "Testar um selo Invalid",
     "marketplace.rail.invalidToggleOff": "Voltar ao ativo demo Valid",
     "marketplace.rail.personaToggleOn": "Mostrar visão DeFi / builder",
@@ -1526,6 +1529,7 @@ export const translations = {
     "myassets.empty.noAssets.loadCta": "Carregar coleção demo (2 ativos)",
     "myassets.empty.noAssets.marketplaceCta": "Explorar Marketplace (demo)",
     "myassets.detail.selectPrompt": "Selecione um ativo para ver as análises de proveniência.",
+    "myassets.list.selectHint": "Selecione o ativo",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 

@@ -8,6 +8,7 @@ type MyAssetsAssetListProps = {
   assets: LotListItem[];
   selectedId: string | null;
   onSelect: (assetId: string) => void;
+  selectHint: string;
 };
 
 export function assetDisplayName(lot: LotListItem): string {
@@ -31,10 +32,10 @@ function assetCoverUrl(lot: LotListItem): string {
   });
 }
 
-export function MyAssetsAssetList({ assets, selectedId, onSelect }: MyAssetsAssetListProps) {
+export function MyAssetsAssetList({ assets, selectedId, onSelect, selectHint }: MyAssetsAssetListProps) {
   return (
     <div className="my-assets-strip" aria-label="Asset collection">
-      <p className="my-assets-strip__hint">Selecione o ativo</p>
+      <p className="my-assets-strip__hint">{selectHint}</p>
       <ul className="my-assets-strip__cards" role="listbox" aria-label="Select an asset">
         {assets.map((lot) => {
           const a = lot.artifact;

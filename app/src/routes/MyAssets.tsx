@@ -186,6 +186,7 @@ export function MyAssets() {
             assets={myMinted}
             selectedId={effectiveAssetId}
             onSelect={selectAsset}
+            selectHint={t("myassets.list.selectHint")}
           />
 
           <div className="my-assets-analytics">

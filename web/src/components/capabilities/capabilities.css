@@ -1,0 +1,276 @@
+/* Capabilities — dark-glass bento, 3 cards.
+ *
+ * Faithful translation of the gaia GLASS_DARK recipe (base fill, colourless
+ * glow, white hotspot, dual-scale grain, luminous edge ring) into plain CSS
+ * + --lastro-* tokens. gaia tuned its alphas for gaia's own light/vibrant
+ * backdrop; Lastro's band sits on a near-black olive field, so the base
+ * black-alphas below are deliberately lighter than the gaia source (0.58/0.40)
+ * and the section itself carries its own lit mesh so the backdrop-filter has
+ * something to refract — see the .cap background rule.
+ *
+ * This section is a forced dark band (added to the dark-band list in
+ * section-atmosphere.css) so its glass and text read identically regardless
+ * of the site's light/dark theme toggle — the same treatment already used by
+ * .sol and .evidence next door.
+ */
+
+/* The section field carries real, fine-grained detail on purpose — a dot
+ * lattice plus the brand mesh — so each card's backdrop-filter has something
+ * to visibly refract. Smooth gradients alone blur into themselves (no visible
+ * change), which is why a first pass here read as flat glass: there was
+ * nothing but soft washes behind the cards for blur(40px) to act on. The dot
+ * lattice stays crisp in the gaps between cards and turns to a soft haze
+ * under each card's blur — that contrast is the tell that the glass is real. */
+.cap {
+  position: relative;
+  overflow: hidden;
+  color: var(--lastro-text-primary);
+  background:
+    repeating-linear-gradient(
+      124deg,
+      rgba(var(--lastro-mint-wash), 0.55) 0px,
+      rgba(var(--lastro-mint-wash), 0.55) 8px,
+      transparent 8px,
+      transparent 30px
+    ),
+    var(--lastro-gradient-mesh-primary),
+    radial-gradient(120% 70% at 50% 0%, var(--section-wash-a) 0%, transparent 55%),
+    radial-gradient(90% 65% at 85% 100%, var(--section-wash-b) 0%, transparent 55%),
+    var(--section-bg);
+}
+
+/* ── header ─────────────────────────────────────────────────────────── */
+
+.cap__header {
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 1.5rem + 4vw, 4rem);
+}
+
+.cap__header .section-lead {
+  margin-top: var(--lastro-space-4);
+}
+
+/* ── grid ───────────────────────────────────────────────────────────── */
+
+.cap__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 900px) {
+  .cap__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── card shell ─────────────────────────────────────────────────────── */
+
+.cap-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 22px;
+  min-height: clamp(15.5rem, 13rem + 8vw, 18.5rem);
+}
+
+.cap-card__base,
+.cap-card__glow,
+.cap-card__hotspot,
+.cap-card__grain,
+.cap-card__edgelight {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* 1 · BASE — fill + shadow. Alphas retuned from gaia's 0.58/0.40 for a band
+ * that is already near-black: too dark here and the glass reads as a void,
+ * too light and the mesh behind blows out. 0.46/0.30 keeps the card visibly
+ * darker than the section field (so the card edge still reads) while
+ * letting enough of the lit mesh through the blur to look like glass. */
+.cap-card__base {
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(4, 12, 9, 0.54), rgba(4, 12, 9, 0.38));
+  backdrop-filter: blur(40px) saturate(1.5);
+  -webkit-backdrop-filter: blur(40px) saturate(1.5);
+  box-shadow:
+    0 30px 80px -28px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  transform: translateZ(0);
+}
+
+/* 2 · GLOW — colourless saturation patch, offset toward the lamp, kept near
+ * the top of the card so it never sits under the title/body text block. */
+.cap-card__glow {
+  z-index: 2;
+  top: -32%;
+  left: calc(var(--cap-lamp-x, 50%) - 38%);
+  width: 76%;
+  height: 78%;
+  border-radius: 50%;
+  backdrop-filter: saturate(1.55) brightness(1.06);
+  -webkit-backdrop-filter: saturate(1.55) brightness(1.06);
+  -webkit-mask-image: radial-gradient(closest-side, #000 0%, rgba(0, 0, 0, 0.75) 45%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 0%, rgba(0, 0, 0, 0.75) 45%, transparent 100%);
+}
+
+/* 3 · HOTSPOT — white light source, bottom-center on the lamp. Its centre
+ * sits below the card's own edge on purpose: only the dim outer rings of
+ * the radial bloom into the visible area, so it lights the glass without
+ * washing out the body text sitting just above it. */
+.cap-card__hotspot {
+  z-index: 3;
+  left: calc(var(--cap-lamp-x, 50%) - 60%);
+  bottom: -62%;
+  width: 120%;
+  height: 88%;
+  mix-blend-mode: plus-lighter;
+  background: radial-gradient(
+    ellipse closest-side,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.15) 26%,
+    rgba(255, 255, 255, 0.045) 52%,
+    transparent 76%
+  );
+  filter: blur(24px);
+}
+
+/* 4 · GRAIN — two SVG-turbulence scales, masked to the same lamp. */
+.cap-card__grain {
+  inset: 0;
+  z-index: 4;
+  mix-blend-mode: overlay;
+  -webkit-mask-image: radial-gradient(
+    78% 78% at var(--cap-lamp),
+    #000 0%,
+    rgba(0, 0, 0, 0.5) 52%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  mask-image: radial-gradient(
+    78% 78% at var(--cap-lamp),
+    #000 0%,
+    rgba(0, 0, 0, 0.5) 52%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+}
+
+.cap-card__grain--coarse {
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 700 700' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='capCoarse'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23capCoarse)'/%3E%3C/svg%3E");
+  background-size: 700px 700px;
+}
+
+.cap-card__grain--fine {
+  opacity: 0.16;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='capFine'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23capFine)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+/* 5 · EDGELIGHT — 1px luminous ring standing in for the card border. Never
+ * pair this with an actual `border`; the ring below is the only edge. */
+.cap-card__edgelight {
+  inset: 0;
+  z-index: 5;
+  border-radius: 22px;
+  padding: 1px;
+  background: radial-gradient(
+    70% 70% at var(--cap-lamp),
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0.22) 42%,
+    rgba(255, 255, 255, 0.07) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+/* ── content ────────────────────────────────────────────────────────── */
+
+.cap-card__content {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+}
+
+.cap-card__signal {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+}
+
+.cap-card__signal-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--lastro-radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--lastro-color-cream-100);
+  font-weight: var(--lastro-weight-medium);
+}
+
+/* Success pill uses the lime primitive directly (not --lastro-accent-success,
+ * which is theme-reactive) — this card is a forced dark band, so the pill
+ * must stay the same bright, AA-safe lime regardless of the site's light/dark
+ * toggle. Dark text on lime-400 measures ~10.6:1, comfortably above AA. Keep
+ * this VALID-positive: never substitute the danger/coral family here — see
+ * accent-danger-light-aa debt (danger fails AA as text in the light theme). */
+.cap-card__signal-tag--success {
+  border-color: rgba(212, 232, 120, 0.55);
+  background: var(--lastro-color-lime-400);
+  color: var(--lastro-color-olive-950);
+  font-weight: var(--lastro-weight-semibold);
+}
+
+.cap-card__signal-rest {
+  color: var(--lastro-color-sage-300);
+}
+
+.cap-card__title {
+  margin-top: auto;
+  padding-top: var(--lastro-space-8);
+  font-family: var(--lastro-font-display);
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.25rem);
+  font-weight: var(--lastro-weight-semibold);
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  color: var(--lastro-color-cream-200);
+}
+
+.cap-card__body {
+  margin-top: var(--lastro-space-3);
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--lastro-color-sage-300);
+  text-wrap: pretty;
+}
+
+/* Backdrop-filter fallback — solid token surface, no blur/saturate/glow. */
+@supports not (backdrop-filter: blur(1px)) {
+  .cap-card__base {
+    background: linear-gradient(
+      to bottom,
+      var(--lastro-color-olive-900),
+      var(--lastro-color-olive-950)
+    );
+    backdrop-filter: none;
+  }
+
+  .cap-card__glow {
+    display: none;
+  }
+}

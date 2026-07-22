@@ -207,3 +207,171 @@
 .proof-rail--vertical .proof-rail__verdict {
   font-size: 0.6875rem;
 }
+
+/* ── Track variant — reference-style progress rail (marketplace) ──────────
+ * Mirrors the landing Sealed Rail: numbered split badges sitting on a
+ * continuous line. Vertical on narrow surfaces, horizontal on wide.
+ * Scoped to .proof-rail--track so LotProofStatus keeps the compact rail. */
+
+.proof-rail--track {
+  --node-size: 0.875rem;
+  --track-gap: 1.5rem;
+  position: relative;
+  gap: var(--track-gap);
+  /* Reset the base .proof-rail viewport rule (repeat(5,…) at ≥768px) so the
+   * track defaults to a single vertical column; the container query below
+   * restores five columns only when there's real width for them. */
+  grid-template-columns: 1fr;
+}
+
+/* Vertical line — runs down the left through the node centres (mobile). */
+.proof-rail--track::before {
+  content: "";
+  position: absolute;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  left: calc(var(--node-size) / 2 - 0.5px);
+  width: 1px;
+  background: var(--lastro-border-subtle);
+}
+
+.proof-rail--track .proof-rail__step {
+  position: relative;
+  grid-template-columns: 1fr;
+  align-items: start;
+  justify-items: start;
+  gap: 0.5rem;
+  padding: 0 0 0 calc(var(--node-size) + 1rem);
+  border: none;
+  background: transparent;
+  text-align: left;
+}
+
+.proof-rail--track .proof-rail__node {
+  position: absolute;
+  z-index: 1;
+  top: 0.35rem;
+  left: 0;
+  box-sizing: border-box;
+  width: var(--node-size);
+  height: var(--node-size);
+  border-radius: 50%;
+  background: var(--lastro-bg-elevated);
+  border: 1.5px solid var(--lastro-border-strong);
+}
+
+.proof-rail--track .proof-rail__step--done .proof-rail__node {
+  background: var(--lastro-accent-success);
+  border-color: var(--lastro-accent-success);
+}
+
+.proof-rail--track .proof-rail__step--active .proof-rail__node {
+  background: var(--lastro-gradient-seal-shine);
+  border-color: transparent;
+  box-shadow: var(--lastro-glow-seal);
+}
+
+.proof-rail--track .proof-rail__step--failed .proof-rail__node {
+  background: var(--lastro-color-coral-300);
+  border-color: transparent;
+}
+
+[data-theme="light"] .proof-rail--track .proof-rail__step--failed .proof-rail__node {
+  background: var(--lastro-color-coral-700);
+}
+
+.proof-rail--track .proof-rail__step--blocked .proof-rail__node {
+  background: transparent;
+  border-color: var(--lastro-border-subtle);
+}
+
+/* Split badge — number cell + label cell. */
+.proof-rail--track .proof-rail__badge {
+  display: inline-flex;
+  align-items: stretch;
+  max-width: 100%;
+  overflow: hidden;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-sm);
+  background: color-mix(in oklab, var(--lastro-bg-panel) 55%, transparent);
+}
+
+.proof-rail--track .proof-rail__badge-n {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.5rem;
+  border-right: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  color: var(--lastro-text-muted);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.proof-rail--track .proof-rail__badge-label {
+  min-width: 0;
+  padding: 0.28rem 0.6rem;
+  color: var(--lastro-text-primary);
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proof-rail--track .proof-rail__step--active .proof-rail__badge {
+  border-color: var(--lastro-border-brand);
+}
+
+.proof-rail--track .proof-rail__step--active .proof-rail__badge-n {
+  color: var(--lastro-text-primary);
+  background: var(--lastro-fill-brand);
+  border-right-color: var(--lastro-border-brand);
+}
+
+.proof-rail--track .proof-rail__step--done .proof-rail__badge-n {
+  color: var(--lastro-accent-success);
+}
+
+.proof-rail--track .proof-rail__step--blocked {
+  opacity: 0.5;
+}
+
+/* Meta line — the demo/mock status pulled out of the label parenthetical. */
+.proof-rail--track .proof-rail__meta {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-accent-warn, var(--lastro-text-muted));
+}
+
+/* Wide surfaces — the rail turns horizontal: nodes on a line, columns below.
+ * Container-query, not viewport: the marketplace rail lives in a narrow panel
+ * (~480px), so it stays vertical there and only turns horizontal when its own
+ * container (.sealed-rail__track-wrap) is genuinely wide enough for five
+ * single-line badges. No container ancestor → condition never matches →
+ * vertical, which is the safe default. */
+@container (min-width: 820px) {
+  .proof-rail--track {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(0.75rem, 0.25rem + 1vw, 1.5rem);
+  }
+
+  .proof-rail--track::before {
+    top: calc(var(--node-size) / 2 - 0.5px);
+    bottom: auto;
+    left: calc(var(--node-size) / 2);
+    right: 0;
+    width: auto;
+    height: 1px;
+  }
+
+  .proof-rail--track .proof-rail__step {
+    padding: calc(var(--node-size) + 1rem) 0 0 0;
+  }
+
+  .proof-rail--track .proof-rail__node {
+    top: 0;
+  }
+}

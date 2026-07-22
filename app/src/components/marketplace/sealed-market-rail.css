@@ -95,6 +95,12 @@
   flex-shrink: 0;
 }
 
+/* Query container for the track-variant ProofRail — lets the rail switch to
+ * its horizontal layout based on the panel's real width, not the viewport. */
+.sealed-rail__track-wrap {
+  container-type: inline-size;
+}
+
 .sealed-rail__status {
   margin: 0;
   font-size: 0.8125rem;
