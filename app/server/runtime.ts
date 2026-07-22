@@ -60,6 +60,7 @@ import {
   type SealedRailGateCode,
   type SealedRailStatus,
 } from "./sealed-rail.js";
+import { CollateralStore } from "./collateral-store.js";
 
 /** Multi-party trust stack — protocol roles, not fake second operators. */
 export const TRUST_STACK = [
@@ -803,8 +804,9 @@ export class AppRuntime {
     return record;
   }
 
-  // Demo collateral (Sealed Market Rail step 5) — Valid + minted only
-  private lockedCollateral = new Map<string, { owner: string; lockedAt: string }>();
+  // Demo collateral (Sealed Market Rail step 5) — Valid + minted only.
+  // Persisted to disk so Render restarts don't wipe locks mid-demo.
+  private readonly collateralStore = new CollateralStore();
 
   lockCollateral(
     assetId: string,
@@ -841,7 +843,7 @@ export class AppRuntime {
         rail: this.getSealedRailStatus(assetId),
       };
     }
-    if (this.lockedCollateral.has(assetId)) {
+    if (this.collateralStore.has(assetId)) {
       return {
         success: false,
         error: "Already locked",
@@ -850,7 +852,7 @@ export class AppRuntime {
         rail: this.getSealedRailStatus(assetId),
       };
     }
-    this.lockedCollateral.set(assetId, { owner, lockedAt: new Date().toISOString() });
+    this.collateralStore.set(assetId, owner);
     return {
       success: true,
       code: "OK",
@@ -870,7 +872,7 @@ export class AppRuntime {
     rail?: SealedRailStatus;
   } {
     const honesty = SEALED_RAIL_HONESTY.collateral;
-    const lock = this.lockedCollateral.get(assetId);
+    const lock = this.collateralStore.get(assetId);
     if (!lock) {
       return {
         success: false,
@@ -889,7 +891,7 @@ export class AppRuntime {
         rail: this.getSealedRailStatus(assetId),
       };
     }
-    this.lockedCollateral.delete(assetId);
+    this.collateralStore.delete(assetId);
     return {
       success: true,
       code: "OK",
@@ -899,13 +901,11 @@ export class AppRuntime {
   }
 
   getLockedStatus(assetId: string) {
-    return this.lockedCollateral.get(assetId) || null;
+    return this.collateralStore.get(assetId);
   }
 
   listLockedBy(owner: string) {
-    return Array.from(this.lockedCollateral.entries())
-      .filter(([_, lock]) => lock.owner === owner)
-      .map(([id, lock]) => ({ assetId: id, ...lock }));
+    return this.collateralStore.listByOwner(owner);
   }
 
   /** Sealed Market Rail overview (product + endpoints + honesty). */
@@ -916,7 +916,7 @@ export class AppRuntime {
   /** Per-asset 5-step rail status for UI / judges. */
   getSealedRailStatus(assetId: string): SealedRailStatus {
     const lot = this.getLot(assetId);
-    const lock = this.lockedCollateral.get(assetId) ?? null;
+    const lock = this.collateralStore.get(assetId);
     const verdict =
       lot?.latestVerdict === "Valid" || lot?.latestVerdict === "Invalid"
         ? lot.latestVerdict
