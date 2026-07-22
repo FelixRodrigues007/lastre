@@ -16,3 +16,7 @@ app/server-dist/
 *.log
 .vercel
 .gstack/
+.playwright-mcp/
+output/
+web/shot-*.png
+web/cobe-test.html
