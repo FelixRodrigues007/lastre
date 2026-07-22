@@ -467,6 +467,11 @@ export class AppRuntime {
       sampleSettles: [
         {
           label: "latest",
+          txHash: CANONICAL_EVIDENCE.x402PayProd20260722,
+          explorerUrl: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.x402PayProd20260722),
+        },
+        {
+          label: "2026-07-21b",
           txHash: CANONICAL_EVIDENCE.x402PayProd20260721b,
           explorerUrl: explorerTxUrlIfDeployHash(CANONICAL_EVIDENCE.x402PayProd20260721b),
         },
