@@ -1,5 +1,8 @@
 # Ranking hostil geral — Final Round (pós-deploy 2026-07-21 ~23:00 UTC)
 
+> **Atualização 22/07:** ver [`RANKING_UPDATE_2026-07-22.md`](./RANKING_UPDATE_2026-07-22.md) — Lastre **4.60** (BUIDL Dora completo).
+
+
 **Escopo:** ~175 finalistas oficiais · grid pública **BUIDLs 50** · **Hackers 159**  
 **Método:** tese Casper (RWA origin + agent rails + constraints) · prova on-chain · clareza demo · honesty · overlap com Lastre  
 **Disciplina:** **estimativas 0–5, não ranking oficial Dora.** Não publicar “#1” no Dora/TG.
@@ -21,7 +24,7 @@
 | Autonomy (sessão smoke) | cycles densos; in-memory reseta em cold start |
 | jury-smoke | **fail=0** (health, evidence, simulate, autonomy×3, Invalid explorer) |
 | Tese copy | *Proof before token — and proof before finance* |
-| Dora short description | **ainda manual** (colar `docs/BUIDL_PAGE_PASTE.md`) |
+| Dora short description | **LIVE** em https://dorahacks.io/buidl/46748 (markdown sem tabelas) |
 
 ---
 
@@ -128,7 +131,7 @@ Leash · AgentShield · Baret · AiFinPay · CasperAgent · HiveMind · Arena ·
 
 ## 8. Próximos movimentos (só o que mexe ranking)
 
-- [ ] **Edit BUIDL** — colar `docs/BUIDL_PAGE_PASTE.md` (maior ROI residual)  
+- [x] **Edit BUIDL** — pack completo live em 46748 (2026-07-21)  
 - [ ] Dry-run demo day scorecard  
 - [ ] Autonomy ×3 no dia do jury (pós cold start)  
 - [x] Render redeploy + jury-smoke fail=0  
