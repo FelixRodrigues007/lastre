@@ -3,13 +3,17 @@ import { createHash } from "node:crypto";
 /** x402 fields returned by the server in the HTTP 402 Payment Required response. */
 export type PaymentRequirements = {
   scheme: "exact";
-  network: "casper-test";
+  /** Legacy short form (`casper-test`) or CAIP-2 (`casper:casper-test`). */
+  network: "casper-test" | "casper:casper-test" | "casper:casper" | string;
   maxAmountRequired: number;
-  asset: "CSPR";
+  /** Native CSPR label, or CEP-18 package hash (WCSPR). */
+  asset: "CSPR" | "WCSPR" | string;
   payTo: string;
-  resource: "/verify";
+  resource: "/verify" | string;
   nonce: string;
-  description: "Lastre provenance verification";
+  description: string;
+  /** Present when LASTRE_X402_MODE=cspr_cloud — official MAKE quote metadata. */
+  cloud?: import("./cspr-cloud-types.js").CloudQuoteMeta;
 };
 
 /** Mock payload sent by the client in the X-PAYMENT header. */
@@ -18,6 +22,14 @@ export type PaymentPayload = {
   amount: number;
   from: string;
   sig: string;
+  /**
+   * Optional official CSPR.cloud body (EIP-712). Required for
+   * CsprCloudFacilitator settle; ignored by Mock/Casper facilitators.
+   */
+  cloud?: {
+    paymentPayload: import("./cspr-cloud-types.js").CloudPaymentPayload;
+    paymentRequirements: import("./cspr-cloud-types.js").CloudPaymentRequirements;
+  };
 };
 
 export type PaymentVerification =
@@ -37,19 +49,21 @@ export type Settlement = {
 /**
  * Identifies which facilitator implementation is active.
  *
- * - `"mock"`   — deterministic local facilitator (no network, no Casper).
- * - `"casper"` — CasperFacilitator (real testnet transfer via casper-client).
+ * - `"mock"`       — deterministic local facilitator (no network, no Casper).
+ * - `"casper"`     — CasperFacilitator (real testnet native CSPR via casper-client).
+ * - `"cspr_cloud"` — CsprCloudFacilitator (official WCSPR + CSPR.cloud verify/settle).
  *
- * Select via createFacilitatorFromEnv() / LASTRE_X402_MODE=mock|casper.
+ * Select via createFacilitatorFromEnv() / LASTRE_X402_MODE=mock|casper|cspr_cloud.
  */
-export type FacilitatorMode = "mock" | "casper";
+export type FacilitatorMode = "mock" | "casper" | "cspr_cloud";
 
 /**
  * x402 payment seam (the single replacement point).
  *
  * Implementations:
  * - `MockFacilitator` — local synthetic_receipt (judge demo default)
- * - `CasperFacilitator` — real casper-client transfer (LASTRE_X402_MODE=casper)
+ * - `CasperFacilitator` — real casper-client native CSPR transfer (LASTRE_X402_MODE=casper)
+ * - `CsprCloudFacilitator` — CSPR.cloud + WCSPR EIP-712 (LASTRE_X402_MODE=cspr_cloud)
  *
  * Inject with createLastroX402Server({ facilitator }) or createFacilitatorFromEnv().
  */
@@ -160,7 +174,9 @@ export function encodePaymentPayload(payload: PaymentPayload): string {
 export function decodePaymentHeader(headerValue: string): PaymentPayload | null {
   try {
     const raw = Buffer.from(headerValue, "base64url").toString("utf8");
-    const parsed = JSON.parse(raw) as Partial<PaymentPayload>;
+    const parsed = JSON.parse(raw) as Partial<PaymentPayload> & {
+      cloud?: PaymentPayload["cloud"];
+    };
 
     if (
       typeof parsed.nonce !== "string" ||
@@ -171,12 +187,16 @@ export function decodePaymentHeader(headerValue: string): PaymentPayload | null 
       return null;
     }
 
-    return {
+    const out: PaymentPayload = {
       nonce: parsed.nonce,
       amount: parsed.amount,
       from: parsed.from,
       sig: parsed.sig,
     };
+    if (parsed.cloud?.paymentPayload && parsed.cloud?.paymentRequirements) {
+      out.cloud = parsed.cloud;
+    }
+    return out;
   } catch {
     return null;
   }

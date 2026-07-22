@@ -21,9 +21,9 @@ export const SEALED_RAIL_PRODUCT = {
 export const SEALED_RAIL_HONESTY = {
   demonstration: "DEMONSTRATION — simulated assets, no investment offered",
   mintGate: "Demo simulated — session MintGate LotMinted, not free mint",
-  x402Ui: "Mock facilitator on UI / POST /api/x402/simulate and POST /api/rail/run (no CSPR moved)",
+  x402Ui: "Mock facilitator on UI / POST /api/x402/simulate and POST /api/rail/run (no value moved)",
   x402Settle:
-    "Real testnet CSPR only via POST /api/x402/settle when facilitatorMode=casper — never the marketplace button",
+    "Real settle: native CSPR via POST /api/x402/settle (mode=casper) OR WCSPR via POST /api/x402/cloud/settle (mode=cspr_cloud + CSPR.cloud). Never the marketplace button.",
   collateral: "Demo collateral — lock/release in session memory; no liquidation, yield, or investment",
   proofOfOrigin: "Live ProofOfOrigin when onChain.source is live | live-rpc; else fallback snapshot",
   phrase:

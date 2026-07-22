@@ -30,9 +30,15 @@ import {
   MockFacilitator,
   createFacilitatorFromEnv,
   signMockPayment,
+  CsprCloudFacilitator,
+  CSPR_CLOUD_FACILITATOR_URL,
+  WCSPR_TESTNET_PACKAGE_HASH,
+  buildCloudQuoteMeta,
   type Facilitator,
   type PaymentPayload,
   type PaymentRequirements,
+  type CloudVerifyRequest,
+  type CloudQuoteMeta,
 } from "../../agent/x402/dist/index.js";
 import { getOperators, getTrustNetwork } from "./operators.js";
 import { MintEconomicsGate } from "./mint-economics.js";
@@ -493,9 +499,26 @@ export class AppRuntime {
         "Live on Casper Testnet today. Mainnet when facilitator ops + keys + monitoring are production-safe. No mainnet money claims in demo.",
       honesty: {
         uiSimulate: "mock",
-        apiSettle: x402Mode === "casper" ? "real_testnet_cspr_when_keys" : "mock_only",
+        apiSettle:
+          x402Mode === "cspr_cloud"
+            ? "cspr_cloud_wcspr_eip712"
+            : x402Mode === "casper"
+              ? "real_testnet_cspr_when_keys"
+              : "mock_only",
         phrase:
-          "UI / POST /api/x402/simulate = mock synthetic_receipt. POST /api/x402/settle = real testnet CSPR only when facilitatorMode=casper.",
+          "UI / POST /api/x402/simulate + /api/rail/run = mock (no value moved). " +
+          "POST /api/x402/settle: native CSPR when facilitatorMode=casper; " +
+          "WCSPR via CSPR.cloud when facilitatorMode=cspr_cloud (EIP-712 body). " +
+          "Official path: docs.cspr.cloud/x402-facilitator-api + make-software/casper-x402.",
+        csprCloud: {
+          facilitatorUrl: CSPR_CLOUD_FACILITATOR_URL,
+          docs: "https://docs.cspr.cloud/x402-facilitator-api/reference",
+          examples: "https://github.com/make-software/casper-x402",
+          tradeWcspr: "https://testnet.cspr.trade",
+          wcsprTestnetPackage: WCSPR_TESTNET_PACKAGE_HASH,
+          note:
+            "WCSPR is fully x402-compatible. Swap CSPR↔WCSPR on testnet.cspr.trade (WCSPR menu).",
+        },
       },
       trustStack: TRUST_STACK,
       operators: ops.operators,
@@ -565,12 +588,24 @@ export class AppRuntime {
       x402: {
         facilitatorMode: x402Mode,
         x402Mode,
-        settlementKind: x402Mode === "casper" ? "casper_deploy" : "synthetic_receipt",
+        settlementKind:
+          x402Mode === "casper" || x402Mode === "cspr_cloud"
+            ? "casper_deploy"
+            : "synthetic_receipt",
+        assetPath:
+          x402Mode === "cspr_cloud"
+            ? "WCSPR_CEP18"
+            : x402Mode === "casper"
+              ? "native_CSPR"
+              : "mock",
         lastCasperSettle,
+        cloud: this.getCsprCloudInfo(),
         honestNote:
-          x402Mode === "casper"
-            ? "Server facilitator mode=casper: settleProvenanceQuery can move real testnet CSPR when keys are configured. UI /simulate stays mock."
-            : "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence.",
+          x402Mode === "cspr_cloud"
+            ? "Server facilitator mode=cspr_cloud: CSPR.cloud /verify+/settle with WCSPR (EIP-712). UI /simulate stays mock. Requires CSPR_CLOUD_API_TOKEN + payTo + client-signed cloud body."
+            : x402Mode === "casper"
+              ? "Server facilitator mode=casper: settleProvenanceQuery can move real testnet native CSPR when keys are configured. UI /simulate stays mock. Optional next: cspr_cloud + WCSPR (MAKE path)."
+              : "Judge demo uses MockFacilitator (no CSPR moved). HTTP 402 seam is real. Paid responses attach live-RPC-verified ProofOfOrigin txs as chain evidence. Official WCSPR path documented under honesty.csprCloud.",
       },
       invalidIsProof: true,
       /** Additive: origin autonomy loop summary (session). Does not replace on-chain counters. */
@@ -1146,6 +1181,7 @@ export class AppRuntime {
   /**
    * x402 step 1 — issue a payment quote (HTTP 402 body). The caller signs it and
    * calls `settleProvenanceQuery`. Reuses the real x402 requirements contract.
+   * When facilitatorMode=cspr_cloud, attaches official WCSPR / CSPR.cloud quote meta.
    */
   quoteProvenanceQuery(assetId: string): { requirements: PaymentRequirements; assetId: string } {
     const payTo =
@@ -1157,8 +1193,160 @@ export class AppRuntime {
       payTo,
       nonce: randomUUID(),
     };
+
+    if (this.x402Facilitator.mode === "cspr_cloud" && this.x402Facilitator instanceof CsprCloudFacilitator) {
+      const cloud = this.x402Facilitator.getQuoteMeta();
+      requirements.asset = "WCSPR";
+      requirements.network = cloud.network;
+      requirements.description =
+        "Lastre provenance verification (WCSPR via CSPR.cloud facilitator)";
+      requirements.cloud = cloud;
+      // maxAmountRequired stays numeric for legacy clients; base units live in cloud.amountBaseUnits
+      const base = Number(cloud.amountBaseUnits);
+      if (Number.isFinite(base) && base > 0) {
+        requirements.maxAmountRequired = base;
+      }
+    }
+
     this.x402Issued.set(requirements.nonce, requirements);
     return { requirements, assetId };
+  }
+
+  /** Static + live (if token) CSPR.cloud / WCSPR path info for evidence + health. */
+  getCsprCloudInfo(): {
+    path: "official_make";
+    facilitatorUrl: string;
+    docs: string;
+    examples: string;
+    tradeWcspr: string;
+    wcsprTestnetPackage: string;
+    modeActive: boolean;
+    quote: CloudQuoteMeta | null;
+    envTokenConfigured: boolean;
+  } {
+    const envToken = Boolean(
+      process.env.CSPR_CLOUD_API_TOKEN?.trim() ||
+        process.env.LASTRE_CSPR_CLOUD_TOKEN?.trim() ||
+        process.env.FACILITATOR_API_KEY?.trim(),
+    );
+    const active = this.x402Facilitator.mode === "cspr_cloud";
+    let quote: CloudQuoteMeta | null = null;
+    if (this.x402Facilitator instanceof CsprCloudFacilitator) {
+      quote = this.x402Facilitator.getQuoteMeta();
+    } else {
+      const payTo =
+        process.env.LASTRE_X402_PAY_TO?.trim() ||
+        process.env.LASTRE_X402_TARGET_ACCOUNT?.trim() ||
+        "";
+      if (payTo) {
+        quote = buildCloudQuoteMeta({
+          payTo,
+          assetPackage:
+            process.env.LASTRE_WCSPR_PACKAGE?.trim() || WCSPR_TESTNET_PACKAGE_HASH,
+        });
+      }
+    }
+    return {
+      path: "official_make",
+      facilitatorUrl: CSPR_CLOUD_FACILITATOR_URL,
+      docs: "https://docs.cspr.cloud/x402-facilitator-api/reference",
+      examples: "https://github.com/make-software/casper-x402",
+      tradeWcspr: "https://testnet.cspr.trade",
+      wcsprTestnetPackage: WCSPR_TESTNET_PACKAGE_HASH,
+      modeActive: active,
+      quote,
+      envTokenConfigured: envToken,
+    };
+  }
+
+  async probeCsprCloudSupported(): Promise<{
+    ok: boolean;
+    mode: string;
+    supported?: unknown;
+    error?: string;
+  }> {
+    if (!(this.x402Facilitator instanceof CsprCloudFacilitator)) {
+      return {
+        ok: false,
+        mode: this.x402Facilitator.mode,
+        error:
+          "Facilitator is not cspr_cloud. Set LASTRE_X402_MODE=cspr_cloud + CSPR_CLOUD_API_TOKEN + LASTRE_X402_PAY_TO.",
+      };
+    }
+    try {
+      const supported = await this.x402Facilitator.getSupported();
+      return { ok: true, mode: "cspr_cloud", supported };
+    } catch (error) {
+      return {
+        ok: false,
+        mode: "cspr_cloud",
+        error: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Settle with official CSPR.cloud body (EIP-712). Used by agents built on
+   * make-software/casper-x402 — not by mock UI simulate.
+   */
+  async settleCsprCloudOfficial(
+    assetId: string,
+    body: CloudVerifyRequest,
+  ): Promise<
+    | {
+        ok: true;
+        txHash: string;
+        settlementKind: "casper_deploy";
+        paymentExplorerUrl: string | null;
+        provenance: ReturnType<AppRuntime["getProvenanceSnapshot"]>;
+        facilitatorMode: "cspr_cloud";
+        network: string;
+        payer: string;
+        chainEvidence: Awaited<ReturnType<AppRuntime["getMintSummary"]>>["onChain"];
+      }
+    | { ok: false; reason: string; message?: string; facilitatorMode: string }
+  > {
+    if (!this.getLot(assetId)) {
+      return { ok: false, reason: "unknown_asset", facilitatorMode: this.x402Facilitator.mode };
+    }
+    if (!(this.x402Facilitator instanceof CsprCloudFacilitator)) {
+      return {
+        ok: false,
+        reason: "facilitator_not_cspr_cloud",
+        message:
+          "Set LASTRE_X402_MODE=cspr_cloud + CSPR_CLOUD_API_TOKEN. Or use mode=casper for native CSPR.",
+        facilitatorMode: this.x402Facilitator.mode,
+      };
+    }
+    const settled = await this.x402Facilitator.settleOfficial(body);
+    if (!settled.ok) {
+      return {
+        ok: false,
+        reason: settled.reason,
+        message: settled.message,
+        facilitatorMode: "cspr_cloud",
+      };
+    }
+    this.x402QueryCount += 1;
+    const paymentExplorerUrl = explorerTxUrlIfDeployHash(settled.txHash);
+    this.lastCasperSettle = {
+      txHash: settled.txHash,
+      assetId,
+      at: new Date().toISOString(),
+      paymentExplorerUrl,
+    };
+    const summary = await this.getMintSummary();
+    return {
+      ok: true,
+      txHash: settled.txHash,
+      settlementKind: "casper_deploy",
+      paymentExplorerUrl,
+      provenance: this.getProvenanceSnapshot(assetId),
+      facilitatorMode: "cspr_cloud",
+      network: settled.network,
+      payer: settled.payer,
+      chainEvidence: summary.onChain,
+    };
   }
 
   /**
@@ -1232,7 +1420,8 @@ export class AppRuntime {
   /**
    * Server-as-agent payer: quote → sign mock X-PAYMENT → settle via env facilitator.
    * - mock mode: refuses (use /api/x402/simulate — keeps paths honest)
-   * - casper mode: real testnet CSPR transfer via CasperFacilitator
+   * - casper mode: real testnet native CSPR transfer via CasperFacilitator
+   * - cspr_cloud mode: refuses mock-header settle; use POST /api/x402/cloud/settle with EIP-712 body
    */
   async settleAsAgent(
     assetId: string,
@@ -1256,12 +1445,25 @@ export class AppRuntime {
     if (!this.getLot(assetId)) {
       return { ok: false, reason: "unknown_asset", facilitatorMode: this.x402Facilitator.mode };
     }
+    if (this.x402Facilitator.mode === "cspr_cloud") {
+      return {
+        ok: false,
+        reason: "use_cloud_settle_endpoint",
+        message:
+          "facilitatorMode=cspr_cloud requires EIP-712 WCSPR body via POST /api/x402/cloud/settle " +
+          "(see make-software/casper-x402). This endpoint only auto-settles native CSPR (mode=casper). " +
+          "Judge mock: POST /api/x402/simulate.",
+        facilitatorMode: "cspr_cloud",
+      };
+    }
     if (this.x402Facilitator.mode !== "casper") {
       return {
         ok: false,
         reason: "facilitator_not_casper",
         message:
-          "Server is in mock mode. Set LASTRE_X402_MODE=casper + keys for real settle, or use POST /api/x402/simulate for judge-safe mock.",
+          "Server is in mock mode. Set LASTRE_X402_MODE=casper + keys for native CSPR settle, " +
+          "or LASTRE_X402_MODE=cspr_cloud + CSPR_CLOUD_API_TOKEN for WCSPR (POST /api/x402/cloud/settle), " +
+          "or use POST /api/x402/simulate for judge-safe mock.",
         facilitatorMode: this.x402Facilitator.mode,
       };
     }

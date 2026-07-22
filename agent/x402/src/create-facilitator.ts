@@ -15,9 +15,11 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { CasperFacilitator } from "./casper-facilitator.js";
+import { CsprCloudFacilitator } from "./cspr-cloud-facilitator.js";
 import { MockFacilitator, type Facilitator } from "./facilitator.js";
+import { WCSPR_TESTNET_PACKAGE_HASH } from "./cspr-cloud-types.js";
 
-export type X402Mode = "mock" | "casper";
+export type X402Mode = "mock" | "casper" | "cspr_cloud";
 
 export type SecretMaterialStatus = {
   mode: X402Mode;
@@ -37,8 +39,12 @@ const PEM_BOOTSTRAP_PATH = join(tmpdir(), "lastre-x402-secret_key.pem");
 const SECRETS_BOOTSTRAP_PATH = "/secrets/x402_secret_key.pem";
 
 export function resolveX402Mode(raw = process.env.LASTRE_X402_MODE): X402Mode {
-  const mode = (raw ?? "mock").trim().toLowerCase();
-  return mode === "casper" ? "casper" : "mock";
+  const mode = (raw ?? "mock").trim().toLowerCase().replace(/-/g, "_");
+  if (mode === "casper") return "casper";
+  if (mode === "cspr_cloud" || mode === "csprcloud" || mode === "cloud" || mode === "wcspr") {
+    return "cspr_cloud";
+  }
+  return "mock";
 }
 
 /**
@@ -242,7 +248,16 @@ export function inspectSecretMaterial(env: NodeJS.ProcessEnv = process.env): Sec
   }
 
   let hint: string | null = null;
-  if (mode === "casper" && !pemOk) {
+  if (mode === "cspr_cloud") {
+    if (!env.CSPR_CLOUD_API_TOKEN?.trim() && !env.LASTRE_CSPR_CLOUD_TOKEN?.trim()) {
+      hint = "Set CSPR_CLOUD_API_TOKEN for CSPR.cloud facilitator (docs.cspr.cloud).";
+    } else if (!env.LASTRE_X402_PAY_TO?.trim() && !env.LASTRE_X402_TARGET_ACCOUNT?.trim()) {
+      hint = "Set LASTRE_X402_PAY_TO to WCSPR payee account hash (00 + 64 hex).";
+    } else {
+      hint =
+        "cspr_cloud mode: settle needs EIP-712 payment.cloud body (make-software/casper-x402). UI/simulate stays mock.";
+    }
+  } else if (mode === "casper" && !pemOk) {
     if (source === "none") {
       hint = "Set LASTRE_X402_SECRET_KEY_B64 (preferred) or PEM/path.";
     } else if (source === "pem") {
@@ -284,14 +299,59 @@ export function createFacilitatorFromEnv(env: NodeJS.ProcessEnv = process.env): 
   prepareX402SecretsFromEnv(env);
   const mode = resolveX402Mode(env.LASTRE_X402_MODE);
 
-  if (mode !== "casper") {
+  if (mode === "mock") {
     return new MockFacilitator();
   }
 
-  const secretKeyPath =
-    env.LASTRE_X402_SECRET_KEY_PATH?.trim() || env.SANDBOX_SECRET_KEY_PATH?.trim() || "";
   const targetAccount =
     env.LASTRE_X402_PAY_TO?.trim() || env.LASTRE_X402_TARGET_ACCOUNT?.trim() || "";
+
+  // ---- Official MAKE path: CSPR.cloud + WCSPR --------------------------------
+  if (mode === "cspr_cloud") {
+    const apiToken =
+      env.CSPR_CLOUD_API_TOKEN?.trim() ||
+      env.LASTRE_CSPR_CLOUD_TOKEN?.trim() ||
+      env.FACILITATOR_API_KEY?.trim() ||
+      "";
+    if (!apiToken) {
+      console.warn(
+        "[lastre-x402] LASTRE_X402_MODE=cspr_cloud but CSPR_CLOUD_API_TOKEN missing; falling back to MockFacilitator.",
+      );
+      return new MockFacilitator();
+    }
+    if (isMockPayTo(targetAccount)) {
+      console.warn(
+        "[lastre-x402] LASTRE_X402_MODE=cspr_cloud but LASTRE_X402_PAY_TO is missing or mock; falling back to MockFacilitator.",
+      );
+      return new MockFacilitator();
+    }
+    try {
+      return new CsprCloudFacilitator({
+        apiToken,
+        payTo: targetAccount,
+        facilitatorUrl: env.CSPR_CLOUD_FACILITATOR_URL?.trim() || undefined,
+        assetPackage:
+          env.LASTRE_WCSPR_PACKAGE?.trim() ||
+          env.ASSET_PACKAGE?.trim() ||
+          WCSPR_TESTNET_PACKAGE_HASH,
+        amountBaseUnits: env.LASTRE_WCSPR_AMOUNT?.trim() || undefined,
+        network:
+          env.LASTRE_CAIP2_NETWORK?.trim() === "casper:casper"
+            ? "casper:casper"
+            : "casper:casper-test",
+      });
+    } catch (error) {
+      console.warn(
+        "[lastre-x402] CsprCloudFacilitator init failed; falling back to mock:",
+        error instanceof Error ? error.message : error,
+      );
+      return new MockFacilitator();
+    }
+  }
+
+  // ---- Native CSPR path (casper-client transfer) -----------------------------
+  const secretKeyPath =
+    env.LASTRE_X402_SECRET_KEY_PATH?.trim() || env.SANDBOX_SECRET_KEY_PATH?.trim() || "";
 
   if (!secretKeyPath || !existsSync(secretKeyPath)) {
     console.warn(
