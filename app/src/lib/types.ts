@@ -170,6 +170,8 @@ export class ApiError extends Error {
   constructor(
     message: string,
     readonly status: number,
+    /** Machine code from API body when present (e.g. ALREADY_MINTED). */
+    readonly code?: string,
   ) {
     super(message);
     this.name = "ApiError";

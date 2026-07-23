@@ -129,6 +129,33 @@ describe("AppRuntime Sealed Market Rail", () => {
     assert.equal(run.rail.eligibility.canLock, true);
   });
 
+  it("second rail run on already-minted Valid lot stays ok (ALREADY_MINTED is success)", async () => {
+    const runtime = new AppRuntime();
+    await runtime.seedDemoSessionIfEmpty();
+
+    const assetId = "MINA-VALEDOURO-LOTE-001";
+    const first = await runtime.runSealedRailDemo({ assetId, minter: "rail-a", lock: false });
+    assert.equal(first.ok, true);
+    assert.ok(runtime.isMinted(assetId));
+
+    const second = await runtime.runSealedRailDemo({ assetId, minter: "rail-b", lock: false });
+    assert.equal(second.ok, true);
+    assert.equal(second.mockOnly, true);
+    const mintStep = second.stepsRun.find((s) => s.step === "mint_gate");
+    assert.ok(mintStep?.ok, "mint_gate must be ok on re-run");
+    assert.ok(
+      mintStep?.code === "ALREADY_MINTED" || mintStep?.code === "OK",
+      `unexpected mint_gate code: ${mintStep?.code}`,
+    );
+    assert.equal(second.rail.eligibility.canLock, true);
+
+    // Direct mint API shape used by the UI path
+    const mint = runtime.mintAsset(assetId, "ui-account");
+    assert.equal(mint.success, false);
+    assert.equal(mint.code, "ALREADY_MINTED");
+    assert.match(mint.error ?? "", /AlreadyMinted/i);
+  });
+
   it("Invalid asset: mint and lock stay closed", async () => {
     const runtime = new AppRuntime();
     await runtime.seedDemoSessionIfEmpty();
