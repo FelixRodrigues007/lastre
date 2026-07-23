@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { mkdtempSync, rmSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
 import {
   evaluateSealedRail,
   sealedRailOverview,
@@ -213,5 +216,94 @@ describe("AppRuntime Sealed Market Rail", () => {
     assert.equal(pack.sealedMarketRail.sampleInvalid.financeGateOpen, false);
     assert.ok(pack.juryLinks.rail);
     assert.ok(pack.accessRights.sealedRail);
+  });
+});
+
+describe("AppRuntime Sealed Rail one-click auto-lock (Option A)", () => {
+  // The runtime's CollateralStore is file-backed; pin it to a throwaway temp
+  // file so these runs never read or mutate the shared prod lock store.
+  function isolatedCollateralEnv(): { dir: string; restore: () => void } {
+    const dir = mkdtempSync(join(tmpdir(), "lastre-rail-lock-"));
+    const prev = process.env.LASTRE_COLLATERAL_PATH;
+    process.env.LASTRE_COLLATERAL_PATH = join(dir, "collateral-locks.json");
+    return {
+      dir,
+      restore() {
+        if (prev === undefined) delete process.env.LASTRE_COLLATERAL_PATH;
+        else process.env.LASTRE_COLLATERAL_PATH = prev;
+        rmSync(dir, { recursive: true, force: true });
+      },
+    };
+  }
+
+  it("run with lock:true completes all five rail steps for a Valid lot", async () => {
+    const env = isolatedCollateralEnv();
+    try {
+      const runtime = new AppRuntime();
+      await runtime.seedDemoSessionIfEmpty();
+      const assetId = SEALED_RAIL_PRODUCT.defaultDemoAssetId;
+
+      const run = await runtime.runSealedRailDemo({
+        assetId,
+        owner: "judge-oneclick",
+        lock: true,
+      });
+
+      assert.equal(run.ok, true);
+      assert.equal(run.mockOnly, true);
+      const lockStep = run.stepsRun.find((s) => s.step === "demo_collateral");
+      assert.ok(lockStep?.ok, "demo_collateral step must be ok when lock:true");
+      assert.equal(run.rail.progress.complete, true);
+      assert.equal(run.rail.progress.completedSteps, 5);
+      assert.equal(run.rail.eligibility.canRelease, true);
+    } finally {
+      env.restore();
+    }
+  });
+
+  it("second run with lock:true stays ok — ALREADY_LOCKED is idempotent success", async () => {
+    const env = isolatedCollateralEnv();
+    try {
+      const runtime = new AppRuntime();
+      await runtime.seedDemoSessionIfEmpty();
+      const assetId = SEALED_RAIL_PRODUCT.defaultDemoAssetId;
+
+      const first = await runtime.runSealedRailDemo({ assetId, owner: "owner-a", lock: true });
+      assert.equal(first.ok, true);
+
+      const second = await runtime.runSealedRailDemo({ assetId, owner: "owner-a", lock: true });
+      assert.equal(second.ok, true, "re-run must stay ok on already-locked lot");
+      const lockStep = second.stepsRun.find((s) => s.step === "demo_collateral");
+      assert.ok(lockStep?.ok, "demo_collateral must be ok on re-run");
+      assert.equal(lockStep?.code, "ALREADY_LOCKED");
+      assert.equal(second.rail.progress.complete, true);
+
+      // Direct lock API shape the UI's auto-lock path consumes: a repeat lock
+      // returns success:false + ALREADY_LOCKED, which the client treats as done.
+      const lockAgain = runtime.lockCollateral(assetId, "owner-a");
+      assert.equal(lockAgain.success, false);
+      assert.equal(lockAgain.code, "ALREADY_LOCKED");
+    } finally {
+      env.restore();
+    }
+  });
+
+  it("Invalid lot: run with lock:true never locks (finance gate stays closed)", async () => {
+    const env = isolatedCollateralEnv();
+    try {
+      const runtime = new AppRuntime();
+      await runtime.seedDemoSessionIfEmpty();
+      const assetId = SEALED_RAIL_PRODUCT.defaultInvalidAssetId;
+
+      const run = await runtime.runSealedRailDemo({ assetId, owner: "attacker", lock: true });
+      assert.equal(run.ok, false);
+      const lockStep = run.stepsRun.find((s) => s.step === "demo_collateral");
+      assert.equal(lockStep?.ok, false);
+      assert.equal(run.rail.financeGateOpen, false);
+      assert.equal(run.rail.eligibility.canLock, false);
+      assert.equal(run.rail.progress.complete, false);
+    } finally {
+      env.restore();
+    }
   });
 });

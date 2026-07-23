@@ -711,6 +711,8 @@ export const translations = {
     "marketplace.rail.statusIdle": "Start with a Valid origin seal.",
     "marketplace.rail.statusMinted":
       "Valid seal confirmed — MintGate claimed (demo). Lock demo collateral to finish.",
+    "marketplace.rail.statusCompleting":
+      "Valid seal confirmed — completing demo collateral…",
     "marketplace.rail.statusBlocked":
       "Blocked — Invalid origin. Mint and demo collateral stay closed.",
     "marketplace.rail.statusComplete":
@@ -1482,6 +1484,8 @@ export const translations = {
     "marketplace.rail.statusIdle": "Comece com um selo de origem Valid.",
     "marketplace.rail.statusMinted":
       "Selo Valid confirmado — MintGate reivindicado (demo). Trave o colateral demo para concluir.",
+    "marketplace.rail.statusCompleting":
+      "Selo Valid confirmado — concluindo o colateral demo…",
     "marketplace.rail.statusBlocked":
       "Bloqueado — origem Invalid. Mint e colateral demo permanecem fechados.",
     "marketplace.rail.statusComplete":
