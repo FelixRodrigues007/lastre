@@ -35,10 +35,18 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
     },
   });
 
-  const body = (await response.json()) as T & { error?: string; message?: string };
+  const body = (await response.json()) as T & {
+    error?: string;
+    message?: string;
+    code?: string;
+  };
 
   if (!response.ok) {
-    throw new ApiError(body.message ?? body.error ?? response.statusText, response.status);
+    throw new ApiError(
+      body.message ?? body.error ?? response.statusText,
+      response.status,
+      typeof body.code === "string" ? body.code : undefined,
+    );
   }
 
   return body;

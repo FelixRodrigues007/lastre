@@ -14,6 +14,11 @@ import {
 } from "../../lib/api";
 import { addDemoMint } from "../../lib/demoMints";
 import { shortHash } from "../../lib/format";
+import {
+  isAlreadyLockedError,
+  isAlreadyMintedError,
+  isNotLockedError,
+} from "../../lib/railIdempotency";
 import { useAsyncData } from "../../hooks/useAsyncData";
 import type { MarketplacePersona } from "../../lib/marketplaceTypes";
 import "./sealed-market-rail.css";
@@ -126,18 +131,16 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
 
       // MintGate: a non-2xx response makes `mintAsset` throw an ApiError, so the
       // "already minted" case arrives here as a throw — not a `{ success:false }`
-      // return. A Valid lot already claimed this session is still a completed
-      // MintGate step for the rail, so surface its existing LotMinted tx instead
-      // of erroring. The seal (checked above) — never a mint error — is what
-      // decides Invalid.
+      // return. Prod seed often already has Valid lots in the gate (ALREADY_MINTED);
+      // that is still a completed MintGate step — never "claim was blocked".
+      // Match code + robust message (AlreadyMinted has no space; old regex failed).
       let mintTx: string | undefined;
       try {
         const mint = await mintAsset(assetId, account);
         addDemoMint(assetId);
         mintTx = mint.txHash;
       } catch (mintError) {
-        const message = mintError instanceof Error ? mintError.message : "";
-        if (!/already minted/iu.test(message)) {
+        if (!isAlreadyMintedError(mintError)) {
           setRunError(t("marketplace.rail.error.mint"));
           return;
         }
@@ -166,10 +169,8 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       if (res.success) setLocked(true);
       else setLockError(t("myassets.rail.lockError"));
     } catch (error) {
-      // `lockCollateral` throws an ApiError on non-2xx. A Valid asset already
-      // locked as demo collateral this session (same persistent demo account)
-      // is a completed step — surface it as locked, never as a raw string.
-      if (error instanceof Error && /already locked/iu.test(error.message)) {
+      // Valid asset already locked this session = completed step 5.
+      if (isAlreadyLockedError(error)) {
         setLocked(true);
       } else {
         setLockError(t("myassets.rail.lockError"));
@@ -189,9 +190,8 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       if (res.success) setLocked(false);
       else setLockError(t("myassets.rail.releaseError"));
     } catch (error) {
-      // Already released (or never locked under this account) is a settled
-      // state, not a failure — reflect it as unlocked without a raw string.
-      if (error instanceof Error && /not locked/iu.test(error.message)) {
+      // Already released (or never locked under this account) is settled.
+      if (isNotLockedError(error)) {
         setLocked(false);
       } else {
         setLockError(t("myassets.rail.releaseError"));
