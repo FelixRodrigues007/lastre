@@ -151,6 +151,19 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
 
       setMintTxHash(mintTx);
       setPhase("minted");
+
+      // Option A — one-click rail: auto-complete demo collateral (step 5)
+      // right after the MintGate step so a single "Run" turns all five steps
+      // green. Prod shares collateral per asset, so a re-run's Valid lot is
+      // usually ALREADY_LOCKED — attemptLock treats that as a completed step.
+      // A genuine lock error stays silent here (the manual Lock button remains
+      // as the fallback) so a transient hiccup never paints the demo "broken".
+      setIsLocking(true);
+      try {
+        await attemptLock(account, true);
+      } finally {
+        setIsLocking(false);
+      }
     } catch {
       // Never surface a raw backend/network string to judge-facing copy.
       setRunError(t("marketplace.rail.error.generic"));
@@ -159,22 +172,38 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
     }
   }
 
+  // Locks demo collateral (Sealed Rail step 5). ALREADY_LOCKED means the shared
+  // prod collateral already holds this Valid lot — that is a completed step 5,
+  // never a judge-facing failure (see railIdempotency.isAlreadyLockedError).
+  // `silent` suppresses the visible error for the one-click auto path so a
+  // transient lock hiccup never paints the demo "broken"; the manual Lock
+  // button stays available as the fallback.
+  async function attemptLock(account: string, silent: boolean): Promise<boolean> {
+    try {
+      const res = await lockCollateral(assetId, account);
+      if (res.success || res.code === "ALREADY_LOCKED") {
+        setLocked(true);
+        return true;
+      }
+      if (!silent) setLockError(t("myassets.rail.lockError"));
+      return false;
+    } catch (error) {
+      // Valid asset already locked (HTTP 400 ALREADY_LOCKED) = completed step 5.
+      if (isAlreadyLockedError(error)) {
+        setLocked(true);
+        return true;
+      }
+      if (!silent) setLockError(t("myassets.rail.lockError"));
+      return false;
+    }
+  }
+
   async function handleLock() {
     if (!minted || locked || isLocking) return;
     setIsLocking(true);
     setLockError(null);
     try {
-      const account = ensureDemoAccount();
-      const res = await lockCollateral(assetId, account);
-      if (res.success) setLocked(true);
-      else setLockError(t("myassets.rail.lockError"));
-    } catch (error) {
-      // Valid asset already locked this session = completed step 5.
-      if (isAlreadyLockedError(error)) {
-        setLocked(true);
-      } else {
-        setLockError(t("myassets.rail.lockError"));
-      }
+      await attemptLock(ensureDemoAccount(), false);
     } finally {
       setIsLocking(false);
     }
@@ -205,9 +234,11 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
     ? t("marketplace.rail.statusBlocked")
     : locked
       ? t("marketplace.rail.statusComplete")
-      : minted
-        ? t("marketplace.rail.statusMinted")
-        : t("marketplace.rail.statusIdle");
+      : isLocking
+        ? t("marketplace.rail.statusCompleting")
+        : minted
+          ? t("marketplace.rail.statusMinted")
+          : t("marketplace.rail.statusIdle");
 
   return (
     <section className="sealed-rail panel" aria-labelledby="sealed-rail-title">

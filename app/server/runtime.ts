@@ -958,7 +958,7 @@ export class AppRuntime {
    * Server-side Sealed Rail demo (judge-safe):
    * 1) mock x402 provenance query
    * 2) MintGate claim only if Valid (skips if already minted / Invalid)
-   * Does NOT lock collateral automatically (UI/judge chooses Lock).
+   * 3) Optionally lock demo collateral when input.lock + input.owner are set.
    */
   async runSealedRailDemo(input: {
     assetId: string;
@@ -1083,10 +1083,18 @@ export class AppRuntime {
     // Optional lock (only if requested + eligible)
     if (input.lock && input.owner) {
       const lock = this.lockCollateral(assetId, input.owner);
+      // ALREADY_LOCKED is idempotent success for the shared demo collateral —
+      // the Valid lot is already locked (mirrors ALREADY_MINTED on mint_gate),
+      // so the rail's step 5 is complete, not a judge-facing failure.
+      const lockOk = lock.success || lock.code === "ALREADY_LOCKED";
       stepsRun.push({
         step: "demo_collateral",
-        ok: lock.success,
-        detail: lock.success ? "Demo collateral locked" : (lock.error ?? "lock_failed"),
+        ok: lockOk,
+        detail: lock.success
+          ? "Demo collateral locked"
+          : lock.code === "ALREADY_LOCKED"
+            ? "AlreadyLocked — demo collateral already held for this Valid lot"
+            : (lock.error ?? "lock_failed"),
         code: lock.code,
       });
     } else {
