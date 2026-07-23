@@ -75,7 +75,12 @@ export const DOCS_URL = `${GITHUB_URL}#readme`;
 // VITE_APP_URL to the deployed console URL (e.g. https://app.lastre.io) so the
 // "App" link actually opens the console. Falls back to "/app" for local dev
 // where a reverse proxy may map it.
-export const APP_URL = import.meta.env.VITE_APP_URL || "/app";
+//
+// .trim() is required: Cloudflare / dashboard env values have shipped with a
+// leading space (" https://app.lastre.io"), which breaks:
+//   - APP_URL_IS_EXTERNAL (regex expects ^https?)
+//   - href navigation (browser treats " https://..." as a broken relative path)
+export const APP_URL = String(import.meta.env.VITE_APP_URL ?? "/app").trim();
 
 /** True when APP_URL points to a different origin and should open with target. */
 export const APP_URL_IS_EXTERNAL = /^https?:\/\//.test(APP_URL);
