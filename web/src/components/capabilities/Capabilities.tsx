@@ -1,6 +1,8 @@
 import { useId } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { useSite } from "../../context/SiteContext";
+import { trackEvent } from "../../lib/analytics";
+import { APP_URL, APP_URL_IS_EXTERNAL } from "../../site-links";
 import "./capabilities.css";
 
 /* Presentation-only mapping — the lamp position each card's glass layers share
@@ -73,6 +75,9 @@ export function Capabilities() {
   const c = content.capabilities;
 
   const [seal, verdict, mint] = c.cards;
+  // Same deep-link as #sealed-rail — opens the working Sealed Market Rail demo
+  // (mock x402 + demo MintGate). Does not call mint APIs from the landing.
+  const marketplaceRailUrl = `${APP_URL.replace(/\/$/, "")}/marketplace?rail=1`;
 
   return (
     <section
@@ -200,22 +205,35 @@ export function Capabilities() {
               <p className="cap-card__body">{mint.body}</p>
             </header>
 
-            <div className="mock" aria-hidden="true">
-              <div className="mock__bar">
-                <span className="mock__name">
-                  <span className="mock__dot" /> {mint.mock.panel}
-                </span>
+            <div className="mock">
+              <div aria-hidden="true">
+                <div className="mock__bar">
+                  <span className="mock__name">
+                    <span className="mock__dot" /> {mint.mock.panel}
+                  </span>
+                </div>
+                <div className="mock__asset">
+                  <span className="mock__asset-label">{mint.mock.assetLabel}</span>
+                  <span className="mock__mono">{mint.mock.asset}</span>
+                </div>
+                <p className="mock__prov">
+                  <span className="mock__check">✓</span> {mint.mock.provenance}
+                </p>
+                <div className="mock__rule" />
+                <p className="mock__gate">{mint.mock.gate}</p>
               </div>
-              <div className="mock__asset">
-                <span className="mock__asset-label">{mint.mock.assetLabel}</span>
-                <span className="mock__mono">{mint.mock.asset}</span>
-              </div>
-              <p className="mock__prov">
-                <span className="mock__check">✓</span> {mint.mock.provenance}
-              </p>
-              <div className="mock__rule" />
-              <p className="mock__gate">{mint.mock.gate}</p>
-              <span className="mock__cta">{mint.mock.cta}</span>
+              <a
+                className="mock__cta"
+                href={marketplaceRailUrl}
+                {...(APP_URL_IS_EXTERNAL
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                onClick={() =>
+                  trackEvent("cta_click", { target: "capabilities-mint-rail" })
+                }
+              >
+                {mint.mock.cta}
+              </a>
             </div>
           </GlassCard>
         </ul>

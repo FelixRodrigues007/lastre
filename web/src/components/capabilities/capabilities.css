@@ -477,6 +477,18 @@
   color: var(--lastro-color-olive-950);
   background: linear-gradient(180deg, var(--lastro-color-lime-300), var(--lastro-color-lime-400));
   box-shadow: 0 8px 20px -10px rgba(212, 232, 120, 0.6);
+  /* Real link to app rail — keep visual identical to the former span CTA */
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.mock__cta:hover {
+  filter: brightness(1.04);
+}
+
+a.mock__cta:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--lastro-color-lime-300) 70%, white);
+  outline-offset: 2px;
 }
 
 .mock__cta::after {
