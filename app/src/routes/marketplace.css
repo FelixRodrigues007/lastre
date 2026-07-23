@@ -16,13 +16,19 @@
   min-width: 0;
 }
 
+.market-page__left {
+  min-width: 0;
+  min-height: 0;
+}
+
 .market-page__note {
   margin-top: 1rem;
   font-size: 0.6875rem;
   opacity: 0.75;
 }
 
-/* Desktop: fixed map + independently scrollable marketplace column */
+/* Desktop: fixed map + one scrollable left column (intro + list together).
+   Wheel over Sealed Rail / header must scroll the marketplace column, not dead-end. */
 @media (min-width: 961px) {
   .app-content:has(.market-page) {
     overflow: hidden;
@@ -47,7 +53,7 @@
 
     display: grid;
     grid-template-columns: minmax(300px, 0.54fr) minmax(280px, 0.46fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     align-items: stretch;
     width: calc(100% + var(--market-shell-pad));
     margin-right: calc(-1 * var(--market-shell-pad));
@@ -59,23 +65,31 @@
     box-sizing: border-box;
   }
 
-  .market-page__intro {
+  .market-page__left {
     grid-column: 1;
     grid-row: 1;
-    flex-shrink: 0;
-    padding-top: 0.25rem;
-    padding-bottom: 0.75rem;
-    padding-right: clamp(12px, 1.4vw, 18px);
-  }
-
-  .market-list {
-    grid-column: 1;
-    grid-row: 2;
+    display: flex;
+    flex-direction: column;
     min-height: 0;
+    height: 100%;
+    overflow-x: hidden;
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding-right: clamp(12px, 1.4vw, 18px);
     padding-bottom: clamp(1rem, 2vh, 1.5rem);
     scrollbar-gutter: stable;
+  }
+
+  .market-page__intro {
+    flex-shrink: 0;
+    padding-top: 0.25rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .market-list {
+    flex-shrink: 0;
+    min-height: auto;
+    overflow: visible;
   }
 
   .market-list__search,
@@ -90,7 +104,7 @@
 
   .market-map {
     grid-column: 2;
-    grid-row: 1 / -1;
+    grid-row: 1;
     align-self: stretch;
     position: relative;
     width: 100%;
@@ -111,7 +125,7 @@
   }
 }
 
-/* Mobile: stacked list then map */
+/* Mobile: left column (intro+list) scrolls; map pinned below */
 @media (max-width: 960px) {
   .market-page {
     display: flex;
@@ -124,16 +138,24 @@
     box-sizing: border-box;
   }
 
+  .market-page__left {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+
   .market-page__intro {
     flex-shrink: 0;
   }
 
   .market-list {
-    flex: 1;
-    min-height: 0;
+    flex-shrink: 0;
+    min-height: auto;
     max-height: none;
-    overflow-y: auto;
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    overflow: visible;
   }
 
   .market-map {
