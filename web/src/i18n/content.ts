@@ -10,6 +10,7 @@ export const content = {
       faq: "FAQ",
       app: "App",
       docs: "Docs",
+      rail: "Sealed rail",
       openMenu: "Open menu",
       closeMenu: "Close menu",
     },
@@ -24,6 +25,34 @@ export const content = {
         ariaLabel: "Provenance seal — valid on Casper Testnet",
         steps: ["Physical origin", "SHA-256 seal", "Casper anchor"] as const,
       },
+    },
+    sealedRail: {
+      eyebrow: "Sealed Market Rail · Origin-gated access",
+      title: "Proof before token. Proof before finance.",
+      body:
+        "Lastre gates tokenization and demo collateral on a Valid origin seal. Autonomous agents may pay to read provenance — they never decide the verdict. Invalid is permanent proof: the rail stays closed.",
+      stepsAria: "The five steps of the sealed market rail",
+      railHeading: "Every step gated on a Valid origin seal",
+      steps: [
+        { n: "1", title: "Origin seal", detail: "Field data sealed offline; Casper records Valid or Invalid.", chip: "Live testnet" },
+        { n: "2", title: "Provenance query", detail: "Read the verdict before any downstream action.", chip: "Mock x402" },
+        { n: "3", title: "MintGate claim", detail: "Demo mint access only after Valid.", chip: "Demo simulated" },
+        { n: "4", title: "Sealed asset", detail: "Lot appears in My Assets for inspection.", chip: "Demo" },
+        { n: "5", title: "Demo collateral", detail: "Lock/release is simulated; origin must stay Valid.", chip: "Demo collateral" },
+      ] as const,
+      invalid: {
+        label: "Invalid branch",
+        title: "Invalid seal → rail closed",
+        detail: "Mint blocked → finance gate closed → rejection is on-chain proof.",
+      },
+      ctaPrimary: "Open Sealed Rail",
+      ctaSecondary: "Spot the fraud",
+      ctaTertiary: "View on-chain package",
+      honesty: [
+        "Demonstration — simulated assets, no investment offered.",
+        "MintGate, collateral, and marketplace x402 are demo/mock in the public UI.",
+        "Live ProofOfOrigin attestations are on Casper Testnet.",
+      ] as const,
     },
     problem: {
       kicker: "The trust gap",
@@ -50,6 +79,7 @@ export const content = {
       lead2Prefix: "When the data is wrong, the entire stack — agents, escrows, settlements — ",
       lead2Emphasis: "runs on fiction",
       lead2Suffix: ".",
+      lead3: "When origin is false, every agent payment and every finance gate inherits fiction.",
       panelAria:
         "Today's stack: an unverified claim propagating through the system without a proof of origin",
       panelTitle: "Without proof",
@@ -146,6 +176,55 @@ export const content = {
           bodyLead: "A match is accepted, a mismatch is rejected, and both are written to Casper forever. A rejection is ",
           bodyEmphasis: "proof, not a deleted error",
           bodyTail: ".",
+        },
+      ] as const,
+    },
+    capabilities: {
+      kicker: "CAPABILITIES",
+      title: "Proof you can build on",
+      subtitle: "Three primitives. One chain of provenance.",
+      cardsAria: "Lastro core capabilities",
+      cards: [
+        {
+          title: "Offline Seal",
+          body: "A deterministic SHA-256 over the canonical reading. Same reading, same seal — computed with no server and no network.",
+          mock: {
+            panel: "Sealer",
+            tag: "offline",
+            readingLabel: "canonical reading",
+            rows: [
+              { label: "origin", value: "BR-MG-014" },
+              { label: "mass", value: "12.40 kg" },
+            ],
+            hashLabel: "sha256",
+            hash: "a1f3 9c2b 77e4 · d10f",
+            note: "same reading → same seal",
+          },
+        },
+        {
+          title: "Permanent Verdict",
+          body: "Every reading is judged against its anchored reference. Valid or Invalid, the verdict is written on-chain forever — a rejection is proof, not a deleted error.",
+          mock: {
+            panel: "Verdict ledger",
+            tag: "Casper",
+            caption: "verdicts anchored",
+            validLabel: "VALID",
+            invalidLabel: "INVALID",
+            note: "anchored · immutable",
+            tx: "tx 0x7b20…9c2",
+          },
+        },
+        {
+          title: "Provenance Marketplace",
+          body: "A sealed asset can only mint after a Valid verdict. What you see carries its origin — provenance is the gate, not a label.",
+          mock: {
+            panel: "MintGate",
+            assetLabel: "Sealed asset",
+            asset: "LOTE-001",
+            provenance: "provenance verified",
+            gate: "verdict VALID → gate open",
+            cta: "Mint sealed asset",
+          },
         },
       ] as const,
     },
@@ -249,6 +328,14 @@ export const content = {
           q: "How do agents interact?",
           a: "Agents submit readings; the seal compares hashes. The LLM never overrides the verdict.",
         },
+        {
+          q: "What is the Sealed Market Rail?",
+          a: "A demo path where MintGate claim and demo collateral only unlock after a Valid origin seal on Casper. It is not a DEX and not an investment product.",
+        },
+        {
+          q: "Does the marketplace move real CSPR?",
+          a: "No. The public Run Demo uses a mock x402 facilitator. Real testnet CSPR settlement is available only via the production API settle path, not the marketplace button.",
+        },
       ] as const,
     },
     useCases: {
@@ -266,6 +353,7 @@ export const content = {
         { label: "Offline proof", lastro: "Yes", oracle: "Partial", api: "No" },
         { label: "Invalid on-chain", lastro: "Permanent", oracle: "Rare", api: "Hidden" },
         { label: "LLM decides truth", lastro: "Never", oracle: "Sometimes", api: "Often" },
+        { label: "Finance without origin", lastro: "Gate closed until Valid", oracle: "Proceeds anyway", api: "Proceeds anyway" },
       ] as const,
     },
     changelog: {
@@ -427,6 +515,7 @@ export const content = {
       faq: "FAQ",
       app: "App",
       docs: "Docs",
+      rail: "Trilho selado",
       openMenu: "Abrir menu",
       closeMenu: "Fechar menu",
     },
@@ -441,6 +530,34 @@ export const content = {
         ariaLabel: "Selo de proveniência — válido no Casper Testnet",
         steps: ["Origem física", "Selo SHA-256", "Âncora Casper"] as const,
       },
+    },
+    sealedRail: {
+      eyebrow: "Trilho de Mercado Selado · Acesso com trava de origem",
+      title: "Prova antes do token. Prova antes da finança.",
+      body:
+        "A Lastre só libera tokenização e colateral demo após selo de origem Valid. Agentes autônomos podem pagar para ler proveniência — nunca decidem o veredito. Invalid é prova permanente: o trilho permanece fechado.",
+      stepsAria: "As cinco etapas do trilho de mercado selado",
+      railHeading: "Cada etapa liberada por um selo de origem Valid",
+      steps: [
+        { n: "1", title: "Selo de origem", detail: "Leitura de campo selada offline; Casper registra Valid ou Invalid.", chip: "Testnet ao vivo" },
+        { n: "2", title: "Consulta de proveniência", detail: "Leia o veredito antes de qualquer ação downstream.", chip: "x402 mock" },
+        { n: "3", title: "Claim MintGate", detail: "Acesso a mint demo só após Valid.", chip: "Demo simulado" },
+        { n: "4", title: "Ativo selado", detail: "Lote aparece em My Assets para inspeção.", chip: "Demo" },
+        { n: "5", title: "Colateral demo", detail: "Lock/release é simulado; a origem precisa permanecer Valid.", chip: "Colateral demo" },
+      ] as const,
+      invalid: {
+        label: "Ramo Invalid",
+        title: "Selo Invalid → trilho fechado",
+        detail: "Mint bloqueado → trava financeira fechada → rejeição é prova on-chain.",
+      },
+      ctaPrimary: "Abrir Trilho Selado",
+      ctaSecondary: "Detectar a fraude",
+      ctaTertiary: "Ver package on-chain",
+      honesty: [
+        "DEMONSTRAÇÃO — ativos simulados, sem oferta de investimento.",
+        "MintGate, colateral e x402 do marketplace são demo/mock na UI pública.",
+        "Atestações live de ProofOfOrigin estão no Casper Testnet.",
+      ] as const,
     },
     problem: {
       kicker: "A lacuna de confiança",
@@ -467,6 +584,7 @@ export const content = {
       lead2Prefix: "Quando os dados estão errados, toda a stack — agentes, escrows, liquidações — ",
       lead2Emphasis: "opera sobre ficção",
       lead2Suffix: ".",
+      lead3: "Quando a origem é falsa, cada pagamento de agente e cada trava financeira herdam ficção.",
       panelAria:
         "Stack atual: uma alegação não verificada propagando pelo sistema sem prova de origem",
       panelTitle: "Sem prova",
@@ -563,6 +681,55 @@ export const content = {
           bodyLead: "Uma correspondência é aceita, uma divergência é rejeitada, e ambas são escritas no Casper para sempre. Uma rejeição é ",
           bodyEmphasis: "prova, não um erro apagado",
           bodyTail: ".",
+        },
+      ] as const,
+    },
+    capabilities: {
+      kicker: "CAPACIDADES",
+      title: "Prova sobre a qual construir",
+      subtitle: "Três primitivas. Uma cadeia de proveniência.",
+      cardsAria: "Capacidades centrais da Lastro",
+      cards: [
+        {
+          title: "Selo Offline",
+          body: "Um SHA-256 determinístico sobre a leitura canônica. Mesma leitura, mesmo selo — calculado sem servidor e sem rede.",
+          mock: {
+            panel: "Sealer",
+            tag: "offline",
+            readingLabel: "leitura canônica",
+            rows: [
+              { label: "origem", value: "BR-MG-014" },
+              { label: "massa", value: "12,40 kg" },
+            ],
+            hashLabel: "sha256",
+            hash: "a1f3 9c2b 77e4 · d10f",
+            note: "mesma leitura → mesmo selo",
+          },
+        },
+        {
+          title: "Veredito Permanente",
+          body: "Cada leitura é julgada contra sua referência ancorada. Válido ou Inválido, o veredito é gravado on-chain para sempre — uma rejeição é prova, não um erro apagado.",
+          mock: {
+            panel: "Ledger de veredito",
+            tag: "Casper",
+            caption: "veredictos ancorados",
+            validLabel: "VÁLIDO",
+            invalidLabel: "INVÁLIDO",
+            note: "ancorado · imutável",
+            tx: "tx 0x7b20…9c2",
+          },
+        },
+        {
+          title: "Marketplace com Proveniência",
+          body: "Um ativo selado só pode ser mintado após um veredito Válido. O que você vê carrega sua origem — a proveniência é o portão, não um rótulo.",
+          mock: {
+            panel: "MintGate",
+            assetLabel: "Ativo selado",
+            asset: "LOTE-001",
+            provenance: "proveniência verificada",
+            gate: "veredito VÁLIDO → portão aberto",
+            cta: "Mintar ativo selado",
+          },
         },
       ] as const,
     },
@@ -666,6 +833,14 @@ export const content = {
           q: "Como os agentes interagem?",
           a: "Agentes submetem leituras; o selo compara hashes. O LLM nunca sobrescreve o veredito.",
         },
+        {
+          q: "O que é o Trilho de Mercado Selado?",
+          a: "Um caminho de demonstração em que o claim do MintGate e o colateral demo só se liberam após um selo de origem Valid no Casper. Não é uma DEX nem um produto de investimento.",
+        },
+        {
+          q: "O marketplace movimenta CSPR real?",
+          a: "Não. O Run Demo público usa um facilitador x402 mock. A liquidação real de CSPR no testnet só está disponível pelo caminho settle da API de produção, não pelo botão do marketplace.",
+        },
       ] as const,
     },
     useCases: {
@@ -683,6 +858,7 @@ export const content = {
         { label: "Prova offline", lastro: "Sim", oracle: "Parcial", api: "Não" },
         { label: "Invalid on-chain", lastro: "Permanente", oracle: "Raro", api: "Oculto" },
         { label: "LLM decide verdade", lastro: "Nunca", oracle: "Às vezes", api: "Frequentemente" },
+        { label: "Finança sem origem", lastro: "Trava fechada até Valid", oracle: "Segue mesmo assim", api: "Segue mesmo assim" },
       ] as const,
     },
     changelog: {

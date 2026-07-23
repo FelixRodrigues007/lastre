@@ -1,0 +1,593 @@
+/* Capabilities — dark-glass bento, 3 cards, each holding a product mock.
+ *
+ * Outer card = a faithful translation of the gaia GLASS_DARK recipe (base fill,
+ * per-card brand tint, colourless glow, white hotspot, dual-scale grain,
+ * luminous edge ring) into plain CSS + --lastro-* tokens. Inner card = a solid,
+ * darker "product screen" (the Sealer panel / the on-chain ledger / the
+ * MintGate) so the section reads like the Origin/gaia bento: a glass window
+ * with a real interface inside it, not a captioned tile.
+ *
+ * gaia tuned its alphas for a vibrant photo backdrop; Lastro's band sits on a
+ * near-black olive field, so the base black-alphas are retuned and the section
+ * carries its own lit lattice + mesh so the backdrop-filter has crisp detail to
+ * refract. This is a forced dark band (see section-atmosphere.css) so glass and
+ * text read identically regardless of the site light/dark toggle.
+ */
+
+/* Clean field — just the brand mesh + two soft washes, no lattice. Each card
+ * now carries its own product mock, so the glass reads as glass from the mock,
+ * the inset rim and the EdgeLight ring; it no longer needs a crisp grid behind
+ * it to refract, and the negative space stays quiet. */
+.cap {
+  position: relative;
+  overflow: hidden;
+  color: var(--lastro-text-primary);
+  background:
+    var(--lastro-gradient-mesh-primary),
+    radial-gradient(120% 70% at 50% 0%, var(--section-wash-a) 0%, transparent 55%),
+    radial-gradient(90% 65% at 85% 100%, var(--section-wash-b) 0%, transparent 55%),
+    var(--section-bg);
+}
+
+/* ── header ─────────────────────────────────────────────────────────── */
+
+.cap__header {
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 1.5rem + 4vw, 4rem);
+}
+
+.cap__header .section-lead {
+  margin-top: var(--lastro-space-4);
+}
+
+/* ── grid ───────────────────────────────────────────────────────────── */
+
+.cap__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 900px) {
+  .cap__grid {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+  }
+}
+
+/* ── outer glass card ───────────────────────────────────────────────── */
+
+.cap-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 22px;
+  min-height: clamp(24rem, 21rem + 8vw, 27rem);
+}
+
+.cap-card__base,
+.cap-card__tint,
+.cap-card__glow,
+.cap-card__hotspot,
+.cap-card__grain,
+.cap-card__edgelight {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* 1 · BASE — fill + shadow. Retuned from gaia's 0.58/0.40 for a band that is
+ * already near-black: kept darker than the section field so the card edge still
+ * reads, while letting enough of the lit mesh through the blur to look glassy. */
+.cap-card__base {
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(to bottom, rgba(4, 12, 9, 0.58), rgba(4, 12, 9, 0.44));
+  backdrop-filter: blur(40px) saturate(1.5);
+  -webkit-backdrop-filter: blur(40px) saturate(1.5);
+  box-shadow:
+    0 30px 80px -28px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  transform: translateZ(0);
+}
+
+/* 2 · TINT — a faint per-card brand colour the glass face carries, so the three
+ * cards read as distinct scenes (jade / lime / seal) like the gaia bento's
+ * blue/dark/purple, instead of three identical olive tiles. Kept low + soft so
+ * it never fights the body text sitting on top of it. */
+.cap-card__tint {
+  inset: 0;
+  z-index: 1;
+  mix-blend-mode: soft-light;
+  background: radial-gradient(
+    130% 85% at var(--cap-lamp-x, 50%) 112%,
+    rgba(var(--cap-tint, 150, 220, 190), 0.55) 0%,
+    transparent 62%
+  );
+}
+
+/* 3 · GLOW — colourless brightening patch near the lamp. Reimplemented with
+ * mix-blend rather than a second backdrop-filter: a sibling backdrop-filter
+ * inside the same `isolation: isolate` card silently kills the BASE blur (the
+ * effect that actually reads as glass), confirmed with a minimal repro. */
+.cap-card__glow {
+  z-index: 2;
+  bottom: -30%;
+  left: calc(var(--cap-lamp-x, 50%) - 38%);
+  width: 76%;
+  height: 70%;
+  border-radius: 50%;
+  mix-blend-mode: soft-light;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.2) 45%,
+    transparent 100%
+  );
+}
+
+/* 4 · HOTSPOT — white light source on the lamp, centre below the card edge so
+ * only the dim outer rings bloom into view (lights the glass, spares the text). */
+.cap-card__hotspot {
+  z-index: 3;
+  left: calc(var(--cap-lamp-x, 50%) - 60%);
+  bottom: -66%;
+  width: 120%;
+  height: 88%;
+  mix-blend-mode: plus-lighter;
+  background: radial-gradient(
+    ellipse closest-side,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.14) 26%,
+    rgba(255, 255, 255, 0.04) 52%,
+    transparent 76%
+  );
+  filter: blur(24px);
+}
+
+/* 5 · GRAIN — two SVG-turbulence scales, masked to the same lamp. */
+.cap-card__grain {
+  inset: 0;
+  z-index: 4;
+  mix-blend-mode: overlay;
+  -webkit-mask-image: radial-gradient(
+    78% 78% at var(--cap-lamp),
+    #000 0%,
+    rgba(0, 0, 0, 0.5) 52%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  mask-image: radial-gradient(
+    78% 78% at var(--cap-lamp),
+    #000 0%,
+    rgba(0, 0, 0, 0.5) 52%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+}
+
+.cap-card__grain--coarse {
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 700 700' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='capCoarse'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23capCoarse)'/%3E%3C/svg%3E");
+  background-size: 700px 700px;
+}
+
+.cap-card__grain--fine {
+  opacity: 0.16;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='capFine'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23capFine)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+/* 6 · EDGELIGHT — 1px luminous ring standing in for the card border. Never pair
+ * this with an actual `border`; the ring below is the only edge. */
+.cap-card__edgelight {
+  inset: 0;
+  z-index: 5;
+  border-radius: 22px;
+  padding: 1px;
+  background: radial-gradient(
+    70% 70% at var(--cap-lamp),
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0.22) 42%,
+    rgba(255, 255, 255, 0.07) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+/* ── card content: title/body at top, mock panel below ──────────────── */
+
+.cap-card__content {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(1.4rem, 1.15rem + 1vw, 1.75rem);
+}
+
+.cap-card__head {
+  margin-bottom: var(--lastro-space-6);
+}
+
+.cap-card__title {
+  font-family: var(--lastro-font-display);
+  font-size: clamp(1.125rem, 1rem + 0.55vw, 1.375rem);
+  font-weight: var(--lastro-weight-semibold);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--lastro-color-cream-100);
+}
+
+.cap-card__body {
+  margin-top: var(--lastro-space-3);
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--lastro-color-sage-300);
+  text-wrap: pretty;
+}
+
+/* ── inner "product screen" ─────────────────────────────────────────── */
+
+.mock {
+  margin-top: auto;
+  border-radius: 14px;
+  border: 1px solid var(--lastro-border-subtle);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(0, 0, 0, 0.22)),
+    var(--lastro-color-olive-950);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    0 14px 34px -22px rgba(0, 0, 0, 0.8);
+  padding: 0.85rem 0.95rem 0.95rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.mock__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.mock__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastro-color-cream-200);
+  letter-spacing: -0.01em;
+}
+
+.mock__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: rgba(var(--cap-tint, 150, 220, 190), 0.9);
+  box-shadow: 0 0 8px rgba(var(--cap-tint, 150, 220, 190), 0.55);
+}
+
+.mock__tag {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: var(--lastro-radius-pill);
+  border: 1px solid var(--lastro-border-subtle);
+  color: var(--lastro-color-sage-300);
+}
+
+.mock__mono {
+  font-family: var(--lastro-font-mono);
+  color: var(--lastro-color-cream-200);
+}
+
+.mock__dim {
+  color: var(--lastro-color-sage-300);
+}
+
+.mock__caption {
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lastro-color-sage-300);
+  opacity: 0.85;
+  margin-bottom: 0.35rem;
+}
+
+.mock__rows {
+  margin: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.mock__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mock__row dt {
+  color: var(--lastro-color-sage-300);
+}
+
+.mock__row dd {
+  margin: 0;
+}
+
+.mock__rule {
+  height: 1px;
+  margin: 0.7rem 0;
+  background: var(--lastro-border-subtle);
+}
+
+.mock__hash {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  color: var(--lastro-color-cream-100);
+}
+
+.mock__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  color: var(--lastro-color-sage-200, var(--lastro-color-sage-300));
+}
+
+.mock__spark {
+  color: rgba(var(--cap-tint, 150, 220, 190), 1);
+}
+
+/* verdict chart — anchored verdicts per period, valid (lime) stacked with the
+ * few rejected (amber). Rejections stay calm amber, never bright coral/danger
+ * (a rejection is proof, not an alarm — and see accent-danger-light-aa debt). */
+.mock__chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 46px;
+  margin: 0.15rem 0 0.55rem;
+}
+
+.mock__col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  border-radius: 2px;
+  overflow: hidden;
+  transform-origin: bottom;
+}
+
+.mock__seg {
+  display: block;
+  width: 100%;
+}
+
+.mock__seg--invalid {
+  height: var(--ih, 0px);
+  background: rgba(224, 184, 106, 0.9);
+}
+
+.mock__seg--valid {
+  height: var(--vh, 0px);
+  background: var(--lastro-color-lime-400);
+}
+
+.mock__legend {
+  display: flex;
+  gap: 1rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastro-color-sage-300);
+}
+
+.mock__leg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mock__leg::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 2px;
+}
+
+.mock__leg--valid::before {
+  background: var(--lastro-color-lime-400);
+}
+
+.mock__leg--invalid::before {
+  background: rgba(224, 184, 106, 0.9);
+}
+
+.mock__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mock__foot .mock__note {
+  margin-top: 0;
+}
+
+/* mintgate */
+.mock__asset {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.mock__asset-label {
+  color: var(--lastro-color-cream-200);
+  font-weight: var(--lastro-weight-medium);
+}
+
+.mock__prov {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  color: var(--lastro-color-lime-300);
+}
+
+.mock__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: rgba(212, 232, 120, 0.16);
+  color: var(--lastro-color-lime-300);
+  font-size: 0.65rem;
+}
+
+.mock__gate {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  color: var(--lastro-color-cream-200);
+  margin-bottom: 0.7rem;
+}
+
+.mock__cta {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  text-align: center;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  font-weight: var(--lastro-weight-semibold);
+  font-size: 0.8125rem;
+  color: var(--lastro-color-olive-950);
+  background: linear-gradient(180deg, var(--lastro-color-lime-300), var(--lastro-color-lime-400));
+  box-shadow: 0 8px 20px -10px rgba(212, 232, 120, 0.6);
+}
+
+.mock__cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 80%
+  );
+  transform: translateX(-130%);
+}
+
+/* ── motion — runs when the grid reveals into view; the static state above is
+ * the final state, so reduced-motion and no-JS users see the finished card ─── */
+@media (prefers-reduced-motion: no-preference) {
+  /* chart bars grow up, staggered left → right */
+  .mock__col {
+    transform: scaleY(0);
+  }
+
+  .cap__grid.is-visible .mock__col {
+    animation: capBarGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.25s + var(--i, 0) * 0.05s);
+  }
+
+  /* status dot — gentle "live" pulse */
+  .mock__dot {
+    animation: capDotPulse 2.6s ease-in-out infinite;
+  }
+
+  /* spark — slow twinkle */
+  .mock__spark {
+    animation: capTwinkle 3s ease-in-out infinite;
+  }
+
+  /* provenance check — pop in on reveal */
+  .cap__grid.is-visible .mock__check {
+    animation: capPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+  }
+
+  /* mint CTA — periodic sheen sweep */
+  .cap__grid.is-visible .mock__cta::after {
+    animation: capSheen 3.6s ease-in-out 1.2s infinite;
+  }
+}
+
+@keyframes capBarGrow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes capDotPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--cap-tint, 150, 220, 190), 0.4);
+  }
+  50% {
+    box-shadow: 0 0 10px 2px rgba(var(--cap-tint, 150, 220, 190), 0.5);
+  }
+}
+
+@keyframes capTwinkle {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes capPop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes capSheen {
+  0% {
+    transform: translateX(-130%);
+  }
+  55%,
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+/* ── backdrop-filter fallback — solid surface, no blur/tint/glow ─────── */
+@supports not (backdrop-filter: blur(1px)) {
+  .cap-card__base {
+    background: linear-gradient(
+      to bottom,
+      var(--lastro-color-olive-900),
+      var(--lastro-color-olive-950)
+    );
+    backdrop-filter: none;
+  }
+
+  .cap-card__tint,
+  .cap-card__glow {
+    display: none;
+  }
+}

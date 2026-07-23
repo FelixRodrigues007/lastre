@@ -165,6 +165,7 @@ export function Problem() {
                 <span className="accent-emphasis accent-emphasis--invalid">{c.lead2Emphasis}</span>
                 {c.lead2Suffix}
               </p>
+              <p>{c.lead3}</p>
             </div>
           </div>
 

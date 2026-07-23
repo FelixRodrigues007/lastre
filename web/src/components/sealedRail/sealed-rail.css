@@ -1,0 +1,289 @@
+/* Section 2 — Sealed Market Rail. Dark mineral band, forest-mint accent.
+ * Not registered in section-atmosphere.css: the default (no data-theme)
+ * semantic tokens are already the dark ramp, so this band inherits the same
+ * cream-on-olive text/border tokens as Hero/Problem without needing the
+ * shared per-section override list. Only the wash + base bg are local. */
+
+.sealed-rail {
+  position: relative;
+  color: var(--lastro-text-primary);
+  background:
+    radial-gradient(90% 70% at 50% 0%, rgba(var(--lastro-mint-wash), 0.05) 0%, transparent 55%),
+    radial-gradient(70% 55% at 100% 100%, rgba(var(--lastro-jade-wash), 0.04) 0%, transparent 50%),
+    var(--lastro-color-olive-925, var(--lastro-color-olive-900));
+}
+
+/* ── header — big title left, lead right (reference rhythm) ─────────────── */
+
+.sealed-rail__header {
+  display: grid;
+  gap: var(--lastro-space-4);
+}
+
+.sealed-rail__title {
+  margin: 0;
+}
+
+.sealed-rail__lead {
+  margin: 0;
+  max-width: 42ch;
+}
+
+@media (min-width: 768px) {
+  .sealed-rail__header {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+    align-items: start;
+    column-gap: clamp(2rem, 1rem + 4vw, 4.5rem);
+  }
+
+  /* Optical nudge: the display title carries leading above its caps, so the
+   * lead's first line sits level with the title's first line, not floating
+   * above it. */
+  .sealed-rail__lead {
+    padding-top: 0.6rem;
+  }
+}
+
+/* ── panel — card holding the progress rail ─────────────────────────────── */
+
+.sealed-rail__panel {
+  margin-top: clamp(2rem, 1.25rem + 2.5vw, 3rem);
+  padding: clamp(1.5rem, 1rem + 2.5vw, 2.75rem);
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-lg);
+  background: color-mix(in oklab, var(--lastro-bg-elevated) 68%, transparent);
+}
+
+.sealed-rail__panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lastro-space-4);
+  padding-bottom: clamp(1.75rem, 1rem + 2.25vw, 2.5rem);
+}
+
+.sealed-rail__panel-title {
+  margin: 0;
+  max-width: 32ch;
+  font-family: var(--lastro-font-display);
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-primary);
+}
+
+/* ── progress rail — vertical by default, horizontal on wide screens ────── */
+
+.sealed-rail__track {
+  --node-size: 0.875rem;
+  --rail-line: var(--lastro-border-subtle);
+  --track-gap: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: grid;
+  gap: var(--track-gap);
+}
+
+/* Vertical line runs down the left, through the node centres. */
+.sealed-rail__track::before {
+  content: "";
+  position: absolute;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  left: calc(var(--node-size) / 2 - 0.5px);
+  width: 1px;
+  background: var(--rail-line);
+}
+
+.sealed-rail__col {
+  position: relative;
+  min-width: 0;
+  padding-left: calc(var(--node-size) + 1.1rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.sealed-rail__node {
+  position: absolute;
+  z-index: 1;
+  top: 0.35rem;
+  left: 0;
+  box-sizing: border-box;
+  width: var(--node-size);
+  height: var(--node-size);
+  border-radius: 50%;
+}
+
+/* Step 1 — the one live/on-chain anchor: solid mint node + mint halo. */
+.sealed-rail__col--live .sealed-rail__node {
+  background: var(--lastro-accent-trust);
+  border: 1px solid var(--lastro-accent-trust);
+  box-shadow: 0 0 0 4px var(--lastro-fill-trust);
+}
+
+/* Steps 2-5 — demo: hollow, quiet, so they never read as live. */
+.sealed-rail__col--demo .sealed-rail__node {
+  background: var(--lastro-bg-elevated);
+  border: 1.5px solid var(--lastro-border-strong);
+}
+
+/* Split badge — number cell + label cell. */
+.sealed-rail__badge {
+  display: inline-flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastro-radius-sm, 0.5rem);
+  background: color-mix(in oklab, var(--lastro-bg-panel) 55%, transparent);
+  white-space: nowrap;
+}
+
+.sealed-rail__badge-n {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.5rem;
+  border-right: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  color: var(--lastro-text-muted);
+  font-family: var(--lastro-font-mono);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+}
+
+.sealed-rail__badge-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  color: var(--lastro-text-primary);
+  font-family: var(--lastro-font-display);
+  font-size: 0.8125rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.005em;
+}
+
+/* Live step colours its number cell to match its node. */
+.sealed-rail__col--live .sealed-rail__badge {
+  border-color: var(--lastro-border-trust);
+}
+
+.sealed-rail__col--live .sealed-rail__badge-n {
+  color: var(--lastro-accent-trust);
+  background: var(--lastro-fill-trust);
+  border-right-color: var(--lastro-border-trust);
+}
+
+.sealed-rail__col-detail {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--lastro-text-secondary);
+  text-wrap: pretty;
+}
+
+/* Meta line — the demo/live status, pinned to the bottom so it aligns
+ * across the row (mirrors the reference's "1-week average" baseline). */
+.sealed-rail__col-meta {
+  margin-top: auto;
+  padding-top: 0.15rem;
+  font-family: var(--lastro-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lastro-text-muted);
+}
+
+.sealed-rail__col--live .sealed-rail__col-meta {
+  color: var(--lastro-accent-trust);
+}
+
+.sealed-rail__col--demo .sealed-rail__col-meta {
+  color: var(--lastro-accent-warn);
+}
+
+/* Wide screens — the rail turns horizontal: nodes on a line, columns below.
+ * Held to 1120px so five columns never crush the longest badge. */
+@media (min-width: 1120px) {
+  .sealed-rail__track {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(1rem, 0.25rem + 1.75vw, 2rem);
+  }
+
+  .sealed-rail__track::before {
+    top: calc(var(--node-size) / 2 - 0.5px);
+    bottom: auto;
+    left: calc(var(--node-size) / 2);
+    right: 0;
+    width: auto;
+    height: 1px;
+  }
+
+  .sealed-rail__col {
+    padding-left: 0;
+    padding-top: calc(var(--node-size) + 1.15rem);
+  }
+
+  .sealed-rail__node {
+    top: 0;
+  }
+}
+
+/* ── Invalid branch — the differentiator, not an afterthought ─────────── */
+
+.sealed-rail__invalid {
+  margin-top: clamp(1.75rem, 1rem + 2vw, 2.5rem);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--lastro-space-4);
+  padding: clamp(1.25rem, 1rem + 1.5vw, 1.75rem) clamp(1.5rem, 1rem + 2vw, 2rem);
+  border: var(--lastro-stroke-hairline) solid color-mix(in oklab, var(--lastro-status-invalid) 40%, transparent);
+  border-radius: var(--lastro-radius-lg);
+  background: color-mix(in oklab, var(--lastro-status-invalid) 8%, var(--lastro-bg-panel));
+}
+
+.sealed-rail__invalid-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: var(--lastro-status-invalid);
+  background: color-mix(in oklab, var(--lastro-status-invalid) 18%, transparent);
+  border: var(--lastro-stroke-hairline) solid color-mix(in oklab, var(--lastro-status-invalid) 45%, transparent);
+}
+
+.sealed-rail__invalid-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.sealed-rail__invalid-label {
+  color: var(--lastro-status-invalid);
+}
+
+.sealed-rail__invalid-title {
+  font-family: var(--lastro-font-display);
+  font-size: 1.125rem;
+  font-weight: var(--lastro-weight-medium);
+  letter-spacing: -0.01em;
+  color: var(--lastro-text-primary);
+}
+
+.sealed-rail__invalid-detail {
+  font-family: var(--lastro-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--lastro-text-secondary);
+  text-wrap: pretty;
+}
+
+/* ── CTAs ──────────────────────────────────────────────────────────────── */
+
+.sealed-rail__ctas {
+  margin-top: clamp(2rem, 1rem + 2.5vw, 2.75rem);
+}

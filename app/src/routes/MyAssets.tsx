@@ -2,9 +2,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { AssetAnalyticsReport } from "../components/my-assets/AssetAnalyticsReport";
 import { MyAssetsAssetList } from "../components/my-assets/MyAssetsAssetList";
+import { SealedRailBanner } from "../components/my-assets/SealedRailBanner";
 import { EmptyState } from "../components/ui/EmptyState";
 import { BtnIcon } from "../components/ui/BtnIcon";
 import { StatePanel } from "../components/layout/StatePanel";
+import { useLocaleContext } from "../context/LocaleContext";
 import {
   getLockedCollateral,
   getLot,
@@ -74,6 +76,7 @@ function mergeMintedLots(lots: LotListItem[]): LotListItem[] {
 }
 
 export function MyAssets() {
+  const { t } = useLocaleContext();
   const lotsData = useAsyncData(getLots);
   const [searchParams, setSearchParams] = useSearchParams();
   const [connectedAccount, setConnectedAccount] = useState<string | null>(readDemoAccount);
@@ -85,6 +88,8 @@ export function MyAssets() {
   const [collateralBusy, setCollateralBusy] = useState<string | null>(null);
   const [collateralMessage, setCollateralMessage] = useState<string>("");
   const [mintSummary, setMintSummary] = useState<MintSummary | null>(null);
+
+  const railFocus = searchParams.get("rail") === "1";
 
   const apiLots = lotsData.data?.lots ?? [];
   const apiMintedCount = apiLots.filter((lot) => lot.isMinted).length;
@@ -102,8 +107,15 @@ export function MyAssets() {
   );
 
   const selectedAssetId = searchParams.get("asset");
-  const effectiveAssetId =
-    selectedAssetId && visibleMinted.some((lot) => lot.artifact.assetId === selectedAssetId)
+  const selectedInCollection =
+    selectedAssetId != null && myMinted.some((lot) => lot.artifact.assetId === selectedAssetId);
+  // While the API collection is still loading, honor a deep-linked ?asset= (e.g.
+  // the Marketplace rail handoff to a freshly-locked Valid lot) instead of
+  // clobbering it with the first demo-seeded lot — the target usually arrives
+  // once apiLots resolves. Only fall back once loading is done and it's absent.
+  const effectiveAssetId = selectedInCollection
+    ? selectedAssetId
+    : selectedAssetId && lotsData.loading
       ? selectedAssetId
       : visibleMinted[0]?.artifact.assetId ?? myMinted[0]?.artifact.assetId ?? null;
 
@@ -246,17 +258,18 @@ export function MyAssets() {
   if (!connectedAccount) {
     return (
       <div className="page my-assets-page">
+        <SealedRailBanner emphasize={railFocus} />
         <EmptyState
           icon="shield"
-          title="No demo account connected"
-          hint="Connect to load a symbolic demo collection with two provenance NFTs — no Marketplace claim required."
+          title={t("myassets.empty.noAccount.title")}
+          hint={t("myassets.empty.noAccount.hint")}
           action={
             <div className="my-assets-empty__actions">
               <button type="button" onClick={connectDemo} className="route-cta">
-                <BtnIcon icon="chain">Connect & load demo collection</BtnIcon>
+                <BtnIcon icon="chain">{t("myassets.empty.noAccount.connectCta")}</BtnIcon>
               </button>
               <Link className="route-cta route-cta--ghost" to="/marketplace">
-                <BtnIcon icon="globe">Open Marketplace (demo)</BtnIcon>
+                <BtnIcon icon="globe">{t("myassets.empty.noAccount.marketplaceCta")}</BtnIcon>
               </Link>
               <Link className="route-cta route-cta--ghost" to={buildMarketplaceDemoUrl()}>
                 <BtnIcon icon="process">Run full demo</BtnIcon>
@@ -270,18 +283,19 @@ export function MyAssets() {
 
   return (
     <div className="page my-assets-page my-assets-page--split">
+      <SealedRailBanner emphasize={railFocus} />
       {myMinted.length === 0 ? (
         <EmptyState
           icon="shield"
-          title="No claimed representations yet"
-          hint="Load the demo collection to preview provenance analytics, or claim your own after Valid proof in Marketplace."
+          title={t("myassets.empty.noAssets.title")}
+          hint={t("myassets.empty.noAssets.hint")}
           action={
             <div className="my-assets-empty__actions">
               <button type="button" onClick={loadDemoCollection} className="route-cta">
-                <BtnIcon icon="shield">Load demo collection (2 assets)</BtnIcon>
+                <BtnIcon icon="shield">{t("myassets.empty.noAssets.loadCta")}</BtnIcon>
               </button>
               <Link className="route-cta route-cta--ghost" to="/marketplace">
-                <BtnIcon icon="globe">Browse Marketplace (demo)</BtnIcon>
+                <BtnIcon icon="globe">{t("myassets.empty.noAssets.marketplaceCta")}</BtnIcon>
               </Link>
               <Link className="route-cta route-cta--ghost" to={buildMarketplaceDemoUrl()}>
                 <BtnIcon icon="process">Run full demo</BtnIcon>
@@ -321,6 +335,7 @@ export function MyAssets() {
             selectedId={effectiveAssetId}
             lockedIds={new Set(Object.keys(lockedMap))}
             onSelect={selectAsset}
+            selectHint={t("myassets.list.selectHint")}
           />
 
           <div className="my-assets-analytics">
@@ -389,7 +404,7 @@ export function MyAssets() {
                   <AssetAnalyticsReport lot={lot} layers={layers} score={score} />
                 </div>
               ) : (
-                <p className="my-assets-page__detail-empty panel">Select an asset to view provenance analytics.</p>
+                <p className="my-assets-page__detail-empty panel">{t("myassets.detail.selectPrompt")}</p>
               )}
             </StatePanel>
           </div>

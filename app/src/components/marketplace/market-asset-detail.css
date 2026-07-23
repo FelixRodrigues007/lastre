@@ -187,6 +187,10 @@
   line-height: 1.45;
 }
 
+.market-detail__hint--danger {
+  color: var(--lastro-accent-danger);
+}
+
 .market-detail-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -270,6 +274,11 @@
   width: 100%;
   justify-content: center;
   text-align: center;
+}
+
+.market-detail__actions .route-cta:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .market-asset-page__note {

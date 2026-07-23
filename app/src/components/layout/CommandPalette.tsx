@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import { COMMAND_ITEMS } from "../../lib/commands";
+import { useLocaleContext } from "../../context/LocaleContext";
 import "./command-palette.css";
 
 type CommandPaletteProps = {
@@ -11,6 +12,7 @@ type CommandPaletteProps = {
 
 export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   const navigate = useNavigate();
+  const { t } = useLocaleContext();
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -100,7 +102,9 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                     onClose();
                   }}
                 >
-                  <span className="command-palette__item-label">{item.label}</span>
+                  <span className="command-palette__item-label">
+                    {item.labelKey ? t(item.labelKey) : item.label}
+                  </span>
                   <span className="command-palette__item-meta">{item.path}</span>
                 </button>
               </li>

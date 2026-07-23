@@ -10,6 +10,7 @@ export const translations = {
     "nav.audit": "Audit",
     "nav.escalations": "Escalations",
     "nav.settings": "Settings",
+    "commands.sealedRail": "Sealed Market Rail",
     "settings.close": "Close settings",
     "settings.lead":
       "Appearance, decider mode, operational limits, and demo guardrails. Audit data resets when the API server restarts.",
@@ -700,6 +701,72 @@ export const translations = {
       "Chain shows permanent Casper attestations. Run a demo batch to record your first proof this session.",
     "chain.empty.cta": "Run demo batch",
     "chain.metrics.aria": "Session attestation counts",
+
+    "marketplace.rail.title": "Sealed Market Rail",
+    "marketplace.rail.subtitle":
+      "Origin-gated path from Valid seal → MintGate claim → demo collateral.",
+    "marketplace.rail.btnPrimary": "Run Sealed Rail demo",
+    "marketplace.rail.btnSecondary": "Open My Assets",
+    "marketplace.rail.running": "Running…",
+    "marketplace.rail.statusIdle": "Start with a Valid origin seal.",
+    "marketplace.rail.statusMinted":
+      "Valid seal confirmed — MintGate claimed (demo). Lock demo collateral to finish.",
+    "marketplace.rail.statusBlocked":
+      "Blocked — Invalid origin. Mint and demo collateral stay closed.",
+    "marketplace.rail.statusComplete":
+      "Rail complete (demo). Review honesty labels before judging live vs simulated.",
+    "marketplace.rail.honestyFooter":
+      "Mock x402 in UI · Demo MintGate · Demo collateral · Live ProofOfOrigin when source=live",
+    "marketplace.rail.step.origin": "Origin seal",
+    "marketplace.rail.step.query": "Provenance query (Mock x402)",
+    "marketplace.rail.step.mint": "MintGate claim (Demo)",
+    "marketplace.rail.step.sealed": "Sealed asset",
+    "marketplace.rail.step.collateral": "Demo collateral",
+    "marketplace.rail.blockedNote":
+      "Invalid is permanent proof. MintGate and demo collateral stay closed.",
+    "marketplace.rail.blockedSr": "Blocked",
+    "marketplace.rail.invalidToggleOn": "Try an Invalid seal",
+    "marketplace.rail.invalidToggleOff": "Back to the Valid demo asset",
+    "marketplace.rail.personaToggleOn": "Show DeFi / builder view",
+    "marketplace.rail.personaToggleOff": "Exit DeFi / builder view",
+    "marketplace.rail.personaDefiCopy":
+      "DeFi / builder view — show only origin-gated access paths. Finance actions stay demo until a Valid seal exists.",
+    "marketplace.rail.mockLabel": "Mock x402 — no CSPR moved",
+    "marketplace.rail.demoMintLabel": "Demo MintGate",
+    "marketplace.rail.lockCta": "Lock demo collateral",
+    "marketplace.rail.releaseCta": "Release demo collateral",
+    "marketplace.rail.locking": "Locking…",
+    "marketplace.rail.error.query": "Mock x402 query was not confirmed.",
+    "marketplace.rail.error.mint": "MintGate demo claim was blocked.",
+    "marketplace.rail.error.generic": "Sealed rail demo failed.",
+    "marketplace.rail.mintSummary": "Demo simulated · {count} claims recorded · package {hash}",
+
+    "myassets.rail.bannerTitle": "Sealed Market Rail · step 4–5",
+    "myassets.rail.bannerBody":
+      "Claimed demo assets can be locked as demo collateral only when origin is Valid.",
+    "myassets.rail.collateralLabel": "Demo collateral",
+    "myassets.rail.lockCta": "Lock demo collateral",
+    "myassets.rail.releaseCta": "Release demo collateral",
+    "myassets.rail.locking": "Locking…",
+    "myassets.rail.releasing": "Releasing…",
+    "myassets.rail.lockDisabledReason":
+      "Locking is disabled — this asset does not have a Valid origin seal.",
+    "myassets.rail.lockError": "Unable to lock collateral (demo).",
+    "myassets.rail.releaseError": "Unable to release collateral (demo).",
+    "myassets.rail.collateralHonesty":
+      "Demo collateral — not a lending market. No liquidation, no yield, no investment. Eligible only with Valid origin + demo claim.",
+    "myassets.empty.noAccount.title": "No demo account connected",
+    "myassets.empty.noAccount.hint":
+      "Connect to load a symbolic demo collection with two provenance NFTs — no Marketplace claim required.",
+    "myassets.empty.noAccount.connectCta": "Connect & load demo collection",
+    "myassets.empty.noAccount.marketplaceCta": "Open Marketplace (demo)",
+    "myassets.empty.noAssets.title": "No claimed representations yet",
+    "myassets.empty.noAssets.hint":
+      "Load the demo collection to preview provenance analytics, or claim your own after Valid proof in Marketplace.",
+    "myassets.empty.noAssets.loadCta": "Load demo collection (2 assets)",
+    "myassets.empty.noAssets.marketplaceCta": "Browse Marketplace (demo)",
+    "myassets.detail.selectPrompt": "Select an asset to view provenance analytics.",
+    "myassets.list.selectHint": "Select an asset",
   },
   pt: {
     "nav.overview": "Visão geral",
@@ -710,6 +777,7 @@ export const translations = {
     "nav.audit": "Auditoria",
     "nav.escalations": "Escalações",
     "nav.settings": "Configurações",
+    "commands.sealedRail": "Trilho de Mercado Selado",
     "settings.close": "Fechar configurações",
     "settings.lead":
       "Aparência, modo do decider, limites operacionais e avisos da demo. Os dados de auditoria resetam quando o servidor API reinicia.",
@@ -1404,6 +1472,72 @@ export const translations = {
       "A Cadeia mostra atestações permanentes no Casper. Rode um lote de demonstração para registrar sua primeira prova nesta sessão.",
     "chain.empty.cta": "Rodar lote demo",
     "chain.metrics.aria": "Contagem de atestações da sessão",
+
+    "marketplace.rail.title": "Trilho de Mercado Selado",
+    "marketplace.rail.subtitle":
+      "Caminho com trava de origem: selo Valid → claim MintGate → colateral demo.",
+    "marketplace.rail.btnPrimary": "Rodar demo do Trilho Selado",
+    "marketplace.rail.btnSecondary": "Abrir My Assets",
+    "marketplace.rail.running": "Rodando…",
+    "marketplace.rail.statusIdle": "Comece com um selo de origem Valid.",
+    "marketplace.rail.statusMinted":
+      "Selo Valid confirmado — MintGate reivindicado (demo). Trave o colateral demo para concluir.",
+    "marketplace.rail.statusBlocked":
+      "Bloqueado — origem Invalid. Mint e colateral demo permanecem fechados.",
+    "marketplace.rail.statusComplete":
+      "Trilho completo (demo). Revise os selos de honesty antes de julgar live vs simulado.",
+    "marketplace.rail.honestyFooter":
+      "x402 mock na UI · MintGate demo · Colateral demo · ProofOfOrigin live quando source=live",
+    "marketplace.rail.step.origin": "Selo de origem",
+    "marketplace.rail.step.query": "Consulta de proveniência (x402 mock)",
+    "marketplace.rail.step.mint": "Claim MintGate (Demo)",
+    "marketplace.rail.step.sealed": "Ativo selado",
+    "marketplace.rail.step.collateral": "Colateral demo",
+    "marketplace.rail.blockedNote":
+      "Inválido é prova permanente. MintGate e colateral demo permanecem fechados.",
+    "marketplace.rail.blockedSr": "Bloqueado",
+    "marketplace.rail.invalidToggleOn": "Testar um selo Invalid",
+    "marketplace.rail.invalidToggleOff": "Voltar ao ativo demo Valid",
+    "marketplace.rail.personaToggleOn": "Mostrar visão DeFi / builder",
+    "marketplace.rail.personaToggleOff": "Sair da visão DeFi / builder",
+    "marketplace.rail.personaDefiCopy":
+      "Visão DeFi / builder — mostra só caminhos com trava de origem. Ações financeiras permanecem demo até existir selo Valid.",
+    "marketplace.rail.mockLabel": "x402 mock — nenhum CSPR movido",
+    "marketplace.rail.demoMintLabel": "MintGate demo",
+    "marketplace.rail.lockCta": "Travar colateral demo",
+    "marketplace.rail.releaseCta": "Liberar colateral demo",
+    "marketplace.rail.locking": "Travando…",
+    "marketplace.rail.error.query": "Consulta x402 mock não foi confirmada.",
+    "marketplace.rail.error.mint": "Claim demo do MintGate foi bloqueado.",
+    "marketplace.rail.error.generic": "Demo do trilho selado falhou.",
+    "marketplace.rail.mintSummary": "Demo simulado · {count} claims registrados · pacote {hash}",
+
+    "myassets.rail.bannerTitle": "Trilho de Mercado Selado · passo 4–5",
+    "myassets.rail.bannerBody":
+      "Ativos demo reivindicados só podem ser travados como colateral demo quando a origem é Valid.",
+    "myassets.rail.collateralLabel": "Colateral demo",
+    "myassets.rail.lockCta": "Travar colateral demo",
+    "myassets.rail.releaseCta": "Liberar colateral demo",
+    "myassets.rail.locking": "Travando…",
+    "myassets.rail.releasing": "Liberando…",
+    "myassets.rail.lockDisabledReason":
+      "Travar está desabilitado — este ativo não tem selo de origem Valid.",
+    "myassets.rail.lockError": "Não foi possível travar o colateral (demo).",
+    "myassets.rail.releaseError": "Não foi possível liberar o colateral (demo).",
+    "myassets.rail.collateralHonesty":
+      "Colateral demo — não é mercado de crédito. Sem liquidação, sem rendimento, sem investimento. Elegível só com origem Valid + claim demo.",
+    "myassets.empty.noAccount.title": "Nenhuma conta demo conectada",
+    "myassets.empty.noAccount.hint":
+      "Conecte para carregar uma coleção demo simbólica com dois NFTs de proveniência — sem precisar de claim no Marketplace.",
+    "myassets.empty.noAccount.connectCta": "Conectar e carregar coleção demo",
+    "myassets.empty.noAccount.marketplaceCta": "Abrir Marketplace (demo)",
+    "myassets.empty.noAssets.title": "Nenhuma representação reivindicada ainda",
+    "myassets.empty.noAssets.hint":
+      "Carregue a coleção demo para pré-visualizar as análises de proveniência, ou reivindique a sua após prova Valid no Marketplace.",
+    "myassets.empty.noAssets.loadCta": "Carregar coleção demo (2 ativos)",
+    "myassets.empty.noAssets.marketplaceCta": "Explorar Marketplace (demo)",
+    "myassets.detail.selectPrompt": "Selecione um ativo para ver as análises de proveniência.",
+    "myassets.list.selectHint": "Selecione o ativo",
   },
 } as const satisfies Record<Locale, Record<string, string>>;
 
