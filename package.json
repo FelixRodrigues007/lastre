@@ -5,9 +5,12 @@
     "build:app": "npm --prefix app run build",
     "lint": "npm --prefix web run lint && npm --prefix app run lint",
     "lint:web": "npm --prefix web run lint",
-    "lint:app": "npm --prefix app run lint"
+    "lint:app": "npm --prefix app run lint",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "devDependencies": {
-    "shadcn": "^4.12.0"
+    "shadcn": "^4.12.0",
+    "wrangler": "^4.113.0"
   }
 }
