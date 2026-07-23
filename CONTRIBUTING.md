@@ -11,7 +11,7 @@ one core invariant:
 ## Development setup
 
 ```bash
-git clone https://github.com/FelixRodrigues007/lastro.git
+git clone https://github.com/FelixRodrigues007/lastre.git
 cd lastro
 make setup
 make build

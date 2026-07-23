@@ -12,11 +12,13 @@ import { getArtifact, getReferenceSeal } from "./registry.js";
 export const DEFAULT_PAYMENT_REQUIREMENTS = {
   scheme: "exact",
   network: "casper-test",
-  maxAmountRequired: 100_000_000,
+  // Casper Testnet enforces a minimum native transfer (~2.5 CSPR = 2.5e9 motes).
+  // Below that, account_put_deploy returns "insufficient transfer amount".
+  maxAmountRequired: 2_500_000_000,
   asset: "CSPR",
-  payTo: "casper-test-account-hash-lastro-payto-mock-0001",
+  payTo: "casper-test-account-hash-lastre-payto-mock-0001",
   resource: "/verify",
-  description: "Lastro provenance verification",
+  description: "Lastre provenance verification",
 } as const;
 
 type CreateServerOptions = {
@@ -29,11 +31,8 @@ export function createLastroX402Server(options: CreateServerOptions = {}): {
   server: Server;
   facilitator: Facilitator;
 } {
+  // Default mock. For real CSPR: createLastroX402Server({ facilitator: createFacilitatorFromEnv() }).
   const facilitator = options.facilitator ?? new MockFacilitator();
-  // INTEGRATION SEAM (x402 facilitator): by default we use the local MOCK.
-  // TODO(casper-facilitator): for production, inject a real Casper facilitator
-  // via `createLastroX402Server({ facilitator: new CasperFacilitator(...) })`.
-  // The server depends only on the `Facilitator` interface, so nothing below changes.
   const nonceFactory = options.nonceFactory ?? randomUUID;
   const issuedRequirements = new Map<string, PaymentRequirements>();
 

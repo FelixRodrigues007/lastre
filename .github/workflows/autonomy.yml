@@ -1,0 +1,83 @@
+name: Origin autonomy cycle
+
+# Dense proof-before-token cycle against public API (mock pay only).
+# Does NOT call casper settle. Safe to run on a schedule.
+
+on:
+  schedule:
+    # Every hour (UTC)
+    - cron: "17 * * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/server/autonomy.ts"
+      - "app/server/runtime.ts"
+      - "app/server/index.ts"
+      - "scripts/autonomous-cycle.mjs"
+      - ".github/workflows/autonomy.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autonomy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: Autonomy unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install app deps
+        working-directory: app
+        run: npm ci
+
+      - name: Build agent packages
+        run: |
+          npm ci --prefix agent/sealer && npm run build --prefix agent/sealer
+          npm ci --prefix agent/x402 && npm run build --prefix agent/x402
+          npm ci --prefix agent/orchestrator && npm run build --prefix agent/orchestrator
+
+      - name: Run autonomy + mint tests
+        working-directory: app
+        run: node --import tsx --test test/autonomy.test.ts test/mintEconomics.test.ts
+
+  live-cycle:
+    name: Live API autonomy cycle (mock only)
+    runs-on: ubuntu-latest
+    # Only hit public API on schedule/manual — not on every PR path push
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run autonomous cycle against production
+        env:
+          LASTRE_API_BASE: https://app-api.lastre.io
+          AUTONOMY_SOURCE: github-actions
+        run: node scripts/autonomous-cycle.mjs
+
+      - name: Upload autonomy log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autonomy-log
+          path: output/autonomy-log.jsonl
+          if-no-files-found: ignore

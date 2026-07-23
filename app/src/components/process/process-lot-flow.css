@@ -91,7 +91,7 @@
   display: flex;
   align-items: flex-start;
   flex: 0 0 auto;
-  height: 23.5rem;
+  height: 24rem;
   scroll-snap-align: center;
 }
 
@@ -101,7 +101,7 @@
   place-items: center;
   width: 2.5rem;
   flex-shrink: 0;
-  height: 23.5rem;
+  height: 24rem;
   align-self: flex-start;
 }
 
@@ -110,7 +110,7 @@
   display: block;
   width: 100%;
   height: 2px;
-  margin-top: 11.75rem;
+  margin-top: 12rem;
   background: color-mix(in srgb, var(--lastro-text-muted) 24%, transparent);
   transition: background 420ms var(--ease-out);
   overflow: hidden;
@@ -154,11 +154,11 @@
 
 .process-lot-card {
   display: grid;
-  grid-template-rows: 5.5rem 4.35rem minmax(0, 1fr) 5.6rem;
+  grid-template-rows: 5.25rem 3.85rem minmax(0, 1fr) auto;
   gap: 0;
   width: min(15.5rem, 72vw);
-  height: 23.5rem;
-  max-height: 23.5rem;
+  height: 24rem;
+  max-height: 24rem;
   flex-shrink: 0;
   border-radius: 0.875rem;
   border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-subtle) 85%, transparent);
@@ -212,7 +212,7 @@
 
 .process-lot-card__banner {
   position: relative;
-  height: 5.5rem;
+  height: 5.25rem;
   overflow: hidden;
   border-radius: 0.875rem 0.875rem 0 0;
   background: var(--lastro-bg-elevated);
@@ -248,9 +248,9 @@
   display: grid;
   grid-template-rows: auto auto auto;
   align-content: start;
-  gap: 0.2rem;
-  height: 4.35rem;
-  padding: 0.65rem 0.75rem 0.45rem;
+  gap: 0.14rem;
+  height: 3.85rem;
+  padding: 0.55rem 0.75rem 0.35rem;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -293,26 +293,26 @@
 .process-lot-card__checklist {
   list-style: none;
   margin: 0;
-  padding: 0.25rem 0.5rem 0.65rem;
+  padding: 0.45rem 0.55rem 0.65rem;
   display: grid;
-  gap: 0.125rem;
-  overflow-y: auto;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  align-content: stretch;
+  gap: 0.28rem;
+  overflow: hidden;
   min-height: 0;
 }
 
 .process-lot-card__check-item {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
-  height: 2rem;
-  min-height: 2rem;
-  max-height: 2rem;
-  padding: 0 0.5rem;
+  gap: 0.55rem;
+  min-height: 0;
+  padding: 0.26rem 0.45rem;
   border-radius: 8px;
-  font-size: 0.8125rem;
+  font-size: 0.78rem;
   font-weight: var(--lastro-weight-medium);
   letter-spacing: -0.01em;
-  line-height: 1.3;
+  line-height: 1.22;
   color: var(--lastro-text-muted);
   transition:
     background 320ms var(--ease-out),
@@ -325,8 +325,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 1rem;
+  height: 1rem;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--lastro-border-strong) 75%, transparent);
   color: var(--lastro-accent-brand);
@@ -352,9 +352,13 @@
 
 .process-lot-card__tail {
   display: grid;
-  grid-template-rows: 2.85rem 2.75rem;
-  height: 5.6rem;
+  grid-template-rows: 0 2.55rem;
+  min-height: 2.55rem;
   overflow: hidden;
+}
+
+.process-lot-card__tail:has(.process-lot-card__reasoning--visible) {
+  grid-template-rows: 2.15rem 2.45rem;
 }
 
 .process-lot-card__reasoning-wrap,
@@ -364,12 +368,12 @@
 
 .process-lot-card__reasoning {
   margin: 0;
-  padding: 0 0.75rem;
-  height: 2.85rem;
-  max-height: 2.85rem;
+  padding: 0 0.75rem 0.3rem;
+  height: 2.15rem;
+  max-height: 2.15rem;
   overflow: hidden;
-  font-size: 0.75rem;
-  line-height: 1.45;
+  font-size: 0.6875rem;
+  line-height: 1.32;
   color: var(--lastro-text-secondary);
   opacity: 0;
   transition: opacity 320ms var(--ease-out);
@@ -384,9 +388,9 @@
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.4rem;
-  height: 2.75rem;
-  max-height: 2.75rem;
-  padding: 0 0.75rem;
+  height: 2.55rem;
+  max-height: 2.55rem;
+  padding: 0 0.7rem;
   border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   box-sizing: border-box;
   overflow: hidden;
@@ -416,9 +420,9 @@
   display: flex;
   align-items: center;
   margin: 0;
-  height: 2.75rem;
-  max-height: 2.75rem;
-  padding: 0 0.75rem;
+  height: 2.55rem;
+  max-height: 2.55rem;
+  padding: 0 0.7rem;
   box-sizing: border-box;
   border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   font-size: 0.625rem;
@@ -435,18 +439,18 @@
 @media (max-width: 900px) {
   .process-lot-card {
     width: min(14rem, 78vw);
-    height: 22.5rem;
-    max-height: 22.5rem;
-    grid-template-rows: 5.5rem 4.35rem minmax(0, 1fr) 5.6rem;
+    height: 23.25rem;
+    max-height: 23.25rem;
+    grid-template-rows: 5rem 3.85rem minmax(0, 1fr) auto;
   }
 
   .process-flow__slot,
   .process-flow__connector {
-    height: 22.5rem;
+    height: 23.25rem;
   }
 
   .process-flow__connector-line {
-    margin-top: 11.25rem;
+    margin-top: 11.625rem;
   }
 
   .process-flow__connector {

@@ -1,8 +1,15 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { URL } from "node:url";
+import {
+  inspectSecretMaterial,
+  prepareX402SecretsFromEnv,
+} from "../../agent/x402/dist/index.js";
 import { AppRuntime, type DeciderMode } from "./runtime.js";
 import { getLiveTestnetSnapshot } from "./casper-read.js";
 import { computeSeal } from "../../agent/sealer/dist/src/sealer.js";
+
+// Materialize PEM/B64 secrets (Render) before AppRuntime constructs the facilitator.
+prepareX402SecretsFromEnv();
 
 const PORT = readPort();
 const HOST = process.env.LASTRO_APP_API_HOST ?? "0.0.0.0";
@@ -58,7 +65,37 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
       return;
     }
 
-    sendJson(res, 200, { ok: true });
+    // Re-run secret materialization so a fixed env takes effect without full image rebuild
+    // when only secrets change + process restart. Never includes key bytes.
+    prepareX402SecretsFromEnv();
+    const secret = inspectSecretMaterial();
+    sendJson(res, 200, {
+      ok: true,
+      product: "sealed-market-rail",
+      thesis: "Proof before token — and proof before finance.",
+      rail: {
+        overview: "/api/rail",
+        status: "/api/rail/:assetId",
+        run: "POST /api/rail/run",
+      },
+      x402: {
+        facilitatorMode: runtime.getX402FacilitatorMode(),
+        secretSource: secret.source,
+        secretPemLooksValid: secret.pemLooksValid,
+        secretBytes: secret.bytes,
+        secretNewlines: secret.newlines,
+        secretHasBegin: secret.hasBegin,
+        secretHasEnd: secret.hasEnd,
+        secretHint: secret.hint,
+        cloud: runtime.getCsprCloudInfo(),
+        endpoints: {
+          simulate: "POST /api/x402/simulate/:assetId  // mock always",
+          settle: "POST /api/x402/settle/:assetId  // native CSPR when mode=casper",
+          cloudSupported: "GET /api/x402/cloud/supported",
+          cloudSettle: "POST /api/x402/cloud/settle/:assetId  // WCSPR EIP-712 when mode=cspr_cloud",
+        },
+      },
+    });
     return;
   }
 
@@ -266,16 +303,77 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     const result = runtime.mintAsset(body.assetId, body.minter);
     if (result.success) {
       const lot = runtime.getLot(body.assetId);
-      sendJson(res, 200, { success: true, txHash: result.txHash, lot });
+      sendJson(res, 200, {
+        success: true,
+        txHash: result.txHash,
+        code: result.code,
+        honesty: result.honesty,
+        rail: result.rail,
+        lot,
+      });
     } else {
-      sendJson(res, 400, { success: false, error: result.error });
+      sendJson(res, 400, {
+        success: false,
+        error: result.error,
+        code: result.code,
+        honesty: result.honesty,
+        rail: result.rail,
+      });
     }
     return;
   }
 
   // MintGate summary: simulated LotMinted events + mint_count (mirrors on-chain reads)
   if (method === "GET" && pathname === "/api/mint/summary") {
-    sendJson(res, 200, runtime.getMintSummary());
+    const summary = await runtime.getMintSummary();
+    sendJson(res, 200, {
+      ...summary,
+      sealedMarketRail: runtime.getSealedRailOverview(),
+    });
+    return;
+  }
+
+  // ---- Sealed Market Rail (proof before finance) ----------------------------
+  if (method === "GET" && pathname === "/api/rail") {
+    sendJson(res, 200, runtime.getSealedRailOverview());
+    return;
+  }
+
+  if (method === "POST" && pathname === "/api/rail/run") {
+    const body = await readJsonBody<{
+      assetId?: string;
+      owner?: string;
+      minter?: string;
+      lock?: boolean;
+    }>(req);
+    const assetId = body?.assetId?.trim();
+    if (!assetId) {
+      sendJson(res, 400, { error: "assetId required" });
+      return;
+    }
+    const result = await runtime.runSealedRailDemo({
+      assetId,
+      owner: body?.owner,
+      minter: body?.minter,
+      lock: Boolean(body?.lock),
+    });
+    sendJson(res, result.ok ? 200 : 400, result);
+    return;
+  }
+
+  const railMatch = pathname.match(/^\/api\/rail\/([^/]+)$/u);
+  if (method === "GET" && railMatch) {
+    const assetId = decodeURIComponent(railMatch[1]);
+    const status = runtime.getSealedRailStatus(assetId);
+    sendJson(res, status.exists ? 200 : 404, status);
+    return;
+  }
+
+  const eligibilityMatch = pathname.match(/^\/api\/defi\/eligibility\/([^/]+)$/u);
+  if (method === "GET" && eligibilityMatch) {
+    const assetId = decodeURIComponent(eligibilityMatch[1]);
+    const eligibility = runtime.getDefiEligibility(assetId);
+    sendJson(res, eligibility.rail.exists ? 200 : 404, eligibility);
     return;
   }
 
@@ -316,13 +414,108 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
 
     const settled = await runtime.settleProvenanceQuery(assetId, payment);
     if (!settled.ok) {
-      res.statusCode = 402;
+      const status = settled.reason === "settle_failed" ? 502 : 402;
+      res.statusCode = status;
       res.setHeader("Content-Type", "application/json; charset=utf-8");
-      res.end(JSON.stringify({ x402Version: 1, error: settled.reason, accepts: settled.requirements ? [settled.requirements] : [] }));
+      res.end(
+        JSON.stringify({
+          x402Version: 1,
+          error: settled.reason,
+          message: settled.message,
+          accepts: settled.requirements ? [settled.requirements] : [],
+        }),
+      );
       return;
     }
     res.setHeader("X-PAYMENT-RESPONSE", settled.txHash);
-    sendJson(res, 200, { paid: true, txHash: settled.txHash, facilitator: settled.facilitatorMode, provenance: settled.provenance });
+    sendJson(res, 200, {
+      paid: true,
+      txHash: settled.txHash,
+      settlementKind: settled.settlementKind,
+      paymentExplorerUrl: settled.paymentExplorerUrl,
+      facilitator: settled.facilitatorMode,
+      provenance: settled.provenance,
+      chainEvidence: settled.chainEvidence,
+    });
+    return;
+  }
+
+  // Official CSPR.cloud path (WCSPR + EIP-712). Probe + settle with full body.
+  if (method === "GET" && pathname === "/api/x402/cloud/supported") {
+    const probe = await runtime.probeCsprCloudSupported();
+    sendJson(res, probe.ok ? 200 : 503, {
+      ...probe,
+      info: runtime.getCsprCloudInfo(),
+    });
+    return;
+  }
+
+  if (method === "GET" && pathname === "/api/x402/cloud") {
+    sendJson(res, 200, {
+      ...runtime.getCsprCloudInfo(),
+      facilitatorMode: runtime.getX402FacilitatorMode(),
+      howTo: {
+        env: [
+          "LASTRE_X402_MODE=cspr_cloud",
+          "CSPR_CLOUD_API_TOKEN=<from docs.cspr.cloud>",
+          "LASTRE_X402_PAY_TO=<00 + 64 hex account hash>",
+          "LASTRE_WCSPR_PACKAGE=3d80df21ba4ee4d66a2a1f60c32570dd5685e4b279f6538162a5fd1314847c1e  # optional override",
+        ],
+        settle: "POST /api/x402/cloud/settle/:assetId with { paymentPayload, paymentRequirements }",
+        examples: "https://github.com/make-software/casper-x402",
+        trade: "https://testnet.cspr.trade — swap CSPR↔WCSPR (WCSPR menu)",
+        honesty: "UI /simulate stays mock. This path is real WCSPR on-chain when settle succeeds.",
+      },
+    });
+    return;
+  }
+
+  const cloudSettleMatch = pathname.match(/^\/api\/x402\/cloud\/settle\/([^/]+)$/u);
+  if (method === "POST" && cloudSettleMatch) {
+    const assetId = decodeURIComponent(cloudSettleMatch[1]);
+    const body = await readJsonBody<{
+      paymentPayload?: unknown;
+      paymentRequirements?: unknown;
+    }>(req);
+    if (!body?.paymentPayload || !body?.paymentRequirements) {
+      sendJson(res, 400, {
+        error: "paymentPayload_and_paymentRequirements_required",
+        message:
+          "Body must match CSPR.cloud /settle schema (x402 v2 EIP-712). See docs.cspr.cloud/x402-facilitator-api/settle and make-software/casper-x402.",
+        info: runtime.getCsprCloudInfo(),
+      });
+      return;
+    }
+    const result = await runtime.settleCsprCloudOfficial(assetId, {
+      paymentPayload: body.paymentPayload as never,
+      paymentRequirements: body.paymentRequirements as never,
+    });
+    sendJson(res, result.ok ? 200 : 400, result);
+    return;
+  }
+
+  // Real CSPR settle (server-as-agent). Requires LASTRE_X402_MODE=casper + keys.
+  // Judge UI must keep using /api/x402/simulate (always mock).
+  // For WCSPR official path use POST /api/x402/cloud/settle/:assetId instead.
+  const x402SettleMatch = pathname.match(/^\/api\/x402\/settle\/([^/]+)$/u);
+  if (method === "POST" && x402SettleMatch) {
+    const assetId = decodeURIComponent(x402SettleMatch[1]);
+    const body = await readJsonBody<{ from?: string }>(req);
+    const result = await runtime.settleAsAgent(assetId, body?.from || "lastre-cli-agent");
+    if (!result.ok) {
+      const status =
+        result.reason === "unknown_asset"
+          ? 404
+          : result.reason === "facilitator_not_casper"
+            ? 409
+            : result.reason === "settle_failed"
+              ? 502
+              : 402;
+      sendJson(res, status, result);
+      return;
+    }
+    res.setHeader("X-PAYMENT-RESPONSE", result.txHash);
+    sendJson(res, 200, result);
     return;
   }
 
@@ -337,7 +530,81 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     return;
   }
 
-  // DeFi collateral lock (demo)
+  // Judge evidence pack: trust stack + operators + composition + live-RPC
+  if (method === "GET" && pathname === "/api/evidence") {
+    sendJson(res, 200, await runtime.getEvidencePack());
+    return;
+  }
+
+  // Origin autonomy loop (session log + dense proof cycles). Additive; read-only GET.
+  if (method === "GET" && pathname === "/api/agent/autonomy") {
+    sendJson(res, 200, {
+      ...runtime.getAutonomySummary(),
+      recent: runtime.listAutonomyCycles(10),
+    });
+    return;
+  }
+
+  // Run one autonomy cycle (mock pay + isolated agent scenarios). Never casper settle.
+  if (method === "POST" && pathname === "/api/agent/autonomy/cycle") {
+    const body = await readJsonBody<{ source?: string }>(req);
+    const cycle = await runtime.runAutonomyCycle(body?.source || "api");
+    sendJson(res, cycle.ok ? 200 : 207, {
+      ok: cycle.ok,
+      cycle,
+      summary: runtime.getAutonomySummary(),
+    });
+    return;
+  }
+
+  // MintGate economics (contract-logic parity)
+  if (method === "GET" && pathname === "/api/mint/economics") {
+    sendJson(res, 200, runtime.getMintEconomics());
+    return;
+  }
+
+  // 2-hop composition receipts
+  if (method === "GET" && pathname === "/api/receipts") {
+    sendJson(res, 200, { receipts: runtime.listReceipts() });
+    return;
+  }
+
+  if (method === "POST" && pathname === "/api/receipts/tool") {
+    const body = await readJsonBody<{ assetId?: string; payTx?: string; note?: string }>(req);
+    if (!body?.assetId) {
+      sendJson(res, 400, { error: "assetId_required" });
+      return;
+    }
+    sendJson(res, 200, runtime.createToolReceipt(body.assetId, body.payTx, body.note));
+    return;
+  }
+
+  if (method === "POST" && pathname === "/api/receipts/compose") {
+    const body = await readJsonBody<{ parentId?: string; assetId?: string; payTx?: string }>(req);
+    if (!body?.parentId || !body?.assetId) {
+      sendJson(res, 400, { error: "parentId_and_assetId_required" });
+      return;
+    }
+    const result = runtime.composeLastreReceipt(body.parentId, body.assetId, body.payTx);
+    sendJson(res, result.ok ? 200 : 409, result);
+    return;
+  }
+
+  if (method === "POST" && pathname === "/api/receipts/demo") {
+    const body = await readJsonBody<{ assetId?: string }>(req);
+    try {
+      const graph = runtime.seedReceiptDemo(body?.assetId || "CARBON-VCS-AMAZONIA-2024-001");
+      sendJson(res, 200, { ok: true, ...graph });
+    } catch (error) {
+      sendJson(res, 500, {
+        ok: false,
+        error: error instanceof Error ? error.message : "seed_failed",
+      });
+    }
+    return;
+  }
+
+  // Demo collateral lock (Sealed Market Rail step 5 — Valid + minted only)
   if (method === "POST" && pathname === "/api/defi/lock") {
     const body = await readJsonBody<{ assetId: string; owner: string }>(req);
     if (!body?.assetId || !body?.owner) {
@@ -357,6 +624,18 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     }
     const result = runtime.releaseCollateral(body.assetId, body.owner);
     sendJson(res, result.success ? 200 : 400, result);
+    return;
+  }
+
+  const lockedMatch = pathname.match(/^\/api\/defi\/locked\/([^/]+)$/u);
+  if (method === "GET" && lockedMatch) {
+    const owner = decodeURIComponent(lockedMatch[1]);
+    sendJson(res, 200, {
+      owner,
+      positions: runtime.listLockedBy(owner),
+      honesty: "Demo collateral — session memory only; no yield or investment",
+      product: "sealed-market-rail",
+    });
     return;
   }
 

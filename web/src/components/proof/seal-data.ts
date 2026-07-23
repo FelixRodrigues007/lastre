@@ -1,3 +1,5 @@
+import { CSPR_PACKAGE_URL } from "../../site-links";
+
 export const REFERENCE_MASS = 125_000;
 export const TAMPERED_MASS = REFERENCE_MASS + 1;
 export const REFERENCE_ORIGIN = "MINA-VALEDOURO-LOTE-001";
@@ -9,5 +11,4 @@ export const SEALS = {
   tamperedOrigin: "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456",
 } as const;
 
-export const CSPR_VERIFY_URL =
-  "https://testnet.cspr.live/contract-package/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561";
+export const CSPR_VERIFY_URL = CSPR_PACKAGE_URL;

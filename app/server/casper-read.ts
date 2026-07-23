@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { PACKAGE_HASH, PACKAGE_URL, TESTNET_SNAPSHOT } from "./constants.js";
+import { getLiveRpcEvidence, type LiveRpcEvidence } from "./casper-rpc.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -32,8 +33,14 @@ export type LiveTestnetSnapshot = {
   accepted: number;
   rejected: number;
   attestations: TestnetAttestation[];
-  source: "live" | "fallback";
+  /**
+   * - live: query_snapshot binary / cargo livenet
+   * - live-rpc: public JSON-RPC verified canonical txs (no local binary)
+   * - fallback: README constants only (RPC + binary both unavailable)
+   */
+  source: "live" | "live-rpc" | "fallback";
   fetchedAt: string | null;
+  rpcEvidence?: LiveRpcEvidence;
 };
 
 type CliSnapshot = {
@@ -53,33 +60,39 @@ type CliSnapshot = {
 let cache: { data: LiveTestnetSnapshot; expiresAt: number } | null = null;
 const CACHE_TTL_MS = 60_000;
 
-function fallbackSnapshot(): LiveTestnetSnapshot {
+function baseAttestations(): TestnetAttestation[] {
+  return [
+    {
+      assetId: "MINA-VALEDOURO-LOTE-001",
+      verdict: "Invalid",
+      providedSeal: "fffec9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff11",
+      referenceSeal: "a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00",
+      attester: "account-hash-6de6ee75f7d41407d9e0643d24fe7debc36bbe75695950e544c4ebd11850e1b2",
+      explorerUrl: TESTNET_TX_LINKS["MINA-VALEDOURO-LOTE-001"],
+    },
+    {
+      assetId: "MINA-VALEDOURO-LOTE-002",
+      verdict: "Valid",
+      providedSeal: "a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00",
+      referenceSeal: "a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00",
+      attester: "account-hash-6de6ee75f7d41407d9e0643d24fe7debc36bbe75695950e544c4ebd11850e1b2",
+      explorerUrl: TESTNET_TX_LINKS["MINA-VALEDOURO-LOTE-002"],
+    },
+  ];
+}
+
+function fallbackSnapshot(rpcEvidence?: LiveRpcEvidence): LiveTestnetSnapshot {
+  const liveRpc = rpcEvidence?.fullyVerified === true;
   return {
     packageHash: PACKAGE_HASH,
     packageUrl: PACKAGE_URL,
     network: "casper-test",
     accepted: TESTNET_SNAPSHOT.accepted,
     rejected: TESTNET_SNAPSHOT.rejected,
-    attestations: [
-      {
-        assetId: "MINA-VALEDOURO-LOTE-001",
-        verdict: "Invalid",
-        providedSeal: "fffec9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff11",
-        referenceSeal: "a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00",
-        attester: "account-hash-6de6ee75f7d41407d9e0643d24fe7debc36bbe75695950e544c4ebd11850e1b2",
-        explorerUrl: TESTNET_TX_LINKS["MINA-VALEDOURO-LOTE-001"],
-      },
-      {
-        assetId: "MINA-VALEDOURO-LOTE-002",
-        verdict: "Valid",
-        providedSeal: "a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00",
-        referenceSeal: "a3f1c9b8d7e6f50123456789abcdef00112233445566778899aabbccddeeff00",
-        attester: "account-hash-6de6ee75f7d41407d9e0643d24fe7debc36bbe75695950e544c4ebd11850e1b2",
-        explorerUrl: TESTNET_TX_LINKS["MINA-VALEDOURO-LOTE-002"],
-      },
-    ],
-    source: "fallback",
-    fetchedAt: null,
+    attestations: baseAttestations(),
+    source: liveRpc ? "live-rpc" : "fallback",
+    fetchedAt: liveRpc ? rpcEvidence?.verifiedAt ?? new Date().toISOString() : null,
+    rpcEvidence,
   };
 }
 
@@ -102,6 +115,7 @@ function mapCliSnapshot(raw: CliSnapshot, fetchedAt: string): LiveTestnetSnapsho
       })),
     source: "live",
     fetchedAt,
+    rpcEvidence: undefined,
   };
 }
 
@@ -157,16 +171,34 @@ export async function getLiveTestnetSnapshot(): Promise<LiveTestnetSnapshot> {
   try {
     const raw = await runQuerySnapshot();
     const data = mapCliSnapshot(raw, new Date().toISOString());
+    // Best-effort RPC attach for explorer proof links (does not block live binary path).
+    try {
+      data.rpcEvidence = await getLiveRpcEvidence();
+    } catch {
+      /* optional */
+    }
     cache = { data, expiresAt: now + CACHE_TTL_MS };
     return data;
   } catch (error) {
     console.warn(
-      "[lastro-app] Casper testnet query failed; using README fallback.",
+      "[lastro-app] query_snapshot unavailable; trying public RPC evidence.",
       error instanceof Error ? error.message : error,
     );
-    const data = fallbackSnapshot();
-    cache = { data, expiresAt: now + 15_000 };
-    return data;
+    try {
+      const rpcEvidence = await getLiveRpcEvidence();
+      const data = fallbackSnapshot(rpcEvidence);
+      // live-rpc is a stronger source than plain fallback — cache longer when fully verified.
+      cache = { data, expiresAt: now + (rpcEvidence.fullyVerified ? CACHE_TTL_MS : 15_000) };
+      return data;
+    } catch (rpcError) {
+      console.warn(
+        "[lastro-app] public RPC evidence failed; using README fallback.",
+        rpcError instanceof Error ? rpcError.message : rpcError,
+      );
+      const data = fallbackSnapshot();
+      cache = { data, expiresAt: now + 15_000 };
+      return data;
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { AuditRecord } from "../../lib/types";
 import { shortHash } from "../../lib/format";
 import { CSPR_PACKAGE_URL } from "../../lib/navigation";
+import { explorerUrlFromTx, resolveAttestationUrl } from "../../lib/chainTimeline";
 import { ActionBadge, OutcomeBadge, VerdictBadge } from "../proof/Badges";
 import { SealChip } from "../proof/SealChip";
 import "./process-record-panel.css";
@@ -21,6 +22,9 @@ export function ProcessRecordPanel({ record, index }: ProcessRecordPanelProps) {
   const verdict = record.verification?.verdict ?? record.onChain?.verdict ?? null;
   const sealNote = sealMatchLabel(record);
   const isInvalidProof = verdict === "Invalid";
+  const attestationUrl = record.onChain
+    ? resolveAttestationUrl(record.assetId, explorerUrlFromTx(record.onChain.txHash), record.onChain.verdict)
+    : null;
 
   return (
     <article className="process-record panel" aria-label={`Process record ${record.assetId}`}>
@@ -95,14 +99,28 @@ export function ProcessRecordPanel({ record, index }: ProcessRecordPanelProps) {
             <>
               <VerdictBadge verdict={record.onChain.verdict} />
               <code className="process-record__tx">tx {shortHash(record.onChain.txHash, 10, 6)}</code>
-              <a
-                className="process-record__link"
-                href={`https://testnet.cspr.live/deploy/${record.onChain.txHash}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on Casper testnet
-              </a>
+              {attestationUrl ? (
+                <a
+                  className="process-record__link"
+                  href={attestationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View on Casper testnet
+                </a>
+              ) : (
+                <>
+                  <p className="process-record__session">Demo/session receipt — not on Casper</p>
+                  <a
+                    className="process-record__link"
+                    href={CSPR_PACKAGE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open ProofOfOrigin package
+                  </a>
+                </>
+              )}
             </>
           ) : (
             <>

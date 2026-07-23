@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { LotDetail } from "../../lib/types";
 import { shortHash } from "../../lib/format";
 import { CSPR_PACKAGE_URL } from "../../lib/navigation";
+import { explorerUrlFromTx, resolveAttestationUrl } from "../../lib/chainTimeline";
 import { ActionBadge, MutedStatusBadge, OutcomeBadge, VerdictBadge } from "../proof/Badges";
 import "./lot-evidence-grid.css";
 
@@ -13,6 +14,15 @@ export function LotEvidenceGrid({ lot }: LotEvidenceGridProps) {
   const record = lot.auditRecord;
   const verdict = lot.latestVerdict ?? record?.verification?.verdict ?? record?.onChain?.verdict ?? null;
   const onChain = lot.testnetAttestation ?? record?.onChain ?? null;
+  const rawExplorer =
+    onChain && "explorerUrl" in onChain && onChain.explorerUrl
+      ? onChain.explorerUrl
+      : onChain && "txHash" in onChain && onChain.txHash
+        ? explorerUrlFromTx(onChain.txHash)
+        : null;
+  const attestationUrl = resolveAttestationUrl(lot.artifact.assetId, rawExplorer, onChain?.verdict ?? null);
+  const hasSessionReceipt =
+    !attestationUrl && Boolean(onChain && "txHash" in onChain && onChain.txHash);
 
   return (
     <section className="lot-evidence panel" aria-label="Evidence breakdown">
@@ -121,24 +131,17 @@ export function LotEvidenceGrid({ lot }: LotEvidenceGridProps) {
               {"txHash" in onChain && onChain.txHash ? (
                 <code className="lot-evidence__tx">tx {shortHash(onChain.txHash, 10, 6)}</code>
               ) : null}
-              {"explorerUrl" in onChain && onChain.explorerUrl ? (
+              {attestationUrl ? (
                 <a
                   className="lot-evidence__link"
-                  href={onChain.explorerUrl}
+                  href={attestationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   View on cspr.live
                 </a>
-              ) : "txHash" in onChain && onChain.txHash ? (
-                <a
-                  className="lot-evidence__link"
-                  href={`https://testnet.cspr.live/deploy/${onChain.txHash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View on Casper testnet
-                </a>
+              ) : hasSessionReceipt ? (
+                <p className="lot-evidence__session">Demo/session receipt — not on Casper</p>
               ) : null}
             </>
           ) : (

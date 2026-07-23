@@ -16,7 +16,7 @@ and **lastro** as a legacy internal namespace until the migration plan is execut
 | Frontend engineer | [`FRONTEND_ROUTES.md`](FRONTEND_ROUTES.md) | [`API_CONTRACT.md`](API_CONTRACT.md), [`QUALITY_CHECKLIST.md`](QUALITY_CHECKLIST.md) |
 | Backend/deploy operator | [`DEPLOYMENT_RUNBOOK.md`](DEPLOYMENT_RUNBOOK.md) | [`API_CONTRACT.md`](API_CONTRACT.md), [`ARCHITECTURE_FLOWCHARTS.md`](ARCHITECTURE_FLOWCHARTS.md) |
 | Product/storytelling | [`LASTRE_BRAND_AND_DOMAIN.md`](LASTRE_BRAND_AND_DOMAIN.md) | [`ROADMAP.md`](ROADMAP.md), [`ARCHITECTURE_FLOWCHARTS.md`](ARCHITECTURE_FLOWCHARTS.md) |
-| Reviewer/judge | [`ARCHITECTURE_FLOWCHARTS.md`](ARCHITECTURE_FLOWCHARTS.md) | [`API_CONTRACT.md`](API_CONTRACT.md), root [`README.md`](../README.md) |
+| Reviewer/judge | [`../JUDGES_PLAYBOOK.md`](../JUDGES_PLAYBOOK.md) | [`JUDGE_ONE_PAGER.md`](JUDGE_ONE_PAGER.md), [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md), root [`README.md`](../README.md) |
 
 ## Canonical facts
 
@@ -58,6 +58,10 @@ ownership, or transferable-token product. The deterministic SHA-256 seal decides
 - [`OPERATING_WHEELS.md`](OPERATING_WHEELS.md) — product, proof, design, trust-boundary, and deployment flywheels.
 - [`DEPLOYMENT_RUNBOOK.md`](DEPLOYMENT_RUNBOOK.md) — Vercel, Render, DNS, CORS,
   smoke tests, and rollback.
+- [`../JUDGES_PLAYBOOK.md`](../JUDGES_PLAYBOOK.md) — final-round judge testing
+  flow, contract package hash, and sample Testnet transactions.
+- [`FINAL_ROUND_CHECKLIST.md`](FINAL_ROUND_CHECKLIST.md) — buildathon
+  requirement-to-evidence checklist and BUIDL page copy/paste block.
 - [`QUALITY_CHECKLIST.md`](QUALITY_CHECKLIST.md) — launch-grade QA checklist.
 - [`LAURA_FRONTEND_SYSTEM_DESIGN.md`](LAURA_FRONTEND_SYSTEM_DESIGN.md) — detailed
   frontend system design handoff.

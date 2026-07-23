@@ -56,3 +56,10 @@
 .casper-proof__link--ghost {
   color: var(--lastro-text-secondary);
 }
+
+.casper-proof__session {
+  font-size: 0.8rem;
+  color: var(--lastro-text-muted);
+  font-style: italic;
+  margin: 0;
+}

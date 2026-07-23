@@ -1,0 +1,10 @@
+{
+  "chainRoot": "0c40eb1b4164b95305b0c98908dd6c17ce6bfa37b3900095d87304ea566f8d33",
+  "transferId": "17290909242139064466",
+  "txHash": "915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a",
+  "explorerUrl": "https://testnet.cspr.live/transaction/915c9736a8d835994b29d163866e600dc7ddb6c0d8c621d8989f52e071dc417a",
+  "amountMotes": "2500000000",
+  "targetAccount": "013a7fadf901393a1ddecefb3fa967d9d782bbe1d3e0729ed526310840217b47f0",
+  "anchoredAt": "2026-07-15T15:12:22.518Z",
+  "note": "Native transfer anchors Lastre 2-hop composition chainRoot via transfer-id; no synthetic hash."
+}

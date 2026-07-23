@@ -2,6 +2,45 @@
 
 # Lastre
 
+## Final-round judge entry
+
+| Item | Link |
+| --- | --- |
+| Live app demo | https://app.lastre.io/marketplace → **Run Demo** |
+| Agents integration | https://app.lastre.io/agents |
+| Landing | https://lastre.io |
+| Demo video | https://youtu.be/UzhKMsKA6QE |
+| Step-by-step testing (no marketing) | [JUDGES_PLAYBOOK.md](./JUDGES_PLAYBOOK.md) |
+| BUIDL paste pack | [docs/BUIDL_PAGE_PASTE.md](./docs/BUIDL_PAGE_PASTE.md) |
+| API health | https://app-api.lastre.io/api/health |
+| Evidence pack (RPC + trust stack) | https://app-api.lastre.io/api/evidence |
+| Casper ProofOfOrigin package | `hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561` |
+| Community standards | https://github.com/FelixRodrigues007/lastre/community |
+| Agent CLI (60s) | `node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay` |
+
+### Agent CLI (60 seconds)
+
+```bash
+# Quote (HTTP 402)
+node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001
+
+# Pay + read proof (judge-safe mock via /simulate)
+node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay
+
+# Real CSPR settle (API must be LASTRE_X402_MODE=casper + keys)
+node packages/cli/bin/lastre.mjs prove CARBON-VCS-AMAZONIA-2024-001 --pay --mode casper
+
+# Live-RPC evidence pack
+node packages/cli/bin/lastre.mjs evidence
+```
+
+Real testnet CSPR settle (optional): set on the **API host**  
+`LASTRE_X402_MODE=casper`, `LASTRE_X402_SECRET_KEY_PATH` (or `LASTRE_X402_SECRET_KEY_PEM`),  
+`LASTRE_X402_PAY_TO`. UI `/simulate` always stays **mock**.  
+Runbook: [docs/X402_CASPER_REAL.md](./docs/X402_CASPER_REAL.md) · smoke: `scripts/x402-real-smoke.sh`.
+
+DEMONSTRATION ONLY — fictional assets; no investment, yield, ownership sale, or financial promise.
+
 **Proof before token — the chain of proof from land to token, verified offline and anchored on Casper.**
 
 [![License: Apache-2.0 + BUSL-1.1](https://img.shields.io/badge/license-Apache--2.0%20%2B%20BUSL--1.1-gold)](#licensing)
@@ -37,6 +76,11 @@ deployment, roadmap, API, and architecture handoff:
 - [Operating wheels](docs/OPERATING_WHEELS.md)
 - [Landing page creative spec](docs/LANDING_PAGE_CREATIVE_SPEC.md)
 - [Deployment runbook](docs/DEPLOYMENT_RUNBOOK.md)
+- [90-second demo script](docs/DEMO_SCRIPT.md)
+- [Judge one-pager](docs/JUDGE_ONE_PAGER.md)
+- [Final-round judge playbook](JUDGES_PLAYBOOK.md)
+- [Buildathon readiness checklist](docs/FINAL_ROUND_CHECKLIST.md)
+- [BUIDL paste pack](docs/BUIDL_PAGE_PASTE.md)
 
 Public brand is **Lastre**. Some internal package names and paths still use the
 legacy `lastro` namespace for compatibility with deployed contracts, package
@@ -121,6 +165,10 @@ agent-driven `LOTE-002` attestation. The latest `LOTE-001` attestation is
 
 **both Valid and Invalid verdicts are written on-chain — a rejection is permanent, verifiable proof, not a discarded error.**
 
+For final-round review, use the concise [judge playbook](JUDGES_PLAYBOOK.md).
+It includes the UI test flow, contract package hash, and sample Casper Testnet
+transactions in copy/paste format for the BUIDL page.
+
 Fresh read-only output from `make query`:
 
 ```text
@@ -145,8 +193,8 @@ Prerequisites on macOS:
   missing, `cargo install cargo-odra` can populate the local tool cache.
 
 ```bash
-git clone https://github.com/FelixRodrigues007/lastro.git
-cd lastro
+git clone https://github.com/FelixRodrigues007/lastre.git
+cd lastre
 make
 ```
 

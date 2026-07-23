@@ -17,6 +17,7 @@ export const WORKSPACE_NAV: NavItem[] = [
   { to: "/escalations", labelKey: "nav.escalations", icon: "escalations", mobileLabelKey: "nav.queue" },
   { to: "/marketplace", labelKey: "nav.marketplace", icon: "globe" },
   { to: "/my-assets", labelKey: "nav.myAssets", icon: "shield" },
+  { to: "/agents", labelKey: "nav.agents", icon: "network" },
 ];
 
 export const SETTINGS_NAV: NavItem = {
@@ -33,5 +34,12 @@ export const MOBILE_NAV: NavItem[] = [
   WORKSPACE_NAV[4],
 ];
 
-export const CSPR_PACKAGE_URL =
-  "https://testnet.cspr.live/contract-package/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561";
+/** Raw 64-hex ProofOfOrigin package hash (no Casper `hash-` key prefix). */
+export const CSPR_PACKAGE_HASH =
+  "b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561";
+
+/**
+ * cspr.live renders the contract-package page from the raw hash. Adding the
+ * Casper `hash-` key prefix makes the explorer return "Nothing was found".
+ */
+export const CSPR_PACKAGE_URL = `https://testnet.cspr.live/contract-package/${CSPR_PACKAGE_HASH}`;

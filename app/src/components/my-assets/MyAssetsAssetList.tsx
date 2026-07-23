@@ -7,6 +7,7 @@ import "./my-assets-asset-list.css";
 type MyAssetsAssetListProps = {
   assets: LotListItem[];
   selectedId: string | null;
+  lockedIds?: Set<string>;
   onSelect: (assetId: string) => void;
   selectHint: string;
 };
@@ -32,7 +33,7 @@ function assetCoverUrl(lot: LotListItem): string {
   });
 }
 
-export function MyAssetsAssetList({ assets, selectedId, onSelect, selectHint }: MyAssetsAssetListProps) {
+export function MyAssetsAssetList({ assets, selectedId, lockedIds, onSelect, selectHint }: MyAssetsAssetListProps) {
   return (
     <div className="my-assets-strip" aria-label="Asset collection">
       <p className="my-assets-strip__hint">{selectHint}</p>
@@ -40,6 +41,7 @@ export function MyAssetsAssetList({ assets, selectedId, onSelect, selectHint }: 
         {assets.map((lot) => {
           const a = lot.artifact;
           const selected = selectedId === a.assetId;
+          const locked = Boolean(lockedIds?.has(a.assetId));
           const label = assetDisplayName(lot);
           const score = computeProvScore(lot);
 
@@ -69,8 +71,11 @@ export function MyAssetsAssetList({ assets, selectedId, onSelect, selectHint }: 
                 </span>
                 <span className="my-assets-strip__body">
                   <span className="my-assets-strip__label">{label}</span>
-                  <span className="my-assets-strip__score">Score {score}</span>
+                  <span className="my-assets-strip__score">
+                    Score {score} • {locked ? "Locked" : "Available"}
+                  </span>
                 </span>
+                {locked ? <span className="my-assets-strip__lock">Locked</span> : null}
               </button>
             </li>
           );

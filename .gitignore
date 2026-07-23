@@ -6,6 +6,8 @@ target/
 node_modules/
 dist/
 app/server-dist/
+# Local autonomy cycle log (optional)
+output/autonomy-log.jsonl
 # Env & secrets
 .env
 .env.*
@@ -20,3 +22,4 @@ app/server-dist/
 output/
 web/shot-*.png
 web/cobe-test.html
+.cache/

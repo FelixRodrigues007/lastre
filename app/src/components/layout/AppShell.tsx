@@ -11,10 +11,8 @@ import { OnboardingChecklist } from "../onboarding/OnboardingChecklist";
 import { AppSidebar } from "./AppSidebar";
 import { CommandPalette, useCommandPalette } from "./CommandPalette";
 import { MobileTabBar } from "./MobileTabBar";
+import { CSPR_PACKAGE_URL } from "../../lib/navigation";
 import "./app-shell.css";
-
-const CSPR_PACKAGE_URL =
-  "https://testnet.cspr.live/contract-package/hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561";
 
 type AppShellProps = {
   children: ReactNode;

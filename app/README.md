@@ -79,3 +79,15 @@ VITE_MAPTILER_KEY=<MapTiler Cloud API key>
 Without a key, or if the third-party map cannot load, a zero-token SVG fallback
 keeps the demo stable. `VITE_*` variables are inlined at **build time**, so after
 adding or changing a token you must **redeploy** for the new bundle to pick it up.
+
+## Hackathon demo surfaces
+
+- `/marketplace` — includes **Run Demo**, x402 provider card, hybrid MintGate summary,
+  and Global Mundi map.
+- `/my-assets` — rich claimed asset view with provenance score, seal/verdict,
+  simulated collateral status, Lock/Release controls, and `All / Available / Locked`
+  filters.
+- `/agents` — dedicated integration narrative: x402 quote → `X-PAYMENT` → proof
+  payload, plus the “Why Lastre wins” comparison.
+
+Demo script: [`docs/DEMO_SCRIPT.md`](../docs/DEMO_SCRIPT.md).

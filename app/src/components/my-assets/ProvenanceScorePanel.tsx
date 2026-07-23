@@ -4,6 +4,7 @@ import { Icon } from "../ui/Icon";
 import { Tabs } from "../ui/Tabs";
 import { shortHash } from "../../lib/format";
 import type { LotDetail } from "../../lib/types";
+import { explorerUrlFromTx, resolveAttestationUrl } from "../../lib/chainTimeline";
 import {
   buildScoreComponents,
   buildTimeline,
@@ -331,11 +332,17 @@ function ChainTab({ lot }: { lot: LotDetail }) {
             <dt>Testnet attester</dt>
             <dd>{attestation.attester}</dd>
           </div>
-          {attestation.explorerUrl ? (
+          {resolveAttestationUrl(lot.artifact.assetId, attestation.explorerUrl, attestation.verdict) ? (
             <div>
               <dt>Explorer</dt>
               <dd>
-                <a href={attestation.explorerUrl} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={
+                    resolveAttestationUrl(lot.artifact.assetId, attestation.explorerUrl, attestation.verdict) as string
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Open attestation ↗
                 </a>
               </dd>
@@ -347,13 +354,19 @@ function ChainTab({ lot }: { lot: LotDetail }) {
         <div>
           <dt>Mint tx</dt>
           <dd>
-            <a
-              href={`https://testnet.cspr.live/transaction/${lot.mintTx}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {shortHash(lot.mintTx, 10, 8)} ↗
-            </a>
+            {explorerUrlFromTx(lot.mintTx) ? (
+              <a
+                href={explorerUrlFromTx(lot.mintTx) as string}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {shortHash(lot.mintTx, 10, 8)} ↗
+              </a>
+            ) : (
+              <span title={lot.mintTx}>
+                {shortHash(lot.mintTx, 10, 8)} · demo/session receipt — not on Casper
+              </span>
+            )}
           </dd>
         </div>
       ) : null}

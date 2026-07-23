@@ -46,6 +46,12 @@ required-features = ["livenet"]
 test = false
 
 [[bin]]
+name = "deploy_mint_gate"
+path = "bin/deploy_mint_gate.rs"
+required-features = ["livenet"]
+test = false
+
+[[bin]]
 name = "query"
 path = "bin/query.rs"
 required-features = ["livenet"]

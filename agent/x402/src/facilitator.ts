@@ -3,13 +3,17 @@ import { createHash } from "node:crypto";
 /** x402 fields returned by the server in the HTTP 402 Payment Required response. */
 export type PaymentRequirements = {
   scheme: "exact";
-  network: "casper-test";
+  /** Legacy short form (`casper-test`) or CAIP-2 (`casper:casper-test`). */
+  network: "casper-test" | "casper:casper-test" | "casper:casper" | string;
   maxAmountRequired: number;
-  asset: "CSPR";
+  /** Native CSPR label, or CEP-18 package hash (WCSPR). */
+  asset: "CSPR" | "WCSPR" | string;
   payTo: string;
-  resource: "/verify";
+  resource: "/verify" | string;
   nonce: string;
-  description: "Lastro provenance verification";
+  description: string;
+  /** Present when LASTRE_X402_MODE=cspr_cloud — official MAKE quote metadata. */
+  cloud?: import("./cspr-cloud-types.js").CloudQuoteMeta;
 };
 
 /** Mock payload sent by the client in the X-PAYMENT header. */
@@ -18,6 +22,14 @@ export type PaymentPayload = {
   amount: number;
   from: string;
   sig: string;
+  /**
+   * Optional official CSPR.cloud body (EIP-712). Required for
+   * CsprCloudFacilitator settle; ignored by Mock/Casper facilitators.
+   */
+  cloud?: {
+    paymentPayload: import("./cspr-cloud-types.js").CloudPaymentPayload;
+    paymentRequirements: import("./cspr-cloud-types.js").CloudPaymentRequirements;
+  };
 };
 
 export type PaymentVerification =
@@ -25,38 +37,35 @@ export type PaymentVerification =
   | { ok: false; reason: "nonce_mismatch" | "amount_insufficient" | "bad_signature" | "nonce_replayed" };
 
 export type Settlement = {
+  /** Settlement receipt hash (synthetic for mock; real deploy hash for casper mode). */
   txHash: string;
+  /**
+   * - synthetic_receipt: local facilitator receipt (judge demo; no CSPR moved)
+   * - casper_deploy: reserved for a real on-chain payment deploy
+   */
+  kind: "synthetic_receipt" | "casper_deploy";
 };
 
 /**
  * Identifies which facilitator implementation is active.
  *
- * - `"mock"`   — deterministic local facilitator (no network, no Casper).
- * - `"casper"` — reserved for a real Casper facilitator that does NOT exist yet.
+ * - `"mock"`       — deterministic local facilitator (no network, no Casper).
+ * - `"casper"`     — CasperFacilitator (real testnet native CSPR via casper-client).
+ * - `"cspr_cloud"` — CsprCloudFacilitator (official WCSPR + CSPR.cloud verify/settle).
  *
- * This lets the server and observability layers report when they are running
- * against the mock.
+ * Select via createFacilitatorFromEnv() / LASTRE_X402_MODE=mock|casper|cspr_cloud.
  */
-export type FacilitatorMode = "mock" | "casper";
+export type FacilitatorMode = "mock" | "casper" | "cspr_cloud";
 
 /**
  * x402 payment seam (the single replacement point).
  *
- * This interface is the ONLY boundary between the Lastro server and payment
- * verification/settlement. Today the only implementation is `MockFacilitator`
- * (a local mock). Replacing it with a real Casper facilitator must be ONE
- * implementation of this interface, without rewriting `server.ts`.
+ * Implementations:
+ * - `MockFacilitator` — local synthetic_receipt (judge demo default)
+ * - `CasperFacilitator` — real casper-client native CSPR transfer (LASTRE_X402_MODE=casper)
+ * - `CsprCloudFacilitator` — CSPR.cloud + WCSPR EIP-712 (LASTRE_X402_MODE=cspr_cloud)
  *
- * INTEGRATION SEAM — where the real facilitator would fit:
- * TODO(casper-facilitator): implement `class CasperFacilitator implements
- * Facilitator` in its own file (for example, `casper-facilitator.ts`) that:
- *   - `verifyPayment`: verifies the x402 payment for real
- *     (network, asset, amount, nonce, signature) via the real facilitator /
- *     on-chain checks instead of the local SHA-256 mock signature.
- *   - `settlePayment`: settles the payment for real and returns the real txHash.
- * Then inject it with `createLastroX402Server({ facilitator: new CasperFacilitator(...) })`.
- * Do NOT add an empty stub here — the real implementation should enter only
- * when it actually exists.
+ * Inject with createLastroX402Server({ facilitator }) or createFacilitatorFromEnv().
  */
 export interface Facilitator {
   /** Implementation label. `MockFacilitator` returns `"mock"`. */
@@ -74,7 +83,7 @@ export interface Facilitator {
  * MOCK secret. This is not a real key: it only lets the mock sign/validate the
  * X-PAYMENT header locally and deterministically.
  */
-export const MOCK_PAYMENT_SECRET = "lastro-local-x402-mock-secret";
+export const MOCK_PAYMENT_SECRET = "lastre-local-x402-mock-secret";
 
 /**
  * ============================ MOCK ============================
@@ -134,10 +143,11 @@ export class MockFacilitator implements Facilitator {
     this.settledNonces.add(payment.nonce);
 
     return {
+      kind: "synthetic_receipt",
       txHash: createHash("sha256")
         .update(
           [
-            "lastro-x402-settlement",
+            "lastre-x402-settlement",
             requirements.network,
             requirements.resource,
             requirements.payTo,
@@ -153,7 +163,7 @@ export class MockFacilitator implements Facilitator {
 
 export function signMockPayment(input: { nonce: string; amount: number; from: string }): string {
   return createHash("sha256")
-    .update(["lastro-x402-payment", input.nonce, input.amount.toString(), input.from, MOCK_PAYMENT_SECRET].join("|"))
+    .update(["lastre-x402-payment", input.nonce, input.amount.toString(), input.from, MOCK_PAYMENT_SECRET].join("|"))
     .digest("hex");
 }
 
@@ -164,7 +174,9 @@ export function encodePaymentPayload(payload: PaymentPayload): string {
 export function decodePaymentHeader(headerValue: string): PaymentPayload | null {
   try {
     const raw = Buffer.from(headerValue, "base64url").toString("utf8");
-    const parsed = JSON.parse(raw) as Partial<PaymentPayload>;
+    const parsed = JSON.parse(raw) as Partial<PaymentPayload> & {
+      cloud?: PaymentPayload["cloud"];
+    };
 
     if (
       typeof parsed.nonce !== "string" ||
@@ -175,12 +187,16 @@ export function decodePaymentHeader(headerValue: string): PaymentPayload | null 
       return null;
     }
 
-    return {
+    const out: PaymentPayload = {
       nonce: parsed.nonce,
       amount: parsed.amount,
       from: parsed.from,
       sig: parsed.sig,
     };
+    if (parsed.cloud?.paymentPayload && parsed.cloud?.paymentRequirements) {
+      out.cloud = parsed.cloud;
+    }
+    return out;
   } catch {
     return null;
   }
@@ -192,7 +208,7 @@ export function createMockPaymentHeader(
   options: { from?: string; amount?: number } = {},
 ): string {
   const amount = options.amount ?? requirements.maxAmountRequired;
-  const from = options.from ?? "lastro-consumer-mock";
+  const from = options.from ?? "lastre-consumer-mock";
   const payload: PaymentPayload = {
     nonce: requirements.nonce,
     amount,

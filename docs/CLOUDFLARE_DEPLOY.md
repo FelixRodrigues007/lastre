@@ -26,7 +26,7 @@ lastro.onrender.com-> fallback direto da API enquanto api.lastre.io propaga
 ## 1. Frontend no Cloudflare Pages
 
 Workers & Pages → **Create application** → **Pages** → **Connect to Git** →
-repositório `FelixRodrigues007/lastro`.
+repositório `FelixRodrigues007/lastre`.
 
 Build settings:
 
