@@ -432,7 +432,8 @@ export function Marketplace() {
 
   return (
     <div className="page market-page">
-      <div className="market-page__intro">
+      <div className="market-page__left">
+        <div className="market-page__intro">
         <PageHeader
           kicker="Marketplace"
           title="Provenance Marketplace"
@@ -578,6 +579,7 @@ export function Marketplace() {
           />
         ) : null}
       </aside>
+      </div>
 
       <div className="market-map" aria-label="Global Mundi provenance map">
         <MarketMapPanel
