@@ -500,8 +500,25 @@ export class AppRuntime {
         agent: "Agent decides action only (pay / skip / escalate) — never seal truth",
         sealedRail: "MintGate + demo collateral only after Valid — proof before finance",
       },
-      mainnetRoadmap:
-        "Live on Casper Testnet today. Mainnet when facilitator ops + keys + monitoring are production-safe. No mainnet money claims in demo.",
+      mainnetRoadmap: {
+        today:
+          "Live on Casper Testnet only. UI simulate / rail run = mock. Real settle = testnet CSPR (or optional WCSPR cloud) when keys present. No mainnet money in demo.",
+        thesis:
+          "Proof before token / finance (origin seal). Dual-key field sealer ≠ chain attester. Invalid is permanent proof. Not a generic proof-of-concept pitch.",
+        afterBuildathon:
+          "When Final Round ends: (A) production completion & ops freeze, (B) operator feasibility at lot level, (C) load/capacity on testnet for industrial RWA corridor class, (D) multi-site RWA + precision field geolocation, (E) phased mainnet only after keys + facilitator + monitoring + runbook + legal gates are green.",
+        mainnetGates: [
+          "production key custody and rotation",
+          "facilitator/settle path ops-safe",
+          "monitoring on health and last settle",
+          "incident/rollback runbook",
+          "contract policy / audit path",
+          "legal review before real-asset claims",
+        ],
+        oneLiner:
+          "Live on Casper Testnet today. Mainnet when facilitator ops + keys + monitoring are production-safe. No mainnet money claims in demo.",
+        doc: "docs/POST_BUILDATHON_ROADMAP.md",
+      },
       honesty: {
         uiSimulate: "mock",
         apiSettle:

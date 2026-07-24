@@ -97,6 +97,26 @@ Definition of done:
 - No mainnet or real-asset claims without audit, legal review, and operational
   controls.
 
+## Phase 5 — Post-Buildathon (after Final Round)
+
+Priority: **P0 after deadline** · full detail in
+[`POST_BUILDATHON_ROADMAP.md`](./POST_BUILDATHON_ROADMAP.md).
+
+Honest summary:
+
+- **Today:** Casper **Testnet** only · no mainnet money in demo.
+- **After finals:** production completion → operator feasibility (lot-level;
+  e.g. industrial copper corridor class) → load/capacity on testnet → multi-site
+  RWA + field geolocation → **phased mainnet** only when keys / facilitator /
+  monitoring / runbook / legal gates are green.
+- **Thesis wording:** proof **before** token/finance (origin seal) — not
+  “proof of concept”.
+
+Definition of done (path exists):
+
+- This phase is documented in repo + BUIDL + `GET /api/evidence` mainnetRoadmap.
+- Mainnet is never claimed until gates in `POST_BUILDATHON_ROADMAP.md` pass.
+
 ## Open decisions
 
 | Decision | Owner | Notes |

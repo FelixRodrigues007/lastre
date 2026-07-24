@@ -73,6 +73,7 @@ deployment, roadmap, API, and architecture handoff:
 - [API contract](docs/API_CONTRACT.md)
 - [Architecture flowcharts](docs/ARCHITECTURE_FLOWCHARTS.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Post-Buildathon roadmap (honest mainnet path)](docs/POST_BUILDATHON_ROADMAP.md)
 - [Operating wheels](docs/OPERATING_WHEELS.md)
 - [Landing page creative spec](docs/LANDING_PAGE_CREATIVE_SPEC.md)
 - [Deployment runbook](docs/DEPLOYMENT_RUNBOOK.md)
