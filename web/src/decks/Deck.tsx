@@ -92,12 +92,14 @@ export function DeckViewer({ deck, locale, onExit }: Props) {
 
     const fit = () => {
       inner.style.transform = "none";
-      const prevAlign = inner.style.alignContent;
-      inner.style.alignContent = "start";
       const box = inner.clientHeight;
-      const content = inner.scrollHeight;
+      const top = inner.getBoundingClientRect().top;
+      let contentBottom = top;
+      for (const kid of Array.from(inner.children)) {
+        contentBottom = Math.max(contentBottom, kid.getBoundingClientRect().bottom);
+      }
+      const content = contentBottom - top;
       const wide = inner.scrollWidth;
-      inner.style.alignContent = prevAlign;
       if (box <= 0 || content <= 0) return;
       const k = Math.min(1, box / content, inner.clientWidth / Math.max(wide, 1));
       inner.style.transform = k < 0.995 ? `scale(${k.toFixed(4)})` : "none";

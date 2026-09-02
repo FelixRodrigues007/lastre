@@ -194,8 +194,8 @@
   align-content: stretch;
   gap: var(--dk-air);
   padding-bottom: clamp(1.8rem, 1rem + 1.5vw, 2.6rem);
-  transform-origin: center center;
-  animation: dk-enter 520ms var(--dk-ease) both;
+  transform-origin: top center;
+  animation: dk-enter 380ms var(--dk-ease) both;
 }
 .dk-canvas__inner--center {
   align-content: safe center;
@@ -205,37 +205,37 @@
 /* Nothing fades in as a block. The bands' children rise one after another,
  * from the side the deck is travelling, and the headline lifts like a
  * curtain — so a slide change reads as a move, not a cut. */
-.dk-canvas__inner { --dk-dx: 30px; }
+.dk-canvas__inner { --dk-dx: 18px; }
 
 .dk-top > *,
 .dk-bottom > *,
 .dk-canvas__inner > .dk-row > * {
-  animation: dk-rise 700ms var(--dk-ease) both;
+  animation: dk-rise 440ms var(--dk-ease) both;
 }
-.dk-top > *:nth-child(2), .dk-bottom > *:nth-child(2), .dk-canvas__inner > .dk-row > *:nth-child(2) { animation-delay: 80ms; }
-.dk-top > *:nth-child(3), .dk-bottom > *:nth-child(3), .dk-canvas__inner > .dk-row > *:nth-child(3) { animation-delay: 155ms; }
-.dk-top > *:nth-child(4), .dk-bottom > *:nth-child(4) { animation-delay: 225ms; }
-.dk-bottom { animation-delay: 120ms; }
-.dk-bottom > * { animation-delay: 150ms; }
-.dk-bottom > *:nth-child(2) { animation-delay: 225ms; }
-.dk-bottom > *:nth-child(3) { animation-delay: 295ms; }
+.dk-top > *:nth-child(2), .dk-bottom > *:nth-child(2), .dk-canvas__inner > .dk-row > *:nth-child(2) { animation-delay: 50ms; }
+.dk-top > *:nth-child(3), .dk-bottom > *:nth-child(3), .dk-canvas__inner > .dk-row > *:nth-child(3) { animation-delay: 100ms; }
+.dk-top > *:nth-child(4), .dk-bottom > *:nth-child(4) { animation-delay: 150ms; }
+.dk-bottom { animation-delay: 70ms; }
+.dk-bottom > * { animation-delay: 90ms; }
+.dk-bottom > *:nth-child(2) { animation-delay: 140ms; }
+.dk-bottom > *:nth-child(3) { animation-delay: 190ms; }
 
 /* the columns inside a band cascade left to right */
 .dk-row > .dk-floor, .dk-row > .dk-step, .dk-row > .dk-panel, .dk-row > .dk-metric {
-  animation: dk-rise 760ms var(--dk-ease) both;
+  animation: dk-rise 480ms var(--dk-ease) both;
 }
-.dk-row > *:nth-child(1) { animation-delay: 180ms; }
-.dk-row > *:nth-child(2) { animation-delay: 265ms; }
-.dk-row > *:nth-child(3) { animation-delay: 350ms; }
-.dk-row > *:nth-child(4) { animation-delay: 435ms; }
-.dk-row > *:nth-child(5) { animation-delay: 520ms; }
-.dk-row > *:nth-child(6) { animation-delay: 605ms; }
+.dk-row > *:nth-child(1) { animation-delay: 110ms; }
+.dk-row > *:nth-child(2) { animation-delay: 165ms; }
+.dk-row > *:nth-child(3) { animation-delay: 220ms; }
+.dk-row > *:nth-child(4) { animation-delay: 275ms; }
+.dk-row > *:nth-child(5) { animation-delay: 330ms; }
+.dk-row > *:nth-child(6) { animation-delay: 385ms; }
 
 /* the headline overrides the name, keeping whatever delay it inherited */
-.dk-h1, .dk-h2 { animation-name: dk-curtain; animation-duration: 900ms; }
+.dk-h1, .dk-h2 { animation-name: dk-curtain; animation-duration: 560ms; }
 
 @keyframes dk-rise {
-  from { opacity: 0; transform: translate3d(var(--dk-dx), 12px, 0); filter: blur(7px); }
+  from { opacity: 0; transform: translate3d(var(--dk-dx), 12px, 0); filter: blur(4px); }
   to { opacity: 1; transform: none; filter: blur(0); }
 }
 @keyframes dk-curtain {
@@ -251,8 +251,8 @@
   to { translate: 0 -14px; }
 }
 @keyframes dk-enter {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; translate: 0 10px; }
+  to { opacity: 1; translate: 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .dk-canvas__inner,
@@ -1004,6 +1004,45 @@
   margin-inline: auto;
   height: auto;
 }
+.dk-ring3d {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: min(62vh, 640px);
+  margin-inline: auto;
+}
+.dk-ring3d canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.dk-ring3d__labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.dk-ring3d__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform, opacity;
+  text-align: center;
+  color: var(--dk-fg);
+  display: grid;
+  gap: 0.15em;
+}
+.dk-ring3d__label-num {
+  font-family: var(--dk-mono);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+}
+.dk-ring3d__label-name {
+  font-family: var(--dk-sans);
+  font-size: var(--dk-ring3d-name-size, 20px);
+  font-weight: 600;
+  line-height: 1.1;
+}
 .dk-ring-slide {
   display: grid;
   gap: clamp(0.8rem, 1.8vh, 1.4rem);
@@ -1022,13 +1061,14 @@
     align-items: center;
   }
   .dk-ring-slide--split {
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     justify-items: stretch;
     align-items: start;
   }
-  .dk-ring-slide--split .dk-ring {
+  .dk-ring-slide--split .dk-ring,
+  .dk-ring-slide--split .dk-ring3d {
     margin-inline: 0;
-    max-width: min(60vh, 620px);
+    max-width: min(52vh, 520px);
   }
 }
 .dk-ring-slide__meta {
@@ -1042,61 +1082,34 @@
   gap: clamp(0.65rem, 1.2vh, 0.9rem);
   min-width: 0;
 }
-.dk-ring-chips__list {
-  list-style: none;
+.dk-ring-lista {
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.38rem 0.45rem;
-  min-width: 0;
-}
-.dk-ring-chip {
-  display: inline-block;
   font-family: var(--dk-sans);
-  font-size: clamp(0.8rem, 0.76rem + 0.16vw, 0.88rem);
-  letter-spacing: 0.05em;
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.9rem);
+  line-height: 1.7;
   color: var(--dk-fg-dim);
-  border: 1px solid var(--dk-rule);
-  border-radius: 999px;
-  padding: 0.22rem 0.55rem;
-  line-height: 1.35;
-  /* chip longo quebra dentro da pílula em vez de vazar pela borda do sheet */
-  white-space: normal;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-wrap: break-word;
   text-wrap: pretty;
-  hyphens: none;
+  min-width: 0;
+  border: 1px solid var(--dk-rule);
+  border-radius: 4px;
+  padding: clamp(0.6rem, 1.1vh, 0.85rem) clamp(0.7rem, 1vw, 1rem);
+  background: transparent;
 }
-.dk-ring-chip--accent {
+.dk-ring-lista__hi {
   color: var(--dk-accent);
-  border-color: rgba(78, 143, 60, 0.4);
+  font-weight: 500;
 }
-.dk-sheet--dark .dk-ring-chip--accent {
+.dk-sheet--dark .dk-ring-lista__hi {
   color: #a9dd8f;
-  border-color: rgba(169, 221, 143, 0.4);
 }
 .dk-ring-chips--cols {
   display: grid;
-  row-gap: clamp(0.55rem, 1vh, 0.85rem);
-  column-gap: clamp(1.5rem, 0.9rem + 1.8vw, 2.75rem);
+  row-gap: clamp(0.9rem, 1.8vh, 1.4rem);
   grid-template-columns: minmax(0, 1fr);
-}
-@media (min-width: 640px) {
-  .dk-ring-chips--cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-.dk-ring-chips--cols:has(.dk-ring-chips__col:nth-child(3)) {
-  grid-template-columns: minmax(0, 1fr);
-}
-@media (min-width: 900px) {
-  .dk-ring-chips--cols:has(.dk-ring-chips__col:nth-child(3)) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 .dk-ring-chips__col {
   display: grid;
-  gap: clamp(0.55rem, 1.1vh, 0.8rem);
+  gap: clamp(0.7rem, 1.4vh, 1rem);
   align-content: start;
   min-width: 0;
 }
@@ -1110,7 +1123,8 @@
   grid-template-rows: auto minmax(0, 1fr) auto auto;
   height: 100%;
 }
-.dk-ring-pedagio .dk-ring {
+.dk-ring-pedagio .dk-ring,
+.dk-ring-pedagio .dk-ring3d {
   max-width: min(38vh, 420px);
   max-height: 100%;
 }
@@ -1209,8 +1223,8 @@
 .dk-ring-resumo dd {
   margin: 0;
   font-family: var(--dk-sans);
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: clamp(0.84rem, 0.79rem + 0.2vw, 0.95rem);
+  line-height: 1.45;
   color: var(--dk-ink-2);
   text-wrap: pretty;
 }
@@ -1255,7 +1269,8 @@
   width: 100%;
   min-height: 0;
 }
-.dk-cover__stage .dk-ring {
+.dk-cover__stage .dk-ring,
+.dk-cover__stage .dk-ring3d {
   max-width: min(40vh, 430px);
   max-height: 100%;
 }
@@ -1743,4 +1758,133 @@
   .dk-top:has(.dk-bignum) .dk-bignum__k {
     margin-left: auto;
   }
+}
+
+/* ── slide 02 · o que é — prova em diagonal ─────────────────────────── */
+
+.dk-oque {
+  grid-row: 1 / -1;
+  min-height: 0;
+  display: grid;
+  gap: clamp(1rem, 0.65rem + 1.4vw, 2.2rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-content: stretch;
+}
+
+@media (min-width: 900px) {
+  .dk-oque {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(1.2rem, 0.75rem + 1.8vw, 2.8rem);
+    align-items: stretch;
+  }
+}
+
+.dk-oque__copy {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+  gap: clamp(0.55rem, 0.4rem + 0.5vw, 0.95rem);
+}
+
+.dk-oque__head {
+  display: grid;
+  gap: clamp(0.7rem, 0.5rem + 0.6vw, 1.1rem);
+  align-content: start;
+}
+
+.dk-oque__head > * {
+  animation: dk-rise 440ms var(--dk-ease) both;
+}
+
+.dk-oque__head > *:nth-child(2) {
+  animation-name: dk-curtain;
+  animation-duration: 560ms;
+}
+
+.dk-oque__copy > .dk-kv {
+  align-self: end;
+  animation: dk-rise 440ms var(--dk-ease) 140ms both;
+}
+
+.dk-oque__stage {
+  display: grid;
+  min-height: 0;
+  align-items: center;
+}
+
+.dk-proof {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.45rem, 0.3rem + 0.6vw, 1.1rem);
+  width: 100%;
+  min-height: 0;
+}
+
+.dk-proof > * {
+  animation: dk-rise 480ms var(--dk-ease) both;
+}
+
+.dk-proof > *:nth-child(1) { animation-delay: 110ms; }
+.dk-proof > *:nth-child(2) { animation-delay: 165ms; }
+.dk-proof > *:nth-child(3) { animation-delay: 220ms; }
+
+.dk-proof__valid {
+  grid-column: 1 / 9;
+  grid-row: 1;
+  justify-self: start;
+  width: 100%;
+}
+
+.dk-proof__seal {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  min-height: 0;
+}
+
+.dk-proof__invalid {
+  grid-column: 5 / -1;
+  grid-row: 3;
+  justify-self: end;
+  width: 100%;
+}
+
+.dk-proof .dk-panel {
+  min-height: 0;
+  padding: clamp(0.6rem, 0.45rem + 0.5vw, 1rem);
+  gap: clamp(0.3rem, 0.2rem + 0.25vw, 0.45rem);
+}
+
+.dk-proof .dk-p {
+  font-size: clamp(0.88rem, 0.82rem + 0.28vw, 1.05rem);
+  line-height: 1.42;
+}
+
+.dk-proof__seal .dk-seal {
+  width: min(100%, clamp(12.5rem, 8.5rem + 9vw, 18.5rem));
+  max-height: 100%;
+}
+
+@media (max-width: 899px) {
+  .dk-proof {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+  }
+
+  .dk-proof__valid,
+  .dk-proof__invalid,
+  .dk-proof__seal {
+    grid-column: 1;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .dk-proof__valid { grid-row: 1; }
+  .dk-proof__seal { grid-row: 2; }
+  .dk-proof__invalid { grid-row: 3; }
 }

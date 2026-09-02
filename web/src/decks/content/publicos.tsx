@@ -1,4 +1,4 @@
-import { Ring } from "../Ring";
+import { Ring3D } from "../Ring3D";
 import { tx, type Deck } from "../types";
 import type { Locale } from "../../i18n/translations";
 import { camada, type CamadaId } from "./publicos-data";
@@ -10,7 +10,7 @@ import { camada, type CamadaId } from "./publicos-data";
  * apenas quais setores estão acesos; o centro nunca apaga, porque é a tese.
  * ───────────────────────────────────────────────────────────────────────── */
 
-function Chips({
+function Lista({
   locale,
   items,
   accent,
@@ -20,17 +20,19 @@ function Chips({
   accent?: string[];
 }) {
   return (
-    <ul className="dk-ring-chips__list" aria-label={locale === "pt" ? "Públicos" : "Audiences"}>
-      {items.map((p) => {
+    <p className="dk-ring-lista">
+      {items.map((p, i) => {
         const label = locale === "pt" ? p.pt : p.en;
         const isAccent = accent?.includes(p.pt) ?? false;
+        const suffix = i < items.length - 1 ? ", " : ".";
         return (
-          <li key={p.pt}>
-            <span className={`dk-ring-chip${isAccent ? " dk-ring-chip--accent" : ""}`}>{label}</span>
-          </li>
+          <span key={p.pt}>
+            {isAccent ? <b className="dk-ring-lista__hi">{label}</b> : label}
+            {suffix}
+          </span>
         );
       })}
-    </ul>
+    </p>
   );
 }
 
@@ -82,7 +84,7 @@ function ChipCols({ locale, cols }: { locale: Locale; cols: Col[] }) {
         <div className="dk-ring-chips__col" key={col.id}>
           <span className="dk-eyebrow">{t(col.label.pt, col.label.en)}</span>
           <Resumo locale={locale} id={col.id} />
-          <Chips locale={locale} items={camada(col.id).publicos} accent={col.accent} />
+          <Lista locale={locale} items={camada(col.id).publicos} accent={col.accent} />
         </div>
       ))}
     </div>
@@ -147,7 +149,7 @@ export const publicos: Deck = {
             </div>
 
             <div className="dk-cover__stage">
-              <Ring locale={l} />
+              <Ring3D locale={l} />
               <aside className="dk-cover__note dk-cover__note--a">
                 <b>{t("50 públicos", "50 audiences")}</b>
                 <span>
@@ -197,7 +199,7 @@ export const publicos: Deck = {
               </p>
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--map">
-              <Ring locale={l} />
+              <Ring3D locale={l} />
               <div className="dk-ring-slide__meta">
                 <div className="dk-row dk-row--3">
                   <div className="dk-metric dk-metric--flat">
@@ -247,7 +249,7 @@ export const publicos: Deck = {
               />
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
-              <Ring locale={l} lit={["origem"]} />
+              <Ring3D locale={l} lit={["origem"]} />
               <div className="dk-ring-slide__side">
                 <ChipCols
                   locale={l}
@@ -281,7 +283,7 @@ export const publicos: Deck = {
               />
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
-              <Ring locale={l} lit={["mercado", "capital"]} />
+              <Ring3D locale={l} lit={["mercado", "capital"]} />
               <div className="dk-ring-slide__side">
                 <ChipCols
                   locale={l}
@@ -289,12 +291,12 @@ export const publicos: Deck = {
                     {
                       label: { pt: "03 · Mercado", en: "03 · Market" },
                       id: "mercado",
-                      accent: ["Comprador com mandato regulatório"],
+                      accent: ["comprador obrigado por lei a saber a origem"],
                     },
                     {
                       label: { pt: "04 · Capital", en: "04 · Capital" },
                       id: "capital",
-                      accent: ["Seguradora e resseguradora"],
+                      accent: ["seguradora"],
                     },
                   ]}
                 />
@@ -326,7 +328,7 @@ export const publicos: Deck = {
               />
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
-              <Ring locale={l} lit={["defi", "infra", "estado"]} />
+              <Ring3D locale={l} lit={["defi", "infra", "estado"]} />
               <div className="dk-ring-slide__side">
                 <ChipCols
                   locale={l}
@@ -334,12 +336,12 @@ export const publicos: Deck = {
                     {
                       label: { pt: "05 · DeFi", en: "05 · DeFi" },
                       id: "defi",
-                      accent: ["Curador de risco"],
+                      accent: ["quem define o risco aceito"],
                     },
                     {
                       label: { pt: "06 · Infraestrutura", en: "06 · Infrastructure" },
                       id: "infra",
-                      accent: ["Agente de IA autônomo (x402)"],
+                      accent: ["agente de IA que compra sozinho"],
                     },
                     {
                       label: { pt: "07 · Estado", en: "07 · State" },
@@ -368,7 +370,7 @@ export const publicos: Deck = {
               <p className="dk-eyebrow">{t("05 — A posição", "05 — The position")}</p>
               <h1 className="dk-h1">{t("O novo tecnofeudalismo.", "The new technofeudalism.")}</h1>
             </div>
-            <Ring locale={l} lit={[]} labels={false} />
+            <Ring3D locale={l} lit={[]} labels={false} />
             <div className="dk-ring-pedagio__lines">
               <p className="dk-ring-pedagio__line">
                 {t(

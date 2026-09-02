@@ -15,12 +15,16 @@ export type Camada = {
   id: CamadaId;
   num: string;
   name: L10n;
-  /** O que a camada faz na cadeia. Uma linha. */
+  /** O que a camada faz na cadeia. Uma linha, sem jargão. */
   faz: L10n;
   /** O que ela quer da Lastre. Uma linha. Nunca uma promessa nossa. */
   quer: L10n;
   publicos: Publico[];
 };
+
+/* Os públicos entram numa frase corrida, separados por vírgula — por isso
+ * cada rótulo começa em minúscula, salvo nome próprio. Nada de jargão:
+ * quem lê o deck não precisa saber o que é off-taker ou SPV. */
 
 export const CAMADAS: Camada[] = [
   {
@@ -28,22 +32,22 @@ export const CAMADAS: Camada[] = [
     num: "01",
     name: { pt: "Origem", en: "Origin" },
     faz: {
-      pt: "Gera o fato físico — minério, madeira, energia, carbono.",
-      en: "Generates the physical fact — ore, timber, power, carbon.",
+      pt: "Tira do chão o que vai ser vendido: minério, madeira, energia, carbono.",
+      en: "Takes what will be sold out of the ground: ore, timber, power, carbon.",
     },
     quer: {
-      pt: "Provar que o que tem é real, para vender com prêmio ou dar em garantia.",
-      en: "To prove what it holds is real, to sell at a premium or pledge it.",
+      pt: "Provar que o que tem é de verdade, para vender mais caro ou dar como garantia.",
+      en: "To prove what it holds is real, to sell it dearer or pledge it as collateral.",
     },
     publicos: [
-      { pt: "Titular de direito minerário", en: "Mining rights holder" },
-      { pt: "Mineradora júnior e média", en: "Junior and mid-tier miner" },
-      { pt: "Proprietário de terra", en: "Landowner" },
-      { pt: "Garimpo em formalização (PLG)", en: "Artisanal mine going formal (PLG)" },
-      { pt: "Madeireira e concessionária florestal", en: "Lumber mill and forest concessionaire" },
-      { pt: "Produtor rural com ativo ambiental", en: "Rural producer with environmental asset" },
-      { pt: "Gerador de energia", en: "Power generator" },
-      { pt: "Reciclador e mineração urbana", en: "Recycler and urban mining" },
+      { pt: "quem tem o direito de minerar", en: "holders of mining rights" },
+      { pt: "mineradora pequena e média", en: "small and mid-sized miners" },
+      { pt: "dono da terra", en: "landowners" },
+      { pt: "garimpo se legalizando", en: "artisanal mines going legal" },
+      { pt: "madeireira e concessão de floresta", en: "timber mills and forest concessions" },
+      { pt: "produtor rural com área preservada", en: "farmers with preserved land" },
+      { pt: "gerador de energia", en: "power generators" },
+      { pt: "reciclagem e sucata", en: "recycling and scrap" },
     ],
   },
   {
@@ -51,22 +55,22 @@ export const CAMADAS: Camada[] = [
     num: "02",
     name: { pt: "Prova", en: "Proof" },
     faz: {
-      pt: "Produz e valida a leitura: pesa, ensaia, audita, custodia.",
-      en: "Produces and validates the reading: weighs, assays, audits, custodies.",
+      pt: "Pesa, analisa, audita e guarda. É quem confere se o material existe mesmo.",
+      en: "Weighs, tests, audits and stores. It is who checks the material is really there.",
     },
     quer: {
-      pt: "Um selo com valor probatório que o laudo em PDF não tem.",
-      en: "A seal with the evidentiary weight a PDF report does not carry.",
+      pt: "Um selo que valha como prova. Um laudo em PDF não vale.",
+      en: "A seal that counts as proof. A PDF report does not.",
     },
     publicos: [
-      { pt: "Operador de balança", en: "Weighbridge operator" },
-      { pt: "Laboratório de ensaio e geoquímica", en: "Assay and geochemistry lab" },
-      { pt: "Certificadora", en: "Certification body" },
-      { pt: "Responsável técnico (ART)", en: "Technical lead (ART)" },
-      { pt: "Auditor independente", en: "Independent auditor" },
-      { pt: "Sensoriamento remoto e IoT", en: "Remote sensing and IoT" },
-      { pt: "Armazém geral e custodiante físico", en: "General warehouse and physical custodian" },
-      { pt: "Transportadora e cadeia de custódia", en: "Carrier and chain of custody" },
+      { pt: "balança de pesagem", en: "weighbridges" },
+      { pt: "laboratório de análise", en: "testing labs" },
+      { pt: "certificadora", en: "certifiers" },
+      { pt: "engenheiro responsável", en: "signing engineers" },
+      { pt: "auditor independente", en: "independent auditors" },
+      { pt: "satélite e sensores em campo", en: "satellites and field sensors" },
+      { pt: "armazém e cofre", en: "warehouses and vaults" },
+      { pt: "transporte com rastreio da carga", en: "tracked transport" },
     ],
   },
   {
@@ -74,19 +78,19 @@ export const CAMADAS: Camada[] = [
     num: "03",
     name: { pt: "Mercado", en: "Market" },
     faz: {
-      pt: "Compra o físico e decide se origem vale prêmio.",
-      en: "Buys the physical and decides whether origin earns a premium.",
+      pt: "Compra o material e decide se a origem vale pagar mais caro.",
+      en: "Buys the material and decides whether origin is worth paying more for.",
     },
     quer: {
-      pt: "Comprar sem herdar passivo de origem.",
-      en: "To buy without inheriting the liability of origin.",
+      pt: "Comprar sem herdar o problema de quem produziu.",
+      en: "To buy without inheriting the producer's problem.",
     },
     publicos: [
-      { pt: "Trading house e comprador industrial", en: "Trading house and industrial buyer" },
-      { pt: "Refinaria e beneficiadora", en: "Refinery and processor" },
-      { pt: "Comprador com mandato regulatório", en: "Buyer under regulatory mandate" },
-      { pt: "Off-taker de longo prazo", en: "Long-term off-taker" },
-      { pt: "Exportador e despachante", en: "Exporter and customs broker" },
+      { pt: "trading e indústria compradora", en: "traders and industrial buyers" },
+      { pt: "refinaria e beneficiamento", en: "refineries and processing plants" },
+      { pt: "comprador obrigado por lei a saber a origem", en: "buyers required by law to know the origin" },
+      { pt: "comprador com contrato de longo prazo", en: "buyers on long-term contracts" },
+      { pt: "exportador e despachante", en: "exporters and customs agents" },
     ],
   },
   {
@@ -94,21 +98,21 @@ export const CAMADAS: Camada[] = [
     num: "04",
     name: { pt: "Capital", en: "Capital" },
     faz: {
-      pt: "Financia a operação contra produção futura.",
-      en: "Funds the operation against future production.",
+      pt: "Põe dinheiro hoje contra a produção de amanhã.",
+      en: "Puts money in today against tomorrow's production.",
     },
     quer: {
-      pt: "Precificar risco com evidência, não com declaração.",
-      en: "To price risk on evidence, not on a declaration.",
+      pt: "Medir o risco por prova, não por promessa.",
+      en: "To price risk on proof, not on a promise.",
     },
     publicos: [
-      { pt: "Banco de capital de giro", en: "Working-capital bank" },
-      { pt: "Fundo de royalty e streaming", en: "Royalty and streaming fund" },
-      { pt: "Seguradora e resseguradora", en: "Insurer and reinsurer" },
-      { pt: "Investidor institucional e family office", en: "Institutional investor and family office" },
-      { pt: "Investidor qualificado", en: "Qualified investor" },
-      { pt: "Investidor de varejo (Res. 88)", en: "Retail investor (Res. 88)" },
-      { pt: "Fomento público e fundo climático", en: "Public development and climate fund" },
+      { pt: "banco que financia o dia a dia", en: "banks funding day-to-day operations" },
+      { pt: "fundo que compra produção futura", en: "funds buying future production" },
+      { pt: "seguradora", en: "insurers" },
+      { pt: "fundo e gestora de fortunas", en: "funds and family offices" },
+      { pt: "investidor qualificado", en: "qualified investors" },
+      { pt: "pequeno investidor", en: "retail investors" },
+      { pt: "banco público e fundo do clima", en: "public banks and climate funds" },
     ],
   },
   {
@@ -116,21 +120,21 @@ export const CAMADAS: Camada[] = [
     num: "05",
     name: { pt: "DeFi", en: "DeFi" },
     faz: {
-      pt: "Opera o token: liquidez, spread, colateral, liquidação.",
-      en: "Operates the token: liquidity, spread, collateral, liquidation.",
+      pt: "Compra e vende o token o dia inteiro, aceita como garantia e cobra a dívida.",
+      en: "Buys and sells the token all day, takes it as collateral and calls in the debt.",
     },
     quer: {
-      pt: "Catálogo de origens legível por máquina, com redenção pelo físico.",
-      en: "A machine-readable catalogue of origins, redeemable for the physical.",
+      pt: "Uma lista de origens que a máquina consiga ler, e poder trocar o token pelo material.",
+      en: "A list of origins a machine can read, and the right to swap the token for the material.",
     },
     publicos: [
-      { pt: "Curador de risco", en: "Risk curator" },
-      { pt: "Provedor de liquidez passivo", en: "Passive liquidity provider" },
-      { pt: "Market maker profissional", en: "Professional market maker" },
-      { pt: "Arbitrador", en: "Arbitrageur" },
-      { pt: "Tomador colateralizado", en: "Collateralised borrower" },
-      { pt: "Liquidante", en: "Liquidator" },
-      { pt: "Yield farmer mercenário", en: "Mercenary yield farmer" },
+      { pt: "quem define o risco aceito", en: "those who set the risk accepted" },
+      { pt: "quem deixa dinheiro parado rendendo", en: "those parking money to earn yield" },
+      { pt: "quem sustenta o preço na tela", en: "those holding the price on screen" },
+      { pt: "quem lucra na diferença de preço", en: "those profiting on the price gap" },
+      { pt: "quem toma emprestado dando garantia", en: "those borrowing against collateral" },
+      { pt: "quem executa a garantia", en: "those seizing the collateral" },
+      { pt: "dinheiro que entra e sai atrás de rendimento", en: "money in and out chasing yield" },
     ],
   },
   {
@@ -138,21 +142,21 @@ export const CAMADAS: Camada[] = [
     num: "06",
     name: { pt: "Infraestrutura", en: "Infrastructure" },
     faz: {
-      pt: "Emite, custodia, cota e distribui — e consome dado sem ser humano.",
-      en: "Issues, custodies, quotes and distributes — and consumes data without being human.",
+      pt: "Emite, guarda, cota e distribui o token — e alimenta sistemas que leem dado sozinhos.",
+      en: "Issues, holds, prices and distributes the token — and feeds systems that read data on their own.",
     },
     quer: {
-      pt: "O selo como condição de emissão e como chamada de API paga.",
-      en: "The seal as a condition of issuance and as a paid API call.",
+      pt: "O selo como condição para emitir, e como consulta que se paga.",
+      en: "The seal as a condition to issue, and as a query that pays for itself.",
     },
     publicos: [
-      { pt: "Emissor e estruturador (SPV)", en: "Issuer and structurer (SPV)" },
-      { pt: "Custodiante de chave", en: "Key custodian" },
-      { pt: "Oráculo de preço", en: "Price oracle" },
-      { pt: "Corretora e VASP autorizado", en: "Broker and authorised VASP" },
-      { pt: "Agente de IA autônomo (x402)", en: "Autonomous AI agent (x402)" },
-      { pt: "Canal white-label", en: "White-label channel" },
-      { pt: "Builder e desenvolvedor", en: "Builder and developer" },
+      { pt: "quem emite o token", en: "token issuers" },
+      { pt: "quem guarda a chave", en: "key custodians" },
+      { pt: "quem leva o preço para dentro do sistema", en: "those feeding price into the system" },
+      { pt: "corretora autorizada", en: "licensed brokers" },
+      { pt: "agente de IA que compra sozinho", en: "AI agents that buy on their own" },
+      { pt: "parceiro que revende com a marca dele", en: "partners reselling under their own brand" },
+      { pt: "desenvolvedor", en: "developers" },
     ],
   },
   {
@@ -160,22 +164,22 @@ export const CAMADAS: Camada[] = [
     num: "07",
     name: { pt: "Estado", en: "State" },
     faz: {
-      pt: "Cria a obrigação que move todo o resto da cadeia.",
-      en: "Creates the obligation that moves everything else in the chain.",
+      pt: "Cria a obrigação que faz o resto da cadeia se mexer.",
+      en: "Creates the obligation that makes the rest of the chain move.",
     },
     quer: {
-      pt: "Rastreabilidade — e, no caso da ANM, é comprador.",
-      en: "Traceability — and, in ANM's case, it is a buyer.",
+      pt: "Saber de onde veio cada carga. E, no caso da ANM, também é comprador.",
+      en: "To know where each load came from. And, in ANM's case, it is also a buyer.",
     },
     publicos: [
       { pt: "ANM", en: "ANM" },
-      { pt: "Receita Federal e SEFAZ", en: "Federal Revenue and SEFAZ" },
+      { pt: "Receita Federal e Sefaz", en: "Federal Revenue and state tax offices" },
       { pt: "CVM", en: "CVM" },
-      { pt: "Banco Central", en: "Central Bank" },
-      { pt: "Órgão ambiental (IBAMA)", en: "Environmental agency (IBAMA)" },
-      { pt: "Ministério Público e polícia", en: "Public prosecutor and police" },
-      { pt: "Comunidade impactada e território indígena", en: "Impacted community and indigenous territory" },
-      { pt: "Imprensa investigativa e ONG", en: "Investigative press and NGO" },
+      { pt: "Banco Central", en: "the Central Bank" },
+      { pt: "Ibama", en: "Ibama" },
+      { pt: "Ministério Público e polícia", en: "prosecutors and police" },
+      { pt: "comunidade afetada e terra indígena", en: "affected communities and indigenous land" },
+      { pt: "imprensa e ONG", en: "the press and NGOs" },
     ],
   },
 ];
