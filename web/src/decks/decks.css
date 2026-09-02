@@ -1241,7 +1241,12 @@
     border: 0;
     min-height: 96vh;
     padding: 2.4rem 2.4rem 3.4rem;
+    /* na tela a folha é flex e o rodapé é absoluto. No papel o rodapé volta a
+     * fluir — e num flex ele virava uma segunda coluna, atravessando a
+     * figura. Em bloco ele desce para baixo, que é onde rodapé mora. */
+    display: block;
   }
+  .dk-canvas__inner { margin-inline: auto; }
   .dk-canvas__inner, .dk-canvas__inner * { transform: none !important; animation: none !important; opacity: 1 !important; filter: none !important; clip-path: none !important; }
   .dk-canvas__inner { height: auto; min-height: 88vh; }
   .dk-shot { position: static; width: 40%; }
@@ -1249,10 +1254,20 @@
   /* o reset acima mata a animação, e o traço que ela ia revelar fica em
    * tracinhos no papel. No PDF a figura já nasce desenhada. */
   .dk-fig__draw, .dk-mk__ring { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
-  /* no papel não existe "sobra da folha": o mapa volta a se medir pela
-   * largura, senão estoura a caixa e passa por cima do rodapé */
-  .dk-bottom--fit { display: block; }
-  .dk-bottom--fit > .dk-fig--map { height: auto; max-height: 58vh; margin-bottom: 1.2rem; }
+  /* no papel não existe "sobra da folha": as faixas que se esticam voltam a
+   * ser medidas pelo conteúdo, e o mapa pela largura. Sem isto o `min-height:
+   * 0` deixa a faixa menor que o que ela carrega, e a fonte cai em cima do
+   * rodapé. */
+  .dk-bottom--fit,
+  .dk-bottom--tall {
+    align-self: auto;
+    align-content: start;
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+    min-height: auto;
+  }
+  .dk-bottom--fit > .dk-fig--map { height: auto; max-height: 52vh; }
+  .dk-bottom--tall .dk-kv { grid-auto-rows: auto; }
 }
 
 /* ── anel de públicos · resumo FAZ/QUER ─────────────────────────────────── */
