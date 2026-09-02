@@ -1,3 +1,4 @@
+import { BrazilMap, WorldMap } from "../figures/maps";
 import { Figure, SealCard } from "../Motion";
 import {
   Bars,
@@ -714,6 +715,171 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
+            </div>
+          </>
+        );
+      },
+    },
+
+    /* ── 05 · onde o ouro está ────────────────────────────────────────── */
+    {
+      id: "brasil",
+      title: { pt: "Onde o ouro está", en: "Where the gold is" },
+      skin: "mint",
+      render: (l) => {
+        const t = tx(l);
+        return (
+          <>
+            <div className="dk-top">
+              <p className="dk-eyebrow">{t("05 — Onde o ouro está", "05 — Where the gold is")}</p>
+              <h2 className="dk-h1">
+                {t("O ouro está no Pará. O trilho, ", "The gold is in Pará. The rail, ")}
+                <span className="dk-accent">{t("não.", "is not.")}</span>
+              </h2>
+            </div>
+            <div className="dk-bottom dk-bottom--fit">
+              <BrazilMap
+                locale={l}
+                title={{
+                  pt: "Mapa do Brasil com o Pará destacado e cinco pontos de referência citados nesta pesquisa.",
+                  en: "Map of Brazil with Pará highlighted and five reference points cited in this research.",
+                }}
+                hero={{
+                  lon: -52.5,
+                  lat: -4.6,
+                  stemTop: 40,
+                  value: "65%",
+                  pct: 0.65,
+                  side: "left",
+                  label: t("do ouro garimpável", "of artisanal gold"),
+                  sub: t("hoje, nenhuma DTVM legal", "today, no licensed dealer"),
+                }}
+                places={[
+                  {
+                    lon: -48.5,
+                    lat: -1.46,
+                    stemTop: 46,
+                    label: "Belém · PA",
+                    sub: t("Selo Amarelo · refinaria North Star", "Selo Amarelo · North Star refinery"),
+                  },
+                  {
+                    lon: -55.98,
+                    lat: -4.28,
+                    stemTop: 100,
+                    side: "left",
+                    label: "Itaituba · PA",
+                    sub: t("Serabi Gold · 1ª certificada", "Serabi Gold · first certified"),
+                  },
+                  {
+                    lon: -56.62,
+                    lat: -16.26,
+                    stemTop: 248,
+                    side: "left",
+                    label: "Poconé · MT",
+                    sub: t("Minery · piloto Certimine", "Minery · Certimine pilot"),
+                  },
+                  {
+                    lon: -43.85,
+                    lat: -19.99,
+                    stemTop: 280,
+                    label: "Nova Lima · MG",
+                    sub: t("AngloGold · LBMA renovada jul/2024", "AngloGold · LBMA renewed Jul 2024"),
+                  },
+                  {
+                    lon: -46.63,
+                    lat: -23.55,
+                    stemTop: 336,
+                    side: "left",
+                    label: "São Paulo · SP",
+                    sub: "C. Steinweg · Prosegur Digital Gold",
+                  },
+                ]}
+              />
+              <p className="dk-src">
+                {t(
+                  "Pontos de referência citados nesta pesquisa — não é um cadastro de minas. Lastre Research, v1.1, 29.08.2026.",
+                  "Reference points cited in this research — not a registry of mines. Lastre Research, v1.1, 29.08.2026.",
+                )}
+              </p>
+            </div>
+          </>
+        );
+      },
+    },
+
+    /* ── 05 · a rede de custódia ──────────────────────────────────────── */
+    {
+      id: "custodia",
+      title: { pt: "A rede de custódia", en: "The custody network" },
+      render: (l) => {
+        const t = tx(l);
+        return (
+          <>
+            <div className="dk-top">
+              <p className="dk-eyebrow">{t("05 — A rede de custódia", "05 — The custody network")}</p>
+              <h2 className="dk-h1">
+                {t("A rede de custódia tem 32 endereços. ", "The custody network has 32 addresses. ")}
+                <span className="dk-accent">{t("Nenhum aqui.", "None of them here.")}</span>
+              </h2>
+            </div>
+            <div className="dk-bottom dk-bottom--fit">
+              <WorldMap
+                locale={l}
+                title={{
+                  pt: "Mapa-múndi com a rede de custódia acesa na Europa, na Ásia, na América do Norte e na África — e um zero na América do Sul.",
+                  en: "World map with the custody network lit in Europe, Asia, North America and Africa — and a zero in South America.",
+                }}
+                sites={[
+                  {
+                    lon: -83.0,
+                    lat: 42.3,
+                    stemTop: 72,
+                    label: t("América do Norte", "North America"),
+                    sub: t("rede LME", "LME network"),
+                  },
+                  {
+                    lon: -58.0,
+                    lat: -15.0,
+                    stemTop: 262,
+                    zero: true,
+                    label: t("América do Sul", "South America"),
+                    sub: t("instalações da rede LME", "LME network facilities"),
+                  },
+                  {
+                    lon: -0.13,
+                    lat: 51.5,
+                    stemTop: 40,
+                    label: t("Londres", "London"),
+                    sub: "LBMA · 100% Good Delivery",
+                  },
+                  {
+                    lon: 29.0,
+                    lat: -2.0,
+                    stemTop: 222,
+                    label: t("Grandes Lagos", "Great Lakes"),
+                    sub: t("BGR · AFP desde 2006 · 3T", "BGR · AFP since 2006 · 3T"),
+                  },
+                  {
+                    lon: 103.8,
+                    lat: 1.35,
+                    stemTop: 180,
+                    label: t("Ásia", "Asia"),
+                    sub: t("rede LME", "LME network"),
+                  },
+                ]}
+              />
+              <p className="dk-p dk-p--fine dk-map-note">
+                {t(
+                  "+450 instalações · 32 locais · nenhum na América do Sul — rede LME",
+                  "+450 facilities · 32 locations · none in South America — LME network",
+                )}
+              </p>
+              <p className="dk-src">
+                {t(
+                  "Armazéns aprovados da LME · LBMA Good Delivery · BGR/AFP, desde 2006. Lastre Research, v1.1, 29.08.2026.",
+                  "LME approved warehouses · LBMA Good Delivery · BGR/AFP, since 2006. Lastre Research, v1.1, 29.08.2026.",
+                )}
+              </p>
             </div>
           </>
         );

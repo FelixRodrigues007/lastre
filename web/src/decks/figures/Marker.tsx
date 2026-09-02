@@ -42,6 +42,11 @@ export type MarkerProps = {
   tone?: Tone;
   /** Which side of the circle the label sits on. */
   side?: "right" | "left";
+  /**
+   * Sem disco: âncora, haste e rótulo. Para substratos onde o círculo seria
+   * ruído — o mapa do Brasil, onde só um ponto carrega número.
+   */
+  bare?: boolean;
   /** Reading order. Markers land 80ms apart, in this order. */
   order?: number;
 };
@@ -60,14 +65,16 @@ export function Marker({
   sub,
   tone = "default",
   side = "right",
+  bare = false,
   order = 0,
 }: MarkerProps) {
   const neg = tone === "negative";
-  const gap = R + 13;
+  const gap = bare ? 11 : R + 13;
   const tx = side === "right" ? x + gap : x - gap;
   const anchor = side === "right" ? "start" : "end";
-  /* the label hangs from the top of the circle, never centred on it */
-  const ty = stemTop - R + 12;
+  /* the label hangs from the top of the circle, never centred on it —
+   * without a disc there is nothing to hang from, so it sits on the stem head */
+  const ty = bare ? stemTop + 5 : stemTop - R + 12;
   const arc = pct == null ? 0 : CIRC * Math.min(1, Math.max(0, pct));
   const style = {
     ["--dk-mk-d" as string]: `${order * 80}ms`,
@@ -80,7 +87,7 @@ export function Marker({
       <line
         className="dk-mk__stem"
         x1={x}
-        y1={stemTop + R}
+        y1={bare ? stemTop : stemTop + R}
         x2={x}
         y2={y}
         strokeWidth={1}
@@ -89,14 +96,16 @@ export function Marker({
 
       <g className="dk-mk__head">
         {/* the circle sits on the substrate — it covers it, it does not float */}
-        <circle
-          className="dk-mk__disc"
-          cx={x}
-          cy={stemTop}
-          r={R}
-          strokeWidth={RING}
-        />
-        {pct != null && (
+        {!bare && (
+          <circle
+            className="dk-mk__disc"
+            cx={x}
+            cy={stemTop}
+            r={R}
+            strokeWidth={RING}
+          />
+        )}
+        {!bare && pct != null && (
           <circle
             className="dk-mk__ring"
             cx={x}
@@ -108,7 +117,7 @@ export function Marker({
             transform={`rotate(-90 ${x} ${stemTop})`}
           />
         )}
-        {value != null && value !== "" && (
+        {!bare && value != null && value !== "" && (
           <text
             className="dk-mk__v"
             x={x}

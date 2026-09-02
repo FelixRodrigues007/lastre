@@ -1390,7 +1390,8 @@
 .dk-mk__disc {
   fill: var(--dk-sheet-bg);
   stroke: currentColor;
-  opacity: 1;
+  /* o disco é o trilho, não o anel — senão cheio e vazio lêem igual */
+  stroke-opacity: 0.24;
 }
 .dk-mk__ring {
   stroke: currentColor;
@@ -1494,6 +1495,65 @@
 .dk-sheet--dark .dk-fig__node { fill: #a9dd8f; }
 
 @keyframes dk-fig-lit { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── os mapas · a silhueta é fundo, o marcador é o objeto ────────────── */
+
+/* O mapa não escolhe a própria altura: recebe a sobra da folha e se encaixa
+ * dentro dela. `preserveAspectRatio` cuida do resto, então nenhuma viewport
+ * consegue empurrar a base da tela para fora. */
+.dk-bottom--fit {
+  align-self: stretch;
+  align-content: stretch;
+  grid-template-rows: minmax(0, 1fr);
+  grid-auto-rows: auto;
+  min-height: 0;
+}
+.dk-bottom--fit > .dk-fig--map {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+}
+/* o recorte precisa ser real: sem isto o Ártico continua sendo pintado fora
+ * do viewBox, por cima da manchete */
+.dk-fig--map { width: 100%; height: auto; margin-inline: auto; overflow: hidden; }
+
+/* a linha de contagem que acompanha o mapa: fina, mas não legenda */
+.dk-p--fine {
+  font-size: clamp(0.78rem, 0.72rem + 0.22vw, 0.92rem);
+  color: var(--dk-fg-dim);
+  letter-spacing: 0.01em;
+}
+.dk-map-note { margin: 0; max-width: 68ch; }
+
+/* o halo descola a massa da folha sem precisar de sombra */
+.dk-fig__geo-halo {
+  fill: none;
+  stroke: var(--dk-geo);
+  stroke-width: 16;
+  stroke-linejoin: round;
+  opacity: 0.35;
+}
+.dk-fig__geo {
+  fill: var(--dk-geo);
+  stroke: currentColor;
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+  opacity: 0.45;
+  animation: dk-fig-lit 520ms var(--dk-ease) 120ms both;
+}
+.dk-fig__geo--fill { fill: var(--dk-geo-hi); opacity: 0.75; }
+.dk { --dk-geo: #e4ece8; --dk-geo-hi: #cfe0d8; }
+.dk-sheet--mint { --dk-geo: #c8ddd4; --dk-geo-hi: #aecdbf; }
+.dk-sheet--dark,
+.dk-sheet--wave { --dk-geo: rgba(255, 255, 255, 0.05); --dk-geo-hi: rgba(169, 221, 143, 0.16); }
+
+.dk-fig__note {
+  font-family: var(--dk-sans);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  fill: var(--dk-fg-faint);
+}
 
 /* ── the rail of five movements ──────────────────────────────────────── */
 
