@@ -26,6 +26,3 @@ web/cobe-test.html
 # Business KB — repo privado lastre-negocio (symlink local). Nunca commitar.
 docs/kb-negocio
 docs/kb-negocio/
-# Corredores nomeados — só no lastre-negocio
-docs/pitch/lastre-system-map.html
-docs/pitch/RIO_CRISTALINO_BRIEFING_LAURA.md
