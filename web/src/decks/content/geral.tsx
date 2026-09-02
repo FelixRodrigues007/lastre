@@ -1,15 +1,17 @@
+import { Figure, SealCard } from "../Motion";
 import { tx, type Deck } from "../types";
 
-const MOCK = "/media/decks/lastre-device-mock.png";
+const PHONE = "/media/decks/lastre-iphone.webp";
+const LAPTOP = "/media/decks/lastre-macbook.webp";
 
 /* ─────────────────────────────────────────────────────────────────────────
- * 01 · A Lastre em cinco tempos
+ * 01 · Apresentação geral
  * ───────────────────────────────────────────────────────────────────────── */
 
 export const geral: Deck = {
   slug: "lastre",
   index: "01",
-  title: { pt: "A Lastre em cinco tempos", en: "Lastre in five movements" },
+  title: { pt: "Apresentação Geral", en: "General Overview" },
   summary: {
     pt: "O que a Lastre é, por que existe, como funciona e quem paga — com um caso real: 2,5 Mt de rejeito de cobre a 3 g/t de ouro.",
     en: "What Lastre is, why it exists, how it works and who pays — with a real case: 2.5 Mt of copper tailings at 3 g/t gold.",
@@ -26,21 +28,24 @@ export const geral: Deck = {
         const t = tx(l);
         return (
           <>
-            <div className="dk-top">
-              <h1 className="dk-h1">
-                {t("Prova antes", "Proof before")}
-                <br />
-                {t("do valor.", "value.")}
-              </h1>
-              <p className="dk-eyebrow">
-                {t("Documento de trabalho · 02 setembro 2026", "Working document · 02 September 2026")}
-              </p>
+            <div className="dk-row dk-row--wide">
+              <div className="dk-top">
+                <h1 className="dk-h1">
+                  {t("Prova antes", "Proof before")}
+                  <br />
+                  {t("do valor.", "value.")}
+                </h1>
+                <p className="dk-eyebrow">
+                  {t("Documento de trabalho · 02 setembro 2026", "Working document · 02 September 2026")}
+                </p>
+              </div>
+              <SealCard locale={l} />
             </div>
             <div className="dk-bottom">
               <p className="dk-p dk-p--lead">
                 {t(
-                  "Tudo o que se tokeniza hoje é tokenizado sobre uma origem declarada. A Lastre existe para provar que a leitura física aconteceu.",
-                  "Everything tokenised today is tokenised on top of a declared origin. Lastre exists to prove the physical reading happened.",
+                  "Hoje se tokeniza sobre origem declarada. A Lastre prova que a leitura aconteceu.",
+                  "Today everything is tokenised on a declared origin. Lastre proves the reading happened.",
                 )}
               </p>
             </div>
@@ -68,39 +73,39 @@ export const geral: Deck = {
               <div className="dk-row dk-row--3">
                 <div className="dk-metric dk-metric--flat">
                   <span className="dk-eyebrow">{t("Toucan · carbono", "Toucan · carbon")}</span>
-                  <span className="dk-metric__v">28<small>%</small></span>
+                  <Figure to={28} locale={l} suffix="%" />
                   <p className="dk-metric__note">
                     {t(
-                      "dos 21,6 mi de créditos migrados vinham de projetos zumbis. Pool fungível apaga a origem e precifica pela média.",
-                      "of the 21.6m migrated credits came from zombie projects. A fungible pool erases origin and prices to the average.",
+                      "Créditos migrados vindos de projetos zumbis.",
+                      "Migrated credits coming from zombie projects.",
                     )}
                   </p>
                 </div>
                 <div className="dk-metric dk-metric--flat">
                   <span className="dk-eyebrow">{t("Ouro brasileiro", "Brazilian gold")}</span>
-                  <span className="dk-metric__v">229<small> t</small></span>
+                  <Figure to={229} locale={l} suffix=" t" />
                   <p className="dk-metric__note">
                     {t(
-                      "com indícios de ilegalidade entre 2015 e 2020 — cerca de metade da produção. Um terço por cinco DTVMs.",
-                      "with signs of illegality between 2015 and 2020 — about half of output. A third through five brokers.",
+                      "Toneladas com indício de ilegalidade entre 2015 e 2020 — cerca de metade da produção.",
+                      "Tonnes with signs of illegality between 2015 and 2020 — about half of output.",
                     )}
                   </p>
                 </div>
                 <div className="dk-metric dk-metric--flat">
                   <span className="dk-eyebrow">{t("Seguro", "Insurance")}</span>
-                  <span className="dk-metric__v">19</span>
+                  <Figure to={19} locale={l} />
                   <p className="dk-metric__note">
                     {t(
-                      "contratos mantidos pela Swiss Re em três propriedades embargadas por desmatamento ilegal. A triagem falha hoje.",
-                      "policies kept by Swiss Re on three properties embargoed for illegal deforestation. Screening fails today.",
+                      "Apólices da Swiss Re em propriedades embargadas por desmatamento ilegal.",
+                      "Swiss Re policies on properties embargoed for illegal deforestation.",
                     )}
                   </p>
                 </div>
               </div>
-              <p className="dk-p dk-p--fine">
+              <p className="dk-src">
                 {t(
-                  "Fontes: análises do Artigo 6 sobre a migração Toucan · Instituto Escolhas, Raio X do Ouro, 10.02.2022 · Repórter Brasil, 11/2023 e 03/2025.",
-                  "Sources: Article 6 analyses of the Toucan migration · Instituto Escolhas, Raio X do Ouro, 10.02.2022 · Repórter Brasil, 11/2023 and 03/2025.",
+                  "Fontes: Artigo 6 / migração Toucan · Instituto Escolhas, Raio X do Ouro, 2022 · Repórter Brasil, 2023–2025.",
+                  "Sources: Article 6 / Toucan migration · Instituto Escolhas, Raio X do Ouro, 2022 · Repórter Brasil, 2023–2025.",
                 )}
               </p>
             </div>
@@ -134,8 +139,8 @@ export const geral: Deck = {
                     <span className="dk-kv__k">{t("O que sela", "What it seals")}</span>
                     <span className="dk-kv__v">
                       {t(
-                        "Peso, teor, ensaio, coordenada, operador e horário — a leitura, não a declaração.",
-                        "Weight, grade, assay, coordinate, operator and time — the reading, not the claim.",
+                        "Peso, teor, ensaio, coordenada, operador, horário. A leitura — não a declaração.",
+                        "Weight, grade, assay, coordinate, operator, time. The reading — not the claim.",
                       )}
                     </span>
                   </div>
@@ -143,8 +148,8 @@ export const geral: Deck = {
                     <span className="dk-kv__k">{t("Como sela", "How it seals")}</span>
                     <span className="dk-kv__v">
                       {t(
-                        "SHA-256 canônico, calculado offline no ponto de leitura. Sem nuvem, sem relógio, sem modelo decidindo.",
-                        "A canonical SHA-256, computed offline at the point of reading. No cloud, no clock, no model deciding.",
+                        "SHA-256 canônico, calculado offline no ponto de leitura. Sem nuvem, sem modelo.",
+                        "A canonical SHA-256, computed offline at the point of reading. No cloud, no model.",
                       )}
                     </span>
                   </div>
@@ -152,8 +157,8 @@ export const geral: Deck = {
                     <span className="dk-kv__k">{t("Onde julga", "Where it judges")}</span>
                     <span className="dk-kv__v">
                       {t(
-                        "Casper. O veredito é permanente nos dois sentidos — quase ninguém registra o “não”.",
-                        "Casper. The verdict is permanent both ways — almost nobody records the “no”.",
+                        "Casper. O veredito é permanente nos dois sentidos.",
+                        "Casper. The verdict is permanent both ways.",
                       )}
                     </span>
                   </div>
@@ -166,8 +171,8 @@ export const geral: Deck = {
                     </div>
                     <p className="dk-p">
                       {t(
-                        "O trilho abre. Registro, circulação e crédito passam a existir para aquele lote.",
-                        "The rail opens. Registry, circulation and credit come into existence for that lot.",
+                        "O trilho abre. Registro, circulação e crédito passam a existir.",
+                        "The rail opens. Registry, circulation and credit come into existence.",
                       )}
                     </p>
                   </div>
@@ -177,8 +182,8 @@ export const geral: Deck = {
                     </div>
                     <p className="dk-p">
                       {t(
-                        "O trilho fecha. A recusa também é prova — é o que impede o selo de virar ferramenta de lavagem.",
-                        "The rail closes. The refusal is proof too — it is what stops the seal becoming a laundering tool.",
+                        "O trilho fecha. A recusa também é prova — é o que impede o selo de virar lavagem.",
+                        "The rail closes. The refusal is proof too — it stops the seal becoming laundering.",
                       )}
                     </p>
                   </div>
@@ -190,41 +195,102 @@ export const geral: Deck = {
       },
     },
 
-    /* ── o produto (mock 3D) ──────────────────────────────────────────── */
+    /* ── na mão: o iPhone entrando pela borda ────────────────────────── */
     {
-      id: "produto",
-      title: { pt: "O produto", en: "The product" },
-      center: true,
+      id: "mao",
+      title: { pt: "Na mão de quem lê", en: "In the hand that reads" },
       render: (l) => {
         const t = tx(l);
         return (
-          <div className="dk-row dk-row--media" style={{ alignSelf: "center" }}>
-            <img
-              className="dk-media"
-              src={MOCK}
-              alt={t(
-                "MacBook e iPhone exibindo o site da Lastre.",
-                "A MacBook and iPhone showing the Lastre site.",
-              )}
-              loading="eager"
-              decoding="async"
-            />
-            <div className="dk-top">
+          <>
+            <div className="dk-shot dk-shot--phone">
+              <img
+                src={PHONE}
+                alt={t("iPhone exibindo o site da Lastre.", "An iPhone showing the Lastre site.")}
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+            <div className="dk-top dk-half-r">
               <p className="dk-eyebrow">{t("Não é slide — está no ar", "Not a slide — it is live")}</p>
-              <h2 className="dk-h2">
-                {t("O selo já roda em testnet.", "The seal already runs on testnet.")}
-              </h2>
-              <div className="dk-label" style={{ marginTop: "1.4rem" }}>
+              <h2 className="dk-h1">{t("O selo já roda em testnet.", "The seal already runs on testnet.")}</h2>
+            </div>
+            <div className="dk-bottom dk-half-r">
+              <div className="dk-label">
                 <span>lastre.io</span>
               </div>
-              <p className="dk-p">
+              <p className="dk-p dk-p--lead">
                 {t(
-                  "Selo determinístico offline, veredito ancorado na Casper e a demonstração de fraude aberta ao público. O que falta não é engenharia — é a primeira leitura real de campo.",
-                  "Deterministic offline seal, verdict anchored on Casper, and the tamper demo open to the public. What is missing is not engineering — it is the first real field reading.",
+                  "Selo determinístico offline, veredito ancorado na Casper e a demonstração de fraude aberta ao público — no navegador de qualquer pessoa, agora.",
+                  "Deterministic offline seal, verdict anchored on Casper, and the tamper demo open to the public — in anyone's browser, right now.",
+                )}
+              </p>
+              <p className="dk-p dk-p--fine">
+                {t(
+                  "O que falta não é engenharia. É a primeira leitura real de campo.",
+                  "What is missing is not engineering. It is the first real field reading.",
                 )}
               </p>
             </div>
-          </div>
+          </>
+        );
+      },
+    },
+
+    /* ── o produto: o MacBook como peça de colagem ────────────────────── */
+    {
+      id: "produto",
+      title: { pt: "O que já existe", en: "What already exists" },
+      skin: "dark",
+      render: (l) => {
+        const t = tx(l);
+        const cards: Array<[string, string]> = [
+          [t("Selo offline", "Offline seal"), "SHA-256 · determinístico"],
+          [t("Veredito on-chain", "On-chain verdict"), "Casper Testnet"],
+          [t("Invalid registrado", "Invalid recorded"), t("permanente", "permanent")],
+          [t("Demo de fraude", "Tamper demo"), t("aberta ao público", "open to the public")],
+        ];
+        return (
+          <>
+            <div className="dk-shot dk-shot--laptop">
+              <img
+                src={LAPTOP}
+                alt={t("MacBook exibindo o site da Lastre.", "A MacBook showing the Lastre site.")}
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+            <div className="dk-top dk-half-l">
+              <p className="dk-eyebrow">{t("E, claro…", "And, of course…")}</p>
+              <h2 className="dk-h1">
+                {t("A prova é auditável por qualquer um.", "The proof is auditable by anyone.")}
+              </h2>
+              <p className="dk-p">
+                {t(
+                  "Nada aqui depende de acreditar na Lastre. O pacote está publicado, o veredito está na chain e o “não” fica registrado junto com o “sim”.",
+                  "Nothing here depends on trusting Lastre. The package is published, the verdict is on chain, and the “no” is recorded alongside the “yes”.",
+                )}
+              </p>
+            </div>
+            <div className="dk-bottom dk-half-l">
+              <div className="dk-cards">
+                {cards.map(([k, v]) => (
+                  <div key={k}>
+                    <span className="dk-cards__k">{k}</span>
+                    <span className="dk-cards__v">{v}</span>
+                  </div>
+                ))}
+              </div>
+              <a
+                className="dk-tag dk-tag--accent"
+                href="https://testnet.cspr.live"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("Ver o pacote na Casper", "See the package on Casper")} →
+              </a>
+            </div>
+          </>
         );
       },
     },
@@ -238,11 +304,13 @@ export const geral: Deck = {
       render: (l) => {
         const t = tx(l);
         return (
-          <div className="dk-top" style={{ maxWidth: "24ch" }}>
+          <div className="dk-top" style={{ maxWidth: "34ch", display: "grid", gap: "1.2rem" }}>
             <p className="dk-eyebrow">{t("A frase que nos separa", "The line that separates us")}</p>
-            <h2 className="dk-h1">
+            <h2 className="dk-h2" style={{ color: "var(--dk-fg-2)" }}>
               {t("A concorrência prova o que o fornecedor ", "The competition proves what the supplier ")}
-              <span className="dk-strike">{t("declarou.", "declared.")}</span>{" "}
+              <span className="dk-strike">{t("declarou.", "declared.")}</span>
+            </h2>
+            <h2 className="dk-h2">
               {t("A Lastre prova que a leitura aconteceu.", "Lastre proves the reading happened.")}
             </h2>
           </div>
@@ -276,8 +344,8 @@ export const geral: Deck = {
                   </div>
                   <p className="dk-p">
                     {t(
-                      "O selo. Não-financeiro, multi-inquilino, receita por verificação. É o único andar que precisa existir para a empresa existir.",
-                      "The seal. Non-financial, multi-tenant, revenue per verification. The only floor that must exist for the company to exist.",
+                      "O selo. Receita por verificação. O único andar que precisa existir.",
+                      "The seal. Revenue per verification. The only floor that must exist.",
                     )}
                   </p>
                 </div>
@@ -289,8 +357,8 @@ export const geral: Deck = {
                   </div>
                   <p className="dk-p">
                     {t(
-                      "NFT de área ou título e a cesta do ativo como inventário. Identidade e colateral — não circula.",
-                      "An NFT of the area or title, and the asset basket as inventory. Identity and collateral — it does not circulate.",
+                      "NFT de área ou título e a cesta do ativo. Identidade e colateral — não circula.",
+                      "An NFT of the area or title, and the asset basket. Identity and collateral — it does not circulate.",
                     )}
                   </p>
                 </div>
@@ -302,8 +370,8 @@ export const geral: Deck = {
                   </div>
                   <p className="dk-p">
                     {t(
-                      "Token de lote por série, custodiado e redimível pelo físico. Único andar em que pode haver pool.",
-                      "A per-series lot token, custodied and redeemable for the physical. The only floor where a pool can exist.",
+                      "Token de lote por série, custodiado e redimível pelo físico.",
+                      "A per-series lot token, custodied and redeemable for the physical.",
                     )}
                   </p>
                 </div>
@@ -315,17 +383,16 @@ export const geral: Deck = {
                   </div>
                   <p className="dk-p">
                     {t(
-                      "Royalty e pré-pagamento em SPV. Fora da entidade e do domínio de comunicação da prova — fronteira societária, não preferência de marca.",
-                      "Royalty and prepayment in an SPV. Outside the proof entity and its communication domain — a corporate boundary, not a brand preference.",
+                      "Royalty e pré-pagamento em SPV. Entidade separada da prova.",
+                      "Royalty and prepayment in an SPV. An entity separate from proof.",
                     )}
                   </p>
                 </div>
               </div>
-              <p className="dk-p dk-p--fine">
-                <b>{t("Regra de ouro. ", "Golden rule. ")}</b>
+              <p className="dk-src">
                 {t(
-                  "Nunca fungibilizar através da fronteira de origem: dois lotes só compartilham um token se compartilharem origem provada, período e especificação. Fungibilizar “Token Ouro” apaga a origem — que é o produto.",
-                  "Never make assets fungible across the origin boundary: two lots share a token only if they share proven origin, period and specification. Making a generic “Gold Token” erases origin — which is the product.",
+                  "Regra de ouro. Dois lotes só compartilham um token se compartilharem origem provada, período e especificação. Fungibilizar “Token Ouro” apaga a origem — que é o produto.",
+                  "Golden rule. Two lots share a token only if they share proven origin, period and specification. A generic “Gold Token” erases origin — which is the product.",
                 )}
               </p>
             </div>
@@ -346,7 +413,7 @@ export const geral: Deck = {
               <p className="dk-eyebrow">{t("04 — O caso: a S.A. do rejeito", "04 — The case: the tailings company")}</p>
               <h2 className="dk-h1">
                 {t("2,5 milhões de toneladas de rejeito.", "2.5 million tonnes of tailings.")}{" "}
-                <span className="dk-accent">{t("3 g de ouro por tonelada.", "3 g of gold per tonne.")}</span>
+                <span className="dk-accent">{t("3\u00a0g de ouro por tonelada.", "3\u00a0g of gold per tonne.")}</span>
               </h2>
             </div>
             <div className="dk-bottom">
@@ -382,15 +449,14 @@ export const geral: Deck = {
                 <div className="dk-top">
                   <p className="dk-p dk-p--lead">
                     {t(
-                      "Um passivo ambiental que já foi escavado, moído e pago. O ouro está lá. O que falta não é geologia — é alguém capaz de provar que o teor foi lido, e não afirmado.",
-                      "An environmental liability already dug, milled and paid for. The gold is there. What is missing is not geology — it is someone able to prove the grade was read, not asserted.",
+                      "Um passivo ambiental já escavado, moído e pago. O ouro está lá. O que falta não é geologia — é provar que o teor foi lido, e não afirmado.",
+                      "An environmental liability already dug, milled and paid for. The gold is there. What is missing is not geology — it is proving the grade was read, not asserted.",
                     )}
                   </p>
-                  <p className="dk-p dk-p--fine">
-                    <b>{t("Metal contido não é receita. ", "Contained metal is not revenue. ")}</b>
+                  <p className="dk-src">
                     {t(
-                      "Rejeito exige recuperação metalúrgica e nenhum projeto entrega 100%. A próxima tela traz a faixa honesta. Cobre residual não quantificado — não há teor informado.",
-                      "Tailings need metallurgical recovery and no project delivers 100%. The next screen carries the honest range. Residual copper is not quantified — no grade was given.",
+                      "Metal contido não é receita: rejeito exige recuperação metalúrgica e nenhum projeto entrega 100%. A faixa honesta está na próxima tela. Cobre residual não quantificado.",
+                      "Contained metal is not revenue: tailings need metallurgical recovery and no project delivers 100%. The honest range is on the next screen. Residual copper is not quantified.",
                     )}
                   </p>
                 </div>
@@ -420,27 +486,21 @@ export const geral: Deck = {
                   <div className="dk-label">
                     <span>{t("Recuperação 50%", "50% recovery")}</span>
                   </div>
-                  <span className="dk-metric__v">
-                    <small>US$ </small>522<small> mi</small>
-                  </span>
+<Figure to={522} locale={l} prefix="US$ " suffix=" mi" />
                   <p className="dk-metric__note">{t("3,75 t recuperadas", "3.75 t recovered")}</p>
                 </div>
                 <div className="dk-panel">
                   <div className="dk-label">
                     <span>{t("Recuperação 65% · central", "65% recovery · central")}</span>
                   </div>
-                  <span className="dk-metric__v">
-                    <small>US$ </small>679<small> mi</small>
-                  </span>
+<Figure to={679} locale={l} prefix="US$ " suffix=" mi" />
                   <p className="dk-metric__note">{t("4,88 t recuperadas", "4.88 t recovered")}</p>
                 </div>
                 <div className="dk-panel">
                   <div className="dk-label">
                     <span>{t("Recuperação 80%", "80% recovery")}</span>
                   </div>
-                  <span className="dk-metric__v">
-                    <small>US$ </small>836<small> mi</small>
-                  </span>
+<Figure to={836} locale={l} prefix="US$ " suffix=" mi" />
                   <p className="dk-metric__note">{t("6,00 t recuperadas", "6.00 t recovered")}</p>
                 </div>
               </div>
@@ -469,19 +529,17 @@ export const geral: Deck = {
                     <span className="dk-kv__k">{t("Prêmio de origem", "Origin premium")}</span>
                     <span className="dk-kv__v">
                       {t(
-                        "O ouro certificado tem prêmio publicado: US$ 2.000/kg (Fairtrade) a US$ 4.000/kg (Fairmined). Sobre 4,88 t, ",
-                        "Certified gold carries a published premium: US$ 2,000/kg (Fairtrade) to US$ 4,000/kg (Fairmined). On 4.88 t, that is ",
+                        "US$ 2.000/kg (Fairtrade) a US$ 4.000/kg (Fairmined). Sobre 4,88 t: US$ 9,8 a 19,5 mi. Nenhum dos dois opera no Brasil hoje.",
+                        "US$ 2,000/kg (Fairtrade) to US$ 4,000/kg (Fairmined). On 4.88 t: US$ 9.8m to 19.5m. Neither scheme operates in Brazil today.",
                       )}
-                      <i>{t("US$ 9,8 mi a US$ 19,5 mi", "US$ 9.8m to US$ 19.5m")}</i>
-                      {t(" — e nenhum desses esquemas opera no Brasil hoje.", " — and neither scheme operates in Brazil today.")}
                     </span>
                   </div>
                   <div className="dk-kv__row">
                     <span className="dk-kv__k">{t("Acesso a seguro", "Insurance access")}</span>
                     <span className="dk-kv__v">
                       {t(
-                        "Barragem é quase inassegurável. O argumento não é prêmio mais barato — é ser subscrito na capacidade que hoje está fechada.",
-                        "A tailings dam is close to uninsurable. The argument is not a cheaper premium — it is being underwritten in capacity that is closed today.",
+                        "Barragem é quase inassegurável. O ganho não é prêmio mais barato — é ser subscrito.",
+                        "A tailings dam is close to uninsurable. The gain is not a cheaper premium — it is being underwritten.",
                       )}
                     </span>
                   </div>
@@ -489,8 +547,8 @@ export const geral: Deck = {
                     <span className="dk-kv__k">{t("Âncora de preço", "Price anchor")}</span>
                     <span className="dk-kv__v">
                       {t(
-                        "O PL 3025/23 põe teto público em rastreabilidade: R$ 5,00 por grama marcada. Sobre 4,88 t, o Estado precificaria R$ 24,4 mi pelo mesmo trabalho.",
-                        "Bill 3025/23 sets a public ceiling on traceability: R$ 5.00 per marked gram. On 4.88 t, the State would price the same work at R$ 24.4m.",
+                        "PL 3025/23: R$ 5,00 por grama marcada. Sobre 4,88 t, o Estado precificaria R$ 24,4 mi.",
+                        "Bill 3025/23: R$ 5.00 per marked gram. On 4.88 t, the State would price it at R$ 24.4m.",
                       )}
                     </span>
                   </div>
@@ -502,22 +560,22 @@ export const geral: Deck = {
                   </div>
                   <p className="dk-p">
                     {t(
-                      "O benchmark de primeira milha existente — iTSCi, US$ 130–180 por tonelada — quebrou por caro. A 2,5 Mt, ele custaria mais do que o ouro vale.",
-                      "The existing first-mile benchmark — iTSCi, US$ 130–180 per tonne — broke because it was too expensive. At 2.5 Mt it would cost more than the gold is worth.",
+                      "O benchmark de primeira milha — iTSCi, US$ 130 a 180 por tonelada — quebrou por caro. A 2,5 Mt custaria mais do que o ouro vale.",
+                      "The first-mile benchmark — iTSCi, US$ 130 to 180 per tonne — broke because it was too expensive. At 2.5 Mt it would cost more than the gold is worth.",
                     )}
                   </p>
                   <p className="dk-p">
                     <b>
                       {t(
-                        "A unidade de cobrança da Lastre não pode ser a tonelada. Tem de ser a verificação ou o lote.",
-                        "Lastre cannot charge by the tonne. It has to charge by the verification, or by the lot.",
+                        "A unidade de cobrança é a verificação ou o lote. Nunca a tonelada.",
+                        "The charging unit is the verification or the lot. Never the tonne.",
                       )}
                     </b>
                   </p>
-                  <p className="dk-p dk-p--fine">
+                  <p className="dk-src">
                     {t(
-                      "Fontes: ouro à vista US$ 4.334/oz em 02.09.2026 (Fortune) · tabelas Fairtrade e Fairmined 2025/2026 · PL 3025/23, aprovado na Câmara em 22.04.2026, travado no Senado · iTSCi, único esquema com preço público.",
-                      "Sources: gold spot US$ 4,334/oz on 02.09.2026 (Fortune) · Fairtrade and Fairmined 2025/2026 schedules · Bill 3025/23, passed the Chamber 22.04.2026, stalled in the Senate · iTSCi, the only scheme with a public price.",
+                      "Fontes: ouro à vista US$ 4.334/oz, 02.09.2026 · tabelas Fairtrade e Fairmined 2025/2026 · PL 3025/23 · iTSCi.",
+                      "Sources: gold spot US$ 4,334/oz, 02.09.2026 · Fairtrade and Fairmined 2025/2026 schedules · Bill 3025/23 · iTSCi.",
                     )}
                   </p>
                 </div>
@@ -552,8 +610,8 @@ export const geral: Deck = {
                   <span className="dk-step__k">{t("Usuário certificado", "Certified user")}</span>
                   <p className="dk-p dk-step__b">
                     {t(
-                      "Faixas de assinatura que abrem acesso a conjuntos diferentes de lotes provados — propriedades, minas, crédito de carbono. A faixa define o escopo do catálogo e o nível de garantia operacional: colateral e escrow adicionais nas faixas superiores.",
-                      "Subscription tiers opening access to different sets of proven lots — properties, mines, carbon credits. The tier sets the catalogue scope and the level of operational guarantee: extra collateral and escrow in the upper tiers.",
+                      "Assinatura por faixa. A faixa define o escopo do catálogo e o nível de garantia — colateral e escrow nas faixas superiores.",
+                      "Subscription by tier. The tier sets the catalogue scope and the level of guarantee — collateral and escrow in the upper tiers.",
                     )}
                   </p>
                 </div>
@@ -562,8 +620,8 @@ export const geral: Deck = {
                   <span className="dk-step__k">{t("Produtor / mineradora", "Producer / miner")}</span>
                   <p className="dk-p dk-step__b">
                     {t(
-                      "Paga por categoria de alcance: quantos e quais participantes certificados enxergam seus lotes. A prova é o requisito de entrada; a categoria é a distribuição.",
-                      "Pays by reach category: how many and which certified participants see their lots. Proof is the entry requirement; the category is the distribution.",
+                      "Paga por alcance: quantos e quais certificados enxergam seus lotes. A prova é a entrada; o alcance é a distribuição.",
+                      "Pays by reach: how many and which certified participants see their lots. Proof is entry; reach is distribution.",
                     )}
                   </p>
                 </div>
@@ -572,8 +630,8 @@ export const geral: Deck = {
                   <span className="dk-step__k">{t("Quem paga antes de 2027", "Who pays before 2027")}</span>
                   <p className="dk-p dk-step__b">
                     {t(
-                      "Seguradora, auditor e agente autônomo pagando por consulta. O comprador com mandato regulatório só é obrigado a partir de 18.02.2027 — precisamos de caixa antes disso.",
-                      "Insurer, auditor and autonomous agent paying per query. The buyer under a regulatory mandate is only obliged from 18.02.2027 — we need cash before that.",
+                      "Seguradora, auditor e agente autônomo pagam por consulta. O mandato regulatório só obriga a partir de 18.02.2027 — precisamos de caixa antes.",
+                      "Insurer, auditor and autonomous agent pay per query. The regulatory mandate only binds from 18.02.2027 — we need cash before that.",
                     )}
                   </p>
                 </div>
@@ -603,8 +661,8 @@ export const geral: Deck = {
                     <span className="dk-kv__k">{t("Entidade", "Entity")}</span>
                     <span className="dk-kv__v">
                       {t(
-                        "A Lastre nasce e opera fora do Brasil. A camada de capital fica em entidade separada da camada de prova.",
-                        "Lastre is born and operates outside Brazil. The capital layer sits in an entity separate from the proof layer.",
+                        "Nasce e opera fora do Brasil. A camada de capital fica em entidade separada da camada de prova.",
+                        "Born and operating outside Brazil. The capital layer sits in an entity separate from the proof layer.",
                       )}
                     </span>
                   </div>
@@ -612,8 +670,8 @@ export const geral: Deck = {
                     <span className="dk-kv__k">{t("Liquidação", "Settlement")}</span>
                     <span className="dk-kv__v">
                       {t(
-                        "O produtor brasileiro mantém conta própria no exterior e recebe em USDT. A responsabilidade fiscal e de reporte da operação dele é dele.",
-                        "The Brazilian producer keeps their own offshore account and is paid in USDT. Their operation's tax and reporting duties are theirs.",
+                        "O produtor brasileiro mantém conta própria no exterior e recebe em USDT. O reporte fiscal dele é dele.",
+                        "The Brazilian producer keeps their own offshore account and is paid in USDT. Their tax reporting is theirs.",
                       )}
                     </span>
                   </div>
@@ -624,8 +682,8 @@ export const geral: Deck = {
                         {t("requer parecer", "opinion required")}
                       </span>
                       {t(
-                        "Estrutura desenhada, ainda não validada por tributarista nas duas jurisdições. Não tratar como decidido.",
-                        "Structure designed, not yet validated by tax counsel in either jurisdiction. Do not treat it as settled.",
+                        "Desenhada, não validada por tributarista nas duas jurisdições. Não tratar como decidida.",
+                        "Designed, not validated by tax counsel in either jurisdiction. Do not treat it as settled.",
                       )}
                     </span>
                   </div>
@@ -663,10 +721,10 @@ export const geral: Deck = {
                       <span className="dk-calc__v">{t("irrecuperável", "unrecoverable")}</span>
                     </div>
                   </div>
-                  <p className="dk-p dk-p--fine">
+                  <p className="dk-src">
                     {t(
-                      "Por que 04 é diferente: histórico de catálogo não se compra depois. Todo mês sem leitura real é um mês que nenhum aporte recompra.",
-                      "Why 04 is different: catalogue history cannot be bought later. Every month without a real reading is a month no funding round buys back.",
+                      "Histórico de catálogo não se compra depois. Todo mês sem leitura real é um mês que nenhum aporte recompra.",
+                      "Catalogue history cannot be bought later. Every month without a real reading is a month no funding round buys back.",
                     )}
                   </p>
                 </div>
@@ -694,10 +752,10 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
-              <p className="dk-p dk-p--fine">
+              <p className="dk-src">
                 {t(
-                  "Material interno. Não é oferta, promessa de retorno ou recomendação de investimento. Cifras de terceiros trazem fonte e data na tela em que aparecem; as cifras do caso do rejeito são cálculo determinístico sobre premissas declaradas, não projeção de receita.",
-                  "Internal material. Not an offer, a promise of return, or investment advice. Third-party figures carry their source and date on the screen where they appear; the tailings figures are a deterministic calculation on stated assumptions, not a revenue forecast.",
+                  "Material interno. Não é oferta, promessa de retorno ou recomendação de investimento. Cifras de terceiros trazem fonte e data na tela em que aparecem; as cifras do rejeito são cálculo sobre premissas declaradas, não projeção de receita.",
+                  "Internal material. Not an offer, a promise of return, or investment advice. Third-party figures carry source and date on the screen where they appear; the tailings figures are a calculation on stated assumptions, not a revenue forecast.",
                 )}
               </p>
             </div>

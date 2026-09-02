@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+import { SealMark } from "../components/ui/SealMark";
 import type { Locale } from "../i18n/translations";
 import type { Deck } from "./types";
 
@@ -7,7 +9,46 @@ type Props = {
   onOpen: (slug: string) => void;
 };
 
-/** The drawer. One row per document; opening one runs the deck. */
+/* One glyph per folder. Keyed by slug so a new deck falls back to the sheet
+ * icon instead of shipping a blank card. */
+const icons: Record<string, ReactNode> = {
+  lastre: (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 3l9 4.5-9 4.5-9-4.5L12 3Z M3 12l9 4.5 9-4.5 M3 16.5L12 21l9-4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
+  publicos: (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="9" cy="8" r="3.1" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M3.5 19.5a5.5 5.5 0 0 1 11 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M16.2 5.4a3.1 3.1 0 0 1 0 5.2M17.5 14.6a5.5 5.5 0 0 1 3 4.9"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
+};
+
+const fallbackIcon = (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path
+      d="M4 6.5A1.5 1.5 0 0 1 5.5 5h3.6l1.8 2h7.6A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5v-11Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+/** The drawer. The mark, one line of instruction, and a folder per document. */
 export function DecksIndex({ decks, locale, onOpen }: Props) {
   const pt = locale === "pt";
 
@@ -15,25 +56,28 @@ export function DecksIndex({ decks, locale, onOpen }: Props) {
     <div className="dk-stage">
       <section className="dk-sheet dk-drawer-sheet">
         <div className="dk-index">
-          <div className="dk-top">
-            <p className="dk-eyebrow">lastre.io / decks</p>
-            <h1 className="dk-h1">
-              {pt ? "Documentos de trabalho." : "Working documents."}
-              <br />
-              {pt ? "Um por assunto." : "One per subject."}
-            </h1>
-            <p className="dk-p dk-p--lead">
+          <div className="dk-index__top">
+            <span className="dk-index__mark">
+              <SealMark size={52} label="Lastre" />
+            </span>
+            <h1 className="dk-index__word">Lastre</h1>
+            <p className="dk-p dk-p--lead dk-index__line">
               {pt
-                ? "Cada pasta abre uma apresentação navegável. Setas para andar, G para o índice, Esc para voltar aqui. Imprimir gera o PDF."
-                : "Each folder opens a navigable deck. Arrows to move, G for contents, Esc to come back here. Print makes the PDF."}
+                ? "Documentos de trabalho. Uma pasta por assunto."
+                : "Working documents. One folder per subject."}
+            </p>
+            <p className="dk-eyebrow dk-index__keys">
+              {pt
+                ? "setas andam · g abre o índice · esc volta aqui · imprimir gera o pdf"
+                : "arrows move · g opens contents · esc comes back · print makes the pdf"}
             </p>
           </div>
 
-          <nav className="dk-list">
+          <nav className="dk-folders">
             {decks.map((deck) => (
               <a
                 key={deck.slug}
-                className="dk-item"
+                className="dk-folder"
                 href={`/decks/${deck.slug}`}
                 onClick={(e) => {
                   if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -41,24 +85,17 @@ export function DecksIndex({ decks, locale, onOpen }: Props) {
                   onOpen(deck.slug);
                 }}
               >
-                <span className="dk-item__n">{deck.index}</span>
-                <span className="dk-item__m">
-                  <span className="dk-item__t">{deck.title[locale]}</span>
-                  <span className="dk-p">{deck.summary[locale]}</span>
-                  <span className="dk-item__meta">
-                    <span className="dk-tag">
-                      {deck.slides.length} {pt ? "telas" : "screens"}
-                    </span>
-                    <span className="dk-tag">{deck.audience[locale]}</span>
-                    <span className="dk-eyebrow">{deck.updated}</span>
-                  </span>
+                <span className="dk-folder__icon">{icons[deck.slug] ?? fallbackIcon}</span>
+                <span className="dk-folder__t">{deck.title[locale]}</span>
+                <span className="dk-p dk-folder__s">{deck.summary[locale]}</span>
+                <span className="dk-folder__meta">
+                  {deck.slides.length} {pt ? "telas" : "screens"} · {deck.updated}
                 </span>
-                <span className="dk-item__a">→</span>
               </a>
             ))}
           </nav>
 
-          <p className="dk-p dk-p--fine">
+          <p className="dk-p dk-p--fine dk-index__fine">
             {pt
               ? "Material interno. Não indexado, e não constitui oferta, promessa de retorno ou recomendação de investimento. Números de terceiros trazem fonte e data na própria tela."
               : "Internal material. Not indexed, and not an offer, a promise of return, or investment advice. Third-party figures carry their source and date on the screen where they appear."}

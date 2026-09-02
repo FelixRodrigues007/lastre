@@ -61,25 +61,14 @@ export const publicos: Deck = {
                 {t("Cada andar vende para gente diferente.", "Each floor sells to different people.")}
               </h2>
             </div>
-            <div className="dk-bottom">
-              <div className="dk-row dk-row--4 dk-row--top">
-                <div className="dk-floor dk-floor--0">
-                  <span className="dk-eyebrow">{t("Andar 0 · Prova", "Floor 0 · Proof")}</span>
-                  <h3 className="dk-h3">{t("Seguradora · auditor · comprador", "Insurer · auditor · buyer")}</h3>
+            <div className="dk-floors" style={{ alignSelf: "center", width: "100%" }}>
+                <div className="dk-floor dk-floor--3">
+                  <span className="dk-eyebrow">{t("Andar 3 · Capital", "Floor 3 · Capital")}</span>
+                  <h3 className="dk-h3">{t("Público de capital", "Capital audience")}</h3>
                   <p className="dk-p">
                     {t(
-                      "Vende certeza. Receita por verificação. É onde há caixa hoje.",
-                      "Sells certainty. Revenue per verification. This is where the cash is today.",
-                    )}
-                  </p>
-                </div>
-                <div className="dk-floor dk-floor--1">
-                  <span className="dk-eyebrow">{t("Andar 1 · Registro", "Floor 1 · Registry")}</span>
-                  <h3 className="dk-h3">{t("Produtor · titular de área", "Producer · title holder")}</h3>
-                  <p className="dk-p">
-                    {t(
-                      "Vende identidade e colateral. Não circula, não é oferta.",
-                      "Sells identity and collateral. It does not circulate and it is not an offer.",
+                      "Royalty e pré-pagamento em SPV. Domínio de comunicação próprio, fora da marca de prova.",
+                      "Royalty and prepayment in an SPV. Its own communication domain, outside the proof brand.",
                     )}
                   </p>
                 </div>
@@ -93,17 +82,28 @@ export const publicos: Deck = {
                     )}
                   </p>
                 </div>
-                <div className="dk-floor dk-floor--3">
-                  <span className="dk-eyebrow">{t("Andar 3 · Capital", "Floor 3 · Capital")}</span>
-                  <h3 className="dk-h3">{t("Público de capital", "Capital audience")}</h3>
+                <div className="dk-floor dk-floor--1">
+                  <span className="dk-eyebrow">{t("Andar 1 · Registro", "Floor 1 · Registry")}</span>
+                  <h3 className="dk-h3">{t("Produtor · titular de área", "Producer · title holder")}</h3>
                   <p className="dk-p">
                     {t(
-                      "Royalty e pré-pagamento em SPV. Domínio de comunicação próprio, fora da marca de prova.",
-                      "Royalty and prepayment in an SPV. Its own communication domain, outside the proof brand.",
+                      "Vende identidade e colateral. Não circula, não é oferta.",
+                      "Sells identity and collateral. It does not circulate and it is not an offer.",
+                    )}
+                  </p>
+                </div>
+                <div className="dk-floor dk-floor--0">
+                  <span className="dk-eyebrow">{t("Andar 0 · Prova", "Floor 0 · Proof")}</span>
+                  <h3 className="dk-h3">{t("Seguradora · auditor · comprador", "Insurer · auditor · buyer")}</h3>
+                  <p className="dk-p">
+                    {t(
+                      "Vende certeza. Receita por verificação. É onde há caixa hoje.",
+                      "Sells certainty. Revenue per verification. This is where the cash is today.",
                     )}
                   </p>
                 </div>
               </div>
+              <div className="dk-bottom">
               <p className="dk-p dk-p--fine">
                 <b>{t("Regra de ouro. ", "Golden rule. ")}</b>
                 {t(
@@ -182,12 +182,14 @@ export const publicos: Deck = {
                 {t("Ninguém no setor está falando com estes seis.", "Nobody in the sector is talking to these six.")}
               </h2>
             </div>
-            <div className="dk-bottom">
+            <div style={{ alignSelf: "center", width: "100%", display: "grid", gap: "clamp(0.9rem, 0.6rem + 1vw, 1.6rem)" }}>
               <div className="dk-row dk-row--3 dk-row--top">
-                {items.map(([name, kicker, body]) => (
+                {items.map(([name, kicker, body], idx) => (
                   <div className="dk-metric" key={name}>
                     <div className="dk-label">
-                      <span>{name}</span>
+                      <span>
+                        {String(idx + 1).padStart(2, "0")} · {name}
+                      </span>
                     </div>
                     <p className="dk-p">
                       <b>{kicker}.</b> {body}
@@ -225,60 +227,51 @@ export const publicos: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
-              <div className="dk-row dk-row--wide">
-                <div className="dk-kv">
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">18.02.2027</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "Passaporte de bateria da UE obrigatório. Sem limiar para VE e transporte leve; acima de 2 kWh para industriais.",
-                        "The EU battery passport becomes mandatory. No threshold for EVs and light transport; above 2 kWh for industrial cells.",
-                      )}
-                    </span>
-                  </div>
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">18.08.2027</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "Due diligence adiada de 2025 para cá pelo Regulamento (UE) 2025/1561.",
-                        "Due diligence pushed here from 2025 by Regulation (EU) 2025/1561.",
-                      )}
-                    </span>
-                  </div>
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">26.07.2029</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "CSDDD pós-Omnibus: só empresas com mais de 5.000 funcionários e € 1,5 bi. Aplicação efetiva.",
-                        "Post-Omnibus CSDDD: only companies above 5,000 staff and € 1.5bn. Effective application.",
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="dk-top">
-                  <div className="dk-panel">
-                    <div className="dk-label">
-                      <span>{t("Janela até a obrigação", "Window to the obligation")}</span>
-                    </div>
-                    <span className="dk-metric__v">
-                      17<small> {t("meses", "months")}</small>
-                    </span>
-                    <p className="dk-metric__note">
-                      {t(
-                        "O tempo em que a receita precisa vir de quem compra por vontade própria — seguradora e auditor.",
-                        "The time in which revenue has to come from those who buy by choice — insurers and auditors.",
-                      )}
-                    </p>
-                  </div>
-                  <p className="dk-p">
-                    <b>{t("O que não pode esperar o relógio: ", "What cannot wait for the clock: ")}</b>
+              <div className="dk-row dk-row--3 dk-row--top dk-steps">
+                <div className="dk-step">
+                  <span className="dk-step__n">18.02</span>
+                  <span className="dk-step__k">{t("2027 · PASSAPORTE DE BATERIA UE", "2027 · EU BATTERY PASSPORT")}</span>
+                  <p className="dk-p dk-step__b">
                     {t(
-                      "registrar a primeira leitura real. Histórico de catálogo não se compra depois — é o único item cujo adiamento é irreversível.",
-                      "recording the first real reading. Catalogue history cannot be bought later — it is the one item whose delay is irreversible.",
+                      "Passaporte de bateria da UE obrigatório. Sem limiar para VE e transporte leve; acima de 2 kWh para industriais.",
+                      "The EU battery passport becomes mandatory. No threshold for EVs and light transport; above 2 kWh for industrial cells.",
                     )}
                   </p>
                 </div>
+                <div className="dk-step">
+                  <span className="dk-step__n">18.08</span>
+                  <span className="dk-step__k">{t("2027 · DUE DILIGENCE", "2027 · DUE DILIGENCE")}</span>
+                  <p className="dk-p dk-step__b">
+                    {t(
+                      "Due diligence adiada de 2025 para cá pelo Regulamento (UE) 2025/1561.",
+                      "Due diligence pushed here from 2025 by Regulation (EU) 2025/1561.",
+                    )}
+                  </p>
+                </div>
+                <div className="dk-step">
+                  <span className="dk-step__n">26.07</span>
+                  <span className="dk-step__k">{t("2029 · CSDDD PÓS-OMNIBUS", "2029 · POST-OMNIBUS CSDDD")}</span>
+                  <p className="dk-p dk-step__b">
+                    {t(
+                      "CSDDD pós-Omnibus: só empresas com mais de 5.000 funcionários e € 1,5 bi. Aplicação efetiva.",
+                      "Post-Omnibus CSDDD: only companies above 5,000 staff and € 1.5bn. Effective application.",
+                    )}
+                  </p>
+                </div>
+              </div>
+              <div className="dk-row dk-row--wide">
+                <div className="dk-metric dk-metric--flat">
+                  <span className="dk-metric__v">
+                    17<small> {t("meses", "months")}</small>
+                  </span>
+                </div>
+                <p className="dk-p">
+                  <b>{t("O que não pode esperar o relógio: ", "What cannot wait for the clock: ")}</b>
+                  {t(
+                    "registrar a primeira leitura real. Histórico de catálogo não se compra depois — é o único item cujo adiamento é irreversível.",
+                    "recording the first real reading. Catalogue history cannot be bought later — it is the one item whose delay is irreversible.",
+                  )}
+                </p>
               </div>
             </div>
           </>
@@ -293,60 +286,53 @@ export const publicos: Deck = {
       render: (l) => {
         const t = tx(l);
         return (
-          <>
+          <div className="dk-split">
+            <figure className="dk-figure dk-figure--bleed">
+              <img src="/media/decks/felix-palco-wide.jpg" alt="" />
+            </figure>
             <div className="dk-top">
               <p className="dk-eyebrow">{t("04 — O canal", "04 — The channel")}</p>
               <h2 className="dk-h1">
                 {t("Todo o ouro brasileiro passa por um funil de ", "All Brazilian gold passes through a funnel of ")}
                 <span className="dk-accent">{t("cinco portas.", "five doors.")}</span>
               </h2>
-            </div>
-            <div className="dk-bottom">
-              <div className="dk-row dk-row--2">
-                <div className="dk-kv">
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">{t("O dever já existe", "The duty already exists")}</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "Desde março de 2025, quando o STF derrubou a presunção de boa-fé. Não depende do PL 3025 ser aprovado.",
-                        "Since March 2025, when the Supreme Court struck down the good-faith presumption. It does not depend on Bill 3025 passing.",
-                      )}
-                    </span>
-                  </div>
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">{t("Concentração", "Concentration")}</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "Cinco corretoras concentram o mercado — e todas têm passivo: processo administrativo na CVM aberto em 18.01.2023, MPF pedindo R$ 10 bi no conjunto.",
-                        "Five brokers concentrate the market — and all carry liabilities: a securities-commission proceeding opened 18.01.2023, prosecutors seeking R$ 10bn across them.",
-                      )}
-                    </span>
-                  </div>
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">{t("O vácuo do Pará", "The Pará vacuum")}</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "Cerca de 65% do ouro garimpável do país e hoje nenhuma corretora legal operando — as que atuavam foram fechadas.",
-                        "About 65% of the country's artisanal gold, and today no legal broker operating — those that did were shut down.",
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="dk-top">
-                  <div className="dk-label">
-                    <span>{t("A leitura", "The read")}</span>
-                  </div>
-                  <p className="dk-p dk-p--lead">
+              <div className="dk-kv">
+                <div className="dk-kv__row">
+                  <span className="dk-kv__k">{t("O dever já existe", "The duty already exists")}</span>
+                  <span className="dk-kv__v">
                     {t(
-                      "Quem entrar sob as regras novas precisa de rastreabilidade desde o dia um, sem passivo a esconder. É o melhor alvo de canal do mapa — e ainda não foi trabalhado.",
-                      "Whoever enters under the new rules needs traceability from day one, with no liability to hide. It is the best channel target on the map — and nobody has worked it.",
+                      "Desde março de 2025, quando o STF derrubou a presunção de boa-fé. Não depende do PL 3025 ser aprovado.",
+                      "Since March 2025, when the Supreme Court struck down the good-faith presumption. It does not depend on Bill 3025 passing.",
                     )}
-                  </p>
+                  </span>
+                </div>
+                <div className="dk-kv__row">
+                  <span className="dk-kv__k">{t("Concentração", "Concentration")}</span>
+                  <span className="dk-kv__v">
+                    {t(
+                      "Cinco corretoras concentram o mercado — e todas têm passivo: processo administrativo na CVM aberto em 18.01.2023, MPF pedindo R$ 10 bi no conjunto.",
+                      "Five brokers concentrate the market — and all carry liabilities: a securities-commission proceeding opened 18.01.2023, prosecutors seeking R$ 10bn across them.",
+                    )}
+                  </span>
+                </div>
+                <div className="dk-kv__row">
+                  <span className="dk-kv__k">{t("O vácuo do Pará", "The Pará vacuum")}</span>
+                  <span className="dk-kv__v">
+                    {t(
+                      "Cerca de 65% do ouro garimpável do país e hoje nenhuma corretora legal operando — as que atuavam foram fechadas.",
+                      "About 65% of the country's artisanal gold, and today no legal broker operating — those that did were shut down.",
+                    )}
+                  </span>
                 </div>
               </div>
+              <p className="dk-p dk-p--lead">
+                {t(
+                  "Quem entrar sob as regras novas precisa de rastreabilidade desde o dia um, sem passivo a esconder. É o melhor alvo de canal do mapa — e ainda não foi trabalhado.",
+                  "Whoever enters under the new rules needs traceability from day one, with no liability to hide. It is the best channel target on the map — and nobody has worked it.",
+                )}
+              </p>
             </div>
-          </>
+          </div>
         );
       },
     },
@@ -369,6 +355,7 @@ export const publicos: Deck = {
             <div className="dk-bottom">
               <div className="dk-row dk-row--2">
                 <div className="dk-panel">
+                  <span className="dk-metric__v">2023</span>
                   <div className="dk-label">
                     <span>{t("Fênix + Minespider · jan 2023", "Fênix + Minespider · Jan 2023")}</span>
                   </div>
@@ -406,13 +393,13 @@ export const publicos: Deck = {
       render: (l) => {
         const t = tx(l);
         return (
-          <div className="dk-top" style={{ maxWidth: "26ch" }}>
+          <div className="dk-quote">
             <p className="dk-eyebrow">{t("05 — O anti-público que virou adversário", "05 — The anti-audience that became an adversary")}</p>
-            <h2 className="dk-h1">
+            <p className="dk-quote__t">
               {t("O maior risco não é ninguém adotar. É ", "The biggest risk is not that nobody adopts it. It is that ")}
               <span className="dk-neg">{t("alguém adotar.", "somebody does.")}</span>
-            </h2>
-            <p className="dk-p dk-p--lead" style={{ marginTop: "1.6rem" }}>
+            </p>
+            <p className="dk-p dk-p--lead dk-quote__b">
               {t(
                 "Quem quer esquentar origem não é um público que recusamos — é um adversário que nos procura. Um selo usado para legitimar ouro sujo destrói a empresa mais rápido do que a falta de clientes.",
                 "Whoever wants to launder origin is not an audience we decline — it is an adversary that seeks us out. A seal used to legitimise dirty gold destroys the company faster than a lack of customers.",
@@ -440,6 +427,20 @@ export const publicos: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
+              <div className="dk-row dk-row--3">
+                <div className="dk-metric dk-metric--flat">
+                  <span className="dk-metric__v">10</span>
+                  <span className="dk-metric__note">{t("CENÁRIOS MAPEADOS", "SCENARIOS MAPPED")}</span>
+                </div>
+                <div className="dk-metric dk-metric--flat">
+                  <span className="dk-metric__v">9</span>
+                  <span className="dk-metric__note">{t("SEM DETECÇÃO HOJE", "UNDETECTED TODAY")}</span>
+                </div>
+                <div className="dk-metric dk-metric--flat">
+                  <span className="dk-metric__v">4/11</span>
+                  <span className="dk-metric__note">{t("DIMENSÕES COM CRITÉRIO EM ABERTO", "DIMENSIONS WITH AN OPEN CRITERION")}</span>
+                </div>
+              </div>
               <div className="dk-row dk-row--2">
                 <div className="dk-top">
                   <div className="dk-label">
@@ -496,14 +497,12 @@ export const publicos: Deck = {
                 {t("Todo o mercado verifica documento. Ninguém verifica o ato de ler.", "The whole market verifies documents. Nobody verifies the act of reading.")}
               </h2>
             </div>
-            <div className="dk-bottom">
+            <div style={{ alignSelf: "center", width: "100%", display: "grid", gap: "clamp(0.9rem, 0.6rem + 1vw, 1.6rem)" }}>
               <div className="dk-row dk-row--3 dk-row--top">
                 <div className="dk-metric">
-                  <div className="dk-label">
-                    <span>Circulor · US$ 39,1 mi</span>
-                  </div>
+                  <span className="dk-tag">{t("A INCUMBENTE", "THE INCUMBENT")}</span>
+                  <h3 className="dk-h3">Circulor · US$ 39,1 mi</h3>
                   <p className="dk-p">
-                    <b>{t("A incumbente. ", "The incumbent. ")}</b>
                     {t(
                       "Cadeia de custódia e balanço de massa para bateria, dentro do Catena-X. Opera sobre dado declarado pelo fornecedor — não verifica o material.",
                       "Chain of custody and mass balance for batteries, inside Catena-X. It runs on supplier-declared data — it does not verify the material.",
@@ -511,11 +510,9 @@ export const publicos: Deck = {
                   </p>
                 </div>
                 <div className="dk-metric">
-                  <div className="dk-label">
-                    <span>ProofLayer · Casper</span>
-                  </div>
+                  <span className="dk-tag">{t("O VIZINHO PERIGOSO", "THE DANGEROUS NEIGHBOUR")}</span>
+                  <h3 className="dk-h3">ProofLayer · Casper</h3>
                   <p className="dk-p">
-                    <b>{t("O vizinho perigoso. ", "The dangerous neighbour. ")}</b>
                     {t(
                       "Infra de prova em TEE, mesma chain, mesmo discurso. Diferenciação que sobra: prova de leitura física contra integridade de feed digital. Parar de usar “camada de prova” como posicionamento.",
                       "TEE-based proof infrastructure, same chain, same pitch. The differentiation left: proof of a physical reading versus integrity of a digital feed. Stop using “proof layer” as positioning.",
@@ -523,11 +520,9 @@ export const publicos: Deck = {
                   </p>
                 </div>
                 <div className="dk-metric">
-                  <div className="dk-label">
-                    <span>LBMA Gold Bar Integrity</span>
-                  </div>
+                  <span className="dk-tag">{t("O PADRÃO DE 2027", "THE 2027 STANDARD")}</span>
+                  <h3 className="dk-h3">LBMA Gold Bar Integrity</h3>
                   <p className="dk-p">
-                    <b>{t("O padrão de 2027. ", "The 2027 standard. ")}</b>
                     {t(
                       "100% dos refinadores Good Delivery integrados, relatório mensal obrigatório em 2027. Mas o dado de origem é declaratório e no nível do refinador — tudo a montante fica fora. Esse “fora” é o nosso mercado.",
                       "All Good Delivery refiners integrated, monthly reporting mandatory in 2027. But the origin data is declaratory and sits at refiner level — everything upstream is out. That “out” is our market.",
@@ -539,6 +534,56 @@ export const publicos: Deck = {
                 {t(
                   "Cemitério útil: Everledger liquidada em 2023 · iTSCi removido da lista RMI em 31.10.2022 e abandonado por custo · Fairmined e Fairtrade somam cerca de 101 kg vendidos no mundo em 2025, e nenhum esquema internacional de certificação de ouro opera no Brasil. Números de mercado de RWA são pouco confiáveis — estimativas para meados de 2026 vão de US$ 23 bi a US$ 34 bi para o mesmo mercado.",
                   "Useful graveyard: Everledger liquidated in 2023 · iTSCi removed from the RMI list on 31.10.2022 and abandoned on cost · Fairmined and Fairtrade together sold about 101 kg worldwide in 2025, and no international gold certification scheme operates in Brazil. RWA market figures are unreliable — mid-2026 estimates range from US$ 23bn to US$ 34bn for the same market.",
+                )}
+              </p>
+            </div>
+          </>
+        );
+      },
+    },
+
+    /* ── 07 · do outro lado da mesa ─────────────────────────────────── */
+    {
+      id: "mesa",
+      title: { pt: "Do outro lado da mesa", en: "On this side of the table" },
+      skin: "light",
+      render: (l) => {
+        const t = tx(l);
+        return (
+          <>
+            <div className="dk-top">
+              <p className="dk-eyebrow">{t("07 — Quem assina este documento", "07 — Who signs this document")}</p>
+              <h2 className="dk-h1">
+                {t("O último público do mapa somos nós.", "The last audience on the map is us.")}
+              </h2>
+            </div>
+            <div className="dk-row dk-row--media" style={{ alignSelf: "center", width: "100%" }}>
+              <div className="dk-portraits">
+                <div className="dk-portrait">
+                  <figure>
+                    <img
+                      src="/media/decks/felix-palco.jpg"
+                      alt={t("Félix Rodrigues no palco", "Félix Rodrigues on stage")}
+                    />
+                  </figure>
+                  <p className="dk-portrait__n">Félix Rodrigues</p>
+                  <p className="dk-portrait__r">{t("CEO & DESENVOLVEDOR", "CEO & DEVELOPER")}</p>
+                </div>
+                <div className="dk-portrait">
+                  <figure>
+                    <img
+                      src="/media/decks/laura-palco.jpg"
+                      alt={t("Laura Eckert no palco", "Laura Eckert on stage")}
+                    />
+                  </figure>
+                  <p className="dk-portrait__n">Laura Eckert</p>
+                  <p className="dk-portrait__r">{t("DESIGN DE PRODUTO & OPERAÇÃO", "PRODUCT DESIGN & OPERATIONS")}</p>
+                </div>
+              </div>
+              <p className="dk-p dk-p--lead">
+                {t(
+                  "Este mapa é escrito de dentro. Cada público desta lista foi procurado, e o que não foi ainda está marcado como não procurado — não como impossível.",
+                  "This map is written from the inside. Every audience on this list has been approached, and what has not is marked as not yet approached — not as impossible.",
                 )}
               </p>
             </div>

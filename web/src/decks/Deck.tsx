@@ -27,16 +27,19 @@ export function DeckViewer({ deck, locale, onExit }: Props) {
     return found >= 0 ? found : 0;
   });
   const [toc, setToc] = useState(false);
+  /* Which way the deck is travelling — content enters from that side. */
+  const [dir, setDir] = useState(1);
 
   const go = useCallback(
     (next: number) => {
       const clamped = Math.max(0, Math.min(total - 1, next));
+      setDir((prev) => (clamped === i ? prev : clamped > i ? 1 : -1));
       setI(clamped);
       setToc(false);
       const slide = deck.slides[clamped];
       if (slide) window.history.replaceState(null, "", `/decks/${deck.slug}#s/${slide.id}`);
     },
-    [deck.slides, deck.slug, total],
+    [deck.slides, deck.slug, i, total],
   );
 
   useEffect(() => {
@@ -89,9 +92,12 @@ export function DeckViewer({ deck, locale, onExit }: Props) {
 
     const fit = () => {
       inner.style.transform = "none";
+      const prevAlign = inner.style.alignContent;
+      inner.style.alignContent = "start";
       const box = inner.clientHeight;
       const content = inner.scrollHeight;
       const wide = inner.scrollWidth;
+      inner.style.alignContent = prevAlign;
       if (box <= 0 || content <= 0) return;
       const k = Math.min(1, box / content, inner.clientWidth / Math.max(wide, 1));
       inner.style.transform = k < 0.995 ? `scale(${k.toFixed(4)})` : "none";
@@ -116,12 +122,18 @@ export function DeckViewer({ deck, locale, onExit }: Props) {
         className={`dk-sheet${skin === "light" ? "" : ` dk-sheet--${skin}`}`}
         aria-roledescription={locale === "pt" ? "apresentação" : "presentation"}
       >
-        {skin === "wave" && <DitherField className="dk-sheet__wave" />}
+        {skin === "wave" && (
+          <>
+            <DitherField className="dk-sheet__wave" />
+            <DitherField variant="valid" className="dk-sheet__wave dk-sheet__wave--b" />
+          </>
+        )}
 
         <div
           className={`dk-canvas__inner${slide.center ? " dk-canvas__inner--center" : ""}`}
           ref={fitRef}
           key={`${slide.id}-${locale}`}
+          style={{ ["--dk-dx" as string]: `${dir * 30}px` }}
         >
           {slide.render(locale)}
         </div>
