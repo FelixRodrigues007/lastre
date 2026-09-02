@@ -4,14 +4,14 @@ import type { Locale } from "../i18n/translations";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { CAMADAS } from "./content/publicos-data";
 
-const CX = 360;
-const CY = 360;
-const CENTER_R = 96;
-const DOT_R = 118;
-const INNER_R = 158;
-const OUTER_R = 278;
-const WEDGE = 46;
-const LABEL_R = (INNER_R + OUTER_R) / 2;
+export const CX = 360;
+export const CY = 360;
+export const CENTER_R = 96;
+export const DOT_R = 118;
+export const INNER_R = 158;
+export const OUTER_R = 278;
+export const WEDGE = 46;
+export const LABEL_R = (INNER_R + OUTER_R) / 2;
 
 export type SectorId = "origem" | "mercado" | "capital" | "defi" | "infra" | "estado";
 
@@ -25,7 +25,7 @@ type SectorDef = {
   crossCut?: boolean;
 };
 
-const SECTORS: SectorDef[] = [
+export const SECTORS: SectorDef[] = [
   { id: "origem", num: "01", angle: -90, namePt: "Origem", nameEn: "Origin", count: 8 },
   { id: "mercado", num: "03", angle: -30, namePt: "Mercado", nameEn: "Market", count: 5 },
   { id: "capital", num: "04", angle: 30, namePt: "Capital", nameEn: "Capital", count: 7 },
@@ -36,7 +36,7 @@ const SECTORS: SectorDef[] = [
 
 const CHAIN: SectorId[] = ["origem", "mercado", "capital", "defi"];
 
-const polar = (r: number, deg: number) => {
+export const polar = (r: number, deg: number) => {
   const rad = (deg * Math.PI) / 180;
   return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
 };

@@ -153,75 +153,78 @@ export const geral: Deck = {
       render: (l) => {
         const t = tx(l);
         return (
-          <>
-            <div className="dk-top">
-              <p className="dk-eyebrow">{t("02 — O que a Lastre é", "02 — What Lastre is")}</p>
-              <h2 className="dk-h1">
-                {t("A prova de que a leitura", "Proof that the reading")}
-                <br />
-                {t("física ", "physically ")}
-                <span className="dk-accent">{t("aconteceu.", "happened.")}</span>
-              </h2>
-            </div>
-            <div className="dk-bottom">
-              <div className="dk-row dk-row--wide">
-                <div className="dk-kv">
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">{t("O que sela", "What it seals")}</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "Peso, teor, ensaio, coordenada, operador, horário. A leitura — não a declaração.",
-                        "Weight, grade, assay, coordinate, operator, time. The reading — not the claim.",
-                      )}
-                    </span>
-                  </div>
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">{t("Como sela", "How it seals")}</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "SHA-256 canônico, calculado offline no ponto de leitura. Sem nuvem, sem modelo.",
-                        "A canonical SHA-256, computed offline at the point of reading. No cloud, no model.",
-                      )}
-                    </span>
-                  </div>
-                  <div className="dk-kv__row">
-                    <span className="dk-kv__k">{t("Onde julga", "Where it judges")}</span>
-                    <span className="dk-kv__v">
-                      {t(
-                        "Casper. O veredito é permanente nos dois sentidos.",
-                        "Casper. The verdict is permanent both ways.",
-                      )}
-                    </span>
-                  </div>
+          <div className="dk-oque">
+            <div className="dk-oque__copy">
+              <div className="dk-oque__head">
+                <p className="dk-eyebrow">{t("02 — O que a Lastre é", "02 — What Lastre is")}</p>
+                <h2 className="dk-h1">
+                  {t("A prova de que a leitura", "Proof that the reading")}
+                  <br />
+                  {t("física ", "physically ")}
+                  <span className="dk-accent">{t("aconteceu.", "happened.")}</span>
+                </h2>
+              </div>
+              <div className="dk-kv">
+                <div className="dk-kv__row">
+                  <span className="dk-kv__k">{t("O que sela", "What it seals")}</span>
+                  <span className="dk-kv__v">
+                    {t(
+                      "Peso, teor, ensaio, coordenada, operador, horário. A leitura — não a declaração.",
+                      "Weight, grade, assay, coordinate, operator, time. The reading — not the claim.",
+                    )}
+                  </span>
                 </div>
-
-                <div className="dk-row dk-row--2">
-                  <div className="dk-panel">
-                    <div className="dk-label">
-                      <span>Valid</span>
-                    </div>
-                    <p className="dk-p">
-                      {t(
-                        "O trilho abre. Registro, circulação e crédito passam a existir.",
-                        "The rail opens. Registry, circulation and credit come into existence.",
-                      )}
-                    </p>
-                  </div>
-                  <div className="dk-panel">
-                    <div className="dk-label">
-                      <span>Invalid</span>
-                    </div>
-                    <p className="dk-p">
-                      {t(
-                        "O trilho fecha. A recusa também é prova — é o que impede o selo de virar lavagem.",
-                        "The rail closes. The refusal is proof too — it stops the seal becoming laundering.",
-                      )}
-                    </p>
-                  </div>
+                <div className="dk-kv__row">
+                  <span className="dk-kv__k">{t("Como sela", "How it seals")}</span>
+                  <span className="dk-kv__v">
+                    {t(
+                      "SHA-256 canônico, calculado offline no ponto de leitura. Sem nuvem, sem modelo.",
+                      "A canonical SHA-256, computed offline at the point of reading. No cloud, no model.",
+                    )}
+                  </span>
+                </div>
+                <div className="dk-kv__row">
+                  <span className="dk-kv__k">{t("Onde julga", "Where it judges")}</span>
+                  <span className="dk-kv__v">
+                    {t(
+                      "Casper. O veredito é permanente nos dois sentidos.",
+                      "Casper. The verdict is permanent both ways.",
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
-          </>
+
+            <div className="dk-oque__stage">
+              <div className="dk-proof">
+                <div className="dk-panel dk-proof__valid">
+                  <div className="dk-label">
+                    <span>Valid</span>
+                  </div>
+                  <p className="dk-p">
+                    {t(
+                      "O trilho abre. Registro, circulação e crédito passam a existir.",
+                      "The rail opens. Registry, circulation and credit come into existence.",
+                    )}
+                  </p>
+                </div>
+                <div className="dk-proof__seal">
+                  <SealCard locale={l} />
+                </div>
+                <div className="dk-panel dk-proof__invalid">
+                  <div className="dk-label">
+                    <span>Invalid</span>
+                  </div>
+                  <p className="dk-p">
+                    {t(
+                      "O trilho fecha. A recusa também é prova — é o que impede o selo de virar lavagem.",
+                      "The rail closes. The refusal is proof too — it stops the seal becoming laundering.",
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         );
       },
     },
