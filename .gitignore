@@ -23,3 +23,6 @@ output/
 web/shot-*.png
 web/cobe-test.html
 .cache/
+# Business KB — repo privado lastre-negocio (symlink local). Nunca commitar.
+docs/kb-negocio
+docs/kb-negocio/
