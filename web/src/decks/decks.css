@@ -1548,3 +1548,21 @@
   .dk-fig *, .dk-watermark, .dk-strike--draw::after { animation: none !important; }
   .dk-watermark { opacity: 0.06; }
 }
+
+/* ── figure layouts ──────────────────────────────────────────────────── */
+
+/* the rail of movements sits at the foot, to the right — a contents line */
+.dk-tempo-rail { justify-self: end; }
+.dk-tempo-rail--full { justify-self: start; }
+
+/* the stack beside its floors: one drawing, four texts, aligned by slab */
+@media (min-width: 900px) {
+  .dk-row--stack { grid-template-columns: minmax(0, 0.26fr) minmax(0, 1fr); align-items: start; }
+}
+.dk-fig--stack { width: 100%; height: auto; max-width: 240px; }
+.dk-floors-col {
+  display: grid;
+  gap: clamp(0.6rem, 0.35rem + 0.7vw, 1rem);
+  align-content: start;
+}
+.dk-floors-col .dk-floor { padding-top: 0; }

@@ -1,5 +1,28 @@
 import { Figure, SealCard } from "../Motion";
+import {
+  Bars,
+  Chain,
+  Converge,
+  Ratio,
+  Scale,
+  Stack,
+  TimeRail,
+  Watermark,
+} from "../figures/substrates";
 import { tx, type Deck } from "../types";
+import type { Locale } from "../../i18n/translations";
+
+/* The five movements of the document. They name the rail on the cover and
+ * come back, fully lit, on the closing sheet. */
+const TEMPOS = (l: Locale): string[] =>
+  l === "pt"
+    ? ["Problema", "O que é", "Como funciona", "O caso", "Quem paga"]
+    : ["Problem", "What it is", "How it works", "The case", "Who pays"];
+
+const RAIL: { pt: string; en: string } = {
+  pt: "Os cinco tempos do documento",
+  en: "The five movements of the document",
+};
 
 const LAPTOP = "/media/decks/lastre-macbook.webp";
 
@@ -47,6 +70,9 @@ export const geral: Deck = {
                   "Today everything is tokenised on a declared origin. Lastre proves the reading happened.",
                 )}
               </p>
+              <div className="dk-tempo-rail">
+                <TimeRail locale={l} title={RAIL} steps={TEMPOS(l)} lit={1} />
+              </div>
             </div>
           </>
         );
@@ -69,6 +95,18 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
+              <Chain
+                locale={l}
+                title={{
+                  pt: "A cadeia do mercado: a leitura acontece, a declaração não é verificada, o token é emitido assim mesmo.",
+                  en: "The market chain: the reading happens, the claim is never verified, the token is issued anyway.",
+                }}
+                links={[
+                  { n: "01", label: t("leitura", "reading") },
+                  { n: "02", label: t("declaração", "claim"), missing: true },
+                  { n: "03", label: t("token", "token") },
+                ]}
+              />
               <div className="dk-row dk-row--3">
                 <div className="dk-metric dk-metric--flat">
                   <span className="dk-eyebrow">{t("Toucan · carbono", "Toucan · carbon")}</span>
@@ -252,10 +290,11 @@ export const geral: Deck = {
         const t = tx(l);
         return (
           <div className="dk-top" style={{ maxWidth: "42ch", display: "grid", gap: "1.2rem" }}>
+            <Watermark />
             <p className="dk-eyebrow">{t("A frase que nos separa", "The line that separates us")}</p>
             <h2 className="dk-h2" style={{ color: "var(--dk-fg-2)" }}>
               {t("A concorrência prova o que o fornecedor ", "The competition proves what the supplier ")}
-              <span className="dk-strike">{t("declarou.", "declared.")}</span>
+              <span className="dk-strike--draw">{t("declarou.", "declared.")}</span>
             </h2>
             <h2 className="dk-h2">
               {t("A Lastre prova que a leitura aconteceu.", "Lastre proves the reading happened.")}
@@ -282,7 +321,16 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
-              <div className="dk-row dk-row--4 dk-row--top">
+              <div className="dk-row dk-row--stack dk-row--top">
+                <Stack
+                  locale={l}
+                  title={{
+                    pt: "Quatro lajes. O andar 0 é a base larga; o andar 3 está deslocado e tracejado — entidade separada.",
+                    en: "Four slabs. Floor 0 is the broad base; floor 3 sits offset and dashed — a separate entity.",
+                  }}
+                  base={t("o único que precisa existir", "the only one that must exist")}
+                />
+                <div className="dk-floors-col">
                 <div className="dk-floor dk-floor--0">
                   <span className="dk-eyebrow">{t("Andar 0", "Floor 0")}</span>
                   <div className="dk-floor__h">
@@ -334,6 +382,7 @@ export const geral: Deck = {
                       "Royalty and prepayment in an SPV. An entity separate from proof.",
                     )}
                   </p>
+                </div>
                 </div>
               </div>
               <p className="dk-src">
@@ -408,6 +457,16 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
+              <Ratio
+                locale={l}
+                title={{
+                  pt: "A massa de rejeito contra o ouro contido, na mesma escala.",
+                  en: "The tailings mass against the contained gold, on one scale.",
+                }}
+                mass={t("2.500.000 t de rejeito", "2,500,000 t of tailings")}
+                metal={t("7,5 t de ouro", "7.5 t of gold")}
+                share={t("0,0003% da massa", "0.0003% of the mass")}
+              />
             </div>
           </>
         );
@@ -428,6 +487,18 @@ export const geral: Deck = {
               <h2 className="dk-h1">{t("Recuperação metalúrgica.", "Metallurgical recovery.")}</h2>
             </div>
             <div className="dk-bottom">
+              <Bars
+                locale={l}
+                title={{
+                  pt: "O trilho do metal contido, com as três marcas de recuperação.",
+                  en: "The rail of contained metal, with the three recovery marks.",
+                }}
+                marks={[
+                  { pct: 0.5, value: "50", label: t("3,75 t", "3.75 t"), side: "left" },
+                  { pct: 0.65, value: "65", label: t("4,88 t", "4.88 t") },
+                  { pct: 0.8, value: "80", label: t("6,00 t", "6.00 t") },
+                ]}
+              />
               <div className="dk-row dk-row--3">
                 <div className="dk-panel">
                   <div className="dk-label">
@@ -527,6 +598,20 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
+              <Scale
+                locale={l}
+                title={{
+                  pt: "A régua do prêmio de origem, em dólares por quilo.",
+                  en: "The origin-premium ruler, in dollars per kilo.",
+                }}
+                max={5000}
+                step={1000}
+                unit="US$/kg"
+                stops={[
+                  { at: 2000, value: "2k", label: "Fairtrade", sub: t("US$ 2.000/kg", "US$ 2,000/kg") },
+                  { at: 4000, value: "4k", label: "Fairmined", sub: t("US$ 4.000/kg", "US$ 4,000/kg") },
+                ]}
+              />
             </div>
           </>
         );
@@ -551,6 +636,16 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
+              <Converge
+                locale={l}
+                title={{
+                  pt: "Dois lados entram no mesmo ponto, e uma saída fina paga antes do mandato.",
+                  en: "Two sides enter the same point, and a thin way out pays before the mandate.",
+                }}
+                a={t("certificado", "certified")}
+                b={t("produtor", "producer")}
+                out={t("pré-2027", "pre-2027")}
+              />
               <div className="dk-row dk-row--3 dk-row--top dk-steps">
                 <div className="dk-step">
                   <span className="dk-step__n">01</span>
@@ -676,6 +771,19 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
+              <Chain
+                locale={l}
+                title={{
+                  pt: "A ordem das quatro decisões. A quarta não se recupera depois.",
+                  en: "The order of the four decisions. The fourth cannot be recovered later.",
+                }}
+                links={[
+                  { n: "01", label: t("armazém", "warehouse") },
+                  { n: "02", label: t("threat model", "threat model") },
+                  { n: "03", label: t("preço", "price") },
+                  { n: "04", label: t("irrecuperável", "unrecoverable"), missing: true },
+                ]}
+              />
             </div>
           </>
         );
@@ -699,6 +807,9 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
+              <div className="dk-tempo-rail dk-tempo-rail--full">
+                <TimeRail locale={l} title={RAIL} steps={TEMPOS(l)} lit={5} />
+              </div>
               <p className="dk-src">
                 {t(
                   "Material interno. Não é oferta, promessa de retorno ou recomendação de investimento. Cifras de terceiros trazem fonte e data na tela em que aparecem; as cifras do rejeito são cálculo sobre premissas declaradas, não projeção de receita.",

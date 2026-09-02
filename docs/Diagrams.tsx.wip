@@ -1,0 +1,147 @@
+import type { ReactNode } from "react";
+import type { Locale } from "../i18n/translations";
+import { camada, type CamadaId } from "./content/publicos-data";
+import { tx, type L10n } from "./types";
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Visual diagrams ported from the mapa de públicos reference.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+export type PillVariant = "pos" | "neg" | "neutral" | "new";
+
+type PillProps = {
+  variant?: PillVariant;
+  children: ReactNode;
+  className?: string;
+};
+
+export function Pill({ variant = "neutral", children, className }: PillProps) {
+  const v = variant === "neutral" ? "" : ` dk-pill--${variant}`;
+  return <span className={`dk-pill${v}${className ? ` ${className}` : ""}`}>{children}</span>;
+}
+
+type CalloutProps = {
+  locale: Locale;
+  label: L10n;
+  children: ReactNode;
+};
+
+export function Callout({ locale, label, children }: CalloutProps) {
+  const t = tx(locale);
+  return (
+    <aside className="dk-callout">
+      <p className="dk-callout__label">{t(label.pt, label.en)}</p>
+      <div className="dk-callout__body">{children}</div>
+    </aside>
+  );
+}
+
+export type FloorItem = {
+  level: 0 | 1 | 2 | 3;
+  qual?: L10n;
+  title: L10n;
+  body: L10n;
+  pill: L10n;
+  pillVariant: PillVariant;
+};
+
+type FloorsProps = {
+  locale: Locale;
+  floors: FloorItem[];
+};
+
+export function Floors({ locale, floors }: FloorsProps) {
+  const t = tx(locale);
+  const ordered = [...floors].sort((a, b) => b.level - a.level);
+
+  return (
+    <div className="dk-floors-stack" role="img" aria-label={t("Quatro andares", "Four floors")}>
+      {ordered.map((floor) => (
+        <div className="dk-floors-stack__row" key={floor.level}>
+          <article className={`dk-floors-stack__bar dk-floors-stack__bar--${floor.level}`}>
+            <p className="dk-eyebrow dk-floors-stack__eyebrow">
+              {t(`Andar ${floor.level}`, `Floor ${floor.level}`)}
+              {floor.qual ? ` · ${t(floor.qual.pt, floor.qual.en)}` : ""}
+            </p>
+            <h3 className="dk-h3 dk-floors-stack__title">{t(floor.title.pt, floor.title.en)}</h3>
+            <p className="dk-p dk-floors-stack__body">{t(floor.body.pt, floor.body.en)}</p>
+          </article>
+          <Pill variant={floor.pillVariant} className="dk-floors-stack__pill">
+            {t(floor.pill.pt, floor.pill.en)}
+          </Pill>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const CHAIN_MID: CamadaId[] = ["origem", "prova", "mercado", "capital", "defi"];
+
+const CHAIN_DESC: Record<(typeof CHAIN_MID)[number], L10n> = {
+  origem: { pt: "quem gera o fato físico", en: "who generates the physical fact" },
+  prova: { pt: "A leitura — não a declaração.", en: "The reading — not the claim." },
+  mercado: { pt: "Quem compra e quem financia.", en: "Who buys and who funds." },
+  capital: { pt: "doze públicos, todos pagam", en: "twelve audiences, all paying" },
+  defi: { pt: "DeFi, infraestrutura e Estado.", en: "DeFi, infrastructure and the State." },
+};
+
+function joinActors(locale: Locale, ids: CamadaId[]): string {
+  const names = ids.flatMap((id) => camada(id).publicos.map((p) => (locale === "pt" ? p.pt : p.en)));
+  return names.slice(0, 6).join(" · ");
+}
+
+type ChainProps = {
+  locale: Locale;
+  active?: CamadaId;
+};
+
+export function Chain({ locale, active = "prova" }: ChainProps) {
+  const t = tx(locale);
+  const estado = camada("estado");
+  const infra = camada("infra");
+
+  return (
+    <div className="dk-chain" role="img" aria-label={t("A cadeia em sete camadas", "The seven-layer chain")}>
+      <div className="dk-chain__rail dk-chain__rail--top">
+        <div className="dk-chain__rail-label">
+          <p className="dk-eyebrow">
+            {t(`Camada ${estado.num}`, `Layer ${estado.num}`)}
+          </p>
+          <p className="dk-chain__rail-name">{t(estado.name.pt, estado.name.en)}</p>
+        </div>
+        <p className="dk-chain__rail-actors">{joinActors(locale, ["estado"])}</p>
+      </div>
+
+      <div className="dk-chain__mid">
+        {CHAIN_MID.map((id, i) => {
+          const layer = camada(id);
+          const isActive = id === active;
+          return (
+            <div className="dk-chain__step-wrap" key={id}>
+              {i > 0 && (
+                <span className="dk-chain__arrow" aria-hidden="true">
+                  →
+                </span>
+              )}
+              <article className={`dk-chain__box${isActive ? " dk-chain__box--active" : ""}`}>
+                <p className={`dk-chain__box-n${isActive ? " dk-chain__box-n--active" : ""}`}>{layer.num}</p>
+                <p className="dk-chain__box-title">{t(layer.name.pt, layer.name.en)}</p>
+                <p className="dk-chain__box-desc">{t(CHAIN_DESC[id].pt, CHAIN_DESC[id].en)}</p>
+              </article>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="dk-chain__rail dk-chain__rail--bottom">
+        <div className="dk-chain__rail-label">
+          <p className="dk-eyebrow">
+            {t(`Camada ${infra.num}`, `Layer ${infra.num}`)}
+          </p>
+          <p className="dk-chain__rail-name">{t(infra.name.pt, infra.name.en)}</p>
+        </div>
+        <p className="dk-chain__rail-actors">{joinActors(locale, ["infra"])}</p>
+      </div>
+    </div>
+  );
+}
