@@ -540,6 +540,38 @@
   font-size: clamp(0.95rem, 0.9rem + 0.24vw, 1.1rem);
 }
 .dk-calc__i { color: var(--dk-fg-faint); font-size: 0.88em; letter-spacing: 0.05em; }
+/* sem a coluna de números: quem numera é a corrente ao lado. As linhas passam
+ * a ter altura igual, para o elo 03 cair na linha 03 e não perto dela. */
+.dk-calc--bare { align-content: stretch; grid-auto-rows: minmax(0, 1fr); }
+.dk-calc--bare .dk-calc__row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+
+/* a corrente como goteira da lista — uma coluna de elos, altura da lista */
+.dk-chainrow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(0.7rem, 0.4rem + 1vw, 1.3rem);
+  align-items: stretch;
+}
+.dk-chainrow > .dk-fig--col {
+  height: 100%;
+  max-height: none;
+  align-self: stretch;
+}
+
+/* uma faixa que se estica: o objeto ocupa a folha em vez de encostar na base
+ * e deixar meia tela vazia acima dele */
+.dk-bottom--tall {
+  align-self: stretch;
+  align-content: stretch;
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+}
+.dk-bottom--tall > .dk-row--2 { align-items: stretch; min-height: 0; }
+/* as três entradas viram três faixas iguais: os filetes caem em intervalo
+ * regular, no mesmo ritmo dos elos da coluna ao lado */
+.dk-bottom--tall .dk-kv { align-content: stretch; grid-auto-rows: minmax(0, 1fr); }
+.dk-bottom--tall .dk-kv__row { align-content: start; }
+.dk-bottom--tall .dk-top { grid-template-rows: auto minmax(0, 1fr) auto; min-height: 0; }
 .dk-calc__k { color: var(--dk-fg-dim); }
 .dk-calc__v {
   color: var(--dk-fg);
@@ -1488,6 +1520,10 @@
   stroke-width: 1.2;
   opacity: 0.5;
 }
+/* o elo que existe e não se desfaz: inteiro, mas em tinta negativa */
+.dk-fig__link--warn { stroke: var(--dk-fig-neg); opacity: 0.85; }
+.dk-fig__linkline { stroke: currentColor; stroke-width: 1.2; opacity: 0.32; }
+.dk-fig__linkline.is-gone { stroke: var(--dk-fig-neg); stroke-dasharray: 4 5; opacity: 0.6; }
 /* a hollow link carries no load */
 .dk-fig__link--gone {
   stroke: var(--dk-fig-neg);
@@ -1720,10 +1756,21 @@
   max-height: 100%;
 }
 
+/* a régua na capa é sumário, não fecho: encosta na margem direita e fica
+ * abaixo do objeto, para ser lida depois dele */
+.dk-cover__rail {
+  justify-self: stretch;
+  display: flex;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
 /* capa silenciosa: só manchete e objeto, com ar generoso entre os dois */
 .dk-cover--quiet {
   gap: clamp(2rem, 1rem + 3vh, 4rem);
-  place-content: center;
+  /* centrado na vertical, esticado na horizontal: as linhas seguem centradas
+   * por `justify-items`, e só a régua consegue encostar na margem */
+  place-content: center stretch;
 }
 
 /* ── número que dimensiona a camada ─────────────────────────────────────── */

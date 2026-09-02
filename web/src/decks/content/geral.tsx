@@ -3,6 +3,7 @@ import { Figure, SealCard } from "../Motion";
 import {
   Bars,
   Chain,
+  ChainColumn,
   Converge,
   Ratio,
   Scale,
@@ -67,6 +68,11 @@ export const geral: Deck = {
 
             <div className="dk-cover__stage">
               <SealCard locale={l} />
+            </div>
+
+            {/* a régua vira sumário aqui e volta inteira acesa no fecho */}
+            <div className="dk-cover__rail">
+              <TimeRail locale={l} title={RAIL} steps={TEMPOS(l)} lit={1} />
             </div>
           </div>
         );
@@ -901,7 +907,7 @@ export const geral: Deck = {
               <p className="dk-eyebrow">{t("05 — Estrutura e ordem", "05 — Structure and order")}</p>
               <h2 className="dk-h1">{t("Fora do Brasil, e nesta ordem.", "Outside Brazil, and in this order.")}</h2>
             </div>
-            <div className="dk-bottom">
+            <div className="dk-bottom dk-bottom--tall">
               <div className="dk-row dk-row--2">
                 <div className="dk-kv">
                   <div className="dk-kv__row">
@@ -940,33 +946,44 @@ export const geral: Deck = {
                   <div className="dk-label">
                     <span>{t("O que precisa ser decidido", "What has to be decided")}</span>
                   </div>
-                  <div className="dk-calc">
+                  <div className="dk-chainrow">
+                    <ChainColumn
+                      locale={l}
+                      title={{
+                        pt: "Quatro decisões em série. A quarta é a única que não se desfaz.",
+                        en: "Four decisions in series. The fourth is the only one that cannot be undone.",
+                      }}
+                      links={[
+                        { n: "01", label: "" },
+                        { n: "02", label: "" },
+                        { n: "03", label: "" },
+                        { n: "04", label: "", warn: true },
+                      ]}
+                    />
+                  <div className="dk-calc dk-calc--bare">
                     <div className="dk-calc__row">
-                      <span className="dk-calc__i">01</span>
                       <span className="dk-calc__k">
                         {t("Perguntar a um armazém geral sobre depósito com trilha digital", "Ask a bonded warehouse about a deposit with a digital trail")}
                       </span>
                       <span className="dk-calc__v">{t("1 semana", "1 week")}</span>
                     </div>
                     <div className="dk-calc__row">
-                      <span className="dk-calc__i">02</span>
                       <span className="dk-calc__k">
                         {t("Escrever o threat model e o que a Lastre não sela", "Write the threat model and what Lastre does not seal")}
                       </span>
                       <span className="dk-calc__v">{t("interno", "internal")}</span>
                     </div>
                     <div className="dk-calc__row">
-                      <span className="dk-calc__i">03</span>
                       <span className="dk-calc__k">
                         {t("Fixar a unidade de cobrança e levar preço a seguradora ou auditor", "Fix the charging unit and take a price to an insurer or auditor")}
                       </span>
                       <span className="dk-calc__v">{t("em aberto", "open")}</span>
                     </div>
                     <div className="dk-calc__row dk-calc__row--sum">
-                      <span className="dk-calc__i">04</span>
                       <span className="dk-calc__k">{t("Registrar a primeira leitura real", "Record the first real reading")}</span>
                       <span className="dk-calc__v">{t("irrecuperável", "unrecoverable")}</span>
                     </div>
+                  </div>
                   </div>
                   <p className="dk-src">
                     {t(

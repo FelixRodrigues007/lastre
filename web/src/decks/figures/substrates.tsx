@@ -19,6 +19,11 @@ export type Link = {
   label: string;
   /** A hollow link carries no load: dashed outline, negative ink, zero ring. */
   missing?: boolean;
+  /**
+   * O elo que existe e não se desfaz. Tinta negativa como o que falta — mas
+   * inteiro, e com o número. Faltar e ser irreversível não são a mesma coisa.
+   */
+  warn?: boolean;
 };
 
 export function Chain({ locale, title, links }: { locale: Locale; title: L10n; links: Link[] }) {
@@ -70,12 +75,29 @@ export function ChainColumn({ locale, title, links }: { locale: Locale; title: L
 
   return (
     <Fig locale={locale} title={title} height={height} className="dk-fig--col" width={70}>
+      {/* o fio entre um elo e o outro: sem ele são quatro pontos, não uma
+        * corrente. Some onde o elo falta — é justamente o que se quer ver. */}
+      {links.slice(0, -1).map((link, i) => (
+        <line
+          key={`c-${link.n}`}
+          className={`dk-fig__linkline${link.missing || links[i + 1].missing ? " is-gone" : ""}`}
+          x1={35}
+          y1={20 + i * pitch + h}
+          x2={35}
+          y2={20 + (i + 1) * pitch}
+        />
+      ))}
       {links.map((link, i) => {
         const y = 20 + i * pitch;
+        const skin = link.missing
+          ? "dk-fig__link--gone"
+          : link.warn
+            ? `dk-fig__link--warn ${DRAW}`
+            : DRAW;
         return (
           <rect
             key={`l-${link.n}`}
-            className={`dk-fig__link ${link.missing ? "dk-fig__link--gone" : DRAW}`}
+            className={`dk-fig__link ${skin}`}
             x={9}
             y={y}
             width={52}
@@ -94,7 +116,7 @@ export function ChainColumn({ locale, title, links }: { locale: Locale; title: L
           value={link.missing ? 0 : link.n}
           pct={link.missing ? 0 : 1}
           label=""
-          tone={link.missing ? "negative" : "default"}
+          tone={link.missing || link.warn ? "negative" : "default"}
           order={i}
         />
       ))}
