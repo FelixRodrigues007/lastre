@@ -1,4 +1,5 @@
 import { Ring3D } from "../Ring3D";
+import type { SectorId } from "../Ring";
 import { tx, type Deck } from "../types";
 import type { Locale } from "../../i18n/translations";
 import { camada, type CamadaId } from "./publicos-data";
@@ -74,6 +75,7 @@ type Col = {
   label: { pt: string; en: string };
   id: CamadaId;
   accent?: string[];
+  reveal?: number;
 };
 
 function ChipCols({ locale, cols }: { locale: Locale; cols: Col[] }) {
@@ -81,7 +83,11 @@ function ChipCols({ locale, cols }: { locale: Locale; cols: Col[] }) {
   return (
     <div className="dk-ring-chips dk-ring-chips--cols">
       {cols.map((col) => (
-        <div className="dk-ring-chips__col" key={col.id}>
+        <div
+          className="dk-ring-chips__col"
+          key={col.id}
+          {...(col.reveal != null ? { "data-step": String(col.reveal) } : {})}
+        >
           <span className="dk-eyebrow">{t(col.label.pt, col.label.en)}</span>
           <Resumo locale={locale} id={col.id} />
           <Lista locale={locale} items={camada(col.id).publicos} accent={col.accent} />
@@ -108,6 +114,7 @@ export const publicos: Deck = {
       title: { pt: "Capa", en: "Cover" },
       skin: "wave",
       center: true,
+      steps: 1,
       render: (l) => {
         const t = tx(l);
         const cards = [
@@ -170,7 +177,7 @@ export const publicos: Deck = {
               </aside>
             </div>
 
-            <ul className="dk-cover__cards">
+            <ul className="dk-cover__cards" data-step="1">
               {cards.map((c) => (
                 <li key={c.k}>
                   <b>{c.k}</b>
@@ -187,6 +194,7 @@ export const publicos: Deck = {
     {
       id: "anel",
       title: { pt: "01 · A cadeia", en: "01 · The chain" },
+      steps: 2,
       render: (l) => {
         const t = tx(l);
         return (
@@ -201,7 +209,7 @@ export const publicos: Deck = {
             <div className="dk-bottom dk-ring-slide dk-ring-slide--map">
               <Ring3D locale={l} />
               <div className="dk-ring-slide__meta">
-                <div className="dk-row dk-row--3">
+                <div className="dk-row dk-row--3" data-step="1">
                   <div className="dk-metric dk-metric--flat">
                     <span className="dk-metric__v">7</span>
                     <span className="dk-metric__note">{t("camadas", "layers")}</span>
@@ -215,7 +223,7 @@ export const publicos: Deck = {
                     <span className="dk-metric__note">{t("centro", "centre")}</span>
                   </div>
                 </div>
-                <div className="dk-ring-chips__col">
+                <div className="dk-ring-chips__col" data-step="2">
                   <span className="dk-eyebrow">
                     {t("02 · Prova — o centro", "02 · Proof — the centre")}
                   </span>
@@ -232,6 +240,7 @@ export const publicos: Deck = {
     {
       id: "gera",
       title: { pt: "02 · Quem gera", en: "02 · Who generates" },
+      steps: 1,
       render: (l) => {
         const t = tx(l);
         return (
@@ -250,7 +259,7 @@ export const publicos: Deck = {
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
               <Ring3D locale={l} lit={["origem"]} />
-              <div className="dk-ring-slide__side">
+              <div className="dk-ring-slide__side" data-step="1">
                 <ChipCols
                   locale={l}
                   cols={[{ label: { pt: "01 · Origem", en: "01 · Origin" }, id: "origem" }]}
@@ -266,8 +275,12 @@ export const publicos: Deck = {
     {
       id: "paga",
       title: { pt: "03 · Quem paga", en: "03 · Who pays" },
-      render: (l) => {
+      steps: 1,
+      render: (l, step) => {
         const t = tx(l);
+        /* a primeira camada já entra acesa: a etapa 0 tem que ser uma tela
+         * inteira, não meia folha vazia esperando a seta. */
+        const lit: SectorId[] = step >= 1 ? ["mercado", "capital"] : ["mercado"];
         return (
           <>
             <div className="dk-top">
@@ -283,7 +296,7 @@ export const publicos: Deck = {
               />
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
-              <Ring3D locale={l} lit={["mercado", "capital"]} />
+              <Ring3D locale={l} lit={lit} />
               <div className="dk-ring-slide__side">
                 <ChipCols
                   locale={l}
@@ -297,6 +310,7 @@ export const publicos: Deck = {
                       label: { pt: "04 · Capital", en: "04 · Capital" },
                       id: "capital",
                       accent: ["seguradora"],
+                      reveal: 1,
                     },
                   ]}
                 />
@@ -311,8 +325,11 @@ export const publicos: Deck = {
     {
       id: "opera",
       title: { pt: "04 · Quem opera", en: "04 · Who operates" },
-      render: (l) => {
+      steps: 2,
+      render: (l, step) => {
         const t = tx(l);
+        const lit: SectorId[] =
+          step >= 2 ? ["defi", "infra", "estado"] : step >= 1 ? ["defi", "infra"] : ["defi"];
         return (
           <>
             <div className="dk-top">
@@ -328,7 +345,7 @@ export const publicos: Deck = {
               />
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--stack">
-              <Ring3D locale={l} lit={["defi", "infra", "estado"]} />
+              <Ring3D locale={l} lit={lit} />
               <div className="dk-ring-slide__side">
                 <ChipCols
                   locale={l}
@@ -342,10 +359,12 @@ export const publicos: Deck = {
                       label: { pt: "06 · Infraestrutura", en: "06 · Infrastructure" },
                       id: "infra",
                       accent: ["agente de IA que compra sozinho"],
+                      reveal: 1,
                     },
                     {
                       label: { pt: "07 · Estado", en: "07 · State" },
                       id: "estado",
+                      reveal: 2,
                     },
                   ]}
                 />
@@ -362,6 +381,7 @@ export const publicos: Deck = {
       title: { pt: "05 · A posição", en: "05 · The position" },
       skin: "dark",
       center: true,
+      steps: 3,
       render: (l) => {
         const t = tx(l);
         return (
@@ -372,20 +392,20 @@ export const publicos: Deck = {
             </div>
             <Ring3D locale={l} lit={[]} labels={false} />
             <div className="dk-ring-pedagio__lines">
-              <p className="dk-ring-pedagio__line">
+              <p className="dk-ring-pedagio__line" data-step="1">
                 {t(
                   "Tudo que for tokenizável vai precisar passar por nós.",
                   "Everything tokenizable will have to pass through us.",
                 )}
               </p>
-              <p className="dk-ring-pedagio__line">
+              <p className="dk-ring-pedagio__line" data-step="2">
                 {t("Não somos um elo da cadeia.", "We are not a link in the chain.")}
               </p>
-              <p className="dk-ring-pedagio__line dk-ring-pedagio__line--accent">
+              <p className="dk-ring-pedagio__line dk-ring-pedagio__line--accent" data-step="3">
                 {t("Somos o pedágio dela.", "We are its toll gate.")}
               </p>
             </div>
-            <p className="dk-src">
+            <p className="dk-src" data-step="3">
               {t(
                 "Lastre Research · Mapa de públicos e arquitetura de tokenização, v1.1, 29.08.2026. Material interno. Não é oferta, promessa de retorno ou recomendação de investimento.",
                 "Lastre Research · Map of audiences and tokenisation architecture, v1.1, 29.08.2026. Internal material. Not an offer, a promise of return, or investment advice.",

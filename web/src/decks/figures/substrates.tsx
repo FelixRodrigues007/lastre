@@ -27,14 +27,14 @@ export type Link = {
 };
 
 export function Chain({ locale, title, links }: { locale: Locale; title: L10n; links: Link[] }) {
-  const w = 300;
-  const h = 64;
-  const pitch = 258;
+  const w = 332;
+  const h = 76;
+  const pitch = 340;
   const x0 = (1200 - (w + pitch * (links.length - 1))) / 2;
-  const cy = 112;
+  const cy = 118;
 
   return (
-    <Fig locale={locale} title={title} height={150}>
+    <Fig locale={locale} title={title} height={164}>
       {links.map((link, i) => {
         const x = x0 + i * pitch;
         return (
@@ -139,17 +139,18 @@ export function Stack({ locale, title, base }: { locale: Locale; title: L10n; ba
   return (
     <Fig locale={locale} title={title} height={452} className="dk-fig--stack" width={320}>
       {slabs.map((s) => (
-        <rect
-          key={s.k}
-          className={`dk-fig__slab${s.loose ? " dk-fig__slab--loose" : ` ${DRAW}`}${s.base ? " dk-fig__slab--base" : ""}`}
-          x={s.x}
-          y={s.y}
-          width={s.w}
-          height={s.h}
-          {...(s.loose ? {} : draw)}
-        />
+        <g key={s.k} data-floor={String(s.k)} {...(s.base ? {} : { "data-step": String(s.k) })}>
+          <rect
+            className={`dk-fig__slab${s.loose ? " dk-fig__slab--loose" : ` ${DRAW}`}${s.base ? " dk-fig__slab--base" : ""}`}
+            x={s.x}
+            y={s.y}
+            width={s.w}
+            height={s.h}
+            {...(s.loose ? {} : draw)}
+          />
+        </g>
       ))}
-      <Marker x={286} y={322} stemTop={56} value={0} pct={1} label={base} order={0} />
+      <Marker x={300} y={371} stemTop={371} value={0} pct={1} label={base} side="left" order={0} />
     </Fig>
   );
 }
@@ -169,14 +170,14 @@ export function Ratio({
   metal: string;
   share: string;
 }) {
-  const y = 72;
-  const h = 34;
+  const y = 66;
+  const h = 62;
 
   return (
-    <Fig locale={locale} title={title} height={116}>
+    <Fig locale={locale} title={title} height={150}>
       <rect className={`dk-fig__mass ${DRAW}`} x={40} y={y} width={1120} height={h} {...draw} />
       {/* the metal, to scale: three ten-thousandths of the bar */}
-      <rect className="dk-fig__thread" x={40} y={y - 10} width={2} height={h + 20} />
+      <rect className="dk-fig__thread" x={40} y={y - 12} width={2} height={h + 24} />
       <Marker x={1120} y={y} stemTop={34} pct={1} label={mass} side="left" order={1} />
       <Marker x={41} y={y} stemTop={34} pct={0.000003} label={metal} sub={share} order={0} />
     </Fig>
@@ -248,12 +249,12 @@ export function Scale({
 }) {
   const x0 = 60;
   const span = 1080;
-  const y = 84;
+  const y = 112;
   const at = (v: number) => x0 + span * (v / max);
   const ticks = Array.from({ length: Math.floor(max / step) + 1 }, (_, i) => i * step);
 
   return (
-    <Fig locale={locale} title={title} height={128}>
+    <Fig locale={locale} title={title} height={160}>
       <line className={`dk-fig__axis ${DRAW}`} x1={x0} y1={y} x2={x0 + span} y2={y} {...draw} />
       {ticks.map((v) => (
         <g key={v}>
@@ -268,7 +269,7 @@ export function Scale({
           key={s.label}
           x={at(s.at)}
           y={y}
-          stemTop={34}
+          stemTop={44}
           value={s.value}
           pct={s.at / max}
           label={s.label}

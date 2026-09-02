@@ -189,36 +189,68 @@
   width: 100%;
   max-width: 1560px;
   height: 100%;
+  padding-bottom: clamp(1.8rem, 1rem + 1.5vw, 2.6rem);
+  transform-origin: top center;
+}
+/* A animação de entrada/saída vive no filho — o pai guarda só o scale do auto-fit. */
+.dk-canvas__anim {
   display: grid;
   grid-template-rows: auto 1fr;
   align-content: stretch;
   gap: var(--dk-air);
-  padding-bottom: clamp(1.8rem, 1rem + 1.5vw, 2.6rem);
-  transform-origin: top center;
+  height: 100%;
+  min-height: 0;
+  --dk-dx: 18px;
   animation: dk-enter 380ms var(--dk-ease) both;
 }
-.dk-canvas__inner--center {
+.dk-canvas__inner--center .dk-canvas__anim {
   align-content: safe center;
   grid-template-rows: auto;
+}
+.dk-canvas__inner--bleed .dk-canvas__anim {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.dk-canvas__inner.is-out .dk-canvas__anim {
+  animation: dk-leave 170ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+@keyframes dk-leave {
+  from { opacity: 1; transform: none; filter: blur(0); }
+  to {
+    opacity: 0;
+    transform: translate3d(calc(var(--dk-dx) * -0.55), -6px, 0);
+    filter: blur(3px);
+  }
+}
+.dk-sheet--bleed {
+  padding: clamp(1.4rem, 0.6rem + 2.4vw, 3.1rem) var(--dk-pad) clamp(1.4rem, 0.8rem + 1.2vw, 2.2rem);
+}
+.dk-canvas__inner--bleed:has(.dk-brasil) .dk-canvas__anim {
+  grid-template-rows: minmax(0, 1fr);
 }
 
 /* Nothing fades in as a block. The bands' children rise one after another,
  * from the side the deck is travelling, and the headline lifts like a
  * curtain — so a slide change reads as a move, not a cut. */
-.dk-canvas__inner { --dk-dx: 18px; }
+.dk-canvas__anim { --dk-dx: 18px; }
 
 .dk-top > *,
 .dk-bottom > *,
-.dk-canvas__inner > .dk-row > * {
+.dk-canvas__anim > .dk-row > * {
   animation: dk-rise 440ms var(--dk-ease) both;
 }
-.dk-top > *:nth-child(2), .dk-bottom > *:nth-child(2), .dk-canvas__inner > .dk-row > *:nth-child(2) { animation-delay: 50ms; }
-.dk-top > *:nth-child(3), .dk-bottom > *:nth-child(3), .dk-canvas__inner > .dk-row > *:nth-child(3) { animation-delay: 100ms; }
+.dk-top > *:nth-child(2), .dk-bottom > *:nth-child(2), .dk-canvas__anim > .dk-row > *:nth-child(2) { animation-delay: 50ms; }
+.dk-top > *:nth-child(3), .dk-bottom > *:nth-child(3), .dk-canvas__anim > .dk-row > *:nth-child(3) { animation-delay: 100ms; }
 .dk-top > *:nth-child(4), .dk-bottom > *:nth-child(4) { animation-delay: 150ms; }
 .dk-bottom { animation-delay: 70ms; }
 .dk-bottom > * { animation-delay: 90ms; }
 .dk-bottom > *:nth-child(2) { animation-delay: 140ms; }
 .dk-bottom > *:nth-child(3) { animation-delay: 190ms; }
+
+/* a marca-d'água é fundo, não conteúdo: ela não sobe com a faixa, e o
+ * fill-mode do keyframe não pode reescrever a opacidade dela */
+.dk-top > .dk-watermark,
+.dk-bottom > .dk-watermark,
+.dk-canvas__anim > .dk-watermark { animation: none; }
 
 /* the columns inside a band cascade left to right */
 .dk-row > .dk-floor, .dk-row > .dk-step, .dk-row > .dk-panel, .dk-row > .dk-metric {
@@ -256,9 +288,81 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .dk-canvas__inner,
-  .dk-canvas__inner *,
+  .dk-canvas__anim,
+  .dk-canvas__anim *,
   .dk-sheet__wave { animation: none !important; }
+  .dk-canvas__inner [data-step] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    pointer-events: auto;
+  }
   .dk * { transition-duration: 1ms !important; }
+}
+
+/* ── fragmentos (builds) ─────────────────────────────────────────────── */
+
+.dk-canvas__inner [data-step] {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  filter: blur(3px);
+  pointer-events: none;
+  animation: none !important;
+}
+/* dentro de SVG, transform no <g> desloca a laje — revela só por opacidade */
+.dk-fig [data-step] {
+  transform: none;
+  filter: none;
+}
+.dk-canvas__inner[data-at="1"] [data-step="1"],
+.dk-canvas__inner[data-at="2"] [data-step="1"],
+.dk-canvas__inner[data-at="2"] [data-step="2"],
+.dk-canvas__inner[data-at="3"] [data-step="1"],
+.dk-canvas__inner[data-at="3"] [data-step="2"],
+.dk-canvas__inner[data-at="3"] [data-step="3"],
+.dk-canvas__inner[data-at="4"] [data-step="1"],
+.dk-canvas__inner[data-at="4"] [data-step="2"],
+.dk-canvas__inner[data-at="4"] [data-step="3"],
+.dk-canvas__inner[data-at="4"] [data-step="4"],
+.dk-canvas__inner[data-at="5"] [data-step="1"],
+.dk-canvas__inner[data-at="5"] [data-step="2"],
+.dk-canvas__inner[data-at="5"] [data-step="3"],
+.dk-canvas__inner[data-at="5"] [data-step="4"],
+.dk-canvas__inner[data-at="5"] [data-step="5"],
+.dk-canvas__inner[data-at="6"] [data-step="1"],
+.dk-canvas__inner[data-at="6"] [data-step="2"],
+.dk-canvas__inner[data-at="6"] [data-step="3"],
+.dk-canvas__inner[data-at="6"] [data-step="4"],
+.dk-canvas__inner[data-at="6"] [data-step="5"],
+.dk-canvas__inner[data-at="6"] [data-step="6"] {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+  pointer-events: auto;
+  transition:
+    opacity 520ms var(--dk-ease),
+    transform 520ms var(--dk-ease),
+    filter 520ms var(--dk-ease);
+}
+/* O fit mede o slide inteiro — builds não podem encolher a escala no meio. */
+.dk-canvas__inner.is-measuring,
+.dk-canvas__inner.is-measuring .dk-canvas__anim,
+.dk-canvas__inner.is-measuring .dk-canvas__anim * {
+  animation: none !important;
+  transition: none !important;
+}
+.dk-canvas__inner.is-measuring .dk-h1,
+.dk-canvas__inner.is-measuring .dk-h2 {
+  clip-path: none !important;
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+.dk-canvas__inner.is-measuring [data-step] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  pointer-events: none;
 }
 
 /* ── footer rail ─────────────────────────────────────────────────────── */
@@ -285,6 +389,24 @@
 .dk-foot__r { text-align: right; }
 @media (max-width: 640px) { .dk-foot__l, .dk-foot__c { display: none; } }
 
+/* ── filete de progresso ─────────────────────────────────────────────── */
+
+.dk-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  height: 2px;
+  background: var(--dk-rule-soft);
+  pointer-events: none;
+}
+.dk-progress__fill {
+  height: 100%;
+  background: var(--dk-fg-dim);
+  transition: width 620ms var(--dk-ease);
+}
+
 /* ── circular navigation ─────────────────────────────────────────────── */
 
 .dk-nav {
@@ -306,9 +428,24 @@
 }
 .dk-nav--prev { left: clamp(0.35rem, 0.2rem + 0.7vw, 1.1rem); }
 .dk-nav--next { right: clamp(0.35rem, 0.2rem + 0.7vw, 1.1rem); }
-.dk-nav:hover:not(:disabled) { transform: translateY(-50%) scale(1.07); }
 .dk-nav:disabled { opacity: 0.28; cursor: default; box-shadow: none; }
 .dk-nav svg { width: 15px; height: 15px; }
+.dk-nav--prev.dk-nav--hidden {
+  opacity: 0;
+  transform: translateY(-50%) translateX(-8px);
+  pointer-events: none;
+}
+.dk-nav--next.dk-nav--hidden {
+  opacity: 0;
+  transform: translateY(-50%) translateX(8px);
+  pointer-events: none;
+}
+.dk-nav--prev.dk-nav--hidden:focus-visible,
+.dk-nav--next.dk-nav--hidden:focus-visible {
+  opacity: 1;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
 
 /* ── type ────────────────────────────────────────────────────────────── */
 
@@ -560,6 +697,10 @@
 
 /* uma faixa que se estica: o objeto ocupa a folha em vez de encostar na base
  * e deixar meia tela vazia acima dele */
+.dk-bottom--rule { grid-template-rows: auto minmax(0, 1fr); align-content: stretch; gap: clamp(0.5rem, 0.35rem + 0.45vw, 0.95rem); }
+/* a régua é o argumento: ela recebe a largura toda e não encolhe */
+.dk-bottom--rule > .dk-fig { width: 100%; height: auto; }
+
 .dk-bottom--tall {
   align-self: stretch;
   align-content: stretch;
@@ -727,10 +868,21 @@
   backdrop-filter: blur(8px);
   overflow-y: auto;
   padding: clamp(1.5rem, 1rem + 3vw, 3.5rem) var(--dk-pad);
-  animation: dk-fade 200ms var(--dk-ease) both;
+  animation: dk-toc-overlay 360ms var(--dk-ease) both;
   border-radius: inherit;
 }
-@keyframes dk-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dk-toc-overlay {
+  from { opacity: 0; backdrop-filter: blur(0); }
+  to { opacity: 1; backdrop-filter: blur(8px); }
+}
+.dk-overlay__head,
+.dk-overlay__panel {
+  animation: dk-toc-panel 420ms var(--dk-ease) both;
+}
+@keyframes dk-toc-panel {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
 .dk-toc { display: grid; max-width: 900px; margin-inline: auto; border-top: 1px solid var(--dk-line-soft); }
 .dk-toc__row {
   appearance: none;
@@ -745,12 +897,22 @@
   grid-template-columns: 2.6rem minmax(0, 1fr);
   gap: 1rem;
   align-items: baseline;
-  padding: 0.8rem 0.3rem;
+  padding: 0.8rem 0.3rem 0.8rem 0.55rem;
   cursor: pointer;
+  border-left: 2px solid transparent;
+  animation: dk-toc-row 480ms var(--dk-ease) both;
+  animation-delay: calc(var(--dk-i) * 26ms);
   transition: color 180ms var(--dk-ease), padding-left 260ms var(--dk-ease);
 }
-.dk-toc__row:hover { color: var(--dk-ink); padding-left: 0.9rem; }
-.dk-toc__row[aria-current="true"] { color: var(--dk-accent); }
+@keyframes dk-toc-row {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.dk-toc__row.is-selected { color: var(--dk-ink); padding-left: 0.9rem; }
+.dk-toc__row[aria-current="true"] {
+  color: var(--dk-accent);
+  border-left-color: var(--dk-accent);
+}
 .dk-toc__n { font-size: 0.88em; letter-spacing: 0.06em; color: var(--dk-faint); }
 
 /* ── the drawer (index of decks) ─────────────────────────────────────── */
@@ -819,12 +981,6 @@
     border-color 260ms var(--dk-ease),
     background 260ms var(--dk-ease),
     transform 260ms var(--dk-ease);
-}
-.dk-folder:hover,
-.dk-folder:focus-visible {
-  border-color: rgba(78, 143, 60, 0.45);
-  background: #fff;
-  transform: translateY(-2px);
 }
 .dk-folder__icon {
   display: grid;
@@ -1027,6 +1183,48 @@
   box-shadow: 0 0 0 3px rgba(78, 143, 60, 0.16);
 }
 
+/* dark sheet: frosted light card reads as opaque grey — flip to translucent ink */
+.dk-sheet--dark .dk-seal {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(9px);
+}
+.dk-sheet--dark .dk-seal__head {
+  gap: 1rem;
+  color: var(--dk-fg-dim);
+  border-bottom-color: var(--dk-rule-soft);
+}
+.dk-sheet--dark .dk-seal__head > span:first-child {
+  min-width: 0;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.dk-sheet--dark .dk-seal__verdict {
+  flex-shrink: 0;
+}
+.dk-sheet--dark .dk-seal__verdict[data-on="true"] {
+  color: #a9dd8f;
+  border-color: rgba(169, 221, 143, 0.45);
+  background: rgba(169, 221, 143, 0.09);
+}
+.dk-sheet--dark .dk-seal__hash {
+  color: var(--dk-fg);
+}
+.dk-sheet--dark .dk-seal__hash[data-live="true"] {
+  color: var(--dk-fg-dim);
+}
+.dk-sheet--dark .dk-seal__steps {
+  color: var(--dk-fg-dim);
+}
+.dk-sheet--dark .dk-seal__steps li[data-on="true"] {
+  color: var(--dk-fg);
+}
+.dk-sheet--dark .dk-seal__steps li[data-on="true"] i {
+  background: #a9dd8f;
+  border-color: #a9dd8f;
+  box-shadow: 0 0 0 3px rgba(169, 221, 143, 0.16);
+}
+
 /* ── anel de públicos ── */
 
 .dk-ring {
@@ -1040,8 +1238,8 @@
   display: block;
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
-  max-width: min(62vh, 640px);
+  height: 100%;
+  min-height: clamp(10rem, 22vh, 16rem);
   margin-inline: auto;
 }
 .dk-ring3d canvas {
@@ -1058,7 +1256,7 @@
   z-index: 1;
 }
 .dk-ring3d__callout {
-  stroke: var(--dk-rule);
+  stroke: var(--dk-fg-dim);
   stroke-width: 1;
 }
 .dk-ring3d__labels {
@@ -1075,6 +1273,7 @@
   color: var(--dk-fg);
   display: grid;
   gap: 0.15em;
+  max-width: 40%;
 }
 .dk-ring3d__label-num {
   font-family: var(--dk-mono);
@@ -1086,12 +1285,31 @@
   font-size: calc(var(--dk-ring3d-name-size, 20px) * var(--dk-ring3d-scale, 1));
   font-weight: 600;
   line-height: 1.1;
+  text-wrap: pretty;
+  overflow-wrap: break-word;
 }
 .dk-ring-slide {
   display: grid;
   gap: clamp(0.8rem, 1.8vh, 1.4rem);
   align-items: center;
   justify-items: center;
+  width: 100%;
+  min-height: 0;
+  align-self: stretch;
+}
+.dk-bottom.dk-ring-slide--map,
+.dk-bottom.dk-ring-slide--split {
+  align-self: stretch;
+  align-content: stretch;
+  min-height: 0;
+}
+.dk-ring-slide--map > .dk-ring3d,
+.dk-ring-slide--split > .dk-ring3d {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  justify-self: stretch;
+  align-self: stretch;
 }
 .dk-ring-slide--map {
   grid-template-columns: minmax(0, 1fr);
@@ -1108,7 +1326,8 @@
 .dk-ring-slide--stack .dk-ring,
 .dk-ring-slide--stack .dk-ring3d {
   margin-inline: auto;
-  max-width: min(30vh, 320px);
+  max-width: min(44vh, 480px);
+  /* min-height herdado de .dk-ring3d: clamp maior estoura o auto-fit em 1440×900 */
 }
 @media (min-width: 880px) {
   .dk-ring-slide--map {
@@ -1123,7 +1342,10 @@
   .dk-ring-slide--split .dk-ring,
   .dk-ring-slide--split .dk-ring3d {
     margin-inline: 0;
-    max-width: min(52vh, 520px);
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    min-height: 0;
   }
   .dk-ring-slide--stack .dk-ring-chips--cols {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1184,8 +1406,11 @@
 }
 .dk-ring-pedagio .dk-ring,
 .dk-ring-pedagio .dk-ring3d {
-  max-width: min(38vh, 420px);
+  width: 100%;
+  max-width: 100%;
   max-height: 100%;
+  height: 100%;
+  min-height: 0;
 }
 .dk-ring-pedagio__head {
   display: grid;
@@ -1232,7 +1457,7 @@
 
 @media print {
   .dk { position: static; display: block; overflow: visible; background: #fff; }
-  .dk-head, .dk-nav, .dk-overlay { display: none !important; }
+  .dk-head, .dk-nav, .dk-overlay, .dk-progress { display: none !important; }
   .dk-stage { padding: 0; }
   .dk-sheet {
     position: static;
@@ -1248,6 +1473,12 @@
   }
   .dk-canvas__inner { margin-inline: auto; }
   .dk-canvas__inner, .dk-canvas__inner * { transform: none !important; animation: none !important; opacity: 1 !important; filter: none !important; clip-path: none !important; }
+  .dk-canvas__inner [data-step] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    pointer-events: auto !important;
+  }
   .dk-canvas__inner { height: auto; min-height: 88vh; }
   .dk-shot { position: static; width: 40%; }
   .dk-foot { position: static; margin-top: 2rem; }
@@ -1339,14 +1570,17 @@
 .dk-cover__stage {
   position: relative;
   display: grid;
-  place-items: center;
+  place-items: stretch;
   width: 100%;
   min-height: 0;
 }
 .dk-cover__stage .dk-ring,
 .dk-cover__stage .dk-ring3d {
-  max-width: min(40vh, 430px);
+  width: 100%;
+  max-width: 100%;
   max-height: 100%;
+  height: 100%;
+  min-height: 0;
 }
 
 .dk-cover__note {
@@ -1552,6 +1786,11 @@
   stroke-width: 1.2;
   opacity: 0.55;
 }
+/* o desenho usa as mesmas quatro cores da lista: é o mesmo prédio */
+.dk-fig--stack [data-floor="0"] .dk-fig__slab { stroke: #4e8f3c; fill: color-mix(in srgb, #4e8f3c 16%, transparent); opacity: 1; }
+.dk-fig--stack [data-floor="1"] .dk-fig__slab { stroke: #2a9a82; fill: color-mix(in srgb, #2a9a82 10%, transparent); opacity: 0.9; }
+.dk-fig--stack [data-floor="2"] .dk-fig__slab { stroke: #c08420; fill: color-mix(in srgb, #c08420 10%, transparent); opacity: 0.9; }
+.dk-fig--stack [data-floor="3"] .dk-fig__slab { stroke: var(--dk-coral); fill: none; opacity: 0.8; }
 .dk-fig__slab--base {
   fill: color-mix(in srgb, var(--dk-accent) 16%, transparent);
   stroke: var(--dk-accent);
@@ -1579,7 +1818,7 @@
   fill: color-mix(in srgb, var(--dk-accent) 20%, transparent);
   animation: dk-fig-lit 420ms var(--dk-ease) 720ms both;
 }
-.dk-sheet--dark .dk-fig__fill { fill: rgba(169, 221, 143, 0.2); }
+.dk-sheet--dark .dk-fig__fill { fill: rgba(169, 221, 143, 0.3); }
 .dk-fig__tick { stroke: currentColor; stroke-width: 1; opacity: 0.42; }
 .dk-fig__tick--minor { opacity: 0.28; }
 
@@ -1592,6 +1831,25 @@
 
 .dk-fig__flow { fill: none; stroke: currentColor; stroke-width: 1.4; opacity: 0.5; }
 .dk-fig__branch { fill: none; stroke: currentColor; stroke-width: 1; opacity: 0.34; stroke-dasharray: 4 5; }
+
+/* No escuro, a mesma opacidade rende menos: o traço claro sobre fundo escuro
+ * perde contraste onde o traço escuro sobre papel ganhava. Os substratos
+ * recuperam presença sem mudar de cor. */
+.dk-sheet--dark .dk-fig__rail,
+.dk-sheet--wave .dk-fig__rail { opacity: 0.78; }
+.dk-sheet--dark .dk-fig__axis,
+.dk-sheet--wave .dk-fig__axis { opacity: 0.75; }
+.dk-sheet--dark .dk-fig__tick,
+.dk-sheet--wave .dk-fig__tick { opacity: 0.62; }
+.dk-sheet--dark .dk-fig__tick--minor,
+.dk-sheet--wave .dk-fig__tick--minor { opacity: 0.44; }
+.dk-sheet--dark .dk-fig__flow,
+.dk-sheet--wave .dk-fig__flow { opacity: 0.78; }
+.dk-sheet--dark .dk-fig__branch,
+.dk-sheet--wave .dk-fig__branch { opacity: 0.56; }
+.dk-sheet--dark .dk-mk__stem,
+.dk-sheet--wave .dk-mk__stem { opacity: 0.72; }
+
 .dk-fig__node { fill: var(--dk-accent); }
 .dk-sheet--dark .dk-fig__node { fill: #a9dd8f; }
 
@@ -1618,6 +1876,28 @@
 /* o recorte precisa ser real: sem isto o Ártico continua sendo pintado fora
  * do viewBox, por cima da manchete */
 .dk-fig--map { width: 100%; height: auto; margin-inline: auto; overflow: hidden; }
+
+/* ── brasil · texto à esquerda, mapa em altura cheia à direita ─────────── */
+
+.dk-brasil {
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+  gap: clamp(1.4rem, 0.8rem + 2vw, 3rem);
+  align-items: stretch;
+  height: 100%;
+  min-height: 0;
+}
+.dk-brasil__type {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.7rem, 0.5rem + 0.6vw, 1.1rem);
+  min-height: 0;
+}
+.dk-brasil__type > .dk-src { margin-top: auto; }
+.dk-brasil > .dk-fig--map { width: 100%; height: 100%; min-height: 0; max-height: none; }
+
+.dk-fig--brasil .dk-mk__label { font-size: 20px; }
+.dk-fig--brasil .dk-mk__sub { font-size: 16px; }
 
 /* a linha de contagem que acompanha o mapa: fina, mas não legenda */
 .dk-p--fine {
@@ -1683,7 +1963,7 @@
   height: auto;
   fill: none;
   stroke: var(--dk-fg);
-  opacity: 0.04;
+  opacity: 0.05;
   pointer-events: none;
   z-index: 0;
 }
@@ -1716,15 +1996,28 @@
 
 /* ── figure layouts ──────────────────────────────────────────────────── */
 
+.dk-frase { display: grid; gap: clamp(1.1rem, 0.7rem + 1.2vw, 2rem); max-width: 30ch; }
+/* o que se nega: corpo de parágrafo forte, não de manchete */
+.dk-frase__neg {
+  margin: 0;
+  font-size: clamp(1.3rem, 1rem + 1vw, 2rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--dk-fg-2);
+  max-width: 26ch;
+}
+/* o que se afirma ocupa a folha */
+.dk-frase__pos { max-width: 22ch; }
+
 /* the rail of movements sits at the foot, to the right — a contents line */
 .dk-tempo-rail { justify-self: end; }
 .dk-tempo-rail--full { justify-self: start; }
 
 /* the stack beside its floors: one drawing, four texts, aligned by slab */
 @media (min-width: 900px) {
-  .dk-row--stack { grid-template-columns: minmax(0, 0.26fr) minmax(0, 1fr); align-items: start; }
+  .dk-row--stack { grid-template-columns: minmax(0, 0.32fr) minmax(0, 1fr); align-items: stretch; }
 }
-.dk-fig--stack { width: 100%; height: auto; max-width: 240px; }
+.dk-fig--stack { width: 100%; max-width: 290px; height: 100%; min-height: 0; }
 .dk-floors-col {
   display: grid;
   gap: clamp(0.6rem, 0.35rem + 0.7vw, 1rem);
@@ -1760,9 +2053,9 @@
 /* four floors read as two pairs — the column alone does not fit a laptop */
 @media (min-width: 900px) {
   .dk-floors-col { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .dk-row--stack { grid-template-columns: minmax(0, 0.28fr) minmax(0, 1fr); }
+  .dk-row--stack { grid-template-columns: minmax(0, 0.32fr) minmax(0, 1fr); }
 }
-.dk-fig--stack { max-width: 250px; }
+.dk-fig--stack { max-width: 290px; }
 
 /* ── capa do deck geral: o selo como objeto central ───────────────────── */
 
@@ -1780,12 +2073,21 @@
   overflow: hidden;
 }
 
-/* capa silenciosa: só manchete e objeto, com ar generoso entre os dois */
+/* capa silenciosa: eixo central — manchete, selo e régua na mesma vertical */
 .dk-cover--quiet {
   gap: clamp(2rem, 1rem + 3vh, 4rem);
-  /* centrado na vertical, esticado na horizontal: as linhas seguem centradas
-   * por `justify-items`, e só a régua consegue encostar na margem */
   place-content: center stretch;
+}
+.dk-cover--quiet .dk-cover__stage {
+  place-items: center;
+}
+.dk-cover--quiet .dk-cover__stage .dk-seal {
+  width: min(30rem, 100%);
+  margin-inline: auto;
+}
+.dk-cover--quiet .dk-cover__rail {
+  justify-content: center;
+  width: 100%;
 }
 
 /* ── número que dimensiona a camada ─────────────────────────────────────── */
@@ -1891,7 +2193,8 @@
 }
 
 .dk-oque__copy > .dk-kv {
-  align-self: end;
+  align-self: start;
+  margin-top: clamp(1rem, 0.6rem + 1.2vw, 2rem);
   animation: dk-rise 440ms var(--dk-ease) 140ms both;
 }
 
@@ -1955,8 +2258,29 @@
 }
 
 .dk-proof__seal .dk-seal {
-  width: min(100%, clamp(12.5rem, 8.5rem + 9vw, 18.5rem));
+  width: clamp(18rem, 12rem + 10vw, 24rem);
   max-height: 100%;
+  gap: clamp(0.8rem, 0.6rem + 0.5vw, 1rem);
+  padding: clamp(1rem, 0.7rem + 0.65vw, 1.3rem);
+}
+.dk-proof__seal .dk-seal__head {
+  font-size: clamp(0.86rem, 0.8rem + 0.2vw, 0.96rem);
+  padding-bottom: 0.7rem;
+}
+.dk-sheet--dark .dk-proof__seal .dk-seal__head > span:first-child {
+  font-size: clamp(0.78rem, 0.74rem + 0.14vw, 0.88rem);
+  letter-spacing: 0.035em;
+}
+.dk-proof__seal .dk-seal__hash {
+  font-size: clamp(0.82rem, 0.76rem + 0.24vw, 1rem);
+}
+.dk-proof__seal .dk-seal__steps {
+  font-size: clamp(0.88rem, 0.82rem + 0.22vw, 1.02rem);
+  gap: 0.5rem;
+}
+.dk-proof__seal .dk-seal__steps li i {
+  width: 7px;
+  height: 7px;
 }
 
 @media (max-width: 899px) {
@@ -1977,3 +2301,372 @@
   .dk-proof__seal { grid-row: 2; }
   .dk-proof__invalid { grid-row: 3; }
 }
+
+/* ── micro-interações · tinta, não elevação ─────────────────────────────── */
+
+@media (hover: hover) and (pointer: fine) {
+
+  /* blocos · filete, eyebrow, nota e fio de acento */
+  .dk-metric,
+  .dk-floor,
+  .dk-step,
+  .dk-panel,
+  .dk-portrait,
+  .dk-cards,
+  .dk-cards > div,
+  .dk-quote {
+    position: relative;
+    transition: border-color 240ms var(--dk-ease);
+  }
+
+  .dk-metric::after,
+  .dk-floor::after,
+  .dk-step::after,
+  .dk-panel::after,
+  .dk-portrait::after,
+  .dk-cards::after,
+  .dk-cards > div::after,
+  .dk-quote::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--dk-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 280ms var(--dk-ease);
+    pointer-events: none;
+  }
+
+  .dk-metric .dk-eyebrow,
+  .dk-floor .dk-eyebrow,
+  .dk-step .dk-eyebrow,
+  .dk-panel .dk-eyebrow,
+  .dk-portrait .dk-eyebrow,
+  .dk-cards .dk-eyebrow,
+  .dk-quote .dk-eyebrow {
+    color: var(--dk-fg-faint);
+    transition: color 240ms var(--dk-ease);
+  }
+
+  .dk-metric__note,
+  .dk-step__b,
+  .dk-floor__h {
+    transition: color 240ms var(--dk-ease);
+  }
+
+  .dk-metric__note,
+  .dk-floor__h {
+    color: var(--dk-fg-dim);
+  }
+
+  .dk-metric:hover,
+  .dk-floor:hover,
+  .dk-step:hover,
+  .dk-panel:hover,
+  .dk-portrait:hover,
+  .dk-cards:hover,
+  .dk-cards > div:hover,
+  .dk-quote:hover,
+  .dk-metric:focus-visible,
+  .dk-floor:focus-visible,
+  .dk-step:focus-visible,
+  .dk-panel:focus-visible,
+  .dk-portrait:focus-visible,
+  .dk-cards:focus-visible,
+  .dk-cards > div:focus-visible,
+  .dk-quote:focus-visible {
+    border-color: var(--dk-rule);
+  }
+
+  .dk-metric:hover::after,
+  .dk-floor:hover::after,
+  .dk-step:hover::after,
+  .dk-panel:hover::after,
+  .dk-portrait:hover::after,
+  .dk-cards:hover::after,
+  .dk-cards > div:hover::after,
+  .dk-quote:hover::after,
+  .dk-metric:focus-visible::after,
+  .dk-floor:focus-visible::after,
+  .dk-step:focus-visible::after,
+  .dk-panel:focus-visible::after,
+  .dk-portrait:focus-visible::after,
+  .dk-cards:focus-visible::after,
+  .dk-cards > div:focus-visible::after,
+  .dk-quote:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .dk-metric:hover .dk-eyebrow,
+  .dk-floor:hover .dk-eyebrow,
+  .dk-step:hover .dk-eyebrow,
+  .dk-panel:hover .dk-eyebrow,
+  .dk-portrait:hover .dk-eyebrow,
+  .dk-cards:hover .dk-eyebrow,
+  .dk-quote:hover .dk-eyebrow,
+  .dk-metric:focus-visible .dk-eyebrow,
+  .dk-floor:focus-visible .dk-eyebrow,
+  .dk-step:focus-visible .dk-eyebrow,
+  .dk-panel:focus-visible .dk-eyebrow,
+  .dk-portrait:focus-visible .dk-eyebrow,
+  .dk-cards:focus-visible .dk-eyebrow,
+  .dk-quote:focus-visible .dk-eyebrow {
+    color: var(--dk-fg-dim);
+  }
+
+  .dk-metric:hover .dk-metric__note,
+  .dk-step:hover .dk-step__b,
+  .dk-floor:hover .dk-floor__h,
+  .dk-metric:focus-visible .dk-metric__note,
+  .dk-step:focus-visible .dk-step__b,
+  .dk-floor:focus-visible .dk-floor__h {
+    color: var(--dk-fg-2);
+  }
+
+  .dk-floor { border-top-color: var(--dk-rule-soft); }
+  .dk-step { border-left-color: var(--dk-rule-soft); }
+  .dk-cards { border-color: var(--dk-rule-soft); }
+  .dk-panel--plain { border-color: var(--dk-rule-soft); }
+  .dk-metric--flat { border-bottom-color: var(--dk-rule-soft); }
+
+  /* linhas · chave em tinta, valor cheio, recuo */
+  .dk-kv__row,
+  .dk-calc__row,
+  .dk-seal__steps li,
+  .dk-ring-pedagio__line,
+  .dk-ring-resumo__row {
+    transition:
+      color 240ms var(--dk-ease),
+      padding-left 240ms var(--dk-ease);
+  }
+
+  .dk-kv__k,
+  .dk-calc__k,
+  .dk-ring-resumo dt {
+    transition: color 240ms var(--dk-ease);
+  }
+
+  .dk-kv__v,
+  .dk-calc__v,
+  .dk-ring-resumo dd,
+  .dk-ring-pedagio__line,
+  .dk-seal__steps li {
+    transition: color 240ms var(--dk-ease);
+  }
+
+  .dk-ring-resumo__row:hover,
+  .dk-ring-resumo__row:focus-visible {
+    padding-left: calc(10px + 0.5rem);
+  }
+
+  .dk-kv__row:hover,
+  .dk-calc__row:hover,
+  .dk-seal__steps li:hover,
+  .dk-ring-pedagio__line:hover,
+  .dk-kv__row:focus-visible,
+  .dk-calc__row:focus-visible,
+  .dk-seal__steps li:focus-visible,
+  .dk-ring-pedagio__line:focus-visible {
+    padding-left: 0.5rem;
+  }
+
+  .dk-kv__row:hover .dk-kv__k,
+  .dk-calc__row:hover .dk-calc__k,
+  .dk-ring-resumo__row:hover dt,
+  .dk-kv__row:focus-visible .dk-kv__k,
+  .dk-calc__row:focus-visible .dk-calc__k,
+  .dk-ring-resumo__row:focus-visible dt {
+    color: var(--dk-fg);
+  }
+
+  .dk-kv__row:hover .dk-kv__v,
+  .dk-calc__row:hover .dk-calc__v,
+  .dk-ring-resumo__row:hover dd,
+  .dk-ring-pedagio__line:hover,
+  .dk-seal__steps li:hover,
+  .dk-kv__row:focus-visible .dk-kv__v,
+  .dk-calc__row:focus-visible .dk-calc__v,
+  .dk-ring-resumo__row:focus-visible dd,
+  .dk-ring-pedagio__line:focus-visible,
+  .dk-seal__steps li:focus-visible {
+    color: var(--dk-fg);
+  }
+
+  /* controles */
+  .dk-tag {
+    transition:
+      border-color 220ms var(--dk-ease),
+      background 220ms var(--dk-ease),
+      color 220ms var(--dk-ease),
+      transform 220ms var(--dk-ease);
+  }
+
+  .dk-tag:hover,
+  .dk-tag:focus-visible {
+    border-color: var(--dk-fg-dim);
+    background: color-mix(in srgb, var(--dk-fg) 4%, transparent);
+  }
+
+  .dk-tag:is(a, button, [role="button"], [tabindex]:not([tabindex="-1"])):hover,
+  .dk-tag:is(a, button, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+    transform: translateY(-1px);
+  }
+
+  .dk-tag--accent:hover,
+  .dk-tag--accent:focus-visible {
+    color: var(--dk-accent);
+    border-color: color-mix(in srgb, var(--dk-accent) 55%, var(--dk-rule));
+  }
+
+  .dk-tag--neg:hover,
+  .dk-tag--neg:focus-visible {
+    color: var(--dk-coral);
+    border-color: color-mix(in srgb, var(--dk-coral) 55%, var(--dk-rule));
+  }
+
+  .dk-lang button:not([aria-pressed="true"]):hover,
+  .dk-lang button:not([aria-pressed="true"]):focus-visible {
+    background: var(--dk-rule-soft);
+  }
+
+  .dk-nav:hover:not(:disabled) { transform: translateY(-50%) scale(1.07); }
+  .dk-nav:active:not(:disabled) {
+    transform: translateY(-50%) scale(0.96);
+    transition-duration: 90ms;
+  }
+
+  .dk-folder {
+    transition:
+      border-color 260ms var(--dk-ease),
+      background 260ms var(--dk-ease),
+      transform 260ms var(--dk-ease);
+  }
+
+  .dk-folder__icon {
+    transition:
+      transform 260ms var(--dk-ease),
+      border-color 260ms var(--dk-ease),
+      color 260ms var(--dk-ease);
+  }
+
+  .dk-folder__meta {
+    transition: color 260ms var(--dk-ease);
+  }
+
+  .dk-folder:hover,
+  .dk-folder:focus-visible {
+    border-color: rgba(78, 143, 60, 0.45);
+    background: #fff;
+    transform: translateY(-2px);
+  }
+
+  .dk-folder:hover .dk-folder__icon,
+  .dk-folder:focus-visible .dk-folder__icon {
+    transform: rotate(-4deg);
+    border-color: var(--dk-accent);
+    color: var(--dk-accent);
+  }
+
+  .dk-folder:hover .dk-folder__meta,
+  .dk-folder:focus-visible .dk-folder__meta {
+    color: var(--dk-fg-dim);
+  }
+
+  .dk-folder:active {
+    transform: translateY(1px);
+    transition-duration: 90ms;
+  }
+
+  .dk-toc__row:hover,
+  .dk-toc__row:focus-visible {
+    color: var(--dk-ink);
+    padding-left: 0.9rem;
+  }
+
+  /* selo */
+  .dk-seal:hover .dk-seal__hash,
+  .dk-seal:focus-visible .dk-seal__hash {
+    color: var(--dk-fg);
+  }
+
+  .dk-seal:hover .dk-seal__verdict,
+  .dk-seal:focus-visible .dk-seal__verdict {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--dk-accent) 10%, transparent);
+  }
+
+  /* figuras */
+  .dk-mk {
+    pointer-events: all;
+    cursor: default;
+    transition: opacity 240ms var(--dk-ease);
+  }
+
+  .dk-mk__label,
+  .dk-mk__v {
+    transition: fill 240ms var(--dk-ease);
+  }
+
+  .dk-fig:has(.dk-mk:hover) .dk-mk:not(:hover) {
+    opacity: 0.45;
+  }
+
+  .dk-mk:hover .dk-mk__label,
+  .dk-mk:hover .dk-mk__v,
+  .dk-mk:focus-visible .dk-mk__label,
+  .dk-mk:focus-visible .dk-mk__v {
+    fill: var(--dk-fg);
+  }
+
+  .dk-fig__node {
+    pointer-events: all;
+    cursor: default;
+    transition:
+      stroke 240ms var(--dk-ease),
+      stroke-width 240ms var(--dk-ease),
+      fill 240ms var(--dk-ease);
+  }
+
+  .dk-fig__node:hover,
+  .dk-fig__node:focus-visible {
+    stroke: var(--dk-fg);
+    stroke-width: 1.6;
+  }
+
+  .dk-fig__link--warn,
+  .dk-fig__link--gone {
+    transition: opacity 240ms var(--dk-ease), stroke 240ms var(--dk-ease);
+  }
+
+  .dk-fig__link--warn:hover,
+  .dk-fig__link--gone:hover,
+  .dk-fig__link--warn:focus-visible,
+  .dk-fig__link--gone:focus-visible {
+    opacity: 1;
+    stroke: var(--dk-coral);
+  }
+
+  .dk-ring3d__label {
+    pointer-events: auto;
+    transition: opacity 240ms var(--dk-ease);
+  }
+
+  .dk-ring3d__labels:has(.dk-ring3d__label:hover) .dk-ring3d__label:not(:hover),
+  .dk-ring3d__labels:has(.dk-ring3d__label:focus-visible) .dk-ring3d__label:not(:focus-visible) {
+    opacity: 0.4;
+  }
+
+  /* risco · tinta de volta */
+  .dk-strike {
+    transition: opacity 200ms var(--dk-ease), color 200ms var(--dk-ease);
+  }
+
+  .dk-strike:hover,
+  .dk-strike:focus-visible {
+    opacity: 1;
+    color: var(--dk-fg);
+  }
+}
+

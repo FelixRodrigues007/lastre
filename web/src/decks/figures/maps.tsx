@@ -96,12 +96,12 @@ export function WorldMap({
 
 /* ── o brasil · onde o ouro está ──────────────────────────────────────── */
 
-/* O Brasil é vertical e estreito. Ele fica no meio, pequeno, e as duas
- * goteiras de 370 recebem os rótulos — que aqui são o conteúdo. */
-const BK = 460 / BRAZIL.w;
+/* O Brasil é vertical e estreito. Ele fica no meio, grande, e as duas
+ * goteiras de 250 recebem os rótulos — que aqui são o conteúdo. */
+const BK = 700 / BRAZIL.w;
 const BX = Math.round((W - BRAZIL.w * BK) / 2);
-const BY = 22;
-const BH = Math.round(BRAZIL.h * BK) + BY + 18;
+const BY = 60;
+const BH = Math.round(BRAZIL.h * BK) + BY + 60;
 
 type Place = {
   lon: number;
@@ -131,7 +131,7 @@ export function BrazilMap({
   const [hx, hy] = at(hero.lon, hero.lat);
 
   return (
-    <Fig locale={locale} title={title} height={BH} className="dk-fig--map">
+    <Fig locale={locale} title={title} height={BH} className="dk-fig--map dk-fig--brasil">
       <svg
         x={BX}
         y={BY}

@@ -15,7 +15,11 @@ export type Slide = {
   skin?: Skin;
   /** Centre the content instead of pinning it top and bottom. */
   center?: boolean;
-  render: (locale: Locale) => ReactNode;
+  /** A figura é o fundo da folha: sem faixas, sem padding, sem rodapé. */
+  bleed?: boolean;
+  /** Etapas de build além do estado inicial (etapa 0). */
+  steps?: number;
+  render: (locale: Locale, step: number) => ReactNode;
 };
 
 export type Deck = {

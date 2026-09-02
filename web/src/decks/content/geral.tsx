@@ -83,6 +83,7 @@ export const geral: Deck = {
     {
       id: "problema",
       title: { pt: "01 · O problema", en: "01 · The problem" },
+      steps: 2,
       render: (l) => {
         const t = tx(l);
         return (
@@ -95,19 +96,21 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
-              <Chain
-                locale={l}
-                title={{
-                  pt: "A cadeia do mercado: a leitura acontece, a declaração não é verificada, o token é emitido assim mesmo.",
-                  en: "The market chain: the reading happens, the claim is never verified, the token is issued anyway.",
-                }}
-                links={[
-                  { n: "01", label: t("leitura", "reading") },
-                  { n: "02", label: t("declaração", "claim"), missing: true },
-                  { n: "03", label: t("token", "token") },
-                ]}
-              />
-              <div className="dk-row dk-row--3">
+              <div data-step="1">
+                <Chain
+                  locale={l}
+                  title={{
+                    pt: "A cadeia do mercado: a leitura acontece, a declaração não é verificada, o token é emitido assim mesmo.",
+                    en: "The market chain: the reading happens, the claim is never verified, the token is issued anyway.",
+                  }}
+                  links={[
+                    { n: "01", label: t("leitura", "reading") },
+                    { n: "02", label: t("declaração", "claim"), missing: true },
+                    { n: "03", label: t("token", "token") },
+                  ]}
+                />
+              </div>
+              <div className="dk-row dk-row--3" data-step="2">
                 <div className="dk-metric dk-metric--flat">
                   <span className="dk-eyebrow">{t("Toucan · carbono", "Toucan · carbon")}</span>
                   <Figure to={28} locale={l} suffix="%" />
@@ -139,7 +142,7 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
-              <p className="dk-src">
+              <p className="dk-src" data-step="2">
                 {t(
                   "Fontes: Artigo 6 / migração Toucan · Instituto Escolhas, Raio X do Ouro, 2022 · Repórter Brasil, 2023–2025.",
                   "Sources: Article 6 / Toucan migration · Instituto Escolhas, Raio X do Ouro, 2022 · Repórter Brasil, 2023–2025.",
@@ -155,6 +158,7 @@ export const geral: Deck = {
     {
       id: "o-que-e",
       title: { pt: "02 · O que a Lastre é", en: "02 · What Lastre is" },
+      steps: 2,
       skin: "dark",
       render: (l) => {
         const t = tx(l);
@@ -170,7 +174,7 @@ export const geral: Deck = {
                   <span className="dk-accent">{t("aconteceu.", "happened.")}</span>
                 </h2>
               </div>
-              <div className="dk-kv">
+              <div className="dk-kv" data-step="1">
                 <div className="dk-kv__row">
                   <span className="dk-kv__k">{t("O que sela", "What it seals")}</span>
                   <span className="dk-kv__v">
@@ -201,7 +205,7 @@ export const geral: Deck = {
               </div>
             </div>
 
-            <div className="dk-oque__stage">
+            <div className="dk-oque__stage" data-step="2">
               <div className="dk-proof">
                 <div className="dk-panel dk-proof__valid">
                   <div className="dk-label">
@@ -239,6 +243,7 @@ export const geral: Deck = {
     {
       id: "produto",
       title: { pt: "O que já existe", en: "What already exists" },
+      steps: 2,
       skin: "dark",
       render: (l) => {
         const t = tx(l);
@@ -250,7 +255,7 @@ export const geral: Deck = {
         ];
         return (
           <>
-            <div className="dk-shot dk-shot--laptop">
+            <div className="dk-shot dk-shot--laptop" data-step="1">
               <img
                 src={LAPTOP}
                 alt={t("MacBook exibindo o site da Lastre.", "A MacBook showing the Lastre site.")}
@@ -269,7 +274,7 @@ export const geral: Deck = {
               </p>
             </div>
             <div className="dk-bottom dk-half-l">
-              <div className="dk-cards">
+              <div className="dk-cards" data-step="2">
                 {cards.map(([k, v]) => (
                   <div key={k}>
                     <span className="dk-cards__k">{k}</span>
@@ -292,14 +297,14 @@ export const geral: Deck = {
       render: (l) => {
         const t = tx(l);
         return (
-          <div className="dk-top" style={{ maxWidth: "42ch", display: "grid", gap: "1.2rem" }}>
+          <div className="dk-top dk-frase">
             <Watermark />
             <p className="dk-eyebrow">{t("A frase que nos separa", "The line that separates us")}</p>
-            <h2 className="dk-h2" style={{ color: "var(--dk-fg-2)" }}>
+            <p className="dk-frase__neg">
               {t("A concorrência prova o que o fornecedor ", "The competition proves what the supplier ")}
               <span className="dk-strike--draw">{t("declarou.", "declared.")}</span>
-            </h2>
-            <h2 className="dk-h2">
+            </p>
+            <h2 className="dk-h1 dk-frase__pos">
               {t("A Lastre prova que a leitura aconteceu.", "Lastre proves the reading happened.")}
             </h2>
           </div>
@@ -311,6 +316,7 @@ export const geral: Deck = {
     {
       id: "como-funciona",
       title: { pt: "03 · Como funciona", en: "03 · How it works" },
+      steps: 3,
       render: (l) => {
         const t = tx(l);
         return (
@@ -347,7 +353,7 @@ export const geral: Deck = {
                     )}
                   </p>
                 </div>
-                <div className="dk-floor dk-floor--1">
+                <div className="dk-floor dk-floor--1" data-step="1">
                   <span className="dk-eyebrow">{t("Andar 1", "Floor 1")}</span>
                   <div className="dk-floor__h">
                     <h3 className="dk-h3">{t("Registro", "Registry")}</h3>
@@ -360,7 +366,7 @@ export const geral: Deck = {
                     )}
                   </p>
                 </div>
-                <div className="dk-floor dk-floor--2">
+                <div className="dk-floor dk-floor--2" data-step="2">
                   <span className="dk-eyebrow">{t("Andar 2", "Floor 2")}</span>
                   <div className="dk-floor__h">
                     <h3 className="dk-h3">{t("Circulação", "Circulation")}</h3>
@@ -373,7 +379,7 @@ export const geral: Deck = {
                     )}
                   </p>
                 </div>
-                <div className="dk-floor dk-floor--3">
+                <div className="dk-floor dk-floor--3" data-step="3">
                   <span className="dk-eyebrow">{t("Andar 3", "Floor 3")}</span>
                   <div className="dk-floor__h">
                     <h3 className="dk-h3">{t("Capital", "Capital")}</h3>
@@ -388,7 +394,7 @@ export const geral: Deck = {
                 </div>
                 </div>
               </div>
-              <p className="dk-src">
+              <p className="dk-src" data-step="3">
                 {t(
                   "Regra de ouro. Dois lotes só compartilham um token se compartilharem origem provada, período e especificação. Fungibilizar “Token Ouro” apaga a origem — que é o produto.",
                   "Golden rule. Two lots share a token only if they share proven origin, period and specification. A generic “Gold Token” erases origin — which is the product.",
@@ -404,6 +410,7 @@ export const geral: Deck = {
     {
       id: "caso",
       title: { pt: "04 · O caso do rejeito", en: "04 · The tailings case" },
+      steps: 3,
       render: (l) => {
         const t = tx(l);
         return (
@@ -415,7 +422,19 @@ export const geral: Deck = {
                 <span className="dk-accent">{t("3\u00a0g de ouro por tonelada.", "3\u00a0g of gold per tonne.")}</span>
               </h2>
             </div>
-            <div className="dk-bottom">
+            <div className="dk-bottom dk-bottom--rule">
+              <div data-step="3">
+                <Ratio
+                  locale={l}
+                  title={{
+                    pt: "A massa de rejeito contra o ouro contido, na mesma escala.",
+                    en: "The tailings mass against the contained gold, on one scale.",
+                  }}
+                  mass={t("2.500.000 t de rejeito", "2,500,000 t of tailings")}
+                  metal={t("7,5 t de ouro", "7.5 t of gold")}
+                  share={t("0,0003% da massa", "0.0003% of the mass")}
+                />
+              </div>
               <div className="dk-row dk-row--wide">
                 <div className="dk-calc">
                   <div className="dk-calc__row">
@@ -428,24 +447,24 @@ export const geral: Deck = {
                     <span className="dk-calc__k">{t("Teor de ouro", "Gold grade")}</span>
                     <span className="dk-calc__v">3,0 g/t</span>
                   </div>
-                  <div className="dk-calc__row">
+                  <div className="dk-calc__row" data-step="1">
                     <span className="dk-calc__i">03</span>
                     <span className="dk-calc__k">{t("Ouro contido", "Contained gold")}</span>
                     <span className="dk-calc__v">7,50 t · 241.134 oz</span>
                   </div>
-                  <div className="dk-calc__row">
+                  <div className="dk-calc__row" data-step="1">
                     <span className="dk-calc__i">04</span>
                     <span className="dk-calc__k">{t("Ouro à vista · 02.09.2026", "Gold spot · 02.09.2026")}</span>
                     <span className="dk-calc__v">US$ 4.334 / oz</span>
                   </div>
-                  <div className="dk-calc__row dk-calc__row--sum">
+                  <div className="dk-calc__row dk-calc__row--sum" data-step="2">
                     <span className="dk-calc__i">05</span>
                     <span className="dk-calc__k">{t("Valor do metal contido", "Contained metal value")}</span>
                     <span className="dk-calc__v">US$ 1,045 bi</span>
                   </div>
                 </div>
 
-                <div className="dk-top">
+                <div className="dk-top" data-step="3">
                   <p className="dk-p dk-p--lead">
                     {t(
                       "Um passivo ambiental já escavado, moído e pago. O ouro está lá. O que falta não é geologia — é provar que o teor foi lido, e não afirmado.",
@@ -460,16 +479,6 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
-              <Ratio
-                locale={l}
-                title={{
-                  pt: "A massa de rejeito contra o ouro contido, na mesma escala.",
-                  en: "The tailings mass against the contained gold, on one scale.",
-                }}
-                mass={t("2.500.000 t de rejeito", "2,500,000 t of tailings")}
-                metal={t("7,5 t de ouro", "7.5 t of gold")}
-                share={t("0,0003% da massa", "0.0003% of the mass")}
-              />
             </div>
           </>
         );
@@ -480,6 +489,7 @@ export const geral: Deck = {
     {
       id: "b3",
       title: { pt: "A B3 em 2027", en: "B3 in 2027" },
+      steps: 2,
       skin: "mint",
       render: (l) => {
         const t = tx(l);
@@ -492,25 +502,27 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
-              <Chain
-                locale={l}
-                title={{
-                  pt: "O anúncio resolve a emissão e a liquidação. A origem segue declarada.",
-                  en: "The announcement solves issuance and settlement. Origin remains declared.",
-                }}
-                links={[
-                  { n: "01", label: t("emissão", "issuance") },
-                  { n: "02", label: t("liquidação", "settlement") },
-                  { n: "03", label: t("origem", "origin"), missing: true },
-                ]}
-              />
-              <p className="dk-p dk-p--lead">
+              <div data-step="1">
+                <Chain
+                  locale={l}
+                  title={{
+                    pt: "O anúncio resolve a emissão e a liquidação. A origem segue declarada.",
+                    en: "The announcement solves issuance and settlement. Origin remains declared.",
+                  }}
+                  links={[
+                    { n: "01", label: t("emissão", "issuance") },
+                    { n: "02", label: t("liquidação", "settlement") },
+                    { n: "03", label: t("origem", "origin"), missing: true },
+                  ]}
+                />
+              </div>
+              <p className="dk-p dk-p--lead" data-step="2">
                 {t(
                   "O trilho chega antes da prova. Quando o ativo brasileiro passar a liquidar em segundos, provar que a leitura aconteceu deixa de ser diferencial e vira requisito de emissão.",
                   "The rail arrives before the proof. Once Brazilian assets settle in seconds, proving the reading happened stops being a differentiator and becomes an issuance requirement.",
                 )}
               </p>
-              <p className="dk-src">
+              <p className="dk-src" data-step="2">
                 {t("Fonte: BitNotícias, Cassio Gusson, 31.08.2026.", "Source: BitNotícias, Cassio Gusson, 31.08.2026.")}
               </p>
             </div>
@@ -523,6 +535,7 @@ export const geral: Deck = {
     {
       id: "faixa",
       title: { pt: "A faixa honesta", en: "The honest range" },
+      steps: 2,
       skin: "dark",
       render: (l) => {
         const t = tx(l);
@@ -541,11 +554,11 @@ export const geral: Deck = {
                 }}
                 marks={[
                   { pct: 0.5, value: "50", label: t("3,75 t", "3.75 t"), side: "left" },
-                  { pct: 0.65, value: "65", label: t("4,88 t", "4.88 t") },
+                  { pct: 0.65, value: "65", label: t("4,88 t", "4.88 t"), side: "left" },
                   { pct: 0.8, value: "80", label: t("6,00 t", "6.00 t") },
                 ]}
               />
-              <div className="dk-row dk-row--3">
+              <div className="dk-row dk-row--3" data-step="1">
                 <div className="dk-panel">
                   <div className="dk-label">
                     <span>{t("Recuperação 50%", "50% recovery")}</span>
@@ -568,6 +581,18 @@ export const geral: Deck = {
                   <p className="dk-metric__note">{t("6,00 t recuperadas", "6.00 t recovered")}</p>
                 </div>
               </div>
+              <p className="dk-p dk-p--fine" data-step="2">
+                {t(
+                  "Três cenários de recuperação sobre 7,5 t de ouro contido. O central (65%) orienta o caso — nenhum inclui CAPEX de planta.",
+                  "Three recovery scenarios on 7.5 t of contained gold. The central case (65%) guides the deck — none includes plant CAPEX.",
+                )}
+              </p>
+              <p className="dk-src" data-step="2">
+                {t(
+                  "Ouro à vista US$ 4.334/oz, 02.09.2026 · cálculo sobre premissas do caso do rejeito.",
+                  "Gold spot US$ 4,334/oz, 02.09.2026 · calculation on the tailings-case assumptions.",
+                )}
+              </p>
             </div>
           </>
         );
@@ -578,6 +603,7 @@ export const geral: Deck = {
     {
       id: "acrescenta",
       title: { pt: "O que a Lastre acrescenta", en: "What Lastre adds" },
+      steps: 2,
       render: (l) => {
         const t = tx(l);
         return (
@@ -586,9 +612,23 @@ export const geral: Deck = {
               <p className="dk-eyebrow">{t("04 — O que a Lastre acrescenta", "04 — What Lastre adds")}</p>
               <h2 className="dk-h1">{t("A pilha não muda. O preço dela, sim.", "The pile does not change. Its price does.")}</h2>
             </div>
-            <div className="dk-bottom">
+            <div className="dk-bottom dk-bottom--rule">
+              <Scale
+                locale={l}
+                title={{
+                  pt: "A régua do prêmio de origem, em dólares por quilo.",
+                  en: "The origin-premium ruler, in dollars per kilo.",
+                }}
+                max={5000}
+                step={1000}
+                unit="US$/kg"
+                stops={[
+                  { at: 2000, value: "2k", label: "Fairtrade", sub: t("US$ 2.000/kg", "US$ 2,000/kg") },
+                  { at: 4000, value: "4k", label: "Fairmined", sub: t("US$ 4.000/kg", "US$ 4,000/kg") },
+                ]}
+              />
               <div className="dk-row dk-row--wide">
-                <div className="dk-kv">
+                <div className="dk-kv" data-step="1">
                   <div className="dk-kv__row">
                     <span className="dk-kv__k">{t("Prêmio de origem", "Origin premium")}</span>
                     <span className="dk-kv__v">
@@ -618,7 +658,7 @@ export const geral: Deck = {
                   </div>
                 </div>
 
-                <div className="dk-top">
+                <div className="dk-top" data-step="2">
                   <div className="dk-label">
                     <span>{t("O que este caso decide para nós", "What this case decides for us")}</span>
                   </div>
@@ -644,20 +684,6 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
-              <Scale
-                locale={l}
-                title={{
-                  pt: "A régua do prêmio de origem, em dólares por quilo.",
-                  en: "The origin-premium ruler, in dollars per kilo.",
-                }}
-                max={5000}
-                step={1000}
-                unit="US$/kg"
-                stops={[
-                  { at: 2000, value: "2k", label: "Fairtrade", sub: t("US$ 2.000/kg", "US$ 2,000/kg") },
-                  { at: 4000, value: "4k", label: "Fairmined", sub: t("US$ 4.000/kg", "US$ 4,000/kg") },
-                ]}
-              />
             </div>
           </>
         );
@@ -668,6 +694,7 @@ export const geral: Deck = {
     {
       id: "quem-paga",
       title: { pt: "05 · Quem paga", en: "05 · Who pays" },
+      steps: 3,
       skin: "dark",
       render: (l) => {
         const t = tx(l);
@@ -682,18 +709,20 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
-              <Converge
-                locale={l}
-                title={{
-                  pt: "Dois lados entram no mesmo ponto, e uma saída fina paga antes do mandato.",
-                  en: "Two sides enter the same point, and a thin way out pays before the mandate.",
-                }}
-                a={t("certificado", "certified")}
-                b={t("produtor", "producer")}
-                out={t("pré-2027", "pre-2027")}
-              />
+              <div data-step="1">
+                <Converge
+                  locale={l}
+                  title={{
+                    pt: "Dois lados entram no mesmo ponto, e uma saída fina paga antes do mandato.",
+                    en: "Two sides enter the same point, and a thin way out pays before the mandate.",
+                  }}
+                  a={t("certificado", "certified")}
+                  b={t("produtor", "producer")}
+                  out={t("pré-2027", "pre-2027")}
+                />
+              </div>
               <div className="dk-row dk-row--3 dk-row--top dk-steps">
-                <div className="dk-step">
+                <div className="dk-step" data-step="1">
                   <span className="dk-step__n">01</span>
                   <span className="dk-step__k">{t("Usuário certificado", "Certified user")}</span>
                   <p className="dk-p dk-step__b">
@@ -703,7 +732,7 @@ export const geral: Deck = {
                     )}
                   </p>
                 </div>
-                <div className="dk-step">
+                <div className="dk-step" data-step="2">
                   <span className="dk-step__n">02</span>
                   <span className="dk-step__k">{t("Produtor / mineradora", "Producer / miner")}</span>
                   <p className="dk-p dk-step__b">
@@ -713,7 +742,7 @@ export const geral: Deck = {
                     )}
                   </p>
                 </div>
-                <div className="dk-step">
+                <div className="dk-step" data-step="3">
                   <span className="dk-step__n">03</span>
                   <span className="dk-step__k">{t("Quem paga antes de 2027", "Who pays before 2027")}</span>
                   <p className="dk-p dk-step__b">
@@ -724,6 +753,12 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
+              <p className="dk-src" data-step="3">
+                {t(
+                  "Resolução CVM 175 · mandato DeFi em 18.02.2027 · anúncio B3 de liquidação em stablecoin, 31.08.2026.",
+                  "CVM Resolution 175 · DeFi mandate on 18.02.2027 · B3 stablecoin settlement announcement, 31.08.2026.",
+                )}
+              </p>
             </div>
           </>
         );
@@ -733,77 +768,19 @@ export const geral: Deck = {
     /* ── 05 · onde o ouro está ────────────────────────────────────────── */
     {
       id: "brasil",
+      bleed: true,
       title: { pt: "Onde o ouro está", en: "Where the gold is" },
       skin: "mint",
       render: (l) => {
         const t = tx(l);
         return (
-          <>
-            <div className="dk-top">
+          <div className="dk-brasil">
+            <div className="dk-brasil__type">
               <p className="dk-eyebrow">{t("05 — Onde o ouro está", "05 — Where the gold is")}</p>
               <h2 className="dk-h1">
                 {t("O ouro está no Pará. O trilho, ", "The gold is in Pará. The rail, ")}
                 <span className="dk-accent">{t("não.", "is not.")}</span>
               </h2>
-            </div>
-            <div className="dk-bottom dk-bottom--fit">
-              <BrazilMap
-                locale={l}
-                title={{
-                  pt: "Mapa do Brasil com o Pará destacado e cinco pontos de referência citados nesta pesquisa.",
-                  en: "Map of Brazil with Pará highlighted and five reference points cited in this research.",
-                }}
-                hero={{
-                  lon: -52.5,
-                  lat: -4.6,
-                  stemTop: 40,
-                  value: "65%",
-                  pct: 0.65,
-                  side: "left",
-                  label: t("do ouro garimpável", "of artisanal gold"),
-                  sub: t("hoje, nenhuma DTVM legal", "today, no licensed dealer"),
-                }}
-                places={[
-                  {
-                    lon: -48.5,
-                    lat: -1.46,
-                    stemTop: 46,
-                    label: "Belém · PA",
-                    sub: t("Selo Amarelo · refinaria North Star", "Selo Amarelo · North Star refinery"),
-                  },
-                  {
-                    lon: -55.98,
-                    lat: -4.28,
-                    stemTop: 100,
-                    side: "left",
-                    label: "Itaituba · PA",
-                    sub: t("Serabi Gold · 1ª certificada", "Serabi Gold · first certified"),
-                  },
-                  {
-                    lon: -56.62,
-                    lat: -16.26,
-                    stemTop: 248,
-                    side: "left",
-                    label: "Poconé · MT",
-                    sub: t("Minery · piloto Certimine", "Minery · Certimine pilot"),
-                  },
-                  {
-                    lon: -43.85,
-                    lat: -19.99,
-                    stemTop: 280,
-                    label: "Nova Lima · MG",
-                    sub: t("AngloGold · LBMA renovada jul/2024", "AngloGold · LBMA renewed Jul 2024"),
-                  },
-                  {
-                    lon: -46.63,
-                    lat: -23.55,
-                    stemTop: 336,
-                    side: "left",
-                    label: "São Paulo · SP",
-                    sub: "C. Steinweg · Prosegur Digital Gold",
-                  },
-                ]}
-              />
               <p className="dk-src">
                 {t(
                   "Pontos de referência citados nesta pesquisa — não é um cadastro de minas. Lastre Research, v1.1, 29.08.2026.",
@@ -811,7 +788,64 @@ export const geral: Deck = {
                 )}
               </p>
             </div>
-          </>
+            <BrazilMap
+              locale={l}
+              title={{
+                pt: "Mapa do Brasil com o Pará destacado e cinco pontos de referência citados nesta pesquisa.",
+                en: "Map of Brazil with Pará highlighted and five reference points cited in this research.",
+              }}
+              hero={{
+                lon: -52.5,
+                lat: -4.6,
+                stemTop: 120,
+                value: "65%",
+                pct: 0.65,
+                side: "left",
+                label: t("do ouro garimpável", "of artisanal gold"),
+                sub: t("hoje, nenhuma DTVM legal", "today, no licensed dealer"),
+              }}
+              places={[
+                {
+                  lon: -48.5,
+                  lat: -1.46,
+                  stemTop: 130,
+                  label: "Belém · PA",
+                  sub: t("Selo Amarelo · refinaria North Star", "Selo Amarelo · North Star refinery"),
+                },
+                {
+                  lon: -55.98,
+                  lat: -4.28,
+                  stemTop: 190,
+                  side: "left",
+                  label: "Itaituba · PA",
+                  sub: t("Serabi Gold · 1ª certificada", "Serabi Gold · first certified"),
+                },
+                {
+                  lon: -56.62,
+                  lat: -16.26,
+                  stemTop: 400,
+                  side: "left",
+                  label: "Poconé · MT",
+                  sub: t("Minery · piloto Certimine", "Minery · Certimine pilot"),
+                },
+                {
+                  lon: -43.85,
+                  lat: -19.99,
+                  stemTop: 470,
+                  label: "Nova Lima · MG",
+                  sub: t("AngloGold · LBMA renovada jul/2024", "AngloGold · LBMA renewed Jul 2024"),
+                },
+                {
+                  lon: -46.63,
+                  lat: -23.55,
+                  stemTop: 535,
+                  side: "left",
+                  label: "São Paulo · SP",
+                  sub: "C. Steinweg · Prosegur Digital Gold",
+                },
+              ]}
+            />
+          </div>
         );
       },
     },
@@ -819,6 +853,8 @@ export const geral: Deck = {
     /* ── 05 · a rede de custódia ──────────────────────────────────────── */
     {
       id: "custodia",
+      bleed: true,
+      steps: 2,
       title: { pt: "A rede de custódia", en: "The custody network" },
       render: (l) => {
         const t = tx(l);
@@ -832,63 +868,67 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom dk-bottom--fit">
-              <WorldMap
-                locale={l}
-                title={{
-                  pt: "Mapa-múndi com a rede de custódia acesa na Europa, na Ásia, na América do Norte e na África — e um zero na América do Sul.",
-                  en: "World map with the custody network lit in Europe, Asia, North America and Africa — and a zero in South America.",
-                }}
-                sites={[
-                  {
-                    lon: -83.0,
-                    lat: 42.3,
-                    stemTop: 72,
-                    label: t("América do Norte", "North America"),
-                    sub: t("rede LME", "LME network"),
-                  },
-                  {
-                    lon: -58.0,
-                    lat: -15.0,
-                    stemTop: 262,
-                    zero: true,
-                    label: t("América do Sul", "South America"),
-                    sub: t("instalações da rede LME", "LME network facilities"),
-                  },
-                  {
-                    lon: -0.13,
-                    lat: 51.5,
-                    stemTop: 40,
-                    label: t("Londres", "London"),
-                    sub: "LBMA · 100% Good Delivery",
-                  },
-                  {
-                    lon: 29.0,
-                    lat: -2.0,
-                    stemTop: 222,
-                    label: t("Grandes Lagos", "Great Lakes"),
-                    sub: t("BGR · AFP desde 2006 · 3T", "BGR · AFP since 2006 · 3T"),
-                  },
-                  {
-                    lon: 103.8,
-                    lat: 1.35,
-                    stemTop: 180,
-                    label: t("Ásia", "Asia"),
-                    sub: t("rede LME", "LME network"),
-                  },
-                ]}
-              />
-              <p className="dk-p dk-p--fine dk-map-note">
-                {t(
-                  "+450 instalações · 32 locais · nenhum na América do Sul — rede LME",
-                  "+450 facilities · 32 locations · none in South America — LME network",
-                )}
-              </p>
-              <p className="dk-src">
-                {t(
-                  "Armazéns aprovados da LME · LBMA Good Delivery · BGR/AFP, desde 2006. Lastre Research, v1.1, 29.08.2026.",
-                  "LME approved warehouses · LBMA Good Delivery · BGR/AFP, since 2006. Lastre Research, v1.1, 29.08.2026.",
-                )}
-              </p>
+              <div data-step="1">
+                <WorldMap
+                  locale={l}
+                  title={{
+                    pt: "Mapa-múndi com a rede de custódia acesa na Europa, na Ásia, na América do Norte e na África — e um zero na América do Sul.",
+                    en: "World map with the custody network lit in Europe, Asia, North America and Africa — and a zero in South America.",
+                  }}
+                  sites={[
+                    {
+                      lon: -83.0,
+                      lat: 42.3,
+                      stemTop: 72,
+                      label: t("América do Norte", "North America"),
+                      sub: t("rede LME", "LME network"),
+                    },
+                    {
+                      lon: -58.0,
+                      lat: -15.0,
+                      stemTop: 262,
+                      zero: true,
+                      label: t("América do Sul", "South America"),
+                      sub: t("instalações da rede LME", "LME network facilities"),
+                    },
+                    {
+                      lon: -0.13,
+                      lat: 51.5,
+                      stemTop: 40,
+                      label: t("Londres", "London"),
+                      sub: "LBMA · 100% Good Delivery",
+                    },
+                    {
+                      lon: 29.0,
+                      lat: -2.0,
+                      stemTop: 222,
+                      label: t("Grandes Lagos", "Great Lakes"),
+                      sub: t("BGR · AFP desde 2006 · 3T", "BGR · AFP since 2006 · 3T"),
+                    },
+                    {
+                      lon: 103.8,
+                      lat: 1.35,
+                      stemTop: 180,
+                      label: t("Ásia", "Asia"),
+                      sub: t("rede LME", "LME network"),
+                    },
+                  ]}
+                />
+              </div>
+              <div data-step="2">
+                <p className="dk-p dk-p--fine dk-map-note">
+                  {t(
+                    "+450 instalações · 32 locais · nenhum na América do Sul — rede LME",
+                    "+450 facilities · 32 locations · none in South America — LME network",
+                  )}
+                </p>
+                <p className="dk-src">
+                  {t(
+                    "Armazéns aprovados da LME · LBMA Good Delivery · BGR/AFP, desde 2006. Lastre Research, v1.1, 29.08.2026.",
+                    "LME approved warehouses · LBMA Good Delivery · BGR/AFP, since 2006. Lastre Research, v1.1, 29.08.2026.",
+                  )}
+                </p>
+              </div>
             </div>
           </>
         );
@@ -899,6 +939,7 @@ export const geral: Deck = {
     {
       id: "onde-vive",
       title: { pt: "Onde a empresa vive", en: "Where the company lives" },
+      steps: 2,
       render: (l) => {
         const t = tx(l);
         return (
@@ -909,7 +950,7 @@ export const geral: Deck = {
             </div>
             <div className="dk-bottom dk-bottom--tall">
               <div className="dk-row dk-row--2">
-                <div className="dk-kv">
+                <div className="dk-kv" data-step="1">
                   <div className="dk-kv__row">
                     <span className="dk-kv__k">{t("Entidade", "Entity")}</span>
                     <span className="dk-kv__v">
@@ -942,7 +983,7 @@ export const geral: Deck = {
                   </div>
                 </div>
 
-                <div className="dk-top">
+                <div className="dk-top" data-step="2">
                   <div className="dk-label">
                     <span>{t("O que precisa ser decidido", "What has to be decided")}</span>
                   </div>
@@ -1003,6 +1044,7 @@ export const geral: Deck = {
     {
       id: "fecho",
       title: { pt: "Fecho", en: "Closing" },
+      steps: 1,
       skin: "wave",
       render: (l) => {
         const t = tx(l);
@@ -1016,10 +1058,10 @@ export const geral: Deck = {
               </h2>
             </div>
             <div className="dk-bottom">
-              <div className="dk-tempo-rail dk-tempo-rail--full">
+              <div className="dk-tempo-rail dk-tempo-rail--full" data-step="1">
                 <TimeRail locale={l} title={RAIL} steps={TEMPOS(l)} lit={5} />
               </div>
-              <p className="dk-src">
+              <p className="dk-src" data-step="1">
                 {t(
                   "Material interno. Não é oferta, promessa de retorno ou recomendação de investimento. Cifras de terceiros trazem fonte e data na tela em que aparecem; as cifras do rejeito são cálculo sobre premissas declaradas, não projeção de receita.",
                   "Internal material. Not an offer, a promise of return, or investment advice. Third-party figures carry source and date on the screen where they appear; the tailings figures are a calculation on stated assumptions, not a revenue forecast.",
