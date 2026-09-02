@@ -3,7 +3,7 @@
  *
  * Paper, not screen. A rounded sheet floating on a soft ground, headline
  * pinned to the top, everything else settled at the bottom, and a wide
- * silence in between. Display type is Inter; every other word is mono.
+ * silence in between. Inter throughout; mono only on the live seal hash.
  * One accent, used almost never. Built on the canonical Lastre tokens.
  * ───────────────────────────────────────────────────────────────────────── */
 
@@ -92,9 +92,9 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  font-family: var(--dk-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.16em;
+  font-family: var(--dk-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
   padding: 0.32rem 0.62rem;
   border-radius: 999px;
   color: var(--dk-dim);
@@ -273,9 +273,9 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 1rem;
-  font-family: var(--dk-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
+  font-family: var(--dk-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-faint);
   font-variant-numeric: tabular-nums;
@@ -334,10 +334,10 @@
 }
 .dk-h3 {
   margin: 0;
-  font-family: var(--dk-mono);
-  font-size: 0.72rem;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.95rem, 0.9rem + 0.22vw, 1.1rem);
   font-weight: 500;
-  letter-spacing: 0.13em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg);
 }
@@ -346,9 +346,10 @@
 .dk-label {
   display: grid;
   gap: 0.5rem;
-  font-family: var(--dk-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.84rem, 0.8rem + 0.18vw, 0.94rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-2);
 }
@@ -357,14 +358,15 @@
 
 .dk-eyebrow {
   margin: 0;
-  font-family: var(--dk-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.2em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-dim);
 }
 
-/* body copy is sans — mono is for labels, numbers and figures */
+/* body copy and labels share the sans stack */
 .dk-p {
   margin: 0;
   font-family: var(--dk-sans);
@@ -380,16 +382,11 @@
   max-width: 30ch;
   color: var(--dk-fg-2);
 }
-.dk-p--fine {
-  font-size: clamp(0.74rem, 0.7rem + 0.16vw, 0.84rem);
-  color: var(--dk-fg-faint);
-  max-width: 78ch;
-}
 .dk-src {
   margin: 0;
-  font-family: var(--dk-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1rem);
+  letter-spacing: 0.04em;
   color: var(--dk-fg-faint);
   max-width: 90ch;
   padding-top: 0.9rem;
@@ -441,19 +438,20 @@
   border-left: 1px solid var(--dk-rule);
 }
 .dk-step__n {
-  font-family: var(--dk-mono);
+  font-family: var(--dk-sans);
   font-size: clamp(2.4rem, 1.2rem + 3.4vw, 4.4rem);
   line-height: 0.82;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.02em;
   font-weight: 400;
   color: var(--dk-fg-2);
   font-variant-numeric: tabular-nums;
 }
 .dk-sheet--dark .dk-step__n { color: #b7cdc2; }
 .dk-step__k {
-  font-family: var(--dk-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.13em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg);
 }
@@ -463,10 +461,10 @@
 
 .dk-metric { display: grid; gap: 0.45rem; align-content: start; }
 .dk-metric__v {
-  font-family: var(--dk-mono);
+  font-family: var(--dk-sans);
   font-size: clamp(2.1rem, 1rem + 3.4vw, 4.2rem);
   line-height: 0.9;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.02em;
   font-weight: 400;
   color: var(--dk-fg);
   font-variant-numeric: tabular-nums;
@@ -513,9 +511,10 @@
   .dk-kv__row { grid-template-columns: minmax(7.5rem, 0.3fr) minmax(0, 1fr); align-items: baseline; }
 }
 .dk-kv__k {
-  font-family: var(--dk-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.88rem, 0.84rem + 0.2vw, 1rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-dim);
 }
@@ -537,12 +536,18 @@
   align-items: baseline;
   padding: 0.5rem 0;
   border-bottom: 1px solid var(--dk-rule-soft);
-  font-family: var(--dk-mono);
-  font-size: clamp(0.7rem, 0.66rem + 0.18vw, 0.82rem);
+  font-family: var(--dk-sans);
+  font-size: clamp(0.95rem, 0.9rem + 0.24vw, 1.1rem);
 }
-.dk-calc__i { color: var(--dk-fg-faint); font-size: 0.62rem; letter-spacing: 0.1em; }
+.dk-calc__i { color: var(--dk-fg-faint); font-size: 0.88em; letter-spacing: 0.05em; }
 .dk-calc__k { color: var(--dk-fg-dim); }
-.dk-calc__v { color: var(--dk-fg); text-align: right; white-space: nowrap; }
+.dk-calc__v {
+  color: var(--dk-fg);
+  text-align: right;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
 .dk-calc__row--sum { border-bottom-color: var(--dk-rule); }
 .dk-calc__row--sum .dk-calc__v { color: var(--dk-accent); font-size: 1.18em; }
 .dk-sheet--dark .dk-calc__row--sum .dk-calc__v { color: #a9dd8f; }
@@ -552,9 +557,9 @@
 .dk-tag {
   justify-self: start;
   width: fit-content;
-  font-family: var(--dk-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.16em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.8rem, 0.76rem + 0.16vw, 0.88rem);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-dim);
   border: 1px solid var(--dk-rule);
@@ -628,9 +633,10 @@
 }
 .dk-figure__cap {
   margin-top: 0.55rem;
-  font-family: var(--dk-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.14em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.84rem, 0.8rem + 0.18vw, 0.94rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-faint);
 }
@@ -657,17 +663,19 @@
 }
 .dk-portrait__n {
   margin: 0.7rem 0 0;
-  font-family: var(--dk-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.13em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.84rem, 0.8rem + 0.18vw, 0.94rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg);
 }
 .dk-portrait__r {
   margin: 0;
-  font-family: var(--dk-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.11em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-dim);
 }
@@ -698,8 +706,8 @@
   border: 0;
   border-bottom: 1px solid var(--dk-line-soft);
   color: var(--dk-ink-2);
-  font-family: var(--dk-mono);
-  font-size: 0.8rem;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1rem);
   text-align: left;
   display: grid;
   grid-template-columns: 2.6rem minmax(0, 1fr);
@@ -711,7 +719,7 @@
 }
 .dk-toc__row:hover { color: var(--dk-ink); padding-left: 0.9rem; }
 .dk-toc__row[aria-current="true"] { color: var(--dk-accent); }
-.dk-toc__n { font-size: 0.62rem; letter-spacing: 0.12em; color: var(--dk-faint); }
+.dk-toc__n { font-size: 0.88em; letter-spacing: 0.06em; color: var(--dk-faint); }
 
 /* ── the drawer (index of decks) ─────────────────────────────────────── */
 
@@ -732,7 +740,7 @@
   text-align: center;
   max-width: 1180px;
 }
-.dk-index .dk-p--fine { max-width: 72ch; }
+.dk-index .dk-index__fine { max-width: 72ch; }
 
 /* the mark, the word, and one line of instruction — nothing else up here */
 .dk-index__top {
@@ -753,7 +761,7 @@
   color: var(--dk-fg);
 }
 .dk-index__line { max-width: 48ch; }
-.dk-index__keys { font-size: 0.6rem; letter-spacing: 0.14em; color: var(--dk-fg-faint); }
+.dk-index__keys { font-size: 0.8rem; letter-spacing: 0.06em; color: var(--dk-fg-faint); }
 .dk-index__fine { color: var(--dk-fg-faint); }
 
 /* one folder per document */
@@ -804,7 +812,7 @@
   color: var(--dk-fg);
 }
 .dk-folder__s {
-  font-size: 0.74rem;
+  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1rem);
   line-height: 1.55;
   max-width: none;
   display: -webkit-box;
@@ -813,9 +821,10 @@
   overflow: hidden;
 }
 .dk-folder__meta {
-  font-family: var(--dk-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.13em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-faint);
   font-variant-numeric: tabular-nums;
@@ -891,15 +900,15 @@
   min-width: min(13rem, 42vw);
 }
 .dk-cards__k {
-  font-family: var(--dk-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.05em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1.02rem);
+  letter-spacing: 0.04em;
   color: var(--dk-fg);
 }
 .dk-cards__v {
-  font-family: var(--dk-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1.02rem);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-dim);
 }
@@ -915,7 +924,7 @@
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.62);
   backdrop-filter: blur(9px);
-  font-family: var(--dk-mono);
+  font-family: var(--dk-sans);
   animation:
     dk-media 1000ms var(--dk-ease) 260ms both,
     dk-float 10s ease-in-out 1.6s infinite alternate;
@@ -927,8 +936,9 @@
   gap: 0.75rem;
   padding-bottom: 0.6rem;
   border-bottom: 1px solid var(--dk-rule-soft);
-  font-size: 0.58rem;
-  letter-spacing: 0.16em;
+  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dk-fg-dim);
 }
@@ -946,6 +956,7 @@
 }
 .dk-seal__hash {
   margin: 0;
+  font-family: var(--dk-mono);
   font-size: clamp(0.7rem, 0.66rem + 0.18vw, 0.82rem);
   letter-spacing: 0.02em;
   color: var(--dk-fg);
@@ -959,8 +970,8 @@
   padding: 0;
   display: grid;
   gap: 0.45rem;
-  font-size: 0.64rem;
-  letter-spacing: 0.07em;
+  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.92rem);
+  letter-spacing: 0.05em;
   color: var(--dk-fg-dim);
 }
 .dk-seal__steps li {
@@ -989,7 +1000,7 @@
 .dk-ring {
   display: block;
   width: 100%;
-  max-width: min(56vh, 620px);
+  max-width: min(62vh, 640px);
   margin-inline: auto;
   height: auto;
 }
@@ -1035,19 +1046,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.38rem 0.45rem;
+  min-width: 0;
 }
 .dk-ring-chip {
   display: inline-block;
-  font-family: var(--dk-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.08em;
+  font-family: var(--dk-sans);
+  font-size: clamp(0.8rem, 0.76rem + 0.16vw, 0.88rem);
+  letter-spacing: 0.05em;
   color: var(--dk-fg-dim);
   border: 1px solid var(--dk-rule);
   border-radius: 999px;
   padding: 0.22rem 0.55rem;
   line-height: 1.35;
-  word-break: keep-all;
-  overflow-wrap: normal;
+  /* chip longo quebra dentro da pílula em vez de vazar pela borda do sheet */
+  white-space: normal;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
   hyphens: none;
 }
 .dk-ring-chip--accent {
@@ -1082,14 +1098,17 @@
 }
 .dk-ring-pedagio {
   display: grid;
-  gap: clamp(0.45rem, 1vh, 0.75rem);
+  gap: clamp(0.35rem, 0.8vh, 0.6rem);
   justify-items: center;
   text-align: center;
   width: 100%;
   padding-bottom: 0.5rem;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  height: 100%;
 }
 .dk-ring-pedagio .dk-ring {
   max-width: min(38vh, 420px);
+  max-height: 100%;
 }
 .dk-ring-pedagio__head {
   display: grid;
@@ -1102,7 +1121,7 @@
 }
 .dk-ring-pedagio__lines {
   display: grid;
-  gap: clamp(0.35rem, 0.8vh, 0.55rem);
+  gap: clamp(0.55rem, 1.2vh, 0.9rem);
   max-width: 28ch;
 }
 .dk-ring-pedagio__line {
@@ -1116,10 +1135,15 @@
 .dk-sheet--dark .dk-ring-pedagio__line--accent { color: #a9dd8f; }
 .dk-ring-pedagio .dk-src {
   text-align: center;
-  max-width: 52ch;
+  max-width: 62ch;
   margin-top: 0;
-  font-size: 0.6rem;
-  padding-top: 0.55rem;
+  padding-top: 0.45rem;
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+.dk-sheet--dark .dk-ring__mark {
+  --seal-mark-outer: var(--dk-dark);
+  --seal-mark-lines: var(--dk-dark);
 }
 .dk-sheet--dark .dk-ring__sector text { fill: var(--dk-fg); }
 .dk-sheet--dark .dk-ring__sector path[stroke] { stroke: var(--dk-fg); }
@@ -1145,4 +1169,37 @@
   .dk-canvas__inner { height: auto; min-height: 88vh; }
   .dk-shot { position: static; width: 40%; }
   .dk-foot { position: static; margin-top: 2rem; }
+}
+
+/* ── anel de públicos · resumo FAZ/QUER ─────────────────────────────────── */
+
+.dk-ring-resumo {
+  margin: 0 0 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.dk-ring-resumo__row {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+}
+
+.dk-ring-resumo dt {
+  font-family: var(--dk-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dk-dim);
+  margin: 0;
+}
+
+.dk-ring-resumo dd {
+  margin: 0;
+  font-family: var(--dk-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--dk-ink-2);
+  text-wrap: pretty;
 }

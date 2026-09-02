@@ -23,3 +23,8 @@ output/
 web/shot-*.png
 web/cobe-test.html
 .cache/
+
+# screenshots de verificação de deck (local)
+web/.deck-verify/
+web/*-slide.png
+web/relogio-*.png

@@ -2,6 +2,9 @@ type SealMarkProps = {
   size?: number;
   /** decorative by default; pass a label to expose it to assistive tech */
   label?: string;
+  /** position, when nested inside another svg */
+  x?: number;
+  y?: number;
 };
 
 /**
@@ -9,9 +12,11 @@ type SealMarkProps = {
  * recolored to the olive palette. Outer hex = the lot, inner hex = the
  * deterministic seal, center node = the on-chain anchor.
  */
-export function SealMark({ size = 32, label }: SealMarkProps) {
+export function SealMark({ size = 32, label, x, y }: SealMarkProps) {
   return (
     <svg
+      x={x}
+      y={y}
       width={size}
       height={size}
       viewBox="0 0 160 160"
