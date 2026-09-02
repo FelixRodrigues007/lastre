@@ -238,11 +238,11 @@ export const publicos: Deck = {
               <p className="dk-eyebrow">{t("02 — Quem gera", "02 — Who generates")}</p>
               <h2 className="dk-h2">{t("O lado da oferta.", "The supply side.")}</h2>
               <BigNum
-                v={t("R$ 298,8", "R$ 298.8")}
+                v={t("US$ 55,3", "US$ 55.3")}
                 unit={t(" bi", "bn")}
                 k={t(
-                  "Faturamento da mineração brasileira em 2025 (IBRAM).",
-                  "Brazilian mining revenue in 2025 (IBRAM).",
+                  "Faturamento da mineração brasileira em 2025 (IBRAM), convertido a R$ 5,40/US$.",
+                  "Brazilian mining revenue in 2025 (IBRAM), converted at BRL 5.40/USD.",
                 )}
               />
             </div>
@@ -272,11 +272,11 @@ export const publicos: Deck = {
               <p className="dk-eyebrow">{t("03 — Quem paga", "03 — Who pays")}</p>
               <h2 className="dk-h2">{t("Quem compra e quem financia.", "Who buys and who funds.")}</h2>
               <BigNum
-                v={t("R$ 3,9", "R$ 3.9")}
-                unit={t(" bi", "bn")}
+                v="US$ 722"
+                unit={t(" mi", "m")}
                 k={t(
-                  "Captados sob a Resolução 88 da CVM em 2025.",
-                  "Raised under CVM Resolution 88 in 2025.",
+                  "Captados sob a Resolução 88 da CVM em 2025, convertidos a R$ 5,40/US$.",
+                  "Raised under CVM Resolution 88 in 2025, converted at BRL 5.40/USD.",
                 )}
               />
             </div>
