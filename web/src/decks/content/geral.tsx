@@ -1,7 +1,6 @@
 import { Figure, SealCard } from "../Motion";
 import { tx, type Deck } from "../types";
 
-const PHONE = "/media/decks/lastre-iphone.webp";
 const LAPTOP = "/media/decks/lastre-macbook.webp";
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -195,48 +194,6 @@ export const geral: Deck = {
       },
     },
 
-    /* ── na mão: o iPhone entrando pela borda ────────────────────────── */
-    {
-      id: "mao",
-      title: { pt: "Na mão de quem lê", en: "In the hand that reads" },
-      render: (l) => {
-        const t = tx(l);
-        return (
-          <>
-            <div className="dk-shot dk-shot--phone">
-              <img
-                src={PHONE}
-                alt={t("iPhone exibindo o site da Lastre.", "An iPhone showing the Lastre site.")}
-                loading="eager"
-                decoding="async"
-              />
-            </div>
-            <div className="dk-top dk-half-r">
-              <p className="dk-eyebrow">{t("Não é slide — está no ar", "Not a slide — it is live")}</p>
-              <h2 className="dk-h1">{t("O selo já roda em testnet.", "The seal already runs on testnet.")}</h2>
-            </div>
-            <div className="dk-bottom dk-half-r">
-              <div className="dk-label">
-                <span>lastre.io</span>
-              </div>
-              <p className="dk-p dk-p--lead">
-                {t(
-                  "Selo determinístico offline, veredito ancorado na Casper e a demonstração de fraude aberta ao público — no navegador de qualquer pessoa, agora.",
-                  "Deterministic offline seal, verdict anchored on Casper, and the tamper demo open to the public — in anyone's browser, right now.",
-                )}
-              </p>
-              <p className="dk-p dk-p--fine">
-                {t(
-                  "O que falta não é engenharia. É a primeira leitura real de campo.",
-                  "What is missing is not engineering. It is the first real field reading.",
-                )}
-              </p>
-            </div>
-          </>
-        );
-      },
-    },
-
     /* ── o produto: o MacBook como peça de colagem ────────────────────── */
     {
       id: "produto",
@@ -261,14 +218,12 @@ export const geral: Deck = {
               />
             </div>
             <div className="dk-top dk-half-l">
-              <p className="dk-eyebrow">{t("E, claro…", "And, of course…")}</p>
-              <h2 className="dk-h1">
-                {t("A prova é auditável por qualquer um.", "The proof is auditable by anyone.")}
-              </h2>
+              <p className="dk-eyebrow">{t("Não é slide — está no ar", "Not a slide — it is live")}</p>
+              <h2 className="dk-h1">{t("O selo já roda em testnet.", "The seal already runs on testnet.")}</h2>
               <p className="dk-p">
                 {t(
-                  "Nada aqui depende de acreditar na Lastre. O pacote está publicado, o veredito está na chain e o “não” fica registrado junto com o “sim”.",
-                  "Nothing here depends on trusting Lastre. The package is published, the verdict is on chain, and the “no” is recorded alongside the “yes”.",
+                  "Selo determinístico offline, veredito ancorado na Casper e a demonstração de fraude aberta ao público. O que falta não é engenharia — é a primeira leitura real de campo.",
+                  "Deterministic offline seal, verdict anchored on Casper, and the tamper demo open to the public. What is missing is not engineering — it is the first real field reading.",
                 )}
               </p>
             </div>
@@ -281,14 +236,6 @@ export const geral: Deck = {
                   </div>
                 ))}
               </div>
-              <a
-                className="dk-tag dk-tag--accent"
-                href="https://testnet.cspr.live"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {t("Ver o pacote na Casper", "See the package on Casper")} →
-              </a>
             </div>
           </>
         );
@@ -304,7 +251,7 @@ export const geral: Deck = {
       render: (l) => {
         const t = tx(l);
         return (
-          <div className="dk-top" style={{ maxWidth: "34ch", display: "grid", gap: "1.2rem" }}>
+          <div className="dk-top" style={{ maxWidth: "42ch", display: "grid", gap: "1.2rem" }}>
             <p className="dk-eyebrow">{t("A frase que nos separa", "The line that separates us")}</p>
             <h2 className="dk-h2" style={{ color: "var(--dk-fg-2)" }}>
               {t("A concorrência prova o que o fornecedor ", "The competition proves what the supplier ")}

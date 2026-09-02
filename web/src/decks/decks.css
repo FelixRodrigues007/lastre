@@ -190,13 +190,17 @@
   max-width: 1560px;
   height: 100%;
   display: grid;
-  align-content: start;
+  grid-template-rows: auto 1fr;
+  align-content: stretch;
   gap: var(--dk-air);
   padding-bottom: clamp(1.8rem, 1rem + 1.5vw, 2.6rem);
   transform-origin: center center;
   animation: dk-enter 520ms var(--dk-ease) both;
 }
-.dk-canvas__inner--center { align-content: safe center; }
+.dk-canvas__inner--center {
+  align-content: safe center;
+  grid-template-rows: auto;
+}
 
 /* Nothing fades in as a block. The bands' children rise one after another,
  * from the side the deck is travelling, and the headline lifts like a
@@ -310,12 +314,12 @@
 
 .dk-h1 {
   margin: 0;
-  font-size: clamp(2.5rem, 0.9rem + 5.6vw, 5rem);
+  font-size: clamp(2.5rem, 0.9rem + 5.6vw, 4.2rem);
   line-height: 0.94;
   letter-spacing: -0.038em;
   font-weight: 400;
   color: var(--dk-fg);
-  max-width: 15ch;
+  max-width: 19ch;
   text-wrap: balance;
 }
 .dk-h2 {
@@ -402,7 +406,7 @@
 /* ── the two bands every slide is made of ────────────────────────────── */
 
 .dk-top { display: grid; gap: clamp(0.7rem, 0.5rem + 0.6vw, 1.1rem); align-content: start; }
-.dk-bottom { display: grid; gap: clamp(0.9rem, 0.6rem + 1vw, 1.6rem); align-content: end; }
+.dk-bottom { display: grid; gap: clamp(0.9rem, 0.6rem + 1vw, 1.6rem); align-content: end; align-self: end; }
 
 .dk-row {
   display: grid;
@@ -979,6 +983,149 @@
   border-color: var(--dk-accent);
   box-shadow: 0 0 0 3px rgba(78, 143, 60, 0.16);
 }
+
+/* ── anel de públicos ── */
+
+.dk-ring {
+  display: block;
+  width: 100%;
+  max-width: min(56vh, 620px);
+  margin-inline: auto;
+  height: auto;
+}
+.dk-ring-slide {
+  display: grid;
+  gap: clamp(0.8rem, 1.8vh, 1.4rem);
+  align-items: center;
+  justify-items: center;
+}
+.dk-ring-slide--map {
+  grid-template-columns: minmax(0, 1fr);
+}
+.dk-ring-slide--split {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 880px) {
+  .dk-ring-slide--map {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: center;
+  }
+  .dk-ring-slide--split {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    justify-items: stretch;
+    align-items: start;
+  }
+  .dk-ring-slide--split .dk-ring { margin-inline: 0; }
+}
+.dk-ring-slide__meta {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 36rem;
+}
+.dk-ring-slide__side {
+  display: grid;
+  gap: clamp(0.65rem, 1.2vh, 0.9rem);
+  min-width: 0;
+}
+.dk-ring-chips__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.38rem 0.45rem;
+}
+.dk-ring-chip {
+  display: inline-block;
+  font-family: var(--dk-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  color: var(--dk-fg-dim);
+  border: 1px solid var(--dk-rule);
+  border-radius: 999px;
+  padding: 0.22rem 0.55rem;
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+.dk-ring-chip--accent {
+  color: var(--dk-accent);
+  border-color: rgba(78, 143, 60, 0.4);
+}
+.dk-sheet--dark .dk-ring-chip--accent {
+  color: #a9dd8f;
+  border-color: rgba(169, 221, 143, 0.4);
+}
+.dk-ring-chips--cols {
+  display: grid;
+  gap: clamp(0.55rem, 1vh, 0.85rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 640px) {
+  .dk-ring-chips--cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.dk-ring-chips--cols:has(.dk-ring-chips__col:nth-child(3)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 900px) {
+  .dk-ring-chips--cols:has(.dk-ring-chips__col:nth-child(3)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.dk-ring-chips__col {
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+  min-width: 0;
+}
+.dk-ring-pedagio {
+  display: grid;
+  gap: clamp(0.45rem, 1vh, 0.75rem);
+  justify-items: center;
+  text-align: center;
+  width: 100%;
+  padding-bottom: 0.5rem;
+}
+.dk-ring-pedagio .dk-ring {
+  max-width: min(38vh, 420px);
+}
+.dk-ring-pedagio__head {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+}
+.dk-ring-pedagio__head .dk-h1 {
+  max-width: 16ch;
+  font-size: clamp(2rem, 0.8rem + 4.2vw, 3.4rem);
+}
+.dk-ring-pedagio__lines {
+  display: grid;
+  gap: clamp(0.35rem, 0.8vh, 0.55rem);
+  max-width: 28ch;
+}
+.dk-ring-pedagio__line {
+  margin: 0;
+  font-size: clamp(0.92rem, 0.85rem + 0.35vw, 1.15rem);
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  color: var(--dk-fg-2);
+}
+.dk-ring-pedagio__line--accent { color: var(--dk-accent); }
+.dk-sheet--dark .dk-ring-pedagio__line--accent { color: #a9dd8f; }
+.dk-ring-pedagio .dk-src {
+  text-align: center;
+  max-width: 52ch;
+  margin-top: 0;
+  font-size: 0.6rem;
+  padding-top: 0.55rem;
+}
+.dk-sheet--dark .dk-ring__sector text { fill: var(--dk-fg); }
+.dk-sheet--dark .dk-ring__sector path[stroke] { stroke: var(--dk-fg); }
+.dk-sheet--dark .dk-ring__core { fill: #eef4f0; }
+.dk-sheet--dark .dk-ring__brand { fill: var(--dk-dark); }
+.dk-sheet--dark .dk-ring__layer { fill: var(--dk-fg-dim); }
 
 /* ── print (PDF export) ──────────────────────────────────────────────── */
 

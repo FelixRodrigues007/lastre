@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useCountUp } from "../hooks/useCountUp";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import type { Locale } from "../i18n/translations";
 
@@ -9,24 +8,21 @@ import type { Locale } from "../i18n/translations";
  * ───────────────────────────────────────────────────────────────────────── */
 
 type FigureProps = {
-  /** The number the figure counts up to. */
+  /** The number to display. */
   to: number;
   locale: Locale;
   prefix?: string;
   suffix?: string;
-  /** Decimal places to keep — the count-up runs on the scaled integer. */
   decimals?: number;
   className?: string;
 };
 
-/** A large number that counts up once, using the site's own useCountUp. */
+/** A large formatted number — no animation, final value from frame one. */
 export function Figure({ to, locale, prefix, suffix, decimals = 0, className }: FigureProps) {
-  const scale = 10 ** decimals;
-  const raw = useCountUp(Math.round(to * scale), 1400);
   const text = new Intl.NumberFormat(locale === "pt" ? "pt-BR" : "en-US", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
-  }).format(raw / scale);
+  }).format(to);
 
   return (
     <span className={className ? `dk-metric__v ${className}` : "dk-metric__v"}>
@@ -41,8 +37,8 @@ const HEX = "0123456789abcdef";
 const FINAL = "472c927a81f4c0e3…00f2";
 
 /**
- * The live seal. Field reading → offline SHA-256 → Casper verdict, looping.
- * This is the Lastre product reduced to a card that never stops working.
+ * The live seal. Field reading → offline SHA-256 → Casper verdict.
+ * Runs once on mount (~2.5s), then rests on Valid.
  */
 export function SealCard({ locale }: { locale: Locale }) {
   const reduced = useReducedMotion();
@@ -56,15 +52,11 @@ export function SealCard({ locale }: { locale: Locale }) {
       setHash(FINAL);
       return;
     }
-    let timer = 0;
-    let n = 0;
-    const run = () => {
-      n = (n + 1) % 5;
-      setStep(Math.min(n, 3));
-      timer = window.setTimeout(run, n === 0 ? 520 : n === 4 ? 2800 : 880);
-    };
-    timer = window.setTimeout(run, 700);
-    return () => window.clearTimeout(timer);
+    const timers: number[] = [];
+    timers.push(window.setTimeout(() => setStep(1), 700));
+    timers.push(window.setTimeout(() => setStep(2), 1580));
+    timers.push(window.setTimeout(() => setStep(3), 2460));
+    return () => timers.forEach((t) => window.clearTimeout(t));
   }, [reduced]);
 
   useEffect(() => {
