@@ -444,8 +444,8 @@ export const geral: Deck = {
                   </p>
                   <p className="dk-src">
                     {t(
-                      "Metal contido não é receita: rejeito exige recuperação metalúrgica e nenhum projeto entrega 100%. A faixa honesta está na próxima tela. Cobre residual não quantificado.",
-                      "Contained metal is not revenue: tailings need metallurgical recovery and no project delivers 100%. The honest range is on the next screen. Residual copper is not quantified.",
+                      "Metal contido não é receita: rejeito exige recuperação metalúrgica e nenhum projeto entrega 100%. A faixa honesta vem logo adiante. Cobre residual não quantificado.",
+                      "Contained metal is not revenue: tailings need metallurgical recovery and no project delivers 100%. The honest range comes just ahead. Residual copper is not quantified.",
                     )}
                   </p>
                 </div>
@@ -460,6 +460,49 @@ export const geral: Deck = {
                 metal={t("7,5 t de ouro", "7.5 t of gold")}
                 share={t("0,0003% da massa", "0.0003% of the mass")}
               />
+            </div>
+          </>
+        );
+      },
+    },
+
+    /* ── a notícia · B3 ───────────────────────────────────────────────── */
+    {
+      id: "b3",
+      title: { pt: "A B3 em 2027", en: "B3 in 2027" },
+      skin: "mint",
+      render: (l) => {
+        const t = tx(l);
+        return (
+          <>
+            <div className="dk-top">
+              <p className="dk-eyebrow">{t("Notícia · 31 agosto 2026", "News · 31 August 2026")}</p>
+              <h2 className="dk-h1">
+                {t("A B3 vai liquidar ação tokenizada em stablecoin a partir de 2027.", "B3 will settle tokenised shares in stablecoin from 2027.")}
+              </h2>
+            </div>
+            <div className="dk-bottom">
+              <Chain
+                locale={l}
+                title={{
+                  pt: "O anúncio resolve a emissão e a liquidação. A origem segue declarada.",
+                  en: "The announcement solves issuance and settlement. Origin remains declared.",
+                }}
+                links={[
+                  { n: "01", label: t("emissão", "issuance") },
+                  { n: "02", label: t("liquidação", "settlement") },
+                  { n: "03", label: t("origem", "origin"), missing: true },
+                ]}
+              />
+              <p className="dk-p dk-p--lead">
+                {t(
+                  "O trilho chega antes da prova. Quando o ativo brasileiro passar a liquidar em segundos, provar que a leitura aconteceu deixa de ser diferencial e vira requisito de emissão.",
+                  "The rail arrives before the proof. Once Brazilian assets settle in seconds, proving the reading happened stops being a differentiator and becomes an issuance requirement.",
+                )}
+              </p>
+              <p className="dk-src">
+                {t("Fonte: BitNotícias, Cassio Gusson, 31.08.2026.", "Source: BitNotícias, Cassio Gusson, 31.08.2026.")}
+              </p>
             </div>
           </>
         );
