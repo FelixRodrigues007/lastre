@@ -15,6 +15,10 @@ import { Fig, Marker, W } from "./Marker";
  * folha vira goteira de rótulo — é lá que o argumento é lido. Os marcadores
  * usam as mesmas funções de projeção do gerador; daí caírem no lugar
  * geográfico certo, e não perto dele.
+ *
+ * A silhueta entra num <svg> aninhado, e não num <g transform>: o reset de
+ * impressão zera transform em tudo dentro da folha, e a silhueta saía 1,33×
+ * maior que os marcadores no PDF.
  * ───────────────────────────────────────────────────────────────────────── */
 
 /** A silhueta e o halo que a descola da folha. Uma path, desenhada duas vezes. */
@@ -59,9 +63,15 @@ export function WorldMap({
 }) {
   return (
     <Fig locale={locale} title={title} height={WH} className="dk-fig--map">
-      <g transform={`translate(0 ${-WCROP}) scale(${WK})`}>
+      <svg
+        x={0}
+        y={-WCROP}
+        width={WORLD.w * WK}
+        height={WORLD.h * WK}
+        viewBox={`0 0 ${WORLD.w} ${WORLD.h}`}
+      >
         <Silhouette d={WORLD.d} />
-      </g>
+      </svg>
       {sites.map((s, i) => {
         const [x, y] = worldXY(s.lon, s.lat);
         return (
@@ -122,10 +132,16 @@ export function BrazilMap({
 
   return (
     <Fig locale={locale} title={title} height={BH} className="dk-fig--map">
-      <g transform={`translate(${BX} ${BY}) scale(${BK})`}>
+      <svg
+        x={BX}
+        y={BY}
+        width={BRAZIL.w * BK}
+        height={BRAZIL.h * BK}
+        viewBox={`0 0 ${BRAZIL.w} ${BRAZIL.h}`}
+      >
         <Silhouette d={BRAZIL.d} />
         <Silhouette d={BRAZIL.para} fill />
-      </g>
+      </svg>
       <Marker
         x={hx}
         y={hy}

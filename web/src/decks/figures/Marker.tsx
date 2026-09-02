@@ -21,7 +21,15 @@ export const RING = 1.5;
 /** Every substrate is authored on this width, so the marker keeps its scale. */
 export const W = 1200;
 
-const CIRC = 2 * Math.PI * R;
+/* O arco desenhado à mão, começando às 12h e andando no sentido horário.
+ * Era um `transform="rotate(-90)"` — e o reset de impressão zera transform em
+ * tudo dentro da folha, o que girava o anel de volta na hora de imprimir. */
+function arc(cx: number, cy: number, r: number, pct: number) {
+  const a = 2 * Math.PI * pct;
+  const ex = cx + r * Math.sin(a);
+  const ey = cy - r * Math.cos(a);
+  return `M${cx} ${cy - r}A${r} ${r} 0 ${a > Math.PI ? 1 : 0} 1 ${ex.toFixed(3)} ${ey.toFixed(3)}`;
+}
 
 export type Tone = "default" | "negative";
 
@@ -75,11 +83,8 @@ export function Marker({
   /* the label hangs from the top of the circle, never centred on it —
    * without a disc there is nothing to hang from, so it sits on the stem head */
   const ty = bare ? stemTop + 5 : stemTop - R + 12;
-  const arc = pct == null ? 0 : CIRC * Math.min(1, Math.max(0, pct));
-  const style = {
-    ["--dk-mk-d" as string]: `${order * 80}ms`,
-    ["--dk-mk-arc" as string]: arc.toFixed(2),
-  };
+  const p = pct == null ? 0 : Math.min(1, Math.max(0, pct));
+  const style = { ["--dk-mk-d" as string]: `${order * 80}ms` };
 
   return (
     <g className={`dk-mk${neg ? " dk-mk--neg" : ""}`} style={style}>
@@ -105,17 +110,26 @@ export function Marker({
             strokeWidth={RING}
           />
         )}
-        {!bare && pct != null && (
-          <circle
-            className="dk-mk__ring"
-            cx={x}
-            cy={stemTop}
-            r={R}
-            fill="none"
-            strokeWidth={RING}
-            strokeDasharray={`${arc.toFixed(2)} ${CIRC.toFixed(2)}`}
-            transform={`rotate(-90 ${x} ${stemTop})`}
-          />
+        {!bare && p > 0 && (
+          p >= 0.999 ? (
+            <circle
+              className="dk-mk__ring"
+              cx={x}
+              cy={stemTop}
+              r={R}
+              fill="none"
+              strokeWidth={RING}
+              pathLength={1}
+            />
+          ) : (
+            <path
+              className="dk-mk__ring"
+              d={arc(x, stemTop, R, p)}
+              fill="none"
+              strokeWidth={RING}
+              pathLength={1}
+            />
+          )
         )}
         {!bare && value != null && value !== "" && (
           <text

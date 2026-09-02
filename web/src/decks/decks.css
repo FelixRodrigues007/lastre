@@ -1173,27 +1173,34 @@
   .dk-canvas__inner { height: auto; min-height: 88vh; }
   .dk-shot { position: static; width: 40%; }
   .dk-foot { position: static; margin-top: 2rem; }
+  /* o reset acima mata a animação, e o traço que ela ia revelar fica em
+   * tracinhos no papel. No PDF a figura já nasce desenhada. */
+  .dk-fig__draw, .dk-mk__ring { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+  /* no papel não existe "sobra da folha": o mapa volta a se medir pela
+   * largura, senão estoura a caixa e passa por cima do rodapé */
+  .dk-bottom--fit { display: block; }
+  .dk-bottom--fit > .dk-fig--map { height: auto; max-height: 58vh; margin-bottom: 1.2rem; }
 }
 
 /* ── anel de públicos · resumo FAZ/QUER ─────────────────────────────────── */
 
 .dk-ring-resumo {
-  margin: 0 0 14px;
+  margin: 0 0 4px;
   display: grid;
-  gap: 6px;
+  gap: clamp(0.6rem, 1.2vh, 0.9rem);
 }
 
 .dk-ring-resumo__row {
   display: grid;
-  grid-template-columns: 46px minmax(0, 1fr);
-  gap: 10px;
-  align-items: baseline;
+  gap: 4px;
+  padding-left: 10px;
+  border-left: 2px solid var(--dk-rule);
 }
 
 .dk-ring-resumo dt {
   font-family: var(--dk-mono);
   font-size: 9.5px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--dk-dim);
   margin: 0;
@@ -1395,6 +1402,7 @@
 }
 .dk-mk__ring {
   stroke: currentColor;
+  stroke-dasharray: 1 1;
   animation: dk-mk-ring 460ms var(--dk-ease) both;
   animation-delay: calc(var(--dk-mk-d, 0ms) + 420ms);
 }
@@ -1426,7 +1434,7 @@
 @keyframes dk-mk-dot { from { opacity: 0; } to { opacity: 1; } }
 @keyframes dk-mk-head { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: none; } }
 @keyframes dk-mk-ring {
-  from { stroke-dashoffset: var(--dk-mk-arc, 0); }
+  from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
 }
 
