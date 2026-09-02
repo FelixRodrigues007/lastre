@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lastre — Investor Pitch</title>
+  <meta name="description" content="Lastre: proof of provenance for tokenized real-world assets. Proof before token." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --olive-950: #0a1713;
+      --olive-900: #0f201a;
+      --olive-850: #122820;
+      --olive-800: #163026;
+      --olive-700: #1a3830;
+      --olive-600: #23463c;
+      --cream-50: #f6faf8;
+      --cream-100: #ecf2ee;
+      --cream-200: #dce8e2;
+      --sage-300: #95a89f;
+      --sage-400: #7a9088;
+      --seal-300: #b8e8a4;
+      --seal-400: #92d67a;
+      --seal-500: #72c458;
+      --jade-400: #56c4a8;
+      --jade-500: #3db899;
+      --lime-400: #b8d04a;
+      --lime-500: #9fc234;
+      --amber-400: #e8a838;
+      --sky-400: #6baef0;
+      --coral-400: #e0714f;
+      --orange-400: #f57c25;
+      --orange-500: #e06a17;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --sans: Inter, ui-sans-serif, system-ui, sans-serif;
+      /* media relative to docs/pitch/ */
+      --img-origin: url("../../web/public/media/hero/hero-origin-1920.webp");
+      --img-miner: url("../../web/public/media/hero-miner.webp");
+      --img-footer: url("../../web/public/media/footer-mine-exploration.png");
+      --img-depth-b: url("../../web/public/media/hero-depth-back.webp");
+      --img-depth-f: url("../../web/public/media/hero-depth-front.webp");
+      --img-poster: url("../../web/public/media/hero/hero-scene-poster.jpg");
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: var(--olive-950);
+      color: var(--cream-50);
+      font-family: var(--sans);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .deck { height: 100%; width: 100%; position: relative; }
+
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: clamp(72px, 9vh, 96px) clamp(28px, 4.5vw, 64px) 88px;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--olive-950);
+      animation: fadeIn 0.38s ease;
+    }
+    .slide.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    /* ── atmospheric layers ─────────────────────────── */
+    .bg-photo {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bg-photo.mine { background-image: var(--img-origin); }
+    .bg-photo.miner { background-image: var(--img-miner); background-position: 60% center; }
+    .bg-photo.explore { background-image: var(--img-footer); background-position: center 40%; }
+    .bg-photo.poster { background-image: var(--img-poster); }
+    .bg-photo.depth {
+      background-image: var(--img-depth-b), var(--img-depth-f);
+      background-size: cover, cover;
+      background-position: center, center;
+    }
+
+    .bg-mask {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .bg-mask.heavy {
+      background:
+        linear-gradient(105deg, rgba(10,23,19,0.97) 0%, rgba(10,23,19,0.88) 38%, rgba(10,23,19,0.55) 62%, rgba(10,23,19,0.72) 100%),
+        linear-gradient(to top, rgba(10,23,19,0.95) 0%, transparent 35%),
+        radial-gradient(ellipse 70% 60% at 85% 40%, rgba(114,196,88,0.14), transparent 55%);
+    }
+    .bg-mask.side-right {
+      background:
+        linear-gradient(90deg, rgba(10,23,19,0.98) 0%, rgba(10,23,19,0.92) 42%, rgba(10,23,19,0.45) 70%, rgba(10,23,19,0.55) 100%),
+        linear-gradient(to top, rgba(10,23,19,0.9) 0%, transparent 40%),
+        radial-gradient(ellipse 50% 50% at 90% 50%, rgba(61,184,153,0.12), transparent 60%);
+    }
+    .bg-mask.side-left {
+      background:
+        linear-gradient(270deg, rgba(10,23,19,0.98) 0%, rgba(10,23,19,0.9) 40%, rgba(10,23,19,0.4) 72%, rgba(10,23,19,0.5) 100%),
+        linear-gradient(to top, rgba(10,23,19,0.92) 0%, transparent 38%);
+    }
+    .bg-mask.vignette {
+      background:
+        radial-gradient(ellipse 90% 80% at 50% 45%, rgba(10,23,19,0.35) 0%, rgba(10,23,19,0.88) 100%),
+        linear-gradient(to top, rgba(10,23,19,0.95) 0%, transparent 45%),
+        linear-gradient(to bottom, rgba(10,23,19,0.55) 0%, transparent 30%);
+    }
+    .bg-mask.soft {
+      background:
+        radial-gradient(ellipse 80% 70% at 70% 40%, rgba(114,196,88,0.08), transparent 50%),
+        linear-gradient(165deg, rgba(10,23,19,0.94) 0%, rgba(15,32,26,0.9) 50%, rgba(12,28,23,0.95) 100%);
+    }
+    .bg-mask.bottom-glow {
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 100%, rgba(114,196,88,0.12), transparent 55%),
+        linear-gradient(165deg, #0a1713 0%, #0f201a 55%, #0c1c17 100%);
+    }
+
+    .slide > .content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .slide.full-bleed > .content { max-width: 1320px; }
+
+    .topbar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px clamp(28px, 4.5vw, 64px);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-size: 15px;
+    }
+    .brand svg { width: 26px; height: 26px; border-radius: 7px; }
+    .slide-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--sage-400);
+      letter-spacing: 0.04em;
+    }
+
+    .kicker {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--seal-400);
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(40px, 5.5vw, 72px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.02;
+    }
+    h1 .accent, h2 .accent { color: var(--seal-400); }
+    h2 {
+      font-size: clamp(26px, 3.4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 10px;
+      max-width: 24ch;
+    }
+    .lede {
+      font-size: clamp(15px, 1.45vw, 18px);
+      line-height: 1.55;
+      color: var(--cream-200);
+      max-width: 54ch;
+      font-weight: 400;
+    }
+    .muted { color: var(--sage-300); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: clamp(20px, 3vw, 40px);
+      align-items: center;
+      width: 100%;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      width: 100%;
+      margin-top: 22px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+      margin-top: 18px;
+    }
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      width: 100%;
+      margin-top: 18px;
+    }
+    .grid-2-eq {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      width: 100%;
+      margin-top: 18px;
+    }
+    .grid-6 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 1000px) {
+      .grid-2, .grid-3, .grid-4, .grid-5, .grid-2-eq, .grid-6 { grid-template-columns: 1fr 1fr; }
+      .slide { padding-top: 80px; overflow-y: auto; justify-content: flex-start; }
+    }
+    @media (max-width: 640px) {
+      .grid-2, .grid-3, .grid-4, .grid-5, .grid-2-eq, .grid-6 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: rgba(18, 40, 32, 0.72);
+      border: 1px solid rgba(184, 232, 164, 0.12);
+      border-radius: 16px;
+      padding: 16px 18px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .card.glass {
+      background: linear-gradient(145deg, rgba(22,48,38,0.75), rgba(10,23,19,0.55));
+      box-shadow: 0 16px 48px rgba(0,0,0,0.25), inset 0 1px 0 rgba(184,232,164,0.08);
+    }
+    .card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p, .card li {
+      font-size: 13px;
+      line-height: 1.48;
+      color: var(--cream-200);
+    }
+    .card ul { padding-left: 15px; }
+    .card li + li { margin-top: 5px; }
+    .card .num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--seal-400);
+      font-weight: 600;
+    }
+    .card .big {
+      font-size: clamp(26px, 2.8vw, 36px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin: 4px 0 2px;
+    }
+    .card .big.seal { color: var(--seal-400); }
+    .card .big.jade { color: var(--jade-400); }
+    .card .big.amber { color: var(--amber-400); }
+    .card .big.lime { color: var(--lime-400); }
+    .card .big.sky { color: var(--sky-400); }
+    .card .big.orange { color: var(--orange-400); }
+    .card .unit {
+      font-size: 11px;
+      color: var(--sage-300);
+      font-family: var(--mono);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+      background: rgba(114, 196, 88, 0.12);
+      color: var(--seal-300);
+      border: 1px solid rgba(114, 196, 88, 0.22);
+    }
+    .chip.amber {
+      background: rgba(232, 168, 56, 0.12);
+      color: var(--amber-400);
+      border-color: rgba(232, 168, 56, 0.25);
+    }
+    .chip.sky {
+      background: rgba(107, 174, 240, 0.12);
+      color: var(--sky-400);
+      border-color: rgba(107, 174, 240, 0.25);
+    }
+    .chip.coral {
+      background: rgba(224, 113, 79, 0.12);
+      color: var(--coral-400);
+      border-color: rgba(224, 113, 79, 0.25);
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: stretch;
+      margin-top: 22px;
+    }
+    .flow-step {
+      background: rgba(18, 40, 32, 0.75);
+      border: 1px solid rgba(184, 232, 164, 0.14);
+      border-radius: 14px;
+      padding: 12px 14px;
+      min-width: 120px;
+      flex: 1;
+      backdrop-filter: blur(10px);
+    }
+    .flow-step strong { display: block; font-size: 12px; margin-bottom: 3px; }
+    .flow-step span { font-size: 11px; color: var(--sage-300); line-height: 1.35; }
+    .flow-arrow { color: var(--seal-400); font-weight: 700; font-size: 16px; opacity: 0.65; align-self: center; }
+
+    .table-wrap { width: 100%; margin-top: 16px; overflow-x: auto; }
+    table.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table th {
+      text-align: left;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage-300);
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(184, 232, 164, 0.15);
+    }
+    .table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid rgba(184, 232, 164, 0.08);
+      vertical-align: middle;
+    }
+    .table tr:last-child td { border-bottom: none; }
+    .table tr.hi td {
+      background: rgba(114, 196, 88, 0.08);
+    }
+    .table .hl {
+      color: var(--seal-400);
+      font-weight: 700;
+      font-family: var(--mono);
+      font-size: 14px;
+    }
+    .table .hl-lg {
+      color: var(--seal-300);
+      font-weight: 800;
+      font-family: var(--mono);
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    /* Penetration cards */
+    .pen-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      padding: 18px 14px 16px;
+      text-align: center;
+      border: 1px solid rgba(184, 232, 164, 0.14);
+      background: linear-gradient(165deg, rgba(22,48,38,0.9), rgba(10,23,19,0.75));
+      min-height: 168px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+    .pen-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(114,196,88,0.18), transparent 65%);
+      pointer-events: none;
+    }
+    .pen-card > * { position: relative; z-index: 1; }
+    .pen-card .pct {
+      font-size: clamp(32px, 3.5vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--seal-400);
+      line-height: 1;
+    }
+    .pen-card .sites {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--sage-300);
+      margin-top: 2px;
+    }
+    .pen-card .rev {
+      font-size: clamp(18px, 1.8vw, 22px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 10px;
+      color: var(--cream-50);
+    }
+    .pen-card .rev-sub {
+      font-size: 10px;
+      color: var(--sage-400);
+      font-family: var(--mono);
+      margin-top: 2px;
+    }
+    .pen-card.featured {
+      border-color: rgba(114, 196, 88, 0.45);
+      box-shadow: 0 0 0 1px rgba(114,196,88,0.15), 0 20px 50px rgba(0,0,0,0.3);
+      background: linear-gradient(165deg, rgba(45,90,55,0.55), rgba(10,23,19,0.85));
+    }
+    .pen-card.featured .pct { color: var(--lime-400); font-size: clamp(36px, 4vw, 48px); }
+
+    /* Cover visual */
+    .cover-visual {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      aspect-ratio: 1;
+    }
+    .cover-ring {
+      position: absolute;
+      inset: 6%;
+      border-radius: 28% ;
+      background:
+        linear-gradient(145deg, rgba(47,211,148,0.35), transparent 40%),
+        linear-gradient(320deg, rgba(233,185,73,0.25), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(125,211,252,0.12), transparent 60%);
+      filter: blur(0.5px);
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+    .cover-photo-mask {
+      position: absolute;
+      inset: 12%;
+      border-radius: 24%;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(184,232,164,0.25),
+        0 30px 80px rgba(0,0,0,0.55),
+        0 0 60px rgba(114,196,88,0.15);
+    }
+    .cover-photo-mask::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, rgba(10,23,19,0.15) 0%, rgba(10,23,19,0.55) 100%),
+        radial-gradient(circle at 50% 40%, transparent 30%, rgba(10,23,19,0.5) 100%);
+      z-index: 1;
+    }
+    .cover-photo-mask .photo {
+      position: absolute;
+      inset: 0;
+      background-image: var(--img-origin);
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.08);
+    }
+    .cover-logo-badge {
+      position: absolute;
+      inset: 28%;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cover-logo-badge .badge {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 26%;
+      background: rgba(7,10,13,0.82);
+      border: 1px solid rgba(184,232,164,0.35);
+      box-shadow:
+        0 12px 40px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(255,255,255,0.06),
+        0 0 40px rgba(47,211,148,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+    .cover-logo-badge svg {
+      width: 72%;
+      height: 72%;
+    }
+    .cover-orbit {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px dashed rgba(146,214,122,0.2);
+      animation: spin 40s linear infinite;
+    }
+    .cover-orbit.inner {
+      inset: 4%;
+      border-color: rgba(61,184,153,0.15);
+      animation-direction: reverse;
+      animation-duration: 55s;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .side-visual {
+      position: relative;
+      width: 100%;
+      min-height: 320px;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .side-visual .photo {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+    }
+    .side-visual .photo.mine { background-image: var(--img-origin); }
+    .side-visual .photo.miner { background-image: var(--img-miner); }
+    .side-visual .photo.explore { background-image: var(--img-footer); }
+    .side-visual .fade {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(10,23,19,0.85) 0%, transparent 50%),
+        linear-gradient(to right, rgba(10,23,19,0.4) 0%, transparent 40%);
+    }
+    .side-visual .caption {
+      position: absolute;
+      left: 16px; right: 16px; bottom: 14px;
+      z-index: 2;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--seal-300);
+    }
+
+    .list-check {
+      list-style: none;
+      margin-top: 16px;
+      max-width: 52ch;
+    }
+    .list-check li {
+      position: relative;
+      padding-left: 26px;
+      margin-bottom: 10px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--cream-200);
+    }
+    .list-check li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 5px;
+      width: 13px; height: 13px;
+      border-radius: 4px;
+      background: var(--seal-500);
+      box-shadow: 0 0 0 3px rgba(114, 196, 88, 0.2);
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--orange-400), var(--orange-500));
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(224, 106, 23, 0.35);
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.04);
+      color: var(--cream-100);
+      border: 1px solid rgba(246, 250, 248, 0.18);
+    }
+
+    .disclaimer {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.28);
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--sage-300);
+      border: 1px solid rgba(184, 232, 164, 0.08);
+    }
+
+    .tagline {
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-top: 14px;
+      color: var(--cream-100);
+      max-width: 22ch;
+      line-height: 1.25;
+    }
+    .logo-word {
+      font-size: clamp(52px, 8vw, 92px);
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      line-height: 0.92;
+    }
+    .cover-sub {
+      margin-top: 16px;
+      font-size: 16px;
+      color: var(--cream-200);
+      max-width: 38ch;
+      line-height: 1.5;
+    }
+    .cover-meta {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .stat-strip .card { text-align: center; padding: 14px 10px; }
+    .stat-strip .big { font-size: 22px; }
+
+    .rev-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .rev-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 100px;
+      gap: 10px;
+      align-items: center;
+    }
+    .rev-row .lab {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--sage-300);
+    }
+    .rev-row .track {
+      height: 22px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .rev-row .fill {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--jade-500), var(--seal-400));
+    }
+    .rev-row .val {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--seal-300);
+      text-align: right;
+    }
+
+    .footer-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px clamp(16px, 3vw, 40px);
+      background: linear-gradient(to top, rgba(10, 23, 19, 0.98), transparent);
+      z-index: 10;
+    }
+    .dots {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      max-width: 50%;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(246, 250, 248, 0.18);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s;
+    }
+    .dot.active {
+      background: var(--seal-400);
+      width: 20px;
+      border-radius: 4px;
+    }
+    .nav-btns { display: flex; gap: 8px; }
+    .nav-btns button {
+      background: rgba(22, 48, 38, 0.92);
+      border: 1px solid rgba(184, 232, 164, 0.2);
+      color: var(--cream-50);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .nav-btns button:hover { border-color: var(--seal-400); color: var(--seal-400); }
+    .hint {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--sage-400);
+      margin-right: 10px;
+    }
+
+    .float-chip {
+      position: absolute;
+      z-index: 4;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(10,23,19,0.78);
+      border: 1px solid rgba(184,232,164,0.2);
+      backdrop-filter: blur(8px);
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--seal-300);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    }
+    .float-chip strong { color: var(--cream-50); display: block; font-family: var(--sans); font-size: 13px; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="160" height="160" rx="36" fill="#070A0D"/>
+          <path d="M80 24L128 52V108L80 136L32 108V52L80 24Z" stroke="#2FD394" stroke-width="6" stroke-linejoin="round"/>
+          <path d="M80 47L108 63.5V96.5L80 113L52 96.5V63.5L80 47Z" stroke="#E9B949" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M54 80H106" stroke="#F8F4EA" stroke-width="6" stroke-linecap="round"/>
+          <path d="M80 54V106" stroke="#F8F4EA" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="80" cy="80" r="9" fill="#7DD3FC"/>
+        </svg>
+        Lastre
+      </div>
+      <div class="slide-meta"><span id="pageLabel">01 / 16</span> · Confidential</div>
+    </div>
+
+    <!-- 1 COVER -->
+    <section class="slide active full-bleed" data-title="Cover">
+      <div class="bg-photo mine" style="transform:scale(1.05);filter:saturate(0.85) brightness(0.7)"></div>
+      <div class="bg-mask heavy"></div>
+      <div class="content">
+        <div class="grid-2">
+          <div>
+            <p class="kicker">Infrastructure · RWA · Casper</p>
+            <div class="logo-word">Lastre</div>
+            <p class="tagline">Proof before token.<br />Proof before finance.</p>
+            <p class="cover-sub">
+              Protocolo de prova de origem para RWA — do campo à chain.
+              Seal determinístico. Gate de tokenização. Fees de infra, DeFi e PCQ.
+            </p>
+            <div class="cover-meta">
+              <span class="chip">Investor briefing</span>
+              <span class="chip sky">Casper Testnet live</span>
+              <span class="chip amber">Illustrative model</span>
+            </div>
+          </div>
+          <div class="cover-visual" aria-hidden="true">
+            <div class="cover-orbit"></div>
+            <div class="cover-orbit inner"></div>
+            <div class="cover-ring"></div>
+            <div class="cover-photo-mask">
+              <div class="photo"></div>
+            </div>
+            <div class="cover-logo-badge">
+              <div class="badge">
+                <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M80 24L128 52V108L80 136L32 108V52L80 24Z" stroke="#2FD394" stroke-width="7" stroke-linejoin="round"/>
+                  <path d="M80 47L108 63.5V96.5L80 113L52 96.5V63.5L80 47Z" stroke="#E9B949" stroke-width="6" stroke-linejoin="round"/>
+                  <path d="M54 80H106" stroke="#F8F4EA" stroke-width="7" stroke-linecap="round"/>
+                  <path d="M80 54V106" stroke="#F8F4EA" stroke-width="7" stroke-linecap="round"/>
+                  <circle cx="80" cy="80" r="10" fill="#7DD3FC"/>
+                </svg>
+              </div>
+            </div>
+            <div class="float-chip" style="top:8%;left:-4%">
+              <strong>Valid seal</strong>
+              SHA-256 · Casper
+            </div>
+            <div class="float-chip" style="bottom:10%;right:-2%">
+              <strong>Gate open</strong>
+              Mint · DeFi · Rail
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 PROBLEM -->
+    <section class="slide" data-title="Problem">
+      <div class="bg-photo miner" style="opacity:0.45;filter:saturate(0.7) brightness(0.55)"></div>
+      <div class="bg-mask side-right"></div>
+      <div class="content">
+        <div class="grid-2">
+          <div>
+            <p class="kicker">The trust gap</p>
+            <h2>RWA e agentes rodam em <span class="accent">claims sem origem</span>.</h2>
+            <p class="lede">Sensores, PDFs e APIs emitem. Modelos aceitam. Escrows e DeFi herdam a ficção.</p>
+            <div class="grid-3" style="margin-top:20px;grid-template-columns:1fr">
+              <div class="card glass">
+                <h3><span class="num">01</span> Sem cadeia de custódia</h3>
+                <p>Dados de campo sem prova verificável de origem física.</p>
+              </div>
+              <div class="card glass">
+                <h3><span class="num">02</span> Token / DeFi first</h3>
+                <p>Mint e colateral abrem antes da pergunta que importa.</p>
+              </div>
+              <div class="card glass">
+                <h3><span class="num">03</span> LLM como “verdade”</h3>
+                <p>IA orquestra — não pode ser oráculo de provenance.</p>
+              </div>
+            </div>
+          </div>
+          <div class="side-visual">
+            <div class="photo miner"></div>
+            <div class="fade"></div>
+            <div class="caption">Physical origin · still unverified in most rails</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 SOLUTION -->
+    <section class="slide" data-title="Solution">
+      <div class="bg-mask soft"></div>
+      <div class="content">
+        <p class="kicker">Solution</p>
+        <h2>Lastre é a <span class="accent">trust layer</span> — e o toll booth — do RWA.</h2>
+        <p class="lede">Sela origem offline, ancora veredito on-chain, libera mint/DeFi só com Valid. Monetiza cada passo da confiança.</p>
+        <ul class="list-check">
+          <li><strong>Seal decide o veredito</strong> — SHA-256: Valid ou Invalid (ambos on-chain).</li>
+          <li><strong>LLM decide a ação</strong> — pay, skip, escalate. Nunca reescreve a verdade.</li>
+          <li><strong>Proof before token / finance / stake</strong> — rail fechado se Invalid.</li>
+          <li><strong>Fees em toda a stack</strong> — seal, PCQ, tx, MintGate, DeFi, staking bonds.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4 HOW -->
+    <section class="slide" data-title="How it works">
+      <div class="bg-photo explore" style="opacity:0.35;filter:saturate(0.75) brightness(0.5)"></div>
+      <div class="bg-mask heavy"></div>
+      <div class="content">
+        <p class="kicker">Architecture</p>
+        <h2>Do campo à liquidez em <span class="accent">portões pagos</span>.</h2>
+        <div class="flow">
+          <div class="flow-step"><strong>1 · Seal</strong><span>Campo → SHA-256 · fee operador</span></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step"><strong>2 · Anchor</strong><span>Casper Valid|Invalid</span></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step"><strong>3 · PCQ</strong><span>Pay-to-query x402</span></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step"><strong>4 · MintGate</strong><span>Token só se Valid</span></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step"><strong>5 · DeFi / Rail</strong><span>Tx · stake · colateral</span></div>
+        </div>
+        <div class="stat-strip">
+          <div class="card glass"><div class="unit">VERDICT</div><div class="big seal">Seal</div><p>Determinístico</p></div>
+          <div class="card glass"><div class="unit">ACTION</div><div class="big jade">Agent</div><p>Nunca reescreve</p></div>
+          <div class="card glass"><div class="unit">QUERY</div><div class="big sky">PCQ</div><p>Pago por prova</p></div>
+          <div class="card glass"><div class="unit">FINANCE</div><div class="big amber">Gated</div><p>Só com Valid</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 PRODUCT -->
+    <section class="slide" data-title="Product today">
+      <div class="bg-mask bottom-glow"></div>
+      <div class="content">
+        <p class="kicker">Live today</p>
+        <h2>Stack rodando — <span class="accent">Casper Testnet</span>.</h2>
+        <div class="grid-4">
+          <div class="card glass"><h3>Landing</h3><p class="unit">lastre.io</p><p style="margin-top:8px">Narrativa sealed rail.</p></div>
+          <div class="card glass"><h3>App / Market</h3><p class="unit">app.lastre.io</p><p style="margin-top:8px">Demo &lt;90s end-to-end.</p></div>
+          <div class="card glass"><h3>API + Evidence</h3><p class="unit">app-api.lastre.io</p><p style="margin-top:8px">x402 · health · pack.</p></div>
+          <div class="card glass"><h3>On-chain</h3><p class="unit">ProofOfOrigin</p><p style="margin-top:8px">Valid + Invalid paths.</p></div>
+        </div>
+        <div class="grid-3">
+          <div class="card glass"><h3>Carbon + mineral</h3><p>Mesmo modelo de prova (demo fictício → pilots reais).</p></div>
+          <div class="card glass"><h3>Agent economy</h3><p>x402 / PCQ: agentes pagam para ler provenance.</p></div>
+          <div class="card glass"><h3>Honest labels</h3><p>Testnet live · UI mock finance · sem TVL fake.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 UNIVERSE -->
+    <section class="slide" data-title="Universe">
+      <div class="bg-photo mine" style="opacity:0.4;filter:saturate(0.8) brightness(0.5)"></div>
+      <div class="bg-mask side-left"></div>
+      <div class="content">
+        <p class="kicker">Addressable universe · illustrative</p>
+        <h2>Minas e operações — <span class="accent">Brasil + LATAM</span>.</h2>
+        <p class="lede">Universo modelável de operações minerárias formais / industriais relevantes (não inclui garimpo informal).</p>
+        <div class="grid-3" style="margin-top:20px">
+          <div class="card glass">
+            <div class="unit">BRASIL</div>
+            <div class="big seal">1.500</div>
+            <p>operações / sites modeláveis</p>
+          </div>
+          <div class="card glass">
+            <div class="unit">LATAM (ex-BR)</div>
+            <div class="big jade">6.000</div>
+            <p>operações / sites modeláveis</p>
+          </div>
+          <div class="card glass">
+            <div class="unit">TOTAL UNIVERSO</div>
+            <div class="big lime">7.500</div>
+            <p>sites · base de penetração</p>
+          </div>
+        </div>
+        <div class="grid-2-eq">
+          <div class="card glass">
+            <h3>Receita média / site / ano (stack completa)</h3>
+            <div class="big amber" style="font-size:28px">US$ 60k</div>
+            <p>SaaS + seals + PCQ share + tx/DeFi take · cenário base mid-market</p>
+          </div>
+          <div class="card glass">
+            <h3>High-value overlay</h3>
+            <p>Diamantes, cobre crítico, ouro industrial: ticket por lote pode ser 5–20× o mid-market. Não está no US$ 60k médio — é upside.</p>
+          </div>
+        </div>
+        <div class="disclaimer">Universo e ARPU são <strong>hipóteses de modelagem</strong> para sizing — não censo ANM/SERNAGEOMIN auditado. Ajustar com data room.</div>
+      </div>
+    </section>
+
+    <!-- 7 MONETIZATION FULL -->
+    <section class="slide" data-title="Monetization">
+      <div class="bg-mask soft"></div>
+      <div class="content">
+        <p class="kicker">Revenue engines</p>
+        <h2>Seis motores — <span class="accent">infra + crypto-native</span>.</h2>
+        <div class="grid-6">
+          <div class="card glass">
+            <h3><span class="num">01</span> Seal-as-a-Service</h3>
+            <p>Fee por lote selado + SaaS mensal por site. Dual-key attest. Base recorrente.</p>
+          </div>
+          <div class="card glass">
+            <h3><span class="num">02</span> PCQ</h3>
+            <p><strong>Provenance Certificate Query</strong> — pay-to-prove via x402. Agentes, bancos, buyers pagam por leitura.</p>
+          </div>
+          <div class="card glass">
+            <h3><span class="num">03</span> Tx fees</h3>
+            <p>Fee por transação no sealed rail: list, transfer, settlement gated por Valid.</p>
+          </div>
+          <div class="card glass">
+            <h3><span class="num">04</span> MintGate</h3>
+            <p>Fixo ou bps no evento de tokenização quando o gate abre (Valid only).</p>
+          </div>
+          <div class="card glass">
+            <h3><span class="num">05</span> DeFi rails</h3>
+            <p>Protocol fee em colateral, lock/release, lending/escrow <em>só com seal Valid</em>.</p>
+          </div>
+          <div class="card glass">
+            <h3><span class="num">06</span> Staking</h3>
+            <p>Bonds de attestors dual-key · stake de segurança · fee share em slash insurance. Skin in the game.</p>
+          </div>
+        </div>
+        <div class="card glass" style="margin-top:12px">
+          <h3>Enterprise / white-label</h3>
+          <p>API dedicada, SLA, onboarding de campo, integração custódia/ERP — ARR 24k–250k+ por conta. Cobre os seis motores com contrato único.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 DEFI STAKING DETAIL -->
+    <section class="slide" data-title="DeFi & Staking">
+      <div class="bg-photo depth" style="opacity:0.3;filter:brightness(0.45)"></div>
+      <div class="bg-mask heavy"></div>
+      <div class="content">
+        <p class="kicker">Crypto-native yield for the protocol — not for the investor brochure</p>
+        <h2>Onde Lastre <span class="accent">captura valor</span> on-chain.</h2>
+        <div class="grid-2-eq">
+          <div class="card glass">
+            <h3>DeFi (gated)</h3>
+            <ul>
+              <li><strong>Collateral fee</strong> — bps ao travar/destravar lote selado</li>
+              <li><strong>Escrow / settlement fee</strong> — % em liberação pós-prova</li>
+              <li><strong>Liquidity rail</strong> — take rate em mercados de lotes Valid</li>
+              <li>Invalid → posição DeFi <em>não abre</em> (risco reduzido = pricing premium)</li>
+            </ul>
+          </div>
+          <div class="card glass">
+            <h3>Staking</h3>
+            <ul>
+              <li><strong>Attestor bond</strong> — field sealer e chain attester stakeiam</li>
+              <li><strong>Slash on fraud</strong> — stake perdido se attest falso</li>
+              <li><strong>Protocol cut</strong> — % das recompensas / insurance pool</li>
+              <li>Alinha incentivos: quem assina a origem tem capital em risco</li>
+            </ul>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card glass">
+            <div class="unit">TX FEE (RAIL)</div>
+            <div class="big seal">5–25 bps</div>
+            <p>por settlement / transfer gated</p>
+          </div>
+          <div class="card glass">
+            <div class="unit">DEFI PROTOCOL</div>
+            <div class="big amber">10–40 bps</div>
+            <p>sobre notional colateralizado</p>
+          </div>
+          <div class="card glass">
+            <div class="unit">STAKING CUT</div>
+            <div class="big jade">8–15%</div>
+            <p>da yield pool de attestors</p>
+          </div>
+        </div>
+        <div class="disclaimer">Fees on-chain são desenho de protocolo — sujeitos a mainnet, governança e compliance. Não é oferta de yield ao investidor final do deck.</div>
+      </div>
+    </section>
+
+    <!-- 9 UNIT ECONOMICS -->
+    <section class="slide" data-title="Unit economics">
+      <div class="bg-mask soft"></div>
+      <div class="content">
+        <p class="kicker">Unit economics · per site / year · base</p>
+        <h2>Como se monta o <span class="accent">US$ 60k</span> por mina.</h2>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Linha</th>
+                <th>Driver</th>
+                <th>Modelo</th>
+                <th>US$ / site / ano</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>SaaS site</strong></td>
+                <td>Operador</td>
+                <td>Assinatura + seats</td>
+                <td class="hl">12.000</td>
+              </tr>
+              <tr>
+                <td><strong>Seals</strong></td>
+                <td>~80 lotes × US$ 150</td>
+                <td>Fee por lote</td>
+                <td class="hl">12.000</td>
+              </tr>
+              <tr>
+                <td><strong>PCQ share</strong></td>
+                <td>Queries de buyers/agentes</td>
+                <td>US$ 0,5–5 / query</td>
+                <td class="hl">8.000</td>
+              </tr>
+              <tr>
+                <td><strong>Tx + MintGate</strong></td>
+                <td>Transfers / mints</td>
+                <td>bps + flat</td>
+                <td class="hl">10.000</td>
+              </tr>
+              <tr>
+                <td><strong>DeFi fees</strong></td>
+                <td>Colateral / escrow</td>
+                <td>bps notional</td>
+                <td class="hl">12.000</td>
+              </tr>
+              <tr class="hi">
+                <td><strong>Staking cut</strong></td>
+                <td>Bonds attestors</td>
+                <td>% pool</td>
+                <td class="hl">6.000</td>
+              </tr>
+              <tr class="hi">
+                <td colspan="3"><strong>Total stack base</strong></td>
+                <td class="hl-lg">~60.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="disclaimer">ARPU ilustrativo mid-market. High-value (diamantes, cobre) e enterprise podem elevar 3–15× por site.</div>
+      </div>
+    </section>
+
+    <!-- 10 PENETRATION BIG -->
+    <section class="slide full-bleed" data-title="Penetration">
+      <div class="bg-photo mine" style="opacity:0.38;filter:saturate(0.7) brightness(0.45)"></div>
+      <div class="bg-mask vignette"></div>
+      <div class="content">
+        <p class="kicker">Market capture · Brasil + LATAM · 7.500 sites · US$ 60k ARPU</p>
+        <h2>Penetração de <span class="accent">1% → 20%</span> das minas.</h2>
+        <p class="lede" style="margin-bottom:8px">Receita anual de protocolo se Lastre for o padrão de prova em fração do universo minerário regional.</p>
+        <div class="grid-5">
+          <div class="pen-card">
+            <div class="pct">1%</div>
+            <div class="sites">75 sites</div>
+            <div class="rev">US$ 4,5M</div>
+            <div class="rev-sub">ARR / ano</div>
+          </div>
+          <div class="pen-card">
+            <div class="pct">5%</div>
+            <div class="sites">375 sites</div>
+            <div class="rev">US$ 22,5M</div>
+            <div class="rev-sub">ARR / ano</div>
+          </div>
+          <div class="pen-card featured">
+            <div class="pct">10%</div>
+            <div class="sites">750 sites</div>
+            <div class="rev">US$ 45M</div>
+            <div class="rev-sub">ARR / ano · base ambicioso</div>
+          </div>
+          <div class="pen-card">
+            <div class="pct">15%</div>
+            <div class="sites">1.125 sites</div>
+            <div class="rev">US$ 67,5M</div>
+            <div class="rev-sub">ARR / ano</div>
+          </div>
+          <div class="pen-card">
+            <div class="pct">20%</div>
+            <div class="sites">1.500 sites</div>
+            <div class="rev">US$ 90M</div>
+            <div class="rev-sub">ARR / ano</div>
+          </div>
+        </div>
+        <div class="grid-2-eq" style="margin-top:14px">
+          <div class="card glass">
+            <h3>Só Brasil @ 10%</h3>
+            <div class="big seal" style="font-size:28px">US$ 9M</div>
+            <p>150 sites × US$ 60k — beachhead doméstico.</p>
+          </div>
+          <div class="card glass">
+            <h3>LATAM ex-BR @ 10%</h3>
+            <div class="big jade" style="font-size:28px">US$ 36M</div>
+            <p>600 sites — expansão regional com mesmos rails.</p>
+          </div>
+        </div>
+        <div class="disclaimer">Fórmula: sites capturados × ARPU stack. Não inclui upside high-value lots nem enterprise global fora de mineração.</div>
+      </div>
+    </section>
+
+    <!-- 11 SCENARIOS TIMELINE -->
+    <section class="slide" data-title="Path to capture">
+      <div class="bg-mask bottom-glow"></div>
+      <div class="content">
+        <p class="kicker">Path · illustrative</p>
+        <h2>Do piloto ao <span class="accent">double-digit %</span>.</h2>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Fase</th>
+                <th>Penetração</th>
+                <th>Sites</th>
+                <th>ARR protocolo</th>
+                <th>Foco</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Y1 · Pilot</strong></td>
+                <td class="hl">~0,1–0,3%</td>
+                <td>8–25</td>
+                <td class="hl">US$ 0,5–1,5M</td>
+                <td>BR beachhead · 1 vertical</td>
+              </tr>
+              <tr>
+                <td><strong>Y2 · Multi-site</strong></td>
+                <td class="hl">~1%</td>
+                <td>~75</td>
+                <td class="hl">US$ 4–5M</td>
+                <td>PCQ agents · 1º enterprise</td>
+              </tr>
+              <tr class="hi">
+                <td><strong>Y3 · Regional</strong></td>
+                <td class="hl">~3–5%</td>
+                <td>225–375</td>
+                <td class="hl-lg">US$ 14–23M</td>
+                <td>LATAM · DeFi gated live</td>
+              </tr>
+              <tr>
+                <td><strong>Y5 · Standard</strong></td>
+                <td class="hl">10–15%</td>
+                <td>750–1.125</td>
+                <td class="hl-lg">US$ 45–68M</td>
+                <td>Must-query Lastre</td>
+              </tr>
+              <tr>
+                <td><strong>Scale case</strong></td>
+                <td class="hl">20%</td>
+                <td>1.500</td>
+                <td class="hl-lg">US$ 90M+</td>
+                <td>+ high-value + non-mine RWA</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="rev-stack" style="margin-top:18px;max-width:720px">
+          <div class="rev-row">
+            <div class="lab">Seal + SaaS</div>
+            <div class="track"><div class="fill" style="width:35%"></div></div>
+            <div class="val">~35%</div>
+          </div>
+          <div class="rev-row">
+            <div class="lab">DeFi + Tx + Gate</div>
+            <div class="track"><div class="fill" style="width:32%;background:linear-gradient(90deg,#e8a838,#f57c25)"></div></div>
+            <div class="val">~32%</div>
+          </div>
+          <div class="rev-row">
+            <div class="lab">PCQ + Staking</div>
+            <div class="track"><div class="fill" style="width:20%;background:linear-gradient(90deg,#56c4a8,#6baef0)"></div></div>
+            <div class="val">~20%</div>
+          </div>
+          <div class="rev-row">
+            <div class="lab">Enterprise</div>
+            <div class="track"><div class="fill" style="width:13%;background:linear-gradient(90deg,#b8d04a,#72c458)"></div></div>
+            <div class="val">~13%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 GTM -->
+    <section class="slide" data-title="Go-to-market">
+      <div class="bg-photo miner" style="opacity:0.4;filter:saturate(0.75) brightness(0.5)"></div>
+      <div class="bg-mask side-right"></div>
+      <div class="content">
+        <div class="grid-2">
+          <div>
+            <p class="kicker">Go-to-market</p>
+            <h2>Entrar por <span class="accent">lote real</span>, escalar por padrão.</h2>
+            <div class="grid-3" style="grid-template-columns:1fr;margin-top:16px">
+              <div class="card glass">
+                <h3><span class="num">A</span> Mineral + carbono BR</h3>
+                <p>1 site, dual-key, docs reais. Beachhead regulatório e operacional.</p>
+              </div>
+              <div class="card glass">
+                <h3><span class="num">B</span> High-value (diamantes)</h3>
+                <p>Rough em DD com SPV — ticket alto, Kimberley, custódia. Lastre = prova + gate, não o balanço da pedra.</p>
+              </div>
+              <div class="card glass">
+                <h3><span class="num">C</span> Agents + DeFi</h3>
+                <p>Must-query PCQ antes de pay/mint/stake no ecossistema Casper.</p>
+              </div>
+            </div>
+          </div>
+          <div class="side-visual">
+            <div class="photo mine"></div>
+            <div class="fade"></div>
+            <div class="caption">From pit to proof · then finance</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13 WHY -->
+    <section class="slide" data-title="Why Lastre">
+      <div class="bg-mask soft"></div>
+      <div class="content">
+        <p class="kicker">Differentiation</p>
+        <h2>Por que Lastre <span class="accent">cobra o pedágio</span>.</h2>
+        <div class="grid-2-eq">
+          <div class="card glass">
+            <h3>Produto</h3>
+            <ul>
+              <li>Proof-before-token nativo</li>
+              <li>Valid e Invalid permanentes</li>
+              <li>Seal ≠ agent (LLM não é verdade)</li>
+              <li>x402 / PCQ ready</li>
+              <li>Casper-native Odra/Rust</li>
+            </ul>
+          </div>
+          <div class="card glass">
+            <h3>Negócio</h3>
+            <ul>
+              <li>6 motores de receita (infra + on-chain)</li>
+              <li>ARPU expansível com DeFi/stake</li>
+              <li>SPV carrega commodity risk</li>
+              <li>Penetração regional mensurável</li>
+              <li>Compliance-first = sticky</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card glass" style="margin-top:14px">
+          <h3>One-liner</h3>
+          <p style="font-size:18px;font-weight:600;letter-spacing:-0.02em;margin-top:6px">
+            Outros executam. Lastre verifica a fonte — e fatura cada verificação, gate e settlement.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14 ROADMAP -->
+    <section class="slide" data-title="Roadmap">
+      <div class="bg-photo explore" style="opacity:0.32;filter:brightness(0.45)"></div>
+      <div class="bg-mask heavy"></div>
+      <div class="content">
+        <p class="kicker">Roadmap · gated</p>
+        <h2>Testnet → piloto → <span class="accent">toll booth</span> regional.</h2>
+        <div class="grid-4">
+          <div class="card glass">
+            <span class="chip">Now</span>
+            <h3 style="margin-top:10px">Freeze &amp; ops</h3>
+            <p>Produção estável, evidence, operator pack, labels honestos.</p>
+          </div>
+          <div class="card glass">
+            <span class="chip amber">0–6 mes</span>
+            <h3 style="margin-top:10px">Pilot + PCQ</h3>
+            <p>1–3 sites reais · PCQ pago · SPV high-value em DD.</p>
+          </div>
+          <div class="card glass">
+            <span class="chip sky">6–18 mes</span>
+            <h3 style="margin-top:10px">DeFi gated</h3>
+            <p>Mainnet gates · staking bonds · multi-site BR.</p>
+          </div>
+          <div class="card glass">
+            <span class="chip">18–36 mes</span>
+            <h3 style="margin-top:10px">LATAM %</h3>
+            <p>1–5% universo · enterprise · must-query standard.</p>
+          </div>
+        </div>
+        <div class="disclaimer" style="margin-top:18px">Mainnet e DeFi com valor real só com keys, monitoring, runbook e counsel. Sem data vazia.</div>
+      </div>
+    </section>
+
+    <!-- 15 ASK / CLOSE VISUAL -->
+    <section class="slide full-bleed" data-title="Close">
+      <div class="bg-photo mine" style="transform:scale(1.06);filter:saturate(0.8) brightness(0.55)"></div>
+      <div class="bg-mask heavy"></div>
+      <div class="content">
+        <p class="kicker">Next step</p>
+        <h2 style="max-width:18ch">Construir a camada de prova <span class="accent">antes</span> que o mercado tokenize às cegas.</h2>
+        <div class="grid-2-eq" style="margin-top:8px">
+          <div class="card glass">
+            <h3>O que buscamos</h3>
+            <ul>
+              <li>Capital e distribuição institucional</li>
+              <li>Piloto com operador / SPV de ativo real</li>
+              <li>Intros: custódia, RWA exchanges, FOs de hard assets</li>
+              <li>Feedback de pricing e vertical prioritário</li>
+            </ul>
+          </div>
+          <div class="card glass">
+            <h3>O que oferecemos</h3>
+            <ul>
+              <li>Stack viva: seal → Casper → PCQ → gate → rail</li>
+              <li>6 motores de receita (infra + DeFi + stake)</li>
+              <li>Sizing claro: 1–20% minas BR/LATAM</li>
+              <li>Caminho honesto testnet → pilot → mainnet</li>
+            </ul>
+          </div>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://app.lastre.io/marketplace" target="_blank" rel="noopener">Abrir demo</a>
+          <a class="btn btn-ghost" href="https://lastre.io" target="_blank" rel="noopener">lastre.io</a>
+          <a class="btn btn-ghost" href="https://app-api.lastre.io/api/evidence" target="_blank" rel="noopener">Evidence pack</a>
+        </div>
+        <p class="lede" style="margin-top:24px;font-size:14px">
+          <strong style="color:var(--seal-400)">Proof before token.</strong>
+          <span class="muted"> Land → seal → chain → fee. Every time.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- 16 NUMBERS ONE-PAGER -->
+    <section class="slide" data-title="Numbers">
+      <div class="bg-mask soft"></div>
+      <div class="content">
+        <p class="kicker">One-slide numbers · take home</p>
+        <h2>Memorize <span class="accent">isto</span>.</h2>
+        <div class="grid-4">
+          <div class="card glass"><div class="unit">UNIVERSO</div><div class="big seal">7.500</div><p>sites BR+LATAM</p></div>
+          <div class="card glass"><div class="unit">ARPU STACK</div><div class="big jade">US$ 60k</div><p>/ site / ano base</p></div>
+          <div class="card glass"><div class="unit">@ 10%</div><div class="big amber">US$ 45M</div><p>ARR protocolo</p></div>
+          <div class="card glass"><div class="unit">@ 20%</div><div class="big lime">US$ 90M</div><p>ARR protocolo</p></div>
+        </div>
+        <div class="grid-3">
+          <div class="card glass"><h3>Motores</h3><p>Seal · PCQ · Tx · MintGate · DeFi · Staking · Enterprise</p></div>
+          <div class="card glass"><h3>Tese</h3><p>Proof before token. Fee em cada gate de confiança.</p></div>
+          <div class="card glass"><h3>Live</h3><p>Casper Testnet · app.lastre.io · evidence API</p></div>
+        </div>
+        <div class="disclaimer">Tudo ilustrativo para discussão de investidores. Não é forecast auditado nem oferta de valor mobiliário.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer-nav">
+    <div style="display:flex;align-items:center;gap:8px;flex:1">
+      <span class="hint">← → · Space · F</span>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="nav-btns">
+      <button type="button" id="prev" aria-label="Anterior">←</button>
+      <button type="button" id="next" aria-label="Próximo">→</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const dotsEl = document.getElementById("dots");
+      const pageLabel = document.getElementById("pageLabel");
+      let i = 0;
+
+      slides.forEach((_, idx) => {
+        const b = document.createElement("button");
+        b.className = "dot" + (idx === 0 ? " active" : "");
+        b.type = "button";
+        b.setAttribute("aria-label", "Slide " + (idx + 1));
+        b.addEventListener("click", () => go(idx));
+        dotsEl.appendChild(b);
+      });
+
+      function go(n) {
+        i = Math.max(0, Math.min(slides.length - 1, n));
+        slides.forEach((s, idx) => s.classList.toggle("active", idx === i));
+        dotsEl.querySelectorAll(".dot").forEach((d, idx) => d.classList.toggle("active", idx === i));
+        pageLabel.textContent = String(i + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0");
+      }
+
+      document.getElementById("prev").addEventListener("click", () => go(i - 1));
+      document.getElementById("next").addEventListener("click", () => go(i + 1));
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault(); go(i + 1);
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault(); go(i - 1);
+        } else if (e.key === "Home") go(0);
+        else if (e.key === "End") go(slides.length - 1);
+        else if (e.key === "f" || e.key === "F") {
+          if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+          else document.exitFullscreen?.();
+        }
+      });
+
+      let touchX = null;
+      document.addEventListener("touchstart", (e) => { touchX = e.changedTouches[0].screenX; }, { passive: true });
+      document.addEventListener("touchend", (e) => {
+        if (touchX == null) return;
+        const dx = e.changedTouches[0].screenX - touchX;
+        if (Math.abs(dx) > 50) go(i + (dx < 0 ? 1 : -1));
+        touchX = null;
+      }, { passive: true });
+
+      go(0);
+    })();
+  </script>
+</body>
+</html>

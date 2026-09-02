@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lastre — mapa do sistema</title>
+  <meta name="description" content="Organograma, trilho de prova e roadmap da Lastre. Proof before token." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --olive-950: #0a1713;
+      --olive-925: #0c1c17;
+      --olive-900: #0f201a;
+      --olive-850: #122820;
+      --olive-800: #163026;
+      --olive-700: #1a3830;
+      --olive-600: #23463c;
+      --cream-50: #f6faf8;
+      --cream-100: #ecf2ee;
+      --cream-200: #dce8e2;
+      --sage-300: #95a89f;
+      --sage-400: #7a9088;
+      --seal-300: #b8e8a4;
+      --seal-400: #92d67a;
+      --seal-500: #72c458;
+      --jade-400: #56c4a8;
+      --jade-500: #3db899;
+      --lime-400: #b8d04a;
+      --amber-400: #e8a838;
+      --sky-400: #6baef0;
+      --coral-400: #e0714f;
+      --orange-400: #f57c25;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --sans: Inter, ui-sans-serif, system-ui, sans-serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --line: rgba(184, 232, 164, 0.16);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: var(--olive-950);
+      color: var(--cream-50);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    body { overflow: hidden; }
+
+    .grain {
+      pointer-events: none;
+      position: fixed; inset: 0; z-index: 8;
+      opacity: 0.09;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.55'/></svg>");
+      mix-blend-mode: overlay;
+    }
+
+    .glow {
+      pointer-events: none;
+      position: fixed; inset: auto -10% -20% 20%;
+      height: 48vh; z-index: 0;
+      background: radial-gradient(ellipse at center, rgba(114,196,88,.14), transparent 62%);
+    }
+
+    .chrome {
+      position: relative; z-index: 6;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 22px 0;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand svg { width: 28px; height: 28px; border-radius: 7px; }
+    .brand b { font-size: 15px; letter-spacing: -.02em; }
+    .brand span {
+      font-family: var(--mono); font-size: 10px; color: var(--sage-400);
+      letter-spacing: .12em; text-transform: uppercase; margin-left: 2px;
+    }
+
+    .tabs { display: flex; gap: 6px; }
+    .tab, .ghost, .play {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--cream-200);
+      background: transparent; border: 1px solid var(--line);
+      border-radius: 999px; padding: 7px 12px; cursor: pointer;
+    }
+    .tab[aria-selected="true"], .play.running {
+      color: var(--olive-950); background: var(--seal-400); border-color: var(--seal-400);
+    }
+    .ghost:hover, .tab:hover, .play:hover { border-color: var(--seal-400); }
+    .actions { display: flex; gap: 6px; }
+
+    .stage {
+      position: relative; z-index: 2;
+      height: calc(100vh - 118px);
+      padding: 12px 22px 0;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 16px;
+    }
+    .canvas {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(18,40,32,.55), rgba(10,23,19,.35));
+      overflow: hidden;
+      min-width: 0;
+    }
+    .view { display: none; height: 100%; padding: 22px 24px 18px; }
+    .view.active { display: flex; flex-direction: column; animation: enter .55s var(--ease); }
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .kicker {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--seal-400); margin-bottom: 8px;
+    }
+    h1 { font-size: clamp(22px, 2.4vw, 32px); letter-spacing: -.03em; font-weight: 800; line-height: 1.1; }
+    h1 em { font-style: normal; color: var(--seal-400); }
+    .lede { color: var(--cream-200); font-size: 14px; max-width: 62ch; margin: 8px 0 18px; line-height: 1.5; }
+
+    .passport {
+      border: 1px solid var(--line); border-radius: 18px;
+      background: linear-gradient(165deg, rgba(22,48,38,.9), rgba(10,23,19,.72));
+      padding: 18px 18px 16px;
+      display: flex; flex-direction: column; min-height: 0;
+    }
+    .passport .stamp {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--jade-400); margin-bottom: 10px;
+    }
+    .passport h2 { font-size: 18px; letter-spacing: -.02em; margin-bottom: 6px; }
+    .passport p { color: var(--cream-200); font-size: 13px; line-height: 1.5; }
+    .passport .meta {
+      margin-top: auto; padding-top: 14px;
+      font-family: var(--mono); font-size: 10px; color: var(--sage-400);
+      letter-spacing: .04em; line-height: 1.6;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+      text-transform: uppercase; padding: 3px 8px; border-radius: 999px;
+      border: 1px solid var(--line); color: var(--sage-300); margin: 10px 0 12px;
+    }
+    .pill i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; display: block; }
+    .pill.live { color: var(--seal-400); }
+    .pill.demo { color: var(--amber-400); }
+    .pill.build { color: var(--sky-400); }
+    .pill.advance { color: var(--jade-400); }
+    .pill.prospect { color: var(--lime-400); }
+    .pill.partner { color: var(--cream-200); }
+    .pill.later { color: var(--sage-400); }
+
+    .footer {
+      position: relative; z-index: 6;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 22px 12px;
+      font-family: var(--mono); font-size: 10px; color: var(--sage-400);
+      letter-spacing: .06em;
+    }
+    .keys kbd {
+      font-family: var(--mono); font-size: 10px;
+      border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; color: var(--cream-200);
+    }
+    .progress { display: flex; gap: 5px; align-items: center; }
+    .progress b { color: var(--seal-400); font-weight: 500; }
+    .bar { width: 88px; height: 3px; background: var(--olive-700); border-radius: 99px; overflow: hidden; }
+    .bar > span { display: block; height: 100%; width: 0; background: var(--seal-400); transition: width .4s var(--ease); }
+
+    /* ── organogram ─────────────────────────────────── */
+    .org { display: grid; grid-template-rows: auto 1fr; gap: 14px; flex: 1; min-height: 0; }
+    .apex {
+      justify-self: center; text-align: center; cursor: pointer;
+      padding: 14px 28px; border-radius: 16px;
+      border: 1px solid rgba(184,232,164,.28);
+      background: linear-gradient(180deg, rgba(114,196,88,.12), rgba(10,23,19,.4));
+      min-width: min(420px, 90%);
+    }
+    .apex .who { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--seal-400); }
+    .apex strong { display: block; font-size: 20px; margin-top: 4px; }
+    .apex small { color: var(--sage-300); font-size: 12px; }
+    .spine { height: 18px; width: 1px; background: var(--seal-400); margin: 0 auto; opacity: .55; }
+    .cols {
+      display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 12px;
+      min-height: 0; flex: 1;
+    }
+    .col {
+      border: 1px solid var(--line); border-radius: 14px; padding: 12px;
+      background: rgba(10,23,19,.35);
+      display: flex; flex-direction: column; gap: 8px; min-height: 0;
+    }
+    .col h3 {
+      font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--sage-300); margin-bottom: 2px;
+    }
+    .node {
+      cursor: pointer; text-align: left; width: 100%;
+      background: rgba(18,40,32,.7); border: 1px solid var(--line);
+      border-radius: 12px; padding: 10px 12px; color: inherit;
+      transition: border-color .2s var(--ease), transform .2s var(--ease);
+    }
+    .node:hover, .node:focus-visible, .node.active, .apex.active {
+      border-color: var(--seal-400); outline: none;
+    }
+    .node.active, .apex.active { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(114,196,88,.25); }
+    .node .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .node b { font-size: 13px; font-weight: 650; }
+    .node em { font-style: normal; font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--sage-400); }
+    .node p { font-size: 11px; color: var(--cream-200); margin-top: 4px; line-height: 1.35; }
+
+    /* ── rail ───────────────────────────────────────── */
+    .rail-wrap { flex: 1; min-height: 0; position: relative; }
+    .rail-wrap svg { width: 100%; height: 100%; display: block; }
+    .rail-label { font-family: var(--sans); font-size: 13px; font-weight: 650; fill: var(--cream-50); }
+    .rail-sub { font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; fill: var(--sage-300); }
+    .box { fill: rgba(18,40,32,.92); stroke: rgba(184,232,164,.22); stroke-width: 1.2; }
+    .box.on { stroke: var(--seal-400); filter: drop-shadow(0 0 10px rgba(114,196,88,.35)); }
+    .flow {
+      fill: none; stroke: var(--seal-400); stroke-width: 1.6;
+      stroke-dasharray: 6 10; animation: dash 2.2s linear infinite;
+    }
+    .flow.soft { stroke: rgba(184,232,164,.28); stroke-dasharray: none; animation: none; }
+    .flow.mock { stroke: var(--amber-400); }
+    .flow.gate { stroke: var(--jade-400); }
+    @keyframes dash { to { stroke-dashoffset: -64; } }
+    .dot { fill: var(--seal-300); }
+    .svg-hit { cursor: pointer; fill: transparent; }
+
+    /* ── roadmap ────────────────────────────────────── */
+    .road { display: grid; grid-template-columns: 1.35fr .65fr; gap: 16px; flex: 1; min-height: 0; }
+    .days { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .day {
+      border: 1px solid var(--line); border-radius: 14px; padding: 12px;
+      background: rgba(10,23,19,.4);
+    }
+    .day h3 { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--seal-400); margin-bottom: 8px; }
+    .chk {
+      display: flex; gap: 8px; align-items: flex-start;
+      font-size: 12px; color: var(--cream-200); line-height: 1.35;
+      margin: 0 0 8px; cursor: pointer;
+    }
+    .chk input { accent-color: var(--seal-500); margin-top: 2px; flex: 0 0 auto; }
+    .chk.done { color: var(--sage-300); text-decoration: line-through; text-decoration-color: rgba(114,196,88,.45); }
+    .later { border: 1px dashed rgba(184,232,164,.22); border-radius: 14px; padding: 14px; }
+    .later h3 { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--amber-400); margin-bottom: 10px; }
+
+    /* ── corridors ──────────────────────────────────── */
+    .lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; flex: 1; min-height: 0; }
+    .lane {
+      border: 1px solid var(--line); border-radius: 16px; padding: 16px;
+      background: rgba(10,23,19,.4); cursor: pointer;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .lane.active { border-color: var(--seal-400); }
+    .lane .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .lane h3 { font-size: 18px; letter-spacing: -.02em; }
+    .lane p { font-size: 13px; color: var(--cream-200); line-height: 1.45; }
+    .lane ul { margin-top: auto; padding-left: 16px; color: var(--cream-200); font-size: 12px; }
+    .lane li + li { margin-top: 4px; }
+
+    body.present .chrome, body.present .footer { opacity: 0; pointer-events: none; }
+    body.present .stage { height: 100vh; padding: 28px 32px; grid-template-columns: 1fr 280px; }
+    body.present .passport { opacity: .92; }
+
+    @media (max-width: 1080px) {
+      .stage { grid-template-columns: 1fr; height: auto; min-height: calc(100vh - 118px); overflow: auto; }
+      body { overflow: auto; }
+      .cols, .days, .lanes, .road { grid-template-columns: 1fr; }
+      .canvas { min-height: 70vh; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flow { animation: none; }
+      .view.active { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="glow"></div>
+
+  <header class="chrome">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#0c1c17"/>
+        <path d="M16 6l9 5.2v9.6L16 26l-9-5.2V11.2L16 6z" fill="none" stroke="#92d67a" stroke-width="1.6"/>
+        <circle cx="16" cy="16" r="2.2" fill="#72c458"/>
+      </svg>
+      <div>
+        <b>Lastre</b>
+        <span data-i="mapKicker">mapa do sistema</span>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" data-view="org" aria-selected="true">01 Organograma</button>
+      <button class="tab" data-view="rail">02 Trilho</button>
+      <button class="tab" data-view="road">03 Roadmap</button>
+      <button class="tab" data-view="lanes">04 Corredores</button>
+    </nav>
+    <div class="actions">
+      <button class="ghost" id="langBtn" type="button">EN</button>
+      <button class="play" id="playBtn" type="button">P · Play</button>
+      <button class="ghost" id="presentBtn" type="button">F · Present</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <section class="canvas">
+      <!-- ORGANOGRAM -->
+      <div class="view active" id="view-org">
+        <p class="kicker" data-i="orgKicker">Accountability · não C-suite de papel</p>
+        <h1 data-i="orgTitle">Quem <em>responde</em> por cada camada.</h1>
+        <p class="lede" data-i="orgLede">Lastre é a camada de prova. Operador dono do minério. MAKE/Casper são trilho — não entram no org da empresa.</p>
+        <div class="org">
+          <button class="apex" data-id="lastre" type="button">
+            <div class="who">Lastre · proof layer</div>
+            <strong>Felix Rodrigues</strong>
+            <small data-i="felixRole">Founder · produto · prova · mesa</small>
+          </button>
+          <div class="spine" aria-hidden="true"></div>
+          <div class="cols">
+            <div class="col">
+              <h3 data-i="colProof">Prova</h3>
+              <button class="node" data-id="engine" type="button">
+                <div class="row"><b>Proof engine</b><em>live</em></div>
+                <p>Sealer · Orchestrator · x402 · ProofOfOrigin · MintGate</p>
+              </button>
+              <button class="node" data-id="surfaces" type="button">
+                <div class="row"><b data-i="surfaces">Superfícies</b><em>live + demo</em></div>
+                <p>lastre.io · app.lastre.io · app-api · /corridor</p>
+              </button>
+              <button class="node" data-id="corridor" type="button">
+                <div class="row"><b>Corridor privado</b><em>build</em></div>
+                <p data-i="corridorBlurb">Lote do operador. Não lista no marketplace.</p>
+              </button>
+            </div>
+            <div class="col">
+              <h3 data-i="colField">Campo</h3>
+              <button class="node" data-id="daniel" type="button">
+                <div class="row"><b>Pilot operator</b><em>advance</em></div>
+                <p>Operator S/A · operador · lote</p>
+              </button>
+              <button class="node" data-id="para" type="button">
+                <div class="row"><b>Industrial offtaker</b><em>advance</em></div>
+                <p data-i="paraBlurb">Offtake industrial (gesso) · commercial offtake</p>
+              </button>
+              <button class="node" data-id="fabian" type="button">
+                <div class="row"><b>LATAM origination · LATAM</b><em>prospect</em></div>
+                <p data-i="fabianBlurb">Colômbia · Bolívia · Argentina em seguida</p>
+              </button>
+            </div>
+            <div class="col">
+              <h3 data-i="colNet">Rede · não é Lastre</h3>
+              <button class="node" data-id="casper" type="button">
+                <div class="row"><b>Casper Association</b><em>partner</em></div>
+                <p>Âncora · testnet · Manifest</p>
+              </button>
+              <button class="node" data-id="make" type="button">
+                <div class="row"><b>MAKE · Alex Kelly</b><em>partner</em></div>
+                <p data-i="makeBlurb">CSPR.cloud · x402 oficial · Tamara COO</p>
+              </button>
+              <button class="node" data-id="entity" type="button">
+                <div class="row"><b data-i="entity">Entidade / offshore</b><em>later</em></div>
+                <p data-i="entityBlurb">Não é o app. Jurídico + custody. Fora dos 7 dias.</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RAIL -->
+      <div class="view" id="view-rail">
+        <p class="kicker" data-i="railKicker">Architecture · proof before token</p>
+        <h1 data-i="railTitle">O selo decide. O agente <em>não</em> reescreve.</h1>
+        <div class="rail-wrap">
+          <svg viewBox="0 0 1280 520" role="img" aria-label="Lastre proof rail">
+            <defs>
+              <filter id="g" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path class="flow" d="M70 118 H1210" />
+            <path class="flow soft" d="M330 176 V268" />
+            <path class="flow mock" d="M590 176 V268" />
+            <path class="flow gate" d="M850 176 V268" />
+            <path class="flow soft" d="M70 390 H1210" />
+
+            <g data-id="field">
+              <rect class="box" x="40" y="70" width="180" height="96" rx="14"/>
+              <text class="rail-label" x="130" y="112" text-anchor="middle">Campo</text>
+              <text class="rail-sub" x="130" y="132" text-anchor="middle">PDF · NFe · ensaio</text>
+            </g>
+            <g data-id="engine">
+              <rect class="box" x="300" y="70" width="180" height="96" rx="14"/>
+              <text class="rail-label" x="390" y="112" text-anchor="middle">Sealer</text>
+              <text class="rail-sub" x="390" y="132" text-anchor="middle">SHA-256 · offline</text>
+            </g>
+            <g data-id="agent">
+              <rect class="box" x="560" y="70" width="180" height="96" rx="14"/>
+              <text class="rail-label" x="650" y="112" text-anchor="middle">Agente</text>
+              <text class="rail-sub" x="650" y="132" text-anchor="middle">pay · skip · escalate</text>
+            </g>
+            <g data-id="casper">
+              <rect class="box" x="820" y="70" width="180" height="96" rx="14"/>
+              <text class="rail-label" x="910" y="112" text-anchor="middle">Casper</text>
+              <text class="rail-sub" x="910" y="132" text-anchor="middle">Valid | Invalid</text>
+            </g>
+            <g data-id="mint">
+              <rect class="box" x="1060" y="70" width="180" height="96" rx="14"/>
+              <text class="rail-label" x="1150" y="112" text-anchor="middle">MintGate</text>
+              <text class="rail-sub" x="1150" y="132" text-anchor="middle">só depois de Valid</text>
+            </g>
+
+            <g data-id="corridor">
+              <rect class="box" x="300" y="268" width="180" height="88" rx="14"/>
+              <text class="rail-label" x="390" y="308" text-anchor="middle">Corridor</text>
+              <text class="rail-sub" x="390" y="328" text-anchor="middle">Operator · privado</text>
+            </g>
+            <g data-id="surfaces">
+              <rect class="box" x="560" y="268" width="180" height="88" rx="14"/>
+              <text class="rail-label" x="650" y="308" text-anchor="middle">Marketplace</text>
+              <text class="rail-sub" x="650" y="328" text-anchor="middle">UI mock · demo</text>
+            </g>
+            <g data-id="x402">
+              <rect class="box" x="820" y="268" width="180" height="88" rx="14"/>
+              <text class="rail-label" x="910" y="308" text-anchor="middle">x402 settle</text>
+              <text class="rail-sub" x="910" y="328" text-anchor="middle">testnet CSPR</text>
+            </g>
+
+            <g data-id="web">
+              <rect class="box" x="40" y="414" width="220" height="72" rx="14"/>
+              <text class="rail-label" x="150" y="448" text-anchor="middle">lastre.io</text>
+              <text class="rail-sub" x="150" y="466" text-anchor="middle">tese pública</text>
+            </g>
+            <g data-id="app">
+              <rect class="box" x="300" y="414" width="220" height="72" rx="14"/>
+              <text class="rail-label" x="410" y="448" text-anchor="middle">app.lastre.io</text>
+              <text class="rail-sub" x="410" y="466" text-anchor="middle">console</text>
+            </g>
+            <g data-id="api">
+              <rect class="box" x="560" y="414" width="220" height="72" rx="14"/>
+              <text class="rail-label" x="670" y="448" text-anchor="middle">app-api.lastre.io</text>
+              <text class="rail-sub" x="670" y="466" text-anchor="middle">Render</text>
+            </g>
+            <g data-id="make">
+              <rect class="box" x="820" y="414" width="420" height="72" rx="14"/>
+              <text class="rail-label" x="1030" y="448" text-anchor="middle">MAKE · CSPR.cloud</text>
+              <text class="rail-sub" x="1030" y="466" text-anchor="middle">ask · first production lot</text>
+            </g>
+
+            <circle class="dot" r="4"><animateMotion dur="5.5s" repeatCount="indefinite" path="M70 118 H1210"/></circle>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ROADMAP -->
+      <div class="view" id="view-road">
+        <p class="kicker" data-i="roadKicker">7 dias · Operator v1 · checks</p>
+        <h1 data-i="roadTitle">Fechar o app que o <em>Operator usa</em>. O resto espera.</h1>
+        <div class="road">
+          <div class="days">
+            <div class="day">
+              <h3>D0 · viagem</h3>
+              <label class="chk"><input type="checkbox" data-check="tamara" checked /> Resposta à Tamara enviada</label>
+              <label class="chk"><input type="checkbox" data-check="facts" /> 3 linhas: Operator / Para / LATAM origination</label>
+              <label class="chk"><input type="checkbox" data-check="daniel-call" /> Conversa Operator: lote, não mina</label>
+            </div>
+            <div class="day">
+              <h3>D1–2 · corridor</h3>
+              <label class="chk"><input type="checkbox" data-check="unlock" /> Unlock + criar lote</label>
+              <label class="chk"><input type="checkbox" data-check="hashes" /> 5 hashes (título NFe transporte ensaio SKR)</label>
+              <label class="chk"><input type="checkbox" data-check="verdict" /> Valid | Invalid visível</label>
+            </div>
+            <div class="day">
+              <h3>D3–5 · operador</h3>
+              <label class="chk"><input type="checkbox" data-check="labels" /> Labels demo vs corridor</label>
+              <label class="chk"><input type="checkbox" data-check="dry" /> Dry-run PDF redigido do Operator</label>
+              <label class="chk"><input type="checkbox" data-check="smoke" /> Smoke health + evidence</label>
+            </div>
+            <div class="day">
+              <h3>D6–7 · call pack</h3>
+              <label class="chk"><input type="checkbox" data-check="onepager" /> One-pager EN Tamara/Alex</label>
+              <label class="chk"><input type="checkbox" data-check="demo90" /> Path 90s rail selado</label>
+              <label class="chk"><input type="checkbox" data-check="ask" /> Ask único: lote no CSPR.cloud</label>
+            </div>
+          </div>
+          <aside class="later">
+            <h3 data-i="laterTitle">Depois · não esta semana</h3>
+            <label class="chk"><input type="checkbox" data-check="make-lot" /> Primeiro lote no rail MAKE</label>
+            <label class="chk"><input type="checkbox" data-check="entity-legal" /> Entidade / offshore / custody</label>
+            <label class="chk"><input type="checkbox" data-check="mainnet" /> Gates de mainnet (keys, monitor, legal)</label>
+            <label class="chk"><input type="checkbox" data-check="latam-deal" /> LATAM deixa de ser prospecção</label>
+            <p class="lede" style="margin:12px 0 0;font-size:12px" data-i="laterNote">Prêmio Casper, se vier, paga entidade e chave. Não trava o corridor.</p>
+          </aside>
+        </div>
+      </div>
+
+      <!-- LANES -->
+      <div class="view" id="view-lanes">
+        <p class="kicker" data-i="laneKicker">Prospects · honest ladder</p>
+        <h1 data-i="laneTitle">O que sobe na sala da <em>Tamara</em>.</h1>
+        <div class="lanes">
+          <article class="lane" data-id="daniel">
+            <span class="tag pill advance"><i></i> advance</span>
+            <h3>Operator</h3>
+            <p data-i="laneOperator">Operador. Operator S/A. Unidade = lote. Papéis de origem. Lastre sela. S/A dona do minério.</p>
+            <ul>
+              <li data-i="ld1">Pode nomear na sala se ele ok</li>
+              <li data-i="ld2">Não: tokenizar a mina</li>
+            </ul>
+          </article>
+          <article class="lane" data-id="para">
+            <span class="tag pill advance"><i></i> advance</span>
+            <h3>Industrial offtaker</h3>
+            <p data-i="lanePara">Offtake industrial já existe na economia real. Lastre é a origem do lote, não o settlement. TT/LC até o hop de prova.</p>
+            <ul>
+              <li data-i="lp1">Nome só se liberado</li>
+              <li data-i="lp2">Senão: listed BR metals · gypsum</li>
+            </ul>
+          </article>
+          <article class="lane" data-id="fabian">
+            <span class="tag pill prospect"><i></i> prospect</span>
+            <h3>LATAM origination · LATAM</h3>
+            <p data-i="laneLATAM origination">Colômbia e Bolívia abertas. Argentina em seguida. Mesmo padrão de lote. Ainda não é deal.</p>
+            <ul>
+              <li data-i="lf1">Dizer: opened conversations</li>
+              <li data-i="lf2">Não dizer: expansão LATAM live</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <aside class="passport" id="passport">
+      <div class="stamp" data-i="passStamp">ensaio · passaporte</div>
+      <h2 id="passTitle">Lastre</h2>
+      <span class="pill live" id="passPill"><i></i> <span>live</span></span>
+      <p id="passBody">Camada de prova. Sela origem antes de mint ou finance. Invalid é prova permanente.</p>
+      <div class="meta" id="passMeta">Proof before token · Casper Testnet · sem claim de mainnet money</div>
+    </aside>
+  </div>
+
+  <footer class="footer">
+    <div class="keys">
+      <kbd>1</kbd>–<kbd>4</kbd> views
+      <kbd>P</kbd> play
+      <kbd>F</kbd> present
+      <kbd>T</kbd> PT/EN
+      <span id="chapter"></span>
+    </div>
+    <div class="progress">
+      <span data-i="checks">checks</span>
+      <b id="checkCount">1/16</b>
+      <div class="bar"><span id="checkBar"></span></div>
+    </div>
+  </footer>
+
+  <script>
+    const I18N = {
+      pt: {
+        mapKicker: "mapa do sistema",
+        orgKicker: "Accountability · não C-suite de papel",
+        orgTitle: "Quem <em>responde</em> por cada camada.",
+        orgLede: "Lastre é a camada de prova. O operador é dono do minério. MAKE/Casper são trilho — não entram no org da empresa.",
+        felixRole: "Founder · produto · prova · mesa",
+        colProof: "Prova",
+        colField: "Campo",
+        colNet: "Rede · não é Lastre",
+        surfaces: "Superfícies",
+        corridorBlurb: "Lote do operador. Não lista no marketplace.",
+        paraBlurb: "Offtake industrial (gesso) · commercial offtake",
+        fabianBlurb: "Colômbia · Bolívia · Argentina em seguida",
+        makeBlurb: "CSPR.cloud · x402 oficial · Tamara COO",
+        entity: "Entidade / offshore",
+        entityBlurb: "Não é o app. Jurídico + custody. Fora dos 7 dias.",
+        railKicker: "Architecture · proof before token",
+        railTitle: "O selo decide. O agente <em>não</em> reescreve.",
+        roadKicker: "7 dias · Operator v1 · checks",
+        roadTitle: "Fechar o app que o <em>Operator usa</em>. O resto espera.",
+        laterTitle: "Depois · não esta semana",
+        laterNote: "Prêmio Casper, se vier, paga entidade e chave. Não trava o corridor.",
+        laneKicker: "Prospects · honest ladder",
+        laneTitle: "O que sobe na sala da <em>Tamara</em>.",
+        laneOperator: "Operador. Operator S/A. Unidade = lote. Papéis de origem. Lastre sela. S/A dona do minério.",
+        ld1: "Pode nomear na sala se ele ok",
+        ld2: "Não: tokenizar a mina",
+        lanePara: "Offtake industrial já existe na economia real. Lastre é a origem do lote, não o settlement. TT/LC até o hop de prova.",
+        lp1: "Nome só se liberado",
+        lp2: "Senão: listed BR metals · gypsum",
+        laneLATAM origination: "Colômbia e Bolívia abertas. Argentina em seguida. Mesmo padrão de lote. Ainda não é deal.",
+        lf1: "Dizer: opened conversations",
+        lf2: "Não dizer: expansão LATAM live",
+        passStamp: "ensaio · passaporte",
+        checks: "checks",
+        nodes: {
+          lastre: { title: "Lastre", pill: "live", body: "Camada de prova. Sela origem antes de mint ou finance. Invalid é prova permanente.", meta: "Proof before token · Casper Testnet · sem claim de mainnet money" },
+          engine: { title: "Proof engine", pill: "live", body: "SHA-256 determinístico decide Valid/Invalid. O agente só escolhe pay, skip ou escalate.", meta: "agent/sealer · orchestrator · x402 · contracts/ProofOfOrigin" },
+          surfaces: { title: "Superfícies", pill: "demo", body: "Landing viva. App viva. Marketplace simulate é mock e deve dizer mock. Corridor é o caminho do operador.", meta: "lastre.io · app.lastre.io · app-api.lastre.io" },
+          corridor: { title: "Corridor privado", pill: "build", body: "Cinco hashes do lote. Não vai ao marketplace. Metal e USDT não passam pela Lastre.", meta: "/corridor · operator key · 7 dias = isto" },
+          daniel: { title: "Pilot operator", pill: "advance", body: "Operador da S/A. Avanço de papéis e lote. Lastre não aparece no H1 da mineradora.", meta: "Operator S/A · Brazil · unidade = lote" },
+          para: { title: "Industrial offtaker", pill: "advance", body: "Offtake industrial em avanço. Contrato comercial ≠ smart contract. Settlement segue TT/LC.", meta: "Gesso · commercial offtake · nome na sala só se liberado" },
+          fabian: { title: "LATAM origination · LATAM", pill: "prospect", body: "Prospecção. Colômbia e Bolívia abertas. Argentina em seguida. Zero país como closed.", meta: "Mesmo padrão de lote · outra jurisdição" },
+          casper: { title: "Casper Association", pill: "partner", body: "Âncora da prova. Michael = protocolo. Não é o org da Lastre.", meta: "Testnet live · mainnet gated" },
+          make: { title: "MAKE", pill: "partner", body: "Studio que constrói CSPR.live, CSPR.cloud, wallet. Alex Kelly = CEO. Tamara = COO + Head of Ecosystem.", meta: "Ask: primeiro lote de produção no rail oficial" },
+          entity: { title: "Entidade", pill: "later", body: "Offshore e custody de chave. Não conclui o app. Prêmio, se houver, paga isto — não o TypeScript.", meta: "Fora do Operator v1" },
+          field: { title: "Campo", pill: "advance", body: "Origem física: título, NFe, romaneio, ensaio, SKR. Hash no browser. Lastre não custodia o PDF.", meta: "Unidade = lote" },
+          agent: { title: "Agente", pill: "live", body: "Decide ação. Nunca verdade. LLM não é oráculo de origem.", meta: "pay / skip / escalate" },
+          mint: { title: "MintGate", pill: "live", body: "Mint simbólico só com Valid. Invalid trava o hop.", meta: "Gate before token" },
+          x402: { title: "x402", pill: "demo", body: "UI simulate = mock. POST /api/x402/settle = CSPR testnet se as chaves existirem.", meta: "Nunca fingir mainnet money" },
+          web: { title: "lastre.io", pill: "live", body: "Tese pública. Não é o console do operador.", meta: "web/" },
+          app: { title: "app.lastre.io", pill: "demo", body: "Console. Demo rotulada + corridor em construção.", meta: "app/" },
+          api: { title: "app-api.lastre.io", pill: "live", body: "API do console. Health, evidence, corridor, settle.", meta: "Render" }
+        }
+      },
+      en: {
+        mapKicker: "system map",
+        orgKicker: "Accountability · not a paper C-suite",
+        orgTitle: "Who <em>owns</em> each layer.",
+        orgLede: "Lastre is the proof layer. The operator owns the mineral. MAKE/Casper are rails — not inside the company box.",
+        felixRole: "Founder · product · proof · desk",
+        colProof: "Proof",
+        colField: "Field",
+        colNet: "Network · not Lastre",
+        surfaces: "Surfaces",
+        corridorBlurb: "Operator lot. Not listed on the marketplace.",
+        paraBlurb: "Industrial offtake (gypsum) · commercial offtake",
+        fabianBlurb: "Colombia · Bolivia · Argentina next",
+        makeBlurb: "CSPR.cloud · official x402 · Tamara COO",
+        entity: "Entity / offshore",
+        entityBlurb: "Not the app. Legal + key custody. Outside the 7 days.",
+        railKicker: "Architecture · proof before token",
+        railTitle: "The seal decides. The agent does <em>not</em> rewrite.",
+        roadKicker: "7 days · Operator v1 · checks",
+        roadTitle: "Ship the app <em>Operator uses</em>. Everything else waits.",
+        laterTitle: "Later · not this week",
+        laterNote: "If the Casper prize lands, it funds entity and keys. It does not block the corridor.",
+        laneKicker: "Prospects · honest ladder",
+        laneTitle: "What enters <em>Tamara’s</em> room.",
+        laneOperator: "Operator. Operator S/A. Unit = lot. Origin paperwork. Lastre seals. The S/A owns the mineral.",
+        ld1: "Name in the room if he clears it",
+        ld2: "Do not: tokenize the mine",
+        lanePara: "Industrial offtake already exists in the real economy. Lastre is lot origin, not settlement. TT/LC until the proof hop.",
+        lp1: "Name only if cleared",
+        lp2: "Else: listed BR metals · gypsum",
+        laneLATAM origination: "Colombia and Bolivia open. Argentina next. Same lot standard. Not a deal.",
+        lf1: "Say: opened conversations",
+        lf2: "Do not say: live LATAM expansion",
+        passStamp: "assay · passport",
+        checks: "checks",
+        nodes: {
+          lastre: { title: "Lastre", pill: "live", body: "Proof layer. Seals origin before mint or finance. Invalid is permanent proof.", meta: "Proof before token · Casper Testnet · no mainnet money claims" },
+          engine: { title: "Proof engine", pill: "live", body: "Deterministic SHA-256 decides Valid/Invalid. The agent only chooses pay, skip, or escalate.", meta: "agent/sealer · orchestrator · x402 · ProofOfOrigin" },
+          surfaces: { title: "Surfaces", pill: "demo", body: "Landing live. App live. Marketplace simulate is mock and must say mock. Corridor is the operator path.", meta: "lastre.io · app.lastre.io · app-api.lastre.io" },
+          corridor: { title: "Private corridor", pill: "build", body: "Five lot hashes. Not on the marketplace. Lastre never touches metal or USDT.", meta: "/corridor · operator key · this is the 7-day cut" },
+          daniel: { title: "Pilot operator", pill: "advance", body: "S/A operator. Paperwork and lot advancing. Lastre does not sit in the miner’s H1.", meta: "Operator S/A · Brazil · unit = lot" },
+          para: { title: "Industrial offtaker", pill: "advance", body: "Industrial offtake in motion. Commercial contract ≠ smart contract. Settlement stays TT/LC.", meta: "Gypsum · commercial offtake · name in-room only if cleared" },
+          fabian: { title: "LATAM origination · LATAM", pill: "prospect", body: "Prospecting. Colombia and Bolivia open. Argentina next. No country is closed.", meta: "Same lot standard · new jurisdiction" },
+          casper: { title: "Casper Association", pill: "partner", body: "Proof anchor. Michael = protocol. Not Lastre org.", meta: "Testnet live · mainnet gated" },
+          make: { title: "MAKE", pill: "partner", body: "The shop that builds CSPR.live, CSPR.cloud, wallet. Alex Kelly = CEO. Tamara = COO + Head of Ecosystem.", meta: "Ask: first production lot on the official rail" },
+          entity: { title: "Entity", pill: "later", body: "Offshore and key custody. Does not finish the app. Prize money, if any, funds this — not TypeScript.", meta: "Outside Operator v1" },
+          field: { title: "Field", pill: "advance", body: "Physical origin: title, invoice, transport, assay, SKR. Hash in-browser. Lastre does not custody the PDF.", meta: "Unit = lot" },
+          agent: { title: "Agent", pill: "live", body: "Chooses action. Never truth. The LLM is not an origin oracle.", meta: "pay / skip / escalate" },
+          mint: { title: "MintGate", pill: "live", body: "Symbolic mint only after Valid. Invalid blocks the hop.", meta: "Gate before token" },
+          x402: { title: "x402", pill: "demo", body: "UI simulate = mock. POST /api/x402/settle = testnet CSPR when keys exist.", meta: "Never fake mainnet money" },
+          web: { title: "lastre.io", pill: "live", body: "Public thesis. Not the operator console.", meta: "web/" },
+          app: { title: "app.lastre.io", pill: "demo", body: "Console. Labeled demo + corridor in progress.", meta: "app/" },
+          api: { title: "app-api.lastre.io", pill: "live", body: "Console API. Health, evidence, corridor, settle.", meta: "Render" }
+        }
+      }
+    };
+
+    const STORY = [
+      { view: "org", id: "lastre", line: { pt: "Lastre sela origem. Não tokeniza a mina.", en: "Lastre seals origin. It does not tokenize the mine." } },
+      { view: "rail", id: "engine", line: { pt: "O selo decide Valid ou Invalid. O agente só age.", en: "The seal decides Valid or Invalid. The agent only acts." } },
+      { view: "lanes", id: "daniel", line: { pt: "Operator: lote, papéis, S/A dona do minério.", en: "Operator: lot, paperwork, S/A owns the mineral." } },
+      { view: "lanes", id: "para", line: { pt: "Industrial offtaker: offtake real. Settlement ainda TT/LC.", en: "Industrial offtaker: real offtake. Settlement still TT/LC." } },
+      { view: "lanes", id: "fabian", line: { pt: "LATAM é prospecção. Não é receita.", en: "LATAM is prospecting. Not revenue." } },
+      { view: "road", id: "corridor", line: { pt: "7 dias: corridor que o operador usa.", en: "7 days: the corridor the operator uses." } },
+      { view: "rail", id: "make", line: { pt: "Ask do Alex: primeiro lote no CSPR.cloud.", en: "Ask for Alex: first lot on CSPR.cloud." } }
+    ];
+
+    const KEY = "lastre-system-map-checks-v1";
+    let lang = "pt";
+    let view = "org";
+    let storyIdx = -1;
+    let storyTimer = null;
+
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+    function applyLang() {
+      document.documentElement.lang = lang === "pt" ? "pt-BR" : "en";
+      const pack = I18N[lang];
+      $$("[data-i]").forEach((el) => {
+        const v = pack[el.dataset.i];
+        if (typeof v === "string") el.innerHTML = v;
+      });
+      $("#langBtn").textContent = lang === "pt" ? "EN" : "PT";
+      const current = $("#passTitle").dataset.id || "lastre";
+      showNode(current);
+    }
+
+    function setView(name) {
+      view = name;
+      $$(".view").forEach((v) => v.classList.toggle("active", v.id === "view-" + name));
+      $$(".tab").forEach((t) => t.setAttribute("aria-selected", t.dataset.view === name ? "true" : "false"));
+    }
+
+    function showNode(id) {
+      const node = I18N[lang].nodes[id] || I18N[lang].nodes.lastre;
+      $("#passTitle").textContent = node.title;
+      $("#passTitle").dataset.id = id;
+      $("#passBody").textContent = node.body;
+      $("#passMeta").textContent = node.meta;
+      const pill = $("#passPill");
+      pill.className = "pill " + node.pill;
+      pill.innerHTML = "<i></i> <span>" + node.pill + "</span>";
+      $$(".node, .apex, .lane").forEach((n) => n.classList.toggle("active", n.dataset.id === id));
+      $$(".box").forEach((b) => b.classList.remove("on"));
+      $$('g[data-id="' + id + '"] .box').forEach((b) => b.classList.add("on"));
+    }
+
+    function loadChecks() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+        $$("[data-check]").forEach((box) => {
+          if (saved[box.dataset.check] === true) box.checked = true;
+          if (saved[box.dataset.check] === false) box.checked = false;
+          box.closest(".chk").classList.toggle("done", box.checked);
+        });
+      } catch {}
+      tally();
+    }
+
+    function saveChecks() {
+      const saved = {};
+      $$("[data-check]").forEach((box) => { saved[box.dataset.check] = box.checked; });
+      localStorage.setItem(KEY, JSON.stringify(saved));
+      tally();
+    }
+
+    function tally() {
+      const all = $$("[data-check]");
+      const on = all.filter((b) => b.checked).length;
+      $("#checkCount").textContent = on + "/" + all.length;
+      $("#checkBar").style.width = (on / all.length * 100) + "%";
+    }
+
+    function playStory() {
+      if (storyTimer) { stopStory(); return; }
+      $("#playBtn").classList.add("running");
+      storyIdx = -1;
+      const step = () => {
+        storyIdx = (storyIdx + 1) % STORY.length;
+        const ch = STORY[storyIdx];
+        setView(ch.view);
+        showNode(ch.id);
+        $("#chapter").textContent = " · " + (storyIdx + 1) + "/" + STORY.length + " — " + ch.line[lang];
+        if (storyIdx === STORY.length - 1) { stopStory(); return; }
+        storyTimer = setTimeout(step, 4200);
+      };
+      step();
+    }
+
+    function stopStory() {
+      clearTimeout(storyTimer); storyTimer = null;
+      $("#playBtn").classList.remove("running");
+    }
+
+    $$(".tab").forEach((t) => t.addEventListener("click", () => { stopStory(); setView(t.dataset.view); }));
+    document.addEventListener("click", (e) => {
+      const n = e.target.closest("[data-id]");
+      if (!n) return;
+      showNode(n.dataset.id);
+    });
+    $$("[data-check]").forEach((box) => {
+      box.addEventListener("change", () => {
+        box.closest(".chk").classList.toggle("done", box.checked);
+        saveChecks();
+      });
+    });
+    $("#langBtn").addEventListener("click", () => { lang = lang === "pt" ? "en" : "pt"; applyLang(); });
+    $("#playBtn").addEventListener("click", playStory);
+    $("#presentBtn").addEventListener("click", () => document.body.classList.toggle("present"));
+
+    document.addEventListener("keydown", (e) => {
+      if (["INPUT", "TEXTAREA"].includes(e.target.tagName)) return;
+      const map = { "1": "org", "2": "rail", "3": "road", "4": "lanes" };
+      if (map[e.key]) { stopStory(); setView(map[e.key]); }
+      if (e.key === "p" || e.key === "P") playStory();
+      if (e.key === "f" || e.key === "F") document.body.classList.toggle("present");
+      if (e.key === "t" || e.key === "T") { lang = lang === "pt" ? "en" : "pt"; applyLang(); }
+      if (e.key === "Escape") document.body.classList.remove("present");
+    });
+
+    applyLang();
+    loadChecks();
+    showNode("lastre");
+  </script>
+</body>
+</html>

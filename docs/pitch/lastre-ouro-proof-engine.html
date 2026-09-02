@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lastre — Proof Engine · Lote de ouro (privado)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a1713; --card: #122820; --line: rgba(184,232,164,.14);
+      --cream: #f6faf8; --muted: #95a89f; --seal: #72c458; --jade: #3db899;
+      --amber: #e8a838; --coral: #e0714f; --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--cream);
+      line-height: 1.5;
+      padding: 40px 24px 80px;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; }
+    .kicker {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--seal); margin-bottom: 10px;
+    }
+    h1 { font-size: 34px; letter-spacing: -.03em; line-height: 1.1; margin-bottom: 8px; }
+    h1 span { color: var(--seal); }
+    .lede { color: #dce8e2; font-size: 16px; max-width: 62ch; margin-bottom: 28px; }
+    h2 { font-size: 15px; letter-spacing: -.01em; margin: 28px 0 12px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    @media (max-width: 720px) { .grid, .grid-3 { grid-template-columns: 1fr; } }
+    .card {
+      background: linear-gradient(165deg, rgba(22,48,38,.9), rgba(10,23,19,.8));
+      border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
+    }
+    .card h3 { font-size: 13px; margin-bottom: 6px; }
+    .card p, .card li { font-size: 13px; color: #dce8e2; }
+    .card ul { padding-left: 16px; }
+    .card li + li { margin-top: 4px; }
+    .who { font-family: var(--mono); font-size: 10px; color: var(--jade); letter-spacing: .06em; text-transform: uppercase; }
+    .no { color: var(--coral); }
+    .yes { color: var(--seal); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+         text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); }
+    td { padding: 9px 10px; border-bottom: 1px solid rgba(184,232,164,.08); vertical-align: top; }
+    .note { margin-top: 22px; font-size: 11px; color: var(--muted); border: 1px solid var(--line);
+            border-radius: 10px; padding: 12px 14px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }
+    .chip { font-family: var(--mono); font-size: 10px; padding: 4px 10px; border-radius: 999px;
+            border: 1px solid var(--line); color: var(--seal); }
+    .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; }
+    .step { background: rgba(18,40,32,.85); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; flex: 1; min-width: 110px; }
+    .step strong { display: block; font-size: 12px; }
+    .arr { color: var(--seal); opacity: .7; }
+    header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+    .meta { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="kicker">Lastre · Confidential · Proof engine</div>
+      <div class="meta">Private lot · S/A commercial · Lastre does not touch metal</div>
+    </header>
+    <h1>Lastre prova se o ouro <span>pode ser tokenizado</span>.</h1>
+    <p class="lede">
+      Motor de prova e viabilidade do lote. A S/A assina o cliente, faz logística e venda.
+      Lastre não compra, não transporta, não refina, não emite token e não aparece no contrato comercial do metal.
+    </p>
+    <div class="chips">
+      <span class="chip">Privacidade por desenho</span>
+      <span class="chip">Valid | Invalid</span>
+      <span class="chip">Gate before token</span>
+      <span class="chip">Cliente não é público</span>
+    </div>
+
+    <h2>Divisão de papéis (não negociável)</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="who">Lastre — proof engine</div>
+        <h3 class="yes">Faz</h3>
+        <ul>
+          <li>Recebe o pacote de evidência (hashes, não PDFs públicos)</li>
+          <li>Confere consistência: origem ↔ ensaio ↔ barra ↔ custódia</li>
+          <li>Emite veredito <strong>Valid / Invalid</strong></li>
+          <li>Sela o lote (SHA-256) e ancora a prova</li>
+          <li>Abre ou fecha o gate de tokenização</li>
+          <li>Libera leitura seletiva (PCQ) só a quem a S/A autorizar</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="who">S/A — commercial + ops</div>
+        <h3 class="yes">Faz</h3>
+        <ul>
+          <li>Contrato inteligente / SPA com o cliente</li>
+          <li>Compra, transporte, refino, exportação, vault, venda</li>
+          <li>Relação com refinaria, seguradora, issuer EUA</li>
+          <li>KYC/AML comercial e câmbio</li>
+          <li>Logística e prazo com o metal</li>
+        </ul>
+        <p style="margin-top:8px" class="no">Lastre não assina, não opera, não lastreia preço.</p>
+      </div>
+    </div>
+
+    <h2>O que “ouro bom” significa (e o que não significa)</h2>
+    <div class="card">
+      <p><strong>Lastre não garante cotação, liquidez nem seguro do metal.</strong> Lastre garante que o lote só passa se o pacote de prova fechar — origem, teor, cadeia de custódia e custódia batem. Isso é a <em>viabilidade</em> para token: o ouro é tratável como bom para o gate.</p>
+      <table style="margin-top:12px">
+        <thead><tr><th>Pergunta do cliente</th><th>Quem responde</th><th>Como</th></tr></thead>
+        <tbody>
+          <tr><td>A origem é regular?</td><td>Lastre</td><td>PLG/ANM + NF-e no seal · Invalid se falhar</td></tr>
+          <tr><td>O teor é 999?</td><td>Laboratório (laudo) · Lastre confere</td><td>Hash do certificado no pacote</td></tr>
+          <tr><td>É a mesma barra?</td><td>Lastre</td><td>Cadeia: lote → ensaio → SKR</td></tr>
+          <tr><td>Está no cofre?</td><td>Vault (SKR) · Lastre ancora o recibo</td><td>Sem SKR = Invalid = sem token</td></tr>
+          <tr><td>Quanto vale / quem compra?</td><td>S/A</td><td>Fora do protocolo</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Privacidade (pedido do cliente)</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3>On-chain opaco</h3>
+        <p>Só hash + veredito + lot ID cego (ex. AU-26W34-07). Zero nome, cidade, CNPJ, kg em claro.</p>
+      </div>
+      <div class="card">
+        <h3>Docs off-chain</h3>
+        <p>NF-e, PLG, laudo e SKR ficam no cofre da S/A. Lastre vê o necessário sob NDA e sela o hash.</p>
+      </div>
+      <div class="card">
+        <h3>Disclosure seletivo</h3>
+        <p>Buyer/auditor só lê via PCQ autorizado pela S/A. Sem marketplace público. Sem post. Sem grupo Casper.</p>
+      </div>
+    </div>
+
+    <h2>Fluxo semanal (7,5 kg)</h2>
+    <div class="flow" style="margin-top:8px">
+      <div class="step"><strong>1. S/A origina</strong>Pacote mínimo de evidência</div>
+      <span class="arr">→</span>
+      <div class="step"><strong>2. Lastre sela</strong>Hash + dual-key</div>
+      <span class="arr">→</span>
+      <div class="step"><strong>3. Veredito</strong>Valid abre · Invalid fecha</div>
+      <span class="arr">→</span>
+      <div class="step"><strong>4. S/A tokeniza</strong>Só se Valid</div>
+      <span class="arr">→</span>
+      <div class="step"><strong>5. PCQ</strong>Buyer lê prova, se autorizado</div>
+    </div>
+
+    <h2>Pacote mínimo para Valid (senão o gate não abre)</h2>
+    <div class="card">
+      <ul>
+        <li>Identificação do lote (ID interno da S/A) + peso + teor declarado</li>
+        <li>Título minerário vigente do vendedor (PLG/ANM) coerente com a NF-e</li>
+        <li>NF-e de primeira aquisição + comprovante CFEM quando aplicável</li>
+        <li>Guia de transporte + evidência de custódia em trânsito</li>
+        <li>Laudo de teor independente (999) da refinaria/lab nomeado</li>
+        <li>SKR / termo de vault <em>antes</em> do mint (não depois)</li>
+      </ul>
+      <p style="margin-top:10px">Falta um item = <strong>Invalid</strong> = a S/A não emite token. Isso é o produto. Invalid também é prova — e permanece privado.</p>
+    </div>
+
+    <h2>Comercial Lastre ↔ S/A (cliente não vê Lastre, se quiser)</h2>
+    <div class="card">
+      <table>
+        <thead><tr><th>Item</th><th>Modelo</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr><td>Setup / NDA + runbook privado</td><td>Único</td><td>Onboarding dual-key, IDs cegos, canal seguro</td></tr>
+          <tr><td>Seal por lote semanal</td><td>Fee / lote</td><td>4 lotes / mês na cadência 7,5 kg</td></tr>
+          <tr><td>SaaS do motor</td><td>Retainer mensal</td><td>Disponibilidade + re-seal se a cadeia mudar</td></tr>
+          <tr><td>Gate (Valid → mint)</td><td>bps ou flat</td><td>Só cobra se o lote passar</td></tr>
+          <tr><td>PCQ</td><td>Por query autorizada</td><td>Buyer/auditor da S/A</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px">Contrato Lastre é com a <strong>S/A</strong>, não com o cliente do ouro. Isola privacidade e risco commodity.</p>
+    </div>
+
+    <p class="note">
+      Demonstração de papel. Lastre não é seguro de ouro, não é oferta de token e não afirma origem sem o pacote mínimo.
+      Prova ≠ preço. Valid ≠ promessa de venda. Invalid bloqueia o mint — isso é a garantia operacional que o cliente pediu.
+    </p>
+  </div>
+</body>
+</html>

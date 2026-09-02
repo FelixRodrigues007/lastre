@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lastre · Private corridor (operator)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#0a1713; --card:#122820; --line:rgba(184,232,164,.16); --cream:#f6faf8; --muted:#95a89f; --seal:#72c458; --coral:#e0714f; --amber:#e8a838; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:Inter,system-ui,sans-serif; background:var(--bg); color:var(--cream); padding:28px 18px 80px; }
+    .wrap { max-width: 920px; margin: 0 auto; }
+    h1 { font-size: 26px; letter-spacing:-.03em; }
+    .sub { color:var(--muted); font-size:13px; margin-bottom:22px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media (max-width:800px){ .grid { grid-template-columns:1fr; } }
+    .card { background:rgba(18,40,32,.85); border:1px solid var(--line); border-radius:14px; padding:16px; }
+    label { display:block; font-size:11px; color:var(--muted); margin:10px 0 4px; font-family:"JetBrains Mono",monospace; }
+    input, select, textarea { width:100%; background:#0c1c17; color:var(--cream); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font:13px Inter,sans-serif; }
+    button { margin-top:12px; background:#72c458; color:#0a1713; border:0; font-weight:700; padding:10px 14px; border-radius:10px; cursor:pointer; }
+    button.ghost { background:transparent; color:var(--cream); border:1px solid var(--line); }
+    pre { white-space:pre-wrap; word-break:break-all; font:11px/1.45 "JetBrains Mono",monospace; color:#dce8e2; max-height:240px; overflow:auto; }
+    .ok { color:var(--seal); } .bad { color:var(--coral); }
+    .row { display:flex; gap:8px; flex-wrap:wrap; }
+    .row > * { flex:1; min-width:140px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Lastre · corridor privado</h1>
+    <p class="sub">Prova em Casper Testnet. USDT só verificação (Lastre não custodia). S/A opera metal e venda.</p>
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>API</label>
+          <input id="api" value="http://127.0.0.1:3001" />
+        </div>
+        <div>
+          <label>Operator key</label>
+          <input id="key" type="password" placeholder="LASTRE_OPERATOR_KEY" />
+        </div>
+      </div>
+      <button class="ghost" type="button" id="ping">Ping private health</button>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="card">
+        <strong>1. Criar lote (7,5 kg)</strong>
+        <label>lotId (opcional)</label>
+        <input id="lotId" placeholder="AU-26W34-07" />
+        <label>massGrams</label>
+        <input id="mass" value="7500" />
+        <button type="button" id="create">Create lot</button>
+      </div>
+      <div class="card">
+        <strong>2. Hashes sha256 das evidências</strong>
+        <label>title / nfe / transport / assay / skr</label>
+        <textarea id="evidence" rows="7" placeholder='{"title":"…64 hex…","nfe":"…","transport":"…","assay":"…","skr":"…"}'></textarea>
+        <button type="button" id="evidenceBtn">Patch evidence</button>
+        <button class="ghost" type="button" id="decide">Evaluate Valid/Invalid</button>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="card">
+        <strong>3. Invoice USDT (verify only)</strong>
+        <div class="row">
+          <div><label>purpose</label>
+            <select id="purpose"><option value="lastre_fee">lastre_fee</option><option value="lot_settlement">lot_settlement</option></select>
+          </div>
+          <div><label>chain</label>
+            <select id="chain"><option value="tron">tron</option><option value="ethereum">ethereum</option><option value="polygon">polygon</option></select>
+          </div>
+        </div>
+        <label>payTo (carteira da S/A ou Lastre)</label>
+        <input id="payTo" placeholder="T… or 0x…" />
+        <label>amount USDT</label>
+        <input id="amount" value="1500" />
+        <button type="button" id="invoice">Create invoice</button>
+        <label>txHash</label>
+        <input id="txHash" placeholder="hash da transferência USDT" />
+        <button class="ghost" type="button" id="verify">Verify payment</button>
+      </div>
+      <div class="card">
+        <strong>Resposta</strong>
+        <pre id="out">{}</pre>
+      </div>
+    </div>
+  </div>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const out = $("out");
+    function headers() {
+      return {
+        "Content-Type": "application/json",
+        "X-Lastre-Operator-Key": $("key").value.trim(),
+      };
+    }
+    async function call(method, path, body) {
+      const url = $("api").value.replace(/\/+$/, "") + path;
+      const res = await fetch(url, {
+        method,
+        headers: headers(),
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const json = await res.json();
+      out.textContent = JSON.stringify(json, null, 2);
+      out.className = res.ok ? "ok" : "bad";
+      return json;
+    }
+    $("ping").onclick = () => call("GET", "/api/private/health");
+    $("create").onclick = () => call("POST", "/api/private/lots", {
+      lotId: $("lotId").value.trim() || undefined,
+      massGrams: Number($("mass").value),
+    }).then((j) => { if (j.lotId) $("lotId").value = j.lotId; });
+    $("evidenceBtn").onclick = () => {
+      const lotId = $("lotId").value.trim();
+      const evidence = JSON.parse($("evidence").value);
+      return call("POST", `/api/private/lots/${encodeURIComponent(lotId)}/evidence`, evidence);
+    };
+    $("decide").onclick = () => call("POST", `/api/private/lots/${encodeURIComponent($("lotId").value.trim())}/decide`, { action: "evaluate" });
+    let lastInvoice = null;
+    $("invoice").onclick = async () => {
+      const j = await call("POST", "/api/private/invoices", {
+        lotId: $("purpose").value === "lot_settlement" ? $("lotId").value.trim() : undefined,
+        purpose: $("purpose").value,
+        chain: $("chain").value,
+        payTo: $("payTo").value.trim(),
+        amountUsdt: $("amount").value.trim(),
+      });
+      lastInvoice = j.invoiceId;
+    };
+    $("verify").onclick = () => call("POST", `/api/private/invoices/${encodeURIComponent(lastInvoice)}/verify`, {
+      txHash: $("txHash").value.trim(),
+    });
+  </script>
+</body>
+</html>
