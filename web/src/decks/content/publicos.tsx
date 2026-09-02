@@ -89,25 +89,78 @@ export const publicos: Deck = {
       id: "capa",
       title: { pt: "Capa", en: "Cover" },
       skin: "wave",
+      center: true,
       render: (l) => {
         const t = tx(l);
+        const cards = [
+          {
+            k: t("Mapeamos a cadeia", "We mapped the chain"),
+            v: t(
+              "Sete camadas, cinquenta públicos e oito atores de Estado. Nenhum elo ficou de fora do desenho.",
+              "Seven layers, fifty audiences and eight State actors. No link was left out of the map.",
+            ),
+          },
+          {
+            k: t("Prova antes do valor", "Proof before value"),
+            v: t(
+              "O valor só anda se a camada 02 disser que o fato existe. A Lastre é o portão, não o percurso.",
+              "Value only moves if layer 02 says the fact exists. Lastre is the gate, not the route.",
+            ),
+          },
+          {
+            k: t("Todo arco passa pelo meio", "Every arc runs through the middle"),
+            v: t(
+              "Origem, mercado, capital e DeFi não se ligam entre si. Ligam-se pelo centro.",
+              "Origin, market, capital and DeFi do not connect to each other. They connect through the centre.",
+            ),
+          },
+        ];
         return (
-          <>
-            <div className="dk-top">
-              <h1 className="dk-h1">{t("O mapa da cadeia.", "The map of the chain.")}</h1>
+          <div className="dk-cover">
+            <div className="dk-cover__head">
               <p className="dk-eyebrow">
-                {t("Documento de trabalho · 02 setembro 2026", "Working document · 02 September 2026")}
+                {t("Mapa de públicos · 02 setembro 2026", "Map of audiences · 02 September 2026")}
               </p>
-            </div>
-            <div className="dk-bottom">
-              <p className="dk-p dk-p--lead">
+              <h1 className="dk-h1">{t("O mapa da cadeia.", "The map of the chain.")}</h1>
+              <p className="dk-cover__sub">
                 {t(
-                  "Sete camadas, cinquenta públicos, um centro. Mapeamos a cadeia inteira para mostrar onde a Lastre fica — e por que ninguém a contorna.",
-                  "Seven layers, fifty audiences, one centre. We mapped the whole chain to show where Lastre sits — and why no one goes around it.",
+                  "Sete camadas, cinquenta públicos — e um ponto por onde tudo passa.",
+                  "Seven layers, fifty audiences — and one point everything passes through.",
                 )}
               </p>
             </div>
-          </>
+
+            <div className="dk-cover__stage">
+              <Ring locale={l} />
+              <aside className="dk-cover__note dk-cover__note--a">
+                <b>{t("50 públicos", "50 audiences")}</b>
+                <span>
+                  {t(
+                    "Mapeados em sete camadas, do buraco no chão ao token negociado.",
+                    "Mapped across seven layers, from the hole in the ground to the traded token.",
+                  )}
+                </span>
+              </aside>
+              <aside className="dk-cover__note dk-cover__note--b">
+                <b>{t("Camada 02 · a Lastre", "Layer 02 · Lastre")}</b>
+                <span>
+                  {t(
+                    "Nada vira token sem alguém dizer que o fato existe.",
+                    "Nothing becomes a token without someone saying the fact exists.",
+                  )}
+                </span>
+              </aside>
+            </div>
+
+            <ul className="dk-cover__cards">
+              {cards.map((c) => (
+                <li key={c.k}>
+                  <b>{c.k}</b>
+                  <span>{c.v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         );
       },
     },

@@ -1203,3 +1203,348 @@
   color: var(--dk-ink-2);
   text-wrap: pretty;
 }
+
+/* ── capa do mapa de públicos ───────────────────────────────────────────── */
+
+.dk-cover {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.5rem, 1.4vh, 1rem);
+  width: 100%;
+  height: 100%;
+  justify-items: center;
+  text-align: center;
+}
+
+.dk-cover__head {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: center;
+}
+.dk-cover__head .dk-h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 1rem + 4vw, 3.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+.dk-cover__sub {
+  margin: 0;
+  max-width: 46ch;
+  font-size: clamp(0.95rem, 0.88rem + 0.4vw, 1.18rem);
+  line-height: 1.4;
+  color: var(--dk-ink-2);
+  text-wrap: pretty;
+}
+
+/* o anel é o herói; as notas ficam fincadas nele */
+.dk-cover__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 0;
+}
+.dk-cover__stage .dk-ring {
+  max-width: min(40vh, 430px);
+  max-height: 100%;
+}
+
+.dk-cover__note {
+  position: absolute;
+  display: grid;
+  gap: 0.2rem;
+  width: min(24ch, 27vw);
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  background: var(--dk-paper);
+  border: 1px solid var(--dk-accent);
+  border-radius: 2px;
+}
+.dk-cover__note b {
+  font-family: var(--dk-sans);
+  font-size: 0.85rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--dk-ink);
+}
+.dk-cover__note span {
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--dk-ink-2);
+  text-wrap: pretty;
+}
+.dk-cover__note--a { left: 2%; top: 16%; }
+.dk-cover__note--b { right: 2%; bottom: 18%; }
+
+/* as notas se apoiam no anel por uma haste fina, como no mapa de referência */
+.dk-cover__note::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: clamp(1.2rem, 4vw, 3.4rem);
+  border-top: 1px solid var(--dk-accent);
+  opacity: 0.55;
+}
+.dk-cover__note--a::after { left: 100%; }
+.dk-cover__note--b::after { right: 100%; }
+
+.dk-cover__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: grid;
+  gap: 1px;
+  background: var(--dk-rule);
+  border: 1px solid var(--dk-rule);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 820px) {
+  .dk-cover__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.dk-cover__cards li {
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+  padding: 0.85rem 1rem;
+  background: var(--dk-paper);
+  text-align: left;
+}
+.dk-cover__cards b {
+  font-size: 0.9rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--dk-ink);
+}
+.dk-cover__cards span {
+  font-size: 0.79rem;
+  line-height: 1.45;
+  color: var(--dk-ink-2);
+  text-wrap: pretty;
+}
+
+/* telas baixas: as notas saem de cima do anel e viram legenda embaixo */
+@media (max-height: 720px), (max-width: 900px) {
+  .dk-cover__note { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * FIGURES · one marker, many substrates
+ *
+ * The marker is the grammar: a thin circle with a progress ring and a
+ * number, a vertical stem down to the exact point, a label beside it. Its
+ * anatomy is fixed here and nowhere else — every figure that draws a
+ * circle, a ring or a stem is drawing this one.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+.dk { --dk-fig-neg: var(--dk-coral); }
+.dk-sheet--dark { --dk-fig-neg: #ef9b7d; }
+
+.dk-fig {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--dk-fg);
+  overflow: visible;
+}
+/* a column figure is driven by the height it is given, not by the row width */
+.dk-fig--col { width: auto; height: 100%; max-height: min(46vh, 460px); }
+.dk-fig--rail { width: auto; height: clamp(46px, 5.4vh, 62px); }
+
+/* the substrate draws itself in, once, before the markers land */
+.dk-fig__draw { animation: dk-fig-draw 700ms var(--dk-ease) 240ms both; }
+@keyframes dk-fig-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── the marker ──────────────────────────────────────────────────────── */
+
+.dk-mk { color: var(--dk-fg); }
+.dk-mk--neg { color: var(--dk-fig-neg); }
+
+.dk-mk__stem {
+  stroke: currentColor;
+  opacity: 0.55;
+  transform-box: fill-box;
+  transform-origin: top;
+  animation: dk-mk-stem 250ms var(--dk-ease) both;
+  animation-delay: var(--dk-mk-d, 0ms);
+}
+.dk-mk__anchor {
+  fill: currentColor;
+  animation: dk-mk-dot 200ms var(--dk-ease) both;
+  animation-delay: calc(var(--dk-mk-d, 0ms) + 210ms);
+}
+.dk-mk__head {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dk-mk-head 320ms var(--dk-ease) both;
+  animation-delay: calc(var(--dk-mk-d, 0ms) + 230ms);
+}
+/* the disc covers the substrate — it never floats translucent over it */
+.dk-mk__disc {
+  fill: var(--dk-sheet-bg);
+  stroke: currentColor;
+  opacity: 1;
+}
+.dk-mk__ring {
+  stroke: currentColor;
+  animation: dk-mk-ring 460ms var(--dk-ease) both;
+  animation-delay: calc(var(--dk-mk-d, 0ms) + 420ms);
+}
+/* the track under the arc, so an empty ring still reads as a ring */
+.dk-mk__disc + .dk-mk__ring { stroke-linecap: butt; }
+.dk-mk__v {
+  font-family: var(--dk-mono);
+  font-size: 13px;
+  letter-spacing: 0;
+  fill: currentColor;
+}
+.dk-mk__label {
+  font-family: var(--dk-sans);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--dk-fg);
+}
+.dk-mk--neg .dk-mk__label { fill: var(--dk-fig-neg); }
+.dk-mk__sub {
+  font-family: var(--dk-sans);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  fill: var(--dk-fg-dim);
+}
+
+@keyframes dk-mk-stem { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes dk-mk-dot { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dk-mk-head { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: none; } }
+@keyframes dk-mk-ring {
+  from { stroke-dashoffset: var(--dk-mk-arc, 0); }
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── substrate parts ─────────────────────────────────────────────────── */
+
+.dk-fig__link {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  opacity: 0.5;
+}
+/* a hollow link carries no load */
+.dk-fig__link--gone {
+  stroke: var(--dk-fig-neg);
+  stroke-dasharray: 5 6;
+  opacity: 0.85;
+}
+
+.dk-fig__slab {
+  fill: color-mix(in srgb, currentColor 7%, transparent);
+  stroke: currentColor;
+  stroke-width: 1.2;
+  opacity: 0.55;
+}
+.dk-fig__slab--base {
+  fill: color-mix(in srgb, var(--dk-accent) 16%, transparent);
+  stroke: var(--dk-accent);
+  opacity: 1;
+}
+.dk-sheet--dark .dk-fig__slab--base { stroke: #a9dd8f; fill: rgba(169, 221, 143, 0.14); }
+/* the capital floor is a separate entity, not another storey */
+.dk-fig__slab--loose {
+  fill: none;
+  stroke-dasharray: 5 6;
+  opacity: 0.42;
+}
+
+.dk-fig__mass {
+  fill: color-mix(in srgb, currentColor 8%, transparent);
+  stroke: currentColor;
+  stroke-width: 1.2;
+  opacity: 0.6;
+}
+.dk-fig__thread { fill: var(--dk-accent); }
+.dk-sheet--dark .dk-fig__thread { fill: #a9dd8f; }
+
+.dk-fig__rail { fill: none; stroke: currentColor; stroke-width: 1.2; opacity: 0.5; }
+.dk-fig__fill {
+  fill: color-mix(in srgb, var(--dk-accent) 20%, transparent);
+  animation: dk-fig-lit 420ms var(--dk-ease) 720ms both;
+}
+.dk-sheet--dark .dk-fig__fill { fill: rgba(169, 221, 143, 0.2); }
+.dk-fig__tick { stroke: currentColor; stroke-width: 1; opacity: 0.42; }
+.dk-fig__tick--minor { opacity: 0.28; }
+
+.dk-fig__axis { stroke: currentColor; stroke-width: 1.2; opacity: 0.5; }
+.dk-fig__unit {
+  font-family: var(--dk-mono);
+  font-size: 11.5px;
+  fill: var(--dk-fg-faint);
+}
+
+.dk-fig__flow { fill: none; stroke: currentColor; stroke-width: 1.4; opacity: 0.5; }
+.dk-fig__branch { fill: none; stroke: currentColor; stroke-width: 1; opacity: 0.34; stroke-dasharray: 4 5; }
+.dk-fig__node { fill: var(--dk-accent); }
+.dk-sheet--dark .dk-fig__node { fill: #a9dd8f; }
+
+@keyframes dk-fig-lit { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── the rail of five movements ──────────────────────────────────────── */
+
+.dk-fig__tempo line { stroke: currentColor; stroke-width: 1.4; opacity: 0.24; }
+.dk-fig__tempo text {
+  font-family: var(--dk-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--dk-fg-faint);
+}
+.dk-fig__tempo.is-lit line { opacity: 1; stroke: var(--dk-accent); }
+.dk-fig__tempo.is-lit text { fill: var(--dk-fg); }
+.dk-sheet--dark .dk-fig__tempo.is-lit line,
+.dk-sheet--wave .dk-fig__tempo.is-lit line { stroke: var(--dk-accent); }
+.dk-fig__tempo.is-lit { animation: dk-fig-lit 320ms var(--dk-ease) both; animation-delay: calc(420ms + var(--dk-t-d, 0ms)); }
+
+/* ── watermark · the seal, oversized and cut by the edge ─────────────── */
+
+.dk-watermark {
+  position: absolute;
+  right: -14%;
+  bottom: -26%;
+  width: min(78vh, 62%);
+  height: auto;
+  fill: none;
+  stroke: var(--dk-fg);
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* the strike draws itself across the word it cancels */
+.dk-strike--draw {
+  position: relative;
+  text-decoration: none;
+  opacity: 1;
+  color: var(--dk-fg-2);
+}
+.dk-strike--draw::after {
+  content: "";
+  position: absolute;
+  left: -0.04em;
+  right: -0.04em;
+  top: 56%;
+  height: 1.5px;
+  background: var(--dk-fig-neg);
+  transform-origin: left center;
+  animation: dk-strike 520ms var(--dk-ease) 640ms both;
+}
+@keyframes dk-strike { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* figures print as drawn — no animation caught mid-flight */
+@media print {
+  .dk-fig *, .dk-watermark, .dk-strike--draw::after { animation: none !important; }
+  .dk-watermark { opacity: 0.06; }
+}
