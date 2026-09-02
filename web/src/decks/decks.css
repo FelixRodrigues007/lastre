@@ -1566,3 +1566,86 @@
   align-content: start;
 }
 .dk-floors-col .dk-floor { padding-top: 0; }
+
+/* the watermark fills its band and is cropped by it — it must never widen
+ * the sheet, or the auto-fit measures a page that is not there */
+.dk-watermark {
+  position: absolute;
+  inset: 0;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  height: 100%;
+}
+
+/* the vertical chain is the gutter of the numbered list beside it. It is
+ * positioned, not flowed: an auto-height SVG inside an auto-height parent
+ * feeds back on itself and grows without bound. */
+.dk-calc-chain { position: relative; padding-left: clamp(46px, 4vw, 62px); }
+.dk-calc-chain .dk-fig--col {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  max-height: none;
+}
+
+/* four floors read as two pairs — the column alone does not fit a laptop */
+@media (min-width: 900px) {
+  .dk-floors-col { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .dk-row--stack { grid-template-columns: minmax(0, 0.28fr) minmax(0, 1fr); }
+}
+.dk-fig--stack { max-width: 250px; }
+
+/* ── capa do deck geral: o selo como objeto central ───────────────────── */
+
+.dk-cover__stage .dk-seal {
+  width: min(38vw, 420px);
+  max-height: 100%;
+}
+
+/* capa silenciosa: só manchete e objeto, com ar generoso entre os dois */
+.dk-cover--quiet {
+  gap: clamp(2rem, 1rem + 3vh, 4rem);
+  place-content: center;
+}
+
+/* o número come altura do topo — o anel cede a mesma altura, senão encosta no rail */
+.dk-top:has(.dk-bignum) ~ .dk-ring-slide .dk-ring {
+  max-width: min(46vh, 500px);
+}
+
+/* ── número que dimensiona a camada ─────────────────────────────────────── */
+
+.dk-bignum {
+  display: grid;
+  gap: 0.22rem;
+  max-width: 46ch;
+  margin-top: clamp(0.5rem, 1.4vh, 1rem);
+  padding-top: clamp(0.5rem, 1.2vh, 0.85rem);
+}
+.dk-bignum__v {
+  font-family: var(--dk-sans);
+  font-size: clamp(2.1rem, 1.2rem + 2.8vw, 3.4rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--dk-ink);
+  font-variant-numeric: tabular-nums;
+}
+.dk-bignum__v small {
+  font-size: 0.42em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-left: 0.06em;
+  color: var(--dk-ink-2);
+}
+.dk-bignum__k {
+  font-size: clamp(0.78rem, 0.74rem + 0.16vw, 0.88rem);
+  line-height: 1.4;
+  color: var(--dk-ink-2);
+  text-wrap: pretty;
+  max-width: 34ch;
+}

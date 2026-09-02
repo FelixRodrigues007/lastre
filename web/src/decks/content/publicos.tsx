@@ -52,6 +52,22 @@ function Resumo({ locale, id }: { locale: Locale; id: CamadaId }) {
   );
 }
 
+/**
+ * O número que dimensiona a camada. Sempre com fonte na tela — cifra de
+ * terceiro sem procedência não entra em deck.
+ */
+function BigNum({ v, unit, k }: { v: string; unit?: string; k: string }) {
+  return (
+    <div className="dk-bignum">
+      <span className="dk-bignum__v">
+        {v}
+        {unit && <small>{unit}</small>}
+      </span>
+      <span className="dk-bignum__k">{k}</span>
+    </div>
+  );
+}
+
 type Col = {
   label: { pt: string; en: string };
   id: CamadaId;
@@ -221,6 +237,14 @@ export const publicos: Deck = {
             <div className="dk-top">
               <p className="dk-eyebrow">{t("02 — Quem gera", "02 — Who generates")}</p>
               <h2 className="dk-h2">{t("O lado da oferta.", "The supply side.")}</h2>
+              <BigNum
+                v={t("R$ 298,8", "R$ 298.8")}
+                unit={t(" bi", "bn")}
+                k={t(
+                  "Faturamento da mineração brasileira em 2025 (IBRAM).",
+                  "Brazilian mining revenue in 2025 (IBRAM).",
+                )}
+              />
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
               <Ring locale={l} lit={["origem"]} />
@@ -247,6 +271,14 @@ export const publicos: Deck = {
             <div className="dk-top">
               <p className="dk-eyebrow">{t("03 — Quem paga", "03 — Who pays")}</p>
               <h2 className="dk-h2">{t("Quem compra e quem financia.", "Who buys and who funds.")}</h2>
+              <BigNum
+                v={t("R$ 3,9", "R$ 3.9")}
+                unit={t(" bi", "bn")}
+                k={t(
+                  "Captados sob a Resolução 88 da CVM em 2025.",
+                  "Raised under CVM Resolution 88 in 2025.",
+                )}
+              />
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
               <Ring locale={l} lit={["mercado", "capital"]} />
@@ -284,6 +316,14 @@ export const publicos: Deck = {
             <div className="dk-top">
               <p className="dk-eyebrow">{t("04 — Quem opera", "04 — Who operates")}</p>
               <h2 className="dk-h2">{t("Os que atravessam tudo.", "The ones that cut across.")}</h2>
+              <BigNum
+                v="US$ 90,7"
+                unit={t(" bi", "bn")}
+                k={t(
+                  "Ouro tokenizado, à vista, no 1º trimestre de 2026.",
+                  "Tokenised gold, spot, in the first quarter of 2026.",
+                )}
+              />
             </div>
             <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
               <Ring locale={l} lit={["defi", "infra", "estado"]} />
