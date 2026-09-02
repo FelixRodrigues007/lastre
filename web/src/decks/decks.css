@@ -1017,29 +1017,41 @@
   height: 100%;
   display: block;
 }
+.dk-ring3d__callouts {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.dk-ring3d__callout {
+  stroke: var(--dk-rule);
+  stroke-width: 1;
+}
 .dk-ring3d__labels {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 2;
 }
 .dk-ring3d__label {
   position: absolute;
   top: 0;
   left: 0;
   will-change: transform, opacity;
-  text-align: center;
   color: var(--dk-fg);
   display: grid;
   gap: 0.15em;
 }
 .dk-ring3d__label-num {
   font-family: var(--dk-mono);
-  font-size: 13px;
+  font-size: calc(13px * var(--dk-ring3d-scale, 1));
   letter-spacing: 0.14em;
 }
 .dk-ring3d__label-name {
   font-family: var(--dk-sans);
-  font-size: var(--dk-ring3d-name-size, 20px);
+  font-size: calc(var(--dk-ring3d-name-size, 20px) * var(--dk-ring3d-scale, 1));
   font-weight: 600;
   line-height: 1.1;
 }
@@ -1055,6 +1067,17 @@
 .dk-ring-slide--split {
   grid-template-columns: minmax(0, 1fr);
 }
+.dk-ring-slide--stack {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  justify-items: stretch;
+  align-items: start;
+}
+.dk-ring-slide--stack .dk-ring,
+.dk-ring-slide--stack .dk-ring3d {
+  margin-inline: auto;
+  max-width: min(30vh, 320px);
+}
 @media (min-width: 880px) {
   .dk-ring-slide--map {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
@@ -1069,6 +1092,10 @@
   .dk-ring-slide--split .dk-ring3d {
     margin-inline: 0;
     max-width: min(52vh, 520px);
+  }
+  .dk-ring-slide--stack .dk-ring-chips--cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1.2rem, 0.8rem + 1.4vw, 2.2rem);
   }
 }
 .dk-ring-slide__meta {

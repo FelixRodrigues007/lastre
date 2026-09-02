@@ -327,7 +327,7 @@ export const publicos: Deck = {
                 )}
               />
             </div>
-            <div className="dk-bottom dk-ring-slide dk-ring-slide--split">
+            <div className="dk-bottom dk-ring-slide dk-ring-slide--stack">
               <Ring3D locale={l} lit={["defi", "infra", "estado"]} />
               <div className="dk-ring-slide__side">
                 <ChipCols
