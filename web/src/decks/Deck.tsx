@@ -98,7 +98,11 @@ export function DeckViewer({ deck, locale, onExit }: Props) {
       for (const kid of Array.from(inner.children)) {
         contentBottom = Math.max(contentBottom, kid.getBoundingClientRect().bottom);
       }
-      const content = contentBottom - top;
+      /* Medir só os filhos diretos deixa passar o que transborda dentro de um
+       * deles — uma faixa com `min-height: 0`, uma figura maior que a caixa.
+       * `scrollHeight` pega esse caso, e escalar não muda o layout, então não
+       * há laço com o ResizeObserver. */
+      const content = Math.max(contentBottom - top, inner.scrollHeight);
       const wide = inner.scrollWidth;
       if (box <= 0 || content <= 0) return;
       const k = Math.min(1, box / content, inner.clientWidth / Math.max(wide, 1));
