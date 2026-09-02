@@ -46,35 +46,28 @@ export const geral: Deck = {
       id: "capa",
       title: { pt: "Capa", en: "Cover" },
       skin: "wave",
+      center: true,
       render: (l) => {
         const t = tx(l);
         return (
-          <>
-            <div className="dk-row dk-row--wide">
-              <div className="dk-top">
-                <h1 className="dk-h1">
-                  {t("Prova antes", "Proof before")}
-                  <br />
-                  {t("do valor.", "value.")}
-                </h1>
-                <p className="dk-eyebrow">
-                  {t("Documento de trabalho · 02 setembro 2026", "Working document · 02 September 2026")}
-                </p>
-              </div>
-              <SealCard locale={l} />
-            </div>
-            <div className="dk-bottom">
-              <p className="dk-p dk-p--lead">
+          <div className="dk-cover dk-cover--quiet">
+            <div className="dk-cover__head">
+              <p className="dk-eyebrow">
+                {t("Documento de trabalho · 02 setembro 2026", "Working document · 02 September 2026")}
+              </p>
+              <h1 className="dk-h1">{t("Prova antes do valor.", "Proof before value.")}</h1>
+              <p className="dk-cover__sub">
                 {t(
                   "Hoje se tokeniza sobre origem declarada. A Lastre prova que a leitura aconteceu.",
                   "Today everything is tokenised on a declared origin. Lastre proves the reading happened.",
                 )}
               </p>
-              <div className="dk-tempo-rail">
-                <TimeRail locale={l} title={RAIL} steps={TEMPOS(l)} lit={1} />
-              </div>
             </div>
-          </>
+
+            <div className="dk-cover__stage">
+              <SealCard locale={l} />
+            </div>
+          </div>
         );
       },
     },
@@ -328,7 +321,7 @@ export const geral: Deck = {
                     pt: "Quatro lajes. O andar 0 é a base larga; o andar 3 está deslocado e tracejado — entidade separada.",
                     en: "Four slabs. Floor 0 is the broad base; floor 3 sits offset and dashed — a separate entity.",
                   }}
-                  base={t("o único que precisa existir", "the only one that must exist")}
+                  base={t("andar 0", "floor 0")}
                 />
                 <div className="dk-floors-col">
                 <div className="dk-floor dk-floor--0">
@@ -771,19 +764,6 @@ export const geral: Deck = {
                   </p>
                 </div>
               </div>
-              <Chain
-                locale={l}
-                title={{
-                  pt: "A ordem das quatro decisões. A quarta não se recupera depois.",
-                  en: "The order of the four decisions. The fourth cannot be recovered later.",
-                }}
-                links={[
-                  { n: "01", label: t("armazém", "warehouse") },
-                  { n: "02", label: t("threat model", "threat model") },
-                  { n: "03", label: t("preço", "price") },
-                  { n: "04", label: t("irrecuperável", "unrecoverable"), missing: true },
-                ]}
-              />
             </div>
           </>
         );

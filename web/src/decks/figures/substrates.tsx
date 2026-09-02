@@ -23,13 +23,13 @@ export type Link = {
 
 export function Chain({ locale, title, links }: { locale: Locale; title: L10n; links: Link[] }) {
   const w = 300;
-  const h = 76;
+  const h = 64;
   const pitch = 258;
   const x0 = (1200 - (w + pitch * (links.length - 1))) / 2;
-  const cy = 128;
+  const cy = 112;
 
   return (
-    <Fig locale={locale} title={title} height={172}>
+    <Fig locale={locale} title={title} height={150}>
       {links.map((link, i) => {
         const x = x0 + i * pitch;
         return (
@@ -50,7 +50,7 @@ export function Chain({ locale, title, links }: { locale: Locale; title: L10n; l
           key={`m-${link.n}`}
           x={x0 + i * pitch + w / 2}
           y={cy - h / 2}
-          stemTop={32}
+          stemTop={30}
           value={link.missing ? 0 : link.n}
           pct={link.missing ? 0 : 1}
           label={link.label}
@@ -64,19 +64,19 @@ export function Chain({ locale, title, links }: { locale: Locale; title: L10n; l
 
 /** The same links, read top to bottom — the gutter of a numbered list. */
 export function ChainColumn({ locale, title, links }: { locale: Locale; title: L10n; links: Link[] }) {
-  const pitch = 108;
-  const h = 62;
+  const pitch = 104;
+  const h = 58;
   const height = pitch * (links.length - 1) + h + 40;
 
   return (
-    <Fig locale={locale} title={title} height={height} className="dk-fig--col" width={130}>
+    <Fig locale={locale} title={title} height={height} className="dk-fig--col" width={70}>
       {links.map((link, i) => {
         const y = 20 + i * pitch;
         return (
           <rect
             key={`l-${link.n}`}
             className={`dk-fig__link ${link.missing ? "dk-fig__link--gone" : DRAW}`}
-            x={39}
+            x={9}
             y={y}
             width={52}
             height={h}
@@ -88,7 +88,7 @@ export function ChainColumn({ locale, title, links }: { locale: Locale; title: L
       {links.map((link, i) => (
         <Marker
           key={`m-${link.n}`}
-          x={65}
+          x={35}
           y={20 + i * pitch + h / 2}
           stemTop={20 + i * pitch + h / 2}
           value={link.missing ? 0 : link.n}
@@ -127,7 +127,7 @@ export function Stack({ locale, title, base }: { locale: Locale; title: L10n; ba
           {...(s.loose ? {} : draw)}
         />
       ))}
-      <Marker x={285} y={322} stemTop={60} value={0} pct={1} label="" sub={base} order={0} />
+      <Marker x={286} y={322} stemTop={56} value={0} pct={1} label={base} order={0} />
     </Fig>
   );
 }
@@ -147,16 +147,16 @@ export function Ratio({
   metal: string;
   share: string;
 }) {
-  const y = 138;
-  const h = 46;
+  const y = 72;
+  const h = 34;
 
   return (
-    <Fig locale={locale} title={title} height={200}>
+    <Fig locale={locale} title={title} height={116}>
       <rect className={`dk-fig__mass ${DRAW}`} x={40} y={y} width={1120} height={h} {...draw} />
       {/* the metal, to scale: three ten-thousandths of the bar */}
       <rect className="dk-fig__thread" x={40} y={y - 10} width={2} height={h + 20} />
-      <Marker x={1050} y={y} stemTop={40} pct={1} label={mass} order={1} />
-      <Marker x={41} y={y} stemTop={40} pct={0.000003} label={metal} sub={share} order={0} />
+      <Marker x={1120} y={y} stemTop={34} pct={1} label={mass} side="left" order={1} />
+      <Marker x={41} y={y} stemTop={34} pct={0.000003} label={metal} sub={share} order={0} />
     </Fig>
   );
 }
@@ -168,12 +168,12 @@ export type Mark = { pct: number; value: string; label: string; side?: "left" | 
 export function Bars({ locale, title, marks }: { locale: Locale; title: L10n; marks: Mark[] }) {
   const x0 = 60;
   const span = 1080;
-  const y = 148;
-  const h = 44;
+  const y = 116;
+  const h = 40;
   const central = marks[Math.floor(marks.length / 2)];
 
   return (
-    <Fig locale={locale} title={title} height={214}>
+    <Fig locale={locale} title={title} height={178}>
       <rect className={`dk-fig__rail ${DRAW}`} x={x0} y={y} width={span} height={h} {...draw} />
       {central && (
         <rect className="dk-fig__fill" x={x0} y={y} width={span * central.pct} height={h} />
@@ -193,7 +193,7 @@ export function Bars({ locale, title, marks }: { locale: Locale; title: L10n; ma
           key={`m-${m.value}`}
           x={x0 + span * m.pct}
           y={y}
-          stemTop={40}
+          stemTop={34}
           value={m.value}
           pct={m.pct}
           label={m.label}
@@ -226,17 +226,17 @@ export function Scale({
 }) {
   const x0 = 60;
   const span = 1080;
-  const y = 132;
+  const y = 84;
   const at = (v: number) => x0 + span * (v / max);
   const ticks = Array.from({ length: Math.floor(max / step) + 1 }, (_, i) => i * step);
 
   return (
-    <Fig locale={locale} title={title} height={190}>
+    <Fig locale={locale} title={title} height={128}>
       <line className={`dk-fig__axis ${DRAW}`} x1={x0} y1={y} x2={x0 + span} y2={y} {...draw} />
       {ticks.map((v) => (
         <g key={v}>
-          <line className="dk-fig__tick dk-fig__tick--minor" x1={at(v)} y1={y} x2={at(v)} y2={y + 12} />
-          <text className="dk-fig__unit" x={at(v)} y={y + 34} textAnchor="middle">
+          <line className="dk-fig__tick dk-fig__tick--minor" x1={at(v)} y1={y} x2={at(v)} y2={y + 11} />
+          <text className="dk-fig__unit" x={at(v)} y={y + 30} textAnchor="middle">
             {v === 0 ? unit : v.toLocaleString(locale === "pt" ? "pt-BR" : "en-US")}
           </text>
         </g>
@@ -246,7 +246,7 @@ export function Scale({
           key={s.label}
           x={at(s.at)}
           y={y}
-          stemTop={40}
+          stemTop={34}
           value={s.value}
           pct={s.at / max}
           label={s.label}
@@ -274,18 +274,18 @@ export function Converge({
   out: string;
 }) {
   const jx = 720;
-  const jy = 172;
+  const jy = 128;
 
   return (
-    <Fig locale={locale} title={title} height={252}>
-      <path className={`dk-fig__flow ${DRAW}`} d={`M60 112 C 330 112, 480 172, ${jx} ${jy}`} {...draw} />
-      <path className={`dk-fig__flow ${DRAW}`} d={`M60 232 C 330 232, 480 172, ${jx} ${jy}`} {...draw} />
+    <Fig locale={locale} title={title} height={192}>
+      <path className={`dk-fig__flow ${DRAW}`} d={`M60 82 C 330 82, 480 128, ${jx} ${jy}`} {...draw} />
+      <path className={`dk-fig__flow ${DRAW}`} d={`M60 174 C 330 174, 480 128, ${jx} ${jy}`} {...draw} />
       <circle className="dk-fig__node" cx={jx} cy={jy} r={7} />
       {/* the thin way out — cash before the mandate binds */}
-      <path className={`dk-fig__branch ${DRAW}`} d={`M${jx} ${jy} L 1000 ${jy} L 1140 108`} {...draw} />
-      <Marker x={190} y={126} stemTop={40} value="01" pct={1} label={a} order={0} />
-      <Marker x={470} y={214} stemTop={40} value="02" pct={1} label={b} order={1} />
-      <Marker x={1010} y={168} stemTop={40} value="03" pct={0.34} label={out} order={2} />
+      <path className={`dk-fig__branch ${DRAW}`} d={`M${jx} ${jy} L 1000 ${jy} L 1140 74`} {...draw} />
+      <Marker x={190} y={92} stemTop={34} value="01" pct={1} label={a} order={0} />
+      <Marker x={470} y={162} stemTop={34} value="02" pct={1} label={b} order={1} />
+      <Marker x={1010} y={124} stemTop={34} value="03" pct={0.34} label={out} order={2} />
     </Fig>
   );
 }
@@ -303,7 +303,9 @@ export function TimeRail({
   steps: string[];
   lit: number;
 }) {
-  const pitch = 112;
+  /* Larga o bastante para o rótulo mais longo ("Como funciona") caber entre
+   * dois passos — a 112 os rótulos se sobrepunham. */
+  const pitch = 152;
   const width = pitch * steps.length;
 
   return (
@@ -324,7 +326,13 @@ export function TimeRail({
 
 export function Watermark() {
   return (
-    <svg className="dk-watermark" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+    <svg
+      className="dk-watermark"
+      viewBox="0 0 160 160"
+      preserveAspectRatio="xMaxYMax slice"
+      aria-hidden="true"
+      focusable="false"
+    >
       <path d="M80 24L128 52V108L80 136L32 108V52L80 24Z" strokeWidth="4" strokeLinejoin="round" />
       <path d="M80 47L108 63.5V96.5L80 113L52 96.5V63.5L80 47Z" strokeWidth="3.4" strokeLinejoin="round" />
       <circle cx="80" cy="80" r="9" strokeWidth="3.4" />
