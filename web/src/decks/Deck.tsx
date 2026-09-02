@@ -1,29 +1,31 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { DitherField } from "../components/visual/DitherField";
+import type { Locale } from "../i18n/translations";
+import { Chevron } from "./DeckChrome";
 import type { Deck } from "./types";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 type Props = {
   deck: Deck;
+  locale: Locale;
   onExit: () => void;
 };
 
 /**
- * Deck viewer. One slide per screen, keyboard-first.
- * ← → / space navigate · G opens the contents · Esc returns to the drawer.
+ * The deck viewer. One sheet per screen, keyboard first.
+ * ← → / space walk the deck · G opens the contents · Esc returns to the drawer.
  */
-export function DeckViewer({ deck, onExit }: Props) {
+export function DeckViewer({ deck, locale, onExit }: Props) {
   const total = deck.slides.length;
-  const stageRef = useRef<HTMLDivElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   const fitRef = useRef<HTMLDivElement>(null);
 
-  const initial = (() => {
+  const [i, setI] = useState(() => {
     const hash = window.location.hash.replace(/^#s\//, "");
     const found = deck.slides.findIndex((s) => s.id === hash);
     return found >= 0 ? found : 0;
-  })();
-
-  const [i, setI] = useState(initial);
+  });
   const [toc, setToc] = useState(false);
 
   const go = useCallback(
@@ -32,40 +34,10 @@ export function DeckViewer({ deck, onExit }: Props) {
       setI(clamped);
       setToc(false);
       const slide = deck.slides[clamped];
-      if (slide) {
-        window.history.replaceState(null, "", `/decks/${deck.slug}#s/${slide.id}`);
-      }
+      if (slide) window.history.replaceState(null, "", `/decks/${deck.slug}#s/${slide.id}`);
     },
     [deck.slides, deck.slug, total],
   );
-
-  /* Auto-fit: every slide is scaled down until it fits the stage, so a deck
-   * never scrolls and never clips — on a laptop or on a meeting-room beamer. */
-  useLayoutEffect(() => {
-    const stage = stageRef.current;
-    const inner = fitRef.current;
-    if (!stage || !inner) return;
-
-    const fit = () => {
-      inner.style.transform = "none";
-      const styles = getComputedStyle(stage);
-      const availableH =
-        stage.clientHeight - parseFloat(styles.paddingTop) - parseFloat(styles.paddingBottom);
-      const availableW =
-        stage.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight);
-      const h = inner.scrollHeight;
-      const w = inner.scrollWidth;
-      if (h <= 0 || w <= 0) return;
-      const k = Math.min(1, availableH / h, availableW / w);
-      inner.style.transform = k < 0.995 ? `scale(${k.toFixed(4)})` : "none";
-    };
-
-    fit();
-    const ro = new ResizeObserver(fit);
-    ro.observe(stage);
-    ro.observe(inner);
-    return () => ro.disconnect();
-  }, [i]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -108,60 +80,64 @@ export function DeckViewer({ deck, onExit }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [go, i, onExit, toc, total]);
 
+  /* Auto-fit. Every sheet is scaled down until its content fits, so a deck
+   * never scrolls and never clips — laptop or meeting-room beamer. */
+  useLayoutEffect(() => {
+    const sheet = sheetRef.current;
+    const inner = fitRef.current;
+    if (!sheet || !inner) return;
+
+    const fit = () => {
+      inner.style.transform = "none";
+      const box = inner.clientHeight;
+      const content = inner.scrollHeight;
+      const wide = inner.scrollWidth;
+      if (box <= 0 || content <= 0) return;
+      const k = Math.min(1, box / content, inner.clientWidth / Math.max(wide, 1));
+      inner.style.transform = k < 0.995 ? `scale(${k.toFixed(4)})` : "none";
+    };
+
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(sheet);
+    ro.observe(inner);
+    return () => ro.disconnect();
+  }, [i, locale]);
+
   const slide = deck.slides[i];
   if (!slide) return null;
 
+  const skin = slide.skin ?? "light";
+
   return (
-    <div className="dk">
-      <header className="dk-rail">
-        <div className="dk-rail__group">
-          <button type="button" className="dk-btn dk-btn--ghost dk-rail__mark" onClick={onExit}>
-            Lastre
-          </button>
-          <span className="dk-rail__sep">/</span>
-          <span className="dk-rail__title">{deck.title}</span>
+    <div className="dk-stage">
+      <section
+        ref={sheetRef}
+        className={`dk-sheet${skin === "light" ? "" : ` dk-sheet--${skin}`}`}
+        aria-roledescription={locale === "pt" ? "apresentação" : "presentation"}
+      >
+        {skin === "wave" && <DitherField className="dk-sheet__wave" />}
+
+        <div
+          className={`dk-canvas__inner${slide.center ? " dk-canvas__inner--center" : ""}`}
+          ref={fitRef}
+          key={`${slide.id}-${locale}`}
+        >
+          {slide.render(locale)}
         </div>
-        <div className="dk-rail__group">
-          <span className="dk-rail__title">{slide.title}</span>
-          <button type="button" className="dk-btn" onClick={() => setToc((v) => !v)} aria-expanded={toc}>
-            Índice
-          </button>
-          <span aria-live="polite">
-            {pad(i + 1)} <span className="dk-rail__sep">/</span> {pad(total)}
+
+        <div className="dk-foot">
+          <span className="dk-foot__l">{deck.title[locale]}</span>
+          <span className="dk-foot__c">Lastre</span>
+          <span className="dk-foot__r">
+            {deck.updated} — {pad(i + 1)}/{pad(total)}
           </span>
         </div>
-      </header>
-
-      <div className="dk-stage dk-stage--fit" ref={stageRef}>
-        {i > 0 && (
-          <button
-            type="button"
-            className="dk-zone dk-zone--prev"
-            onClick={() => go(i - 1)}
-            aria-label="Tela anterior"
-            tabIndex={-1}
-          />
-        )}
-        {i < total - 1 && (
-          <button
-            type="button"
-            className="dk-zone dk-zone--next"
-            onClick={() => go(i + 1)}
-            aria-label="Próxima tela"
-            tabIndex={-1}
-          />
-        )}
-
-        <article className="dk-canvas" key={slide.id}>
-          <div className="dk-canvas__inner" ref={fitRef}>
-            {slide.body}
-          </div>
-        </article>
 
         {toc && (
-          <div className="dk-overlay" role="dialog" aria-label="Índice da apresentação">
-            <p className="dk-mono" style={{ marginBottom: "1.5rem" }}>
-              {deck.title} — {total} telas
+          <div className="dk-overlay" role="dialog" aria-label={locale === "pt" ? "Índice" : "Contents"}>
+            <p className="dk-eyebrow" style={{ marginBottom: "1.6rem" }}>
+              {deck.title[locale]} — {total} {locale === "pt" ? "telas" : "screens"}
             </p>
             <nav className="dk-toc">
               {deck.slides.map((s, n) => (
@@ -173,34 +149,31 @@ export function DeckViewer({ deck, onExit }: Props) {
                   onClick={() => go(n)}
                 >
                   <span className="dk-toc__n">{pad(n + 1)}</span>
-                  <span className="dk-toc__t">{s.title}</span>
+                  <span>{s.title[locale]}</span>
                 </button>
               ))}
             </nav>
           </div>
         )}
-      </div>
+      </section>
 
-      <footer className="dk-rail dk-rail--foot">
-        <button type="button" className="dk-btn" onClick={() => go(i - 1)} disabled={i === 0}>
-          ←
-        </button>
-        <div className="dk-ticks">
-          {deck.slides.map((s, n) => (
-            <button
-              type="button"
-              key={s.id}
-              className="dk-tick"
-              aria-current={n === i}
-              aria-label={`Tela ${n + 1}: ${s.title}`}
-              onClick={() => go(n)}
-            />
-          ))}
-        </div>
-        <button type="button" className="dk-btn" onClick={() => go(i + 1)} disabled={i === total - 1}>
-          →
-        </button>
-      </footer>
+      <button
+        type="button"
+        className="dk-nav dk-nav--prev"
+        onClick={() => go(i - 1)}
+        disabled={i === 0}
+        aria-label={locale === "pt" ? "Tela anterior" : "Previous screen"}
+      >
+        <Chevron dir="prev" />
+      </button>
+      <button
+        type="button"
+        className="dk-nav dk-nav--next"
+        onClick={() => (i === total - 1 ? onExit() : go(i + 1))}
+        aria-label={locale === "pt" ? "Próxima tela" : "Next screen"}
+      >
+        <Chevron dir="next" />
+      </button>
     </div>
   );
 }

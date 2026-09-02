@@ -1,22 +1,36 @@
 import type { ReactNode } from "react";
+import type { Locale } from "../i18n/translations";
+
+/** A string in both deck languages. */
+export type L10n = Record<Locale, string>;
+
+/** Sheet skins, mirroring the four grounds of the system. */
+export type Skin = "light" | "dark" | "mint" | "wave";
 
 export type Slide = {
-  /** Stable id, used for the deep link hash (#s/<id>). */
+  /** Stable id — becomes the deep link (#s/<id>). */
   id: string;
-  /** Short label shown in the table of contents and the top rail. */
-  title: string;
-  body: ReactNode;
+  /** Short label for the contents overlay and the footer rail. */
+  title: L10n;
+  skin?: Skin;
+  /** Centre the content instead of pinning it top and bottom. */
+  center?: boolean;
+  render: (locale: Locale) => ReactNode;
 };
 
 export type Deck = {
   /** URL segment under /decks. */
   slug: string;
-  /** Two-digit ordinal shown in the drawer. */
   index: string;
-  title: string;
-  /** One line, editorial. Shown in the drawer and on the deck cover rail. */
-  summary: string;
-  audience: string;
+  title: L10n;
+  summary: L10n;
+  audience: L10n;
   updated: string;
   slides: Slide[];
 };
+
+/** `const t = tx(locale)` then `t("português", "english")`. */
+export const tx =
+  (locale: Locale) =>
+  (pt: string, en: string): string =>
+    locale === "pt" ? pt : en;

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import { normalizeLocale } from "../lib/locale";
+import type { Locale } from "../i18n/translations";
 import { decks } from "./registry";
 import { DecksIndex } from "./DecksIndex";
 import { DeckViewer } from "./Deck";
+import { DeckHeader } from "./DeckChrome";
 import "./decks.css";
 
 const readSlug = () => {
@@ -9,14 +12,38 @@ const readSlug = () => {
   return m ? decodeURIComponent(m[1]!) : null;
 };
 
+/* The decks keep their own language key: the landing is English-first, but a
+ * deck opens in the language of the room it is presented in. */
+const LOCALE_KEY = "lastre-deck-locale";
+
+const readLocale = (): Locale => {
+  try {
+    const stored = localStorage.getItem(LOCALE_KEY);
+    return stored ? normalizeLocale(stored) : "pt";
+  } catch {
+    return "pt";
+  }
+};
+
 /** Path router for /decks and /decks/:slug. No dependency, no build change. */
 export function DecksApp() {
   const [slug, setSlug] = useState<string | null>(readSlug);
+  const [locale, setLocaleState] = useState<Locale>(readLocale);
 
   useEffect(() => {
     const onPop = () => setSlug(readSlug());
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  const setLocale = useCallback((next: Locale) => {
+    setLocaleState(next);
+    try {
+      localStorage.setItem(LOCALE_KEY, next);
+    } catch {
+      // Storage can be unavailable — the toggle still works for this session.
+    }
+    document.documentElement.lang = next === "pt" ? "pt-BR" : "en";
   }, []);
 
   const open = useCallback((next: string) => {
@@ -32,30 +59,46 @@ export function DecksApp() {
   const deck = slug ? decks.find((d) => d.slug === slug) : undefined;
 
   useEffect(() => {
-    document.title = deck ? `${deck.title} — Lastre` : "Apresentações — Lastre";
-  }, [deck]);
+    document.documentElement.lang = locale === "pt" ? "pt-BR" : "en";
+    document.title = deck
+      ? `${deck.title[locale]} — Lastre`
+      : locale === "pt"
+        ? "Apresentações — Lastre"
+        : "Decks — Lastre";
+  }, [deck, locale]);
 
-  if (slug && !deck) {
-    return (
-      <div className="dk">
+  return (
+    <div className="dk">
+      <DeckHeader locale={locale} onLocale={setLocale} />
+
+      {slug && !deck ? (
         <div className="dk-stage">
-          <div className="dk-slide">
-            <p className="dk-eyebrow dk-eyebrow--muted">404</p>
-            <h1 className="dk-h1">Esta pasta não existe.</h1>
-            <p>
-              <button type="button" className="dk-btn" onClick={exit}>
-                Ver todas as apresentações
-              </button>
-            </p>
-          </div>
+          <section className="dk-sheet">
+            <div className="dk-canvas__inner dk-canvas__inner--center">
+              <div className="dk-top">
+                <p className="dk-eyebrow">404</p>
+                <h1 className="dk-h1">
+                  {locale === "pt" ? "Esta pasta não existe." : "This folder does not exist."}
+                </h1>
+                <p className="dk-p">
+                  <button
+                    type="button"
+                    className="dk-tag"
+                    style={{ cursor: "pointer" }}
+                    onClick={exit}
+                  >
+                    {locale === "pt" ? "Ver todas" : "See all"}
+                  </button>
+                </p>
+              </div>
+            </div>
+          </section>
         </div>
-      </div>
-    );
-  }
-
-  return deck ? (
-    <DeckViewer deck={deck} onExit={exit} />
-  ) : (
-    <DecksIndex decks={decks} onOpen={open} />
+      ) : deck ? (
+        <DeckViewer deck={deck} locale={locale} onExit={exit} />
+      ) : (
+        <DecksIndex decks={decks} locale={locale} onOpen={open} />
+      )}
+    </div>
   );
 }
