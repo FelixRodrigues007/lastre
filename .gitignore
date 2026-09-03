@@ -26,3 +26,18 @@ web/cobe-test.html
 # Business KB — repo privado lastre-negocio (symlink local). Nunca commitar.
 docs/kb-negocio
 docs/kb-negocio/
+
+# Corredores / SPE / intel — nunca no GitHub público (Casper ainda aberto)
+docs/pitch/RIO_CRISTALINO_BRIEFING_LAURA.md
+docs/pitch/lastre-system-map.html
+docs/COMPETITOR_INTEL_*.md
+docs/MEGA_REPORT_*.md
+ops-beijing/
+
+# Dumps locais de sessão
+FUGU_TESTER_AGRESSIVO.md
+LASTRO_FULL_CODE_ANALYSIS_*.md
+PROMPT_PARA_FUGU_VERCEL.md
+TODO_HANDOFF_SUPER_GROK_HEAVY.md
+VIDEO_MAP_FOR_CODEX_FUGU.md
+analyze-lastro.sh

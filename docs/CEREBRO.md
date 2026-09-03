@@ -29,6 +29,18 @@ ln -sfn ../../lastre-negocio docs/kb-negocio
 
 `docs/kb-negocio/` continua no `.gitignore` deste repo. O Claude Project da pasta `lastre` lê o symlink.
 
+## Claude / Fable — DD de corredor
+
+Abrir primeiro (local, gitignorado neste repo):
+
+```text
+docs/kb-negocio/04-corredores/PARA-FABLE.md
+```
+
+Absoluto: `/Users/felixrodrigues/Developer/lastre/docs/kb-negocio/04-corredores/PARA-FABLE.md`
+
+O cérebro no GitHub privado usa **git-crypt** (working tree em claro). Este repo público **não** cifra o código da competição — o júri precisa lê-lo. O que é confidencial simplesmente **não entra** aqui.
+
 ## O que cada repo é
 
 | Repo | Conteúdo |
