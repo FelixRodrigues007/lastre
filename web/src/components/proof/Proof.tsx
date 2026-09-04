@@ -76,7 +76,8 @@ export function Proof() {
   const seal =
     field === "mass" ? SEALS.tamperedMass : field === "origin" ? SEALS.tamperedOrigin : SEALS.valid;
   const verdict = tampered ? c.invalid : c.valid;
-  const numberLocale = locale === "pt" ? "pt-BR" : "en-US";
+  const numberLocale =
+    locale === "pt" ? "pt-BR" : locale === "es" ? "es-CO" : "en-US";
 
   const applyTamper = (next: TamperField) => {
     setField(next);

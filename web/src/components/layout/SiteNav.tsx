@@ -3,6 +3,7 @@ import { SealMark } from "../ui/SealMark";
 import { useSite } from "../../context/SiteContext";
 import { trackEvent } from "../../lib/analytics";
 import type { Locale } from "../../i18n/translations";
+import { withLangParam } from "../../lib/locale";
 import { APP_URL, APP_URL_IS_EXTERNAL, DOCS_URL } from "../../site-links";
 import "./site-nav.css";
 
@@ -21,7 +22,7 @@ function LocaleToggle({ className }: { className?: string }) {
       role="group"
       aria-label="Language"
     >
-      {(["pt", "en"] as const).map((code) => (
+      {(["en", "pt", "es"] as const).map((code) => (
         <button
           key={code}
           type="button"
@@ -45,18 +46,19 @@ const NAV_HREFS = [
   { href: "#demo", key: "demo" as const },
 ] as const;
 
-const SECONDARY_HREFS = [
-  { href: "#faq", key: "faq" as const },
-  ...(APP_URL_IS_EXTERNAL
-    ? ([{ href: APP_URL, key: "app" as const, external: true }] as const)
-    : ([{ href: APP_URL, key: "app" as const }] as const)),
-  { href: DOCS_URL, key: "docs" as const, external: true },
-] as const;
-
 function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const panelRef = useRef<HTMLDivElement>(null);
-  const { content } = useSite();
+  const { content, locale } = useSite();
   const { nav } = content;
+  const secondaryHrefs = [
+    { href: "#faq", key: "faq" as const },
+    {
+      href: withLangParam(APP_URL, locale),
+      key: "app" as const,
+      ...(APP_URL_IS_EXTERNAL ? { external: true as const } : {}),
+    },
+    { href: DOCS_URL, key: "docs" as const, external: true as const },
+  ];
 
   useEffect(() => {
     if (!open) return;
@@ -114,13 +116,15 @@ function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           </ul>
 
           <ul className="site-nav__drawer-secondary">
-            {SECONDARY_HREFS.map((link) => (
+            {secondaryHrefs.map((link) => (
               <li key={link.href + link.key}>
                 <a
                   className="site-nav__drawer-secondary-link"
                   href={link.href}
                   onClick={onClose}
-                  {...("external" in link ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  {...("external" in link && link.external
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
                 >
                   {nav[link.key]}
                 </a>
@@ -137,8 +141,9 @@ function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
 
 export function SiteNav() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { content } = useSite();
+  const { content, locale } = useSite();
   const { nav } = content;
+  const appHref = withLangParam(APP_URL, locale);
 
   return (
     <>
@@ -163,7 +168,7 @@ export function SiteNav() {
             <LocaleToggle />
             <a
               className="site-nav__action"
-              href={APP_URL}
+              href={appHref}
               {...(APP_URL_IS_EXTERNAL ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             >
               {nav.app}

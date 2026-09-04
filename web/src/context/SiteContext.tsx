@@ -40,10 +40,13 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [scrollDepth, setScrollDepth] = useState(0);
 
+  const htmlLang = (loc: Locale) =>
+    loc === "pt" ? "pt-BR" : loc === "es" ? "es" : "en";
+
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
     persistLocale(next);
-    document.documentElement.lang = next === "pt" ? "pt-BR" : "en";
+    document.documentElement.lang = htmlLang(next);
     const meta = getContent(next).meta;
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
@@ -61,7 +64,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const meta = getContent(locale).meta;
-    document.documentElement.lang = locale === "pt" ? "pt-BR" : "en";
+    document.documentElement.lang = htmlLang(locale);
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
     if (localStorage.getItem("lastro-contrast") === "high") {
@@ -71,7 +74,8 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   }, [locale]);
 
   const t = useCallback(
-    (key: TranslationKey) => translations[locale][key] ?? translations.en[key],
+    (key: TranslationKey) =>
+      translations[locale][key] ?? translations.en[key],
     [locale],
   );
 

@@ -1,4 +1,4 @@
-export type Locale = "en" | "pt";
+export type Locale = "en" | "pt" | "es";
 
 export const translations = {
   en: {
@@ -84,6 +84,48 @@ export const translations = {
     accepted: "aceitos",
     rejected: "rejeitados",
     postDemo: "Adulteração concluída — abra o console do app para ver a trilha de auditoria completa.",
+  },
+  es: {
+    skipToDemo: "Ir a la demo de prueba",
+    verifyProof: "Verificar prueba",
+    tryTamperDemo: "Probar adulteración",
+    runDemo: "Ejecutar demo",
+    viewOnChain: "Ver on-chain",
+    openApp: "Abrir consola de la app",
+    copyContract: "Copiar dirección del contrato",
+    copied: "Copiado al portapapeles",
+    cmdHint: "Acciones rápidas",
+    scrollProgress: "Progreso de la página",
+    proofRail: "Pipeline de prueba",
+    locale: "ES",
+    highContrast: "Alto contraste",
+    notifyMainnet: "Avisar en mainnet",
+    emailPlaceholder: "tu@empresa.com",
+    subscribe: "Suscribirse",
+    protocolUpdates: "Solo actualizaciones del protocolo — sin lenguaje de inversión.",
+    bookWalkthrough: "Agendar walkthrough técnico",
+    simulatedOnly: "Feedback simulado",
+    partners: "Socios tecnológicos",
+    builtFor: "Hecho para evaluadores",
+    faq: "Preguntas frecuentes",
+    useCases: "Casos de uso",
+    compare: "Cómo se compara Lastre",
+    changelog: "Novedades en testnet",
+    whatWeAreNot: "Lo que no somos",
+    security: "Postura de seguridad",
+    githubStats: "Código abierto",
+    heroEyebrow: "En vivo en Casper Testnet · Protocolo de prueba de procedencia",
+    heroHeadline: "Prueba antes del token.",
+    heroSubShort:
+      "Sellos determinísticos offline. Veredictos on-chain. Antes de cualquier token, agente o acción financiera.",
+    heroSubFull:
+      "Lastre es la capa de confianza para activos del mundo real y agentes autónomos. Verifica el origen físico offline y de forma determinística, luego ancla el veredicto en Casper — antes de que cualquier token o agente actúe sobre los datos.",
+    readMore: "Leer más",
+    readLess: "Leer menos",
+    testnetHealthy: "Testnet saludable",
+    accepted: "aceptados",
+    rejected: "rechazados",
+    postDemo: "Adulteración completa — abre la consola de la app para inspeccionar la traza de auditoría completa.",
   },
 } as const;
 

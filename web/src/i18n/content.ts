@@ -1,4 +1,5 @@
 import type { Locale } from "./translations";
+import { contentEs } from "./content-es";
 
 export const content = {
   en: {
@@ -1011,10 +1012,13 @@ export const content = {
         "A Lastre verifica origem física offline com selos SHA-256 determinísticos e ancora vereditos Valid ou Invalid no Casper — antes de qualquer token ou agente agir sobre os dados.",
     },
   },
+  es: contentEs,
 } as const;
 
-export type SiteContent = (typeof content)[Locale];
+/** Canonical shape from English; all locales must match this tree. */
+export type SiteContent = (typeof content)["en"];
 
 export function getContent(locale: Locale): SiteContent {
-  return content[locale];
+  // Cast keeps TS happy when locales share the same string-tree shape.
+  return content[locale] as SiteContent;
 }

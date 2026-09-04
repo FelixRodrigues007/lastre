@@ -80,11 +80,14 @@
   align-items: center;
   gap: 0.625rem;
   flex-shrink: 0;
+  overflow: visible;
 }
 
 .site-nav__locale {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
   gap: 0.125rem;
   padding: 0.1875rem;
   border-radius: var(--lastro-radius-pill);
@@ -93,7 +96,8 @@
 
 .site-nav__locale-btn {
   margin: 0;
-  padding: 0.3125rem 0.5rem;
+  padding: 0.3125rem 0.45rem;
+  min-width: 1.85rem;
   border: 0;
   border-radius: var(--lastro-radius-pill);
   background: transparent;
@@ -297,6 +301,17 @@
 
   .site-nav__menu-btn {
     display: none;
+  }
+}
+
+/* Mid desktop: keep EN/PT/ES visible before the App CTA, not clipped by nav links. */
+@media (min-width: 860px) and (max-width: 1100px) {
+  .site-nav__links {
+    gap: 1.1rem;
+  }
+
+  .site-nav__inner {
+    gap: var(--lastro-space-4);
   }
 }
 
