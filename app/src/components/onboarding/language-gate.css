@@ -1,0 +1,75 @@
+.lang-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: color-mix(in srgb, #050607 72%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.lang-gate__card {
+  width: min(100%, 22rem);
+  padding: 1.5rem 1.35rem 1.35rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--lastro-border-subtle, #2a322c) 90%, transparent);
+  background: color-mix(in srgb, var(--lastro-bg-elevated, #121814) 96%, #0a0c0b);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+}
+
+.lang-gate__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--lastro-text-secondary, #9aa89a) 90%, transparent);
+}
+
+.lang-gate__title {
+  margin: 0 0 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--lastro-text-primary, #f2f5f2);
+}
+
+.lang-gate__lead {
+  margin: 0 0 1.15rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lastro-text-secondary, #9aa89a);
+}
+
+.lang-gate__options {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.lang-gate__btn {
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--lastro-border-subtle, #2a322c) 100%, transparent);
+  background: transparent;
+  color: var(--lastro-text-primary, #f2f5f2);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 550;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.lang-gate__btn:hover {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal, #6b9b6e) 55%, transparent);
+  background: color-mix(in srgb, var(--lastro-brand-seal, #6b9b6e) 10%, transparent);
+}
+
+.lang-gate__btn--active {
+  border-color: color-mix(in srgb, var(--lastro-brand-seal, #6b9b6e) 70%, transparent);
+  background: color-mix(in srgb, var(--lastro-brand-seal, #6b9b6e) 14%, transparent);
+}

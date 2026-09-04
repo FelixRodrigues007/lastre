@@ -6,6 +6,7 @@ import { WORKSPACE_NAV } from "../../lib/navigation";
 import { Icon } from "../ui/Icon";
 import { SealMark } from "../ui/SealMark";
 import { OnboardingChecklist } from "../onboarding/OnboardingChecklist";
+import { SidebarPreferencesMenu } from "./AppPreferencesMenu";
 import { NavItem } from "./NavItem";
 import { SessionMenu } from "./SessionMenu";
 import "./app-sidebar.css";
@@ -97,6 +98,7 @@ export function AppSidebar({ onOpenSearch }: AppSidebarProps) {
           <OnboardingChecklist inSidebar />
 
           <footer className="app-sidebar__foot">
+            <SidebarPreferencesMenu collapsed={collapsed} />
             <SessionMenu collapsed={collapsed} />
           </footer>
         </div>

@@ -172,14 +172,14 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
                           {t("settings.language.hint")}
                         </p>
                         <div
-                          className="settings-modal__segment"
+                          className="settings-modal__segment settings-modal__segment--langs"
                           role="radiogroup"
                           aria-labelledby={languageGroupId}
                         >
                           <span className="sr-only" id={languageGroupId}>
                             {t("prefs.language")}
                           </span>
-                          {(["en", "pt"] as Locale[]).map((value) => (
+                          {(["en", "pt", "es"] as Locale[]).map((value) => (
                             <button
                               key={value}
                               type="button"
@@ -190,7 +190,9 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
                             >
                               {value === "en"
                                 ? t("prefs.lang.en")
-                                : t("prefs.lang.pt")}
+                                : value === "pt"
+                                  ? t("prefs.lang.pt")
+                                  : t("prefs.lang.es")}
                             </button>
                           ))}
                         </div>

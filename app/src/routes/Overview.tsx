@@ -21,8 +21,9 @@ export function Overview() {
   const auditLog = useAsyncData(getAudit);
   const lots = useAsyncData(getLots);
 
-  const loading = chain.loading || audit.loading || lots.loading;
-  const error = chain.error ?? audit.error ?? lots.error;
+  const ready = Boolean(chain.data && audit.data);
+  const loading = !ready && (chain.loading || audit.loading || lots.loading);
+  const error = ready ? null : chain.error ?? audit.error ?? lots.error;
 
   const auditTotal = audit.data?.total ?? 0;
 

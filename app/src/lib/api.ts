@@ -26,20 +26,72 @@ function apiUrl(path: string): string {
   return `${API_BASE_URL}${suffix}`;
 }
 
-async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(apiUrl(path), {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...init?.headers,
-    },
-  });
+const FETCH_TIMEOUT_MS = 8_000;
 
-  const body = (await response.json()) as T & {
+async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  const url = apiUrl(path);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  if (init?.signal) {
+    if (init.signal.aborted) controller.abort();
+    else init.signal.addEventListener("abort", () => controller.abort(), { once: true });
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      ...init,
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        ...init?.headers,
+      },
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new ApiError(`Request timed out (${url}).`, 504, "API_TIMEOUT");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
+  const raw = await response.text();
+  const contentType = response.headers.get("content-type") ?? "";
+  const looksHtml =
+    contentType.includes("text/html") ||
+    raw.trimStart().startsWith("<!DOCTYPE") ||
+    raw.trimStart().startsWith("<!doctype") ||
+    raw.trimStart().startsWith("<html");
+
+  if (looksHtml) {
+    throw new ApiError(
+      API_BASE_URL
+        ? `API returned HTML instead of JSON (${url}). Check the app-api service.`
+        : `API base URL is not configured (got HTML from ${url}). Set VITE_API_BASE_URL=https://app-api.lastre.io for production builds.`,
+      response.status || 502,
+      "API_HTML_RESPONSE",
+    );
+  }
+
+  let body: T & {
     error?: string;
     message?: string;
     code?: string;
   };
+  try {
+    body = JSON.parse(raw) as T & {
+      error?: string;
+      message?: string;
+      code?: string;
+    };
+  } catch {
+    throw new ApiError(
+      `Invalid JSON from API (${url}).`,
+      response.status || 502,
+      "API_INVALID_JSON",
+    );
+  }
 
   if (!response.ok) {
     throw new ApiError(

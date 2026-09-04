@@ -187,12 +187,17 @@
 
 .settings-modal__segment {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* 2 (theme) or 3 (language) options — auto-fit keeps both layouts tidy */
+  grid-template-columns: repeat(auto-fit, minmax(4.25rem, 1fr));
   gap: 0.375rem;
   padding: 0.25rem;
   border-radius: 10px;
   background: color-mix(in srgb, var(--app-fill-hover) 70%, transparent);
   box-shadow: inset 0 0 0 0.5px var(--lastro-border-subtle);
+}
+
+.settings-modal__segment--langs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .settings-modal__segment-btn {

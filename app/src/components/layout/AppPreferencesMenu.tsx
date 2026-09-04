@@ -7,13 +7,17 @@ import { SETTINGS_NAV } from "../../lib/navigation";
 import { Icon } from "../ui/Icon";
 import "./app-preferences-menu.css";
 
-export function SidebarPreferencesMenu() {
+export function SidebarPreferencesMenu({ collapsed = false }: { collapsed?: boolean }) {
   const { locale, setLocale, t } = useLocaleContext();
   const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const languageGroupId = useId();
   const themeGroupId = useId();
+
+  useEffect(() => {
+    if (collapsed) setOpen(false);
+  }, [collapsed]);
 
   useEffect(() => {
     if (!open) return;
@@ -39,7 +43,7 @@ export function SidebarPreferencesMenu() {
   return (
     <div
       ref={rootRef}
-      className={`app-prefs app-prefs--sidebar${open ? " app-prefs--open" : ""}`}
+      className={`app-prefs app-prefs--sidebar${open ? " app-prefs--open" : ""}${collapsed ? " app-prefs--collapsed" : ""}`}
     >
       <button
         type="button"
@@ -50,8 +54,8 @@ export function SidebarPreferencesMenu() {
         onClick={() => setOpen((value) => !value)}
       >
         <Icon name="settings" size={16} />
-        <span className="app-prefs__trigger-label">{t("prefs.menu")}</span>
-        <Icon name="chevron-down" size={12} className="app-prefs__chevron" />
+        {collapsed ? null : <span className="app-prefs__trigger-label">{t("prefs.menu")}</span>}
+        {collapsed ? null : <Icon name="chevron-down" size={12} className="app-prefs__chevron" />}
       </button>
 
       {open ? (
@@ -60,17 +64,24 @@ export function SidebarPreferencesMenu() {
             <span className="app-prefs__field-label" id={languageGroupId}>
               {t("prefs.language")}
             </span>
-            <div className="app-prefs__segment" role="group" aria-labelledby={languageGroupId}>
-              {(["en", "pt"] as Locale[]).map((value) => (
+            <div className="app-prefs__segment app-prefs__segment--langs" role="group" aria-labelledby={languageGroupId}>
+              {(["en", "pt", "es"] as Locale[]).map((value) => (
                 <button
                   key={value}
                   type="button"
                   role="menuitemradio"
                   aria-checked={locale === value}
                   className={`app-prefs__segment-btn${locale === value ? " app-prefs__segment-btn--active" : ""}`}
+                  aria-label={
+                    value === "en"
+                      ? t("prefs.lang.en")
+                      : value === "pt"
+                        ? t("prefs.lang.pt")
+                        : t("prefs.lang.es")
+                  }
                   onClick={() => setLocale(value)}
                 >
-                  {value === "en" ? t("prefs.lang.en") : t("prefs.lang.pt")}
+                  {value.toUpperCase()}
                 </button>
               ))}
             </div>

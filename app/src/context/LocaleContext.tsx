@@ -9,7 +9,7 @@ import {
 } from "react";
 import type { TranslationKey, TranslationParams } from "../i18n/translations";
 import { translate } from "../i18n/translations";
-import { applyLocale, getStoredLocale, type Locale } from "../lib/locale";
+import { applyLocale, getStoredLocale, markLocaleChosen, type Locale } from "../lib/locale";
 
 type LocaleContextValue = {
   locale: Locale;
@@ -25,6 +25,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
     applyLocale(next);
+    markLocaleChosen();
   }, []);
 
   useEffect(() => {

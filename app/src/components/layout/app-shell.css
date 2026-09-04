@@ -73,6 +73,16 @@
   flex-shrink: 0;
 }
 
+.app-topbar__locale {
+  margin-inline-end: 0.15rem;
+}
+
+@media (max-width: 430px) {
+  .app-topbar__status {
+    display: none;
+  }
+}
+
 .app-topbar__capture {
   min-height: 1.75rem;
   padding: 0.25rem 0.65rem;

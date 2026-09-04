@@ -22,6 +22,7 @@ initDemoSession();
 document.documentElement.dataset.appBuild = APP_BUILD_STAMP;
 
 import { App } from "./App";
+import { LanguageGate } from "./components/onboarding/LanguageGate";
 import { LocaleProvider } from "./context/LocaleContext";
 import { NavCountsProvider } from "./context/NavCountsContext";
 import { OnboardingProvider } from "./context/OnboardingContext";
@@ -30,6 +31,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <LocaleProvider>
+        <LanguageGate />
         <OnboardingProvider>
           <NavCountsProvider>
             <App />

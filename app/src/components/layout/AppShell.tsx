@@ -6,6 +6,7 @@ import { useLocaleContext } from "../../context/LocaleContext";
 import { usePageReveal } from "../../hooks/usePageReveal";
 import { resolveScreenId } from "../../lib/screenMotion";
 import { useSidebarCollapsed } from "../../hooks/useSidebarCollapsed";
+import { AuthLangToggle } from "../onboarding/AuthLangToggle";
 import { CaptureWizardTrigger } from "../capture/CaptureWizardTrigger";
 import { OnboardingChecklist } from "../onboarding/OnboardingChecklist";
 import { AppSidebar } from "./AppSidebar";
@@ -42,6 +43,7 @@ export function AppShell({ children }: AppShellProps) {
                 <span className="app-topbar__wordmark">{t("brand.console")}</span>
               </NavLink>
               <div className="app-topbar__end">
+                <AuthLangToggle className="app-topbar__locale" />
                 <CaptureWizardTrigger className="app-topbar__capture route-cta route-cta--ghost" icon>
                   {t("capture.wizard.trigger")}
                 </CaptureWizardTrigger>

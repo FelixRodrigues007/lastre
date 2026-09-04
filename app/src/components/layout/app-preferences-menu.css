@@ -68,20 +68,28 @@
   font-family: var(--lastro-font-mono);
   font-size: 0.625rem;
   font-weight: var(--lastro-weight-medium);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
   color: var(--lastro-text-muted);
 }
 
 .app-prefs__segment {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(3.2rem, 1fr));
   gap: 0.35rem;
+}
+
+.app-prefs__segment--langs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .app-prefs__segment-btn {
   min-height: 1.875rem;
-  padding: 0.3rem 0.5rem;
+  padding: 0.3rem 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   border-radius: var(--lastro-radius-sm);
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
   background: transparent;
@@ -136,4 +144,15 @@
 
 .app-prefs__settings-arrow {
   opacity: 0.55;
+}
+
+.app-prefs--collapsed .app-prefs__trigger {
+  justify-content: center;
+  padding-inline: 0.45rem;
+}
+
+.app-prefs--collapsed .app-prefs__menu {
+  left: 0;
+  right: auto;
+  min-width: 14.5rem;
 }

@@ -242,6 +242,8 @@
 
   .app-sidebar__foot {
     flex-shrink: 0;
+    display: grid;
+    gap: 0.5rem;
     padding-top: 0.625rem;
     margin-top: 0.625rem;
     border-top: 0.5px solid var(--app-stroke-divider);

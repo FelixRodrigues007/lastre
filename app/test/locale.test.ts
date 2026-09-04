@@ -38,12 +38,15 @@ beforeEach(() => {
   installStorage();
 });
 
-test("normalizeLocale only accepts 'pt', everything else is 'en'", () => {
+test("normalizeLocale only accepts exact 'pt', 'es', or 'en' — everything else is 'en'", () => {
   assert.equal(typeof locale.normalizeLocale, "function");
   assert.equal(locale.normalizeLocale("pt"), "pt");
+  assert.equal(locale.normalizeLocale("es"), "es");
   assert.equal(locale.normalizeLocale("en"), "en");
   assert.equal(locale.normalizeLocale("PT"), "en");
+  assert.equal(locale.normalizeLocale("ES"), "en");
   assert.equal(locale.normalizeLocale("pt-BR"), "en");
+  assert.equal(locale.normalizeLocale("es-ES"), "en");
   assert.equal(locale.normalizeLocale(""), "en");
   assert.equal(locale.normalizeLocale(null), "en");
   assert.equal(locale.normalizeLocale(undefined), "en");
@@ -76,6 +79,14 @@ test("after the one-time reset, an explicit 'pt' choice persists across reloads"
   assert.equal(locale.getStoredLocale(), "pt");
 });
 
+test("after the one-time reset, an explicit 'es' choice persists across reloads", () => {
+  const mem = installStorage();
+  locale.getStoredLocale();
+  locale.applyLocale("es");
+  assert.equal(mem.getItem("lastro-locale"), "es");
+  assert.equal(locale.getStoredLocale(), "es");
+});
+
 test("getStoredLocale never throws when localStorage access is blocked", () => {
   const mem = installStorage();
   mem.throwOnGet = true;
@@ -86,4 +97,14 @@ test("applyLocale does not throw when setItem is blocked", () => {
   const mem = installStorage();
   mem.throwOnSet = true;
   assert.doesNotThrow(() => locale.applyLocale("en"));
+});
+
+test("hasExplicitLocaleChoice stays false until markLocaleChosen — cookie from applyLocale is not a pick", () => {
+  const mem = installStorage();
+  locale.getStoredLocale();
+  locale.applyLocale("en");
+  assert.equal(locale.hasExplicitLocaleChoice(), false);
+  locale.markLocaleChosen();
+  assert.equal(mem.getItem("lastro-locale-chosen"), "1");
+  assert.equal(locale.hasExplicitLocaleChoice(), true);
 });

@@ -1,0 +1,37 @@
+/* Shared EN / PT / ES toggle — login bar + console topbar. */
+
+.auth-lang {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  gap: 0.15rem;
+  font-size: 0.75rem;
+}
+
+.auth-lang__btn {
+  padding: 0.25rem 0.4rem;
+  min-width: 1.75rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--lastro-font-body);
+  font-size: 0.75rem;
+  font-weight: var(--lastro-weight-medium);
+  color: var(--lastro-text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.auth-lang__btn--active {
+  color: var(--lastro-text-primary);
+}
+
+.auth-lang__btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--lastro-brand-seal, #6b9b6e) 45%, transparent);
+}
+
+.auth-lang__sep {
+  color: var(--lastro-border-strong);
+  user-select: none;
+}
