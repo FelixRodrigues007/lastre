@@ -1,7 +1,7 @@
 import { Ring3D } from "../Ring3D";
 import type { SectorId } from "../Ring";
 import { tx, type Deck } from "../types";
-import type { Locale } from "../../i18n/translations";
+import type { DeckLocale as Locale } from "../types";
 import { camada, type CamadaId } from "./publicos-data";
 
 /* ─────────────────────────────────────────────────────────────────────────

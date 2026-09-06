@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import type { Locale } from "../i18n/translations";
+import type { DeckLocale as Locale } from "./types";
 
 /* ─────────────────────────────────────────────────────────────────────────
  * Small animated pieces. Everything here degrades to a still frame under

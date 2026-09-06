@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { SealMark } from "../components/ui/SealMark";
-import type { Locale } from "../i18n/translations";
+import type { DeckLocale as Locale } from "./types";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { CAMADAS } from "./content/publicos-data";
 

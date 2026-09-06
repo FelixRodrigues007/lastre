@@ -1,8 +1,13 @@
 import type { ReactNode } from "react";
-import type { Locale } from "../i18n/translations";
+
+/* The site speaks three languages; these documents are written in two, and the
+ * deck header is a two-button toggle. Widening this to the site Locale would
+ * demand a Spanish string for every line of every sheet — so the decks name
+ * their own contract and DecksApp clamps the site locale down to it. */
+export type DeckLocale = "pt" | "en";
 
 /** A string in both deck languages. */
-export type L10n = Record<Locale, string>;
+export type L10n = Record<DeckLocale, string>;
 
 /** Sheet skins, mirroring the four grounds of the system. */
 export type Skin = "light" | "dark" | "mint" | "wave";
@@ -19,7 +24,7 @@ export type Slide = {
   bleed?: boolean;
   /** Etapas de build além do estado inicial (etapa 0). */
   steps?: number;
-  render: (locale: Locale, step: number) => ReactNode;
+  render: (locale: DeckLocale, step: number) => ReactNode;
 };
 
 export type Deck = {
@@ -35,6 +40,6 @@ export type Deck = {
 
 /** `const t = tx(locale)` then `t("português", "english")`. */
 export const tx =
-  (locale: Locale) =>
+  (locale: DeckLocale) =>
   (pt: string, en: string): string =>
     locale === "pt" ? pt : en;

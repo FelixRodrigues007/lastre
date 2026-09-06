@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Locale } from "../../i18n/translations";
+import type { DeckLocale as Locale } from "../types";
 import type { L10n } from "../types";
 
 /* ─────────────────────────────────────────────────────────────────────────

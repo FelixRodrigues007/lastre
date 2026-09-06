@@ -1,5 +1,5 @@
 import { SealMark } from "../components/ui/SealMark";
-import type { Locale } from "../i18n/translations";
+import type { DeckLocale as Locale } from "./types";
 
 /**
  * The whole header: the mark, the word, and the language switch.

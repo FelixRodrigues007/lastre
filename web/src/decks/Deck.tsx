@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { flushSync } from "react-dom";
 import { DitherField } from "../components/visual/DitherField";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-import type { Locale } from "../i18n/translations";
+import type { DeckLocale as Locale } from "./types";
 import { Chevron } from "./DeckChrome";
 import type { Deck } from "./types";
 

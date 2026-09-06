@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { normalizeLocale } from "../lib/locale";
-import type { Locale } from "../i18n/translations";
+import type { DeckLocale as Locale } from "./types";
 import { decks } from "./registry";
 import { DecksIndex } from "./DecksIndex";
 import { DeckViewer } from "./Deck";
@@ -16,10 +16,16 @@ const readSlug = () => {
  * deck opens in the language of the room it is presented in. */
 const LOCALE_KEY = "lastre-deck-locale";
 
+/* normalizeLocale answers for the whole site, which speaks Spanish too. These
+ * documents do not, so a Spanish reader gets the English sheet rather than a
+ * deck half in a language it was never written in. */
+const toDeckLocale = (value: unknown): Locale =>
+  normalizeLocale(value) === "pt" ? "pt" : "en";
+
 const readLocale = (): Locale => {
   try {
     const stored = localStorage.getItem(LOCALE_KEY);
-    return stored ? normalizeLocale(stored) : "pt";
+    return stored ? toDeckLocale(stored) : "pt";
   } catch {
     return "pt";
   }

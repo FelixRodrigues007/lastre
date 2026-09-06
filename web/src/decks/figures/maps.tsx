@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n/translations";
+import type { DeckLocale as Locale } from "../types";
 import type { L10n } from "../types";
 import { BRAZIL, WORLD, brazilXY, worldXY } from "./geo-data";
 import { Fig, Marker, W } from "./Marker";

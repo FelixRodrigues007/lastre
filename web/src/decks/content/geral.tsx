@@ -12,7 +12,7 @@ import {
   Watermark,
 } from "../figures/substrates";
 import { tx, type Deck } from "../types";
-import type { Locale } from "../../i18n/translations";
+import type { DeckLocale as Locale } from "../types";
 
 /* The five movements of the document. They name the rail on the cover and
  * come back, fully lit, on the closing sheet. */

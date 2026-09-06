@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
-import type { Locale } from "../i18n/translations";
+import type { DeckLocale as Locale } from "./types";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import {
   Ring,

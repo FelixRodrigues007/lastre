@@ -1,4 +1,4 @@
-import type { Locale } from "../../i18n/translations";
+import type { DeckLocale as Locale } from "../types";
 import type { L10n } from "../types";
 import { DRAW, Fig, Marker, draw } from "./Marker";
 
