@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { tx, type Deck } from "../types";
+import type { Deck, DeckLocale } from "../types";
 
 /* The board is an Excalidraw scene, and Excalidraw is the heaviest thing the
  * site loads. Keep it out of the decks chunk until this sheet is on screen. */
@@ -7,7 +7,13 @@ const BoardEmbed = lazy(() =>
   import("../../diagram/BoardEmbed").then((m) => ({ default: m.BoardEmbed })),
 );
 
-const BOARD = "lastre-capacidades";
+/* One committed board per language, both written by
+ * scripts/build-capabilities-board.mjs from a single bilingual source — a
+ * drawing has no runtime string table, so the translation is another file. */
+const BOARD: Record<DeckLocale, string> = {
+  pt: "lastre-capacidades",
+  en: "lastre-capacidades-en",
+};
 
 /* ─────────────────────────────────────────────────────────────────────────
  * 03 · Capacidades
@@ -24,49 +30,13 @@ export const capacidades: Deck = {
   audience: { pt: "Sócios e convidados", en: "Partners and guests" },
   updated: "05.09.2026",
   slides: [
-    /* ── capa ─────────────────────────────────────────────────────────── */
-    {
-      id: "capa",
-      title: { pt: "Capa", en: "Cover" },
-      skin: "mint",
-      center: true,
-      render: (l) => {
-        const t = tx(l);
-        return (
-          <div className="dk-cover dk-cover--quiet">
-            <div className="dk-cover__head">
-              <p className="dk-eyebrow">
-                {t(
-                  "Documento de trabalho · 05 setembro 2026",
-                  "Working document · 05 September 2026",
-                )}
-              </p>
-              <h1 className="dk-h1">
-                {t(
-                  "O que a Lastre é capaz de fazer?",
-                  "What is Lastre capable of?",
-                )}
-              </h1>
-              <p className="dk-cover__sub">
-                {t(
-                  "Uma coisa de cada vez, na ordem em que acontecem. A prova vem primeiro — nada a jusante existe sem ela.",
-                  "One thing at a time, in the order they happen. Proof comes first — nothing downstream exists without it.",
-                )}
-              </p>
-            </div>
-          </div>
-        );
-      },
-    },
-
-    /* ── o mapa ───────────────────────────────────────────────────────── */
     {
       id: "mapa",
       title: { pt: "O mapa", en: "The map" },
       bleed: true,
-      render: () => (
+      render: (l) => (
         <Suspense fallback={<div className="board-embed" aria-busy="true" />}>
-          <BoardEmbed slug={BOARD} theme="light" />
+          <BoardEmbed key={l} slug={BOARD[l]} theme="light" />
         </Suspense>
       ),
     },

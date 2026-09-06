@@ -103,7 +103,15 @@ export function DecksIndex({ decks, locale, onOpen }: Props) {
                 <span className="dk-folder__t">{deck.title[locale]}</span>
                 <span className="dk-p dk-folder__s">{deck.summary[locale]}</span>
                 <span className="dk-folder__meta">
-                  {deck.slides.length} {pt ? "telas" : "screens"} · {deck.updated}
+                  {deck.slides.length}{" "}
+                  {deck.slides.length === 1
+                    ? pt
+                      ? "tela"
+                      : "screen"
+                    : pt
+                      ? "telas"
+                      : "screens"}{" "}
+                  · {deck.updated}
                 </span>
               </a>
             ))}
