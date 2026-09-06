@@ -7,9 +7,13 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit && node scripts/verify-casper-landing-evidence.mjs"
+    "lint": "tsc --noEmit && node scripts/verify-casper-landing-evidence.mjs",
+    "sync:excalidraw": "node scripts/sync-excalidraw-fonts.mjs",
+    "predev": "npm run sync:excalidraw",
+    "prebuild": "npm run sync:excalidraw"
   },
   "dependencies": {
+    "@excalidraw/excalidraw": "^0.18.1",
     "cobe": "^0.6.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

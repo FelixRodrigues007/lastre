@@ -4,3 +4,6 @@ dist
 *.tsbuildinfo
 .DS_Store
 .vercel
+
+# Mirrored from node_modules by scripts/sync-excalidraw-fonts.mjs
+public/excalidraw/

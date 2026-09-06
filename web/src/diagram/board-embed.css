@@ -1,0 +1,27 @@
+/* Excalidraw sizes itself from its parent, so the parent needs real bounds. */
+.board-embed {
+  position: absolute;
+  inset: 0;
+}
+
+.board-embed .excalidraw {
+  height: 100%;
+}
+
+/* View mode still ships the menu, the zoom island and the help button. A deck
+ * sheet is not a place to operate the canvas, it is a place to look at it. */
+.board-embed .excalidraw .App-bottom-bar,
+.board-embed .excalidraw .help-icon,
+.board-embed .excalidraw .layer-ui__wrapper__footer,
+.board-embed .excalidraw .layer-ui__wrapper__top-right,
+.board-embed .excalidraw .dropdown-menu,
+.board-embed .excalidraw .sidebar-trigger,
+.board-embed .excalidraw [data-testid="main-menu-trigger"] {
+  display: none !important;
+}
+
+/* Let the sheet skin show through the scene. */
+.board-embed .excalidraw,
+.board-embed .excalidraw .excalidraw__canvas {
+  background: transparent !important;
+}
