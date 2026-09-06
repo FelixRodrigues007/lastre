@@ -35,6 +35,20 @@ const icons: Record<string, ReactNode> = {
       />
     </svg>
   ),
+  capacidades: (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="5" cy="12" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="19" cy="5.5" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="19" cy="12" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="19" cy="18.5" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M7.2 12h9.6M7.4 10.9 16.9 6.6M7.4 13.1l9.5 4.3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
 };
 
 const fallbackIcon = (
