@@ -20,7 +20,7 @@ const PAD = 16;
 
 const base = (over) => ({
   angle: 0,
-  strokeColor: "#1e1e1e",
+  strokeColor: P.ink,
   backgroundColor: "transparent",
   fillStyle: "solid",
   strokeWidth: 2,
@@ -56,6 +56,33 @@ const wrap = (text, maxPx) => {
   return out;
 };
 
+
+/* Excalidraw's own dark mode is a filter over the canvas (invert + hue-rotate),
+ * which lifts every stroke towards white at once — a black border and black
+ * text come out the same near-white, and neither can be softened without the
+ * other. So the dark board is not a filtered light board: it is drawn dark,
+ * with its own colours, and rendered with the filter off. */
+const PALETTES = {
+  light: {
+    bg: "#f7f9f7",
+    ink: "#1e1e1e",   // text
+    line: "#1e1e1e",  // box borders
+    flow: "#1e1e1e",  // arrows
+    blue: "#1971c2",
+    red: "#e03131",
+  },
+  dark: {
+    bg: "#121212",
+    ink: "#e6ede9",
+    line: "#6f7d77",  // grey, not white: the border frames, it does not shout
+    flow: "#8b9a93",
+    blue: "#6ea8fe",
+    red: "#ff8b8b",
+  },
+};
+
+let P = PALETTES.light;
+
 let elements = [];
 
 /** A labelled box: rectangle + bound text, height derived from the wrapped label. */
@@ -69,7 +96,7 @@ const box = (id, x, y, w, label, opts = {}) => {
     id, type: "rectangle", x, y, width: w, height: h,
     backgroundColor: opts.fill ?? "transparent",
     fillStyle: "solid",
-    strokeColor: opts.stroke ?? "#1e1e1e",
+    strokeColor: opts.accent ?? P.line,
     strokeWidth: opts.strokeWidth ?? 2,
     roundness: { type: 3 },
     boundElements: [{ type: "text", id: textId }],
@@ -79,7 +106,7 @@ const box = (id, x, y, w, label, opts = {}) => {
     id: textId, type: "text",
     x: x + PAD, y: y + Math.round((h - textH) / 2),
     width: w - PAD * 2, height: textH,
-    strokeColor: opts.stroke ?? "#1e1e1e",
+    strokeColor: opts.accent ?? P.ink,
     text: lines.join("\n"),
     originalText: label,
     fontSize: FONT, fontFamily: 1,
@@ -113,7 +140,7 @@ const arrow = (a, b, opts = {}) => {
     startArrowhead: null, endArrowhead: "arrow",
     elbowed: false,
     roundness: { type: 2 },
-    strokeColor: opts.stroke ?? "#1e1e1e",
+    strokeColor: opts.accent ?? P.flow,
   }));
 
   for (const node of [a, b]) {
@@ -122,7 +149,7 @@ const arrow = (a, b, opts = {}) => {
   }
 };
 
-const label = (id, x, y, text, size = 18, color = "#1e1e1e", maxPx = 1200) => {
+const label = (id, x, y, text, size = 18, color = null, maxPx = 1200) => {
   // Free text measures with its own size — the box helper's CHAR is tied to FONT.
   const per = size * 0.62;
   const max = Math.max(6, Math.floor(maxPx / per));
@@ -137,7 +164,7 @@ const label = (id, x, y, text, size = 18, color = "#1e1e1e", maxPx = 1200) => {
     id, type: "text", x, y,
     width: Math.ceil(Math.max(...lines.map((l) => l.length)) * per),
     height: Math.ceil(lines.length * size * LH),
-    strokeColor: color,
+    strokeColor: color ?? P.ink,
     text: lines.join("\n"), originalText: text,
     fontSize: size, fontFamily: 1,
     textAlign: "left", verticalAlign: "top",
@@ -150,9 +177,6 @@ const label = (id, x, y, text, size = 18, color = "#1e1e1e", maxPx = 1200) => {
  * One entry per box: [pt, en]. The layout is shared, so the two files differ
  * only in the strings — which is what makes the diff readable when the wording
  * changes. */
-
-const RED = "#e03131";
-const BLUE = "#1971c2";
 
 const COPY = {
   title: [
@@ -187,23 +211,24 @@ const COPY = {
   fim: ["FINALIZAR OPERAÇÃO DE VENDA/COMPRA", "SETTLE THE BUY/SELL OPERATION"],
 };
 
-const build = (i) => {
+const build = (i, themeKey) => {
+  P = PALETTES[themeKey];
   elements = [];
   seedCounter = 1; // deterministic ids and seeds, so the two files diff cleanly
   const c = (k) => COPY[k][i];
 
-  label("title", 120, 140, c("title"), 28, BLUE);
+  label("title", 120, 140, c("title"), 28, P.blue);
 
   const prova = box("prova", 120, 390, 250, c("prova"));
-  const valido = box("valido", 460, 390, 200, c("valido"), { stroke: BLUE });
-  const semGar = box("semgar", 450, 620, 230, c("semgar"), { stroke: RED });
+  const valido = box("valido", 460, 390, 200, c("valido"), { accent: P.blue });
+  const semGar = box("semgar", 450, 620, 230, c("semgar"), { accent: P.red });
   const token = box("token", 780, 390, 220, c("token"));
 
   const compra = box("compra", 1080, 70, 340, c("compra"));
   const supply = box("supply", 1080, 360, 340, c("supply"));
   const entrep = box("entrep", 1080, 650, 340, c("entrep"));
 
-  const escrow = box("escrow", 1530, 380, 280, c("escrow"), { stroke: BLUE });
+  const escrow = box("escrow", 1530, 380, 280, c("escrow"), { accent: P.blue });
 
   const defi = box("defi", 1920, 120, 300, c("defi"));
   const staking = box("staking", 1920, 380, 300, c("staking"));
@@ -211,7 +236,7 @@ const build = (i) => {
 
   arrow(prova, valido);
   arrow(valido, token);
-  arrow(valido, semGar, { from: "bottom", to: "top", stroke: RED });
+  arrow(valido, semGar, { from: "bottom", to: "top", accent: P.red });
   arrow(token, compra, { from: "top", to: "left" });
   arrow(token, supply);
   arrow(token, entrep, { from: "bottom", to: "left" });
@@ -234,9 +259,14 @@ const frame = (els, zoom, marginX, marginY) => {
 
 const OUT = new URL("../public/diagrams/", import.meta.url);
 
-["lastre-capacidades.excalidraw", "lastre-capacidades-en.excalidraw"].forEach(
-  (name, i) => {
-    const els = build(i);
+const LANGS = ["", "-en"];
+const THEMES = ["light", "dark"];
+
+for (const [i, lang] of LANGS.entries()) {
+  for (const themeKey of THEMES) {
+    const els = build(i, themeKey);
+    const suffix = themeKey === "dark" ? "-dark" : "";
+    const name = `lastre-capacidades${lang}${suffix}.excalidraw`;
     const scene = {
       type: "excalidraw",
       version: 2,
@@ -244,7 +274,7 @@ const OUT = new URL("../public/diagrams/", import.meta.url);
       elements: els,
       appState: {
         gridSize: null,
-        viewBackgroundColor: "#ffffff",
+        viewBackgroundColor: PALETTES[themeKey].bg,
         ...frame(els, 0.55, 90, 150),
         zoom: { value: 0.55 },
       },
@@ -252,5 +282,5 @@ const OUT = new URL("../public/diagrams/", import.meta.url);
     };
     fs.writeFileSync(new URL(name, OUT), JSON.stringify(scene));
     console.log(`${name}: ${els.length} elements`);
-  },
-);
+  }
+}

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { useAnnounceBoard, useBoardTheme } from "../BoardTheme";
+import { useAnnounceBoard, useBoardTheme, type BoardTheme } from "../BoardTheme";
 import type { Deck, DeckLocale } from "../types";
 
 /* The board is an Excalidraw scene, and Excalidraw is the heaviest thing the
@@ -8,19 +8,24 @@ const BoardEmbed = lazy(() =>
   import("../../diagram/BoardEmbed").then((m) => ({ default: m.BoardEmbed })),
 );
 
-/* One committed board per language, both written by
- * scripts/build-capabilities-board.mjs from a single bilingual source — a
- * drawing has no runtime string table, so the translation is another file. */
-const BOARD: Record<DeckLocale, string> = {
-  pt: "lastre-capacidades",
-  en: "lastre-capacidades-en",
+/* Four committed boards — two languages, each drawn light and dark — all
+ * written by scripts/build-capabilities-board.mjs from one source. A drawing
+ * has no runtime string table and no CSS, so both the translation and the
+ * theme are other files.
+ *
+ * The dark ones are drawn dark rather than filtered: Excalidraw's own dark
+ * mode inverts the whole canvas, which lifts border and text to the same
+ * near-white and lets neither be softened alone. */
+const BOARD: Record<DeckLocale, Record<BoardTheme, string>> = {
+  pt: { light: "lastre-capacidades", dark: "lastre-capacidades-dark" },
+  en: { light: "lastre-capacidades-en", dark: "lastre-capacidades-en-dark" },
 };
 
-/* The paper the drawing sits on, painted into the canvas bitmap — CSS cannot
- * undo it. Both values are light because Excalidraw's dark theme works by
- * inverting the whole canvas: hand it a dark colour and it comes back bright.
- * So the dark sheet asks for white and lets the inversion darken it. */
-const PAPER = { light: "#f7f9f7", dark: "#ffffff" };
+/* Painted into the canvas bitmap, so it has to equal the sheet exactly. */
+const PAPER: Record<BoardTheme, string> = {
+  light: "#f7f9f7",
+  dark: "#121212",
+};
 
 function CapabilitiesBoard({ locale }: { locale: DeckLocale }) {
   const { theme } = useBoardTheme();
@@ -31,8 +36,10 @@ function CapabilitiesBoard({ locale }: { locale: DeckLocale }) {
       <Suspense fallback={<div className="board-embed" aria-busy="true" />}>
         <BoardEmbed
           key={`${locale}-${theme}`}
-          slug={BOARD[locale]}
-          theme={theme}
+          slug={BOARD[locale][theme]}
+          /* Always light: the darkness is in the file, and Excalidraw's dark
+           * theme would filter it a second time. */
+          theme="light"
           background={PAPER[theme]}
         />
       </Suspense>
