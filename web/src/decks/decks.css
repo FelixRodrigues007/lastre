@@ -56,12 +56,23 @@
 /* ── header · logo and language, nothing else ────────────────────────── */
 
 .dk-head {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
   padding: 0.85rem clamp(0.9rem, 0.5rem + 1.2vw, 1.6rem);
 }
+/* The mark holds the left; the switches sit on the sheet's own centre line. */
+.dk-head .dk-brand { grid-column: 1; justify-self: start; }
+.dk-switches {
+  grid-column: 2;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+/* Words, not two letters — this pill is wider and its labels are sentence case. */
+.dk-lang--theme button { letter-spacing: 0.02em; }
 
 .dk-brand {
   display: inline-flex;
@@ -2670,3 +2681,20 @@
   }
 }
 
+
+/* ── a sheet that is nothing but a drawing ───────────────────────────────
+ * The board covers the sheet edge to edge, so the sheet's own paper only
+ * shows at the rounded corners — it has to follow the drawing's theme or a
+ * dark board sits in a bright frame. */
+.dk-board {
+  position: absolute;
+  inset: 0;
+}
+/* Not --dk-dark: Excalidraw darkens by filtering the canvas
+ * (invert .93 + hue-rotate 180), and white through that lands on #121212.
+ * The frame matches the drawing rather than the other way round — the filter
+ * is not ours to aim. */
+.dk-sheet:has(.dk-board[data-theme="dark"]) {
+  background: #121212;
+  border-color: rgba(255, 255, 255, 0.09);
+}

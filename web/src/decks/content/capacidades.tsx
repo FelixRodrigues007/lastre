@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { useAnnounceBoard, useBoardTheme } from "../BoardTheme";
 import type { Deck, DeckLocale } from "../types";
 
 /* The board is an Excalidraw scene, and Excalidraw is the heaviest thing the
@@ -14,6 +15,30 @@ const BOARD: Record<DeckLocale, string> = {
   pt: "lastre-capacidades",
   en: "lastre-capacidades-en",
 };
+
+/* The paper the drawing sits on, painted into the canvas bitmap — CSS cannot
+ * undo it. Both values are light because Excalidraw's dark theme works by
+ * inverting the whole canvas: hand it a dark colour and it comes back bright.
+ * So the dark sheet asks for white and lets the inversion darken it. */
+const PAPER = { light: "#f7f9f7", dark: "#ffffff" };
+
+function CapabilitiesBoard({ locale }: { locale: DeckLocale }) {
+  const { theme } = useBoardTheme();
+  useAnnounceBoard();
+
+  return (
+    <div className="dk-board" data-theme={theme}>
+      <Suspense fallback={<div className="board-embed" aria-busy="true" />}>
+        <BoardEmbed
+          key={`${locale}-${theme}`}
+          slug={BOARD[locale]}
+          theme={theme}
+          background={PAPER[theme]}
+        />
+      </Suspense>
+    </div>
+  );
+}
 
 /* ─────────────────────────────────────────────────────────────────────────
  * 03 · Capacidades
@@ -34,11 +59,7 @@ export const capacidades: Deck = {
       id: "mapa",
       title: { pt: "O mapa", en: "The map" },
       bleed: true,
-      render: (l) => (
-        <Suspense fallback={<div className="board-embed" aria-busy="true" />}>
-          <BoardEmbed key={l} slug={BOARD[l]} theme="light" />
-        </Suspense>
-      ),
+      render: (l) => <CapabilitiesBoard locale={l} />,
     },
   ],
 };

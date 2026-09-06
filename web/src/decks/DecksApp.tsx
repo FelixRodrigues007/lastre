@@ -5,6 +5,7 @@ import { decks } from "./registry";
 import { DecksIndex } from "./DecksIndex";
 import { DeckViewer } from "./Deck";
 import { DeckHeader } from "./DeckChrome";
+import { BoardThemeProvider } from "./BoardTheme";
 import "./decks.css";
 
 const readSlug = () => {
@@ -33,6 +34,14 @@ const readLocale = (): Locale => {
 
 /** Path router for /decks and /decks/:slug. No dependency, no build change. */
 export function DecksApp() {
+  return (
+    <BoardThemeProvider>
+      <DecksSurface />
+    </BoardThemeProvider>
+  );
+}
+
+function DecksSurface() {
   const [slug, setSlug] = useState<string | null>(readSlug);
   const [locale, setLocaleState] = useState<Locale>(readLocale);
 
