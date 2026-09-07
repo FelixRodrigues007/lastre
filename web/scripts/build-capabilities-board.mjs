@@ -5,9 +5,10 @@
  *   npm run board:capacidades
  *
  * The sheet has two halves. Above, the flow: what Lastre is able to do, from
- * proof of validity to settlement. Below, the shelf: the nine units of the
- * dossier, each anchor given its box before anything is drawn in it, so the
- * order of the dossier is fixed on the board rather than remembered.
+ * proof of validity to settlement. Below, the workbench: one large empty block
+ * per unit of the dossier, stacked, each the size of a diagram — the space is
+ * reserved before there is anything to put in it, and the drawing happens
+ * inside the block rather than on a sheet of its own.
  *
  * Deliberately NOT part of the build. The boards it writes are committed, and
  * /diagram can edit them by hand; running this on every build would silently
@@ -53,12 +54,16 @@ const COPY = {
   fim: ["FINALIZAR OPERAÇÃO DE VENDA/COMPRA", "SETTLE THE BUY/SELL OPERATION"],
 
   shelf: [
-    "AS NOVE UNIDADES DO DOSSIÊ — O ESPAÇO DE CADA ÂNCORA",
-    "THE NINE UNITS OF THE DOSSIER — THE SPACE FOR EVERY ANCHOR",
+    "O DOSSIÊ — UM BLOCO POR UNIDADE, PARA DESENHAR DENTRO",
+    "THE DOSSIER — ONE BLOCK PER UNIT, TO DRAW INSIDE",
   ],
   legenda: [
-    "CONTÍNUO = JÁ TEM FOLHA   ·   TRACEJADO = ESPAÇO RESERVADO, AINDA SEM DESENHO   ·   CINZA = UNIDADE AINDA NÃO ESCRITA NO DOSSIÊ",
-    "SOLID = ALREADY HAS ITS SHEET   ·   DASHED = SPACE RESERVED, NOTHING DRAWN YET   ·   GREY = UNIT NOT YET WRITTEN IN THE DOSSIER",
+    "CONTÍNUO = JÁ DESENHADO   ·   TRACEJADO = BLOCO VAZIO, ESPERANDO O DIAGRAMA   ·   CINZA = UNIDADE AINDA NÃO ESCRITA NO DOSSIÊ",
+    "SOLID = ALREADY DRAWN   ·   DASHED = EMPTY BLOCK, WAITING FOR ITS DIAGRAM   ·   GREY = UNIT NOT YET WRITTEN IN THE DOSSIER",
+  ],
+  feita: [
+    "DESENHADA — VER A FOLHA 02 DO DECK",
+    "DRAWN — SEE SHEET 02 OF THE DECK",
   ],
 };
 
@@ -165,18 +170,23 @@ const UNITS = [
   },
 ];
 
-/* Nine columns across the same width the flow above already uses, so the two
- * halves share their left and right edge. The slot is deliberately smaller
- * than a box in the flow: it is a place, not a claim. */
-const COL_W = 220;
-const COL_STEP = 235;
+/* Everything below carries the `sh-` id prefix: the deck frames the board on
+ * the flow alone (BoardEmbed's `fitExclude`), because a sheet that opened on
+ * nine empty blocks would show the flow at eight per cent.
+ *
+ * One block per unit, stacked — never side by side. A block is as wide as the
+ * flow above and tall enough to hold a real diagram, because that is what it
+ * is for: the drawing of the unit happens inside it. The board therefore grows
+ * downwards as a workbench rather than sideways as a table. */
 const SHELF_X = 120;
 const SHELF_Y = 900;
-const SLOT_H = 56;
-const SLOT_GAP = 10;
+const BLOCK_W = 2100;
+const BLOCK_H = 760;
+const UNIT_TOP = 990;   // first block's label
+const UNIT_STEP = BLOCK_H + 190;
 
 emit("lastre-capacidades", (i, palette) => {
-  const { P, elements, box, arrow, label } = sheet(palette);
+  const { P, elements, box, arrow, label, rect } = sheet(palette);
   const c = (k) => COPY[k][i];
 
   label("title", 120, 140, c("title"), 28, P.blue);
@@ -209,28 +219,29 @@ emit("lastre-capacidades", (i, palette) => {
   arrow(escrow, fim, { from: "bottom", to: "left" });
   arrow(compra, defi);
 
-  /* ---- the shelf --------------------------------------------------------- */
-  label("shelf", SHELF_X, SHELF_Y, c("shelf"), 22, P.blue);
-  label("shelf-legenda", SHELF_X, SHELF_Y + 36, c("legenda"), 14, P.dim, 2100);
+  /* ---- the workbench ----------------------------------------------------- */
+  label("sh-title", SHELF_X, SHELF_Y, c("shelf"), 26, P.blue);
+  label("sh-legenda", SHELF_X, SHELF_Y + 40, c("legenda"), 15, P.dim, BLOCK_W);
 
   UNITS.forEach((u, k) => {
-    const x = SHELF_X + k * COL_STEP;
+    const y = UNIT_TOP + k * UNIT_STEP;
     const tone = u.state === "vazia" ? P.dim : u.state === "folha" ? P.blue : P.ink;
+    const ancoras = u.ancoras.map((a) => a[i]).join("   ·   ");
 
-    label(`u${u.n}`, x, SHELF_Y + 90, `${u.n} · ${u.nome[i]}`, 16, tone, COL_W);
+    label(`sh-u${u.n}`, SHELF_X, y, `${u.n} · ${u.nome[i]}`, 26, tone, BLOCK_W);
 
-    u.ancoras.forEach((a, j) => {
-      box(`u${u.n}-a${j}`, x, SHELF_Y + 118 + j * (SLOT_H + SLOT_GAP), COL_W, a[i], {
-        height: SLOT_H,
-        fontSize: 13,
-        pad: 10,
-        strokeWidth: 1,
-        /* Solid only where the unit is already drawn; everywhere else the
-         * border says the box is waiting. */
-        strokeStyle: u.state === "folha" ? "solid" : "dashed",
-        accent: tone,
-      });
+    /* The anchors are the brief for the block, so they sit inside it, at the
+     * top left — where whoever draws reads them before drawing. */
+    rect(SHELF_X, y + 48, BLOCK_W, BLOCK_H, {
+      id: `sh-u${u.n}-bloco`,
+      stroke: tone,
+      strokeWidth: u.state === "folha" ? 2 : 1,
+      strokeStyle: u.state === "folha" ? "solid" : "dashed",
+      roundness: { type: 3 },
     });
+    label(`sh-u${u.n}-brief`, SHELF_X + 34, y + 84, ancoras, 16, P.dim, BLOCK_W - 68);
+    if (u.state === "folha")
+      label(`sh-u${u.n}-feita`, SHELF_X + 34, y + 116, c("feita"), 16, P.blue, BLOCK_W - 68);
   });
 
   return elements;

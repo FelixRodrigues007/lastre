@@ -15,12 +15,18 @@ export function BoardEmbed({
   slug,
   theme = "light",
   background = "#f7f9f7",
+  fitExclude,
 }: {
   slug: string;
   theme?: "light" | "dark";
   /** Excalidraw paints this into the canvas bitmap, so CSS cannot undo it.
    *  Match the surface the board sits on — the deck sheet, by default. */
   background?: string;
+  /** Id prefix left out of the opening frame. A board can be larger than what
+   *  it opens on — a workbench of empty blocks under the drawing, say — and
+   *  fitting all of it would show the drawing at a tenth of its size. What is
+   *  excluded is still on the board; it is below the fold, not gone. */
+  fitExclude?: string;
 }) {
   const [data, setData] = useState<ExcalidrawInitialDataState | null | undefined>(
     undefined,
@@ -43,18 +49,23 @@ export function BoardEmbed({
    * initialData.scrollToContent does not survive restore here. */
   useEffect(() => {
     if (!api) return;
-    const fit = () =>
-      api.scrollToContent(api.getSceneElements(), {
+    const fit = () => {
+      const all = api.getSceneElements();
+      const framed = fitExclude
+        ? all.filter((el) => !el.id.startsWith(fitExclude))
+        : all;
+      api.scrollToContent(framed.length ? framed : all, {
         fitToViewport: true,
         viewportZoomFactor: 0.9,
         animate: false,
       });
+    };
     fit();
     const ro = new ResizeObserver(fit);
     const host = document.querySelector(".board-embed");
     if (host) ro.observe(host);
     return () => ro.disconnect();
-  }, [api, data]);
+  }, [api, data, fitExclude]);
 
   const capture = useCallback((next: ExcalidrawImperativeAPI) => setApi(next), []);
 

@@ -195,7 +195,7 @@ export function sheet(palette) {
    * box can move without its picture coming loose. */
   const shape = (type, x, y, w, h, opts = {}) =>
     elements.push(base({
-      id: `${type[0]}${elements.length}`,
+      id: opts.id ?? `${type[0]}${elements.length}`,
       type, x, y, width: w, height: h,
       strokeColor: opts.stroke ?? P.line,
       backgroundColor: opts.fill ?? "transparent",

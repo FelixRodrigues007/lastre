@@ -26,6 +26,14 @@ const BOARDS = {
   estrategia: variants("lastre-estrategia"),
 };
 
+/* O quadro de capacidades é maior do que a folha mostra: embaixo do fluxo ele
+ * carrega o banco de trabalho do dossiê — um bloco vazio por unidade, do
+ * tamanho de um diagrama. A folha abre no fluxo; o banco fica abaixo da
+ * dobra, para quem rolar o quadro ou abri-lo em /diagram. */
+const FIT_EXCLUDE: Partial<Record<keyof typeof BOARDS, string>> = {
+  capacidades: "sh-",
+};
+
 /* Painted into the canvas bitmap, so it has to equal the sheet exactly. */
 const PAPER: Record<BoardTheme, string> = {
   light: "#f7f9f7",
@@ -52,6 +60,7 @@ function Board({
            * theme would filter it a second time. */
           theme="light"
           background={PAPER[theme]}
+          fitExclude={FIT_EXCLUDE[board]}
         />
       </Suspense>
     </div>
