@@ -26,6 +26,7 @@ export const PALETTES = {
     flow: "#1e1e1e",  // arrows
     blue: "#1971c2",
     red: "#e03131",
+    dim: "#6b6b6b",  // what is named but not yet written
   },
   dark: {
     bg: "#121212",
@@ -34,6 +35,7 @@ export const PALETTES = {
     flow: "#8b9a93",
     blue: "#6ea8fe",
     red: "#ff8b8b",
+    dim: "#7d8a84",
   },
 };
 
@@ -67,8 +69,8 @@ export function sheet(palette) {
     ...over,
   });
 
-  const wrap = (text, maxPx) => {
-    const max = Math.max(6, Math.floor(maxPx / CHAR));
+  const wrap = (text, maxPx, size = FONT) => {
+    const max = Math.max(6, Math.floor(maxPx / (size * 0.62)));
     const out = [];
     for (const para of text.split("\n")) {
       let line = "";
@@ -82,11 +84,16 @@ export function sheet(palette) {
     return out;
   };
 
-  /** A labelled box: rectangle + bound text, height derived from the wrapped label. */
+  /** A labelled box: rectangle + bound text, height derived from the wrapped label.
+   *  `fontSize` and `pad` shrink the box without shrinking the sheet — a
+   *  reserved slot is smaller than a link in the chain and has to read as
+   *  smaller. `strokeStyle: "dashed"` is how the sheet says "not drawn yet". */
   const box = (id, x, y, w, label, opts = {}) => {
-    const lines = wrap(label, w - PAD * 2);
-    const textH = Math.round(lines.length * FONT * LH);
-    const h = opts.height ?? Math.max(72, textH + PAD * 2);
+    const size = opts.fontSize ?? FONT;
+    const pad = opts.pad ?? PAD;
+    const lines = wrap(label, w - pad * 2, size);
+    const textH = Math.round(lines.length * size * LH);
+    const h = opts.height ?? Math.max(72, textH + pad * 2);
     const textId = id + "-t";
 
     elements.push(base({
@@ -95,18 +102,19 @@ export function sheet(palette) {
       fillStyle: "solid",
       strokeColor: opts.accent ?? P.line,
       strokeWidth: opts.strokeWidth ?? 2,
+      strokeStyle: opts.strokeStyle ?? "solid",
       roundness: { type: 3 },
       boundElements: [{ type: "text", id: textId }],
     }));
 
     elements.push(base({
       id: textId, type: "text",
-      x: x + PAD, y: y + Math.round((h - textH) / 2),
-      width: w - PAD * 2, height: textH,
+      x: x + pad, y: y + Math.round((h - textH) / 2),
+      width: w - pad * 2, height: textH,
       strokeColor: opts.accent ?? P.ink,
       text: lines.join("\n"),
       originalText: label,
-      fontSize: FONT, fontFamily: 1,
+      fontSize: size, fontFamily: 1,
       textAlign: "center", verticalAlign: "middle",
       containerId: id, lineHeight: LH, autoResize: true,
       boundElements: null,

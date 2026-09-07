@@ -4,6 +4,11 @@
  *
  *   npm run board:capacidades
  *
+ * The sheet has two halves. Above, the flow: what Lastre is able to do, from
+ * proof of validity to settlement. Below, the shelf: the nine units of the
+ * dossier, each anchor given its box before anything is drawn in it, so the
+ * order of the dossier is fixed on the board rather than remembered.
+ *
  * Deliberately NOT part of the build. The boards it writes are committed, and
  * /diagram can edit them by hand; running this on every build would silently
  * throw those edits away. Run it when the wording changes, look at the diff,
@@ -46,7 +51,129 @@ const COPY = {
     "ALLOW STAKING OF TOKENISED ASSETS",
   ],
   fim: ["FINALIZAR OPERAÇÃO DE VENDA/COMPRA", "SETTLE THE BUY/SELL OPERATION"],
+
+  shelf: [
+    "AS NOVE UNIDADES DO DOSSIÊ — O ESPAÇO DE CADA ÂNCORA",
+    "THE NINE UNITS OF THE DOSSIER — THE SPACE FOR EVERY ANCHOR",
+  ],
+  legenda: [
+    "CONTÍNUO = JÁ TEM FOLHA   ·   TRACEJADO = ESPAÇO RESERVADO, AINDA SEM DESENHO   ·   CINZA = UNIDADE AINDA NÃO ESCRITA NO DOSSIÊ",
+    "SOLID = ALREADY HAS ITS SHEET   ·   DASHED = SPACE RESERVED, NOTHING DRAWN YET   ·   GREY = UNIT NOT YET WRITTEN IN THE DOSSIER",
+  ],
 };
+
+/* ---- the shelf ------------------------------------------------------------
+ * One entry per unit of the dossier, in the order the dossier reads. `state`
+ * is the only thing that changes as the work advances:
+ *
+ *   "folha"    the unit is drawn and has its own sheet in the deck
+ *   "reservada"  written in the dossier, waiting to be drawn
+ *   "vazia"    not written in the dossier either — named, and nothing more
+ *
+ * Drawing a unit is: write its script in web/scripts on the grammar of
+ * build-strategy-board.mjs, add the sheet to the deck, and move the state. */
+const UNITS = [
+  {
+    n: "01",
+    nome: ["ESTRATÉGIA", "STRATEGY"],
+    state: "folha",
+    ancoras: [
+      ["IDENTIDADE", "IDENTITY"],
+      ["IDEIA", "IDEA"],
+      ["SNAPSHOT", "SNAPSHOT"],
+      ["MODELO DE NEGÓCIO", "BUSINESS MODEL"],
+    ],
+  },
+  {
+    n: "02",
+    nome: ["PÚBLICO", "AUDIENCE"],
+    state: "reservada",
+    ancoras: [
+      ["PERSONAS", "PERSONAS"],
+      ["DISCOVERY", "DISCOVERY"],
+      ["DOR → SOLUÇÃO", "PAIN → SOLUTION"],
+      ["CONCORRENTES", "ALTERNATIVES"],
+    ],
+  },
+  {
+    n: "03",
+    nome: ["OFERTA", "OFFER"],
+    state: "reservada",
+    ancoras: [
+      ["OFERTAS", "OFFERS"],
+      ["PRECIFICAÇÃO", "PRICING"],
+      ["ROADMAP", "ROADMAP"],
+    ],
+  },
+  {
+    n: "04",
+    nome: ["MARCA", "BRAND"],
+    state: "reservada",
+    ancoras: [
+      ["VOZ DA MARCA", "BRAND VOICE"],
+      ["PROVAS", "PROOF"],
+      ["REPUTAÇÃO E CRISE", "REPUTATION AND CRISIS"],
+    ],
+  },
+  {
+    n: "05",
+    nome: ["AQUISIÇÃO", "ACQUISITION"],
+    state: "reservada",
+    ancoras: [
+      ["ESTRATÉGIA", "STRATEGY"],
+      ["PARCERIAS", "PARTNERSHIPS"],
+      ["EXPERIMENTOS", "EXPERIMENTS"],
+    ],
+  },
+  {
+    n: "06",
+    nome: ["CONVERSÃO", "CONVERSION"],
+    state: "reservada",
+    ancoras: [
+      ["FUNIL", "FUNNEL"],
+      ["OBJEÇÕES", "OBJECTIONS"],
+      ["PLAYBOOK", "PLAYBOOK"],
+    ],
+  },
+  {
+    n: "07",
+    nome: ["CLIENTE", "CUSTOMER"],
+    state: "reservada",
+    ancoras: [
+      ["SAÚDE E RETENÇÃO", "HEALTH AND RETENTION"],
+      ["VOZ DO CLIENTE", "CUSTOMER VOICE"],
+    ],
+  },
+  {
+    n: "08",
+    nome: ["OPERAÇÕES", "OPERATIONS"],
+    state: "reservada",
+    ancoras: [
+      ["CAPACIDADE E FORNECEDORES", "CAPACITY AND SUPPLIERS"],
+      ["QUALIDADE E RISCOS", "QUALITY AND RISK"],
+    ],
+  },
+  {
+    n: "09",
+    nome: ["TECNOLOGIA", "TECHNOLOGY"],
+    state: "vazia",
+    ancoras: [
+      ["ARQUITETURA", "ARCHITECTURE"],
+      ["DADOS E ANALYTICS", "DATA AND ANALYTICS"],
+      ["SEGURANÇA", "SECURITY"],
+    ],
+  },
+];
+
+/* Nine columns across the same width the flow above already uses, so the two
+ * halves share their left and right edge. The slot is deliberately smaller
+ * than a box in the flow: it is a place, not a claim. */
+const COL_W = 220;
+const COL_STEP = 235;
+const SHELF_X = 120;
+const SHELF_Y = 900;
+const SLOT_H = 56;
+const SLOT_GAP = 10;
 
 emit("lastre-capacidades", (i, palette) => {
   const { P, elements, box, arrow, label } = sheet(palette);
@@ -81,6 +208,30 @@ emit("lastre-capacidades", (i, palette) => {
   arrow(escrow, staking);
   arrow(escrow, fim, { from: "bottom", to: "left" });
   arrow(compra, defi);
+
+  /* ---- the shelf --------------------------------------------------------- */
+  label("shelf", SHELF_X, SHELF_Y, c("shelf"), 22, P.blue);
+  label("shelf-legenda", SHELF_X, SHELF_Y + 36, c("legenda"), 14, P.dim, 2100);
+
+  UNITS.forEach((u, k) => {
+    const x = SHELF_X + k * COL_STEP;
+    const tone = u.state === "vazia" ? P.dim : u.state === "folha" ? P.blue : P.ink;
+
+    label(`u${u.n}`, x, SHELF_Y + 90, `${u.n} · ${u.nome[i]}`, 16, tone, COL_W);
+
+    u.ancoras.forEach((a, j) => {
+      box(`u${u.n}-a${j}`, x, SHELF_Y + 118 + j * (SLOT_H + SLOT_GAP), COL_W, a[i], {
+        height: SLOT_H,
+        fontSize: 13,
+        pad: 10,
+        strokeWidth: 1,
+        /* Solid only where the unit is already drawn; everywhere else the
+         * border says the box is waiting. */
+        strokeStyle: u.state === "folha" ? "solid" : "dashed",
+        accent: tone,
+      });
+    });
+  });
 
   return elements;
 });
