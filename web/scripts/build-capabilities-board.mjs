@@ -5,10 +5,20 @@
  *   npm run board:capacidades
  *
  * The sheet has two halves. Above, the flow: what Lastre is able to do, from
- * proof of validity to settlement. Below, the workbench: one large empty block
- * per unit of the dossier, stacked, each the size of a diagram — the space is
+ * proof of validity to settlement. Below, the workbench: nine large empty
+ * blocks, one per unit of the dossier, laid out three by three — the space is
  * reserved before there is anything to put in it, and the drawing happens
  * inside the block rather than on a sheet of its own.
+ *
+ * Three by three and not one under the other: nine stacked blocks make a strip
+ * ten thousand tall that reads as a queue, and a queue hides how much work
+ * there is. The grid shows all nine at once, and its proportion stays close to
+ * the sheet's.
+ *
+ * Both halves hang from the same left margin. The grid is wider than the flow,
+ * so the board is heavier on the right at the top — the alternative was to
+ * centre the flow over the grid, which pushes the workbench's own title off
+ * the left of the deck's opening frame and cuts it mid-word.
  *
  * Deliberately NOT part of the build. The boards it writes are committed, and
  * /diagram can edit them by hand; running this on every build would silently
@@ -170,26 +180,32 @@ const UNITS = [
   },
 ];
 
-/* Everything below carries the `sh-` id prefix: the deck frames the board on
- * the flow alone (BoardEmbed's `fitExclude`), because a sheet that opened on
- * nine empty blocks would show the flow at eight per cent.
+/* Everything in the workbench carries the `sh-` id prefix: the deck frames the
+ * board on the flow alone (BoardEmbed's `fitExclude`), because a sheet that
+ * opened on the whole workbench would show the flow at a fifth of its size.
  *
- * One block per unit, stacked — never side by side. A block is as wide as the
- * flow above and tall enough to hold a real diagram, because that is what it
- * is for: the drawing of the unit happens inside it. The board therefore grows
- * downwards as a workbench rather than sideways as a table. */
+ * A block is a container, not an outline: a head that names the unit and lists
+ * the anchors it has to cover, a rule under the head, and below it an empty
+ * body on its own paper — 1400 × 800 of it, which is the size of a real
+ * diagram. The unit's number sits large and faint in the corner of the body,
+ * so a block can be told apart while panning at any zoom. */
 const SHELF_X = 120;
-const SHELF_Y = 900;
-const BLOCK_W = 2100;
-const BLOCK_H = 760;
-const UNIT_TOP = 990;   // first block's label
-const UNIT_STEP = BLOCK_H + 190;
+const SHELF_Y = 940;
+const GRID_TOP = 1060;
+const BLOCK_W = 1400;
+const BLOCK_H = 900;
+const BLOCK_GAP_X = 150;
+const BLOCK_GAP_Y = 150;
+const HEAD_H = 96;
+const COLS = 3;
+
+const GRID_W = COLS * BLOCK_W + (COLS - 1) * BLOCK_GAP_X;
 
 emit("lastre-capacidades", (i, palette) => {
-  const { P, elements, box, arrow, label, rect } = sheet(palette);
+  const { P, elements, box, arrow, label, rect, poly, glyph } = sheet(palette);
   const c = (k) => COPY[k][i];
 
-  label("title", 120, 140, c("title"), 28, P.blue);
+  label("title", SHELF_X, 140, c("title"), 28, P.blue);
 
   const prova = box("prova", 120, 390, 250, c("prova"));
   const valido = box("valido", 460, 390, 200, c("valido"), { accent: P.blue });
@@ -220,28 +236,49 @@ emit("lastre-capacidades", (i, palette) => {
   arrow(compra, defi);
 
   /* ---- the workbench ----------------------------------------------------- */
-  label("sh-title", SHELF_X, SHELF_Y, c("shelf"), 26, P.blue);
-  label("sh-legenda", SHELF_X, SHELF_Y + 40, c("legenda"), 15, P.dim, BLOCK_W);
+  label("sh-title", SHELF_X, SHELF_Y, c("shelf"), 28, P.blue);
+  label("sh-legenda", SHELF_X, SHELF_Y + 44, c("legenda"), 15, P.dim, GRID_W);
 
   UNITS.forEach((u, k) => {
-    const y = UNIT_TOP + k * UNIT_STEP;
+    const x = SHELF_X + (k % COLS) * (BLOCK_W + BLOCK_GAP_X);
+    const y = GRID_TOP + Math.floor(k / COLS) * (BLOCK_H + BLOCK_GAP_Y);
     const tone = u.state === "vazia" ? P.dim : u.state === "folha" ? P.blue : P.ink;
-    const ancoras = u.ancoras.map((a) => a[i]).join("   ·   ");
+    const drawn = u.state === "folha";
 
-    label(`sh-u${u.n}`, SHELF_X, y, `${u.n} · ${u.nome[i]}`, 26, tone, BLOCK_W);
-
-    /* The anchors are the brief for the block, so they sit inside it, at the
-     * top left — where whoever draws reads them before drawing. */
-    rect(SHELF_X, y + 48, BLOCK_W, BLOCK_H, {
+    /* The container. Its paper is a shade off the sheet, so an empty block
+     * still reads as a surface to draw on rather than a hole in the board. */
+    rect(x, y, BLOCK_W, BLOCK_H, {
       id: `sh-u${u.n}-bloco`,
       stroke: tone,
-      strokeWidth: u.state === "folha" ? 2 : 1,
-      strokeStyle: u.state === "folha" ? "solid" : "dashed",
+      fill: P.paper,
+      strokeWidth: drawn ? 2 : 1,
+      strokeStyle: drawn ? "solid" : "dashed",
       roundness: { type: 3 },
     });
-    label(`sh-u${u.n}-brief`, SHELF_X + 34, y + 84, ancoras, 16, P.dim, BLOCK_W - 68);
-    if (u.state === "folha")
-      label(`sh-u${u.n}-feita`, SHELF_X + 34, y + 116, c("feita"), 16, P.blue, BLOCK_W - 68);
+
+    /* The head: the unit, the anchors it owes, and the rule that separates the
+     * brief from the space the drawing gets. */
+    label(`sh-u${u.n}`, x + 32, y + 24, `${u.n} · ${u.nome[i]}`, 24, tone, BLOCK_W - 64);
+    label(
+      `sh-u${u.n}-brief`,
+      x + 32,
+      y + 60,
+      u.ancoras.map((a) => a[i]).join("   ·   "),
+      14,
+      P.dim,
+      BLOCK_W - 64,
+    );
+    poly(x, y + HEAD_H, [[0, 0], [BLOCK_W, 0]], {
+      id: `sh-u${u.n}-regua`,
+      stroke: tone,
+      strokeWidth: 1,
+    });
+
+    /* The number, large and faint in the corner of the body: at the zoom where
+     * the head is unreadable, this is still what tells the blocks apart. */
+    glyph(x + BLOCK_W - 110, y + BLOCK_H - 160, u.n, 120, P.ghost, `sh-u${u.n}-num`);
+
+    if (drawn) label(`sh-u${u.n}-feita`, x + 32, y + HEAD_H + 36, c("feita"), 16, P.blue, BLOCK_W - 64);
   });
 
   return elements;

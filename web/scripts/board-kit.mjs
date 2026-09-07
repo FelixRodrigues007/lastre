@@ -26,7 +26,9 @@ export const PALETTES = {
     flow: "#1e1e1e",  // arrows
     blue: "#1971c2",
     red: "#e03131",
-    dim: "#6b6b6b",  // what is named but not yet written
+    dim: "#6b6b6b",   // what is named but not yet written
+    paper: "#ffffff", // a working surface, lifted off the sheet
+    ghost: "#eceff0", // a mark meant to be seen without being read
   },
   dark: {
     bg: "#121212",
@@ -36,6 +38,8 @@ export const PALETTES = {
     blue: "#6ea8fe",
     red: "#ff8b8b",
     dim: "#7d8a84",
+    paper: "#1b1b1b",
+    ghost: "#262626",
   },
 };
 
@@ -213,7 +217,7 @@ export function sheet(palette) {
     const xs = points.map((p) => p[0]);
     const ys = points.map((p) => p[1]);
     elements.push(base({
-      id: `ln${elements.length}`,
+      id: opts.id ?? `ln${elements.length}`,
       type: "line", x, y,
       width: Math.max(...xs) - Math.min(...xs),
       height: Math.max(...ys) - Math.min(...ys),
@@ -233,10 +237,10 @@ export function sheet(palette) {
 
   /** A character or two inside a drawing, centred on cx rather than left-set:
    *  a "?" that hangs off its own anchor stops being part of the picture. */
-  const glyph = (cx, y, text, size, color = null) => {
+  const glyph = (cx, y, text, size, color = null, id = null) => {
     const w = Math.ceil(text.length * size * 0.85);
     elements.push(base({
-      id: `gl${elements.length}`,
+      id: id ?? `gl${elements.length}`,
       type: "text",
       x: Math.round(cx - w / 2), y,
       width: w, height: Math.ceil(size * LH),
