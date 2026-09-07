@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { useAnnounceBoard, useBoardTheme, type BoardTheme } from "../BoardTheme";
+import { useAnnounceThemed, useBoardTheme, type BoardTheme } from "../BoardTheme";
 import type { Deck, DeckLocale } from "../types";
 
 /* The board is an Excalidraw scene, and Excalidraw is the heaviest thing the
@@ -21,8 +21,10 @@ const variants = (stem: string): Record<DeckLocale, Record<BoardTheme, string>> 
   en: { light: `${stem}-en`, dark: `${stem}-en-dark` },
 });
 
+/* A chave é o deck; o radical é o nome dos arquivos desenhados, que continua
+ * sendo o do pipeline em web/scripts. */
 const BOARDS = {
-  capacidades: variants("lastre-capacidades"),
+  whiteboard: variants("lastre-capacidades"),
 };
 
 /* O quadro é maior do que a folha mostra: embaixo do fluxo ele carrega o banco
@@ -31,7 +33,7 @@ const BOARDS = {
  * deck é uma folha só. Ela abre no fluxo, e o banco fica abaixo da dobra, para
  * quem rolar o quadro ou abri-lo em /diagram. */
 const FIT_EXCLUDE: Partial<Record<keyof typeof BOARDS, string>> = {
-  capacidades: "sh-",
+  whiteboard: "sh-",
 };
 
 /* Painted into the canvas bitmap, so it has to equal the sheet exactly. */
@@ -48,7 +50,7 @@ function Board({
   locale: DeckLocale;
 }) {
   const { theme } = useBoardTheme();
-  useAnnounceBoard();
+  useAnnounceThemed();
 
   return (
     <div className="dk-board" data-theme={theme}>
@@ -68,13 +70,13 @@ function Board({
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
- * 03 · Capacidades
+ * 03 · Whiteboard
  * ───────────────────────────────────────────────────────────────────────── */
 
-export const capacidades: Deck = {
+export const whiteboard: Deck = {
   slug: "whiteboard",
   index: "03",
-  title: { pt: "Capacidades", en: "Capabilities" },
+  title: { pt: "Whiteboard", en: "Whiteboard" },
   summary: {
     pt: "O mapa do que a Lastre é capaz de fazer: da prova de validade à tokenização, e daí a custódia, DeFi, staking e liquidação. Abaixo do mapa, o banco de trabalho do dossiê — uma unidade por bloco, desenhada dentro dele.",
     en: "The map of what Lastre can do: from proof of validity to tokenisation, and from there to custody, DeFi, staking and settlement. Below the map, the dossier's workbench — one unit per block, drawn inside it.",
@@ -86,7 +88,7 @@ export const capacidades: Deck = {
       id: "mapa",
       title: { pt: "O mapa", en: "The map" },
       bleed: true,
-      render: (l) => <Board board="capacidades" locale={l} />,
+      render: (l) => <Board board="whiteboard" locale={l} />,
     },
   ],
 };

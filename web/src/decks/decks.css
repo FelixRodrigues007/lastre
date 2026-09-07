@@ -970,101 +970,148 @@
 }
 .dk-toc__n { font-size: 0.88em; letter-spacing: 0.06em; color: var(--dk-faint); }
 
-/* ── the drawer (index of decks) ─────────────────────────────────────── */
+/* ── the drawer (index of decks) ─────────────────────────────────────────
+ * One column, left aligned: a masthead, then a group per kind of document.
+ * Every line hangs off the same left edge — that edge is the hierarchy, and
+ * the two groups differ in form, not just in title: the decks are folders to
+ * open, the corpus is a single document listed as its own contents. */
 
-.dk-drawer-sheet { align-items: stretch; overflow-y: auto; display: block; }
+/* A gaveta respira menos que uma folha de apresentação: ela é um índice, e o
+ * que importa é caber inteira — os cinco cartões do corpus e a nota de rodapé
+ * inclusive — sem rolagem na maioria das telas. */
+.dk-drawer-sheet {
+  align-items: stretch;
+  overflow-y: auto;
+  display: block;
+  padding-block: clamp(1.1rem, 0.8rem + 1vw, 1.9rem) clamp(1.1rem, 0.8rem + 1vw, 1.9rem);
+}
+
 .dk-index {
   width: 100%;
-  max-width: 1560px;
+  max-width: 63rem;
   margin-inline: auto;
   display: grid;
-  gap: clamp(1rem, 0.6rem + 1.2vw, 1.7rem);
-  align-content: center;
-  align-content: safe center;
-  min-height: 100%;
-  padding-block: clamp(0.5rem, 1.2vh, 1.1rem);
+  gap: clamp(1.35rem, 1rem + 1.1vw, 1.95rem);
+  align-content: start;
+  padding-block: clamp(0.4rem, 1.4vh, 1.4rem);
+  text-align: left;
 }
-.dk-index {
-  justify-items: center;
-  text-align: center;
-  max-width: 1180px;
-}
-.dk-index .dk-index__fine { max-width: 72ch; }
 
-/* the mark, the word, and one line of instruction — nothing else up here */
+/* masthead · o selo ao lado da palavra, e embaixo uma linha dizendo o que é
+ * esta gaveta — a linha volta à margem esquerda, a mesma dos grupos. */
 .dk-index__top {
   display: grid;
-  justify-items: center;
-  gap: 0.55rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.85rem;
+  row-gap: 0.55rem;
   --seal-mark-outer: #7f9a8e;
   --seal-mark-accent: #4e8f3c;
   --seal-mark-lines: #13241d;
 }
-.dk-index__mark { display: block; line-height: 0; margin-bottom: 0.2rem; }
+.dk-index__mark { grid-area: 1 / 1; display: block; line-height: 0; }
 .dk-index__word {
+  grid-area: 1 / 2;
+  justify-self: start;
   margin: 0;
-  font-size: clamp(1.5rem, 1.1rem + 1.3vw, 2.1rem);
+  font-size: clamp(1.55rem, 1.1rem + 1.5vw, 2.25rem);
   font-weight: 600;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   line-height: 1;
   color: var(--dk-fg);
 }
-.dk-index__line { max-width: 48ch; }
+.dk-index__line {
+  grid-area: 2 / 1 / 3 / -1;
+  margin: 0;
+  max-width: 54ch;
+  font-size: clamp(0.92rem, 0.87rem + 0.25vw, 1.05rem);
+  color: var(--dk-fg-dim);
+}
 .dk-index__keys { font-size: 0.8rem; letter-spacing: 0.06em; color: var(--dk-fg-faint); }
-.dk-index__fine { color: var(--dk-fg-faint); }
+/* O fio do rodapé atravessa a coluna inteira; o texto miúdo para na medida. */
+.dk-index__foot {
+  padding-top: clamp(0.75rem, 0.55rem + 0.5vw, 1.05rem);
+  border-top: 1px solid var(--dk-rule-soft);
+}
+.dk-index__fine {
+  margin: 0;
+  max-width: 88ch;
+  font-size: clamp(0.78rem, 0.75rem + 0.15vw, 0.86rem);
+  line-height: 1.55;
+  color: var(--dk-fg-faint);
+}
 
 /* ── grupos · um título por tipo de documento ────────────────────────── */
 
 .dk-group {
-  width: 100%;
-  /* Larga o bastante para as três pastas caberem numa linha só — a gaveta
-   * inteira, com o corpus e a nota de rodapé, fica acima da dobra. */
-  max-width: 61rem;
   display: grid;
-  gap: clamp(0.7rem, 0.45rem + 0.6vw, 1rem);
-  text-align: left;
+  gap: clamp(0.8rem, 0.55rem + 0.6vw, 1.15rem);
+}
+/* O fio corre do título até a coluna da direita — é ele que agrupa, não uma
+ * caixa. À direita fica a única ação do grupo, quando existe. */
+.dk-group__head {
+  display: grid;
+  grid-template-columns: auto minmax(1.5rem, 1fr) auto;
+  align-items: center;
+  gap: 0.85rem;
 }
 .dk-group__h {
   margin: 0;
-  display: grid;
-  grid-template-columns: auto minmax(1.5rem, 1fr);
-  align-items: center;
-  gap: 0.8rem;
   font-family: var(--dk-sans);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--dk-fg-faint);
 }
-/* O fio segue o título até a borda da coluna — é ele que agrupa, não uma caixa. */
-.dk-group__h::after {
-  content: "";
-  height: 1px;
-  background: var(--dk-line-soft);
+.dk-group__rule { height: 1px; background: var(--dk-rule-soft); }
+.dk-group__aside {
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--dk-fg-faint);
+  font-variant-numeric: tabular-nums;
 }
 .dk-group__empty { color: var(--dk-fg-faint); max-width: 60ch; }
-.dk-group__lead { color: var(--dk-fg-dim); max-width: 60ch; margin-bottom: 0.2rem; }
+.dk-group__lead {
+  margin: 0;
+  max-width: 64ch;
+  font-size: clamp(0.92rem, 0.87rem + 0.25vw, 1.05rem);
+  color: var(--dk-fg-dim);
+}
 .dk-group__lead b { font-weight: 560; color: var(--dk-fg); }
-.dk-group__link { color: var(--dk-accent); text-decoration: none; white-space: nowrap; }
-.dk-group__link:hover { text-decoration: underline; }
+.dk-group__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--dk-accent);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 540;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.dk-sheet--dark .dk-group__link { color: #a9dd8f; }
 
-/* one folder per document */
+/* ── pastas · um cartão por documento ────────────────────────────────── */
+
 .dk-folders {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  gap: clamp(0.7rem, 0.4rem + 0.9vw, 1.1rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.5rem), 1fr));
+  gap: clamp(0.7rem, 0.4rem + 0.9vw, 1rem);
   width: 100%;
   text-align: left;
 }
+/* Quatro faixas fixas: glifo, título, resumo elástico e rodapé. O resumo é
+ * que estica, então o rodapé de todos os cartões da linha assenta na mesma
+ * altura mesmo com títulos de uma ou duas linhas. */
 .dk-folder {
   display: grid;
-  gap: 0.42rem;
-  align-content: start;
-  padding: clamp(0.9rem, 0.7rem + 0.7vw, 1.2rem);
-  border: 1px solid var(--dk-line);
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.4rem;
+  padding: clamp(0.9rem, 0.72rem + 0.6vw, 1.15rem);
+  border: 1px solid var(--dk-rule-soft);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.55);
   text-decoration: none;
   color: inherit;
   transition:
@@ -1075,14 +1122,14 @@
 .dk-folder__icon {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  border: 1px solid var(--dk-line);
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  border: 1px solid var(--dk-rule);
   color: var(--dk-accent);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.28rem;
 }
-.dk-folder__icon svg { width: 19px; height: 19px; }
+.dk-folder__icon svg { width: 18px; height: 18px; }
 /* A parte do corpus não tem glifo: o numeral romano ocupa a mesma caixa. */
 .dk-folder__num {
   font-family: var(--dk-sans);
@@ -1092,33 +1139,138 @@
   font-variant-numeric: tabular-nums;
 }
 .dk-folder__t {
-  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.32rem);
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.28rem);
+  font-weight: 560;
   line-height: 1.15;
-  letter-spacing: -0.022em;
+  letter-spacing: -0.024em;
   color: var(--dk-fg);
 }
 .dk-folder__s {
-  font-size: clamp(0.9rem, 0.86rem + 0.2vw, 1rem);
-  line-height: 1.55;
+  font-size: clamp(0.88rem, 0.85rem + 0.2vw, 0.97rem);
+  line-height: 1.45;
   max-width: none;
+  color: var(--dk-fg-dim);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 .dk-folder__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+  padding-top: 0.52rem;
+  border-top: 1px solid var(--dk-rule-soft);
   font-family: var(--dk-sans);
-  font-size: clamp(0.82rem, 0.78rem + 0.18vw, 0.92rem);
+  font-size: 0.74rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--dk-fg-faint);
   font-variant-numeric: tabular-nums;
-  margin-top: 0.15rem;
+}
+.dk-folder__go {
+  margin-left: auto;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  opacity: 0.4;
+  transition: opacity 260ms var(--dk-ease), transform 260ms var(--dk-ease);
 }
 
-.dk-sheet--dark .dk-folder { background: rgba(255, 255, 255, 0.04); }
+.dk-sheet--dark .dk-folder {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.09);
+}
 .dk-sheet--dark .dk-index__top { --seal-mark-lines: #eef4f0; --seal-mark-outer: #7f9a8e; }
+
+/* ── o corpus · um documento só, listado como o seu próprio sumário ───── */
+
+.dk-parts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--dk-rule-soft);
+}
+.dk-parts > li { border-bottom: 1px solid var(--dk-rule-soft); }
+.dk-part {
+  display: grid;
+  /* A coluna do título se mede pelo título mais longo — sem vão morto entre
+   * ele e o resumo, e sem quebrar um nome de parte em duas linhas. */
+  grid-template-columns: 1.4rem auto minmax(0, 1fr) auto 0.9rem;
+  align-items: baseline;
+  gap: 0.9rem;
+  /* a faixa de hover sangra além da coluna de texto, sem mexer no fio */
+  padding: 0.52rem 0.7rem;
+  margin-inline: -0.7rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 220ms var(--dk-ease);
+}
+.dk-part__n {
+  font-size: 0.78rem;
+  font-weight: 560;
+  letter-spacing: 0.08em;
+  color: var(--dk-fg-faint);
+  font-variant-numeric: tabular-nums;
+}
+.dk-part__t {
+  font-size: clamp(0.98rem, 0.93rem + 0.25vw, 1.08rem);
+  font-weight: 540;
+  letter-spacing: -0.018em;
+  line-height: 1.25;
+  color: var(--dk-fg);
+}
+.dk-part__s {
+  font-size: 0.89rem;
+  line-height: 1.5;
+  color: var(--dk-fg-dim);
+  max-width: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dk-part__langs {
+  justify-self: end;
+  min-width: 4.4rem;
+  text-align: right;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--dk-fg-faint);
+}
+.dk-part__go {
+  justify-self: end;
+  font-size: 0.9rem;
+  opacity: 0.32;
+  transition: opacity 260ms var(--dk-ease), transform 260ms var(--dk-ease);
+}
+
+/* Tela baixa: o resumo do cartão perde a terceira linha antes de a gaveta
+ * perder o rodapé — é o índice inteiro que tem de caber, não cada resumo. */
+@media (max-height: 940px) {
+  .dk-folder__s { -webkit-line-clamp: 2; }
+}
+
+/* Estreito: a parte vira duas linhas — numeral e título em cima, resumo
+ * embaixo — e a seta sai, que aí não há hover para revelar. */
+@media (max-width: 760px) {
+  .dk-part {
+    grid-template-columns: 1.4rem minmax(0, 1fr) auto;
+    row-gap: 0.3rem;
+  }
+  .dk-part__s {
+    grid-column: 2 / -1;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .dk-part__go { display: none; }
+}
 
 /* ── device shots, bleeding off the sheet ────────────────────────────── */
 
@@ -2661,6 +2813,12 @@
     transform: translateY(-2px);
   }
 
+  .dk-sheet--dark .dk-folder:hover,
+  .dk-sheet--dark .dk-folder:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(169, 221, 143, 0.4);
+  }
+
   .dk-folder:hover .dk-folder__icon,
   .dk-folder:focus-visible .dk-folder__icon {
     transform: rotate(-4deg);
@@ -2673,10 +2831,40 @@
     color: var(--dk-fg-dim);
   }
 
+  .dk-folder:hover .dk-folder__go,
+  .dk-folder:focus-visible .dk-folder__go {
+    opacity: 1;
+    transform: translateX(2px);
+    color: var(--dk-accent);
+  }
+
   .dk-folder:active {
     transform: translateY(1px);
     transition-duration: 90ms;
   }
+
+  /* A linha do corpus não levanta como o cartão: ela acende a faixa e adianta
+   * a seta — é uma lista, não um objeto. */
+  .dk-part:hover,
+  .dk-part:focus-visible {
+    background: color-mix(in srgb, var(--dk-fg) 4%, transparent);
+  }
+
+  .dk-part:hover .dk-part__t,
+  .dk-part:focus-visible .dk-part__t { color: var(--dk-accent); }
+
+  .dk-sheet--dark .dk-part:hover .dk-part__t,
+  .dk-sheet--dark .dk-part:focus-visible .dk-part__t { color: #a9dd8f; }
+
+  .dk-part:hover .dk-part__go,
+  .dk-part:focus-visible .dk-part__go {
+    opacity: 1;
+    transform: translateX(2px);
+    color: var(--dk-accent);
+  }
+
+  .dk-group__link:hover,
+  .dk-group__link:focus-visible { text-decoration: underline; }
 
   .dk-toc__row:hover,
   .dk-toc__row:focus-visible {

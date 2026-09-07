@@ -8,8 +8,8 @@ export type Crumb = { label: string; onBack: () => void };
 /**
  * The whole header: the mark and the word on the left — followed, while a
  * folder is open, by the trail back to the drawer — and, centred on the
- * sheet's axis, the language switch plus, only while a sheet is showing a
- * drawing, the light/dark switch for that drawing.
+ * sheet's axis, the language switch plus, only while the surface on screen
+ * can take it, the light/dark switch.
  * Nothing else lives up here; the deck carries every other affordance.
  */
 export function DeckHeader({
@@ -21,7 +21,7 @@ export function DeckHeader({
   onLocale: (next: Locale) => void;
   crumb?: Crumb;
 }) {
-  const { theme, setTheme, boards } = useBoardTheme();
+  const { theme, setTheme, themed } = useBoardTheme();
 
   return (
     <header className="dk-head">
@@ -60,11 +60,11 @@ export function DeckHeader({
           </button>
         </div>
 
-        {boards > 0 && (
+        {themed > 0 && (
           <div
             className="dk-lang dk-lang--theme"
             role="group"
-            aria-label={locale === "pt" ? "Tema do desenho" : "Drawing theme"}
+            aria-label={locale === "pt" ? "Tema" : "Theme"}
           >
             <button
               type="button"

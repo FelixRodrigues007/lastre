@@ -10,13 +10,15 @@ import {
 
 export type BoardTheme = "light" | "dark";
 
-/* Only sheets that carry a drawing can be turned dark, so the header cannot
- * decide on its own whether to offer the switch — the board on screen says so.
- * Boards register while mounted; the count is what makes the control appear. */
+/* Not every sheet can be turned dark — a sheet of figures is drawn for paper
+ * and stays there — so the header cannot decide on its own whether to offer
+ * the switch. The surface on screen says so: the drawer and any sheet carrying
+ * a drawing announce themselves while mounted, and the count is what makes the
+ * control appear. */
 type Ctx = {
   theme: BoardTheme;
   setTheme: (next: BoardTheme) => void;
-  boards: number;
+  themed: number;
   register: () => () => void;
 };
 
@@ -34,7 +36,7 @@ const read = (): BoardTheme => {
 
 export function BoardThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<BoardTheme>(read);
-  const [boards, setBoards] = useState(0);
+  const [themed, setThemed] = useState(0);
 
   const setTheme = useCallback((next: BoardTheme) => {
     setThemeState(next);
@@ -46,13 +48,13 @@ export function BoardThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const register = useCallback(() => {
-    setBoards((n) => n + 1);
-    return () => setBoards((n) => n - 1);
+    setThemed((n) => n + 1);
+    return () => setThemed((n) => n - 1);
   }, []);
 
   const value = useMemo(
-    () => ({ theme, setTheme, boards, register }),
-    [theme, setTheme, boards, register],
+    () => ({ theme, setTheme, themed, register }),
+    [theme, setTheme, themed, register],
   );
 
   return (
@@ -68,8 +70,8 @@ export function useBoardTheme(): Ctx {
   return ctx;
 }
 
-/** Announce a board for as long as it is on screen. */
-export function useAnnounceBoard() {
+/** Announce a theme-following surface for as long as it is on screen. */
+export function useAnnounceThemed() {
   const { register } = useBoardTheme();
   useEffect(() => register(), [register]);
 }
