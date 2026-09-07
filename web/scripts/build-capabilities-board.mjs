@@ -186,17 +186,18 @@ const UNITS = [
  *
  * A block is a container, not an outline: a head that names the unit and lists
  * the anchors it has to cover, a rule under the head, and below it an empty
- * body on its own paper — 1400 × 800 of it, which is the size of a real
- * diagram. The unit's number sits large and faint in the corner of the body,
- * so a block can be told apart while panning at any zoom. */
+ * body on its own paper — 2200 × 1180 of it, which is more than the strategy
+ * sheet needed for the whole of unit 01. The unit's number sits large and
+ * faint in the corner of the body, so a block can be told apart while panning
+ * at any zoom. */
 const SHELF_X = 120;
 const SHELF_Y = 940;
 const GRID_TOP = 1060;
-const BLOCK_W = 1400;
-const BLOCK_H = 900;
-const BLOCK_GAP_X = 150;
-const BLOCK_GAP_Y = 150;
-const HEAD_H = 96;
+const BLOCK_W = 2200;
+const BLOCK_H = 1300;
+const BLOCK_GAP_X = 220;
+const BLOCK_GAP_Y = 220;
+const HEAD_H = 120;
 const COLS = 3;
 
 const GRID_W = COLS * BLOCK_W + (COLS - 1) * BLOCK_GAP_X;
@@ -258,15 +259,15 @@ emit("lastre-capacidades", (i, palette) => {
 
     /* The head: the unit, the anchors it owes, and the rule that separates the
      * brief from the space the drawing gets. */
-    label(`sh-u${u.n}`, x + 32, y + 24, `${u.n} · ${u.nome[i]}`, 24, tone, BLOCK_W - 64);
+    label(`sh-u${u.n}`, x + 40, y + 28, `${u.n} · ${u.nome[i]}`, 30, tone, BLOCK_W - 80);
     label(
       `sh-u${u.n}-brief`,
-      x + 32,
-      y + 60,
+      x + 40,
+      y + 72,
       u.ancoras.map((a) => a[i]).join("   ·   "),
-      14,
+      17,
       P.dim,
-      BLOCK_W - 64,
+      BLOCK_W - 80,
     );
     poly(x, y + HEAD_H, [[0, 0], [BLOCK_W, 0]], {
       id: `sh-u${u.n}-regua`,
@@ -276,9 +277,9 @@ emit("lastre-capacidades", (i, palette) => {
 
     /* The number, large and faint in the corner of the body: at the zoom where
      * the head is unreadable, this is still what tells the blocks apart. */
-    glyph(x + BLOCK_W - 110, y + BLOCK_H - 160, u.n, 120, P.ghost, `sh-u${u.n}-num`);
+    glyph(x + BLOCK_W - 170, y + BLOCK_H - 250, u.n, 180, P.ghost, `sh-u${u.n}-num`);
 
-    if (drawn) label(`sh-u${u.n}-feita`, x + 32, y + HEAD_H + 36, c("feita"), 16, P.blue, BLOCK_W - 64);
+    if (drawn) label(`sh-u${u.n}-feita`, x + 40, y + HEAD_H + 40, c("feita"), 18, P.blue, BLOCK_W - 80);
   });
 
   return elements;
