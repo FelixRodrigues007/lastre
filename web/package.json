@@ -11,8 +11,7 @@
     "sync:excalidraw": "node scripts/sync-excalidraw-fonts.mjs",
     "predev": "npm run sync:excalidraw",
     "prebuild": "npm run sync:excalidraw",
-    "board:capacidades": "node scripts/build-capabilities-board.mjs",
-    "board:estrategia": "node scripts/build-strategy-board.mjs"
+    "board:capacidades": "node scripts/build-capabilities-board.mjs"
   },
   "dependencies": {
     "@excalidraw/excalidraw": "^0.18.1",

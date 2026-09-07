@@ -23,13 +23,13 @@ const variants = (stem: string): Record<DeckLocale, Record<BoardTheme, string>> 
 
 const BOARDS = {
   capacidades: variants("lastre-capacidades"),
-  estrategia: variants("lastre-estrategia"),
 };
 
-/* O quadro de capacidades é maior do que a folha mostra: embaixo do fluxo ele
- * carrega o banco de trabalho do dossiê — um bloco vazio por unidade, do
- * tamanho de um diagrama. A folha abre no fluxo; o banco fica abaixo da
- * dobra, para quem rolar o quadro ou abri-lo em /diagram. */
+/* O quadro é maior do que a folha mostra: embaixo do fluxo ele carrega o banco
+ * de trabalho do dossiê — um bloco por unidade, do tamanho de um diagrama, com
+ * o desenho da unidade dentro dele. Nenhuma unidade ganha folha própria; o
+ * deck é uma folha só. Ela abre no fluxo, e o banco fica abaixo da dobra, para
+ * quem rolar o quadro ou abri-lo em /diagram. */
 const FIT_EXCLUDE: Partial<Record<keyof typeof BOARDS, string>> = {
   capacidades: "sh-",
 };
@@ -76,23 +76,17 @@ export const capacidades: Deck = {
   index: "03",
   title: { pt: "Capacidades", en: "Capabilities" },
   summary: {
-    pt: "O mapa do que a Lastre é capaz de fazer: da prova de validade à tokenização, e daí a custódia, DeFi, staking e liquidação. Depois, a tese que sustenta o mapa.",
-    en: "The map of what Lastre can do: from proof of validity to tokenisation, and from there to custody, DeFi, staking and settlement. Then the thesis the map stands on.",
+    pt: "O mapa do que a Lastre é capaz de fazer: da prova de validade à tokenização, e daí a custódia, DeFi, staking e liquidação. Abaixo do mapa, o banco de trabalho do dossiê — uma unidade por bloco, desenhada dentro dele.",
+    en: "The map of what Lastre can do: from proof of validity to tokenisation, and from there to custody, DeFi, staking and settlement. Below the map, the dossier's workbench — one unit per block, drawn inside it.",
   },
   audience: { pt: "Sócios e convidados", en: "Partners and guests" },
-  updated: "05.09.2026",
+  updated: "07.09.2026",
   slides: [
     {
       id: "mapa",
       title: { pt: "O mapa", en: "The map" },
       bleed: true,
       render: (l) => <Board board="capacidades" locale={l} />,
-    },
-    {
-      id: "estrategia",
-      title: { pt: "A estratégia", en: "The strategy" },
-      bleed: true,
-      render: (l) => <Board board="estrategia" locale={l} />,
     },
   ],
 };

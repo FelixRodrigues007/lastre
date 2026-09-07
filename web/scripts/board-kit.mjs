@@ -50,6 +50,15 @@ export function sheet(palette) {
   let seedCounter = 1;
   const rnd = () => (seedCounter = (seedCounter * 1103515245 + 12345) % 2147483648);
 
+  /* A drawing that lives inside another board's block has to be tellable from
+   * the rest of the board by id alone: the deck frames its opening view on an
+   * id prefix, and one element left outside the namespace drags the whole
+   * workbench into that frame. So the prefix is set once around a drawing and
+   * every id — spelled or generated — goes through it. */
+  let idPrefix = "";
+  const setPrefix = (p) => { idPrefix = p ?? ""; };
+  const mkId = (id) => idPrefix + id;
+
   const base = (over) => ({
     angle: 0,
     strokeColor: P.ink,
@@ -93,6 +102,7 @@ export function sheet(palette) {
    *  reserved slot is smaller than a link in the chain and has to read as
    *  smaller. `strokeStyle: "dashed"` is how the sheet says "not drawn yet". */
   const box = (id, x, y, w, label, opts = {}) => {
+    id = mkId(id);
     const size = opts.fontSize ?? FONT;
     const pad = opts.pad ?? PAD;
     const lines = wrap(label, w - pad * 2, size);
@@ -129,15 +139,19 @@ export function sheet(palette) {
 
   /** Arrow bound to both ends so the boxes stay draggable without breaking the flow. */
   const arrow = (a, b, opts = {}) => {
-    const id = `arw-${elements.length}`;
+    const id = mkId(opts.id ?? `arw-${elements.length}`);
     const from = opts.from ?? "right";
     const to = opts.to ?? "left";
-    const p = (nodeSide, n) => ({
-      right: [n.right, n.cy], left: [n.x, n.cy],
-      bottom: [n.cx, n.bottom], top: [n.cx, n.y],
+    /* `fromAt` / `toAt` slide the anchor along the side it leaves or meets,
+     * 0 to 1, centre by default. A wide box needs it: an arrow into the middle
+     * of a full-width band, coming from a box off to one side, crosses the
+     * drawing diagonally and reads as a strike-through rather than a drop. */
+    const p = (nodeSide, n, t) => ({
+      right: [n.right, n.y + n.h * t], left: [n.x, n.y + n.h * t],
+      bottom: [n.x + n.w * t, n.bottom], top: [n.x + n.w * t, n.y],
     })[nodeSide];
-    const [x1, y1] = p(from, a);
-    const [x2, y2] = p(to, b);
+    const [x1, y1] = p(from, a, opts.fromAt ?? 0.5);
+    const [x2, y2] = p(to, b, opts.toAt ?? 0.5);
 
     elements.push(base({
       id, type: "arrow",
@@ -159,6 +173,7 @@ export function sheet(palette) {
   };
 
   const label = (id, x, y, text, size = 18, color = null, maxPx = 1200) => {
+    id = mkId(id);
     /* Free text measures with its own size — the box helper's CHAR is tied to
      * FONT. Two different metrics on purpose: WRAP is the honest average
      * advance, so lines break where they look right; WIDE is deliberately
@@ -199,7 +214,7 @@ export function sheet(palette) {
    * box can move without its picture coming loose. */
   const shape = (type, x, y, w, h, opts = {}) =>
     elements.push(base({
-      id: opts.id ?? `${type[0]}${elements.length}`,
+      id: mkId(opts.id ?? `${type[0]}${elements.length}`),
       type, x, y, width: w, height: h,
       strokeColor: opts.stroke ?? P.line,
       backgroundColor: opts.fill ?? "transparent",
@@ -217,7 +232,7 @@ export function sheet(palette) {
     const xs = points.map((p) => p[0]);
     const ys = points.map((p) => p[1]);
     elements.push(base({
-      id: opts.id ?? `ln${elements.length}`,
+      id: mkId(opts.id ?? `ln${elements.length}`),
       type: "line", x, y,
       width: Math.max(...xs) - Math.min(...xs),
       height: Math.max(...ys) - Math.min(...ys),
@@ -240,7 +255,7 @@ export function sheet(palette) {
   const glyph = (cx, y, text, size, color = null, id = null) => {
     const w = Math.ceil(text.length * size * 0.85);
     elements.push(base({
-      id: id ?? `gl${elements.length}`,
+      id: mkId(id ?? `gl${elements.length}`),
       type: "text",
       x: Math.round(cx - w / 2), y,
       width: w, height: Math.ceil(size * LH),
@@ -252,7 +267,7 @@ export function sheet(palette) {
     }));
   };
 
-  return { P, elements, box, arrow, label, ellipse, rect, poly, glyph };
+  return { P, elements, setPrefix, box, arrow, label, ellipse, rect, poly, glyph };
 }
 
 /** Park the scene just below the top toolbar rather than under it. */
