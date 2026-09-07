@@ -8,17 +8,22 @@ const BoardEmbed = lazy(() =>
   import("../../diagram/BoardEmbed").then((m) => ({ default: m.BoardEmbed })),
 );
 
-/* Four committed boards — two languages, each drawn light and dark — all
- * written by scripts/build-capabilities-board.mjs from one source. A drawing
- * has no runtime string table and no CSS, so both the translation and the
- * theme are other files.
+/* Four committed files per board — two languages, each drawn light and dark —
+ * all written by the scripts under web/scripts from one bilingual source. A
+ * drawing has no runtime string table and no CSS, so both the translation and
+ * the theme are other files.
  *
  * The dark ones are drawn dark rather than filtered: Excalidraw's own dark
  * mode inverts the whole canvas, which lifts border and text to the same
  * near-white and lets neither be softened alone. */
-const BOARD: Record<DeckLocale, Record<BoardTheme, string>> = {
-  pt: { light: "lastre-capacidades", dark: "lastre-capacidades-dark" },
-  en: { light: "lastre-capacidades-en", dark: "lastre-capacidades-en-dark" },
+const variants = (stem: string): Record<DeckLocale, Record<BoardTheme, string>> => ({
+  pt: { light: stem, dark: `${stem}-dark` },
+  en: { light: `${stem}-en`, dark: `${stem}-en-dark` },
+});
+
+const BOARDS = {
+  capacidades: variants("lastre-capacidades"),
+  estrategia: variants("lastre-estrategia"),
 };
 
 /* Painted into the canvas bitmap, so it has to equal the sheet exactly. */
@@ -27,7 +32,13 @@ const PAPER: Record<BoardTheme, string> = {
   dark: "#121212",
 };
 
-function CapabilitiesBoard({ locale }: { locale: DeckLocale }) {
+function Board({
+  board,
+  locale,
+}: {
+  board: keyof typeof BOARDS;
+  locale: DeckLocale;
+}) {
   const { theme } = useBoardTheme();
   useAnnounceBoard();
 
@@ -35,8 +46,8 @@ function CapabilitiesBoard({ locale }: { locale: DeckLocale }) {
     <div className="dk-board" data-theme={theme}>
       <Suspense fallback={<div className="board-embed" aria-busy="true" />}>
         <BoardEmbed
-          key={`${locale}-${theme}`}
-          slug={BOARD[locale][theme]}
+          key={`${board}-${locale}-${theme}`}
+          slug={BOARDS[board][locale][theme]}
           /* Always light: the darkness is in the file, and Excalidraw's dark
            * theme would filter it a second time. */
           theme="light"
@@ -56,8 +67,8 @@ export const capacidades: Deck = {
   index: "03",
   title: { pt: "Capacidades", en: "Capabilities" },
   summary: {
-    pt: "O mapa do que a Lastre é capaz de fazer: da prova de validade à tokenização, e daí a custódia, DeFi, staking e liquidação.",
-    en: "The map of what Lastre can do: from proof of validity to tokenisation, and from there to custody, DeFi, staking and settlement.",
+    pt: "O mapa do que a Lastre é capaz de fazer: da prova de validade à tokenização, e daí a custódia, DeFi, staking e liquidação. Depois, a tese que sustenta o mapa.",
+    en: "The map of what Lastre can do: from proof of validity to tokenisation, and from there to custody, DeFi, staking and settlement. Then the thesis the map stands on.",
   },
   audience: { pt: "Sócios e convidados", en: "Partners and guests" },
   updated: "05.09.2026",
@@ -66,7 +77,13 @@ export const capacidades: Deck = {
       id: "mapa",
       title: { pt: "O mapa", en: "The map" },
       bleed: true,
-      render: (l) => <CapabilitiesBoard locale={l} />,
+      render: (l) => <Board board="capacidades" locale={l} />,
+    },
+    {
+      id: "estrategia",
+      title: { pt: "A estratégia", en: "The strategy" },
+      bleed: true,
+      render: (l) => <Board board="estrategia" locale={l} />,
     },
   ],
 };
