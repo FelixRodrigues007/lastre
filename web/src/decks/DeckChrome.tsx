@@ -2,27 +2,53 @@ import { SealMark } from "../components/ui/SealMark";
 import { useBoardTheme } from "./BoardTheme";
 import type { DeckLocale as Locale } from "./types";
 
+/** A pasta aberta, para a trilha do cabeçalho saber o caminho de volta. */
+export type Crumb = { label: string; onBack: () => void };
+
 /**
- * The whole header: the mark and the word on the left, and — centred on the
- * sheet's axis — the language switch plus, only while a sheet is showing a
+ * The whole header: the mark and the word on the left — followed, while a
+ * folder is open, by the trail back to the drawer — and, centred on the
+ * sheet's axis, the language switch plus, only while a sheet is showing a
  * drawing, the light/dark switch for that drawing.
  * Nothing else lives up here; the deck carries every other affordance.
  */
 export function DeckHeader({
   locale,
   onLocale,
+  crumb,
 }: {
   locale: Locale;
   onLocale: (next: Locale) => void;
+  crumb?: Crumb;
 }) {
   const { theme, setTheme, boards } = useBoardTheme();
 
   return (
     <header className="dk-head">
-      <a className="dk-brand" href="/" aria-label="Lastre">
-        <SealMark size={19} />
-        <span className="dk-brand__word">Lastre</span>
-      </a>
+      <div className="dk-head__l">
+        <a className="dk-brand" href="/" aria-label="Lastre">
+          <SealMark size={19} />
+          <span className="dk-brand__word">Lastre</span>
+        </a>
+
+        {crumb && (
+          <nav className="dk-crumb" aria-label={locale === "pt" ? "Trilha" : "Breadcrumb"}>
+            <span className="dk-crumb__sep" aria-hidden="true">
+              /
+            </span>
+            {/* Volta à gaveta sem recarregar — o mesmo caminho do Esc. */}
+            <button type="button" className="dk-crumb__up" onClick={crumb.onBack}>
+              Decks
+            </button>
+            <span className="dk-crumb__sep" aria-hidden="true">
+              /
+            </span>
+            <span className="dk-crumb__here" aria-current="page">
+              {crumb.label}
+            </span>
+          </nav>
+        )}
+      </div>
 
       <div className="dk-switches">
         <div className="dk-lang" role="group" aria-label={locale === "pt" ? "Idioma" : "Language"}>

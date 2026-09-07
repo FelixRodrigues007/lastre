@@ -28,3 +28,11 @@ web/cobe-test.html
 web/.deck-verify/
 web/*-slide.png
 web/relogio-*.png
+
+# Cloudflare Pages Functions — segredos locais (DECKS_PASSWORD)
+.dev.vars
+**/.dev.vars
+
+# Cloudflare Pages — estado local do wrangler
+.wrangler/
+**/.wrangler/

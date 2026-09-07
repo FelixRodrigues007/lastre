@@ -12,3 +12,30 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
+
+# 3) Superfícies internas — nada de cache compartilhado nem indexação. O portão
+#    (web/functions/) já responde 401 sem o cookie; isto é a segunda cerca.
+/decks-private/*
+  Cache-Control: private, max-age=31536000, immutable
+  X-Robots-Tag: noindex, nofollow
+
+/decks
+  X-Robots-Tag: noindex, nofollow
+
+/decks/*
+  X-Robots-Tag: noindex, nofollow
+
+/diagrams/*
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow
+
+/diagram
+  X-Robots-Tag: noindex, nofollow
+
+/corpus
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow
+
+/corpus/*
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, nofollow

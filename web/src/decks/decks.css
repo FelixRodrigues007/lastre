@@ -63,7 +63,14 @@
   padding: 0.85rem clamp(0.9rem, 0.5rem + 1.2vw, 1.6rem);
 }
 /* The mark holds the left; the switches sit on the sheet's own centre line. */
-.dk-head .dk-brand { grid-column: 1; justify-self: start; }
+.dk-head__l {
+  grid-column: 1;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
 .dk-switches {
   grid-column: 2;
   justify-self: center;
@@ -88,6 +95,43 @@
   font-size: 0.92rem;
   font-weight: 600;
   letter-spacing: -0.015em;
+}
+
+/* ── trilha · o caminho de volta à gaveta ────────────────────────────── */
+
+.dk-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  font-family: var(--dk-sans);
+  font-size: 0.82rem;
+  letter-spacing: -0.01em;
+}
+.dk-crumb__sep { color: var(--dk-line); }
+.dk-crumb__up {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0.1rem 0.2rem;
+  margin: 0 -0.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  color: var(--dk-dim);
+  transition: color 220ms var(--dk-ease);
+}
+.dk-crumb__up:hover { color: var(--dk-ink); }
+.dk-crumb__here {
+  color: var(--dk-ink);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Tela estreita: a marca cede a palavra para a trilha caber inteira. */
+@media (max-width: 560px) {
+  .dk-head:has(.dk-crumb) .dk-brand__word { display: none; }
 }
 
 .dk-lang {
@@ -934,11 +978,11 @@
   max-width: 1560px;
   margin-inline: auto;
   display: grid;
-  gap: clamp(1.25rem, 0.7rem + 1.9vw, 2.5rem);
+  gap: clamp(1rem, 0.6rem + 1.2vw, 1.7rem);
   align-content: center;
   align-content: safe center;
   min-height: 100%;
-  padding-block: clamp(0.75rem, 2vh, 1.75rem);
+  padding-block: clamp(0.5rem, 1.2vh, 1.1rem);
 }
 .dk-index {
   justify-items: center;
@@ -956,7 +1000,7 @@
   --seal-mark-accent: #4e8f3c;
   --seal-mark-lines: #13241d;
 }
-.dk-index__mark { display: block; line-height: 0; margin-bottom: 0.35rem; }
+.dk-index__mark { display: block; line-height: 0; margin-bottom: 0.2rem; }
 .dk-index__word {
   margin: 0;
   font-size: clamp(1.5rem, 1.1rem + 1.3vw, 2.1rem);
@@ -969,20 +1013,55 @@
 .dk-index__keys { font-size: 0.8rem; letter-spacing: 0.06em; color: var(--dk-fg-faint); }
 .dk-index__fine { color: var(--dk-fg-faint); }
 
+/* ── grupos · um título por tipo de documento ────────────────────────── */
+
+.dk-group {
+  width: 100%;
+  /* Larga o bastante para as três pastas caberem numa linha só — a gaveta
+   * inteira, com o corpus e a nota de rodapé, fica acima da dobra. */
+  max-width: 61rem;
+  display: grid;
+  gap: clamp(0.7rem, 0.45rem + 0.6vw, 1rem);
+  text-align: left;
+}
+.dk-group__h {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto minmax(1.5rem, 1fr);
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--dk-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--dk-fg-faint);
+}
+/* O fio segue o título até a borda da coluna — é ele que agrupa, não uma caixa. */
+.dk-group__h::after {
+  content: "";
+  height: 1px;
+  background: var(--dk-line-soft);
+}
+.dk-group__empty { color: var(--dk-fg-faint); max-width: 60ch; }
+.dk-group__lead { color: var(--dk-fg-dim); max-width: 60ch; margin-bottom: 0.2rem; }
+.dk-group__lead b { font-weight: 560; color: var(--dk-fg); }
+.dk-group__link { color: var(--dk-accent); text-decoration: none; white-space: nowrap; }
+.dk-group__link:hover { text-decoration: underline; }
+
 /* one folder per document */
 .dk-folders {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   gap: clamp(0.7rem, 0.4rem + 0.9vw, 1.1rem);
   width: 100%;
-  max-width: 46rem;
   text-align: left;
 }
 .dk-folder {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.42rem;
   align-content: start;
-  padding: clamp(1.05rem, 0.8rem + 0.9vw, 1.5rem);
+  padding: clamp(0.9rem, 0.7rem + 0.7vw, 1.2rem);
   border: 1px solid var(--dk-line);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.5);
@@ -1004,6 +1083,14 @@
   margin-bottom: 0.3rem;
 }
 .dk-folder__icon svg { width: 19px; height: 19px; }
+/* A parte do corpus não tem glifo: o numeral romano ocupa a mesma caixa. */
+.dk-folder__num {
+  font-family: var(--dk-sans);
+  font-size: 0.86rem;
+  font-weight: 560;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
 .dk-folder__t {
   font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.32rem);
   line-height: 1.15;

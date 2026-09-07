@@ -1,5 +1,5 @@
 /* Generates the four committed versions of the "capabilities" board that
- * /decks/capacidades embeds — two languages, each drawn light and dark — from
+ * /decks/whiteboard embeds — two languages, each drawn light and dark — from
  * the one bilingual source below.
  *
  *   npm run board:capacidades

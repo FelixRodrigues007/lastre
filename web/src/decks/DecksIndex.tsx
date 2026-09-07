@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { SealMark } from "../components/ui/SealMark";
 import type { DeckLocale as Locale } from "./types";
 import type { Deck } from "./types";
+import { corpusAll, corpusHref, corpusParts, corpusUpdated } from "./corpus";
 
 type Props = {
   decks: Deck[];
@@ -35,7 +36,7 @@ const icons: Record<string, ReactNode> = {
       />
     </svg>
   ),
-  capacidades: (
+  whiteboard: (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="5" cy="12" r="2.2" stroke="currentColor" strokeWidth="1.5" />
       <circle cx="19" cy="5.5" r="2.2" stroke="currentColor" strokeWidth="1.5" />
@@ -62,7 +63,7 @@ const fallbackIcon = (
   </svg>
 );
 
-/** The drawer. The mark, one line of instruction, and a folder per document. */
+/** The drawer. The mark, then a titled group per kind of document. */
 export function DecksIndex({ decks, locale, onOpen }: Props) {
   const pt = locale === "pt";
 
@@ -75,47 +76,78 @@ export function DecksIndex({ decks, locale, onOpen }: Props) {
               <SealMark size={52} label="Lastre" />
             </span>
             <h1 className="dk-index__word">Lastre</h1>
-            <p className="dk-p dk-p--lead dk-index__line">
-              {pt
-                ? "Documentos de trabalho. Uma pasta por assunto."
-                : "Working documents. One folder per subject."}
-            </p>
-            <p className="dk-eyebrow dk-index__keys">
-              {pt
-                ? "setas andam · g abre o índice · esc volta aqui · imprimir gera o pdf"
-                : "arrows move · g opens contents · esc comes back · print makes the pdf"}
-            </p>
           </div>
 
-          <nav className="dk-folders">
-            {decks.map((deck) => (
-              <a
-                key={deck.slug}
-                className="dk-folder"
-                href={`/decks/${deck.slug}`}
-                onClick={(e) => {
-                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-                  e.preventDefault();
-                  onOpen(deck.slug);
-                }}
-              >
-                <span className="dk-folder__icon">{icons[deck.slug] ?? fallbackIcon}</span>
-                <span className="dk-folder__t">{deck.title[locale]}</span>
-                <span className="dk-p dk-folder__s">{deck.summary[locale]}</span>
-                <span className="dk-folder__meta">
-                  {deck.slides.length}{" "}
-                  {deck.slides.length === 1
-                    ? pt
-                      ? "tela"
-                      : "screen"
-                    : pt
-                      ? "telas"
-                      : "screens"}{" "}
-                  · {deck.updated}
-                </span>
-              </a>
-            ))}
-          </nav>
+          <section className="dk-group">
+            <h2 className="dk-group__h">{pt ? "Slides & Apresentações" : "Slides & Presentations"}</h2>
+            <nav className="dk-folders">
+              {decks.map((deck) => (
+                <a
+                  key={deck.slug}
+                  className="dk-folder"
+                  href={`/decks/${deck.slug}`}
+                  onClick={(e) => {
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                    e.preventDefault();
+                    onOpen(deck.slug);
+                  }}
+                >
+                  <span className="dk-folder__icon">{icons[deck.slug] ?? fallbackIcon}</span>
+                  <span className="dk-folder__t">{deck.title[locale]}</span>
+                  <span className="dk-p dk-folder__s">{deck.summary[locale]}</span>
+                  <span className="dk-folder__meta">
+                    {deck.slides.length}{" "}
+                    {deck.slides.length === 1
+                      ? pt
+                        ? "tela"
+                        : "screen"
+                      : pt
+                        ? "telas"
+                        : "screens"}{" "}
+                    · {deck.updated}
+                  </span>
+                </a>
+              ))}
+            </nav>
+          </section>
+
+          {/* O corpus é um documento só, servido inteiro em /corpus. Cada parte
+           * dele já é um cartão lá dentro; a gaveta repete os cartões para que
+           * a parte se abra direto, sem passar pelo índice do documento. */}
+          <section className="dk-group">
+            <h2 className="dk-group__h">Research Corpus</h2>
+            <p className="dk-p dk-group__lead">
+              {pt ? (
+                <>
+                  <b>Corpus Lastre</b> — a prova antes do valor. Cinco partes, escritas como um
+                  documento só.{" "}
+                  <a className="dk-group__link" href={corpusAll}>
+                    Ler inteiro
+                  </a>
+                </>
+              ) : (
+                <>
+                  <b>Corpus Lastre</b> — proof before value. Five parts, written as a single
+                  document.{" "}
+                  <a className="dk-group__link" href={corpusAll}>
+                    Read it whole
+                  </a>
+                </>
+              )}
+            </p>
+            <nav className="dk-folders">
+              {corpusParts.map((part) => (
+                <a key={part.numeral} className="dk-folder" href={corpusHref(part, locale)}>
+                  <span className="dk-folder__icon dk-folder__num">{part.numeral}</span>
+                  <span className="dk-folder__t">{part.title[locale]}</span>
+                  <span className="dk-p dk-folder__s">{part.summary[locale]}</span>
+                  <span className="dk-folder__meta">
+                    {part.langs.join(" · ")} · {corpusUpdated}
+                  </span>
+                </a>
+              ))}
+            </nav>
+          </section>
 
           <p className="dk-p dk-p--fine dk-index__fine">
             {pt

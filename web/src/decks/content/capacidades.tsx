@@ -72,7 +72,7 @@ function Board({
  * ───────────────────────────────────────────────────────────────────────── */
 
 export const capacidades: Deck = {
-  slug: "capacidades",
+  slug: "whiteboard",
   index: "03",
   title: { pt: "Capacidades", en: "Capabilities" },
   summary: {

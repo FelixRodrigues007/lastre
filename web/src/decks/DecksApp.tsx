@@ -84,7 +84,11 @@ function DecksSurface() {
 
   return (
     <div className="dk">
-      <DeckHeader locale={locale} onLocale={setLocale} />
+      <DeckHeader
+        locale={locale}
+        onLocale={setLocale}
+        crumb={deck ? { label: deck.slug, onBack: exit } : undefined}
+      />
 
       {slug && !deck ? (
         <div className="dk-stage">
