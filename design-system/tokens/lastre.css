@@ -66,8 +66,6 @@
   --lastre-duration-fast: 120ms;
   --lastre-duration-normal: 180ms;
   --lastre-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --lastre-shadow-sm: 0 2px 8px rgb(15 17 22 / 8%);
-  --lastre-shadow-md: 0 12px 32px rgb(15 17 22 / 14%);
   --lastre-gradient-gold: linear-gradient(115deg, var(--lastre-color-gold-600) 0%, var(--lastre-color-gold-200) 28%, var(--lastre-color-gold-50) 48%, var(--lastre-color-gold-300) 68%, var(--lastre-color-gold-500) 100%);
   --lastre-glow-gold: 0 0 28px rgb(253 168 45 / 12%);
   --lastre-text-display: clamp(2.25rem, 4.4vw, 4rem);
@@ -94,6 +92,15 @@
   --lastre-weight-bold: 700;
   --lastre-layer-modal: 100;
   --lastre-layer-tooltip: 110;
+  --lastre-radius-xl: 24px;
+  --lastre-duration-slow: 320ms;
+  --lastre-duration-expressive: 560ms;
+  --lastre-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --lastre-ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --lastre-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --lastre-blur-glass: 20px;
+  --lastre-lift-sm: -2px;
+  --lastre-lift-md: -6px;
 }
 :root, [data-theme="dark"] {
   --lastre-bg-canvas: var(--lastre-color-mirage-950);
@@ -123,7 +130,7 @@
   --lastre-success-surface: color-mix(in srgb, var(--lastre-success) 8%, var(--lastre-bg-surface));
   --lastre-warning-surface: color-mix(in srgb, var(--lastre-warning) 8%, var(--lastre-bg-surface));
   --lastre-danger-surface: color-mix(in srgb, var(--lastre-danger) 8%, var(--lastre-bg-surface));
-  --lastre-surface-shadow: 0 0 0 1px rgb(255 255 255 / 7%), 0 12px 28px rgb(0 0 0 / 12%);
+  --lastre-surface-shadow: var(--lastre-surface-edge), var(--lastre-elevation-2);
   --lastre-text-tertiary: var(--lastre-text-muted);
   --lastre-overlay: rgb(15 17 22 / 68%);
   --lastre-focus-shadow: 0 0 0 3px color-mix(in srgb, var(--lastre-focus) 22%, transparent);
@@ -169,6 +176,23 @@
   --lastre-gradient-success: linear-gradient(135deg, var(--lastre-success), var(--lastre-success));
   --lastre-gradient-map-water: linear-gradient(180deg, var(--lastre-map-water), var(--lastre-map-water-deep));
   --lastre-ambient: radial-gradient(ellipse at top right, var(--lastre-fill-info), transparent 65%);
+  --lastre-elevation-0: none;
+  --lastre-elevation-1: 0 1px 2px rgb(3 7 18 / 28%), 0 3px 6px -3px rgb(3 7 18 / 22%);
+  --lastre-elevation-2: 0 2px 4px rgb(3 7 18 / 26%), 0 8px 16px -6px rgb(3 7 18 / 36%);
+  --lastre-elevation-3: 0 4px 8px -2px rgb(3 7 18 / 32%), 0 16px 32px -8px rgb(3 7 18 / 44%);
+  --lastre-elevation-4: 0 8px 16px -4px rgb(3 7 18 / 36%), 0 28px 56px -12px rgb(3 7 18 / 52%);
+  --lastre-elevation-5: 0 12px 24px -6px rgb(3 7 18 / 40%), 0 40px 80px -16px rgb(3 7 18 / 64%);
+  --lastre-edge-light: rgb(255 255 255 / 12%);
+  --lastre-edge-shadow: rgb(3 7 18 / 28%);
+  --lastre-surface-edge: inset 0 1px 0 var(--lastre-edge-light), inset 0 -1px 0 var(--lastre-edge-shadow);
+  --lastre-shadow-inset: inset 0 2px 4px rgb(3 7 18 / 30%), inset 0 1px 2px rgb(3 7 18 / 18%);
+  --lastre-material-matte: linear-gradient(145deg, color-mix(in srgb, var(--lastre-bg-surface) 94%, white), var(--lastre-bg-surface) 70%);
+  --lastre-material-glass: color-mix(in srgb, var(--lastre-bg-surface) 82%, transparent);
+  --lastre-material-metal: linear-gradient(125deg, var(--lastre-color-gold-600) 0%, var(--lastre-color-gold-200) 24%, var(--lastre-color-gold-50) 44%, var(--lastre-color-gold-200) 52%, var(--lastre-color-gold-400) 78%, var(--lastre-color-gold-200) 100%);
+  --lastre-shadow-action: inset 0 1px 0 rgb(255 255 255 / 18%), inset 0 -1px 0 rgb(3 7 18 / 20%), 0 2px 4px rgb(3 7 18 / 16%), 0 5px 12px color-mix(in srgb, var(--lastre-action-primary) 20%, transparent);
+  --lastre-shadow-action-hover: inset 0 1px 0 rgb(255 255 255 / 22%), 0 4px 8px rgb(3 7 18 / 12%), 0 8px 20px color-mix(in srgb, var(--lastre-action-primary) 28%, transparent);
+  --lastre-shadow-sm: var(--lastre-elevation-1);
+  --lastre-shadow-md: var(--lastre-elevation-3);
   --lastre-button-radius: var(--lastre-radius-sm);
   --lastre-button-height-sm: var(--lastre-control-sm);
   --lastre-button-height-md: var(--lastre-control-md);
@@ -193,6 +217,12 @@
   --lastre-field-padding-x: var(--lastre-space-3);
   --lastre-alert-radius: var(--lastre-radius-md);
   --lastre-alert-padding: var(--lastre-space-4);
+  --lastre-button-shadow: var(--lastre-shadow-action);
+  --lastre-button-shadow-hover: var(--lastre-shadow-action-hover);
+  --lastre-field-shadow: var(--lastre-shadow-inset);
+  --lastre-panel-shadow: var(--lastre-surface-edge), var(--lastre-elevation-2);
+  --lastre-popover-shadow: var(--lastre-surface-edge), var(--lastre-elevation-4);
+  --lastre-dialog-shadow: var(--lastre-surface-edge), var(--lastre-elevation-5);
 }
 [data-theme="light"] {
   --lastre-bg-canvas: var(--lastre-color-mirage-50);
@@ -222,7 +252,7 @@
   --lastre-success-surface: color-mix(in srgb, var(--lastre-success) 8%, var(--lastre-bg-surface));
   --lastre-warning-surface: color-mix(in srgb, var(--lastre-warning) 8%, var(--lastre-bg-surface));
   --lastre-danger-surface: color-mix(in srgb, var(--lastre-danger) 8%, var(--lastre-bg-surface));
-  --lastre-surface-shadow: 0 0 0 1px rgb(15 17 22 / 7%), 0 1px 3px rgb(15 17 22 / 4%), 0 10px 28px -12px rgb(15 17 22 / 12%);
+  --lastre-surface-shadow: var(--lastre-surface-edge), var(--lastre-elevation-2);
   --lastre-text-tertiary: var(--lastre-text-muted);
   --lastre-overlay: rgb(15 17 22 / 68%);
   --lastre-focus-shadow: 0 0 0 3px color-mix(in srgb, var(--lastre-focus) 22%, transparent);
@@ -268,6 +298,23 @@
   --lastre-gradient-success: linear-gradient(135deg, var(--lastre-success), var(--lastre-success));
   --lastre-gradient-map-water: linear-gradient(180deg, var(--lastre-map-water), var(--lastre-map-water-deep));
   --lastre-ambient: radial-gradient(ellipse at top right, var(--lastre-fill-info), transparent 65%);
+  --lastre-elevation-0: none;
+  --lastre-elevation-1: 0 1px 2px rgb(27 29 36 / 6%), 0 3px 6px -3px rgb(27 29 36 / 6%);
+  --lastre-elevation-2: 0 2px 4px rgb(27 29 36 / 4%), 0 8px 16px -6px rgb(27 29 36 / 12%);
+  --lastre-elevation-3: 0 4px 8px -2px rgb(27 29 36 / 6%), 0 16px 32px -8px rgb(27 29 36 / 16%);
+  --lastre-elevation-4: 0 8px 16px -4px rgb(27 29 36 / 8%), 0 28px 56px -12px rgb(27 29 36 / 20%);
+  --lastre-elevation-5: 0 12px 24px -6px rgb(27 29 36 / 10%), 0 40px 80px -16px rgb(27 29 36 / 24%);
+  --lastre-edge-light: rgb(255 255 255 / 88%);
+  --lastre-edge-shadow: rgb(27 29 36 / 10%);
+  --lastre-surface-edge: inset 0 1px 0 var(--lastre-edge-light), inset 0 -1px 0 var(--lastre-edge-shadow);
+  --lastre-shadow-inset: inset 0 2px 4px rgb(27 29 36 / 5%), inset 0 1px 2px rgb(27 29 36 / 4%);
+  --lastre-material-matte: linear-gradient(145deg, color-mix(in srgb, var(--lastre-bg-surface) 94%, white), var(--lastre-bg-surface) 70%);
+  --lastre-material-glass: color-mix(in srgb, var(--lastre-bg-surface) 82%, transparent);
+  --lastre-material-metal: linear-gradient(125deg, var(--lastre-color-gold-600) 0%, var(--lastre-color-gold-200) 24%, var(--lastre-color-gold-50) 44%, var(--lastre-color-gold-200) 52%, var(--lastre-color-gold-400) 78%, var(--lastre-color-gold-200) 100%);
+  --lastre-shadow-action: inset 0 1px 0 rgb(255 255 255 / 18%), inset 0 -1px 0 rgb(3 7 18 / 20%), 0 2px 4px rgb(3 7 18 / 16%), 0 5px 12px color-mix(in srgb, var(--lastre-action-primary) 20%, transparent);
+  --lastre-shadow-action-hover: inset 0 1px 0 rgb(255 255 255 / 22%), 0 4px 8px rgb(3 7 18 / 12%), 0 8px 20px color-mix(in srgb, var(--lastre-action-primary) 28%, transparent);
+  --lastre-shadow-sm: var(--lastre-elevation-1);
+  --lastre-shadow-md: var(--lastre-elevation-3);
   --lastre-button-radius: var(--lastre-radius-sm);
   --lastre-button-height-sm: var(--lastre-control-sm);
   --lastre-button-height-md: var(--lastre-control-md);
@@ -292,4 +339,10 @@
   --lastre-field-padding-x: var(--lastre-space-3);
   --lastre-alert-radius: var(--lastre-radius-md);
   --lastre-alert-padding: var(--lastre-space-4);
+  --lastre-button-shadow: var(--lastre-shadow-action);
+  --lastre-button-shadow-hover: var(--lastre-shadow-action-hover);
+  --lastre-field-shadow: var(--lastre-shadow-inset);
+  --lastre-panel-shadow: var(--lastre-surface-edge), var(--lastre-elevation-2);
+  --lastre-popover-shadow: var(--lastre-surface-edge), var(--lastre-elevation-4);
+  --lastre-dialog-shadow: var(--lastre-surface-edge), var(--lastre-elevation-5);
 }
