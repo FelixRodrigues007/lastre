@@ -1,18 +1,16 @@
-import iconUrl from "@design-system/assets/lastre-icon-espectro.svg";
-
-/** Proporção do vetor original: 150 × 143. */
-const RATIO = 150 / 143;
+import iconUrl from "@design-system/assets/lastre-symbol-espectro.svg";
 
 type LastreIconProps = {
-  /** Altura em px; a largura acompanha a proporção do vetor. */
+  /** Lado da caixa em px; o símbolo é quadrado. */
   size?: number;
   className?: string;
 };
 
 /**
- * Ícone da Lastre — marca exportada do Figma (nó 69:917), servida direto de
- * design-system/assets para o arquivo seguir como fonte única. É multicolorida,
- * então não usa máscara CSS como o wordmark: renderiza com as cores próprias.
+ * Símbolo da Lastre. O arquivo é gerado por design-system/scripts/build-symbol.mjs
+ * a partir das retas de construção do nó 69:917 do Figma — caixa quadrada de 128,
+ * marca centrada na própria bbox ocupando 112. É multicolorido, então não usa
+ * máscara CSS como o wordmark: renderiza com as cores próprias.
  */
 export function LastreIcon({ size = 20, className }: LastreIconProps) {
   return (
@@ -20,7 +18,7 @@ export function LastreIcon({ size = 20, className }: LastreIconProps) {
       src={iconUrl}
       alt=""
       aria-hidden="true"
-      width={Math.round(size * RATIO)}
+      width={size}
       height={size}
       className={className}
       draggable={false}

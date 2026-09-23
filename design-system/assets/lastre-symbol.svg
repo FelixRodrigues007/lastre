@@ -1,0 +1,15 @@
+<!-- Gerado por design-system/scripts/build-symbol.mjs. Não editar à mão. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Lastre">
+  <title>Lastre</title>
+  <defs>
+    <linearGradient id="lastre-roof" gradientUnits="userSpaceOnUse" x1="0" y1="9.585" x2="0" y2="62.74">
+      <stop stop-color="#676C80"/>
+      <stop offset="1" stop-color="#3E424F"/>
+    </linearGradient>
+  </defs>
+  <path d="M89.407 9.585L120 62.74L88.892 118.415L79.833 118.415A3.21 3.21 0 0 1 77.009 113.68L79.734 108.635L64.134 81.809L49.869 81.809L37.306 62.74L49.869 43.67L59.128 57.726Z" fill="#48AFF5"/>
+  <path d="M37.306 62.74L49.869 43.67L62.432 62.74L49.869 81.809Z" fill="#5DC9FD"/>
+  <path d="M89.407 9.585L120 62.74L62.432 62.74L59.128 57.726Z" fill="url(#lastre-roof)"/>
+  <path d="M64.134 81.809L94.221 81.809L79.734 108.635Z" fill="#3E424F"/>
+  <path d="M39.556 9.585L48.032 23.576L26.742 57.635A9.124 9.124 0 0 0 26.503 66.902L47.282 104.305L38.656 118.415L9.215 67.75A8.982 8.982 0 0 1 9.339 58.518Z" fill="#ED9E04"/>
+</svg>

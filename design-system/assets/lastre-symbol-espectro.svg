@@ -1,0 +1,15 @@
+<!-- Gerado por design-system/scripts/build-symbol.mjs. Não editar à mão. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Lastre">
+  <title>Lastre</title>
+  <defs>
+    <linearGradient id="lastre-espectro" gradientUnits="userSpaceOnUse" x1="8" y1="118.415" x2="120" y2="9.585">
+      <stop stop-color="#E99A20"/>
+      <stop offset="0.22" stop-color="#FDA82D"/>
+      <stop offset="0.44" stop-color="#FED3B1"/>
+      <stop offset="0.56" stop-color="#B9E2FE"/>
+      <stop offset="0.78" stop-color="#5DC9FD"/>
+      <stop offset="1" stop-color="#1CAFE5"/>
+    </linearGradient>
+  </defs>
+  <path d="M89.407 9.585L120 62.74L88.892 118.415L79.833 118.415A3.21 3.21 0 0 1 77.009 113.68L79.734 108.635L64.134 81.809L49.869 81.809L37.306 62.74L49.869 43.67L59.128 57.726ZM39.556 9.585L48.032 23.576L26.742 57.635A9.124 9.124 0 0 0 26.503 66.902L47.282 104.305L38.656 118.415L9.215 67.75A8.982 8.982 0 0 1 9.339 58.518Z" fill="url(#lastre-espectro)"/>
+</svg>
