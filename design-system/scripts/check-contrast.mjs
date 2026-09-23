@@ -17,6 +17,18 @@ const contrast = (a, b) =>
   (Math.max(luminance(a), luminance(b)) + 0.05) /
   (Math.min(luminance(a), luminance(b)) + 0.05);
 let checks = 0;
+const mix = (a, b, weight) =>
+  "#" +
+  [1, 3, 5]
+    .map((i) =>
+      Math.round(
+        parseInt(a.slice(i, i + 2), 16) * weight +
+          parseInt(b.slice(i, i + 2), 16) * (1 - weight),
+      )
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("");
 for (const [mode, semantics] of Object.entries(tokens.semantic)) {
   const resolve = (key) =>
     tokens.primitive[semantics[key].$value.slice(11, -1)].$value;
@@ -46,6 +58,36 @@ for (const [mode, semantics] of Object.entries(tokens.semantic)) {
     );
     checks++;
   }
+  // Notices use an opaque sRGB tint on the surface. Check the actual mixed
+  // background, since a passing foreground on the plain surface is insufficient.
+  for (const tone of ["info", "success", "warning", "danger"]) {
+    const formula = semantics[`${tone}-surface`].$value;
+    const match = formula.match(
+      /^color-mix\(in srgb, \{semantic\.([^}]+)\} (\d+)%, \{semantic\.([^}]+)\}\)$/,
+    );
+    assert(match, `${mode}: unsupported notice mix ${formula}`);
+    const background = mix(
+      resolve(match[1]),
+      resolve(match[3]),
+      Number(match[2]) / 100,
+    );
+    for (const fg of [tone, "text-primary", "text-secondary"]) {
+      const ratio = contrast(resolve(fg), background);
+      assert(
+        ratio >= 4.5,
+        `${mode}: ${fg} on ${tone}-surface = ${ratio.toFixed(2)}`,
+      );
+      checks++;
+    }
+  }
+  assert(
+    contrast(
+      tokens.primitive["color-white"].$value,
+      tokens.primitive["color-danger-light"].$value,
+    ) >= 4.5,
+    "Danger button contrast",
+  );
+  checks++;
   // Gold text uses its own theme-aware stops, separate from decorative metal.
   const stops = [
     ...semantics["gradient-accent-text"].$value.matchAll(

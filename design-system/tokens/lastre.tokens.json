@@ -356,6 +356,26 @@
     "layer-toast": {
       "$type": "string",
       "$value": "30"
+    },
+    "stroke-hairline": {
+      "$type": "string",
+      "$value": "1px"
+    },
+    "radius-xs": {
+      "$type": "string",
+      "$value": "4px"
+    },
+    "weight-bold": {
+      "$type": "string",
+      "$value": "700"
+    },
+    "layer-modal": {
+      "$type": "string",
+      "$value": "100"
+    },
+    "layer-tooltip": {
+      "$type": "string",
+      "$value": "110"
     }
   },
   "semantic": {
@@ -471,6 +491,186 @@
       "surface-shadow": {
         "$type": "string",
         "$value": "0 0 0 1px rgb(255 255 255 / 7%), 0 12px 28px rgb(0 0 0 / 12%)"
+      },
+      "text-tertiary": {
+        "$type": "string",
+        "$value": "{semantic.text-muted}"
+      },
+      "overlay": {
+        "$type": "string",
+        "$value": "rgb(15 17 22 / 68%)"
+      },
+      "focus-shadow": {
+        "$type": "string",
+        "$value": "0 0 0 3px color-mix(in srgb, {semantic.focus} 22%, transparent)"
+      },
+      "glass-highlight": {
+        "$type": "string",
+        "$value": "linear-gradient(180deg, rgb(255 255 255 / 4%), transparent)"
+      },
+      "fill-brand": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.link} 10%, transparent)"
+      },
+      "fill-brand-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.link} 18%, transparent)"
+      },
+      "border-brand": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.link} 30%, transparent)"
+      },
+      "fill-trust": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 10%, transparent)"
+      },
+      "fill-trust-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 18%, transparent)"
+      },
+      "border-trust": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 30%, transparent)"
+      },
+      "fill-success": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.success} 10%, transparent)"
+      },
+      "fill-success-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.success} 18%, transparent)"
+      },
+      "border-success": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.success} 30%, transparent)"
+      },
+      "fill-warn": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.warning} 10%, transparent)"
+      },
+      "fill-warn-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.warning} 18%, transparent)"
+      },
+      "border-warn": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.warning} 30%, transparent)"
+      },
+      "fill-info": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 10%, transparent)"
+      },
+      "fill-info-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 18%, transparent)"
+      },
+      "border-info": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 30%, transparent)"
+      },
+      "fill-danger": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.danger} 10%, transparent)"
+      },
+      "fill-danger-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.danger} 18%, transparent)"
+      },
+      "border-danger": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.danger} 30%, transparent)"
+      },
+      "map-deep": {
+        "$type": "string",
+        "$value": "{semantic.bg-canvas}"
+      },
+      "map-panel": {
+        "$type": "string",
+        "$value": "{semantic.bg-surface}"
+      },
+      "map-border": {
+        "$type": "string",
+        "$value": "{semantic.border-subtle}"
+      },
+      "map-border-strong": {
+        "$type": "string",
+        "$value": "{semantic.border-strong}"
+      },
+      "map-text": {
+        "$type": "string",
+        "$value": "{semantic.text-primary}"
+      },
+      "map-text-secondary": {
+        "$type": "string",
+        "$value": "{semantic.text-secondary}"
+      },
+      "map-text-muted": {
+        "$type": "string",
+        "$value": "{semantic.text-muted}"
+      },
+      "map-text-dim": {
+        "$type": "string",
+        "$value": "{semantic.text-muted}"
+      },
+      "map-water": {
+        "$type": "string",
+        "$value": "{primitive.color-blue-100}"
+      },
+      "map-water-deep": {
+        "$type": "string",
+        "$value": "{primitive.color-blue-200}"
+      },
+      "map-land-light": {
+        "$type": "string",
+        "$value": "{primitive.color-mirage-100}"
+      },
+      "map-sand": {
+        "$type": "string",
+        "$value": "{primitive.color-gold-100}"
+      },
+      "chart-1": {
+        "$type": "string",
+        "$value": "{semantic.info}"
+      },
+      "chart-2": {
+        "$type": "string",
+        "$value": "{semantic.success}"
+      },
+      "chart-3": {
+        "$type": "string",
+        "$value": "{semantic.text-secondary}"
+      },
+      "chart-4": {
+        "$type": "string",
+        "$value": "{semantic.warning}"
+      },
+      "chart-5": {
+        "$type": "string",
+        "$value": "{semantic.link}"
+      },
+      "chart-6": {
+        "$type": "string",
+        "$value": "{semantic.danger}"
+      },
+      "chart-7": {
+        "$type": "string",
+        "$value": "{semantic.text-muted}"
+      },
+      "gradient-info": {
+        "$type": "string",
+        "$value": "linear-gradient(135deg, {semantic.info}, {semantic.link})"
+      },
+      "gradient-success": {
+        "$type": "string",
+        "$value": "linear-gradient(135deg, {semantic.success}, {semantic.success})"
+      },
+      "gradient-map-water": {
+        "$type": "string",
+        "$value": "linear-gradient(180deg, {semantic.map-water}, {semantic.map-water-deep})"
+      },
+      "ambient": {
+        "$type": "string",
+        "$value": "radial-gradient(ellipse at top right, {semantic.fill-info}, transparent 65%)"
       }
     },
     "light": {
@@ -585,6 +785,186 @@
       "surface-shadow": {
         "$type": "string",
         "$value": "0 0 0 1px rgb(15 17 22 / 7%), 0 1px 3px rgb(15 17 22 / 4%), 0 10px 28px -12px rgb(15 17 22 / 12%)"
+      },
+      "text-tertiary": {
+        "$type": "string",
+        "$value": "{semantic.text-muted}"
+      },
+      "overlay": {
+        "$type": "string",
+        "$value": "rgb(15 17 22 / 68%)"
+      },
+      "focus-shadow": {
+        "$type": "string",
+        "$value": "0 0 0 3px color-mix(in srgb, {semantic.focus} 22%, transparent)"
+      },
+      "glass-highlight": {
+        "$type": "string",
+        "$value": "linear-gradient(180deg, rgb(255 255 255 / 60%), transparent)"
+      },
+      "fill-brand": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.link} 10%, transparent)"
+      },
+      "fill-brand-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.link} 18%, transparent)"
+      },
+      "border-brand": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.link} 30%, transparent)"
+      },
+      "fill-trust": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 10%, transparent)"
+      },
+      "fill-trust-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 18%, transparent)"
+      },
+      "border-trust": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 30%, transparent)"
+      },
+      "fill-success": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.success} 10%, transparent)"
+      },
+      "fill-success-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.success} 18%, transparent)"
+      },
+      "border-success": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.success} 30%, transparent)"
+      },
+      "fill-warn": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.warning} 10%, transparent)"
+      },
+      "fill-warn-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.warning} 18%, transparent)"
+      },
+      "border-warn": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.warning} 30%, transparent)"
+      },
+      "fill-info": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 10%, transparent)"
+      },
+      "fill-info-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 18%, transparent)"
+      },
+      "border-info": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.info} 30%, transparent)"
+      },
+      "fill-danger": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.danger} 10%, transparent)"
+      },
+      "fill-danger-strong": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.danger} 18%, transparent)"
+      },
+      "border-danger": {
+        "$type": "string",
+        "$value": "color-mix(in srgb, {semantic.danger} 30%, transparent)"
+      },
+      "map-deep": {
+        "$type": "string",
+        "$value": "{semantic.bg-canvas}"
+      },
+      "map-panel": {
+        "$type": "string",
+        "$value": "{semantic.bg-surface}"
+      },
+      "map-border": {
+        "$type": "string",
+        "$value": "{semantic.border-subtle}"
+      },
+      "map-border-strong": {
+        "$type": "string",
+        "$value": "{semantic.border-strong}"
+      },
+      "map-text": {
+        "$type": "string",
+        "$value": "{semantic.text-primary}"
+      },
+      "map-text-secondary": {
+        "$type": "string",
+        "$value": "{semantic.text-secondary}"
+      },
+      "map-text-muted": {
+        "$type": "string",
+        "$value": "{semantic.text-muted}"
+      },
+      "map-text-dim": {
+        "$type": "string",
+        "$value": "{semantic.text-muted}"
+      },
+      "map-water": {
+        "$type": "string",
+        "$value": "{primitive.color-blue-100}"
+      },
+      "map-water-deep": {
+        "$type": "string",
+        "$value": "{primitive.color-blue-200}"
+      },
+      "map-land-light": {
+        "$type": "string",
+        "$value": "{primitive.color-mirage-100}"
+      },
+      "map-sand": {
+        "$type": "string",
+        "$value": "{primitive.color-gold-100}"
+      },
+      "chart-1": {
+        "$type": "string",
+        "$value": "{semantic.info}"
+      },
+      "chart-2": {
+        "$type": "string",
+        "$value": "{semantic.success}"
+      },
+      "chart-3": {
+        "$type": "string",
+        "$value": "{semantic.text-secondary}"
+      },
+      "chart-4": {
+        "$type": "string",
+        "$value": "{semantic.warning}"
+      },
+      "chart-5": {
+        "$type": "string",
+        "$value": "{semantic.link}"
+      },
+      "chart-6": {
+        "$type": "string",
+        "$value": "{semantic.danger}"
+      },
+      "chart-7": {
+        "$type": "string",
+        "$value": "{semantic.text-muted}"
+      },
+      "gradient-info": {
+        "$type": "string",
+        "$value": "linear-gradient(135deg, {semantic.info}, {semantic.link})"
+      },
+      "gradient-success": {
+        "$type": "string",
+        "$value": "linear-gradient(135deg, {semantic.success}, {semantic.success})"
+      },
+      "gradient-map-water": {
+        "$type": "string",
+        "$value": "linear-gradient(180deg, {semantic.map-water}, {semantic.map-water-deep})"
+      },
+      "ambient": {
+        "$type": "string",
+        "$value": "radial-gradient(ellipse at top right, {semantic.fill-info}, transparent 65%)"
       }
     }
   },
