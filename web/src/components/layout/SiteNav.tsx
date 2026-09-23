@@ -89,7 +89,7 @@ function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       >
         <div className="site-nav__drawer-head">
           <a className="site-nav__drawer-brand" href="#top" onClick={onClose}>
-            <LastreIcon size={22} />
+            <LastreIcon size={26} />
             <span>Lastre</span>
           </a>
           <button type="button" className="site-nav__drawer-close" onClick={onClose} aria-label={nav.closeMenu}>
@@ -151,7 +151,7 @@ export function SiteNav() {
         <div className="shell site-nav__inner">
           <div className="site-nav__start">
             <a className="site-nav__brand" href="#top" aria-label="Lastre — home">
-              <LastreIcon size={22} />
+              <LastreIcon size={26} />
               <span className="lastre-wordmark site-nav__wordmark" role="img" aria-label="Lastre" />
             </a>
 

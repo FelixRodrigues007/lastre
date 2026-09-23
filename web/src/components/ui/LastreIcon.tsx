@@ -1,4 +1,4 @@
-import iconUrl from "@design-system/assets/lastre-icon.svg";
+import iconUrl from "@design-system/assets/lastre-icon-espectro.svg";
 
 /** Proporção do vetor original: 150 × 143. */
 const RATIO = 150 / 143;
