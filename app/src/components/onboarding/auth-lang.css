@@ -1,4 +1,7 @@
 /* Shared EN / PT / ES toggle — login bar + console topbar. */
+.auth-lang__select {
+  display: none;
+}
 
 .auth-lang {
   display: inline-flex;
@@ -34,4 +37,20 @@
 .auth-lang__sep {
   color: var(--lastre-border-strong);
   user-select: none;
+}
+@media (max-width: 600px) {
+  .auth-lang__btn,
+  .auth-lang__sep {
+    display: none;
+  }
+  .auth-lang__select {
+    display: block;
+    min-height: var(--lastre-control-md);
+    border: 1px solid var(--lastre-field-border);
+    border-radius: var(--lastre-field-radius);
+    padding: 8px;
+    font: 16px var(--lastre-font-body);
+    color: var(--lastre-field-text);
+    background: var(--lastre-field-bg);
+  }
 }

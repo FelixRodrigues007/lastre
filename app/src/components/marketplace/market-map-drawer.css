@@ -15,7 +15,8 @@
   width: min(100%, 340px);
   padding: 14px 16px 16px;
   border-radius: 12px;
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-trust) 55%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-border-trust) 55%, transparent);
   background: var(--lastre-bg-surface);
   box-shadow: var(--app-shadow-float);
   backdrop-filter: blur(20px) saturate(1.15);

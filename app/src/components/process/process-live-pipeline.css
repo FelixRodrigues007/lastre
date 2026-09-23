@@ -55,7 +55,8 @@
   gap: 0.75rem;
   padding: 0.85rem 1rem;
   border-radius: var(--lastre-radius-md);
-  border: var(--lastre-stroke-hairline) dashed color-mix(in srgb, var(--lastre-link) 22%, transparent);
+  border: var(--lastre-stroke-hairline) dashed
+    color-mix(in srgb, var(--lastre-link) 22%, transparent);
   background: color-mix(in srgb, var(--lastre-bg-canvas) 22%, transparent);
 }
 
@@ -126,7 +127,8 @@
   text-transform: uppercase;
   color: var(--lastre-link);
   background: color-mix(in srgb, var(--lastre-link) 10%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 25%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-link) 25%, transparent);
 }
 
 .process-pipeline__status--idle {
@@ -142,8 +144,13 @@
   gap: 0.45rem 0.65rem;
   padding: 0.5rem 0.7rem;
   border-radius: var(--lastre-radius-sm);
-  background: color-mix(in srgb, var(--lastre-link) 5%, var(--lastre-bg-canvas));
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 18%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--lastre-link) 5%,
+    var(--lastre-bg-canvas)
+  );
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-link) 18%, transparent);
 }
 
 .process-pipeline__principle-col {
@@ -228,7 +235,11 @@
   border-bottom: none;
 }
 
-.process-ledger tbody tr:nth-child(even):not(.process-ledger__row--running):not(.process-ledger__row--proof-invalid) {
+.process-ledger
+  tbody
+  tr:nth-child(even):not(.process-ledger__row--running):not(
+    .process-ledger__row--proof-invalid
+  ) {
   background: color-mix(in srgb, var(--lastre-bg-canvas) 18%, transparent);
 }
 

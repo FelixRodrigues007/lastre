@@ -24,8 +24,6 @@
 }
 
 .badge--verdict-invalid {
-  /* lighter than status-invalid (#d9603f) so the label clears WCAG AA
-     (~5:1) on the tinted badge fill; #d9603f sat at 4.32. */
   color: var(--lastre-danger);
   border-color: color-mix(in srgb, var(--lastre-danger) 35%, transparent);
   background: color-mix(in srgb, var(--lastre-danger) 12%, transparent);

@@ -199,14 +199,14 @@
   margin: 0;
   padding: 1rem 1.125rem;
   border-radius: var(--lastre-radius-sm);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--lastre-bg-canvas) 52%, transparent) 0%,
-      color-mix(in srgb, var(--lastre-bg-elevated) 40%, transparent) 100%
-    );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--lastre-bg-canvas) 52%, transparent) 0%,
+    color-mix(in srgb, var(--lastre-bg-elevated) 40%, transparent) 100%
+  );
   border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
-  border-left: 3px solid color-mix(in srgb, var(--lastre-warning) 55%, transparent);
+  border-left: 3px solid
+    color-mix(in srgb, var(--lastre-warning) 55%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 4%, transparent);
 }
 
@@ -238,7 +238,8 @@
   padding: 0.625rem 0.75rem;
   border-radius: var(--lastre-radius-sm);
   background: color-mix(in srgb, var(--lastre-link) 8%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 20%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-link) 20%, transparent);
 }
 
 .escalation-detail__error {
@@ -248,7 +249,8 @@
   padding: 0.625rem 0.75rem;
   border-radius: var(--lastre-radius-sm);
   background: color-mix(in srgb, var(--lastre-danger) 12%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 30%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-danger) 30%, transparent);
 }
 
 /* Fields tab — lot-drawer style rows */
@@ -300,11 +302,15 @@
 
 .escalation-detail .artifact-panel__row--highlight {
   background: color-mix(in srgb, var(--lastre-danger) 8%, transparent);
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastre-danger) 55%, transparent);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--lastre-danger) 55%, transparent);
 }
 
-.escalation-detail .artifact-panel__row--highlight + .artifact-panel__row--highlight {
-  border-top: 0.5px solid color-mix(in srgb, var(--lastre-danger) 18%, var(--lastre-border-subtle));
+.escalation-detail
+  .artifact-panel__row--highlight
+  + .artifact-panel__row--highlight {
+  border-top: 0.5px solid
+    color-mix(in srgb, var(--lastre-danger) 18%, var(--lastre-border-subtle));
 }
 
 /* Geo tab inside detail panel */

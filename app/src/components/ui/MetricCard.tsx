@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Surface } from "./Surface";
 import "./metric-card.css";
 
 type MetricCardProps = {
@@ -28,7 +29,9 @@ export function MetricCard({
           : "";
 
   return (
-    <article
+    <Surface
+      as="article"
+      elevation={1}
       className={[
         "metric-card",
         size === "lg" ? "metric-card--lg" : "",
@@ -38,8 +41,12 @@ export function MetricCard({
         .join(" ")}
     >
       <p className="metric-card__label">{label}</p>
-      <p className={["metric-card__value", valueClass].filter(Boolean).join(" ")}>{value}</p>
+      <p
+        className={["metric-card__value", valueClass].filter(Boolean).join(" ")}
+      >
+        {value}
+      </p>
       {hint ? <p className="metric-card__hint">{hint}</p> : null}
-    </article>
+    </Surface>
   );
 }

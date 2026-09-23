@@ -33,7 +33,8 @@ function rowPhase(
   if (phase === "idle") return "queued";
   if (phase === "error") return index < recordsLength ? "completed" : "queued";
   if (index < recordsLength) return "completed";
-  if (activeIndex === index && (fetchingBatch || phase === "running")) return "running";
+  if (activeIndex === index && (fetchingBatch || phase === "running"))
+    return "running";
   return "queued";
 }
 
@@ -70,23 +71,35 @@ export function ProcessLivePipeline({
       {showHeader ? (
         <header className="process-pipeline__head">
           <div>
-            <p className="process-pipeline__step mono-label">{t("process.step3")}</p>
-            <p className="process-pipeline__kicker mono-label">{t("process.pipeline.kicker")}</p>
-            <h2 className="process-pipeline__title">{t("process.livePipeline")}</h2>
+            <p className="process-pipeline__step mono-label">
+              {t("process.step3")}
+            </p>
+            <p className="process-pipeline__kicker mono-label">
+              {t("process.pipeline.kicker")}
+            </p>
+            <h2 className="process-pipeline__title">
+              {t("process.livePipeline")}
+            </h2>
             {!showLiveTable && hasSelection ? (
-              <p className="process-pipeline__lead">{t("process.pipeline.idleLead")}</p>
+              <p className="process-pipeline__lead">
+                {t("process.pipeline.idleLead")}
+              </p>
             ) : null}
           </div>
           {phase === "running" ? (
             <p className="process-pipeline__status" role="status">
-              {fetchingBatch ? t("process.pipeline.fetching") : t("process.pipeline.revealing")}
+              {fetchingBatch
+                ? t("process.pipeline.fetching")
+                : t("process.pipeline.revealing")}
             </p>
           ) : null}
         </header>
       ) : null}
 
       {!hasSelection ? (
-        <p className="process-pipeline__empty">{t("process.pipeline.emptySelection")}</p>
+        <p className="process-pipeline__empty">
+          {t("process.pipeline.emptySelection")}
+        </p>
       ) : !showLiveTable ? (
         <div className="process-queue">
           <p className="process-queue__title">
@@ -95,9 +108,15 @@ export function ProcessLivePipeline({
           <ol className="process-queue__list">
             {selectedLots.map((lot, index) => (
               <li key={lot.artifact.assetId} className="process-queue__item">
-                <span className="process-queue__index mono-label">{String(index + 1).padStart(2, "0")}</span>
-                <span className="process-queue__name">{t(lotShortNameKey(lot))}</span>
-                <span className="process-queue__status mono-label">{t("process.queue.waiting")}</span>
+                <span className="process-queue__index mono-label">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="process-queue__name">
+                  {t(lotShortNameKey(lot))}
+                </span>
+                <span className="process-queue__status mono-label">
+                  {t("process.queue.waiting")}
+                </span>
               </li>
             ))}
           </ol>
@@ -107,7 +126,10 @@ export function ProcessLivePipeline({
                 <Icon name="process" size={14} />
                 <strong>{t("process.pipeline.principleAgent")}</strong>
               </div>
-              <span className="process-pipeline__principle-arrow" aria-hidden="true">
+              <span
+                className="process-pipeline__principle-arrow"
+                aria-hidden="true"
+              >
                 →
               </span>
               <div className="process-pipeline__principle-col process-pipeline__principle-col--seal">
@@ -120,19 +142,22 @@ export function ProcessLivePipeline({
       ) : (
         <div className="process-ledger-wrap">
           {showPrinciple ? (
-          <div className="process-pipeline__principle">
-            <div className="process-pipeline__principle-col process-pipeline__principle-col--agent">
-              <Icon name="process" size={14} />
-              <strong>{t("process.pipeline.principleAgent")}</strong>
+            <div className="process-pipeline__principle">
+              <div className="process-pipeline__principle-col process-pipeline__principle-col--agent">
+                <Icon name="process" size={14} />
+                <strong>{t("process.pipeline.principleAgent")}</strong>
+              </div>
+              <span
+                className="process-pipeline__principle-arrow"
+                aria-hidden="true"
+              >
+                →
+              </span>
+              <div className="process-pipeline__principle-col process-pipeline__principle-col--seal">
+                <Icon name="shield" size={14} />
+                <strong>{t("process.pipeline.principleSeal")}</strong>
+              </div>
             </div>
-            <span className="process-pipeline__principle-arrow" aria-hidden="true">
-              →
-            </span>
-            <div className="process-pipeline__principle-col process-pipeline__principle-col--seal">
-              <Icon name="shield" size={14} />
-              <strong>{t("process.pipeline.principleSeal")}</strong>
-            </div>
-          </div>
           ) : null}
 
           <table className="process-ledger">
@@ -151,8 +176,15 @@ export function ProcessLivePipeline({
             </thead>
             <tbody>
               {selectedLots.map((lot, index) => {
-                const phaseValue = rowPhase(index, activeIndex, records.length, phase, fetchingBatch);
-                const record = recordByAssetId.get(lot.artifact.assetId) ?? null;
+                const phaseValue = rowPhase(
+                  index,
+                  activeIndex,
+                  records.length,
+                  phase,
+                  fetchingBatch,
+                );
+                const record =
+                  recordByAssetId.get(lot.artifact.assetId) ?? null;
                 const showSeal = index <= sealRevealedThrough;
 
                 return (
@@ -173,8 +205,13 @@ export function ProcessLivePipeline({
       )}
 
       {showSummary && summary ? (
-        <footer className="process-pipeline__summary" aria-label={t("process.summary.aria")}>
-          <p className="process-pipeline__summary-kicker mono-label">{t("process.summary.title")}</p>
+        <footer
+          className="process-pipeline__summary"
+          aria-label={t("process.summary.aria")}
+        >
+          <p className="process-pipeline__summary-kicker mono-label">
+            {t("process.summary.title")}
+          </p>
           <dl className="process-pipeline__scoreboard">
             <div className="process-pipeline__score process-pipeline__score--tokenizable">
               <dt>{t("process.summary.tokenizable")}</dt>
@@ -194,7 +231,9 @@ export function ProcessLivePipeline({
             </div>
           </dl>
           <div className="process-pipeline__summary-actions">
-            <ActionLink variant="primary" size="md"
+            <ActionLink
+              variant="primary"
+              size="md"
               to="/audit"
               state={{ fromProcess: true, count: records.length }}
               className="route-cta process-pipeline__audit-link"
@@ -202,7 +241,13 @@ export function ProcessLivePipeline({
               {t("process.openAudit")}
               <Icon name="chevron-right" size={16} />
             </ActionLink>
-            <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost process-pipeline__repeat" onClick={onRepeat}>
+            <Button
+              variant="secondary"
+              size="md"
+              type="button"
+              className="route-cta route-cta--ghost process-pipeline__repeat"
+              onClick={onRepeat}
+            >
               <Icon name="refresh" size={16} />
               {t("process.repeat")}
             </Button>

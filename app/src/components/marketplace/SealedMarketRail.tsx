@@ -1,3 +1,4 @@
+import { InlineNotice } from "../ui/InlineNotice";
 import { ActionLink } from "../ui/ActionLink";
 import { Button } from "../ui/Button";
 import { useEffect, useRef, useState } from "react";
@@ -45,7 +46,9 @@ function ensureDemoAccount(): string {
 function queryResultLine(result: AgentQueryResult): string {
   return [
     result.facilitatorMode,
-    typeof result.amountCspr === "number" ? `${result.amountCspr} CSPR (mock)` : null,
+    typeof result.amountCspr === "number"
+      ? `${result.amountCspr} CSPR (mock)`
+      : null,
     result.txHash ? shortHash(result.txHash) : null,
   ]
     .filter(Boolean)
@@ -57,15 +60,22 @@ type SealedMarketRailProps = {
   onPersonaChange: (next: MarketplacePersona) => void;
 };
 
-export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailProps) {
+export function SealedMarketRail({
+  persona,
+  onPersonaChange,
+}: SealedMarketRailProps) {
   const { t } = useLocaleContext();
 
   const [isInvalidChoice, setIsInvalidChoice] = useState(false);
-  const assetId = isInvalidChoice ? INVALID_TARGET_ASSET_ID : VALID_TARGET_ASSET_ID;
+  const assetId = isInvalidChoice
+    ? INVALID_TARGET_ASSET_ID
+    : VALID_TARGET_ASSET_ID;
 
   // Remembers the buyer-side persona so leaving the DeFi view restores the
   // user's actual filter choice instead of snapping back to a hardcoded role.
-  const prevPersonaRef = useRef<MarketplacePersona>(persona === "defi" ? "buyer" : persona);
+  const prevPersonaRef = useRef<MarketplacePersona>(
+    persona === "defi" ? "buyer" : persona,
+  );
 
   const [phase, setPhase] = useState<RailPhase>("idle");
   const [isRunning, setIsRunning] = useState(false);
@@ -93,7 +103,15 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
 
   const blocked = phase === "blocked";
   const minted = phase === "minted";
-  const activeStep = blocked ? 0 : locked ? 5 : minted ? 4 : phase === "proof_ready" ? 2 : 0;
+  const activeStep = blocked
+    ? 0
+    : locked
+      ? 5
+      : minted
+        ? 4
+        : phase === "proof_ready"
+          ? 2
+          : 0;
 
   const steps = [
     t("marketplace.rail.step.origin"),
@@ -116,7 +134,8 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       // The seal decides Valid vs Invalid — never the mint endpoint or an error
       // string. Read the verdict straight from the paid provenance snapshot.
       const queryIsInvalid =
-        query.provenance?.verdict === "Invalid" || query.provenance?.sealMatch === false;
+        query.provenance?.verdict === "Invalid" ||
+        query.provenance?.sealMatch === false;
 
       if (queryIsInvalid) {
         setPhase("blocked");
@@ -147,7 +166,9 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
         }
         addDemoMint(assetId);
         const summary = await getMintSummary().catch(() => null);
-        mintTx = summary?.events.find((event) => event.assetId === assetId)?.mintTx;
+        mintTx = summary?.events.find(
+          (event) => event.assetId === assetId,
+        )?.mintTx;
       }
 
       setMintTxHash(mintTx);
@@ -179,7 +200,10 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
   // `silent` suppresses the visible error for the one-click auto path so a
   // transient lock hiccup never paints the demo "broken"; the manual Lock
   // button stays available as the fallback.
-  async function attemptLock(account: string, silent: boolean): Promise<boolean> {
+  async function attemptLock(
+    account: string,
+    silent: boolean,
+  ): Promise<boolean> {
     try {
       const res = await lockCollateral(assetId, account);
       if (res.success || res.code === "ALREADY_LOCKED") {
@@ -250,19 +274,26 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
           <h2 id="sealed-rail-title" className="sealed-rail__title">
             {t("marketplace.rail.title")}
           </h2>
-          <p className="sealed-rail__subtitle">{t("marketplace.rail.subtitle")}</p>
+          <p className="sealed-rail__subtitle">
+            {t("marketplace.rail.subtitle")}
+          </p>
         </div>
 
         <div className="sealed-rail__actions">
-          <Button variant="primary" size="md"
+          <Button
+            variant="primary"
+            size="md"
             type="button"
             className="route-cta"
             onClick={handleRun}
-            disabled={isRunning || blocked || minted}
+            loading={isRunning}
+            disabled={blocked || minted}
           >
-            {isRunning ? t("marketplace.rail.running") : t("marketplace.rail.btnPrimary")}
+            {t("marketplace.rail.btnPrimary")}
           </Button>
-          <ActionLink variant="secondary" size="md"
+          <ActionLink
+            variant="secondary"
+            size="md"
             className="route-cta route-cta--ghost"
             to={`/my-assets?asset=${encodeURIComponent(assetId)}&rail=1`}
           >
@@ -285,12 +316,17 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
 
       {blocked ? (
         <p className="sealed-rail__note sealed-rail__note--danger">
-          <StatusBadge label={t("common.invalid")} tone="danger" circle="dashed" size="sm" />
+          <StatusBadge
+            label={t("common.invalid")}
+            tone="danger"
+            circle="dashed"
+            size="sm"
+          />
           {t("marketplace.rail.blockedNote")}
         </p>
       ) : null}
 
-      {runError ? <p className="sealed-rail__note sealed-rail__note--danger">{runError}</p> : null}
+      {runError ? <InlineNotice tone="danger" live title={runError} /> : null}
 
       {queryInfo?.ok && !blocked ? (
         <p className="sealed-rail__result mono-label">
@@ -306,7 +342,9 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       ) : null}
 
       <div className="sealed-rail__row">
-        <Button variant="ghost" size="sm"
+        <Button
+          variant="ghost"
+          size="sm"
           type="button"
           className="sealed-rail__link-btn"
           disabled={isRunning}
@@ -317,7 +355,9 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
             : t("marketplace.rail.invalidToggleOn")}
         </Button>
 
-        <Button variant="ghost" size="sm"
+        <Button
+          variant="ghost"
+          size="sm"
           type="button"
           className="sealed-rail__link-btn"
           onClick={() => {
@@ -336,31 +376,45 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
       </div>
 
       {persona === "defi" ? (
-        <p className="sealed-rail__persona-copy">{t("marketplace.rail.personaDefiCopy")}</p>
+        <p className="sealed-rail__persona-copy">
+          {t("marketplace.rail.personaDefiCopy")}
+        </p>
       ) : null}
 
       {minted && !blocked ? (
         <div className="sealed-rail__collateral">
           {locked ? (
-            <Button variant="secondary" size="md"
+            <Button
+              variant="secondary"
+              size="md"
               type="button"
               className="route-cta route-cta--ghost"
               onClick={handleRelease}
               disabled={isLocking}
             >
-              {isLocking ? t("myassets.rail.releasing") : t("marketplace.rail.releaseCta")}
+              {isLocking
+                ? t("myassets.rail.releasing")
+                : t("marketplace.rail.releaseCta")}
             </Button>
           ) : (
-            <Button variant="secondary" size="md"
+            <Button
+              variant="secondary"
+              size="md"
               type="button"
               className="route-cta route-cta--ghost"
               onClick={handleLock}
               disabled={isLocking}
             >
-              {isLocking ? t("myassets.rail.locking") : t("marketplace.rail.lockCta")}
+              {isLocking
+                ? t("myassets.rail.locking")
+                : t("marketplace.rail.lockCta")}
             </Button>
           )}
-          {lockError ? <p className="sealed-rail__note sealed-rail__note--danger">{lockError}</p> : null}
+          {lockError ? (
+            <p className="sealed-rail__note sealed-rail__note--danger">
+              {lockError}
+            </p>
+          ) : null}
         </div>
       ) : null}
 
@@ -373,7 +427,9 @@ export function SealedMarketRail({ persona, onPersonaChange }: SealedMarketRailP
         </p>
       ) : null}
 
-      <p className="sealed-rail__honesty">{t("marketplace.rail.honestyFooter")}</p>
+      <p className="sealed-rail__honesty">
+        {t("marketplace.rail.honestyFooter")}
+      </p>
     </section>
   );
 }

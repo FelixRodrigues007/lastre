@@ -225,11 +225,11 @@ button:not(:disabled) {
   }
 
   button:not(:disabled):active,
-[role="button"]:not([aria-disabled="true"]):active,
-.tab:active,
-.lot-list-row:active,
-.market-lot-card:active,
-.my-assets-strip__card:active {
+  [role="button"]:not([aria-disabled="true"]):active,
+  .tab:active,
+  .lot-list-row:active,
+  .market-lot-card:active,
+  .my-assets-strip__card:active {
     transform: none;
   }
 

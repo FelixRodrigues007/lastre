@@ -127,12 +127,11 @@
 }
 
 .escalation-table__row:hover {
-  background:
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--lastre-link) 6%, transparent) 0%,
-      color-mix(in srgb, var(--lastre-bg-elevated) 35%, transparent) 100%
-    );
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--lastre-link) 6%, transparent) 0%,
+    color-mix(in srgb, var(--lastre-bg-elevated) 35%, transparent) 100%
+  );
 }
 
 .escalation-table__row:active {
@@ -145,12 +144,17 @@
 }
 
 .escalation-table__row--selected:hover {
-  background: color-mix(in srgb, var(--lastre-fill-brand) 88%, var(--lastre-fill-trust));
+  background: color-mix(
+    in srgb,
+    var(--lastre-fill-brand) 88%,
+    var(--lastre-fill-trust)
+  );
 }
 
 .escalation-table__row--geo td:first-child,
 .escalation-table__row--mass td:first-child {
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastre-warning) 70%, transparent);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--lastre-warning) 70%, transparent);
 }
 
 .escalation-table__row--missing td:first-child {
@@ -158,7 +162,8 @@
 }
 
 .escalation-table__row--review td:first-child {
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastre-link) 45%, transparent);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--lastre-link) 45%, transparent);
 }
 
 .escalation-table__row--selected.escalation-table__row--geo td:first-child,
@@ -173,7 +178,9 @@
   padding-inline: 0.75rem;
 }
 
-.escalation-table-wrap--compact .escalation-table__row--selected .escalation-table__asset {
+.escalation-table-wrap--compact
+  .escalation-table__row--selected
+  .escalation-table__asset {
   color: var(--lastre-link);
 }
 
@@ -196,7 +203,11 @@
 }
 
 .escalation-table__row--selected .escalation-table__preview {
-  border-color: color-mix(in srgb, var(--lastre-link) 35%, var(--lastre-border-subtle));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-link) 35%,
+    var(--lastre-border-subtle)
+  );
 }
 
 .escalation-table__title {

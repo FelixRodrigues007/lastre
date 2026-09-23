@@ -144,13 +144,13 @@
   top: 1rem;
   padding: clamp(16px, 2vw, 22px);
   border-radius: 14px;
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 85%, transparent);
-  background:
-    linear-gradient(
-      165deg,
-      color-mix(in srgb, var(--lastre-bg-elevated) 88%, transparent) 0%,
-      color-mix(in srgb, var(--lastre-bg-surface) 72%, transparent) 100%
-    );
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-border-subtle) 85%, transparent);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--lastre-bg-elevated) 88%, transparent) 0%,
+    color-mix(in srgb, var(--lastre-bg-surface) 72%, transparent) 100%
+  );
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent),
     0 20px 48px -32px rgba(0, 0, 0, 0.45);
@@ -206,14 +206,19 @@
   padding: 10px 12px;
   border-radius: 10px;
   background: color-mix(in srgb, var(--lastre-bg-canvas) 55%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 70%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-border-subtle) 70%, transparent);
   transition:
     border-color var(--dur-fast) var(--ease-out),
     background var(--dur-fast) var(--ease-out);
 }
 
 .market-detail-metrics div:hover {
-  border-color: color-mix(in srgb, var(--lastre-border-trust) 45%, var(--lastre-border-subtle));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-border-trust) 45%,
+    var(--lastre-border-subtle)
+  );
   background: color-mix(in srgb, var(--lastre-fill-trust) 35%, transparent);
 }
 
@@ -296,7 +301,6 @@
   .market-detail-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
 @media (prefers-reduced-motion: reduce) {

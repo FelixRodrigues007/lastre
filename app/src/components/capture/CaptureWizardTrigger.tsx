@@ -17,7 +17,14 @@ export function CaptureWizardTrigger({
   const { openCaptureWizard } = useCaptureWizard();
 
   return (
-    <Button variant={className.includes("ghost") ? "secondary" : "primary"} size="md" type="button" className={className} onClick={openCaptureWizard}>
+    <Button
+      variant={className.includes("ghost") ? "secondary" : "primary"}
+      size="md"
+      type="button"
+      aria-label={typeof children === "string" ? children : undefined}
+      className={className}
+      onClick={openCaptureWizard}
+    >
       {icon ? <BtnIcon icon="capture">{children}</BtnIcon> : children}
     </Button>
   );

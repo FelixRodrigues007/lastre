@@ -78,12 +78,17 @@
   font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.02em;
-  border: var(--lastre-stroke-hairline) dashed color-mix(in srgb, var(--lastre-text-muted) 35%, transparent);
+  border: var(--lastre-stroke-hairline) dashed
+    color-mix(in srgb, var(--lastre-text-muted) 35%, transparent);
   color: var(--lastre-text-muted);
 }
 
 .process-ledger__ghost--valid {
-  color: color-mix(in srgb, var(--lastre-success) 80%, var(--lastre-text-muted));
+  color: color-mix(
+    in srgb,
+    var(--lastre-success) 80%,
+    var(--lastre-text-muted)
+  );
   border-color: color-mix(in srgb, var(--lastre-success) 30%, transparent);
 }
 
@@ -93,7 +98,11 @@
 }
 
 .process-ledger__ghost--escalate {
-  color: color-mix(in srgb, var(--lastre-warning) 85%, var(--lastre-text-muted));
+  color: color-mix(
+    in srgb,
+    var(--lastre-warning) 85%,
+    var(--lastre-text-muted)
+  );
   border-color: color-mix(in srgb, var(--lastre-warning) 28%, transparent);
 }
 

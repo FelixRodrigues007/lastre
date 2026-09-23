@@ -1,4 +1,5 @@
 const STORAGE_KEY = "lastro-app-theme";
+export const THEME_CHANGE_EVENT = "lastre-theme-change";
 
 export type Theme = "dark" | "light";
 
@@ -12,6 +13,7 @@ export function applyTheme(theme: Theme): void {
   document.documentElement.dataset.theme = theme;
   document.documentElement.style.colorScheme = theme;
   localStorage.setItem(STORAGE_KEY, theme);
+  window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
 }
 
 export function initTheme(): Theme {

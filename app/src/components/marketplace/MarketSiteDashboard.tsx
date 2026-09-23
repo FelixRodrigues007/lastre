@@ -1,3 +1,4 @@
+import { useDialogFocus } from "../../hooks/useDialogFocus";
 import { Button } from "../ui/Button";
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
@@ -13,7 +14,11 @@ type MarketSiteDashboardProps = {
 };
 
 function formatClock(date: Date): string {
-  return date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  return date.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 }
 
 function seedFromId(id: string): number {
@@ -23,13 +28,17 @@ function seedFromId(id: string): number {
 function buildTrendPoints(assetId: string, base: number): number[] {
   const seed = seedFromId(assetId);
   return Array.from({ length: 12 }, (_, i) => {
-    const wave = Math.sin((i + seed % 7) * 0.65) * 0.18;
+    const wave = Math.sin((i + (seed % 7)) * 0.65) * 0.18;
     const drift = i * 0.04;
     return Math.round(base * (0.72 + wave + drift));
   });
 }
 
-export function MarketSiteDashboard({ asset, cameras, siteName }: MarketSiteDashboardProps) {
+export function MarketSiteDashboard({
+  asset,
+  cameras,
+  siteName,
+}: MarketSiteDashboardProps) {
   const [now, setNow] = useState(() => new Date());
   const [activeId, setActiveId] = useState<string | null>(null);
   const primaryCamera = cameras[0];
@@ -61,7 +70,9 @@ export function MarketSiteDashboard({ asset, cameras, siteName }: MarketSiteDash
                 <span className="market-site__live-dot" aria-hidden="true" />
                 Demo
               </span>
-              <span className="market-site__clock mono-label">{formatClock(now)}</span>
+              <span className="market-site__clock mono-label">
+                {formatClock(now)}
+              </span>
             </header>
             <CameraFeed camera={primaryCamera} siteName={siteName} embedded />
           </div>
@@ -87,7 +98,10 @@ export function MarketSiteDashboard({ asset, cameras, siteName }: MarketSiteDash
 
 function OutputTrendPanel({ asset }: { asset: EnrichedAsset }) {
   const base = asset.quantity ?? (asset.isCarbon ? 4200 : 180);
-  const points = useMemo(() => buildTrendPoints(String(asset.asset.assetId), base), [asset]);
+  const points = useMemo(
+    () => buildTrendPoints(String(asset.asset.assetId), base),
+    [asset],
+  );
   const max = Math.max(...points, 1);
   const unit = asset.isCarbon ? "tCO₂e" : asset.unit || "g";
   const label = asset.isCarbon ? "Carbon yield" : "Extraction rate";
@@ -106,7 +120,9 @@ function OutputTrendPanel({ asset }: { asset: EnrichedAsset }) {
     return { x, y };
   });
 
-  const linePath = coords.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+  const linePath = coords
+    .map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`)
+    .join(" ");
   const areaPath = `${linePath} L${pad.left + plotW},${pad.top + plotH} L${pad.left},${pad.top + plotH} Z`;
 
   return (
@@ -121,17 +137,41 @@ function OutputTrendPanel({ asset }: { asset: EnrichedAsset }) {
           <LiveValue value={latest} />
           <small>{unit}</small>
         </p>
-        <svg className="market-site__trend-chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label} 7 day trend`}>
+        <svg
+          className="market-site__trend-chart"
+          viewBox={`0 0 ${W} ${H}`}
+          role="img"
+          aria-label={`${label} 7 day trend`}
+        >
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="currentColor" stopOpacity="0.22" />
               <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
             </linearGradient>
           </defs>
-          <line className="market-site__trend-grid" x1={pad.left} y1={pad.top + plotH * 0.5} x2={pad.left + plotW} y2={pad.top + plotH * 0.5} />
-          <path className="market-site__trend-area" d={areaPath} fill={`url(#${gradientId})`} />
-          <path className="market-site__trend-line" d={linePath} pathLength={1} />
-          <circle className="market-site__trend-dot" cx={coords[coords.length - 1].x} cy={coords[coords.length - 1].y} r="3.5" />
+          <line
+            className="market-site__trend-grid"
+            x1={pad.left}
+            y1={pad.top + plotH * 0.5}
+            x2={pad.left + plotW}
+            y2={pad.top + plotH * 0.5}
+          />
+          <path
+            className="market-site__trend-area"
+            d={areaPath}
+            fill={`url(#${gradientId})`}
+          />
+          <path
+            className="market-site__trend-line"
+            d={linePath}
+            pathLength={1}
+          />
+          <circle
+            className="market-site__trend-dot"
+            cx={coords[coords.length - 1].x}
+            cy={coords[coords.length - 1].y}
+            r="3.5"
+          />
         </svg>
       </div>
 
@@ -147,9 +187,21 @@ function ProofVitalsPanel({ asset }: { asset: EnrichedAsset }) {
   const seed = seedFromId(String(asset.asset.assetId));
   const bars = useMemo(
     () => [
-      { label: "Seal", value: Math.min(100, asset.provScore + (seed % 5)), tone: "seal" as const },
-      { label: "Chain", value: Math.min(100, asset.provScore - 4 + (seed % 3)), tone: "chain" as const },
-      { label: "Geo", value: Math.min(100, asset.provScore - 8 + (seed % 6)), tone: "geo" as const },
+      {
+        label: "Seal",
+        value: Math.min(100, asset.provScore + (seed % 5)),
+        tone: "seal" as const,
+      },
+      {
+        label: "Chain",
+        value: Math.min(100, asset.provScore - 4 + (seed % 3)),
+        tone: "chain" as const,
+      },
+      {
+        label: "Geo",
+        value: Math.min(100, asset.provScore - 8 + (seed % 6)),
+        tone: "geo" as const,
+      },
     ],
     [asset, seed],
   );
@@ -162,13 +214,22 @@ function ProofVitalsPanel({ asset }: { asset: EnrichedAsset }) {
     <div className="market-site__cell market-site__panel market-site__panel--vitals">
       <header className="market-site__panel-head">
         <span className="market-site__panel-eyebrow">Proof vitals</span>
-        <span className={`market-site__status-pill market-site__status-pill--${asset.status}`}>{asset.status}</span>
+        <span
+          className={`market-site__status-pill market-site__status-pill--${asset.status}`}
+        >
+          {asset.status}
+        </span>
       </header>
 
       <div className="market-site__vitals-body">
         <div className="market-site__score-ring" aria-hidden="true">
           <svg viewBox="0 0 72 72">
-            <circle className="market-site__score-ring-track" cx="36" cy="36" r={ringRadius} />
+            <circle
+              className="market-site__score-ring-track"
+              cx="36"
+              cy="36"
+              r={ringRadius}
+            />
             <circle
               className="market-site__score-ring-fill"
               cx="36"
@@ -188,7 +249,10 @@ function ProofVitalsPanel({ asset }: { asset: EnrichedAsset }) {
             <li key={bar.label}>
               <span className="market-site__bar-label">{bar.label}</span>
               <div className="market-site__bar-track" aria-hidden="true">
-                <span className={`market-site__bar-fill market-site__bar-fill--${bar.tone}`} style={{ width: `${bar.value}%` }} />
+                <span
+                  className={`market-site__bar-fill market-site__bar-fill--${bar.tone}`}
+                  style={{ width: `${bar.value}%` }}
+                />
               </div>
               <span className="market-site__bar-value">{bar.value}%</span>
             </li>
@@ -221,9 +285,14 @@ function buildActivitySeries(assetId: string): ActivityPoint[] {
     const hour = 6 + i;
     const stamp = new Date(now);
     stamp.setHours(hour, 0, 0, 0);
-    const label = stamp.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+    const label = stamp.toLocaleString(undefined, {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     const idle = i < 4 ? 0 : 0;
-    const wave = Math.sin((i + seed % 6) * 0.85) * 1200;
+    const wave = Math.sin((i + (seed % 6)) * 0.85) * 1200;
     const ramp = i < 4 ? idle : 800 + (i - 4) * 620 + wave;
     const spike = i === 10 ? 1800 + (seed % 900) : 0;
     return {
@@ -233,8 +302,17 @@ function buildActivitySeries(assetId: string): ActivityPoint[] {
   });
 }
 
-function SiteActivityChart({ asset, siteName }: { asset: EnrichedAsset; siteName: string }) {
-  const series = useMemo(() => buildActivitySeries(String(asset.asset.assetId)), [asset]);
+function SiteActivityChart({
+  asset,
+  siteName,
+}: {
+  asset: EnrichedAsset;
+  siteName: string;
+}) {
+  const series = useMemo(
+    () => buildActivitySeries(String(asset.asset.assetId)),
+    [asset],
+  );
   const total = series.reduce((sum, point) => sum + point.value, 0);
   const max = Math.max(...series.map((p) => p.value), 1);
   const gradientId = useId().replace(/:/g, "");
@@ -247,7 +325,9 @@ function SiteActivityChart({ asset, siteName }: { asset: EnrichedAsset; siteName
 
   const ySteps = 4;
   const yMax = Math.ceil(max / 1000) * 1000 || 1000;
-  const yTicks = Array.from({ length: ySteps + 1 }, (_, i) => Math.round((yMax / ySteps) * i));
+  const yTicks = Array.from({ length: ySteps + 1 }, (_, i) =>
+    Math.round((yMax / ySteps) * i),
+  );
 
   const points = series.map((point, i) => {
     const x = pad.left + (i / (series.length - 1)) * plotW;
@@ -256,7 +336,10 @@ function SiteActivityChart({ asset, siteName }: { asset: EnrichedAsset; siteName
   });
 
   const linePath = points
-    .map((point, i) => `${i === 0 ? "M" : "L"}${point.x.toFixed(1)},${point.y.toFixed(1)}`)
+    .map(
+      (point, i) =>
+        `${i === 0 ? "M" : "L"}${point.x.toFixed(1)},${point.y.toFixed(1)}`,
+    )
     .join(" ");
 
   const areaPath = `${linePath} L${pad.left + plotW},${pad.top + plotH} L${pad.left},${pad.top + plotH} Z`;
@@ -264,11 +347,16 @@ function SiteActivityChart({ asset, siteName }: { asset: EnrichedAsset; siteName
   const xLabelIndexes = [0, 4, 8, 12, 15];
 
   return (
-    <section className="market-site__activity" aria-labelledby="market-site-activity-title">
+    <section
+      className="market-site__activity"
+      aria-labelledby="market-site-activity-title"
+    >
       <header className="market-site__activity-head">
         <div>
           <h4 id="market-site-activity-title">Site activity</h4>
-          <p className="market-site__activity-sub">Last 24 hours · demo telemetry</p>
+          <p className="market-site__activity-sub">
+            Last 24 hours · demo telemetry
+          </p>
         </div>
         <span className="market-site__activity-total">
           <LiveValue value={total} duration={1100} /> events
@@ -299,14 +387,23 @@ function SiteActivityChart({ asset, siteName }: { asset: EnrichedAsset; siteName
                 x2={pad.left + plotW}
                 y2={y}
               />
-              <text className="market-site__activity-tick market-site__activity-tick--y" x={pad.left - 8} y={y + 4} textAnchor="end">
+              <text
+                className="market-site__activity-tick market-site__activity-tick--y"
+                x={pad.left - 8}
+                y={y + 4}
+                textAnchor="end"
+              >
                 {formatActivityTick(tick)}
               </text>
             </g>
           );
         })}
 
-        <path className="market-site__activity-area" d={areaPath} fill={`url(#${gradientId})`} />
+        <path
+          className="market-site__activity-area"
+          d={areaPath}
+          fill={`url(#${gradientId})`}
+        />
         <path className="market-site__activity-line" d={linePath} />
 
         {xLabelIndexes.map((index) => {
@@ -335,7 +432,9 @@ function SiteActivityChart({ asset, siteName }: { asset: EnrichedAsset; siteName
         </text>
       </svg>
 
-      <p className="market-site__activity-note">Demo telemetry — not live operations data</p>
+      <p className="market-site__activity-note">
+        Demo telemetry — not live operations data
+      </p>
     </section>
   );
 }
@@ -349,7 +448,15 @@ type CameraModalProps = {
   onClose: () => void;
 };
 
-function CameraModal({ cameras, siteName, activeId, clock, onSelect, onClose }: CameraModalProps) {
+function CameraModal({
+  cameras,
+  siteName,
+  activeId,
+  clock,
+  onSelect,
+  onClose,
+}: CameraModalProps) {
+  const dialogRef = useDialogFocus(true);
   const titleId = useId();
   const active = cameras.find((cam) => cam.id === activeId) ?? cameras[0];
 
@@ -372,6 +479,8 @@ function CameraModal({ cameras, siteName, activeId, clock, onSelect, onClose }: 
     <div className="market-cam-modal-overlay" onClick={onClose}>
       <div
         className="market-cam-modal"
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -382,16 +491,23 @@ function CameraModal({ cameras, siteName, activeId, clock, onSelect, onClose }: 
             <h3 id={titleId} className="market-cam-modal__title">
               {active.label}
             </h3>
-            <p className="market-cam-modal__zone">{active.zone} · {siteName}</p>
+            <p className="market-cam-modal__zone">
+              {active.zone} · {siteName}
+            </p>
           </div>
           <div className="market-cam-modal__meta">
             <span className="market-site__live">
               <span className="market-site__live-dot" aria-hidden="true" />
               Live
             </span>
-            <span className="market-cam-modal__clock mono-label">{clock} UTC-3</span>
+            <span className="market-cam-modal__clock mono-label">
+              {clock} UTC-3
+            </span>
           </div>
-          <Button variant="ghost" size="sm" iconOnly
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
             type="button"
             className="market-cam-modal__close"
             onClick={onClose}
@@ -405,7 +521,11 @@ function CameraModal({ cameras, siteName, activeId, clock, onSelect, onClose }: 
           <CameraFeed camera={active} siteName={siteName} large />
         </div>
 
-        <div className="market-cam-modal__strip" role="listbox" aria-label="Other cameras">
+        <div
+          className="market-cam-modal__strip"
+          role="listbox"
+          aria-label="Other cameras"
+        >
           {cameras.map((camera) => {
             const selected = camera.id === active.id;
             return (
@@ -465,7 +585,9 @@ function CameraFeed({
       />
       <div className="market-cam-feed__scan" aria-hidden="true" />
       <span className="market-cam-feed__badge">LIVE</span>
-      {compact ? <span className="market-cam-feed__compact-label">{camera.zone}</span> : null}
+      {compact ? (
+        <span className="market-cam-feed__compact-label">{camera.zone}</span>
+      ) : null}
     </div>
   );
 

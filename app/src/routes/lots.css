@@ -66,8 +66,16 @@
 }
 
 .lot-card--selected {
-  border-color: color-mix(in srgb, var(--lastre-link) 45%, var(--lastre-border-strong));
-  background: color-mix(in srgb, var(--lastre-link) 6%, var(--lastre-bg-surface));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-link) 45%,
+    var(--lastre-border-strong)
+  );
+  background: color-mix(
+    in srgb,
+    var(--lastre-link) 6%,
+    var(--lastre-bg-surface)
+  );
 }
 
 .lot-card__head {

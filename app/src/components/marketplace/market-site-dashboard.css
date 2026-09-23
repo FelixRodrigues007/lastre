@@ -48,7 +48,8 @@
 
 .market-site__cell--cam:hover {
   background: color-mix(in srgb, var(--lastre-bg-elevated) 78%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lastre-info) 18%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--lastre-info) 18%, transparent);
 }
 
 .market-site__cam-inner {
@@ -150,7 +151,10 @@
   padding: 8px 2px 2px;
 }
 
-.market-site__cam-inner .market-cam-feed--embedded .market-cam-feed__footer strong {
+.market-site__cam-inner
+  .market-cam-feed--embedded
+  .market-cam-feed__footer
+  strong {
   font-size: 0.6875rem;
   font-weight: 600;
   color: var(--lastre-text-primary);
@@ -159,13 +163,18 @@
   text-overflow: ellipsis;
 }
 
-.market-site__cam-inner .market-cam-feed--embedded .market-cam-feed__footer span {
+.market-site__cam-inner
+  .market-cam-feed--embedded
+  .market-cam-feed__footer
+  span {
   flex-shrink: 0;
   font-size: 0.6875rem;
   color: var(--lastre-text-muted);
 }
 
-.market-site__cell--cam:hover .market-cam-feed--embedded .market-cam-feed__video {
+.market-site__cell--cam:hover
+  .market-cam-feed--embedded
+  .market-cam-feed__video {
   filter: saturate(0.88) contrast(1.04) brightness(0.76);
 }
 
@@ -180,21 +189,19 @@
 }
 
 .market-site__panel--trend {
-  background:
-    linear-gradient(
-      160deg,
-      color-mix(in srgb, var(--lastre-info) 8%, transparent),
-      transparent 55%
-    );
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--lastre-info) 8%, transparent),
+    transparent 55%
+  );
 }
 
 .market-site__panel--vitals {
-  background:
-    linear-gradient(
-      200deg,
-      color-mix(in srgb, var(--lastre-bg-elevated) 42%, transparent),
-      transparent 60%
-    );
+  background: linear-gradient(
+    200deg,
+    color-mix(in srgb, var(--lastre-bg-elevated) 42%, transparent),
+    transparent 60%
+  );
 }
 
 .market-site__panel-head {
@@ -426,15 +433,27 @@
 }
 
 .market-site__bar-fill--seal {
-  background: linear-gradient(90deg, color-mix(in srgb, var(--lastre-info) 55%, transparent), var(--lastre-info));
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--lastre-info) 55%, transparent),
+    var(--lastre-info)
+  );
 }
 
 .market-site__bar-fill--chain {
-  background: linear-gradient(90deg, color-mix(in srgb, var(--lastre-info) 55%, transparent), var(--lastre-info));
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--lastre-info) 55%, transparent),
+    var(--lastre-info)
+  );
 }
 
 .market-site__bar-fill--geo {
-  background: linear-gradient(90deg, color-mix(in srgb, var(--lastre-success) 55%, transparent), var(--lastre-success));
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--lastre-success) 55%, transparent),
+    var(--lastre-success)
+  );
 }
 
 .market-site__bar-value {
@@ -548,7 +567,8 @@
 
   .market-site__top-row > * {
     border-right: 0;
-    border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+    border-bottom: var(--lastre-stroke-hairline) solid
+      var(--lastre-border-subtle);
   }
 
   .market-site__top-row > *:last-child {

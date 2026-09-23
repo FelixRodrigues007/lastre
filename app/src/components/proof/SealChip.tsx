@@ -20,7 +20,14 @@ export function SealChip({ hash, label = "seal" }: SealChipProps) {
     <div className="seal-chip">
       <span className="seal-chip__label">{label}</span>
       <code className="seal-chip__value">{shortHash(hash, 10, 6)}</code>
-      <Button variant="ghost" size="sm" type="button" className="seal-chip__copy" onClick={copy} aria-label={`Copy ${label}`}>
+      <Button
+        variant="ghost"
+        size="sm"
+        type="button"
+        className="seal-chip__copy"
+        onClick={copy}
+        aria-label={`Copy ${label}`}
+      >
         Copy
       </Button>
     </div>

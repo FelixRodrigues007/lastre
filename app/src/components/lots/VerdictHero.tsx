@@ -13,7 +13,12 @@ type VerdictHeroProps = {
 
 const COPY: Record<
   VerdictHeroTone,
-  { seal: string; title: string; lead: string; icon: "shield" | "invalid" | "pending" }
+  {
+    seal: string;
+    title: string;
+    lead: string;
+    icon: "shield" | "invalid" | "pending";
+  }
 > = {
   invalid: {
     seal: "Invalid",
@@ -38,7 +43,10 @@ const COPY: Record<
 function HeroIcon({ tone }: { tone: VerdictHeroTone }) {
   if (tone === "valid") {
     return (
-      <span className="verdict-hero__icon verdict-hero__icon--valid" aria-hidden="true">
+      <span
+        className="verdict-hero__icon verdict-hero__icon--valid"
+        aria-hidden="true"
+      >
         <Icon name="shield" size={22} />
       </span>
     );
@@ -46,7 +54,10 @@ function HeroIcon({ tone }: { tone: VerdictHeroTone }) {
 
   if (tone === "invalid") {
     return (
-      <span className="verdict-hero__icon verdict-hero__icon--invalid" aria-hidden="true">
+      <span
+        className="verdict-hero__icon verdict-hero__icon--invalid"
+        aria-hidden="true"
+      >
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
           <path
             d="M11 3L19 18H3L11 3Z"
@@ -54,7 +65,12 @@ function HeroIcon({ tone }: { tone: VerdictHeroTone }) {
             strokeWidth="1.6"
             strokeLinejoin="round"
           />
-          <path d="M11 9V13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          <path
+            d="M11 9V13"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          />
           <circle cx="11" cy="16" r="0.9" fill="currentColor" />
         </svg>
       </span>
@@ -62,16 +78,34 @@ function HeroIcon({ tone }: { tone: VerdictHeroTone }) {
   }
 
   return (
-    <span className="verdict-hero__icon verdict-hero__icon--pending" aria-hidden="true">
+    <span
+      className="verdict-hero__icon verdict-hero__icon--pending"
+      aria-hidden="true"
+    >
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-        <circle cx="11" cy="11" r="7.5" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M11 7V12L14 14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        <circle
+          cx="11"
+          cy="11"
+          r="7.5"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        />
+        <path
+          d="M11 7V12L14 14"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
       </svg>
     </span>
   );
 }
 
-export function VerdictHero({ tone, attested, showMarketplaceCta = false }: VerdictHeroProps) {
+export function VerdictHero({
+  tone,
+  attested,
+  showMarketplaceCta = false,
+}: VerdictHeroProps) {
   const copy = COPY[tone];
   const lead =
     tone === "valid" && attested
@@ -94,7 +128,12 @@ export function VerdictHero({ tone, attested, showMarketplaceCta = false }: Verd
 
       {showMarketplaceCta ? (
         <div className="verdict-hero__actions">
-          <ActionLink variant="primary" size="md" className="route-cta" to="/marketplace">
+          <ActionLink
+            variant="primary"
+            size="md"
+            className="route-cta"
+            to="/marketplace"
+          >
             <BtnIcon icon="globe">Marketplace (demo)</BtnIcon>
           </ActionLink>
         </div>

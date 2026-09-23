@@ -12,7 +12,8 @@ export const translations = {
     "nav.settings": "Settings",
     "commands.sealedRail": "Sealed Market Rail",
     "settings.close": "Close settings",
-    "settings.lead": "Appearance, decider mode, operational limits, and demo guardrails. Audit data resets when the API server restarts.",
+    "settings.lead":
+      "Appearance, decider mode, operational limits, and demo guardrails. Audit data resets when the API server restarts.",
     "settings.sections": "Settings sections",
     "settings.tab.general": "General",
     "settings.tab.decider": "Decider",
@@ -27,8 +28,10 @@ export const translations = {
     "settings.status.persistence": "Persistence",
     "settings.decider.rule": "RuleDecider",
     "settings.decider.llm": "LlmDecider",
-    "settings.decider.hintConnected": "xAI or OpenRouter key detected on server.",
-    "settings.decider.hintFallback": "LLM falls back to rules — XAI_API_KEY or OPENROUTER_API_KEY not set.",
+    "settings.decider.hintConnected":
+      "xAI or OpenRouter key detected on server.",
+    "settings.decider.hintFallback":
+      "LLM falls back to rules — XAI_API_KEY or OPENROUTER_API_KEY not set.",
     "settings.decider.saved": "Saved to API server for this session.",
     "settings.decider.saveError": "Could not save decider preference.",
     "settings.limits.title": "Known limits",
@@ -38,7 +41,8 @@ export const translations = {
     "settings.limits.mineLat": "Mine perimeter (lat)",
     "settings.limits.mineLng": "Mine perimeter (lng)",
     "settings.limits.mass": "Mass range (g)",
-    "settings.persistence.hint": "Audit log and mock on-chain state live in API memory only. Restart the server to reset. Export JSON from Audit before restarting.",
+    "settings.persistence.hint":
+      "Audit log and mock on-chain state live in API memory only. Restart the server to reset. Export JSON from Audit before restarting.",
     "settings.persistence.packageLabel": "Casper package URL",
     "nav.marketplace": "Marketplace",
     "nav.myAssets": "My Assets",
@@ -49,7 +53,8 @@ export const translations = {
     "nav.workspace": "Workspace",
     "nav.suffix": "Provenance Console",
     "guardrail.demo": "Demo",
-    "guardrail.text": "Fictional data · Seal decides verdict · Not investment or token sale",
+    "guardrail.text":
+      "Fictional data · Seal decides verdict · Not investment or token sale",
     "prefs.menu": "Preferences",
     "session.menu": "Session menu",
     "sidebar.search.label": "Open command palette",
@@ -68,6 +73,7 @@ export const translations = {
     "brand.console": "Lastre Console",
     "brand.name": "Lastre",
     "common.retry": "Retry",
+    "common.skipContent": "Skip to content",
     "common.loadError": "Could not load this section",
     "common.runBatch": "Run batch",
     "common.runDemoBatch": "Run demo batch",
@@ -82,7 +88,8 @@ export const translations = {
     "common.invalid": "Invalid",
     "journey.aria": "Proof journey — capture to symbolic demo",
     "journey.kicker": "Proof before token",
-    "journey.lead": "Physical document → seal → agent action → verdict → Casper → symbolic demo only after proof.",
+    "journey.lead":
+      "Physical document → seal → agent action → verdict → Casper → symbolic demo only after proof.",
     "journey.capture.label": "Capture",
     "journey.capture.hint": "Document → structured fields",
     "journey.seal.label": "Seal",
@@ -99,9 +106,11 @@ export const translations = {
     "journey.myAssets.hint": "Claimed representations",
     "overview.kicker": "Overview",
     "overview.title": "Proof command center",
-    "overview.lead": "One screen to see pipeline health, trust layers, and what to do next.",
+    "overview.lead":
+      "One screen to see pipeline health, trust layers, and what to do next.",
     "overview.pipeline.title": "Demo pipeline",
-    "overview.pipeline.subtitle": "How far fictional assets moved through the console",
+    "overview.pipeline.subtitle":
+      "How far fictional assets moved through the console",
     "overview.pipeline.lots": "Lots in catalog",
     "overview.pipeline.lotsHint": "Captured or seeded assets",
     "overview.pipeline.processed": "Processed",
@@ -109,9 +118,11 @@ export const translations = {
     "overview.pipeline.sealVerified": "Seal verified",
     "overview.pipeline.onCasper": "On Casper",
     "overview.pipeline.tokenizable": "Tokenizable",
-    "overview.pipeline.empty": "Run Capture or Process to populate the pipeline",
+    "overview.pipeline.empty":
+      "Run Capture or Process to populate the pipeline",
     "overview.trust.title": "Trust layers (session)",
-    "overview.trust.subtitle": "Agent chooses action · seal decides verdict · Casper records proof",
+    "overview.trust.subtitle":
+      "Agent chooses action · seal decides verdict · Casper records proof",
     "overview.trust.agentActions": "Agent actions",
     "overview.trust.sealChecks": "Seal checks",
     "overview.trust.empty": "No session records yet",
@@ -120,7 +131,8 @@ export const translations = {
     "overview.testnet.split": "{valid} valid · {invalid} invalid",
     "overview.testnet.splitAria": "Testnet attestation split",
     "overview.sessionOutcomes": "Session outcomes",
-    "overview.sessionEmpty": "No batch run yet. Process will populate outcome charts here.",
+    "overview.sessionEmpty":
+      "No batch run yet. Process will populate outcome charts here.",
     "overview.recentActivity": "Recent proof activity",
     "overview.lastFive": "Last 5 records",
     "overview.fullAudit": "Full audit log",
@@ -152,22 +164,26 @@ export const translations = {
     "overview.stats.tokenizable": "Tokenizable outcomes",
     "overview.stats.tokenizableHint": "{tokenizable} of {processed} · {pct}%",
     "overview.stats.conversion": "{pct}% conversion to tokenizable",
-    "overview.stats.ratioAria": "{tokenizable} tokenizable of {processed} processed",
+    "overview.stats.ratioAria":
+      "{tokenizable} tokenizable of {processed} processed",
     "overview.stats.onChain": "On Casper",
     "overview.stats.acceptance": "Testnet acceptance",
     "overview.next.aria": "Recommended next step",
     "overview.next.kicker": "Your next step",
     "overview.next.start.title": "Start the proof journey",
-    "overview.next.start.lead": "Capture a fictional document, run Process, then read the audit log. The seal decides the verdict.",
+    "overview.next.start.lead":
+      "Capture a fictional document, run Process, then read the audit log. The seal decides the verdict.",
     "overview.next.start.cta": "Start with Capture",
     "overview.next.lots.title": "Lots ready — run the demo batch",
     "overview.next.lots.leadStat": "{count} lot(s) in queue.",
-    "overview.next.lots.leadHint": "Process will show agent action vs seal verdict for each one.",
+    "overview.next.lots.leadHint":
+      "Process will show agent action vs seal verdict for each one.",
     "overview.next.lots.cta": "Run demo batch",
     "overview.next.lots.secondary": "Review lots",
     "overview.next.review.title": "Proof logged — review outcomes",
     "overview.next.review.leadStat": "{count} record(s) in session.",
-    "overview.next.review.leadHint": "Invalid rows are permanent proof, not errors.",
+    "overview.next.review.leadHint":
+      "Invalid rows are permanent proof, not errors.",
     "overview.next.review.cta": "Open audit log",
     "overview.next.review.secondary": "Run another batch",
     "overview.next.tokenizable.title": "Valid proof — symbolic demo unlocked",
@@ -177,7 +193,8 @@ export const translations = {
     "overview.next.metric.records": "session records",
     "overview.next.metric.tokenizable": "tokenizable",
     "overview.next.metric.aria": "{value} {unit}",
-    "overview.next.tokenizable.leadHint": "Marketplace and My Assets are demo layers only — after proof.",
+    "overview.next.tokenizable.leadHint":
+      "Marketplace and My Assets are demo layers only — after proof.",
     "overview.next.tokenizable.cta": "Open Marketplace (demo)",
     "overview.next.tokenizable.secondary": "My Assets",
     "overview.next.report.title": "Proof Report",
@@ -193,11 +210,14 @@ export const translations = {
     "overview.next.report.check.chain": "Casper attestation logged",
     "overview.next.report.check.token": "Tokenizable outcome confirmed",
     "overview.next.hero.start.title": "Proof journey",
-    "overview.next.hero.start.lead": "Capture → seal → verdict. Start with a fictional document.",
+    "overview.next.hero.start.lead":
+      "Capture → seal → verdict. Start with a fictional document.",
     "overview.next.hero.lots.title": "Demo batch ready",
-    "overview.next.hero.lots.lead": "{count} lot(s) queued — Process runs agent vs seal for each.",
+    "overview.next.hero.lots.lead":
+      "{count} lot(s) queued — Process runs agent vs seal for each.",
     "overview.next.hero.review.title": "Session logged",
-    "overview.next.hero.review.lead": "{count} record(s) in audit — invalid rows are proof, not errors.",
+    "overview.next.hero.review.lead":
+      "{count} record(s) in audit — invalid rows are proof, not errors.",
     "badge.noVerdict": "No verdict",
     "badge.attested": "Attested",
     "badge.pending": "Pending",
@@ -216,7 +236,8 @@ export const translations = {
     "outcome.skipped": "Skipped",
     "outcome.escalated": "Escalated",
     "audit.evidence.title": "Evidence",
-    "audit.evidence.lead": "Proof items for this session — seal verdict, agent decision, and on-chain attestation when accepted.",
+    "audit.evidence.lead":
+      "Proof items for this session — seal verdict, agent decision, and on-chain attestation when accepted.",
     "audit.evidence.auditorView": "Auditor view",
     "audit.evidence.context": "Session proof review · fictional demo data",
     "audit.evidence.progress": "Audit progress",
@@ -245,22 +266,28 @@ export const translations = {
     "audit.evidence.onChain.awaiting": "Awaiting",
     "audit.evidence.onChain.viewAttestation": "View attestation",
     "audit.evidence.onChain.viewValidSample": "View Valid sample",
-    "audit.evidence.onChain.sessionReceipt": "Demo/session receipt — not on Casper",
+    "audit.evidence.onChain.sessionReceipt":
+      "Demo/session receipt — not on Casper",
     "audit.evidence.viewEvidence": "View evidence",
     "audit.evidence.owner.rule": "Rule engine",
     "audit.evidence.owner.llm": "LLM agent",
     "audit.evidence.noMatch": "No evidence matches the current filters.",
     "audit.evidence.emptyTitle": "No evidence yet",
-    "audit.evidence.emptyHint": "Capture a document or run a batch from Process to populate evidence.",
+    "audit.evidence.emptyHint":
+      "Capture a document or run a batch from Process to populate evidence.",
     "audit.evidence.emptyCapture": "Start with Capture",
     "audit.evidence.emptyProcess": "Go to Process",
-    "audit.evidence.fromProcess": "Batch complete — {count} record(s) logged this session. Review evidence below.",
-    "audit.evidence.nextStep": "Symbolic demo layers unlock only after valid attestation.",
+    "audit.evidence.fromProcess":
+      "Batch complete — {count} record(s) logged this session. Review evidence below.",
+    "audit.evidence.nextStep":
+      "Symbolic demo layers unlock only after valid attestation.",
     "audit.evidence.acceptedCount": "{count} accepted",
     "audit.evidence.marketplaceCta": "Open Marketplace (demo)",
     "escalations.title": "Review queue",
-    "escalations.lead": "Lots where the agent chose escalate — missing fields, geo outside perimeter, or mass out of range. Review each case and decide.",
-    "escalations.principle": "The agent chose the action escalate — it did not judge truth. Escalation is legitimate uncertainty routed to a human. The seal decides Valid or Invalid.",
+    "escalations.lead":
+      "Lots where the agent chose escalate — missing fields, geo outside perimeter, or mass out of range. Review each case and decide.",
+    "escalations.principle":
+      "The agent chose the action escalate — it did not judge truth. Escalation is legitimate uncertainty routed to a human. The seal decides Valid or Invalid.",
     "escalations.queueLabel": "Escalation queue",
     "escalations.table.image": "Preview",
     "escalations.table.title": "Asset",
@@ -283,7 +310,8 @@ export const translations = {
     "escalations.filters.deciderAll": "All deciders",
     "escalations.filters.shown": "{visible} of {total}",
     "escalations.filters.emptyTitle": "No cases match these filters",
-    "escalations.filters.emptyHint": "Clear filters or pick another type to see the queue again.",
+    "escalations.filters.emptyHint":
+      "Clear filters or pick another type to see the queue again.",
     "escalations.metrics.pending": "Pending review",
     "escalations.metrics.pendingHint": "Requires human decision before payment",
     "escalations.metrics.rule": "Rule decisions",
@@ -295,7 +323,8 @@ export const translations = {
     "escalations.kind.missing": "Missing field",
     "escalations.kind.review": "Review",
     "escalations.item.label": "Case {index}",
-    "escalations.item.agentNote": "Agent chose escalate — operational action, not a verdict on integrity.",
+    "escalations.item.agentNote":
+      "Agent chose escalate — operational action, not a verdict on integrity.",
     "escalations.item.reason": "Why the agent escalated",
     "escalations.item.triggerFields": "Triggering fields",
     "escalations.item.actions": "Your decision",
@@ -307,14 +336,20 @@ export const translations = {
     "escalations.action.overriding": "Applying…",
     "escalations.action.discard": "Discard case",
     "escalations.action.discarding": "Discarding…",
-    "escalations.feedback.requeued": "{assetId} acknowledged and sent back to Process — outcome: {outcome}.",
-    "escalations.feedback.requeuedStillEscalated": "{assetId} reprocessed but escalated again — still in queue for review.",
-    "escalations.feedback.discarded": "{assetId} discarded from queue — logged as skipped.",
-    "escalations.feedback.overriddenPay": "{assetId} overridden to pay — outcome: {outcome}.",
-    "escalations.feedback.overriddenSkip": "{assetId} overridden to skip — logged as skipped.",
+    "escalations.feedback.requeued":
+      "{assetId} acknowledged and sent back to Process — outcome: {outcome}.",
+    "escalations.feedback.requeuedStillEscalated":
+      "{assetId} reprocessed but escalated again — still in queue for review.",
+    "escalations.feedback.discarded":
+      "{assetId} discarded from queue — logged as skipped.",
+    "escalations.feedback.overriddenPay":
+      "{assetId} overridden to pay — outcome: {outcome}.",
+    "escalations.feedback.overriddenSkip":
+      "{assetId} overridden to skip — logged as skipped.",
     "escalations.feedback.error": "Action failed — try again.",
     "escalations.geo.title": "Perimeter check",
-    "escalations.geo.lead": "Expected mine bounds vs declared coordinates that triggered escalation.",
+    "escalations.geo.lead":
+      "Expected mine bounds vs declared coordinates that triggered escalation.",
     "escalations.geo.field": "Field",
     "escalations.geo.expected": "Expected perimeter",
     "escalations.geo.declared": "Declared location",
@@ -328,14 +363,17 @@ export const translations = {
     "escalations.geo.inPerimeter": "Inside perimeter",
     "escalations.geo.outPerimeter": "Outside perimeter",
     "escalations.empty.title": "No escalations in this session",
-    "escalations.empty.hint": "Escalation means the agent was uncertain and routed the lot to you — not a system failure. Run the demo batch with LOTE-OUTOFREGION in Process to populate the queue.",
+    "escalations.empty.hint":
+      "Escalation means the agent was uncertain and routed the lot to you — not a system failure. Run the demo batch with LOTE-OUTOFREGION in Process to populate the queue.",
     "escalations.empty.cta": "Go to Process",
     "process.title": "Run demo batch",
-    "process.lead": "The agent chooses the action (pay, skip, escalate). The seal decides Valid or Invalid.",
+    "process.lead":
+      "The agent chooses the action (pay, skip, escalate). The seal decides Valid or Invalid.",
     "process.leadShort": "Select lots, run the batch, watch the seal decide.",
     "process.config": "Batch configuration",
     "process.config.kicker": "Configuration",
-    "process.config.llmFootnote": "LLM mode uses xAI (XAI_API_KEY) or OpenRouter when set; otherwise rule fallback applies.",
+    "process.config.llmFootnote":
+      "LLM mode uses xAI (XAI_API_KEY) or OpenRouter when set; otherwise rule fallback applies.",
     "process.decider.kicker": "Decider",
     "process.decider.ruleShort": "Rule",
     "process.decider.llmShort": "LLM",
@@ -345,18 +383,22 @@ export const translations = {
     "process.step2": "Step 2",
     "process.step3": "Step 3",
     "process.selectLotsTitle": "Which lots go in this batch?",
-    "process.selectLotsLead": "Click each card to include or exclude it. Only selected lots are processed when you run the batch.",
+    "process.selectLotsLead":
+      "Click each card to include or exclude it. Only selected lots are processed when you run the batch.",
     "process.selectLotsEmpty": "Select at least one lot to run the batch.",
     "process.toolbar.aria": "Batch controls",
     "process.runWithCount": "Run batch ({count} lots)",
     "process.queue.title": "{count} lot(s) queued — waiting to run",
     "process.queue.waiting": "Waiting",
-    "process.pipeline.idleLead": "Results appear here after you run the batch. Agent action and seal verdict fill in one lot at a time.",
+    "process.pipeline.idleLead":
+      "Results appear here after you run the batch. Agent action and seal verdict fill in one lot at a time.",
     "process.decider.label": "How the agent decides",
     "process.decider.ruleLabel": "Fixed rules",
     "process.decider.llmLabel": "AI",
-    "process.decider.ruleTooltip": "Deterministic logic picks pay, skip, or escalate from metadata — no language model.",
-    "process.decider.llmTooltip": "A language model suggests the action; the seal still computes Valid or Invalid independently.",
+    "process.decider.ruleTooltip":
+      "Deterministic logic picks pay, skip, or escalate from metadata — no language model.",
+    "process.decider.llmTooltip":
+      "A language model suggests the action; the seal still computes Valid or Invalid independently.",
     "process.lotsInBatch": "Lots in batch",
     "process.progress": "Progress",
     "process.run": "Run batch",
@@ -380,18 +422,22 @@ export const translations = {
     "process.expected.skip": "skip expected",
     "process.expected.escalate": "escalate expected",
     "process.pipeline.kicker": "Live proof",
-    "process.stage.lead": "Watch each lot move through the pipeline — agent action first, then the deterministic seal verdict.",
+    "process.stage.lead":
+      "Watch each lot move through the pipeline — agent action first, then the deterministic seal verdict.",
     "process.stage.featureTamper": "Tampered lots show the field that changed",
     "process.stage.previewAria": "Pipeline preview",
     "process.stage.previewTitle": "Your batch, visualized",
-    "process.stage.previewLead": "Each selected lot will pass through agent action, then the deterministic seal — one row at a time.",
+    "process.stage.previewLead":
+      "Each selected lot will pass through agent action, then the deterministic seal — one row at a time.",
     "process.stage.previewEmpty": "Select lots to begin.",
     "process.stage.lotCount": "lots ready",
     "process.stage.previewAgent": "Agent",
     "process.stage.previewSeal": "Seal",
     "process.stage.previewPlaceholder": "—",
-    "process.stage.previewHint": "Press Run batch when ready — results fill in live, not in advance.",
-    "process.stage.inspectLead": "One lot at a time — agent action first, then the deterministic seal verdict.",
+    "process.stage.previewHint":
+      "Press Run batch when ready — results fill in live, not in advance.",
+    "process.stage.inspectLead":
+      "One lot at a time — agent action first, then the deterministic seal verdict.",
     "process.stage.inspectProgress": "Inspecting lot {current} of {total}",
     "process.stage.inspectComplete": "All {count} lots inspected",
     "process.stage.inspectDone": "Inspection complete for this lot.",
@@ -402,9 +448,11 @@ export const translations = {
     "process.stage.agentStep.metadata": "Cross-checking mass and coordinates…",
     "process.stage.agentStep.fields": "Diffing fields against reference seal…",
     "process.stage.agentStep.tamper": "Flagging tamper indicators…",
-    "process.stage.agentStep.geo": "Reading geolocation against mine perimeter…",
+    "process.stage.agentStep.geo":
+      "Reading geolocation against mine perimeter…",
     "process.stage.agentStep.perimeter": "Perimeter breach — escalation path…",
-    "process.stage.agentStep.duplicate": "Checking attestation history for duplicates…",
+    "process.stage.agentStep.duplicate":
+      "Checking attestation history for duplicates…",
     "process.stage.agentStep.decide": "Choosing operational action…",
     "process.flow.aria": "Live lot inspection flow",
     "process.flow.completedAria": "Completed inspections",
@@ -413,7 +461,8 @@ export const translations = {
     "process.flow.upcoming": "Up next",
     "process.flow.checklist.aria": "Agent inspection steps",
     "process.flow.checklist.seal": "Seal verification",
-    "process.pipeline.lead": "Each card shows the agent’s operational action beside the seal’s deterministic verdict.",
+    "process.pipeline.lead":
+      "Each card shows the agent’s operational action beside the seal’s deterministic verdict.",
     "process.pipeline.principleAgent": "Agent chooses the action",
     "process.pipeline.principleSeal": "Seal decides the verdict",
     "process.pipeline.colLot": "Lot",
@@ -434,8 +483,10 @@ export const translations = {
     "process.pipeline.sealComputing": "Computing seal…",
     "process.selectAll": "Select all",
     "process.selectNone": "Clear",
-    "process.pipeline.empty": "Run the batch to watch each lot process — agent action on the left, seal verdict on the right.",
-    "process.pipeline.emptySelection": "Select at least one lot to preview the pipeline.",
+    "process.pipeline.empty":
+      "Run the batch to watch each lot process — agent action on the left, seal verdict on the right.",
+    "process.pipeline.emptySelection":
+      "Select at least one lot to preview the pipeline.",
     "process.pipeline.agentColumn": "Agent action",
     "process.pipeline.sealColumn": "Seal verdict",
     "process.pipeline.agentHint": "Operational — pay, skip, or escalate",
@@ -446,15 +497,18 @@ export const translations = {
     "process.pipeline.decidedByRule": "Rule engine",
     "process.pipeline.decidedByLlm": "LLM agent",
     "process.pipeline.sealHash": "Seal",
-    "process.pipeline.invalidProof": "Invalid is permanent proof of tamper — not a system failure.",
+    "process.pipeline.invalidProof":
+      "Invalid is permanent proof of tamper — not a system failure.",
     "process.seal.notInvoked": "Seal not invoked",
-    "process.seal.notInvokedHint": "No payment — the deterministic seal was not run for this action.",
+    "process.seal.notInvokedHint":
+      "No payment — the deterministic seal was not run for this action.",
     "process.card.pending": "Pending",
     "process.card.running": "Processing",
     "process.card.done": "Complete",
     "process.tamperDiff.title": "Field that changed",
     "process.tamperDiff.aria": "Tampered field comparison",
-    "process.tamperDiff.note": "The reference seal was computed from the original value; the current artifact diverges.",
+    "process.tamperDiff.note":
+      "The reference seal was computed from the original value; the current artifact diverges.",
     "process.summary.title": "Batch scoreboard",
     "process.summary.aria": "Batch outcome summary",
     "process.summary.tokenizable": "Tokenizable",
@@ -463,7 +517,8 @@ export const translations = {
     "process.summary.escalated": "Escalated",
     "process.projection.title": "Proof pipeline projections",
     "process.projection.kicker": "Live estimate",
-    "process.projection.subtitle": "Cumulative proof layers across the selected demo lots — updates as the batch runs.",
+    "process.projection.subtitle":
+      "Cumulative proof layers across the selected demo lots — updates as the batch runs.",
     "process.projection.legendAria": "Chart legend",
     "process.projection.band": "Confidence band",
     "process.projection.high": "High estimate",
@@ -485,66 +540,85 @@ export const translations = {
     "process.projection.lot.duplicate": "Duplicate",
     "process.projection.lot.escalate": "Escalate",
     "process.projection.onChainToggle": "Show on-chain layer",
-    "process.projection.disclaimer": "Rough demo estimate — the seal decides each verdict; Invalid rows are permanent proof.",
+    "process.projection.disclaimer":
+      "Rough demo estimate — the seal decides each verdict; Invalid rows are permanent proof.",
     "process.projection.emptyTitle": "Select lots to preview the pipeline",
-    "process.projection.emptyHint": "Choose one or more demo lots, then run the batch to watch live proof layers accumulate.",
+    "process.projection.emptyHint":
+      "Choose one or more demo lots, then run the batch to watch live proof layers accumulate.",
     "process.projection.chartAria": "Proof projection for {count} lots",
     "process.projection.markerTamper": "Tamper detected",
     "process.projection.markerLot": "Lot processed",
     "process.projection.markerBatch": "Batch complete",
     "onboarding.auth.title": "Provenance proof, before any token.",
-    "onboarding.auth.subtitle": "Sign in to explore the demo console — fictional data only.",
+    "onboarding.auth.subtitle":
+      "Sign in to explore the demo console — fictional data only.",
     "onboarding.auth.badge": "Demo · fictional data · not investment",
     "onboarding.auth.google": "Continue with Google",
     "onboarding.auth.emailLink": "Continue with email",
     "onboarding.auth.emailPlaceholder": "Work email",
     "onboarding.auth.emailSubmit": "Send magic link",
     "onboarding.auth.dividerOr": "or",
-    "onboarding.auth.footnote": "Demo environment — no real account is created.",
+    "onboarding.auth.footnote":
+      "Demo environment — no real account is created.",
     "onboarding.visual.eyebrow": "Proof before token",
-    "onboarding.visual.quote": "Physical origin, sealed on-chain — nothing changes without a trace.",
+    "onboarding.visual.quote":
+      "Physical origin, sealed on-chain — nothing changes without a trace.",
     "onboarding.welcome.title": "Welcome to Lastre.",
     "onboarding.welcome.kicker": "One question only",
-    "onboarding.welcome.subtitle": "We prove a provenance document is intact — nothing changed. Proof first, token later.",
+    "onboarding.welcome.subtitle":
+      "We prove a provenance document is intact — nothing changed. Proof first, token later.",
     "onboarding.welcome.aria": "Choose your demo path",
     "onboarding.welcome.judge.title": "Evaluate the technology",
-    "onboarding.welcome.judge.lead": "Run the demo in ~60s and watch the seal decide.",
+    "onboarding.welcome.judge.lead":
+      "Run the demo in ~60s and watch the seal decide.",
     "onboarding.welcome.judge.badge": "Recommended",
     "onboarding.welcome.operator.title": "Register a lot",
-    "onboarding.welcome.operator.lead": "Capture a document and generate its seal.",
+    "onboarding.welcome.operator.lead":
+      "Capture a document and generate its seal.",
     "onboarding.welcome.explore": "Just explore",
     "onboarding.judge.kicker": "60-second demo",
     "onboarding.judge.title": "Run the demo in 60 seconds",
-    "onboarding.judge.lead": "Process 4 lots and watch the seal decide each verdict.",
+    "onboarding.judge.lead":
+      "Process 4 lots and watch the seal decide each verdict.",
     "onboarding.judge.cta": "Run now",
-    "onboarding.capture.demoTip": "Demo example loaded. Generate the seal or edit the fields.",
+    "onboarding.capture.demoTip":
+      "Demo example loaded. Generate the seal or edit the fields.",
     "onboarding.capture.demoCta": "Generate Passport + Seal",
     "capture.wizard.trigger": "New lot",
     "capture.wizard.kicker": "Provenance capture",
     "capture.wizard.title": "Register a lot",
-    "capture.wizard.lead": "Structured data → document → SHA-256 seal. The seal decides the verdict — not the agent.",
+    "capture.wizard.lead":
+      "Structured data → document → SHA-256 seal. The seal decides the verdict — not the agent.",
     "capture.wizard.progress": "Step {current} of {total}",
     "capture.wizard.section.quickStart": "Quick start",
-    "capture.wizard.section.quickStartHint": "Load demo data to explore Valid or Invalid outcomes.",
+    "capture.wizard.section.quickStartHint":
+      "Load demo data to explore Valid or Invalid outcomes.",
     "capture.wizard.section.identity": "Identity",
-    "capture.wizard.section.identityHint": "Who registered this lot and how it is labeled in the queue.",
+    "capture.wizard.section.identityHint":
+      "Who registered this lot and how it is labeled in the queue.",
     "capture.wizard.section.origin": "Origin",
-    "capture.wizard.section.originHint": "Geographic anchor and capture timestamp — seal-relevant.",
+    "capture.wizard.section.originHint":
+      "Geographic anchor and capture timestamp — seal-relevant.",
     "capture.wizard.section.asset": "Asset details",
-    "capture.wizard.section.assetHint": "Quantity and certificate fields that feed the SHA-256 seal.",
+    "capture.wizard.section.assetHint":
+      "Quantity and certificate fields that feed the SHA-256 seal.",
     "capture.wizard.section.document": "Document capture",
-    "capture.wizard.mediaEmpty": "No document yet — start the camera or upload a file.",
+    "capture.wizard.mediaEmpty":
+      "No document yet — start the camera or upload a file.",
     "capture.wizard.close": "Close capture wizard",
     "capture.wizard.stepperAria": "Capture progress",
     "capture.wizard.step1.label": "Details",
     "capture.wizard.step2.label": "Document",
     "capture.wizard.step3.label": "Passport",
     "capture.wizard.step1.heading": "Lot details",
-    "capture.wizard.step1.hint": "Choose type and fill validated fields. The seal is computed from these values.",
+    "capture.wizard.step1.hint":
+      "Choose type and fill validated fields. The seal is computed from these values.",
     "capture.wizard.step2.heading": "Capture document",
-    "capture.wizard.step2.hint": "Photograph or upload the certificate. This creates a frame hash — separate from the seal.",
+    "capture.wizard.step2.hint":
+      "Photograph or upload the certificate. This creates a frame hash — separate from the seal.",
     "capture.wizard.step3.heading": "Passport + seal",
-    "capture.wizard.step3.hint": "Review the credential card. The photo does not change the seal.",
+    "capture.wizard.step3.hint":
+      "Review the credential card. The photo does not change the seal.",
     "capture.wizard.presetValid": "Demo Valid carbon",
     "capture.wizard.presetInvalid": "Demo tampered lot",
     "capture.wizard.field.category": "Category",
@@ -567,10 +641,13 @@ export const translations = {
     "capture.wizard.error.range": "Out of valid range",
     "capture.wizard.error.positive": "Must be greater than zero",
     "capture.wizard.cameraActive": "Camera active — point at the document.",
-    "capture.wizard.cameraDenied": "Camera unavailable. Use file upload instead.",
-    "capture.wizard.photoCaptured": "Photo captured. Continue to generate the passport.",
+    "capture.wizard.cameraDenied":
+      "Camera unavailable. Use file upload instead.",
+    "capture.wizard.photoCaptured":
+      "Photo captured. Continue to generate the passport.",
     "capture.wizard.documentUploaded": "Document uploaded.",
-    "capture.wizard.needDocument": "Capture or upload a document before continuing.",
+    "capture.wizard.needDocument":
+      "Capture or upload a document before continuing.",
     "capture.wizard.startCamera": "Start camera",
     "capture.wizard.capturePhoto": "Capture photo",
     "capture.wizard.uploadFile": "Upload file",
@@ -586,14 +663,16 @@ export const translations = {
     "capture.wizard.noPhoto": "No preview",
     "capture.wizard.passportTitle": "Lastre proof passport",
     "capture.wizard.sealLabel": "Seal (SHA-256)",
-    "capture.wizard.passportFoot": "Deterministic. Verifiable. Proof before token.",
+    "capture.wizard.passportFoot":
+      "Deterministic. Verifiable. Proof before token.",
     "capture.wizard.autoProcess": "Auto-process after submit (rule decider)",
     "capture.wizard.next": "Continue",
     "capture.wizard.back": "Back",
     "capture.wizard.submit": "Submit to queue",
     "capture.wizard.submitError": "Submit failed: {message}",
     "capture.wizard.success.title": "Lot enqueued",
-    "capture.wizard.success.lead": "Passport sealed and proof logged. Open the lot to inspect evidence before any symbolic layer.",
+    "capture.wizard.success.lead":
+      "Passport sealed and proof logged. Open the lot to inspect evidence before any symbolic layer.",
     "capture.wizard.success.lot": "Open lot evidence",
     "capture.wizard.success.process": "Re-run in Process",
     "capture.wizard.success.audit": "Open audit log",
@@ -606,14 +685,16 @@ export const translations = {
     "onboarding.checklist.batch": "Run the first batch",
     "onboarding.checklist.batchHint": "Watch the agent decide across four lots",
     "onboarding.checklist.invalid": "View an Invalid verdict",
-    "onboarding.checklist.invalidHint": "See how an Invalid verdict reads in evidence",
+    "onboarding.checklist.invalidHint":
+      "See how an Invalid verdict reads in evidence",
     "onboarding.checklist.casper": "Check proof on Casper",
     "onboarding.checklist.casperHint": "Confirm the attestation on Casper",
     "onboarding.checklist.marketplace": "See the symbolic layer",
     "onboarding.checklist.marketplaceHint": "Browse the symbolic asset layer",
     "onboarding.checklist.completeAria": "Tour complete",
     "onboarding.checklist.completeTitle": "Full loop seen",
-    "onboarding.checklist.completeLead": "Capture, verdict, proof, and market — you traced the complete path.",
+    "onboarding.checklist.completeLead":
+      "Capture, verdict, proof, and market — you traced the complete path.",
     "onboarding.checklist.completeArc": "Capture → Verdict → Proof → Market",
     "onboarding.checklist.dismiss": "Close tour",
     "onboarding.checklist.reopen": "Reopen guided tour",
@@ -623,8 +704,10 @@ export const translations = {
     "onboarding.persona.explorer": "Explore freely",
     "guardrail.session": "Reload clears demo session data.",
     "chain.title": "Casper proof ledger",
-    "chain.lead": "Read-only snapshot of attestations on Casper testnet. Invalid records stay on-chain — permanent tamper proof.",
-    "chain.immutable": "Recorded on Casper. Once registered, nothing is erased — not even invalid verdicts.",
+    "chain.lead":
+      "Read-only snapshot of attestations on Casper testnet. Invalid records stay on-chain — permanent tamper proof.",
+    "chain.immutable":
+      "Recorded on Casper. Once registered, nothing is erased — not even invalid verdicts.",
     "chain.sessionNotice": "Session records. Reload clears demo data.",
     "chain.source.live": "Live snapshot",
     "chain.source.fallback": "Fallback data — live snapshot unavailable",
@@ -635,10 +718,13 @@ export const translations = {
     "chain.technical.packageUrl": "Package URL",
     "chain.technical.fetched": "Fetched at",
     "chain.group.session": "This session",
-    "chain.group.sessionHint": "Attestations from batches run in this demo session.",
-    "chain.group.sessionEmpty": "No session attestations yet. Run a batch from Process to record proof.",
+    "chain.group.sessionHint":
+      "Attestations from batches run in this demo session.",
+    "chain.group.sessionEmpty":
+      "No session attestations yet. Run a batch from Process to record proof.",
     "chain.group.history": "On-chain history",
-    "chain.group.historyHint": "Permanent attestations already stored on Casper testnet.",
+    "chain.group.historyHint":
+      "Permanent attestations already stored on Casper testnet.",
     "chain.group.noMatch": "No attestations match the current filter.",
     "chain.filter.aria": "Filter attestations by verdict",
     "chain.filter.all": "All",
@@ -649,32 +735,41 @@ export const translations = {
     "chain.timeline.viewAttestation": "View attestation",
     "chain.timeline.sessionReceipt": "Demo/session receipt — not on Casper",
     "chain.empty.title": "No session proof yet",
-    "chain.empty.hint": "Chain shows permanent Casper attestations. Run a demo batch to record your first proof this session.",
+    "chain.empty.hint":
+      "Chain shows permanent Casper attestations. Run a demo batch to record your first proof this session.",
     "chain.empty.cta": "Run demo batch",
     "chain.metrics.aria": "Session attestation counts",
     "marketplace.rail.title": "Sealed Market Rail",
-    "marketplace.rail.subtitle": "Origin-gated path from Valid seal → MintGate claim → demo collateral.",
+    "marketplace.rail.subtitle":
+      "Origin-gated path from Valid seal → MintGate claim → demo collateral.",
     "marketplace.rail.btnPrimary": "Run Sealed Rail demo",
     "marketplace.rail.btnSecondary": "Open My Assets",
     "marketplace.rail.running": "Running…",
     "marketplace.rail.statusIdle": "Start with a Valid origin seal.",
-    "marketplace.rail.statusMinted": "Valid seal confirmed — MintGate claimed (demo). Lock demo collateral to finish.",
-    "marketplace.rail.statusCompleting": "Valid seal confirmed — completing demo collateral…",
-    "marketplace.rail.statusBlocked": "Blocked — Invalid origin. Mint and demo collateral stay closed.",
-    "marketplace.rail.statusComplete": "Rail complete (demo). Review honesty labels before judging live vs simulated.",
-    "marketplace.rail.honestyFooter": "Mock x402 in UI · Demo MintGate · Demo collateral · Live ProofOfOrigin when source=live",
+    "marketplace.rail.statusMinted":
+      "Valid seal confirmed — MintGate claimed (demo). Lock demo collateral to finish.",
+    "marketplace.rail.statusCompleting":
+      "Valid seal confirmed — completing demo collateral…",
+    "marketplace.rail.statusBlocked":
+      "Blocked — Invalid origin. Mint and demo collateral stay closed.",
+    "marketplace.rail.statusComplete":
+      "Rail complete (demo). Review honesty labels before judging live vs simulated.",
+    "marketplace.rail.honestyFooter":
+      "Mock x402 in UI · Demo MintGate · Demo collateral · Live ProofOfOrigin when source=live",
     "marketplace.rail.step.origin": "Origin seal",
     "marketplace.rail.step.query": "Provenance query (Mock x402)",
     "marketplace.rail.step.mint": "MintGate claim (Demo)",
     "marketplace.rail.step.sealed": "Sealed asset",
     "marketplace.rail.step.collateral": "Demo collateral",
-    "marketplace.rail.blockedNote": "Invalid is permanent proof. MintGate and demo collateral stay closed.",
+    "marketplace.rail.blockedNote":
+      "Invalid is permanent proof. MintGate and demo collateral stay closed.",
     "marketplace.rail.blockedSr": "Blocked",
     "marketplace.rail.invalidToggleOn": "Try an Invalid seal",
     "marketplace.rail.invalidToggleOff": "Back to the Valid demo asset",
     "marketplace.rail.personaToggleOn": "Show DeFi / builder view",
     "marketplace.rail.personaToggleOff": "Exit DeFi / builder view",
-    "marketplace.rail.personaDefiCopy": "DeFi / builder view — show only origin-gated access paths. Finance actions stay demo until a Valid seal exists.",
+    "marketplace.rail.personaDefiCopy":
+      "DeFi / builder view — show only origin-gated access paths. Finance actions stay demo until a Valid seal exists.",
     "marketplace.rail.mockLabel": "Mock x402 — no CSPR moved",
     "marketplace.rail.demoMintLabel": "Demo MintGate",
     "marketplace.rail.lockCta": "Lock demo collateral",
@@ -683,42 +778,53 @@ export const translations = {
     "marketplace.rail.error.query": "Mock x402 query was not confirmed.",
     "marketplace.rail.error.mint": "MintGate demo claim was blocked.",
     "marketplace.rail.error.generic": "Sealed rail demo failed.",
-    "marketplace.rail.mintSummary": "Demo simulated · {count} claims recorded · package {hash}",
+    "marketplace.rail.mintSummary":
+      "Demo simulated · {count} claims recorded · package {hash}",
     "myassets.rail.bannerTitle": "Sealed Market Rail · step 4–5",
-    "myassets.rail.bannerBody": "Claimed demo assets can be locked as demo collateral only when origin is Valid.",
+    "myassets.rail.bannerBody":
+      "Claimed demo assets can be locked as demo collateral only when origin is Valid.",
     "myassets.rail.collateralLabel": "Demo collateral",
     "myassets.rail.lockCta": "Lock demo collateral",
     "myassets.rail.releaseCta": "Release demo collateral",
     "myassets.rail.locking": "Locking…",
     "myassets.rail.releasing": "Releasing…",
-    "myassets.rail.lockDisabledReason": "Locking is disabled — this asset does not have a Valid origin seal.",
+    "myassets.rail.lockDisabledReason":
+      "Locking is disabled — this asset does not have a Valid origin seal.",
     "myassets.rail.lockError": "Unable to lock collateral (demo).",
     "myassets.rail.releaseError": "Unable to release collateral (demo).",
-    "myassets.rail.collateralHonesty": "Demo collateral — not a lending market. No liquidation, no yield, no investment. Eligible only with Valid origin + demo claim.",
+    "myassets.rail.collateralHonesty":
+      "Demo collateral — not a lending market. No liquidation, no yield, no investment. Eligible only with Valid origin + demo claim.",
     "myassets.empty.noAccount.title": "No demo account connected",
-    "myassets.empty.noAccount.hint": "Connect to load a symbolic demo collection with two provenance NFTs — no Marketplace claim required.",
+    "myassets.empty.noAccount.hint":
+      "Connect to load a symbolic demo collection with two provenance NFTs — no Marketplace claim required.",
     "myassets.empty.noAccount.connectCta": "Connect & load demo collection",
     "myassets.empty.noAccount.marketplaceCta": "Open Marketplace (demo)",
     "myassets.empty.noAssets.title": "No claimed representations yet",
-    "myassets.empty.noAssets.hint": "Load the demo collection to preview provenance analytics, or claim your own after Valid proof in Marketplace.",
+    "myassets.empty.noAssets.hint":
+      "Load the demo collection to preview provenance analytics, or claim your own after Valid proof in Marketplace.",
     "myassets.empty.noAssets.loadCta": "Load demo collection (2 assets)",
     "myassets.empty.noAssets.marketplaceCta": "Browse Marketplace (demo)",
-    "myassets.detail.selectPrompt": "Select an asset to view provenance analytics.",
+    "myassets.detail.selectPrompt":
+      "Select an asset to view provenance analytics.",
     "myassets.list.selectHint": "Select an asset",
     "prefs.lang.es": "Español",
-      "marketplace.page.kicker": "Marketplace",
+    "marketplace.page.kicker": "Marketplace",
     "marketplace.page.title": "Provenance Marketplace",
-    "marketplace.page.lead": "Browse verified assets on the map. Select a lot to inspect origin, proof status, and claim options (demo).",
+    "marketplace.page.lead":
+      "Browse verified assets on the map. Select a lot to inspect origin, proof status, and claim options (demo).",
     "marketplace.page.captureNew": "Capture New",
     "marketplace.page.judgeEyebrow": "Judge-ready flow",
     "marketplace.page.fullDemoTitle": "Run Full End-to-End Demo",
-    "marketplace.page.fullDemoLead": "Capture preset → agent decision → paid x402 proof query → MintGate demo claim, ending with the agent payload visible for judges.",
+    "marketplace.page.fullDemoLead":
+      "Capture preset → agent decision → paid x402 proof query → MintGate demo claim, ending with the agent payload visible for judges.",
     "marketplace.page.runDemo": "Run Demo",
     "marketplace.page.fullDemoAria": "Full end-to-end demo",
     "marketplace.page.agentAria": "Agent integration",
     "marketplace.page.agentProvider": "x402 provider",
-    "marketplace.page.agentTitle": "Agents pay Lastre before touching RWA/carbon data.",
-    "marketplace.page.agentBody": "Query verdict, seal match, carbon score, and Casper links before any downstream action.",
+    "marketplace.page.agentTitle":
+      "Agents pay Lastre before touching RWA/carbon data.",
+    "marketplace.page.agentBody":
+      "Query verdict, seal match, carbon score, and Casper links before any downstream action.",
     "marketplace.page.copySnippet": "Copy snippet",
     "marketplace.page.copied": "Copied ✓",
     "marketplace.page.openAgents": "Open /agents",
@@ -730,7 +836,8 @@ export const translations = {
     "marketplace.page.demoSimulated": "Demo simulated",
     "marketplace.page.x402Paid": "x402 paid queries",
     "marketplace.page.demoLotMinted": "Demo LotMinted",
-    "marketplace.page.mintNote": "Live query reads ProofOfOrigin attestations. MintGate events are demo-only for this hackathon. Honesty freeze: Run Demo / x402 simulate = mock facilitator (no CSPR moved). Real testnet CSPR settles only via production API settle path — not this UI button. Proof before token and before finance.",
+    "marketplace.page.mintNote":
+      "Live query reads ProofOfOrigin attestations. MintGate events are demo-only for this hackathon. Honesty freeze: Run Demo / x402 simulate = mock facilitator (no CSPR moved). Real testnet CSPR settles only via production API settle path — not this UI button. Proof before token and before finance.",
     "marketplace.page.searchPlaceholder": "Search assets…",
     "marketplace.page.searchAria": "Search marketplace assets",
     "marketplace.page.assetsAria": "Marketplace assets",
@@ -739,18 +846,23 @@ export const translations = {
     "marketplace.page.legendOriginHint": "(fictional)",
     "marketplace.page.legendAnchor": "Casper on-chain anchor",
     "marketplace.page.legendRoute": "Attestation route (demo)",
-    "marketplace.page.legendNote": "Origins are operator-declared demo coordinates — not GPS tracking or real custody.",
+    "marketplace.page.legendNote":
+      "Origins are operator-declared demo coordinates — not GPS tracking or real custody.",
     "marketplace.page.loadingMap": "Loading map…",
     "marketplace.page.mapAria": "Interactive provenance map",
     "marketplace.page.anchorLabel": "Casper Testnet anchor",
     "marketplace.page.demoStep1.label": "Capture + proof preset",
-    "marketplace.page.demoStep1.detail": "Load the fictional VCS Amazonia carbon proof and confirm the proof-before-token payload.",
+    "marketplace.page.demoStep1.detail":
+      "Load the fictional VCS Amazonia carbon proof and confirm the proof-before-token payload.",
     "marketplace.page.demoStep2.label": "Agent processing",
-    "marketplace.page.demoStep2.detail": "Run the Lastre agent path so the action is decided before the deterministic seal verdict.",
+    "marketplace.page.demoStep2.detail":
+      "Run the Lastre agent path so the action is decided before the deterministic seal verdict.",
     "marketplace.page.demoStep3.label": "Paid x402 query (mock)",
-    "marketplace.page.demoStep3.detail": "Judge path: mock facilitator pays to read provenance (synthetic_receipt). Real CSPR settle is API/CLI only.",
+    "marketplace.page.demoStep3.detail":
+      "Judge path: mock facilitator pays to read provenance (synthetic_receipt). Real CSPR settle is API/CLI only.",
     "marketplace.page.demoStep4.label": "MintGate claim",
-    "marketplace.page.demoStep4.detail": "Mint access requires Valid origin. Demo LotMinted only after seal Valid (Invalid would block).",
+    "marketplace.page.demoStep4.detail":
+      "Mint access requires Valid origin. Demo LotMinted only after seal Valid (Invalid would block).",
     "marketplace.page.viewMyAssets": "View in MyAssets",
     "marketplace.filters.aria": "Marketplace filters",
     "marketplace.filters.category": "Category",
@@ -776,8 +888,10 @@ export const translations = {
     "marketplace.drawer.close": "Close preview",
     "corridor.kicker": "Private corridor",
     "corridor.title": "Proof desk",
-    "corridor.lead": "Seal the lot. Lastre decides Valid or Invalid. The S/A handles metal, logistics, and sale.",
-    "corridor.unlock.lead": "Operator key for this desk. Documents are hashed in the browser — files never go on-chain.",
+    "corridor.lead":
+      "Seal the lot. Lastre decides Valid or Invalid. The S/A handles metal, logistics, and sale.",
+    "corridor.unlock.lead":
+      "Operator key for this desk. Documents are hashed in the browser — files never go on-chain.",
     "corridor.unlock.label": "Operator key",
     "corridor.unlock.submit": "Unlock",
     "corridor.key.short": "Key must be at least 16 characters.",
@@ -791,10 +905,12 @@ export const translations = {
     "corridor.gate.closed": "Gate closed",
     "corridor.evaluate": "Evaluate pack",
     "corridor.hashing": "Hashing in the browser…",
-    "corridor.note": "Payment is not in this screen. Next step: USDT on Liquid, verified by Lastre, never custodied.",
+    "corridor.note":
+      "Payment is not in this screen. Next step: USDT on Liquid, verified by Lastre, never custodied.",
     "corridor.error": "Corridor request failed.",
     "corridor.slot.title": "Mining title",
-    "corridor.slot.title.hint": "PLG / ANM — drop the PDF. Only the SHA-256 is stored.",
+    "corridor.slot.title.hint":
+      "PLG / ANM — drop the PDF. Only the SHA-256 is stored.",
     "corridor.slot.nfe": "Invoice (NF-e)",
     "corridor.slot.nfe.hint": "First-acquisition invoice, hashed locally.",
     "corridor.slot.transport": "Transport",
@@ -803,7 +919,7 @@ export const translations = {
     "corridor.slot.assay.hint": "Independent lab certificate.",
     "corridor.slot.skr": "Vault SKR",
     "corridor.slot.skr.hint": "Safekeeping receipt before any mint.",
-},
+  },
   pt: {
     "nav.overview": "Visão geral",
     "nav.capture": "Captura",
@@ -815,7 +931,8 @@ export const translations = {
     "nav.settings": "Configurações",
     "commands.sealedRail": "Trilho de Mercado Selado",
     "settings.close": "Fechar configurações",
-    "settings.lead": "Aparência, modo do decider, limites operacionais e avisos da demo. Os dados de auditoria resetam quando o servidor API reinicia.",
+    "settings.lead":
+      "Aparência, modo do decider, limites operacionais e avisos da demo. Os dados de auditoria resetam quando o servidor API reinicia.",
     "settings.sections": "Seções de configurações",
     "settings.tab.general": "Geral",
     "settings.tab.decider": "Decider",
@@ -830,18 +947,23 @@ export const translations = {
     "settings.status.persistence": "Persistência",
     "settings.decider.rule": "RuleDecider",
     "settings.decider.llm": "LlmDecider",
-    "settings.decider.hintConnected": "Chave xAI ou OpenRouter detectada no servidor.",
-    "settings.decider.hintFallback": "LLM usa regras — XAI_API_KEY ou OPENROUTER_API_KEY não configurada.",
+    "settings.decider.hintConnected":
+      "Chave xAI ou OpenRouter detectada no servidor.",
+    "settings.decider.hintFallback":
+      "LLM usa regras — XAI_API_KEY ou OPENROUTER_API_KEY não configurada.",
     "settings.decider.saved": "Salvo no servidor API para esta sessão.",
-    "settings.decider.saveError": "Não foi possível salvar a preferência do decider.",
+    "settings.decider.saveError":
+      "Não foi possível salvar a preferência do decider.",
     "settings.limits.title": "Limites conhecidos",
-    "settings.limits.hint": "Usados pelo RuleDecider / triagem LLM antes do pagamento.",
+    "settings.limits.hint":
+      "Usados pelo RuleDecider / triagem LLM antes do pagamento.",
     "settings.limits.parameter": "Parâmetro",
     "settings.limits.range": "Intervalo",
     "settings.limits.mineLat": "Perímetro da mina (lat)",
     "settings.limits.mineLng": "Perímetro da mina (lng)",
     "settings.limits.mass": "Faixa de massa (g)",
-    "settings.persistence.hint": "Log de auditoria e estado on-chain simulado ficam só na memória da API. Reinicie o servidor para resetar. Exporte JSON em Auditoria antes de reiniciar.",
+    "settings.persistence.hint":
+      "Log de auditoria e estado on-chain simulado ficam só na memória da API. Reinicie o servidor para resetar. Exporte JSON em Auditoria antes de reiniciar.",
     "settings.persistence.packageLabel": "URL do pacote Casper",
     "nav.marketplace": "Marketplace",
     "nav.myAssets": "Meus Ativos",
@@ -852,7 +974,8 @@ export const translations = {
     "nav.workspace": "Área de trabalho",
     "nav.suffix": "Console de proveniência",
     "guardrail.demo": "Demo",
-    "guardrail.text": "Dados fictícios · Selo decide veredito · Não é investimento nem venda de token",
+    "guardrail.text":
+      "Dados fictícios · Selo decide veredito · Não é investimento nem venda de token",
     "prefs.menu": "Preferências",
     "session.menu": "Menu da sessão",
     "sidebar.search.label": "Abrir paleta de comandos",
@@ -871,6 +994,7 @@ export const translations = {
     "brand.console": "Lastre Console",
     "brand.name": "Lastre",
     "common.retry": "Tentar novamente",
+    "common.skipContent": "Ir para o conteúdo",
     "common.loadError": "Não foi possível carregar esta seção",
     "common.runBatch": "Executar lote",
     "common.runDemoBatch": "Executar lote demo",
@@ -885,7 +1009,8 @@ export const translations = {
     "common.invalid": "Inválido",
     "journey.aria": "Jornada da prova — da captura ao demo simbólico",
     "journey.kicker": "Prova antes do token",
-    "journey.lead": "Documento físico → selo → ação do agente → veredito → Casper → demo simbólico só após a prova.",
+    "journey.lead":
+      "Documento físico → selo → ação do agente → veredito → Casper → demo simbólico só após a prova.",
     "journey.capture.label": "Captura",
     "journey.capture.hint": "Documento → campos estruturados",
     "journey.seal.label": "Selo",
@@ -902,9 +1027,11 @@ export const translations = {
     "journey.myAssets.hint": "Representações reivindicadas",
     "overview.kicker": "Visão geral",
     "overview.title": "Centro de comando da prova",
-    "overview.lead": "Uma tela para ver a saúde do pipeline, camadas de confiança e o próximo passo.",
+    "overview.lead":
+      "Uma tela para ver a saúde do pipeline, camadas de confiança e o próximo passo.",
     "overview.pipeline.title": "Pipeline demo",
-    "overview.pipeline.subtitle": "Quão longe os ativos fictícios avançaram no console",
+    "overview.pipeline.subtitle":
+      "Quão longe os ativos fictícios avançaram no console",
     "overview.pipeline.lots": "Lotes no catálogo",
     "overview.pipeline.lotsHint": "Ativos capturados ou semeados",
     "overview.pipeline.processed": "Processados",
@@ -912,9 +1039,11 @@ export const translations = {
     "overview.pipeline.sealVerified": "Selo verificado",
     "overview.pipeline.onCasper": "No Casper",
     "overview.pipeline.tokenizable": "Tokenizáveis",
-    "overview.pipeline.empty": "Use Captura ou Processar para popular o pipeline",
+    "overview.pipeline.empty":
+      "Use Captura ou Processar para popular o pipeline",
     "overview.trust.title": "Camadas de confiança (sessão)",
-    "overview.trust.subtitle": "Agente escolhe ação · selo decide veredito · Casper registra a prova",
+    "overview.trust.subtitle":
+      "Agente escolhe ação · selo decide veredito · Casper registra a prova",
     "overview.trust.agentActions": "Ações do agente",
     "overview.trust.sealChecks": "Checagens de selo",
     "overview.trust.empty": "Nenhum registro na sessão ainda",
@@ -923,7 +1052,8 @@ export const translations = {
     "overview.testnet.split": "{valid} válidos · {invalid} inválidos",
     "overview.testnet.splitAria": "Divisão de atestações na testnet",
     "overview.sessionOutcomes": "Resultados da sessão",
-    "overview.sessionEmpty": "Nenhum lote executado ainda. Processar vai popular os gráficos aqui.",
+    "overview.sessionEmpty":
+      "Nenhum lote executado ainda. Processar vai popular os gráficos aqui.",
     "overview.recentActivity": "Atividade recente de prova",
     "overview.lastFive": "Últimos 5 registros",
     "overview.fullAudit": "Log completo de auditoria",
@@ -941,7 +1071,8 @@ export const translations = {
     "overview.trust.validShare": "válidos na sessão",
     "overview.trust.link": "Abrir log de auditoria",
     "overview.progress.title": "Progresso da prova",
-    "overview.progress.subtitle": "Percentual do catálogo que chegou a cada etapa",
+    "overview.progress.subtitle":
+      "Percentual do catálogo que chegou a cada etapa",
     "overview.progress.complete": "do catálogo tokenizável",
     "overview.progress.catalogHint": "{count} de {total} lotes",
     "overview.progress.legend": "Conclusão do pipeline",
@@ -955,32 +1086,38 @@ export const translations = {
     "overview.stats.tokenizable": "Resultados tokenizáveis",
     "overview.stats.tokenizableHint": "{tokenizable} de {processed} · {pct}%",
     "overview.stats.conversion": "{pct}% conversão para tokenizável",
-    "overview.stats.ratioAria": "{tokenizable} tokenizáveis de {processed} processados",
+    "overview.stats.ratioAria":
+      "{tokenizable} tokenizáveis de {processed} processados",
     "overview.stats.onChain": "No Casper",
     "overview.stats.acceptance": "Aceitação testnet",
     "overview.next.aria": "Próximo passo recomendado",
     "overview.next.kicker": "Seu próximo passo",
     "overview.next.start.title": "Comece a jornada da prova",
-    "overview.next.start.lead": "Capture um documento fictício, execute Processar e leia o log de auditoria. O selo decide o veredito.",
+    "overview.next.start.lead":
+      "Capture um documento fictício, execute Processar e leia o log de auditoria. O selo decide o veredito.",
     "overview.next.start.cta": "Começar pela Captura",
     "overview.next.lots.title": "Lotes prontos — execute o lote demo",
     "overview.next.lots.leadStat": "{count} lote(s) na fila.",
-    "overview.next.lots.leadHint": "Processar mostra ação do agente vs veredito do selo para cada um.",
+    "overview.next.lots.leadHint":
+      "Processar mostra ação do agente vs veredito do selo para cada um.",
     "overview.next.lots.cta": "Executar lote demo",
     "overview.next.lots.secondary": "Revisar lotes",
     "overview.next.review.title": "Prova registrada — revise os resultados",
     "overview.next.review.leadStat": "{count} registro(s) na sessão.",
-    "overview.next.review.leadHint": "Linhas inválidas são prova permanente, não erros.",
+    "overview.next.review.leadHint":
+      "Linhas inválidas são prova permanente, não erros.",
     "overview.next.review.cta": "Abrir log de auditoria",
     "overview.next.review.secondary": "Executar outro lote",
     "overview.next.tokenizable.title": "Prova válida — demo simbólico liberado",
     "overview.next.tokenizable.titleShort": "Prova válida",
-    "overview.next.tokenizable.leadStat": "{count} registro(s) tokenizável(is).",
+    "overview.next.tokenizable.leadStat":
+      "{count} registro(s) tokenizável(is).",
     "overview.next.metric.lots": "lotes na fila",
     "overview.next.metric.records": "registros na sessão",
     "overview.next.metric.tokenizable": "tokenizáveis",
     "overview.next.metric.aria": "{value} {unit}",
-    "overview.next.tokenizable.leadHint": "Marketplace e Meus Ativos são camadas demo — após a prova.",
+    "overview.next.tokenizable.leadHint":
+      "Marketplace e Meus Ativos são camadas demo — após a prova.",
     "overview.next.tokenizable.cta": "Abrir Marketplace (demo)",
     "overview.next.tokenizable.secondary": "Meus Ativos",
     "overview.next.report.title": "Relatório de Prova",
@@ -996,11 +1133,14 @@ export const translations = {
     "overview.next.report.check.chain": "Atestação Casper registrada",
     "overview.next.report.check.token": "Resultado tokenizável confirmado",
     "overview.next.hero.start.title": "Jornada da prova",
-    "overview.next.hero.start.lead": "Captura → selo → veredito. Comece com um documento fictício.",
+    "overview.next.hero.start.lead":
+      "Captura → selo → veredito. Comece com um documento fictício.",
     "overview.next.hero.lots.title": "Lote demo pronto",
-    "overview.next.hero.lots.lead": "{count} lote(s) na fila — Processar roda agente vs selo em cada um.",
+    "overview.next.hero.lots.lead":
+      "{count} lote(s) na fila — Processar roda agente vs selo em cada um.",
     "overview.next.hero.review.title": "Sessão registrada",
-    "overview.next.hero.review.lead": "{count} registro(s) na auditoria — inválidos são prova, não erro.",
+    "overview.next.hero.review.lead":
+      "{count} registro(s) na auditoria — inválidos são prova, não erro.",
     "badge.noVerdict": "Sem veredito",
     "badge.attested": "Attestado",
     "badge.pending": "Pendente",
@@ -1019,9 +1159,11 @@ export const translations = {
     "outcome.skipped": "Pulados",
     "outcome.escalated": "Escalados",
     "audit.evidence.title": "Evidências",
-    "audit.evidence.lead": "Itens de prova desta sessão — veredito do selo, decisão do agente e attestation on-chain quando aceito.",
+    "audit.evidence.lead":
+      "Itens de prova desta sessão — veredito do selo, decisão do agente e attestation on-chain quando aceito.",
     "audit.evidence.auditorView": "Visão do auditor",
-    "audit.evidence.context": "Revisão de provas da sessão · dados fictícios de demo",
+    "audit.evidence.context":
+      "Revisão de provas da sessão · dados fictícios de demo",
     "audit.evidence.progress": "Progresso da auditoria",
     "audit.evidence.export": "Exportar",
     "audit.evidence.exporting": "Exportando…",
@@ -1048,22 +1190,29 @@ export const translations = {
     "audit.evidence.onChain.awaiting": "Aguardando",
     "audit.evidence.onChain.viewAttestation": "Ver attestation",
     "audit.evidence.onChain.viewValidSample": "Ver amostra Valid",
-    "audit.evidence.onChain.sessionReceipt": "Recibo de demo/sessão — não está na Casper",
+    "audit.evidence.onChain.sessionReceipt":
+      "Recibo de demo/sessão — não está na Casper",
     "audit.evidence.viewEvidence": "Ver evidência",
     "audit.evidence.owner.rule": "Motor de regras",
     "audit.evidence.owner.llm": "Agente LLM",
-    "audit.evidence.noMatch": "Nenhuma evidência corresponde aos filtros atuais.",
+    "audit.evidence.noMatch":
+      "Nenhuma evidência corresponde aos filtros atuais.",
     "audit.evidence.emptyTitle": "Nenhuma evidência ainda",
-    "audit.evidence.emptyHint": "Capture um documento ou rode um lote em Processar para popular as evidências.",
+    "audit.evidence.emptyHint":
+      "Capture um documento ou rode um lote em Processar para popular as evidências.",
     "audit.evidence.emptyCapture": "Começar pelo Capture",
     "audit.evidence.emptyProcess": "Ir para Processar",
-    "audit.evidence.fromProcess": "Lote concluído — {count} registro(s) nesta sessão. Revise as evidências abaixo.",
-    "audit.evidence.nextStep": "Camadas simbólicas da demo só desbloqueiam após attestation válida.",
+    "audit.evidence.fromProcess":
+      "Lote concluído — {count} registro(s) nesta sessão. Revise as evidências abaixo.",
+    "audit.evidence.nextStep":
+      "Camadas simbólicas da demo só desbloqueiam após attestation válida.",
     "audit.evidence.acceptedCount": "{count} aceitos",
     "audit.evidence.marketplaceCta": "Abrir Marketplace (demo)",
     "escalations.title": "Fila de revisão",
-    "escalations.lead": "Lotes em que o agente escolheu escalate — campos faltando, geo fora do perímetro ou massa fora da faixa. Revise cada caso e decida.",
-    "escalations.principle": "O agente escolheu a ação escalate — não julgou a verdade. Escalar é incerteza legítima encaminhada a um humano. O selo decide Valid ou Invalid.",
+    "escalations.lead":
+      "Lotes em que o agente escolheu escalate — campos faltando, geo fora do perímetro ou massa fora da faixa. Revise cada caso e decida.",
+    "escalations.principle":
+      "O agente escolheu a ação escalate — não julgou a verdade. Escalar é incerteza legítima encaminhada a um humano. O selo decide Valid ou Invalid.",
     "escalations.queueLabel": "Fila de escalações",
     "escalations.table.image": "Prévia",
     "escalations.table.title": "Ativo",
@@ -1086,9 +1235,11 @@ export const translations = {
     "escalations.filters.deciderAll": "Todos os decisores",
     "escalations.filters.shown": "{visible} de {total}",
     "escalations.filters.emptyTitle": "Nenhum caso com estes filtros",
-    "escalations.filters.emptyHint": "Limpe os filtros ou escolha outro tipo para ver a fila.",
+    "escalations.filters.emptyHint":
+      "Limpe os filtros ou escolha outro tipo para ver a fila.",
     "escalations.metrics.pending": "Pendentes de revisão",
-    "escalations.metrics.pendingHint": "Exige decisão humana antes do pagamento",
+    "escalations.metrics.pendingHint":
+      "Exige decisão humana antes do pagamento",
     "escalations.metrics.rule": "Decisões por regra",
     "escalations.metrics.ruleHint": "Decidido pelo RuleDecider",
     "escalations.metrics.llm": "Decisões por LLM",
@@ -1098,7 +1249,8 @@ export const translations = {
     "escalations.kind.missing": "Campo faltando",
     "escalations.kind.review": "Revisão",
     "escalations.item.label": "Caso {index}",
-    "escalations.item.agentNote": "Agente escolheu escalate — ação operacional, não veredito sobre integridade.",
+    "escalations.item.agentNote":
+      "Agente escolheu escalate — ação operacional, não veredito sobre integridade.",
     "escalations.item.reason": "Por que o agente escalou",
     "escalations.item.triggerFields": "Campos que dispararam",
     "escalations.item.actions": "Sua decisão",
@@ -1110,14 +1262,20 @@ export const translations = {
     "escalations.action.overriding": "Aplicando…",
     "escalations.action.discard": "Descartar caso",
     "escalations.action.discarding": "Descartando…",
-    "escalations.feedback.requeued": "{assetId} reconhecido e reenviado ao Processar — resultado: {outcome}.",
-    "escalations.feedback.requeuedStillEscalated": "{assetId} reprocessado mas escalou de novo — ainda na fila para revisão.",
-    "escalations.feedback.discarded": "{assetId} descartado da fila — registrado como skipped.",
-    "escalations.feedback.overriddenPay": "{assetId} sobrescrito para pay — resultado: {outcome}.",
-    "escalations.feedback.overriddenSkip": "{assetId} sobrescrito para skip — registrado como skipped.",
+    "escalations.feedback.requeued":
+      "{assetId} reconhecido e reenviado ao Processar — resultado: {outcome}.",
+    "escalations.feedback.requeuedStillEscalated":
+      "{assetId} reprocessado mas escalou de novo — ainda na fila para revisão.",
+    "escalations.feedback.discarded":
+      "{assetId} descartado da fila — registrado como skipped.",
+    "escalations.feedback.overriddenPay":
+      "{assetId} sobrescrito para pay — resultado: {outcome}.",
+    "escalations.feedback.overriddenSkip":
+      "{assetId} sobrescrito para skip — registrado como skipped.",
     "escalations.feedback.error": "Falha na ação — tente novamente.",
     "escalations.geo.title": "Checagem de perímetro",
-    "escalations.geo.lead": "Limites esperados da mina vs coordenadas declaradas que dispararam a escalação.",
+    "escalations.geo.lead":
+      "Limites esperados da mina vs coordenadas declaradas que dispararam a escalação.",
     "escalations.geo.field": "Campo",
     "escalations.geo.expected": "Perímetro esperado",
     "escalations.geo.declared": "Localização declarada",
@@ -1131,14 +1289,18 @@ export const translations = {
     "escalations.geo.inPerimeter": "Dentro do perímetro",
     "escalations.geo.outPerimeter": "Fora do perímetro",
     "escalations.empty.title": "Nenhuma escalação nesta sessão",
-    "escalations.empty.hint": "Escalar significa que o agente ficou em dúvida e encaminhou o lote a você — não é falha do sistema. Rode o lote demo com LOTE-OUTOFREGION em Processar para popular a fila.",
+    "escalations.empty.hint":
+      "Escalar significa que o agente ficou em dúvida e encaminhou o lote a você — não é falha do sistema. Rode o lote demo com LOTE-OUTOFREGION em Processar para popular a fila.",
     "escalations.empty.cta": "Ir para Processar",
     "process.title": "Rodar lote demo",
-    "process.lead": "O agente escolhe a ação (pagar, pular, escalar). O selo decide Válido ou Inválido.",
-    "process.leadShort": "Selecione os lotes, rode o batch e veja o selo decidir.",
+    "process.lead":
+      "O agente escolhe a ação (pagar, pular, escalar). O selo decide Válido ou Inválido.",
+    "process.leadShort":
+      "Selecione os lotes, rode o batch e veja o selo decidir.",
     "process.config": "Configuração do lote",
     "process.config.kicker": "Configuração",
-    "process.config.llmFootnote": "Modo LLM usa xAI (XAI_API_KEY) ou OpenRouter quando configurado; caso contrário, aplica fallback por regras.",
+    "process.config.llmFootnote":
+      "Modo LLM usa xAI (XAI_API_KEY) ou OpenRouter quando configurado; caso contrário, aplica fallback por regras.",
     "process.decider.kicker": "Decisor",
     "process.decider.ruleShort": "Regra",
     "process.decider.llmShort": "LLM",
@@ -1148,18 +1310,22 @@ export const translations = {
     "process.step2": "Passo 2",
     "process.step3": "Passo 3",
     "process.selectLotsTitle": "Quais lotes entram neste batch?",
-    "process.selectLotsLead": "Clique em cada card para incluir ou excluir. Só os lotes selecionados são processados ao rodar o batch.",
+    "process.selectLotsLead":
+      "Clique em cada card para incluir ou excluir. Só os lotes selecionados são processados ao rodar o batch.",
     "process.selectLotsEmpty": "Selecione ao menos um lote para rodar o batch.",
     "process.toolbar.aria": "Controles do batch",
     "process.runWithCount": "Rodar batch ({count} lotes)",
     "process.queue.title": "{count} lote(s) na fila — aguardando execução",
     "process.queue.waiting": "Aguardando",
-    "process.pipeline.idleLead": "Os resultados aparecem aqui depois que você rodar o batch. Ação do agente e veredito do selo preenchem um lote por vez.",
+    "process.pipeline.idleLead":
+      "Os resultados aparecem aqui depois que você rodar o batch. Ação do agente e veredito do selo preenchem um lote por vez.",
     "process.decider.label": "Como o agente decide",
     "process.decider.ruleLabel": "Regras fixas",
     "process.decider.llmLabel": "IA",
-    "process.decider.ruleTooltip": "Lógica determinística escolhe pagar, pular ou escalar a partir dos metadados — sem modelo de linguagem.",
-    "process.decider.llmTooltip": "Um modelo de linguagem sugere a ação; o selo ainda calcula Válido ou Inválido de forma independente.",
+    "process.decider.ruleTooltip":
+      "Lógica determinística escolhe pagar, pular ou escalar a partir dos metadados — sem modelo de linguagem.",
+    "process.decider.llmTooltip":
+      "Um modelo de linguagem sugere a ação; o selo ainda calcula Válido ou Inválido de forma independente.",
     "process.lotsInBatch": "Lotes no batch",
     "process.progress": "Progresso",
     "process.run": "Rodar batch",
@@ -1183,18 +1349,23 @@ export const translations = {
     "process.expected.skip": "skip esperado",
     "process.expected.escalate": "escalar esperado",
     "process.pipeline.kicker": "Prova ao vivo",
-    "process.stage.lead": "Veja cada lote percorrer o pipeline — ação do agente primeiro, depois o veredito determinístico do selo.",
-    "process.stage.featureTamper": "Lotes adulterados mostram o campo que mudou",
+    "process.stage.lead":
+      "Veja cada lote percorrer o pipeline — ação do agente primeiro, depois o veredito determinístico do selo.",
+    "process.stage.featureTamper":
+      "Lotes adulterados mostram o campo que mudou",
     "process.stage.previewAria": "Prévia do pipeline",
     "process.stage.previewTitle": "Seu batch, visualizado",
-    "process.stage.previewLead": "Cada lote selecionado passa pela ação do agente e depois pelo selo determinístico — uma linha por vez.",
+    "process.stage.previewLead":
+      "Cada lote selecionado passa pela ação do agente e depois pelo selo determinístico — uma linha por vez.",
     "process.stage.previewEmpty": "Selecione lotes para começar.",
     "process.stage.lotCount": "lotes prontos",
     "process.stage.previewAgent": "Agente",
     "process.stage.previewSeal": "Selo",
     "process.stage.previewPlaceholder": "—",
-    "process.stage.previewHint": "Pressione Rodar batch quando estiver pronto — os resultados aparecem ao vivo, não antecipadamente.",
-    "process.stage.inspectLead": "Uma vistoria por vez — ação do agente primeiro, depois o veredito determinístico do selo.",
+    "process.stage.previewHint":
+      "Pressione Rodar batch quando estiver pronto — os resultados aparecem ao vivo, não antecipadamente.",
+    "process.stage.inspectLead":
+      "Uma vistoria por vez — ação do agente primeiro, depois o veredito determinístico do selo.",
     "process.stage.inspectProgress": "Vistoria {current} de {total}",
     "process.stage.inspectComplete": "Todos os {count} lotes vistoriados",
     "process.stage.inspectDone": "Vistoria concluída para este lote.",
@@ -1203,10 +1374,12 @@ export const translations = {
     "process.stage.walkthroughAria": "Passos da vistoria",
     "process.stage.agentStep.scan": "Escaneando payload do artefato…",
     "process.stage.agentStep.metadata": "Conferindo massa e coordenadas…",
-    "process.stage.agentStep.fields": "Comparando campos com o selo de referência…",
+    "process.stage.agentStep.fields":
+      "Comparando campos com o selo de referência…",
     "process.stage.agentStep.tamper": "Sinalizando indicadores de adulteração…",
     "process.stage.agentStep.geo": "Lendo geolocalização contra o perímetro…",
-    "process.stage.agentStep.perimeter": "Fora do perímetro — caminho de escalação…",
+    "process.stage.agentStep.perimeter":
+      "Fora do perímetro — caminho de escalação…",
     "process.stage.agentStep.duplicate": "Verificando histórico de atestação…",
     "process.stage.agentStep.decide": "Escolhendo ação operacional…",
     "process.flow.aria": "Fluxo de vistoria ao vivo",
@@ -1216,13 +1389,15 @@ export const translations = {
     "process.flow.upcoming": "A seguir",
     "process.flow.checklist.aria": "Passos da vistoria do agente",
     "process.flow.checklist.seal": "Verificação do selo",
-    "process.pipeline.lead": "Cada card mostra a ação operacional do agente ao lado do veredito determinístico do selo.",
+    "process.pipeline.lead":
+      "Cada card mostra a ação operacional do agente ao lado do veredito determinístico do selo.",
     "process.pipeline.principleAgent": "Agente escolhe a ação",
     "process.pipeline.principleSeal": "Selo decide o veredito",
     "process.pipeline.colLot": "Lote",
     "process.pipeline.fetching": "Rodando batch…",
     "process.pipeline.revealing": "Revelando resultados…",
-    "process.pipeline.idleHint": "Pressione Rodar batch à esquerda para iniciar.",
+    "process.pipeline.idleHint":
+      "Pressione Rodar batch à esquerda para iniciar.",
     "process.pipeline.previewAgent": "—",
     "process.pipeline.previewSeal": "—",
     "process.pipeline.previewMode": "Prévia",
@@ -1237,8 +1412,10 @@ export const translations = {
     "process.pipeline.sealComputing": "Calculando selo…",
     "process.selectAll": "Selecionar todos",
     "process.selectNone": "Limpar",
-    "process.pipeline.empty": "Rode o batch para ver cada lote processar — ação do agente à esquerda, veredito do selo à direita.",
-    "process.pipeline.emptySelection": "Selecione ao menos um lote para pré-visualizar o pipeline.",
+    "process.pipeline.empty":
+      "Rode o batch para ver cada lote processar — ação do agente à esquerda, veredito do selo à direita.",
+    "process.pipeline.emptySelection":
+      "Selecione ao menos um lote para pré-visualizar o pipeline.",
     "process.pipeline.agentColumn": "Ação do agente",
     "process.pipeline.sealColumn": "Veredito do selo",
     "process.pipeline.agentHint": "Operacional — pagar, pular ou escalar",
@@ -1249,15 +1426,18 @@ export const translations = {
     "process.pipeline.decidedByRule": "Motor de regras",
     "process.pipeline.decidedByLlm": "Agente LLM",
     "process.pipeline.sealHash": "Selo",
-    "process.pipeline.invalidProof": "Inválido é prova permanente de adulteração — não é falha do sistema.",
+    "process.pipeline.invalidProof":
+      "Inválido é prova permanente de adulteração — não é falha do sistema.",
     "process.seal.notInvoked": "Selo não invocado",
-    "process.seal.notInvokedHint": "Sem pagamento — o selo determinístico não foi executado para esta ação.",
+    "process.seal.notInvokedHint":
+      "Sem pagamento — o selo determinístico não foi executado para esta ação.",
     "process.card.pending": "Pendente",
     "process.card.running": "Processando",
     "process.card.done": "Concluído",
     "process.tamperDiff.title": "Campo alterado",
     "process.tamperDiff.aria": "Comparação do campo adulterado",
-    "process.tamperDiff.note": "O selo de referência foi calculado com o valor original; o artefato atual diverge.",
+    "process.tamperDiff.note":
+      "O selo de referência foi calculado com o valor original; o artefato atual diverge.",
     "process.summary.title": "Placar do batch",
     "process.summary.aria": "Resumo dos desfechos do batch",
     "process.summary.tokenizable": "Tokenizável",
@@ -1266,7 +1446,8 @@ export const translations = {
     "process.summary.escalated": "Escalado",
     "process.projection.title": "Projeções do pipeline de prova",
     "process.projection.kicker": "Estimativa ao vivo",
-    "process.projection.subtitle": "Camadas de prova acumuladas nos lotes demo selecionados — atualiza conforme o lote roda.",
+    "process.projection.subtitle":
+      "Camadas de prova acumuladas nos lotes demo selecionados — atualiza conforme o lote roda.",
     "process.projection.legendAria": "Legenda do gráfico",
     "process.projection.band": "Faixa de confiança",
     "process.projection.high": "Estimativa alta",
@@ -1288,15 +1469,19 @@ export const translations = {
     "process.projection.lot.duplicate": "Duplicado",
     "process.projection.lot.escalate": "Escalado",
     "process.projection.onChainToggle": "Mostrar camada on-chain",
-    "process.projection.disclaimer": "Estimativa demo aproximada — o selo decide cada veredito; linhas Invalid são prova permanente.",
-    "process.projection.emptyTitle": "Selecione lotes para pré-visualizar o pipeline",
-    "process.projection.emptyHint": "Escolha um ou mais lotes demo e rode o lote para ver as camadas de prova acumularem ao vivo.",
+    "process.projection.disclaimer":
+      "Estimativa demo aproximada — o selo decide cada veredito; linhas Invalid são prova permanente.",
+    "process.projection.emptyTitle":
+      "Selecione lotes para pré-visualizar o pipeline",
+    "process.projection.emptyHint":
+      "Escolha um ou mais lotes demo e rode o lote para ver as camadas de prova acumularem ao vivo.",
     "process.projection.chartAria": "Projeção de prova para {count} lotes",
     "process.projection.markerTamper": "Adulteração detectada",
     "process.projection.markerLot": "Lote processado",
     "process.projection.markerBatch": "Lote concluído",
     "onboarding.auth.title": "Prova de proveniência, antes de qualquer token.",
-    "onboarding.auth.subtitle": "Entre para explorar o console demo — dados fictícios apenas.",
+    "onboarding.auth.subtitle":
+      "Entre para explorar o console demo — dados fictícios apenas.",
     "onboarding.auth.badge": "Demo · dados fictícios · não é investimento",
     "onboarding.auth.google": "Continuar com Google",
     "onboarding.auth.emailLink": "Continuar com e-mail",
@@ -1305,49 +1490,63 @@ export const translations = {
     "onboarding.auth.dividerOr": "ou",
     "onboarding.auth.footnote": "Ambiente demo — nenhuma conta real é criada.",
     "onboarding.visual.eyebrow": "Prova antes do token",
-    "onboarding.visual.quote": "Origem física, selada on-chain — nada muda sem rastro.",
+    "onboarding.visual.quote":
+      "Origem física, selada on-chain — nada muda sem rastro.",
     "onboarding.welcome.title": "Bem-vinda à Lastre.",
     "onboarding.welcome.kicker": "Uma pergunta só",
-    "onboarding.welcome.subtitle": "Provamos que um documento de origem é íntegro — e nada mudou nele. Primeiro a prova, depois qualquer token.",
+    "onboarding.welcome.subtitle":
+      "Provamos que um documento de origem é íntegro — e nada mudou nele. Primeiro a prova, depois qualquer token.",
     "onboarding.welcome.aria": "Escolha seu caminho na demo",
     "onboarding.welcome.judge.title": "Quero avaliar a tecnologia",
-    "onboarding.welcome.judge.lead": "Rode a demo em ~60s e veja o selo decidir.",
+    "onboarding.welcome.judge.lead":
+      "Rode a demo em ~60s e veja o selo decidir.",
     "onboarding.welcome.judge.badge": "Recomendado",
     "onboarding.welcome.operator.title": "Quero registrar um lote",
     "onboarding.welcome.operator.lead": "Capture um documento e gere seu selo.",
     "onboarding.welcome.explore": "Só quero explorar",
     "onboarding.judge.kicker": "Demo de 60 segundos",
     "onboarding.judge.title": "Rode a demo em 60 segundos",
-    "onboarding.judge.lead": "Processe 4 lotes e veja o selo decidir cada veredito.",
+    "onboarding.judge.lead":
+      "Processe 4 lotes e veja o selo decidir cada veredito.",
     "onboarding.judge.cta": "Rodar agora",
-    "onboarding.capture.demoTip": "Exemplo demo carregado. Gere o selo ou edite os campos.",
+    "onboarding.capture.demoTip":
+      "Exemplo demo carregado. Gere o selo ou edite os campos.",
     "onboarding.capture.demoCta": "Gerar Passaporte + Selo",
     "capture.wizard.trigger": "Novo lote",
     "capture.wizard.kicker": "Captura de proveniência",
     "capture.wizard.title": "Registrar lote",
-    "capture.wizard.lead": "Dados estruturados → documento → selo SHA-256. O selo decide o veredito — não o agente.",
+    "capture.wizard.lead":
+      "Dados estruturados → documento → selo SHA-256. O selo decide o veredito — não o agente.",
     "capture.wizard.progress": "Etapa {current} de {total}",
     "capture.wizard.section.quickStart": "Início rápido",
-    "capture.wizard.section.quickStartHint": "Carregue dados demo para explorar resultados Valid ou Invalid.",
+    "capture.wizard.section.quickStartHint":
+      "Carregue dados demo para explorar resultados Valid ou Invalid.",
     "capture.wizard.section.identity": "Identidade",
-    "capture.wizard.section.identityHint": "Quem registrou o lote e como ele aparece na fila.",
+    "capture.wizard.section.identityHint":
+      "Quem registrou o lote e como ele aparece na fila.",
     "capture.wizard.section.origin": "Origem",
-    "capture.wizard.section.originHint": "Âncora geográfica e horário de captura — entram no selo.",
+    "capture.wizard.section.originHint":
+      "Âncora geográfica e horário de captura — entram no selo.",
     "capture.wizard.section.asset": "Detalhes do ativo",
-    "capture.wizard.section.assetHint": "Quantidade e campos do certificado que alimentam o selo SHA-256.",
+    "capture.wizard.section.assetHint":
+      "Quantidade e campos do certificado que alimentam o selo SHA-256.",
     "capture.wizard.section.document": "Captura do documento",
-    "capture.wizard.mediaEmpty": "Nenhum documento ainda — inicie a câmera ou envie um arquivo.",
+    "capture.wizard.mediaEmpty":
+      "Nenhum documento ainda — inicie a câmera ou envie um arquivo.",
     "capture.wizard.close": "Fechar assistente de captura",
     "capture.wizard.stepperAria": "Progresso da captura",
     "capture.wizard.step1.label": "Dados",
     "capture.wizard.step2.label": "Documento",
     "capture.wizard.step3.label": "Passaporte",
     "capture.wizard.step1.heading": "Dados do lote",
-    "capture.wizard.step1.hint": "Escolha o tipo e preencha os campos validados. O selo é calculado a partir deles.",
+    "capture.wizard.step1.hint":
+      "Escolha o tipo e preencha os campos validados. O selo é calculado a partir deles.",
     "capture.wizard.step2.heading": "Capturar documento",
-    "capture.wizard.step2.hint": "Fotografe ou envie o certificado. Isso gera um frame hash — separado do selo.",
+    "capture.wizard.step2.hint":
+      "Fotografe ou envie o certificado. Isso gera um frame hash — separado do selo.",
     "capture.wizard.step3.heading": "Passaporte + selo",
-    "capture.wizard.step3.hint": "Revise o cartão credencial. A foto não altera o selo.",
+    "capture.wizard.step3.hint":
+      "Revise o cartão credencial. A foto não altera o selo.",
     "capture.wizard.presetValid": "Demo carbono Valid",
     "capture.wizard.presetInvalid": "Demo lote adulterado",
     "capture.wizard.field.category": "Categoria",
@@ -1370,10 +1569,13 @@ export const translations = {
     "capture.wizard.error.range": "Fora do intervalo válido",
     "capture.wizard.error.positive": "Deve ser maior que zero",
     "capture.wizard.cameraActive": "Câmera ativa — aponte para o documento.",
-    "capture.wizard.cameraDenied": "Câmera indisponível. Use upload de arquivo.",
-    "capture.wizard.photoCaptured": "Foto capturada. Continue para gerar o passaporte.",
+    "capture.wizard.cameraDenied":
+      "Câmera indisponível. Use upload de arquivo.",
+    "capture.wizard.photoCaptured":
+      "Foto capturada. Continue para gerar o passaporte.",
     "capture.wizard.documentUploaded": "Documento enviado.",
-    "capture.wizard.needDocument": "Capture ou envie um documento antes de continuar.",
+    "capture.wizard.needDocument":
+      "Capture ou envie um documento antes de continuar.",
     "capture.wizard.startCamera": "Iniciar câmera",
     "capture.wizard.capturePhoto": "Capturar foto",
     "capture.wizard.uploadFile": "Enviar arquivo",
@@ -1389,14 +1591,16 @@ export const translations = {
     "capture.wizard.noPhoto": "Sem preview",
     "capture.wizard.passportTitle": "Passaporte Lastre",
     "capture.wizard.sealLabel": "Selo (SHA-256)",
-    "capture.wizard.passportFoot": "Determinístico. Verificável. Prova antes do token.",
+    "capture.wizard.passportFoot":
+      "Determinístico. Verificável. Prova antes do token.",
     "capture.wizard.autoProcess": "Auto-processar após envio (rule decider)",
     "capture.wizard.next": "Continuar",
     "capture.wizard.back": "Voltar",
     "capture.wizard.submit": "Enviar para a fila",
     "capture.wizard.submitError": "Falha no envio: {message}",
     "capture.wizard.success.title": "Lote enfileirado",
-    "capture.wizard.success.lead": "Passaporte selado e prova registrada. Abra o lote para ver a evidência antes de qualquer camada simbólica.",
+    "capture.wizard.success.lead":
+      "Passaporte selado e prova registrada. Abra o lote para ver a evidência antes de qualquer camada simbólica.",
     "capture.wizard.success.lot": "Abrir evidência do lote",
     "capture.wizard.success.process": "Reprocessar em Processar",
     "capture.wizard.success.audit": "Abrir log de auditoria",
@@ -1409,14 +1613,17 @@ export const translations = {
     "onboarding.checklist.batch": "Rodar o primeiro lote",
     "onboarding.checklist.batchHint": "Veja o agente decidir em quatro lotes",
     "onboarding.checklist.invalid": "Ver um veredito Invalid",
-    "onboarding.checklist.invalidHint": "Entenda um veredito Invalid na evidência",
+    "onboarding.checklist.invalidHint":
+      "Entenda um veredito Invalid na evidência",
     "onboarding.checklist.casper": "Conferir a prova no Casper",
     "onboarding.checklist.casperHint": "Confira a atestação no Casper",
     "onboarding.checklist.marketplace": "Ver a camada simbólica",
-    "onboarding.checklist.marketplaceHint": "Veja a camada simbólica dos ativos",
+    "onboarding.checklist.marketplaceHint":
+      "Veja a camada simbólica dos ativos",
     "onboarding.checklist.completeAria": "Tour concluído",
     "onboarding.checklist.completeTitle": "Fluxo completo",
-    "onboarding.checklist.completeLead": "Captura, veredito, prova e mercado — você percorreu o ciclo inteiro.",
+    "onboarding.checklist.completeLead":
+      "Captura, veredito, prova e mercado — você percorreu o ciclo inteiro.",
     "onboarding.checklist.completeArc": "Captura → Veredito → Prova → Mercado",
     "onboarding.checklist.dismiss": "Fechar tour",
     "onboarding.checklist.reopen": "Reabrir tour guiado",
@@ -1426,11 +1633,15 @@ export const translations = {
     "onboarding.persona.explorer": "Explorar livremente",
     "guardrail.session": "Recarregar limpa os dados da demo.",
     "chain.title": "Registro de prova no Casper",
-    "chain.lead": "Snapshot somente leitura das atestações na testnet Casper. Registros inválidos permanecem on-chain — prova permanente de adulteração.",
-    "chain.immutable": "Gravado no Casper. Uma vez registrado, ninguém apaga — nem os inválidos.",
-    "chain.sessionNotice": "Registros desta sessão. Recarregar limpa os dados da demonstração.",
+    "chain.lead":
+      "Snapshot somente leitura das atestações na testnet Casper. Registros inválidos permanecem on-chain — prova permanente de adulteração.",
+    "chain.immutable":
+      "Gravado no Casper. Uma vez registrado, ninguém apaga — nem os inválidos.",
+    "chain.sessionNotice":
+      "Registros desta sessão. Recarregar limpa os dados da demonstração.",
     "chain.source.live": "Snapshot ao vivo",
-    "chain.source.fallback": "Dados de fallback — snapshot ao vivo indisponível",
+    "chain.source.fallback":
+      "Dados de fallback — snapshot ao vivo indisponível",
     "chain.technical.toggle": "Ver detalhe técnico",
     "chain.technical.contract": "Contrato",
     "chain.technical.network": "Rede",
@@ -1438,10 +1649,13 @@ export const translations = {
     "chain.technical.packageUrl": "URL do pacote",
     "chain.technical.fetched": "Consultado em",
     "chain.group.session": "Nesta sessão",
-    "chain.group.sessionHint": "Atestações geradas por lotes rodados nesta sessão de demonstração.",
-    "chain.group.sessionEmpty": "Nenhuma atestação nesta sessão. Rode um lote em Processar para registrar prova.",
+    "chain.group.sessionHint":
+      "Atestações geradas por lotes rodados nesta sessão de demonstração.",
+    "chain.group.sessionEmpty":
+      "Nenhuma atestação nesta sessão. Rode um lote em Processar para registrar prova.",
     "chain.group.history": "Histórico on-chain",
-    "chain.group.historyHint": "Atestações permanentes já gravadas na testnet Casper.",
+    "chain.group.historyHint":
+      "Atestações permanentes já gravadas na testnet Casper.",
     "chain.group.noMatch": "Nenhuma atestação corresponde ao filtro atual.",
     "chain.filter.aria": "Filtrar atestações por veredito",
     "chain.filter.all": "Todos",
@@ -1450,34 +1664,44 @@ export const translations = {
     "chain.timeline.copied": "Copiado",
     "chain.timeline.copySeal": "Copiar hash do selo on-chain",
     "chain.timeline.viewAttestation": "Ver attestation",
-    "chain.timeline.sessionReceipt": "Recibo de demo/sessão — não está na Casper",
+    "chain.timeline.sessionReceipt":
+      "Recibo de demo/sessão — não está na Casper",
     "chain.empty.title": "Nenhuma prova nesta sessão",
-    "chain.empty.hint": "A Cadeia mostra atestações permanentes no Casper. Rode um lote de demonstração para registrar sua primeira prova nesta sessão.",
+    "chain.empty.hint":
+      "A Cadeia mostra atestações permanentes no Casper. Rode um lote de demonstração para registrar sua primeira prova nesta sessão.",
     "chain.empty.cta": "Rodar lote demo",
     "chain.metrics.aria": "Contagem de atestações da sessão",
     "marketplace.rail.title": "Trilho de Mercado Selado",
-    "marketplace.rail.subtitle": "Caminho com trava de origem: selo Valid → claim MintGate → colateral demo.",
+    "marketplace.rail.subtitle":
+      "Caminho com trava de origem: selo Valid → claim MintGate → colateral demo.",
     "marketplace.rail.btnPrimary": "Rodar demo do Trilho Selado",
     "marketplace.rail.btnSecondary": "Abrir My Assets",
     "marketplace.rail.running": "Rodando…",
     "marketplace.rail.statusIdle": "Comece com um selo de origem Valid.",
-    "marketplace.rail.statusMinted": "Selo Valid confirmado — MintGate reivindicado (demo). Trave o colateral demo para concluir.",
-    "marketplace.rail.statusCompleting": "Selo Valid confirmado — concluindo o colateral demo…",
-    "marketplace.rail.statusBlocked": "Bloqueado — origem Invalid. Mint e colateral demo permanecem fechados.",
-    "marketplace.rail.statusComplete": "Trilho completo (demo). Revise os selos de honesty antes de julgar live vs simulado.",
-    "marketplace.rail.honestyFooter": "x402 mock na UI · MintGate demo · Colateral demo · ProofOfOrigin live quando source=live",
+    "marketplace.rail.statusMinted":
+      "Selo Valid confirmado — MintGate reivindicado (demo). Trave o colateral demo para concluir.",
+    "marketplace.rail.statusCompleting":
+      "Selo Valid confirmado — concluindo o colateral demo…",
+    "marketplace.rail.statusBlocked":
+      "Bloqueado — origem Invalid. Mint e colateral demo permanecem fechados.",
+    "marketplace.rail.statusComplete":
+      "Trilho completo (demo). Revise os selos de honesty antes de julgar live vs simulado.",
+    "marketplace.rail.honestyFooter":
+      "x402 mock na UI · MintGate demo · Colateral demo · ProofOfOrigin live quando source=live",
     "marketplace.rail.step.origin": "Selo de origem",
     "marketplace.rail.step.query": "Consulta de proveniência (x402 mock)",
     "marketplace.rail.step.mint": "Claim MintGate (Demo)",
     "marketplace.rail.step.sealed": "Ativo selado",
     "marketplace.rail.step.collateral": "Colateral demo",
-    "marketplace.rail.blockedNote": "Inválido é prova permanente. MintGate e colateral demo permanecem fechados.",
+    "marketplace.rail.blockedNote":
+      "Inválido é prova permanente. MintGate e colateral demo permanecem fechados.",
     "marketplace.rail.blockedSr": "Bloqueado",
     "marketplace.rail.invalidToggleOn": "Testar um selo Invalid",
     "marketplace.rail.invalidToggleOff": "Voltar ao ativo demo Valid",
     "marketplace.rail.personaToggleOn": "Mostrar visão DeFi / builder",
     "marketplace.rail.personaToggleOff": "Sair da visão DeFi / builder",
-    "marketplace.rail.personaDefiCopy": "Visão DeFi / builder — mostra só caminhos com trava de origem. Ações financeiras permanecem demo até existir selo Valid.",
+    "marketplace.rail.personaDefiCopy":
+      "Visão DeFi / builder — mostra só caminhos com trava de origem. Ações financeiras permanecem demo até existir selo Valid.",
     "marketplace.rail.mockLabel": "x402 mock — nenhum CSPR movido",
     "marketplace.rail.demoMintLabel": "MintGate demo",
     "marketplace.rail.lockCta": "Travar colateral demo",
@@ -1486,42 +1710,54 @@ export const translations = {
     "marketplace.rail.error.query": "Consulta x402 mock não foi confirmada.",
     "marketplace.rail.error.mint": "Claim demo do MintGate foi bloqueado.",
     "marketplace.rail.error.generic": "Demo do trilho selado falhou.",
-    "marketplace.rail.mintSummary": "Demo simulado · {count} claims registrados · pacote {hash}",
+    "marketplace.rail.mintSummary":
+      "Demo simulado · {count} claims registrados · pacote {hash}",
     "myassets.rail.bannerTitle": "Trilho de Mercado Selado · passo 4–5",
-    "myassets.rail.bannerBody": "Ativos demo reivindicados só podem ser travados como colateral demo quando a origem é Valid.",
+    "myassets.rail.bannerBody":
+      "Ativos demo reivindicados só podem ser travados como colateral demo quando a origem é Valid.",
     "myassets.rail.collateralLabel": "Colateral demo",
     "myassets.rail.lockCta": "Travar colateral demo",
     "myassets.rail.releaseCta": "Liberar colateral demo",
     "myassets.rail.locking": "Travando…",
     "myassets.rail.releasing": "Liberando…",
-    "myassets.rail.lockDisabledReason": "Travar está desabilitado — este ativo não tem selo de origem Valid.",
+    "myassets.rail.lockDisabledReason":
+      "Travar está desabilitado — este ativo não tem selo de origem Valid.",
     "myassets.rail.lockError": "Não foi possível travar o colateral (demo).",
-    "myassets.rail.releaseError": "Não foi possível liberar o colateral (demo).",
-    "myassets.rail.collateralHonesty": "Colateral demo — não é mercado de crédito. Sem liquidação, sem rendimento, sem investimento. Elegível só com origem Valid + claim demo.",
+    "myassets.rail.releaseError":
+      "Não foi possível liberar o colateral (demo).",
+    "myassets.rail.collateralHonesty":
+      "Colateral demo — não é mercado de crédito. Sem liquidação, sem rendimento, sem investimento. Elegível só com origem Valid + claim demo.",
     "myassets.empty.noAccount.title": "Nenhuma conta demo conectada",
-    "myassets.empty.noAccount.hint": "Conecte para carregar uma coleção demo simbólica com dois NFTs de proveniência — sem precisar de claim no Marketplace.",
+    "myassets.empty.noAccount.hint":
+      "Conecte para carregar uma coleção demo simbólica com dois NFTs de proveniência — sem precisar de claim no Marketplace.",
     "myassets.empty.noAccount.connectCta": "Conectar e carregar coleção demo",
     "myassets.empty.noAccount.marketplaceCta": "Abrir Marketplace (demo)",
     "myassets.empty.noAssets.title": "Nenhuma representação reivindicada ainda",
-    "myassets.empty.noAssets.hint": "Carregue a coleção demo para pré-visualizar as análises de proveniência, ou reivindique a sua após prova Valid no Marketplace.",
+    "myassets.empty.noAssets.hint":
+      "Carregue a coleção demo para pré-visualizar as análises de proveniência, ou reivindique a sua após prova Valid no Marketplace.",
     "myassets.empty.noAssets.loadCta": "Carregar coleção demo (2 ativos)",
     "myassets.empty.noAssets.marketplaceCta": "Explorar Marketplace (demo)",
-    "myassets.detail.selectPrompt": "Selecione um ativo para ver as análises de proveniência.",
+    "myassets.detail.selectPrompt":
+      "Selecione um ativo para ver as análises de proveniência.",
     "myassets.list.selectHint": "Selecione o ativo",
     "prefs.lang.es": "Español",
-      "marketplace.page.kicker": "Marketplace",
+    "marketplace.page.kicker": "Marketplace",
     "marketplace.page.title": "Marketplace de proveniência",
-    "marketplace.page.lead": "Explore ativos verificados no mapa. Selecione um lote para inspecionar origem, status da prova e opções de claim (demo).",
+    "marketplace.page.lead":
+      "Explore ativos verificados no mapa. Selecione um lote para inspecionar origem, status da prova e opções de claim (demo).",
     "marketplace.page.captureNew": "Capturar novo",
     "marketplace.page.judgeEyebrow": "Fluxo pronto para júri",
     "marketplace.page.fullDemoTitle": "Rodar demo ponta a ponta",
-    "marketplace.page.fullDemoLead": "Preset de captura → decisão do agente → query x402 paga → claim MintGate demo, com payload do agente visível para o júri.",
+    "marketplace.page.fullDemoLead":
+      "Preset de captura → decisão do agente → query x402 paga → claim MintGate demo, com payload do agente visível para o júri.",
     "marketplace.page.runDemo": "Rodar demo",
     "marketplace.page.fullDemoAria": "Demo ponta a ponta completa",
     "marketplace.page.agentAria": "Integração de agentes",
     "marketplace.page.agentProvider": "Provedor x402",
-    "marketplace.page.agentTitle": "Agentes pagam a Lastre antes de tocar dados de RWA/carbono.",
-    "marketplace.page.agentBody": "Consulte veredito, match do selo, score de carbono e links Casper antes de qualquer ação downstream.",
+    "marketplace.page.agentTitle":
+      "Agentes pagam a Lastre antes de tocar dados de RWA/carbono.",
+    "marketplace.page.agentBody":
+      "Consulte veredito, match do selo, score de carbono e links Casper antes de qualquer ação downstream.",
     "marketplace.page.copySnippet": "Copiar snippet",
     "marketplace.page.copied": "Copiado ✓",
     "marketplace.page.openAgents": "Abrir /agents",
@@ -1533,7 +1769,8 @@ export const translations = {
     "marketplace.page.demoSimulated": "Demo simulada",
     "marketplace.page.x402Paid": "queries x402 pagas",
     "marketplace.page.demoLotMinted": "Demo LotMinted",
-    "marketplace.page.mintNote": "A query ao vivo lê atestações ProofOfOrigin. Eventos MintGate são só demo neste hackathon. Congelamento de honestidade: Run Demo / x402 simulate = facilitador mock (sem CSPR). CSPR real no testnet só via settle da API de produção — não este botão. Prova antes do token e antes da finança.",
+    "marketplace.page.mintNote":
+      "A query ao vivo lê atestações ProofOfOrigin. Eventos MintGate são só demo neste hackathon. Congelamento de honestidade: Run Demo / x402 simulate = facilitador mock (sem CSPR). CSPR real no testnet só via settle da API de produção — não este botão. Prova antes do token e antes da finança.",
     "marketplace.page.searchPlaceholder": "Buscar ativos…",
     "marketplace.page.searchAria": "Buscar ativos do marketplace",
     "marketplace.page.assetsAria": "Ativos do marketplace",
@@ -1542,18 +1779,23 @@ export const translations = {
     "marketplace.page.legendOriginHint": "(fictícia)",
     "marketplace.page.legendAnchor": "Âncora on-chain Casper",
     "marketplace.page.legendRoute": "Rota de atestação (demo)",
-    "marketplace.page.legendNote": "Origens são coordenadas demo declaradas pelo operador — não GPS real nem custódia.",
+    "marketplace.page.legendNote":
+      "Origens são coordenadas demo declaradas pelo operador — não GPS real nem custódia.",
     "marketplace.page.loadingMap": "Carregando mapa…",
     "marketplace.page.mapAria": "Mapa interativo de proveniência",
     "marketplace.page.anchorLabel": "Âncora Casper Testnet",
     "marketplace.page.demoStep1.label": "Captura + preset de prova",
-    "marketplace.page.demoStep1.detail": "Carrega a prova fictícia de carbono VCS Amazônia e confirma o payload proof-before-token.",
+    "marketplace.page.demoStep1.detail":
+      "Carrega a prova fictícia de carbono VCS Amazônia e confirma o payload proof-before-token.",
     "marketplace.page.demoStep2.label": "Processamento do agente",
-    "marketplace.page.demoStep2.detail": "Roda o caminho do agente Lastre para a ação ser decidida antes do veredito determinístico do selo.",
+    "marketplace.page.demoStep2.detail":
+      "Roda o caminho do agente Lastre para a ação ser decidida antes do veredito determinístico do selo.",
     "marketplace.page.demoStep3.label": "Query x402 paga (mock)",
-    "marketplace.page.demoStep3.detail": "Caminho do júri: facilitador mock paga para ler proveniência (synthetic_receipt). Settle real de CSPR só via API/CLI.",
+    "marketplace.page.demoStep3.detail":
+      "Caminho do júri: facilitador mock paga para ler proveniência (synthetic_receipt). Settle real de CSPR só via API/CLI.",
     "marketplace.page.demoStep4.label": "Claim MintGate",
-    "marketplace.page.demoStep4.detail": "Mint exige origem Valid. Demo LotMinted só após selo Valid (Invalid bloqueia).",
+    "marketplace.page.demoStep4.detail":
+      "Mint exige origem Valid. Demo LotMinted só após selo Valid (Invalid bloqueia).",
     "marketplace.page.viewMyAssets": "Ver em Meus Ativos",
     "marketplace.filters.aria": "Filtros do marketplace",
     "marketplace.filters.category": "Categoria",
@@ -1579,8 +1821,10 @@ export const translations = {
     "marketplace.drawer.close": "Fechar preview",
     "corridor.kicker": "Corridor privado",
     "corridor.title": "Mesa de prova",
-    "corridor.lead": "Sela o lote. A Lastre decide Valid ou Invalid. A S/A toca metal, logística e venda.",
-    "corridor.unlock.lead": "Chave de operador desta mesa. Documentos são hasheados no navegador — o arquivo não vai on-chain.",
+    "corridor.lead":
+      "Sela o lote. A Lastre decide Valid ou Invalid. A S/A toca metal, logística e venda.",
+    "corridor.unlock.lead":
+      "Chave de operador desta mesa. Documentos são hasheados no navegador — o arquivo não vai on-chain.",
     "corridor.unlock.label": "Chave de operador",
     "corridor.unlock.submit": "Desbloquear",
     "corridor.key.short": "A chave precisa ter pelo menos 16 caracteres.",
@@ -1594,7 +1838,8 @@ export const translations = {
     "corridor.gate.closed": "Gate fechado",
     "corridor.evaluate": "Avaliar pacote",
     "corridor.hashing": "Calculando hash no navegador…",
-    "corridor.note": "Pagamento não entra nesta tela. Próximo passo: USDT na Liquid, verificado pela Lastre, sem custódia.",
+    "corridor.note":
+      "Pagamento não entra nesta tela. Próximo passo: USDT na Liquid, verificado pela Lastre, sem custódia.",
     "corridor.error": "Falha no corridor privado.",
     "corridor.slot.title": "Título minerário",
     "corridor.slot.title.hint": "PLG / ANM — solte o PDF. Só o SHA-256 fica.",
@@ -1606,7 +1851,7 @@ export const translations = {
     "corridor.slot.assay.hint": "Certificado de laboratório independente.",
     "corridor.slot.skr": "SKR do vault",
     "corridor.slot.skr.hint": "Recibo de custódia antes de qualquer mint.",
-},
+  },
   es: {
     "nav.overview": "Descripción general",
     "nav.capture": "Capturar",
@@ -1618,7 +1863,8 @@ export const translations = {
     "nav.settings": "Configuración",
     "commands.sealedRail": "Carril de mercado sellado",
     "settings.close": "Cerrar configuración",
-    "settings.lead": "Apariencia, modo de decisión, límites operativos y barreras de seguridad de demostración. Los datos de auditoría se restablecen cuando se reinicia el servidor API.",
+    "settings.lead":
+      "Apariencia, modo de decisión, límites operativos y barreras de seguridad de demostración. Los datos de auditoría se restablecen cuando se reinicia el servidor API.",
     "settings.sections": "Secciones de configuración",
     "settings.tab.general": "General",
     "settings.tab.decider": "Decisor",
@@ -1633,18 +1879,23 @@ export const translations = {
     "settings.status.persistence": "persistencia",
     "settings.decider.rule": "ReglaDecisora",
     "settings.decider.llm": "LlmDecider",
-    "settings.decider.hintConnected": "Clave xAI u OpenRouter detectada en el servidor.",
-    "settings.decider.hintFallback": "LLM recurre a las reglas: XAI_API_KEY o OPENROUTER_API_KEY no configuradas.",
+    "settings.decider.hintConnected":
+      "Clave xAI u OpenRouter detectada en el servidor.",
+    "settings.decider.hintFallback":
+      "LLM recurre a las reglas: XAI_API_KEY o OPENROUTER_API_KEY no configuradas.",
     "settings.decider.saved": "Guardado en el servidor API para esta sesión.",
-    "settings.decider.saveError": "No se pudo guardar la preferencia del decisor.",
+    "settings.decider.saveError":
+      "No se pudo guardar la preferencia del decisor.",
     "settings.limits.title": "Límites conocidos",
-    "settings.limits.hint": "Utilizado por el triaje de RuleDecider / LLM antes del pago.",
+    "settings.limits.hint":
+      "Utilizado por el triaje de RuleDecider / LLM antes del pago.",
     "settings.limits.parameter": "Parámetro",
     "settings.limits.range": "Rango",
     "settings.limits.mineLat": "Perímetro de la mina (latitud)",
     "settings.limits.mineLng": "Perímetro de mina (lng)",
     "settings.limits.mass": "Rango de masa (g)",
-    "settings.persistence.hint": "El registro de auditoría y el simulacro del estado en cadena se encuentran solo en la memoria API. Reinicie el servidor para restablecerlo. Exporte JSON desde Auditoría antes de reiniciar.",
+    "settings.persistence.hint":
+      "El registro de auditoría y el simulacro del estado en cadena se encuentran solo en la memoria API. Reinicie el servidor para restablecerlo. Exporte JSON desde Auditoría antes de reiniciar.",
     "settings.persistence.packageLabel": "URL del paquete Casper",
     "nav.marketplace": "Mercado",
     "nav.myAssets": "Mis activos",
@@ -1655,7 +1906,8 @@ export const translations = {
     "nav.workspace": "Espacio de trabajo",
     "nav.suffix": "Consola de procedencia",
     "guardrail.demo": "Demostración",
-    "guardrail.text": "Datos ficticios · El sello decide el veredicto · No es inversión ni venta simbólica",
+    "guardrail.text":
+      "Datos ficticios · El sello decide el veredicto · No es inversión ni venta simbólica",
     "prefs.menu": "Preferencias",
     "session.menu": "Menú de sesión",
     "sidebar.search.label": "Abrir paleta de comandos",
@@ -1674,6 +1926,7 @@ export const translations = {
     "brand.console": "Lastre Console",
     "brand.name": "Lastre",
     "common.retry": "Reintentar",
+    "common.skipContent": "Ir al contenido",
     "common.loadError": "No se pudo cargar esta sección",
     "common.runBatch": "Ejecutar lote",
     "common.runDemoBatch": "Ejecutar lote de demostración",
@@ -1688,7 +1941,8 @@ export const translations = {
     "common.invalid": "Inválido",
     "journey.aria": "Viaje de prueba: captura a demostración simbólica",
     "journey.kicker": "Prueba antes del token",
-    "journey.lead": "Documento físico → sello → acción del agente → veredicto → Casper → demostración simbólica solo después de la prueba.",
+    "journey.lead":
+      "Documento físico → sello → acción del agente → veredicto → Casper → demostración simbólica solo después de la prueba.",
     "journey.capture.label": "Capturar",
     "journey.capture.hint": "Documento → campos estructurados",
     "journey.seal.label": "Sello",
@@ -1705,9 +1959,11 @@ export const translations = {
     "journey.myAssets.hint": "Representaciones reclamadas",
     "overview.kicker": "Descripción general",
     "overview.title": "Centro de mando de prueba",
-    "overview.lead": "Una pantalla para ver el estado de la canalización, las capas de confianza y qué hacer a continuación.",
+    "overview.lead":
+      "Una pantalla para ver el estado de la canalización, las capas de confianza y qué hacer a continuación.",
     "overview.pipeline.title": "Canal de demostración",
-    "overview.pipeline.subtitle": "Hasta dónde se movieron los activos ficticios a través de la consola",
+    "overview.pipeline.subtitle":
+      "Hasta dónde se movieron los activos ficticios a través de la consola",
     "overview.pipeline.lots": "Lotes en catalogo",
     "overview.pipeline.lotsHint": "Activos capturados o sembrados",
     "overview.pipeline.processed": "Procesado",
@@ -1715,9 +1971,11 @@ export const translations = {
     "overview.pipeline.sealVerified": "Sello verificado",
     "overview.pipeline.onCasper": "sobre casper",
     "overview.pipeline.tokenizable": "Tokenizable",
-    "overview.pipeline.empty": "Ejecute Captura o Procesar para completar la canalización",
+    "overview.pipeline.empty":
+      "Ejecute Captura o Procesar para completar la canalización",
     "overview.trust.title": "Capas de confianza (sesión)",
-    "overview.trust.subtitle": "El agente elige la acción · el sello decide el veredicto · Casper registra la prueba",
+    "overview.trust.subtitle":
+      "El agente elige la acción · el sello decide el veredicto · Casper registra la prueba",
     "overview.trust.agentActions": "Acciones del agente",
     "overview.trust.sealChecks": "controles de sello",
     "overview.trust.empty": "Aún no hay registros de sesión",
@@ -1726,7 +1984,8 @@ export const translations = {
     "overview.testnet.split": "{valid} valid · {invalid} invalid",
     "overview.testnet.splitAria": "División de certificación de Testnet",
     "overview.sessionOutcomes": "Resultados de la sesión",
-    "overview.sessionEmpty": "Aún no se ha realizado ningún lote. El proceso completará los gráficos de resultados aquí.",
+    "overview.sessionEmpty":
+      "Aún no se ha realizado ningún lote. El proceso completará los gráficos de resultados aquí.",
     "overview.recentActivity": "Actividad de prueba reciente",
     "overview.lastFive": "Últimos 5 registros",
     "overview.fullAudit": "Registro de auditoría completo",
@@ -1744,7 +2003,8 @@ export const translations = {
     "overview.trust.validShare": "válido en sesión",
     "overview.trust.link": "Abrir registro de auditoría",
     "overview.progress.title": "Progreso de la prueba",
-    "overview.progress.subtitle": "Porcentaje del catálogo que llegó a cada etapa",
+    "overview.progress.subtitle":
+      "Porcentaje del catálogo que llegó a cada etapa",
     "overview.progress.complete": "de catálogo tokenizable",
     "overview.progress.catalogHint": "{count} de {total} lotes",
     "overview.progress.legend": "Finalización del oleoducto",
@@ -1758,36 +2018,43 @@ export const translations = {
     "overview.stats.tokenizable": "Resultados tokenizables",
     "overview.stats.tokenizableHint": "{tokenizable} de {processed} · {pct}%",
     "overview.stats.conversion": "{pct}% de conversión a tokenizable",
-    "overview.stats.ratioAria": "{tokenizable} tokenizable de {processed} procesado",
+    "overview.stats.ratioAria":
+      "{tokenizable} tokenizable de {processed} procesado",
     "overview.stats.onChain": "sobre casper",
     "overview.stats.acceptance": "Aceptación de la red de prueba",
     "overview.next.aria": "Siguiente paso recomendado",
     "overview.next.kicker": "Tu próximo paso",
     "overview.next.start.title": "Comience el viaje de prueba",
-    "overview.next.start.lead": "Capture un documento ficticio, ejecute Proceso y luego lea el registro de auditoría. El sello decide el veredicto.",
+    "overview.next.start.lead":
+      "Capture un documento ficticio, ejecute Proceso y luego lea el registro de auditoría. El sello decide el veredicto.",
     "overview.next.start.cta": "Comience con la captura",
     "overview.next.lots.title": "Lotes listos: ejecute el lote de demostración",
     "overview.next.lots.leadStat": "{count} lote(s) en cola.",
-    "overview.next.lots.leadHint": "El proceso mostrará la acción del agente versus el veredicto del sello para cada uno.",
+    "overview.next.lots.leadHint":
+      "El proceso mostrará la acción del agente versus el veredicto del sello para cada uno.",
     "overview.next.lots.cta": "Ejecutar lote de demostración",
     "overview.next.lots.secondary": "Revisar lotes",
     "overview.next.review.title": "Prueba registrada: revisar los resultados",
     "overview.next.review.leadStat": "{count} registros en la sesión.",
-    "overview.next.review.leadHint": "Las filas no válidas son prueba permanente, no errores.",
+    "overview.next.review.leadHint":
+      "Las filas no válidas son prueba permanente, no errores.",
     "overview.next.review.cta": "Abrir registro de auditoría",
     "overview.next.review.secondary": "Ejecute otro lote",
-    "overview.next.tokenizable.title": "Prueba válida: demostración simbólica desbloqueada",
+    "overview.next.tokenizable.title":
+      "Prueba válida: demostración simbólica desbloqueada",
     "overview.next.tokenizable.titleShort": "Prueba válida",
     "overview.next.tokenizable.leadStat": "{count} registros tokenizables.",
     "overview.next.metric.lots": "muchos en cola",
     "overview.next.metric.records": "registros de sesión",
     "overview.next.metric.tokenizable": "tokenizable",
     "overview.next.metric.aria": "{value} {unit}",
-    "overview.next.tokenizable.leadHint": "Marketplace y My Assets son solo capas de demostración, después de la prueba.",
+    "overview.next.tokenizable.leadHint":
+      "Marketplace y My Assets son solo capas de demostración, después de la prueba.",
     "overview.next.tokenizable.cta": "Mercado abierto (demostración)",
     "overview.next.tokenizable.secondary": "Mis activos",
     "overview.next.report.title": "Informe de prueba",
-    "overview.next.report.subtitle": "Atestación de procedencia para esta sesión.",
+    "overview.next.report.subtitle":
+      "Atestación de procedencia para esta sesión.",
     "overview.next.report.sidebar": "Documentos",
     "overview.next.report.doc.seal": "Certificación de sello",
     "overview.next.report.doc.chain": "registro de casper",
@@ -1799,11 +2066,14 @@ export const translations = {
     "overview.next.report.check.chain": "Atestación de Casper registrada",
     "overview.next.report.check.token": "Resultado tokenizable confirmado",
     "overview.next.hero.start.title": "Viaje de prueba",
-    "overview.next.hero.start.lead": "Capturar → sellar → veredicto. Comience con un documento ficticio.",
+    "overview.next.hero.start.lead":
+      "Capturar → sellar → veredicto. Comience con un documento ficticio.",
     "overview.next.hero.lots.title": "Lote de demostración listo",
-    "overview.next.hero.lots.lead": "{count} lote(s) en cola: el proceso ejecuta agente versus sello para cada uno.",
+    "overview.next.hero.lots.lead":
+      "{count} lote(s) en cola: el proceso ejecuta agente versus sello para cada uno.",
     "overview.next.hero.review.title": "Sesión registrada",
-    "overview.next.hero.review.lead": "{count} registros en la auditoría: las filas no válidas son prueba, no errores.",
+    "overview.next.hero.review.lead":
+      "{count} registros en la auditoría: las filas no válidas son prueba, no errores.",
     "badge.noVerdict": "Sin veredicto",
     "badge.attested": "Atestiguado",
     "badge.pending": "Pendiente",
@@ -1822,9 +2092,11 @@ export const translations = {
     "outcome.skipped": "Saltado",
     "outcome.escalated": "escalado",
     "audit.evidence.title": "evidencia",
-    "audit.evidence.lead": "Elementos de prueba para esta sesión: veredicto del sello, decisión del agente y certificación en cadena cuando se acepte.",
+    "audit.evidence.lead":
+      "Elementos de prueba para esta sesión: veredicto del sello, decisión del agente y certificación en cadena cuando se acepte.",
     "audit.evidence.auditorView": "Vista de auditor",
-    "audit.evidence.context": "Revisión de prueba de sesión · datos de demostración ficticios",
+    "audit.evidence.context":
+      "Revisión de prueba de sesión · datos de demostración ficticios",
     "audit.evidence.progress": "Progreso de la auditoría",
     "audit.evidence.export": "Exportar",
     "audit.evidence.exporting": "Exportando…",
@@ -1851,22 +2123,29 @@ export const translations = {
     "audit.evidence.onChain.awaiting": "esperando",
     "audit.evidence.onChain.viewAttestation": "Ver atestación",
     "audit.evidence.onChain.viewValidSample": "Ver muestra válida",
-    "audit.evidence.onChain.sessionReceipt": "Recibo de demostración/sesión: no en Casper",
+    "audit.evidence.onChain.sessionReceipt":
+      "Recibo de demostración/sesión: no en Casper",
     "audit.evidence.viewEvidence": "Ver evidencia",
     "audit.evidence.owner.rule": "motor de reglas",
     "audit.evidence.owner.llm": "agente de maestría en Derecho",
-    "audit.evidence.noMatch": "Ninguna evidencia coincide con los filtros actuales.",
+    "audit.evidence.noMatch":
+      "Ninguna evidencia coincide con los filtros actuales.",
     "audit.evidence.emptyTitle": "Aún no hay evidencia",
-    "audit.evidence.emptyHint": "Capture un documento o ejecute un lote desde Proceso para completar evidencia.",
+    "audit.evidence.emptyHint":
+      "Capture un documento o ejecute un lote desde Proceso para completar evidencia.",
     "audit.evidence.emptyCapture": "Comience con la captura",
     "audit.evidence.emptyProcess": "Ir al proceso",
-    "audit.evidence.fromProcess": "Lote completo: {count} registros registraron esta sesión. Revise la evidencia a continuación.",
-    "audit.evidence.nextStep": "Las capas de demostración simbólicas se desbloquean solo después de una certificación válida.",
+    "audit.evidence.fromProcess":
+      "Lote completo: {count} registros registraron esta sesión. Revise la evidencia a continuación.",
+    "audit.evidence.nextStep":
+      "Las capas de demostración simbólicas se desbloquean solo después de una certificación válida.",
     "audit.evidence.acceptedCount": "{count} aceptado",
     "audit.evidence.marketplaceCta": "Mercado abierto (demostración)",
     "escalations.title": "Cola de revisión",
-    "escalations.lead": "Lotes donde el agente eligió escalar: campos faltantes, perímetro geográfico exterior o masa fuera de alcance. Revisa cada caso y decide.",
-    "escalations.principle": "El agente optó por intensificar la acción: no juzgó la verdad. La escalada es una incertidumbre legítima dirigida a un ser humano. El sello decide Válido o Inválido.",
+    "escalations.lead":
+      "Lotes donde el agente eligió escalar: campos faltantes, perímetro geográfico exterior o masa fuera de alcance. Revisa cada caso y decide.",
+    "escalations.principle":
+      "El agente optó por intensificar la acción: no juzgó la verdad. La escalada es una incertidumbre legítima dirigida a un ser humano. El sello decide Válido o Inválido.",
     "escalations.queueLabel": "Cola de escalada",
     "escalations.table.image": "Vista previa",
     "escalations.table.title": "Activo",
@@ -1889,9 +2168,11 @@ export const translations = {
     "escalations.filters.deciderAll": "Todos los que deciden",
     "escalations.filters.shown": "{visible} de {total}",
     "escalations.filters.emptyTitle": "Ningún caso coincide con estos filtros",
-    "escalations.filters.emptyHint": "Borre los filtros o elija otro tipo para volver a ver la cola.",
+    "escalations.filters.emptyHint":
+      "Borre los filtros o elija otro tipo para volver a ver la cola.",
     "escalations.metrics.pending": "Pendiente de revisión",
-    "escalations.metrics.pendingHint": "Requiere decisión humana antes del pago.",
+    "escalations.metrics.pendingHint":
+      "Requiere decisión humana antes del pago.",
     "escalations.metrics.rule": "Decisiones de reglas",
     "escalations.metrics.ruleHint": "Decidido por RuleDecider",
     "escalations.metrics.llm": "Decisiones de maestría en Derecho",
@@ -1901,7 +2182,8 @@ export const translations = {
     "escalations.kind.missing": "Campo faltante",
     "escalations.kind.review": "Revisión",
     "escalations.item.label": "Case {index}",
-    "escalations.item.agentNote": "El agente eligió escalar: acción operativa, no un veredicto sobre integridad.",
+    "escalations.item.agentNote":
+      "El agente eligió escalar: acción operativa, no un veredicto sobre integridad.",
     "escalations.item.reason": "¿Por qué el agente se intensificó?",
     "escalations.item.triggerFields": "Campos de activación",
     "escalations.item.actions": "Tu decisión",
@@ -1913,14 +2195,20 @@ export const translations = {
     "escalations.action.overriding": "Aplicando…",
     "escalations.action.discard": "Caso de descarte",
     "escalations.action.discarding": "Descartando…",
-    "escalations.feedback.requeued": "{assetId} reconocido y enviado de regreso al Proceso - resultado: {outcome}.",
-    "escalations.feedback.requeuedStillEscalated": "{assetId} se reprocesó pero se elevó nuevamente; todavía está en cola para revisión.",
-    "escalations.feedback.discarded": "{assetId} descartado de la cola: registrado como omitido.",
-    "escalations.feedback.overriddenPay": "{assetId} anulado para pagar - resultado: {outcome}.",
-    "escalations.feedback.overriddenSkip": "{assetId} anulado para omitir: registrado como omitido.",
+    "escalations.feedback.requeued":
+      "{assetId} reconocido y enviado de regreso al Proceso - resultado: {outcome}.",
+    "escalations.feedback.requeuedStillEscalated":
+      "{assetId} se reprocesó pero se elevó nuevamente; todavía está en cola para revisión.",
+    "escalations.feedback.discarded":
+      "{assetId} descartado de la cola: registrado como omitido.",
+    "escalations.feedback.overriddenPay":
+      "{assetId} anulado para pagar - resultado: {outcome}.",
+    "escalations.feedback.overriddenSkip":
+      "{assetId} anulado para omitir: registrado como omitido.",
     "escalations.feedback.error": "La acción falló: inténtalo de nuevo.",
     "escalations.geo.title": "Verificación perimetral",
-    "escalations.geo.lead": "Límites de mina esperados versus coordenadas declaradas que desencadenaron la escalada.",
+    "escalations.geo.lead":
+      "Límites de mina esperados versus coordenadas declaradas que desencadenaron la escalada.",
     "escalations.geo.field": "campo",
     "escalations.geo.expected": "Perímetro esperado",
     "escalations.geo.declared": "Ubicación declarada",
@@ -1934,14 +2222,18 @@ export const translations = {
     "escalations.geo.inPerimeter": "Perímetro interior",
     "escalations.geo.outPerimeter": "Perímetro exterior",
     "escalations.empty.title": "No hay escaladas en esta sesión",
-    "escalations.empty.hint": "La escalada significa que el agente no estaba seguro y le envió el lote a usted, no una falla del sistema. Ejecute el lote de demostración con LOTE-OUTOFREGION en proceso para completar la cola.",
+    "escalations.empty.hint":
+      "La escalada significa que el agente no estaba seguro y le envió el lote a usted, no una falla del sistema. Ejecute el lote de demostración con LOTE-OUTOFREGION en proceso para completar la cola.",
     "escalations.empty.cta": "Ir al proceso",
     "process.title": "Ejecutar lote de demostración",
-    "process.lead": "El agente elige la acción (pagar, omitir, escalar). El sello decide Válido o Inválido.",
-    "process.leadShort": "Seleccione lotes, ejecute el lote y observe cómo decide el sello.",
+    "process.lead":
+      "El agente elige la acción (pagar, omitir, escalar). El sello decide Válido o Inválido.",
+    "process.leadShort":
+      "Seleccione lotes, ejecute el lote y observe cómo decide el sello.",
     "process.config": "Configuración por lotes",
     "process.config.kicker": "Configuración",
-    "process.config.llmFootnote": "El modo LLM utiliza xAI (XAI_API_KEY) u OpenRouter cuando está configurado; de lo contrario, se aplica la regla alternativa.",
+    "process.config.llmFootnote":
+      "El modo LLM utiliza xAI (XAI_API_KEY) u OpenRouter cuando está configurado; de lo contrario, se aplica la regla alternativa.",
     "process.decider.kicker": "Decisor",
     "process.decider.ruleShort": "regla",
     "process.decider.llmShort": "LLM",
@@ -1951,18 +2243,23 @@ export const translations = {
     "process.step2": "Paso 2",
     "process.step3": "Paso 3",
     "process.selectLotsTitle": "¿Qué lotes van en este lote?",
-    "process.selectLotsLead": "Haga clic en cada tarjeta para incluirla o excluirla. Solo se procesan los lotes seleccionados cuando ejecuta el lote.",
-    "process.selectLotsEmpty": "Seleccione al menos un lote para ejecutar el lote.",
+    "process.selectLotsLead":
+      "Haga clic en cada tarjeta para incluirla o excluirla. Solo se procesan los lotes seleccionados cuando ejecuta el lote.",
+    "process.selectLotsEmpty":
+      "Seleccione al menos un lote para ejecutar el lote.",
     "process.toolbar.aria": "Controles de lotes",
     "process.runWithCount": "Ejecutar lote ({count} lotes)",
     "process.queue.title": "{count} lote(s) en cola: esperando para ejecutarse",
     "process.queue.waiting": "esperando",
-    "process.pipeline.idleLead": "Los resultados aparecen aquí después de ejecutar el lote. La acción del agente y el veredicto del sello se completan un lote a la vez.",
+    "process.pipeline.idleLead":
+      "Los resultados aparecen aquí después de ejecutar el lote. La acción del agente y el veredicto del sello se completan un lote a la vez.",
     "process.decider.label": "Cómo decide el agente",
     "process.decider.ruleLabel": "Reglas fijas",
     "process.decider.llmLabel": "IA",
-    "process.decider.ruleTooltip": "La lógica determinista selecciona pagar, omitir o escalar a partir de metadatos, sin modelo de lenguaje.",
-    "process.decider.llmTooltip": "Un modelo de lenguaje sugiere la acción; el sello todavía calcula Válido o Inválido de forma independiente.",
+    "process.decider.ruleTooltip":
+      "La lógica determinista selecciona pagar, omitir o escalar a partir de metadatos, sin modelo de lenguaje.",
+    "process.decider.llmTooltip":
+      "Un modelo de lenguaje sugiere la acción; el sello todavía calcula Válido o Inválido de forma independiente.",
     "process.lotsInBatch": "lotes en lote",
     "process.progress": "Progreso",
     "process.run": "Ejecutar lote",
@@ -1986,18 +2283,23 @@ export const translations = {
     "process.expected.skip": "saltar esperado",
     "process.expected.escalate": "escalar esperado",
     "process.pipeline.kicker": "prueba en vivo",
-    "process.stage.lead": "Observe cómo se mueve cada lote a través del proceso: primero la acción del agente y luego el veredicto determinista del sello.",
-    "process.stage.featureTamper": "Los lotes manipulados muestran el campo que cambió",
+    "process.stage.lead":
+      "Observe cómo se mueve cada lote a través del proceso: primero la acción del agente y luego el veredicto determinista del sello.",
+    "process.stage.featureTamper":
+      "Los lotes manipulados muestran el campo que cambió",
     "process.stage.previewAria": "Vista previa de canalización",
     "process.stage.previewTitle": "Tu lote, visualizado",
-    "process.stage.previewLead": "Cada lote seleccionado pasará por la acción del agente y luego por el sello determinista, una fila a la vez.",
+    "process.stage.previewLead":
+      "Cada lote seleccionado pasará por la acción del agente y luego por el sello determinista, una fila a la vez.",
     "process.stage.previewEmpty": "Seleccione lotes para comenzar.",
     "process.stage.lotCount": "lotes listos",
     "process.stage.previewAgent": "Agente",
     "process.stage.previewSeal": "Sello",
     "process.stage.previewPlaceholder": "—",
-    "process.stage.previewHint": "Presione Ejecutar lote cuando esté listo: los resultados se completan en vivo, no por adelantado.",
-    "process.stage.inspectLead": "Un lote a la vez: primero la acción del agente, luego el veredicto determinista del sello.",
+    "process.stage.previewHint":
+      "Presione Ejecutar lote cuando esté listo: los resultados se completan en vivo, no por adelantado.",
+    "process.stage.inspectLead":
+      "Un lote a la vez: primero la acción del agente, luego el veredicto determinista del sello.",
     "process.stage.inspectProgress": "Inspeccionando lote {current} de {total}",
     "process.stage.inspectComplete": "Todos los {count} lotes inspeccionados",
     "process.stage.inspectDone": "Inspección completa para este lote.",
@@ -2005,12 +2307,17 @@ export const translations = {
     "process.stage.queueDone": "hecho",
     "process.stage.walkthroughAria": "Pasos de inspección",
     "process.stage.agentStep.scan": "Carga útil del artefacto de escaneo...",
-    "process.stage.agentStep.metadata": "Comprobación cruzada de masa y coordenadas...",
-    "process.stage.agentStep.fields": "Diferenciando campos contra sello de referencia...",
+    "process.stage.agentStep.metadata":
+      "Comprobación cruzada de masa y coordenadas...",
+    "process.stage.agentStep.fields":
+      "Diferenciando campos contra sello de referencia...",
     "process.stage.agentStep.tamper": "Marcando indicadores de manipulación...",
-    "process.stage.agentStep.geo": "Leyendo geolocalización contra el perímetro de la mina…",
-    "process.stage.agentStep.perimeter": "Violación del perímetro: ruta de escalada...",
-    "process.stage.agentStep.duplicate": "Comprobando el historial de atestación en busca de duplicados...",
+    "process.stage.agentStep.geo":
+      "Leyendo geolocalización contra el perímetro de la mina…",
+    "process.stage.agentStep.perimeter":
+      "Violación del perímetro: ruta de escalada...",
+    "process.stage.agentStep.duplicate":
+      "Comprobando el historial de atestación en busca de duplicados...",
     "process.stage.agentStep.decide": "Eligiendo la acción operativa...",
     "process.flow.aria": "Flujo de inspección de lotes activos",
     "process.flow.completedAria": "Inspecciones completadas",
@@ -2019,13 +2326,15 @@ export const translations = {
     "process.flow.upcoming": "A continuación",
     "process.flow.checklist.aria": "Pasos de inspección del agente",
     "process.flow.checklist.seal": "Verificación del sello",
-    "process.pipeline.lead": "Cada tarjeta muestra la acción operativa del agente junto al veredicto determinista del sello.",
+    "process.pipeline.lead":
+      "Cada tarjeta muestra la acción operativa del agente junto al veredicto determinista del sello.",
     "process.pipeline.principleAgent": "El agente elige la acción.",
     "process.pipeline.principleSeal": "Seal decide el veredicto",
     "process.pipeline.colLot": "lote",
     "process.pipeline.fetching": "Ejecutando lote…",
     "process.pipeline.revealing": "Resultados reveladores…",
-    "process.pipeline.idleHint": "Presione Ejecutar lote a la izquierda para comenzar.",
+    "process.pipeline.idleHint":
+      "Presione Ejecutar lote a la izquierda para comenzar.",
     "process.pipeline.previewAgent": "—",
     "process.pipeline.previewSeal": "—",
     "process.pipeline.previewMode": "Vista previa",
@@ -2040,27 +2349,33 @@ export const translations = {
     "process.pipeline.sealComputing": "Sello informático…",
     "process.selectAll": "Seleccionar todo",
     "process.selectNone": "Borrar",
-    "process.pipeline.empty": "Ejecute el lote para observar el proceso de cada lote: la acción del agente a la izquierda, el veredicto del sello a la derecha.",
-    "process.pipeline.emptySelection": "Seleccione al menos un lote para obtener una vista previa de la tubería.",
+    "process.pipeline.empty":
+      "Ejecute el lote para observar el proceso de cada lote: la acción del agente a la izquierda, el veredicto del sello a la derecha.",
+    "process.pipeline.emptySelection":
+      "Seleccione al menos un lote para obtener una vista previa de la tubería.",
     "process.pipeline.agentColumn": "Acción del agente",
     "process.pipeline.sealColumn": "veredicto del sello",
     "process.pipeline.agentHint": "Operativo: pagar, omitir o escalar",
     "process.pipeline.sealHint": "SHA-256 determinista: válido o no válido",
     "process.pipeline.columnsAria": "Acción del agente y veredicto del sello.",
-    "process.pipeline.awaitingAgent": "A la espera de la decisión del agente...",
+    "process.pipeline.awaitingAgent":
+      "A la espera de la decisión del agente...",
     "process.pipeline.awaitingSeal": "Esperando revisión de sellos...",
     "process.pipeline.decidedByRule": "motor de reglas",
     "process.pipeline.decidedByLlm": "agente de maestría en Derecho",
     "process.pipeline.sealHash": "Sello",
-    "process.pipeline.invalidProof": "No válido es una prueba permanente de manipulación, no una falla del sistema.",
+    "process.pipeline.invalidProof":
+      "No válido es una prueba permanente de manipulación, no una falla del sistema.",
     "process.seal.notInvoked": "Sello no invocado",
-    "process.seal.notInvokedHint": "Sin pago: no se ejecutó el sello determinista para esta acción.",
+    "process.seal.notInvokedHint":
+      "Sin pago: no se ejecutó el sello determinista para esta acción.",
     "process.card.pending": "Pendiente",
     "process.card.running": "Procesamiento",
     "process.card.done": "completo",
     "process.tamperDiff.title": "Campo que cambió",
     "process.tamperDiff.aria": "Comparación de campos manipulados",
-    "process.tamperDiff.note": "El sello de referencia se calculó a partir del valor original; el artefacto actual diverge.",
+    "process.tamperDiff.note":
+      "El sello de referencia se calculó a partir del valor original; el artefacto actual diverge.",
     "process.summary.title": "marcador de lotes",
     "process.summary.aria": "Resumen de resultados del lote",
     "process.summary.tokenizable": "Tokenizable",
@@ -2069,7 +2384,8 @@ export const translations = {
     "process.summary.escalated": "escalado",
     "process.projection.title": "Proyecciones de tubería de prueba",
     "process.projection.kicker": "Estimación en vivo",
-    "process.projection.subtitle": "Capas de prueba acumulativas en los lotes de demostración seleccionados: se actualizan a medida que se ejecuta el lote.",
+    "process.projection.subtitle":
+      "Capas de prueba acumulativas en los lotes de demostración seleccionados: se actualizan a medida que se ejecuta el lote.",
     "process.projection.legendAria": "Leyenda del gráfico",
     "process.projection.band": "banda de confianza",
     "process.projection.high": "Estimación alta",
@@ -2091,66 +2407,87 @@ export const translations = {
     "process.projection.lot.duplicate": "Duplicar",
     "process.projection.lot.escalate": "escalar",
     "process.projection.onChainToggle": "Mostrar capa en cadena",
-    "process.projection.disclaimer": "Estimación aproximada de la demostración: el sello decide cada veredicto; Las filas no válidas son una prueba permanente.",
-    "process.projection.emptyTitle": "Seleccione lotes para obtener una vista previa del oleoducto",
-    "process.projection.emptyHint": "Elija uno o más lotes de demostración y luego ejecute el lote para observar cómo se acumulan las capas de prueba en vivo.",
+    "process.projection.disclaimer":
+      "Estimación aproximada de la demostración: el sello decide cada veredicto; Las filas no válidas son una prueba permanente.",
+    "process.projection.emptyTitle":
+      "Seleccione lotes para obtener una vista previa del oleoducto",
+    "process.projection.emptyHint":
+      "Elija uno o más lotes de demostración y luego ejecute el lote para observar cómo se acumulan las capas de prueba en vivo.",
     "process.projection.chartAria": "Proyección de prueba para {count} lotes",
     "process.projection.markerTamper": "Manipulación detectada",
     "process.projection.markerLot": "Lote procesado",
     "process.projection.markerBatch": "Lote completo",
-    "onboarding.auth.title": "Prueba de procedencia, antes que cualquier ficha.",
-    "onboarding.auth.subtitle": "Inicie sesión para explorar la consola de demostración: solo datos ficticios.",
+    "onboarding.auth.title":
+      "Prueba de procedencia, antes que cualquier ficha.",
+    "onboarding.auth.subtitle":
+      "Inicie sesión para explorar la consola de demostración: solo datos ficticios.",
     "onboarding.auth.badge": "Demostración · datos ficticios · no inversión",
     "onboarding.auth.google": "Continuar con Google",
     "onboarding.auth.emailLink": "Continuar con el correo electrónico",
     "onboarding.auth.emailPlaceholder": "correo electrónico de trabajo",
     "onboarding.auth.emailSubmit": "Enviar enlace mágico",
     "onboarding.auth.dividerOr": "o",
-    "onboarding.auth.footnote": "Entorno de demostración: no se crea ninguna cuenta real.",
+    "onboarding.auth.footnote":
+      "Entorno de demostración: no se crea ninguna cuenta real.",
     "onboarding.visual.eyebrow": "Prueba antes del token",
-    "onboarding.visual.quote": "Origen físico, sellado en cadena: nada cambia sin dejar rastro.",
+    "onboarding.visual.quote":
+      "Origen físico, sellado en cadena: nada cambia sin dejar rastro.",
     "onboarding.welcome.title": "Bienvenidos a Lastre.",
     "onboarding.welcome.kicker": "solo una pregunta",
-    "onboarding.welcome.subtitle": "Probamos que un documento de procedencia está intacto: nada ha cambiado. La prueba primero, la muestra después.",
+    "onboarding.welcome.subtitle":
+      "Probamos que un documento de procedencia está intacto: nada ha cambiado. La prueba primero, la muestra después.",
     "onboarding.welcome.aria": "Elija su ruta de demostración",
     "onboarding.welcome.judge.title": "Evaluar la tecnología",
-    "onboarding.welcome.judge.lead": "Ejecute la demostración en ~60 segundos y observe cómo decide la foca.",
+    "onboarding.welcome.judge.lead":
+      "Ejecute la demostración en ~60 segundos y observe cómo decide la foca.",
     "onboarding.welcome.judge.badge": "Recomendado",
     "onboarding.welcome.operator.title": "registrarse mucho",
-    "onboarding.welcome.operator.lead": "Capturar un documento y generar su sello.",
+    "onboarding.welcome.operator.lead":
+      "Capturar un documento y generar su sello.",
     "onboarding.welcome.explore": "Solo explora",
     "onboarding.judge.kicker": "Demostración de 60 segundos",
     "onboarding.judge.title": "Ejecute la demostración en 60 segundos.",
-    "onboarding.judge.lead": "Procesa 4 lotes y observa cómo el sello decide cada veredicto.",
+    "onboarding.judge.lead":
+      "Procesa 4 lotes y observa cómo el sello decide cada veredicto.",
     "onboarding.judge.cta": "Corre ahora",
-    "onboarding.capture.demoTip": "Ejemplo de demostración cargado. Genera el sello o edita los campos.",
+    "onboarding.capture.demoTip":
+      "Ejemplo de demostración cargado. Genera el sello o edita los campos.",
     "onboarding.capture.demoCta": "Generar Pasaporte + Sello",
     "capture.wizard.trigger": "Nuevo lote",
     "capture.wizard.kicker": "captura de procedencia",
     "capture.wizard.title": "registrarse mucho",
-    "capture.wizard.lead": "Datos estructurados → documento → sello SHA-256. El sello decide el veredicto, no el agente.",
+    "capture.wizard.lead":
+      "Datos estructurados → documento → sello SHA-256. El sello decide el veredicto, no el agente.",
     "capture.wizard.progress": "Paso {current} de {total}",
     "capture.wizard.section.quickStart": "Inicio rápido",
-    "capture.wizard.section.quickStartHint": "Cargue datos de demostración para explorar resultados válidos o no válidos.",
+    "capture.wizard.section.quickStartHint":
+      "Cargue datos de demostración para explorar resultados válidos o no válidos.",
     "capture.wizard.section.identity": "Identidad",
-    "capture.wizard.section.identityHint": "Quién registró este lote y cómo se etiqueta en la cola.",
+    "capture.wizard.section.identityHint":
+      "Quién registró este lote y cómo se etiqueta en la cola.",
     "capture.wizard.section.origin": "Origen",
-    "capture.wizard.section.originHint": "Ancla geográfica y marca de tiempo de captura: relevante para el sello.",
+    "capture.wizard.section.originHint":
+      "Ancla geográfica y marca de tiempo de captura: relevante para el sello.",
     "capture.wizard.section.asset": "Detalles del activo",
-    "capture.wizard.section.assetHint": "Campos de cantidad y certificado que alimentan el sello SHA-256.",
+    "capture.wizard.section.assetHint":
+      "Campos de cantidad y certificado que alimentan el sello SHA-256.",
     "capture.wizard.section.document": "Captura de documentos",
-    "capture.wizard.mediaEmpty": "Aún no hay ningún documento: inicie la cámara o cargue un archivo.",
+    "capture.wizard.mediaEmpty":
+      "Aún no hay ningún documento: inicie la cámara o cargue un archivo.",
     "capture.wizard.close": "Cerrar asistente de captura",
     "capture.wizard.stepperAria": "Capturar el progreso",
     "capture.wizard.step1.label": "Detalles",
     "capture.wizard.step2.label": "Documento",
     "capture.wizard.step3.label": "Pasaporte",
     "capture.wizard.step1.heading": "Detalles del lote",
-    "capture.wizard.step1.hint": "Elija el tipo y complete los campos validados. El sello se calcula a partir de estos valores.",
+    "capture.wizard.step1.hint":
+      "Elija el tipo y complete los campos validados. El sello se calcula a partir de estos valores.",
     "capture.wizard.step2.heading": "Capturar documento",
-    "capture.wizard.step2.hint": "Fotografíe o cargue el certificado. Esto crea un hash de marco, separado del sello.",
+    "capture.wizard.step2.hint":
+      "Fotografíe o cargue el certificado. Esto crea un hash de marco, separado del sello.",
     "capture.wizard.step3.heading": "Pasaporte + sello",
-    "capture.wizard.step3.hint": "Revisar la tarjeta de credencial. La foto no cambia el sello.",
+    "capture.wizard.step3.hint":
+      "Revisar la tarjeta de credencial. La foto no cambia el sello.",
     "capture.wizard.presetValid": "Demostración Carbón válido",
     "capture.wizard.presetInvalid": "Lote de demostración manipulado",
     "capture.wizard.field.category": "Categoría",
@@ -2173,10 +2510,13 @@ export const translations = {
     "capture.wizard.error.range": "Fuera del rango válido",
     "capture.wizard.error.positive": "Debe ser mayor que cero",
     "capture.wizard.cameraActive": "Cámara activa: apunte al documento.",
-    "capture.wizard.cameraDenied": "Cámara no disponible. Utilice la carga de archivos en su lugar.",
-    "capture.wizard.photoCaptured": "Foto capturada. Continúe generando el pasaporte.",
+    "capture.wizard.cameraDenied":
+      "Cámara no disponible. Utilice la carga de archivos en su lugar.",
+    "capture.wizard.photoCaptured":
+      "Foto capturada. Continúe generando el pasaporte.",
     "capture.wizard.documentUploaded": "Documento subido.",
-    "capture.wizard.needDocument": "Capture o cargue un documento antes de continuar.",
+    "capture.wizard.needDocument":
+      "Capture o cargue un documento antes de continuar.",
     "capture.wizard.startCamera": "Iniciar cámara",
     "capture.wizard.capturePhoto": "Capturar foto",
     "capture.wizard.uploadFile": "Subir archivo",
@@ -2192,14 +2532,17 @@ export const translations = {
     "capture.wizard.noPhoto": "Sin vista previa",
     "capture.wizard.passportTitle": "Pasaporte prueba de última hora",
     "capture.wizard.sealLabel": "Sello (SHA-256)",
-    "capture.wizard.passportFoot": "Determinista. Verifiable. Prueba antes que token.",
-    "capture.wizard.autoProcess": "Procesamiento automático después del envío (decisor de reglas)",
+    "capture.wizard.passportFoot":
+      "Determinista. Verifiable. Prueba antes que token.",
+    "capture.wizard.autoProcess":
+      "Procesamiento automático después del envío (decisor de reglas)",
     "capture.wizard.next": "Continuar",
     "capture.wizard.back": "Atrás",
     "capture.wizard.submit": "Enviar a la cola",
     "capture.wizard.submitError": "Error al enviar: {message}",
     "capture.wizard.success.title": "lote en cola",
-    "capture.wizard.success.lead": "Pasaporte sellado y comprobante registrado. Abra el lote para inspeccionar evidencia antes de cualquier capa simbólica.",
+    "capture.wizard.success.lead":
+      "Pasaporte sellado y comprobante registrado. Abra el lote para inspeccionar evidencia antes de cualquier capa simbólica.",
     "capture.wizard.success.lot": "evidencia de lote abierto",
     "capture.wizard.success.process": "Volver a ejecutar en proceso",
     "capture.wizard.success.audit": "Abrir registro de auditoría",
@@ -2210,30 +2553,41 @@ export const translations = {
     "onboarding.checklist.expand": "Ampliar lista de verificación",
     "onboarding.checklist.collapse": "Contraer lista de verificación",
     "onboarding.checklist.batch": "Ejecute el primer lote",
-    "onboarding.checklist.batchHint": "Observe al agente decidir entre cuatro lotes",
+    "onboarding.checklist.batchHint":
+      "Observe al agente decidir entre cuatro lotes",
     "onboarding.checklist.invalid": "Ver un veredicto no válido",
-    "onboarding.checklist.invalidHint": "Vea cómo se lee como evidencia un veredicto no válido",
+    "onboarding.checklist.invalidHint":
+      "Vea cómo se lee como evidencia un veredicto no válido",
     "onboarding.checklist.casper": "Verifique la prueba sobre Casper",
-    "onboarding.checklist.casperHint": "Confirmar la certificación sobre Casper",
+    "onboarding.checklist.casperHint":
+      "Confirmar la certificación sobre Casper",
     "onboarding.checklist.marketplace": "Ver la capa simbólica",
-    "onboarding.checklist.marketplaceHint": "Explorar la capa de activos simbólicos",
+    "onboarding.checklist.marketplaceHint":
+      "Explorar la capa de activos simbólicos",
     "onboarding.checklist.completeAria": "Tour completo",
     "onboarding.checklist.completeTitle": "Bucle completo visto",
-    "onboarding.checklist.completeLead": "Captura, veredicto, prueba y comercialización: has trazado el camino completo.",
-    "onboarding.checklist.completeArc": "Captura → Veredicto → Prueba → Mercado",
+    "onboarding.checklist.completeLead":
+      "Captura, veredicto, prueba y comercialización: has trazado el camino completo.",
+    "onboarding.checklist.completeArc":
+      "Captura → Veredicto → Prueba → Mercado",
     "onboarding.checklist.dismiss": "Cerrar recorrido",
     "onboarding.checklist.reopen": "Reabrir visita guiada",
     "onboarding.persona.label": "Ruta de demostración",
     "onboarding.persona.judge": "Evaluar (demostración de los años 60)",
     "onboarding.persona.operator": "registrarse mucho",
     "onboarding.persona.explorer": "Explora libremente",
-    "guardrail.session": "La recarga borra los datos de la sesión de demostración.",
+    "guardrail.session":
+      "La recarga borra los datos de la sesión de demostración.",
     "chain.title": "Libro mayor a prueba de Casper",
-    "chain.lead": "Instantánea de solo lectura de las certificaciones en Casper testnet. Los registros no válidos permanecen en la cadena y son permanentemente a prueba de manipulaciones.",
-    "chain.immutable": "Grabado en Casper. Una vez registrado, no se borra nada, ni siquiera los veredictos inválidos.",
-    "chain.sessionNotice": "Registros de sesiones. Recargar borra los datos de demostración.",
+    "chain.lead":
+      "Instantánea de solo lectura de las certificaciones en Casper testnet. Los registros no válidos permanecen en la cadena y son permanentemente a prueba de manipulaciones.",
+    "chain.immutable":
+      "Grabado en Casper. Una vez registrado, no se borra nada, ni siquiera los veredictos inválidos.",
+    "chain.sessionNotice":
+      "Registros de sesiones. Recargar borra los datos de demostración.",
     "chain.source.live": "Instantánea en vivo",
-    "chain.source.fallback": "Datos alternativos: instantánea en vivo no disponible",
+    "chain.source.fallback":
+      "Datos alternativos: instantánea en vivo no disponible",
     "chain.technical.toggle": "Ver detalle técnico",
     "chain.technical.contract": "Contrato",
     "chain.technical.network": "Red",
@@ -2241,11 +2595,15 @@ export const translations = {
     "chain.technical.packageUrl": "URL del paquete",
     "chain.technical.fetched": "Obtenido en",
     "chain.group.session": "Esta sesión",
-    "chain.group.sessionHint": "Las certificaciones de lotes se ejecutan en esta sesión de demostración.",
-    "chain.group.sessionEmpty": "Aún no hay certificados de sesión. Ejecute un lote desde Proceso para registrar la prueba.",
+    "chain.group.sessionHint":
+      "Las certificaciones de lotes se ejecutan en esta sesión de demostración.",
+    "chain.group.sessionEmpty":
+      "Aún no hay certificados de sesión. Ejecute un lote desde Proceso para registrar la prueba.",
     "chain.group.history": "Historia en cadena",
-    "chain.group.historyHint": "Certificaciones permanentes ya almacenadas en Casper testnet.",
-    "chain.group.noMatch": "Ninguna certificación coincide con el filtro actual.",
+    "chain.group.historyHint":
+      "Certificaciones permanentes ya almacenadas en Casper testnet.",
+    "chain.group.noMatch":
+      "Ninguna certificación coincide con el filtro actual.",
     "chain.filter.aria": "Filtrar certificaciones por veredicto",
     "chain.filter.all": "Todos",
     "chain.timeline.seal": "Sello en cadena",
@@ -2253,78 +2611,107 @@ export const translations = {
     "chain.timeline.copied": "Copiado",
     "chain.timeline.copySeal": "Copiar hash de sello en cadena",
     "chain.timeline.viewAttestation": "Ver atestación",
-    "chain.timeline.sessionReceipt": "Recibo de demostración/sesión: no en Casper",
+    "chain.timeline.sessionReceipt":
+      "Recibo de demostración/sesión: no en Casper",
     "chain.empty.title": "Aún no hay pruebas de sesión",
-    "chain.empty.hint": "La cadena muestra certificaciones permanentes de Casper. Ejecute un lote de demostración para grabar su primera prueba en esta sesión.",
+    "chain.empty.hint":
+      "La cadena muestra certificaciones permanentes de Casper. Ejecute un lote de demostración para grabar su primera prueba en esta sesión.",
     "chain.empty.cta": "Ejecutar lote de demostración",
     "chain.metrics.aria": "Recuentos de atestación de sesión",
     "marketplace.rail.title": "Carril de mercado sellado",
-    "marketplace.rail.subtitle": "Ruta controlada por origen desde Sello válido → Reclamo MintGate → Garantía de demostración.",
+    "marketplace.rail.subtitle":
+      "Ruta controlada por origen desde Sello válido → Reclamo MintGate → Garantía de demostración.",
     "marketplace.rail.btnPrimary": "Ejecutar demostración de riel sellado",
     "marketplace.rail.btnSecondary": "Abrir mis activos",
     "marketplace.rail.running": "Corriendo…",
     "marketplace.rail.statusIdle": "Comience con un sello de origen válido.",
-    "marketplace.rail.statusMinted": "Sello válido confirmado: MintGate reclamado (demostración). Bloquee el material de demostración para finalizar.",
-    "marketplace.rail.statusCompleting": "Sello válido confirmado: completando la garantía de demostración...",
-    "marketplace.rail.statusBlocked": "Bloqueado: origen no válido. Las garantías nuevas y de demostración permanecen cerradas.",
-    "marketplace.rail.statusComplete": "Carril completo (demostración). Revise las etiquetas de honestidad antes de juzgar en vivo o simulado.",
-    "marketplace.rail.honestyFooter": "Simulacro de x402 en la interfaz de usuario · Demostración MintGate · Garantía de demostración · Live ProofOfOrigin cuando fuente=live",
+    "marketplace.rail.statusMinted":
+      "Sello válido confirmado: MintGate reclamado (demostración). Bloquee el material de demostración para finalizar.",
+    "marketplace.rail.statusCompleting":
+      "Sello válido confirmado: completando la garantía de demostración...",
+    "marketplace.rail.statusBlocked":
+      "Bloqueado: origen no válido. Las garantías nuevas y de demostración permanecen cerradas.",
+    "marketplace.rail.statusComplete":
+      "Carril completo (demostración). Revise las etiquetas de honestidad antes de juzgar en vivo o simulado.",
+    "marketplace.rail.honestyFooter":
+      "Simulacro de x402 en la interfaz de usuario · Demostración MintGate · Garantía de demostración · Live ProofOfOrigin cuando fuente=live",
     "marketplace.rail.step.origin": "Sello de origen",
     "marketplace.rail.step.query": "Consulta de procedencia (simulacro x402)",
     "marketplace.rail.step.mint": "Reclamo de MintGate (demostración)",
     "marketplace.rail.step.sealed": "Activo sellado",
     "marketplace.rail.step.collateral": "Garantía de demostración",
-    "marketplace.rail.blockedNote": "No es válida la prueba permanente. MintGate y la garantía de demostración permanecen cerrados.",
+    "marketplace.rail.blockedNote":
+      "No es válida la prueba permanente. MintGate y la garantía de demostración permanecen cerrados.",
     "marketplace.rail.blockedSr": "Bloqueado",
     "marketplace.rail.invalidToggleOn": "Pruebe con un sello no válido",
-    "marketplace.rail.invalidToggleOff": "Volver al recurso de demostración válido",
+    "marketplace.rail.invalidToggleOff":
+      "Volver al recurso de demostración válido",
     "marketplace.rail.personaToggleOn": "Mostrar vista DeFi/constructor",
     "marketplace.rail.personaToggleOff": "Salir de la vista DeFi/constructor",
-    "marketplace.rail.personaDefiCopy": "Vista DeFi/constructor: muestra solo rutas de acceso controladas por origen. Las acciones financieras permanecen demo hasta que exista un sello Válido.",
+    "marketplace.rail.personaDefiCopy":
+      "Vista DeFi/constructor: muestra solo rutas de acceso controladas por origen. Las acciones financieras permanecen demo hasta que exista un sello Válido.",
     "marketplace.rail.mockLabel": "Mock x402: no se movió ningún CSPR",
     "marketplace.rail.demoMintLabel": "Demostración de MintGate",
     "marketplace.rail.lockCta": "Bloquear garantía de demostración",
     "marketplace.rail.releaseCta": "Liberar garantía de demostración",
     "marketplace.rail.locking": "Bloqueando…",
-    "marketplace.rail.error.query": "La consulta simulada x402 no fue confirmada.",
-    "marketplace.rail.error.mint": "El reclamo de demostración de MintGate fue bloqueado.",
+    "marketplace.rail.error.query":
+      "La consulta simulada x402 no fue confirmada.",
+    "marketplace.rail.error.mint":
+      "El reclamo de demostración de MintGate fue bloqueado.",
     "marketplace.rail.error.generic": "La demostración del riel sellado falló.",
-    "marketplace.rail.mintSummary": "Demostración simulada · {count} reclamos registrados · paquete {hash}",
+    "marketplace.rail.mintSummary":
+      "Demostración simulada · {count} reclamos registrados · paquete {hash}",
     "myassets.rail.bannerTitle": "Carril de mercado sellado · paso 4–5",
-    "myassets.rail.bannerBody": "Los activos de demostración reclamados se pueden bloquear como garantía de demostración solo cuando el origen sea válido.",
+    "myassets.rail.bannerBody":
+      "Los activos de demostración reclamados se pueden bloquear como garantía de demostración solo cuando el origen sea válido.",
     "myassets.rail.collateralLabel": "Garantía de demostración",
     "myassets.rail.lockCta": "Bloquear garantía de demostración",
     "myassets.rail.releaseCta": "Liberar garantía de demostración",
     "myassets.rail.locking": "Bloqueando…",
     "myassets.rail.releasing": "Liberando…",
-    "myassets.rail.lockDisabledReason": "El bloqueo está deshabilitado: este activo no tiene un sello de origen válido.",
-    "myassets.rail.lockError": "No se puede bloquear la garantía (demostración).",
-    "myassets.rail.releaseError": "No se puede liberar la garantía (demostración).",
-    "myassets.rail.collateralHonesty": "Garantía de demostración, no un mercado de préstamos. Sin liquidación, sin rendimiento, sin inversión. Elegible solo con origen válido + reclamo de demostración.",
+    "myassets.rail.lockDisabledReason":
+      "El bloqueo está deshabilitado: este activo no tiene un sello de origen válido.",
+    "myassets.rail.lockError":
+      "No se puede bloquear la garantía (demostración).",
+    "myassets.rail.releaseError":
+      "No se puede liberar la garantía (demostración).",
+    "myassets.rail.collateralHonesty":
+      "Garantía de demostración, no un mercado de préstamos. Sin liquidación, sin rendimiento, sin inversión. Elegible solo con origen válido + reclamo de demostración.",
     "myassets.empty.noAccount.title": "No hay cuenta demo conectada",
-    "myassets.empty.noAccount.hint": "Conéctese para cargar una colección de demostración simbólica con dos NFT de procedencia; no se requiere reclamo de Marketplace.",
-    "myassets.empty.noAccount.connectCta": "Conectar y cargar la colección de demostración",
+    "myassets.empty.noAccount.hint":
+      "Conéctese para cargar una colección de demostración simbólica con dos NFT de procedencia; no se requiere reclamo de Marketplace.",
+    "myassets.empty.noAccount.connectCta":
+      "Conectar y cargar la colección de demostración",
     "myassets.empty.noAccount.marketplaceCta": "Mercado abierto (demostración)",
     "myassets.empty.noAssets.title": "Aún no hay representaciones reclamadas",
-    "myassets.empty.noAssets.hint": "Cargue la colección de demostración para obtener una vista previa de los análisis de procedencia o solicite la suya propia después de una prueba válida en Marketplace.",
-    "myassets.empty.noAssets.loadCta": "Cargar colección de demostración (2 recursos)",
-    "myassets.empty.noAssets.marketplaceCta": "Explorar Marketplace (demostración)",
-    "myassets.detail.selectPrompt": "Seleccione un activo para ver análisis de procedencia.",
+    "myassets.empty.noAssets.hint":
+      "Cargue la colección de demostración para obtener una vista previa de los análisis de procedencia o solicite la suya propia después de una prueba válida en Marketplace.",
+    "myassets.empty.noAssets.loadCta":
+      "Cargar colección de demostración (2 recursos)",
+    "myassets.empty.noAssets.marketplaceCta":
+      "Explorar Marketplace (demostración)",
+    "myassets.detail.selectPrompt":
+      "Seleccione un activo para ver análisis de procedencia.",
     "myassets.list.selectHint": "Seleccione un activo",
     "prefs.lang.es": "Español",
-      "marketplace.page.kicker": "Marketplace",
+    "marketplace.page.kicker": "Marketplace",
     "marketplace.page.title": "Marketplace de procedencia",
-    "marketplace.page.lead": "Explore activos verificados en el mapa. Seleccione un lote para inspeccionar origen, estado de la prueba y opciones de claim (demo).",
+    "marketplace.page.lead":
+      "Explore activos verificados en el mapa. Seleccione un lote para inspeccionar origen, estado de la prueba y opciones de claim (demo).",
     "marketplace.page.captureNew": "Capturar nuevo",
     "marketplace.page.judgeEyebrow": "Flujo listo para el jurado",
     "marketplace.page.fullDemoTitle": "Ejecutar demo de extremo a extremo",
-    "marketplace.page.fullDemoLead": "Preset de captura → decisión del agente → consulta x402 pagada → claim MintGate demo, con el payload del agente visible para el jurado.",
+    "marketplace.page.fullDemoLead":
+      "Preset de captura → decisión del agente → consulta x402 pagada → claim MintGate demo, con el payload del agente visible para el jurado.",
     "marketplace.page.runDemo": "Ejecutar demo",
     "marketplace.page.fullDemoAria": "Demo completa de extremo a extremo",
     "marketplace.page.agentAria": "Integración de agentes",
     "marketplace.page.agentProvider": "Proveedor x402",
-    "marketplace.page.agentTitle": "Los agentes pagan a Lastre antes de tocar datos RWA/carbono.",
-    "marketplace.page.agentBody": "Consulte veredicto, coincidencia del sello, score de carbono y enlaces Casper antes de cualquier acción posterior.",
+    "marketplace.page.agentTitle":
+      "Los agentes pagan a Lastre antes de tocar datos RWA/carbono.",
+    "marketplace.page.agentBody":
+      "Consulte veredicto, coincidencia del sello, score de carbono y enlaces Casper antes de cualquier acción posterior.",
     "marketplace.page.copySnippet": "Copiar snippet",
     "marketplace.page.copied": "Copiado ✓",
     "marketplace.page.openAgents": "Abrir /agents",
@@ -2336,7 +2723,8 @@ export const translations = {
     "marketplace.page.demoSimulated": "Demo simulada",
     "marketplace.page.x402Paid": "consultas x402 pagadas",
     "marketplace.page.demoLotMinted": "Demo LotMinted",
-    "marketplace.page.mintNote": "La consulta en vivo lee atestaciones ProofOfOrigin. Los eventos MintGate son solo demo en este hackathon. Congelación de honestidad: Run Demo / x402 simulate = facilitador mock (sin CSPR). CSPR real en testnet solo vía settle de la API de producción — no este botón. Prueba antes del token y antes de las finanzas.",
+    "marketplace.page.mintNote":
+      "La consulta en vivo lee atestaciones ProofOfOrigin. Los eventos MintGate son solo demo en este hackathon. Congelación de honestidad: Run Demo / x402 simulate = facilitador mock (sin CSPR). CSPR real en testnet solo vía settle de la API de producción — no este botón. Prueba antes del token y antes de las finanzas.",
     "marketplace.page.searchPlaceholder": "Buscar activos…",
     "marketplace.page.searchAria": "Buscar activos del marketplace",
     "marketplace.page.assetsAria": "Activos del marketplace",
@@ -2345,18 +2733,23 @@ export const translations = {
     "marketplace.page.legendOriginHint": "(ficticio)",
     "marketplace.page.legendAnchor": "Ancla on-chain Casper",
     "marketplace.page.legendRoute": "Ruta de atestación (demo)",
-    "marketplace.page.legendNote": "Los orígenes son coordenadas demo declaradas por el operador — no GPS real ni custodia.",
+    "marketplace.page.legendNote":
+      "Los orígenes son coordenadas demo declaradas por el operador — no GPS real ni custodia.",
     "marketplace.page.loadingMap": "Cargando mapa…",
     "marketplace.page.mapAria": "Mapa interactivo de procedencia",
     "marketplace.page.anchorLabel": "Ancla Casper Testnet",
     "marketplace.page.demoStep1.label": "Captura + preset de prueba",
-    "marketplace.page.demoStep1.detail": "Carga la prueba ficticia de carbono VCS Amazonia y confirma el payload proof-before-token.",
+    "marketplace.page.demoStep1.detail":
+      "Carga la prueba ficticia de carbono VCS Amazonia y confirma el payload proof-before-token.",
     "marketplace.page.demoStep2.label": "Procesamiento del agente",
-    "marketplace.page.demoStep2.detail": "Ejecuta la ruta del agente Lastre para que la acción se decida antes del veredicto determinístico del sello.",
+    "marketplace.page.demoStep2.detail":
+      "Ejecuta la ruta del agente Lastre para que la acción se decida antes del veredicto determinístico del sello.",
     "marketplace.page.demoStep3.label": "Consulta x402 pagada (mock)",
-    "marketplace.page.demoStep3.detail": "Ruta del jurado: facilitador mock paga para leer procedencia (synthetic_receipt). Settle real de CSPR solo vía API/CLI.",
+    "marketplace.page.demoStep3.detail":
+      "Ruta del jurado: facilitador mock paga para leer procedencia (synthetic_receipt). Settle real de CSPR solo vía API/CLI.",
     "marketplace.page.demoStep4.label": "Claim MintGate",
-    "marketplace.page.demoStep4.detail": "El mint exige origen Valid. Demo LotMinted solo tras sello Valid (Invalid bloquea).",
+    "marketplace.page.demoStep4.detail":
+      "El mint exige origen Valid. Demo LotMinted solo tras sello Valid (Invalid bloquea).",
     "marketplace.page.viewMyAssets": "Ver en Mis activos",
     "marketplace.filters.aria": "Filtros del marketplace",
     "marketplace.filters.category": "Categoría",
@@ -2382,8 +2775,10 @@ export const translations = {
     "marketplace.drawer.close": "Cerrar vista previa",
     "corridor.kicker": "Corredor privado",
     "corridor.title": "Mesa de prueba",
-    "corridor.lead": "Sella el lote. Lastre decide Valid o Invalid. La S/A opera metal, logística y venta.",
-    "corridor.unlock.lead": "Clave de operador de esta mesa. Los documentos se hashean en el navegador — el archivo no va on-chain.",
+    "corridor.lead":
+      "Sella el lote. Lastre decide Valid o Invalid. La S/A opera metal, logística y venta.",
+    "corridor.unlock.lead":
+      "Clave de operador de esta mesa. Los documentos se hashean en el navegador — el archivo no va on-chain.",
     "corridor.unlock.label": "Clave de operador",
     "corridor.unlock.submit": "Desbloquear",
     "corridor.key.short": "La clave debe tener al menos 16 caracteres.",
@@ -2397,10 +2792,12 @@ export const translations = {
     "corridor.gate.closed": "Gate cerrado",
     "corridor.evaluate": "Evaluar paquete",
     "corridor.hashing": "Hasheando en el navegador…",
-    "corridor.note": "El pago no entra en esta pantalla. Siguiente paso: USDT en Liquid, verificado por Lastre, sin custodia.",
+    "corridor.note":
+      "El pago no entra en esta pantalla. Siguiente paso: USDT en Liquid, verificado por Lastre, sin custodia.",
     "corridor.error": "Fallo en el corredor privado.",
     "corridor.slot.title": "Título minero",
-    "corridor.slot.title.hint": "PLG / ANM — suelta el PDF. Solo queda el SHA-256.",
+    "corridor.slot.title.hint":
+      "PLG / ANM — suelta el PDF. Solo queda el SHA-256.",
     "corridor.slot.nfe": "Factura (NF-e)",
     "corridor.slot.nfe.hint": "Primera adquisición, hash local.",
     "corridor.slot.transport": "Transporte",
@@ -2409,7 +2806,7 @@ export const translations = {
     "corridor.slot.assay.hint": "Certificado de laboratorio independiente.",
     "corridor.slot.skr": "SKR del vault",
     "corridor.slot.skr.hint": "Recibo de custodia antes de cualquier mint.",
-}
+  },
 } as const satisfies Record<Locale, Record<string, string>>;
 
 export type TranslationKey = keyof typeof translations.en;

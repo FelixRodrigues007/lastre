@@ -18,7 +18,12 @@
   height: min(88vh, 40rem);
   border-radius: 16px;
   background: var(--lastre-bg-elevated);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-trust) 40%, var(--lastre-border-subtle));
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-trust) 40%,
+      var(--lastre-border-subtle)
+    );
   box-shadow: var(--app-shadow-float);
   overflow: hidden;
   position: relative;
@@ -121,7 +126,11 @@
 }
 
 .settings-modal__nav-item--active {
-  background: color-mix(in srgb, var(--lastre-link) 12%, var(--app-fill-active));
+  background: color-mix(
+    in srgb,
+    var(--lastre-link) 12%,
+    var(--app-fill-active)
+  );
   color: var(--lastre-text-primary);
 }
 
@@ -220,7 +229,8 @@
   padding: 0.875rem 1rem;
   border-radius: 12px;
   background: color-mix(in srgb, var(--lastre-link) 7%, transparent);
-  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--lastre-link) 24%, transparent);
+  box-shadow: inset 0 0 0 0.5px
+    color-mix(in srgb, var(--lastre-link) 24%, transparent);
 }
 
 .settings-modal__guardrail-icon {

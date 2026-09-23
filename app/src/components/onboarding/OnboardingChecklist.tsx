@@ -26,8 +26,17 @@ function ProgressRing({
 
   return (
     <div className="sidebar-guide__ring-wrap" aria-label={label}>
-      <svg className="sidebar-guide__ring" viewBox="0 0 24 24" aria-hidden="true">
-        <circle className="sidebar-guide__ring-track" cx="12" cy="12" r={radius} />
+      <svg
+        className="sidebar-guide__ring"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle
+          className="sidebar-guide__ring-track"
+          cx="12"
+          cy="12"
+          r={radius}
+        />
         <circle
           className="sidebar-guide__ring-fill"
           cx="12"
@@ -47,12 +56,19 @@ function ProgressRing({
 function SidebarGuide() {
   const { t } = useLocaleContext();
   const { checklist } = useOnboarding();
-  const doneCount = CHECKLIST_STEPS.filter(({ step }) => checklist[step]).length;
+  const doneCount = CHECKLIST_STEPS.filter(
+    ({ step }) => checklist[step],
+  ).length;
 
   return (
-    <section className="sidebar-guide" aria-label={t("onboarding.checklist.aria")}>
+    <section
+      className="sidebar-guide"
+      aria-label={t("onboarding.checklist.aria")}
+    >
       <header className="sidebar-guide__head">
-        <h2 className="sidebar-guide__title">{t("onboarding.checklist.title")}</h2>
+        <h2 className="sidebar-guide__title">
+          {t("onboarding.checklist.title")}
+        </h2>
         <ProgressRing
           done={doneCount}
           total={CHECKLIST_STEPS.length}
@@ -65,7 +81,10 @@ function SidebarGuide() {
       <ol className="sidebar-guide__list">
         {CHECKLIST_STEPS.map(({ step, to, labelKey }) => {
           const done = checklist[step];
-          const rowClass = ["sidebar-guide__row", done ? "sidebar-guide__row--done" : ""]
+          const rowClass = [
+            "sidebar-guide__row",
+            done ? "sidebar-guide__row--done" : "",
+          ]
             .filter(Boolean)
             .join(" ");
 
@@ -88,19 +107,26 @@ function SidebarGuide() {
 function FloatingGuide() {
   const { t } = useLocaleContext();
   const { checklist } = useOnboarding();
-  const doneCount = CHECKLIST_STEPS.filter(({ step }) => checklist[step]).length;
+  const doneCount = CHECKLIST_STEPS.filter(
+    ({ step }) => checklist[step],
+  ).length;
 
   return (
-    <aside className="guide-checklist" aria-label={t("onboarding.checklist.aria")}>
-      <header className="guide-checklist__head">
-        <h2 className="guide-checklist__title">{t("onboarding.checklist.title")}</h2>
+    <details
+      className="guide-checklist"
+      aria-label={t("onboarding.checklist.aria")}
+    >
+      <summary className="guide-checklist__head">
+        <span className="guide-checklist__title">
+          {t("onboarding.checklist.title")}
+        </span>
         <span className="guide-checklist__meta">
           {t("onboarding.checklist.progress", {
             done: doneCount,
             total: CHECKLIST_STEPS.length,
           })}
         </span>
-      </header>
+      </summary>
       <ul className="guide-checklist__list">
         {CHECKLIST_STEPS.map(({ step, to, labelKey }) => {
           const done = checklist[step];
@@ -121,7 +147,7 @@ function FloatingGuide() {
           );
         })}
       </ul>
-    </aside>
+    </details>
   );
 }
 

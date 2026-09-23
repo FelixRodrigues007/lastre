@@ -10,7 +10,11 @@ html {
 }
 
 :root[data-theme="light"] ::selection {
-  background: color-mix(in srgb, var(--lastre-info) 22%, var(--lastre-color-mirage-50));
+  background: color-mix(
+    in srgb,
+    var(--lastre-info) 22%,
+    var(--lastre-color-mirage-50)
+  );
   color: var(--lastre-text-secondary);
 }
 
@@ -44,7 +48,8 @@ kbd {
 /* Whisper scrollbars — visible, not hidden */
 * {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--lastre-text-muted) 32%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--lastre-text-muted) 32%, transparent)
+    transparent;
 }
 
 *::-webkit-scrollbar {

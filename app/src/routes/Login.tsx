@@ -36,7 +36,13 @@ export function Login() {
         </header>
 
         <div className="login__actions">
-          <Button variant="primary" size="md" type="button" className="entry-btn entry-btn--primary" onClick={() => finishAuth()}>
+          <Button
+            variant="primary"
+            size="md"
+            type="button"
+            className="entry-btn entry-btn--primary"
+            onClick={() => finishAuth()}
+          >
             <GoogleIcon size={18} />
             {t("onboarding.auth.google")}
           </Button>
@@ -46,7 +52,9 @@ export function Login() {
           </div>
 
           {!showEmail ? (
-            <Button variant="secondary" size="md"
+            <Button
+              variant="secondary"
+              size="md"
               type="button"
               className="entry-btn entry-btn--ghost"
               onClick={() => setShowEmail(true)}
@@ -59,20 +67,24 @@ export function Login() {
               onSubmit={(e) => {
                 e.preventDefault();
                 const nextEmail = email.trim();
-                finishAuth(
-                  buildUserProfile(
-                    nextEmail || "demo@lastro.io",
-                  ),
-                );
+                finishAuth(buildUserProfile(nextEmail || "demo@lastro.io"));
               }}
             >
-              <TextField label={t("onboarding.auth.emailPlaceholder")} className="entry-field"
-type="email"
-value={email}
-onChange={(e) => setEmail(e.target.value)}
-placeholder="you@example.com"
-autoComplete="email" />
-              <Button variant="primary" size="md" type="submit" className="entry-btn entry-btn--primary">
+              <TextField
+                label={t("onboarding.auth.emailPlaceholder")}
+                className="entry-field"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                autoComplete="email"
+              />
+              <Button
+                variant="primary"
+                size="md"
+                type="submit"
+                className="entry-btn entry-btn--primary"
+              >
                 {t("onboarding.auth.emailSubmit")}
               </Button>
             </form>

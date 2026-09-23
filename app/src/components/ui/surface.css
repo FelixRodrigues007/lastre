@@ -1,0 +1,41 @@
+.lastre-surface {
+  --surface-elevation: var(--lastre-elevation-1);
+  min-width: 0;
+  border: 1px solid var(--lastre-border-subtle);
+  border-radius: var(--lastre-radius-lg);
+  background: var(--lastre-material-matte);
+  box-shadow: var(--lastre-surface-edge), var(--surface-elevation);
+}
+.lastre-surface[data-elevation="0"] {
+  --surface-elevation: var(--lastre-elevation-0);
+}
+.lastre-surface[data-elevation="1"] {
+  --surface-elevation: var(--lastre-elevation-1);
+}
+.lastre-surface[data-elevation="2"] {
+  --surface-elevation: var(--lastre-elevation-2);
+}
+.lastre-surface[data-elevation="3"] {
+  --surface-elevation: var(--lastre-elevation-3);
+}
+.lastre-surface[data-elevation="4"] {
+  --surface-elevation: var(--lastre-elevation-4);
+}
+.lastre-surface[data-elevation="5"] {
+  --surface-elevation: var(--lastre-elevation-5);
+}
+.lastre-surface[data-material="glass"] {
+  background: var(--lastre-material-glass);
+  backdrop-filter: blur(var(--lastre-blur-glass));
+  -webkit-backdrop-filter: blur(var(--lastre-blur-glass));
+  border-color: var(--lastre-edge-light);
+}
+.lastre-surface[data-material="recessed"] {
+  background: var(--lastre-bg-canvas);
+  box-shadow: var(--lastre-shadow-inset);
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .lastre-surface[data-material="glass"] {
+    background: var(--lastre-bg-surface);
+  }
+}

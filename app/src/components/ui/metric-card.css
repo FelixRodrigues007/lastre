@@ -3,27 +3,18 @@
   gap: 0.35rem;
   padding: 1rem 1.125rem;
   border-radius: var(--panel-radius);
-  background: var(--lastre-bg-surface);
-  box-shadow: var(--app-shadow-panel);
+  background: var(--lastre-material-matte);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-1);
   position: relative;
 }
 
-.metric-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--lastre-glass-highlight);
-  pointer-events: none;
-}
-
 .metric-card--accent {
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--lastre-fill-brand) 85%, var(--lastre-bg-surface)) 0%,
-      var(--lastre-bg-surface) 100%
-    );
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--lastre-fill-brand) 85%, var(--lastre-bg-surface))
+      0%,
+    var(--lastre-bg-surface) 100%
+  );
   border: var(--lastre-stroke-hairline) solid var(--lastre-border-brand);
 }
 

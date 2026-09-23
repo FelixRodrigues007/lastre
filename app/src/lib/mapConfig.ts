@@ -1,3 +1,5 @@
+import tokens from "@design-system/tokens/lastre.tokens.json";
+
 export type MapProvider = "mapbox" | "maptiler" | "none";
 
 export type MapCredentials = {
@@ -9,7 +11,12 @@ export type MapCredentials = {
 };
 
 /** Pastel ocean fill — matches reference cartography and map panel chrome. */
-export const MARKETPLACE_MAP_OCEAN = "#aadaff";
+export const MARKETPLACE_MAP_OCEAN = tokens.primitive["color-blue-100"].$value;
+export const MARKETPLACE_MAP_STATUS = {
+  minted: tokens.primitive["color-success-light"].$value,
+  proven: tokens.primitive["color-blue-600"].$value,
+  pending: tokens.primitive["color-mirage-500"].$value,
+};
 
 /** Flat traditional map — blue ocean, no globe halo (Mapbox GL v3 defaults to globe). */
 export const MAPBOX_MARKETPLACE_STYLE = "mapbox://styles/mapbox/streets-v12";

@@ -7,7 +7,12 @@ import { MarketNoticeModal } from "../components/ui/MarketNoticeModal";
 import { Breadcrumbs } from "../components/ui/Breadcrumbs";
 import { EmptyState } from "../components/ui/EmptyState";
 import { StatePanel } from "../components/layout/StatePanel";
-import { getLots, lockCollateral, mintAsset, releaseCollateral } from "../lib/api";
+import {
+  getLots,
+  lockCollateral,
+  mintAsset,
+  releaseCollateral,
+} from "../lib/api";
 import { findMarketplaceAsset } from "../lib/marketplaceAssets";
 import type { MarketplacePersona } from "../lib/marketplaceTypes";
 import { useAsyncData } from "../hooks/useAsyncData";
@@ -33,7 +38,10 @@ function createDemoAccount(): string {
 
 function readStoredPersona(): MarketplacePersona {
   const stored = readDemoStorage(DEMO_PERSONA_STORAGE_KEY);
-  return stored === "public" || stored === "buyer" || stored === "defi" || stored === "operator"
+  return stored === "public" ||
+    stored === "buyer" ||
+    stored === "defi" ||
+    stored === "operator"
     ? stored
     : "buyer";
 }
@@ -47,7 +55,10 @@ export function MarketplaceAssetDetail() {
   );
   const [persona] = useState<MarketplacePersona>(() => readStoredPersona());
   const [locked, setLocked] = useState<Record<string, boolean>>({});
-  const [claimConfirm, setClaimConfirm] = useState<Record<string, unknown> | null>(null);
+  const [claimConfirm, setClaimConfirm] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
   const [isSigning, setIsSigning] = useState(false);
   const [notice, setNotice] = useState<{
     title: string;
@@ -56,7 +67,9 @@ export function MarketplaceAssetDetail() {
   } | null>(null);
 
   const lots = lotsData.data?.lots ?? [];
-  const enriched = assetId ? findMarketplaceAsset(assetId, lots as never[]) : null;
+  const enriched = assetId
+    ? findMarketplaceAsset(assetId, lots as never[])
+    : null;
 
   const connectWallet = useCallback(() => {
     const fake = createDemoAccount();
@@ -168,7 +181,12 @@ export function MarketplaceAssetDetail() {
             title="Asset not found"
             hint="This catalog entry may have been filtered out or removed from the demo set."
             action={
-              <ActionLink variant="primary" size="md" className="route-cta" to="/marketplace">
+              <ActionLink
+                variant="primary"
+                size="md"
+                className="route-cta"
+                to="/marketplace"
+              >
                 Back to Marketplace
               </ActionLink>
             }
@@ -200,10 +218,22 @@ export function MarketplaceAssetDetail() {
               Action: MintGate.record_mint (simulated Casper signature)
             </div>
             <div className="actions">
-              <Button variant="primary" size="md" onClick={confirmSimulatedClaim} disabled={isSigning} className="btn primary">
-                {isSigning ? "Signing with Casper account..." : "Sign & Claim (simulated)"}
+              <Button
+                variant="primary"
+                size="md"
+                onClick={confirmSimulatedClaim}
+                loading={isSigning}
+                className="btn primary"
+              >
+                Sign & Claim (simulated)
               </Button>
-              <Button variant="primary" size="md" onClick={() => setClaimConfirm(null)} className="btn" disabled={isSigning}>
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={() => setClaimConfirm(null)}
+                className="btn"
+                disabled={isSigning}
+              >
                 Cancel
               </Button>
             </div>

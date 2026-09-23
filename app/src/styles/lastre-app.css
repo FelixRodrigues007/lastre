@@ -5,9 +5,16 @@
   --focus-ring-trust: var(--lastre-focus-shadow);
 }
 
-:where(h1, h2, h3) { text-wrap: balance; }
-:where(p) { text-wrap: pretty; }
-:where(input, select, textarea) { font-family: var(--lastre-font-body); accent-color: var(--lastre-action-primary); }
+:where(h1, h2, h3) {
+  text-wrap: balance;
+}
+:where(p) {
+  text-wrap: pretty;
+}
+:where(input, select, textarea) {
+  font-family: var(--lastre-font-body);
+  accent-color: var(--lastre-action-primary);
+}
 :where(button, a, input, select, textarea, [tabindex]):focus-visible {
   outline: var(--lastre-focus-width) solid var(--lastre-focus);
   outline-offset: var(--lastre-focus-offset);
@@ -17,37 +24,85 @@
   outline: var(--lastre-focus-width) solid var(--lastre-focus);
   outline-offset: var(--lastre-focus-offset);
 }
-.app-shell :is(button, input, select):disabled { cursor: not-allowed; }
-.app-shell :is(h1, h2, h3), .entry-shell :is(h1, h2, h3) {
+.app-shell :is(button, input, select):disabled {
+  cursor: not-allowed;
+}
+.app-shell :is(h1, h2, h3),
+.entry-shell :is(h1, h2, h3) {
   font-family: var(--lastre-font-display);
   letter-spacing: var(--lastre-tracking-heading);
 }
-.app-shell :is(table, [role="progressbar"], .mono, .mono-label) { font-variant-numeric: tabular-nums; }
-.app-main, .page, .page__head, .page__title-row, .page__actions { min-width: 0; }
-.page__title { line-height: var(--lastre-line-heading); }
-.page__lead { line-height: var(--lastre-line-body); }
+.app-shell :is(table, [role="progressbar"], .mono, .mono-label) {
+  font-variant-numeric: tabular-nums;
+}
+.app-main,
+.page,
+.page__head,
+.page__title-row,
+.page__actions {
+  min-width: 0;
+}
+.page__title {
+  line-height: var(--lastre-line-heading);
+}
+.page__lead {
+  line-height: var(--lastre-line-body);
+}
 
 /* Selection and navigation keep their native semantics and share control sizing. */
-:is(.tab, .filter-pill, .view-toggle__btn, .auth-lang__btn, .app-prefs__trigger,
-.app-prefs__segment-btn, .settings-modal__segment-btn, .process-config-segment__btn,
-.escalation-filters__chip, .market-list__page-num, .my-assets-collateral-filters button,
-.app-sidebar__collapse, .session-menu__link, .session-menu__persona) {
+:is(
+  .tab,
+  .filter-pill,
+  .view-toggle__btn,
+  .auth-lang__btn,
+  .app-prefs__trigger,
+  .app-prefs__segment-btn,
+  .settings-modal__segment-btn,
+  .process-config-segment__btn,
+  .escalation-filters__chip,
+  .market-list__page-num,
+  .my-assets-collateral-filters button,
+  .app-sidebar__collapse,
+  .session-menu__link,
+  .session-menu__persona
+) {
   min-height: var(--lastre-control-sm);
   min-width: var(--lastre-control-sm);
   border-radius: var(--lastre-radius-sm);
 }
-.app-shell .app-sidebar__collapse { width: var(--lastre-control-sm); height: var(--lastre-control-sm); }
-.app-shell .auth-lang__btn { padding-inline: 10px; }
-.app-shell :is(.tab, .view-toggle__btn, .filter-pill) { font-size: var(--lastre-text-label); }
-.tabs { padding: var(--lastre-space-1); border-radius: var(--lastre-radius-md); }
-.search-input { min-height: var(--lastre-field-height); background: var(--lastre-field-bg); border: 1px solid var(--lastre-field-border); border-radius: var(--lastre-field-radius); }
-.search-input:focus-within { outline: var(--lastre-focus-width) solid var(--lastre-focus); outline-offset: var(--lastre-focus-offset); box-shadow: none; }
-.search-input__field { font-size: var(--lastre-text-label); }
-.app-shell .search-input__field:focus-visible { outline: none; }
-.lastre-notice { width: 100%; }
-.empty-state { border-radius: var(--lastre-radius-lg); padding: var(--lastre-space-8); gap: var(--lastre-space-3); }
-.empty-state__hint { font-size: var(--lastre-text-label); line-height: var(--lastre-line-body); }
-.empty-state__icon { color: var(--lastre-info); background: var(--lastre-info-surface); }
+.app-shell .app-sidebar__collapse {
+  width: var(--lastre-control-sm);
+  height: var(--lastre-control-sm);
+}
+.app-shell .auth-lang__btn {
+  padding-inline: 10px;
+}
+.app-shell :is(.tab, .view-toggle__btn, .filter-pill) {
+  font-size: var(--lastre-text-label);
+}
+.tabs {
+  padding: var(--lastre-space-1);
+  border-radius: var(--lastre-radius-md);
+}
+.app-shell .search-input__field:focus-visible {
+  outline: none;
+}
+.lastre-notice {
+  width: 100%;
+}
+.empty-state {
+  border-radius: var(--lastre-radius-lg);
+  padding: var(--lastre-space-8);
+  gap: var(--lastre-space-3);
+}
+.empty-state__hint {
+  font-size: var(--lastre-text-label);
+  line-height: var(--lastre-line-body);
+}
+.empty-state__icon {
+  color: var(--lastre-info);
+  background: var(--lastre-info-surface);
+}
 
 /* One restrained metallic accent on the key product surfaces. */
 .overview-next--banner::after {
@@ -56,7 +111,10 @@
   background: var(--lastre-gradient-gold);
   box-shadow: var(--lastre-glow-gold);
 }
-.sealed-rail, .process-config { border-top-color: var(--lastre-border-strong); }
+.sealed-rail,
+.process-config {
+  border-top-color: var(--lastre-border-strong);
+}
 .sealed-rail::before {
   content: "";
   position: absolute;
@@ -78,15 +136,53 @@
   opacity: 0;
   pointer-events: none;
 }
-.app-skip:focus { opacity: 1; pointer-events: auto; }
+.app-skip:focus {
+  opacity: 1;
+  pointer-events: auto;
+}
 @media (max-width: 600px) {
+  .app-topbar {
+    gap: 8px;
+    padding-inline: 16px;
+  }
+  .app-topbar__end {
+    gap: 6px;
+  }
+  .app-topbar__brand .seal-mark {
+    display: none;
+  }
+  .app-topbar__brand .lastre-wordmark {
+    width: 88px;
+    height: auto;
+    aspect-ratio: 428.488 / 96.109;
+  }
+  .app-topbar .app-topbar__capture {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+  }
+  .app-topbar__capture .btn-icon__label {
+    display: none;
+  }
   .app-shell :is(input:not([type="checkbox"]):not([type="radio"]), select),
-  .entry-shell :is(input, select) { font-size: 16px; }
-  .page__actions { flex-wrap: wrap; }
-  .empty-state { padding: var(--lastre-space-6); }
-  .skeleton-table__row { grid-template-columns: 1fr 1fr; }
-  .app-shell .auth-lang__btn { min-width: 40px; }
+  .entry-shell :is(input, select) {
+    font-size: 16px;
+  }
+  .page__actions {
+    flex-wrap: wrap;
+  }
+  .empty-state {
+    padding: var(--lastre-space-6);
+  }
+  .skeleton-table__row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .app-shell .auth-lang__btn {
+    min-width: 40px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .app-shell .lastre-button:active { transform: none; }
+  .app-shell .lastre-button:active {
+    transform: none;
+  }
 }

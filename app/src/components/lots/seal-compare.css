@@ -4,11 +4,19 @@
 }
 
 .seal-compare--mismatch {
-  border-color: color-mix(in srgb, var(--lastre-danger) 30%, var(--lastre-border-subtle));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-danger) 30%,
+    var(--lastre-border-subtle)
+  );
 }
 
 .seal-compare--match {
-  border-color: color-mix(in srgb, var(--lastre-link) 28%, var(--lastre-border-subtle));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-link) 28%,
+    var(--lastre-border-subtle)
+  );
 }
 
 .seal-compare__head {
@@ -94,7 +102,8 @@
   line-height: 1.45;
   color: var(--lastre-text-secondary);
   background: color-mix(in srgb, var(--lastre-danger) 6%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 18%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-danger) 18%, transparent);
 }
 
 .seal-compare__technical {

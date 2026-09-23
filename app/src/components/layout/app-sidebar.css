@@ -144,10 +144,10 @@
     align-items: center;
     gap: 0.5rem;
     width: 100%;
-    min-height: 2.125rem;
+    min-height: var(--lastre-control-md);
     padding: 0.4375rem 0.625rem;
     border: 0.5px solid var(--app-stroke-divider);
-    border-radius: 9px;
+    border-radius: var(--lastre-radius-sm);
     background: color-mix(in srgb, var(--app-fill-hover) 45%, transparent);
     color: var(--lastre-text-muted);
     font-family: inherit;
@@ -167,7 +167,7 @@
   }
 
   .app-sidebar__search:hover {
-    border-color: color-mix(in srgb, #fff 12%, transparent);
+    border-color: var(--lastre-border-strong);
     background: var(--app-fill-hover);
     color: var(--lastre-text-secondary);
   }

@@ -48,11 +48,18 @@ export function StatePanel({
 
   if (error) {
     return (
-      <InlineNotice tone="danger" live title={t("common.loadError")} action={onRetry ? (
-          <Button variant="secondary" onClick={onRetry}>
-            {t("common.retry")}
-          </Button>
-        ) : undefined}>
+      <InlineNotice
+        tone="danger"
+        live
+        title={t("common.loadError")}
+        action={
+          onRetry ? (
+            <Button variant="secondary" onClick={onRetry}>
+              {t("common.retry")}
+            </Button>
+          ) : undefined
+        }
+      >
         {error}
       </InlineNotice>
     );

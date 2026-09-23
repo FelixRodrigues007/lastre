@@ -1,7 +1,10 @@
 import { Button } from "../ui/Button";
 import { useState } from "react";
 import type { ChainSummary } from "../../lib/types";
-import type { ChainTimelineEntry, VerdictFilter } from "../../lib/chainTimeline";
+import type {
+  ChainTimelineEntry,
+  VerdictFilter,
+} from "../../lib/chainTimeline";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { truncateMiddle } from "../../lib/format";
 import { Icon } from "../ui/Icon";
@@ -14,7 +17,11 @@ type ChainPanelProps = {
   historyEntries: ChainTimelineEntry[];
 };
 
-export function ChainPanel({ summary, sessionEntries, historyEntries }: ChainPanelProps) {
+export function ChainPanel({
+  summary,
+  sessionEntries,
+  historyEntries,
+}: ChainPanelProps) {
   const { t } = useLocaleContext();
   const [technicalOpen, setTechnicalOpen] = useState(false);
   const [filter, setFilter] = useState<VerdictFilter>("all");
@@ -50,13 +57,18 @@ export function ChainPanel({ summary, sessionEntries, historyEntries }: ChainPan
       />
 
       <div className="chain-panel__technical">
-        <Button variant="secondary" size="md"
+        <Button
+          variant="secondary"
+          size="md"
           type="button"
           className="chain-panel__technical-toggle"
           aria-expanded={technicalOpen}
           onClick={() => setTechnicalOpen((open) => !open)}
         >
-          <Icon name={technicalOpen ? "chevron-down" : "chevron-right"} size={14} />
+          <Icon
+            name={technicalOpen ? "chevron-down" : "chevron-right"}
+            size={14}
+          />
           {t("chain.technical.toggle")}
         </Button>
 
@@ -79,7 +91,11 @@ export function ChainPanel({ summary, sessionEntries, historyEntries }: ChainPan
             <div>
               <dt>{t("chain.technical.packageUrl")}</dt>
               <dd>
-                <a href={testnet.packageUrl} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={testnet.packageUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {truncateMiddle(testnet.packageUrl, 56)}
                 </a>
               </dd>

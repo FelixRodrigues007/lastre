@@ -5,7 +5,8 @@ import "./lastre-primitives.css";
 export type NoticeTone = "info" | "success" | "warning" | "danger";
 type InlineNoticeProps = {
   title: string;
-  children: ReactNode;
+  children?: ReactNode;
+  className?: string;
   tone?: NoticeTone;
   action?: ReactNode;
   /** Enable only for a newly delivered result, not static page instructions. */
@@ -24,18 +25,19 @@ export function InlineNotice({
   tone = "info",
   action,
   live = false,
+  className = "",
 }: InlineNoticeProps) {
   const id = useId();
   return (
     <section
-      className={`lastre-notice lastre-notice--${tone}`}
+      className={`lastre-notice lastre-notice--${tone} ${className}`}
       aria-labelledby={id}
       role={live ? (tone === "danger" ? "alert" : "status") : undefined}
     >
       <Icon name={icons[tone]} size={18} />
       <div className="lastre-notice__body">
         <h4 id={id}>{title}</h4>
-        <div>{children}</div>
+        {children && <div>{children}</div>}
         {action && <div className="lastre-notice__action">{action}</div>}
       </div>
     </section>

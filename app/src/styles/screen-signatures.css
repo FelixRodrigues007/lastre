@@ -17,7 +17,8 @@
 
 @keyframes live-ring {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lastre-success) 45%, transparent);
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--lastre-success) 45%, transparent);
   }
 
   70% {
@@ -253,23 +254,38 @@
   animation: row-slide-in var(--dur-moderate) var(--ease-out) both;
 }
 
-[data-screen="overview"] .overview-activity-panel__items li:nth-child(1) .overview-activity-panel__row {
+[data-screen="overview"]
+  .overview-activity-panel__items
+  li:nth-child(1)
+  .overview-activity-panel__row {
   animation-delay: 200ms;
 }
 
-[data-screen="overview"] .overview-activity-panel__items li:nth-child(2) .overview-activity-panel__row {
+[data-screen="overview"]
+  .overview-activity-panel__items
+  li:nth-child(2)
+  .overview-activity-panel__row {
   animation-delay: 260ms;
 }
 
-[data-screen="overview"] .overview-activity-panel__items li:nth-child(3) .overview-activity-panel__row {
+[data-screen="overview"]
+  .overview-activity-panel__items
+  li:nth-child(3)
+  .overview-activity-panel__row {
   animation-delay: 320ms;
 }
 
-[data-screen="overview"] .overview-activity-panel__items li:nth-child(4) .overview-activity-panel__row {
+[data-screen="overview"]
+  .overview-activity-panel__items
+  li:nth-child(4)
+  .overview-activity-panel__row {
   animation-delay: 380ms;
 }
 
-[data-screen="overview"] .overview-activity-panel__items li:nth-child(n + 5) .overview-activity-panel__row {
+[data-screen="overview"]
+  .overview-activity-panel__items
+  li:nth-child(n + 5)
+  .overview-activity-panel__row {
   animation-delay: 440ms;
 }
 
@@ -338,7 +354,9 @@
 }
 
 [data-screen="lots"] .lot-list-row::before {
-  transition: width var(--dur-normal) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+  transition:
+    width var(--dur-normal) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -549,19 +567,31 @@
   animation: card-unfold 440ms var(--ease-out) both;
 }
 
-[data-screen="my-assets"] .my-assets-strip__cards > li:nth-child(1) .my-assets-strip__card {
+[data-screen="my-assets"]
+  .my-assets-strip__cards
+  > li:nth-child(1)
+  .my-assets-strip__card {
   animation-delay: 60ms;
 }
 
-[data-screen="my-assets"] .my-assets-strip__cards > li:nth-child(2) .my-assets-strip__card {
+[data-screen="my-assets"]
+  .my-assets-strip__cards
+  > li:nth-child(2)
+  .my-assets-strip__card {
   animation-delay: 120ms;
 }
 
-[data-screen="my-assets"] .my-assets-strip__cards > li:nth-child(3) .my-assets-strip__card {
+[data-screen="my-assets"]
+  .my-assets-strip__cards
+  > li:nth-child(3)
+  .my-assets-strip__card {
   animation-delay: 180ms;
 }
 
-[data-screen="my-assets"] .my-assets-strip__cards > li:nth-child(n + 4) .my-assets-strip__card {
+[data-screen="my-assets"]
+  .my-assets-strip__cards
+  > li:nth-child(n + 4)
+  .my-assets-strip__card {
   animation-delay: 240ms;
 }
 
@@ -636,8 +666,12 @@
   [data-screen] .market-lots-grid > *,
   [data-screen] .my-assets-strip__card,
   .entry-shell[data-screen] .entry-card,
-  .entry-shell[data-screen="welcome"] .path-option {
-    animation: page-rise 200ms var(--ease-out) both;
+  .entry-shell[data-screen="welcome"] .path-option,
+  [data-screen="overview"] .overview-trust__slice,
+  [data-screen="overview"] .overview-chart__area--draw {
+    animation: none;
+    opacity: 1;
+    transform: none;
     filter: none;
   }
 

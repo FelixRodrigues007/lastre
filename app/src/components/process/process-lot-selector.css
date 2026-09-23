@@ -106,7 +106,8 @@
   flex-shrink: 0;
   margin-top: 0.05rem;
   border-radius: var(--lastre-radius-sm);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-text-muted) 40%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-text-muted) 40%, transparent);
   color: var(--lastre-link);
   background: color-mix(in srgb, var(--lastre-bg-surface) 80%, transparent);
 }
@@ -215,5 +216,6 @@
   font-size: 0.8125rem;
   color: var(--lastre-warning);
   background: color-mix(in srgb, var(--lastre-warning) 8%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-warning) 25%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-warning) 25%, transparent);
 }

@@ -58,14 +58,20 @@ function LotSelectCard({
           {checked ? <Icon name="check" size={14} /> : null}
         </span>
         <span className="process-lot-card__body">
-          <span className="process-lot-card__name">{t(lotShortNameKey(lot))}</span>
+          <span className="process-lot-card__name">
+            {t(lotShortNameKey(lot))}
+          </span>
           {expectedKey ? (
-            <span className={`process-lot-card__expected process-lot-card__expected--${expectedKindClass(expected)}`}>
+            <span
+              className={`process-lot-card__expected process-lot-card__expected--${expectedKindClass(expected)}`}
+            >
               {t(expectedKey)}
             </span>
           ) : null}
           {isUserCapturedLot(lot) ? (
-            <span className="process-lot-card__id mono-label">{lot.artifact.assetId}</span>
+            <span className="process-lot-card__id mono-label">
+              {lot.artifact.assetId}
+            </span>
           ) : null}
         </span>
       </label>
@@ -94,22 +100,46 @@ export function ProcessLotSelector({
     >
       <header className="process-lot-selector__head">
         <div>
-          <p className="process-lot-selector__step mono-label">{t("process.step1")}</p>
-          <h2 id="process-lot-selector-title" className="process-lot-selector__title">
+          <p className="process-lot-selector__step mono-label">
+            {t("process.step1")}
+          </p>
+          <h2
+            id="process-lot-selector-title"
+            className="process-lot-selector__title"
+          >
             {t("process.selectLotsTitle")}
           </h2>
-          {!isSidebar ? <p className="process-lot-selector__lead">{t("process.selectLotsLead")}</p> : null}
+          {!isSidebar ? (
+            <p className="process-lot-selector__lead">
+              {t("process.selectLotsLead")}
+            </p>
+          ) : null}
         </div>
         <div className="process-lot-selector__meta">
           <p className="process-lot-selector__count">
-            {t("process.selected", { selected: String(selected.length), total: String(totalLots) })}
+            {t("process.selected", {
+              selected: String(selected.length),
+              total: String(totalLots),
+            })}
           </p>
           {!disabled ? (
             <div className="process-lot-selector__bulk">
-              <Button variant="ghost" size="sm" type="button" className="process-lot-selector__bulk-btn" onClick={onSelectAll}>
+              <Button
+                variant="ghost"
+                size="sm"
+                type="button"
+                className="process-lot-selector__bulk-btn"
+                onClick={onSelectAll}
+              >
                 {t("process.selectAll")}
               </Button>
-              <Button variant="ghost" size="sm" type="button" className="process-lot-selector__bulk-btn" onClick={onSelectNone}>
+              <Button
+                variant="ghost"
+                size="sm"
+                type="button"
+                className="process-lot-selector__bulk-btn"
+                onClick={onSelectNone}
+              >
                 {t("process.selectNone")}
               </Button>
             </div>
@@ -118,7 +148,11 @@ export function ProcessLotSelector({
       </header>
 
       <ul
-        className={isSidebar ? "process-lot-selector__list" : "process-lot-selector__grid"}
+        className={
+          isSidebar
+            ? "process-lot-selector__list"
+            : "process-lot-selector__grid"
+        }
         role="group"
         aria-label={t("process.selectLotsTitle")}
       >

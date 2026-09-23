@@ -8,10 +8,7 @@ import { EmptyState } from "../components/ui/EmptyState";
 import { useLocaleContext } from "../context/LocaleContext";
 import { useOnboarding } from "../context/OnboardingContext";
 import { getAudit, getChainSummary } from "../lib/api";
-import {
-  buildHistoryEntries,
-  buildSessionEntries,
-} from "../lib/chainTimeline";
+import { buildHistoryEntries, buildSessionEntries } from "../lib/chainTimeline";
 import { useAsyncData } from "../hooks/useAsyncData";
 import "./chain.css";
 
@@ -62,19 +59,33 @@ export function Chain() {
                 title={t("chain.empty.title")}
                 hint={t("chain.empty.hint")}
                 action={
-                  <ActionLink variant="primary" size="md" className="route-cta" to="/process">
+                  <ActionLink
+                    variant="primary"
+                    size="md"
+                    className="route-cta"
+                    to="/process"
+                  >
                     <BtnIcon icon="process">{t("chain.empty.cta")}</BtnIcon>
                   </ActionLink>
                 }
               />
             ) : (
-              <section className="chain-session-metrics panel" aria-label={t("chain.metrics.aria")}>
+              <section
+                className="chain-session-metrics panel"
+                aria-label={t("chain.metrics.aria")}
+              >
                 <div className="chain-session-metrics__item">
-                  <span className="chain-session-metrics__label">{t("common.valid")}</span>
-                  <span className="chain-session-metrics__value">{chain.data.session.accepted}</span>
+                  <span className="chain-session-metrics__label">
+                    {t("common.valid")}
+                  </span>
+                  <span className="chain-session-metrics__value">
+                    {chain.data.session.accepted}
+                  </span>
                 </div>
                 <div className="chain-session-metrics__item">
-                  <span className="chain-session-metrics__label">{t("common.invalid")}</span>
+                  <span className="chain-session-metrics__label">
+                    {t("common.invalid")}
+                  </span>
                   <span className="chain-session-metrics__value chain-session-metrics__value--invalid">
                     {chain.data.session.rejected}
                   </span>

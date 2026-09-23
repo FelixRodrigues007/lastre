@@ -103,7 +103,8 @@
 }
 
 .field-diff__row--diverge td:last-child {
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastre-danger) 70%, transparent);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--lastre-danger) 70%, transparent);
 }
 
 .field-diff__footer {

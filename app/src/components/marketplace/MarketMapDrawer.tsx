@@ -1,3 +1,4 @@
+import { useDialogFocus } from "../../hooks/useDialogFocus";
 import { ActionLink } from "../ui/ActionLink";
 import { Button } from "../ui/Button";
 import { useEffect, useId } from "react";
@@ -12,9 +13,11 @@ type MarketMapDrawerProps = {
 };
 
 export function MarketMapDrawer({ asset, onClose }: MarketMapDrawerProps) {
+  const dialogRef = useDialogFocus<HTMLElement>(true);
   const titleId = useId();
   const assetId = String(asset.asset.assetId);
-  const origin = asset.asset.origin as { site?: string; label?: string } | undefined;
+  const origin = asset.asset.origin as
+    { site?: string; label?: string } | undefined;
   const site = origin?.site || origin?.label;
 
   useEffect(() => {
@@ -33,9 +36,15 @@ export function MarketMapDrawer({ asset, onClose }: MarketMapDrawerProps) {
   }, [onClose]);
 
   return (
-    <div className="market-map-drawer-overlay" onClick={onClose} role="presentation">
+    <div
+      className="market-map-drawer-overlay"
+      onClick={onClose}
+      role="presentation"
+    >
       <aside
         className="market-map-drawer"
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -52,7 +61,10 @@ export function MarketMapDrawer({ asset, onClose }: MarketMapDrawerProps) {
               <span className="mono-label">{assetId}</span>
             </p>
           </div>
-          <Button variant="ghost" size="sm" iconOnly
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
             type="button"
             className="market-map-drawer__close"
             onClick={onClose}
@@ -64,19 +76,34 @@ export function MarketMapDrawer({ asset, onClose }: MarketMapDrawerProps) {
 
         <div className="market-map-drawer__seal-row">
           <span className="market-map-drawer__seal-label">Seal</span>
-          <code className="market-map-drawer__seal">{shortHash(asset.computedSeal, 10, 6)}</code>
-          <span className="market-map-drawer__score">Score {asset.provScore}</span>
+          <code className="market-map-drawer__seal">
+            {shortHash(asset.computedSeal, 10, 6)}
+          </code>
+          <span className="market-map-drawer__score">
+            Score {asset.provScore}
+          </span>
         </div>
 
         <p className="market-map-drawer__note small">
-          Declared origin — fictional demo coordinates. Not GPS tracking or real-world custody.
+          Declared origin — fictional demo coordinates. Not GPS tracking or
+          real-world custody.
         </p>
 
         <div className="market-map-drawer__actions">
-          <ActionLink variant="primary" size="md" className="route-cta" to={`/lots?lot=${encodeURIComponent(assetId)}`}>
+          <ActionLink
+            variant="primary"
+            size="md"
+            className="route-cta"
+            to={`/lots?lot=${encodeURIComponent(assetId)}`}
+          >
             Ver evidências
           </ActionLink>
-          <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={`/marketplace/${encodeURIComponent(assetId)}`}>
+          <ActionLink
+            variant="secondary"
+            size="md"
+            className="route-cta route-cta--ghost"
+            to={`/marketplace/${encodeURIComponent(assetId)}`}
+          >
             Open asset page
           </ActionLink>
         </div>

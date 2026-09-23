@@ -5,7 +5,8 @@
   padding: 0.2rem;
   border-radius: var(--app-radius-control);
   border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
-  background: color-mix(in srgb, var(--lastre-bg-canvas) 40%, transparent);
+  background: var(--lastre-bg-canvas);
+  box-shadow: var(--lastre-shadow-inset);
   width: fit-content;
   max-width: 100%;
 }
@@ -30,9 +31,9 @@
 }
 
 .tab--active {
-  background: color-mix(in srgb, var(--lastre-bg-elevated) 90%, transparent);
+  background: var(--lastre-material-matte);
   color: var(--lastre-text-primary);
-  box-shadow: inset 0 0 0 0.5px var(--lastre-border-subtle);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-1);
 }
 
 .tabs-panel {

@@ -3,10 +3,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
 import type { LotDetail } from "../../lib/types";
-import {
-  layerStatusCounts,
-  type ProofLayer,
-} from "../../lib/provenanceScore";
+import { layerStatusCounts, type ProofLayer } from "../../lib/provenanceScore";
 import { assetDisplayName } from "./MyAssetsAssetList";
 import "./asset-analytics-report.css";
 
@@ -42,7 +39,10 @@ function buildTrafficSeries(
     const spike = i % 6 === 3 ? 22 : i % 4 === 1 ? 14 : 0;
     const base = tab === "score" ? score * 0.45 : tab === "layers" ? 28 : 18;
     const primary = Math.max(8, Math.round(base + wave + spike + (i % 3) * 4));
-    const secondary = Math.max(0, Math.round(primary * (0.22 + (seed % 5) * 0.04) + Math.cos(i * 0.7) * 6));
+    const secondary = Math.max(
+      0,
+      Math.round(primary * (0.22 + (seed % 5) * 0.04) + Math.cos(i * 0.7) * 6),
+    );
     attested.push(primary);
     pending.push(secondary);
   }
@@ -83,19 +83,29 @@ function ProofTrafficChart({
   const min = 0;
   const max = Math.max(...allValues, 20);
   const range = max - min || 1;
-  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((ratio) => Math.round(min + range * ratio));
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((ratio) =>
+    Math.round(min + range * ratio),
+  );
 
-  const xAt = (index: number) => PAD.left + (index / (attested.length - 1)) * plotW;
-  const yAt = (value: number) => PAD.top + plotH - ((value - min) / range) * plotH;
+  const xAt = (index: number) =>
+    PAD.left + (index / (attested.length - 1)) * plotW;
+  const yAt = (value: number) =>
+    PAD.top + plotH - ((value - min) / range) * plotH;
 
-  const attestedLine = attested.map((value, index) => `${xAt(index)},${yAt(value)}`).join(" ");
+  const attestedLine = attested
+    .map((value, index) => `${xAt(index)},${yAt(value)}`)
+    .join(" ");
   const pendingTop = pending.map((value, index) => attested[index] + value);
-  const pendingLine = pendingTop.map((value, index) => `${xAt(index)},${yAt(value)}`).join(" ");
+  const pendingLine = pendingTop
+    .map((value, index) => `${xAt(index)},${yAt(value)}`)
+    .join(" ");
 
   const baseline = yAt(0);
   const attestedArea = `M ${xAt(0)},${baseline} L ${attestedLine.split(" ").join(" L ")} L ${xAt(attested.length - 1)},${baseline} Z`;
 
-  const pendingTopPts = pendingTop.map((value, index) => `${xAt(index)},${yAt(value)}`);
+  const pendingTopPts = pendingTop.map(
+    (value, index) => `${xAt(index)},${yAt(value)}`,
+  );
   const attestedPtsRev = [...attested].reverse().map((value, revIndex) => {
     const index = attested.length - 1 - revIndex;
     return `${xAt(index)},${yAt(value)}`;
@@ -103,21 +113,47 @@ function ProofTrafficChart({
   const pendingArea = `M ${pendingTopPts.join(" L ")} L ${attestedPtsRev.join(" L ")} Z`;
 
   const yLabel =
-    tab === "score" ? "Provenance score" : tab === "layers" ? "Layer events" : "Chain events";
+    tab === "score"
+      ? "Provenance score"
+      : tab === "layers"
+        ? "Layer events"
+        : "Chain events";
 
   return (
     <div className="aar-traffic-chart">
       <div className="aar-traffic-chart__legend" aria-hidden="true">
-        <span><i className="aar-traffic-chart__dot aar-traffic-chart__dot--attested" /> Attested</span>
-        <span><i className="aar-traffic-chart__dot aar-traffic-chart__dot--pending" /> Pending</span>
+        <span>
+          <i className="aar-traffic-chart__dot aar-traffic-chart__dot--attested" />{" "}
+          Attested
+        </span>
+        <span>
+          <i className="aar-traffic-chart__dot aar-traffic-chart__dot--pending" />{" "}
+          Pending
+        </span>
       </div>
-      <svg className="aar-traffic-chart__svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${yLabel} over time`}>
+      <svg
+        className="aar-traffic-chart__svg"
+        viewBox={`0 0 ${W} ${H}`}
+        role="img"
+        aria-label={`${yLabel} over time`}
+      >
         {yTicks.map((tick) => {
           const y = yAt(tick);
           return (
             <g key={tick}>
-              <line className="aar-traffic-chart__grid" x1={PAD.left} y1={y} x2={PAD.left + plotW} y2={y} />
-              <text className="aar-traffic-chart__tick" x={PAD.left - 8} y={y + 4} textAnchor="end">
+              <line
+                className="aar-traffic-chart__grid"
+                x1={PAD.left}
+                y1={y}
+                x2={PAD.left + plotW}
+                y2={y}
+              />
+              <text
+                className="aar-traffic-chart__tick"
+                x={PAD.left - 8}
+                y={y + 4}
+                textAnchor="end"
+              >
                 {tick}
               </text>
             </g>
@@ -136,10 +172,24 @@ function ProofTrafficChart({
             />
           );
         })}
-        <path className="aar-traffic-chart__area aar-traffic-chart__area--attested" d={attestedArea} />
-        <path className="aar-traffic-chart__area aar-traffic-chart__area--pending" d={pendingArea} />
-        <polyline className="aar-traffic-chart__line aar-traffic-chart__line--attested" points={attestedLine} fill="none" />
-        <polyline className="aar-traffic-chart__line aar-traffic-chart__line--pending" points={pendingLine} fill="none" />
+        <path
+          className="aar-traffic-chart__area aar-traffic-chart__area--attested"
+          d={attestedArea}
+        />
+        <path
+          className="aar-traffic-chart__area aar-traffic-chart__area--pending"
+          d={pendingArea}
+        />
+        <polyline
+          className="aar-traffic-chart__line aar-traffic-chart__line--attested"
+          points={attestedLine}
+          fill="none"
+        />
+        <polyline
+          className="aar-traffic-chart__line aar-traffic-chart__line--pending"
+          points={pendingLine}
+          fill="none"
+        />
         <text
           className="aar-traffic-chart__ylabel"
           transform={`translate(16 ${PAD.top + plotH / 2}) rotate(-90)`}
@@ -164,7 +214,9 @@ function DistributionColumn({
   return (
     <div className="aar-dist__col">
       <span className="aar-dist__label">{label}</span>
-      <span className={`aar-dist__value aar-dist__value--${tone}`}>{percent}%</span>
+      <span className={`aar-dist__value aar-dist__value--${tone}`}>
+        {percent}%
+      </span>
       <div className="aar-dist__track" aria-hidden="true">
         <span
           className={`aar-dist__fill aar-dist__fill--${tone}`}
@@ -196,18 +248,30 @@ function ProofLayerVitalsSection({
       </div>
 
       <p id="proof-layers-about" className="aar-proof-layers__desc">
-        Distribution of capture, seal, verification, Casper attestation, and mint layers for this asset.
+        Distribution of capture, seal, verification, Casper attestation, and
+        mint layers for this asset.
       </p>
 
-      <div className="aar-dist" role="group" aria-label="Layer status distribution">
+      <div
+        className="aar-dist"
+        role="group"
+        aria-label="Layer status distribution"
+      >
         <DistributionColumn label="Good" percent={goodPct} tone="good" />
-        <DistributionColumn label="Needs improvement" percent={partialPct} tone="partial" />
+        <DistributionColumn
+          label="Needs improvement"
+          percent={partialPct}
+          tone="partial"
+        />
         <DistributionColumn label="Poor" percent={poorPct} tone="poor" />
       </div>
 
       <ul className="aar-layer-list">
         {layers.map((layer) => (
-          <li key={layer.id} className={`aar-layer-list__item aar-layer-list__item--${layer.status}`}>
+          <li
+            key={layer.id}
+            className={`aar-layer-list__item aar-layer-list__item--${layer.status}`}
+          >
             <span className="aar-layer-list__name">{layer.label}</span>
             <span className="aar-layer-list__detail">{layer.detail}</span>
           </li>
@@ -235,7 +299,10 @@ function ProofTrafficPanel({
   poorPct: number;
 }) {
   const [tab, setTab] = useState<TrafficTab>("score");
-  const series = useMemo(() => buildTrafficSeries(assetId, tab, score), [assetId, tab, score]);
+  const series = useMemo(
+    () => buildTrafficSeries(assetId, tab, score),
+    [assetId, tab, score],
+  );
   const totals = trafficTotals(series.attested, series.pending);
 
   const panelTitle =
@@ -259,16 +326,32 @@ function ProofTrafficPanel({
           </Link>
         </h2>
         <div className="aar__control-actions">
-          <Button variant="secondary" size="md" type="button" className="aar__range" disabled>
+          <Button
+            variant="secondary"
+            size="md"
+            type="button"
+            className="aar__range"
+            disabled
+          >
             Last 24 hours (GMT-3) <Icon name="chevron-down" size={14} />
           </Button>
-          <Button variant="secondary" size="md" type="button" className="aar__print" disabled>
+          <Button
+            variant="secondary"
+            size="md"
+            type="button"
+            className="aar__print"
+            disabled
+          >
             <Icon name="download" size={16} /> Print report
           </Button>
         </div>
       </header>
 
-      <nav className="aar-traffic-tabs" role="tablist" aria-label="Traffic dimensions">
+      <nav
+        className="aar-traffic-tabs"
+        role="tablist"
+        aria-label="Traffic dimensions"
+      >
         {TRAFFIC_TABS.map((item, index) => (
           <button
             key={item.id}
@@ -286,20 +369,30 @@ function ProofTrafficPanel({
       <div className="aar-traffic__body">
         <h3 className="aar-traffic__heading">{panelTitle}</h3>
 
-        <div className="aar-traffic-kpis" role="group" aria-label="Summary metrics">
+        <div
+          className="aar-traffic-kpis"
+          role="group"
+          aria-label="Summary metrics"
+        >
           <div className="aar-traffic-kpi">
             <span className="aar-traffic-kpi__label">Total checks</span>
-            <span className="aar-traffic-kpi__value">{totals.total.toLocaleString()}</span>
+            <span className="aar-traffic-kpi__value">
+              {totals.total.toLocaleString()}
+            </span>
             <span className="aar-traffic-kpi__hint">Previous 24 hours</span>
           </div>
           <div className="aar-traffic-kpi">
             <span className="aar-traffic-kpi__label">Attested</span>
-            <span className="aar-traffic-kpi__value">{totals.attested.toLocaleString()}</span>
+            <span className="aar-traffic-kpi__value">
+              {totals.attested.toLocaleString()}
+            </span>
             <span className="aar-traffic-kpi__hint">Previous 24 hours</span>
           </div>
           <div className="aar-traffic-kpi">
             <span className="aar-traffic-kpi__label">Pending</span>
-            <span className="aar-traffic-kpi__value">{totals.pending.toLocaleString()}</span>
+            <span className="aar-traffic-kpi__value">
+              {totals.pending.toLocaleString()}
+            </span>
             <span className="aar-traffic-kpi__hint">Previous 24 hours</span>
           </div>
         </div>
@@ -353,15 +446,27 @@ function KpiSidebar({
 
   return (
     <aside className="aar__kpi-col" aria-label="Proof KPIs">
-      <KpiMetricCard title="Provenance score" value={score} label="P50 percentile" />
+      <KpiMetricCard
+        title="Provenance score"
+        value={score}
+        label="P50 percentile"
+      />
       <KpiMetricCard title="Good layers" value={good} label="P75 percentile" />
-      <KpiMetricCard title="Partial layers" value={partial} label="P90 percentile" />
+      <KpiMetricCard
+        title="Partial layers"
+        value={partial}
+        label="P90 percentile"
+      />
       <KpiMetricCard title="Mint" value={mintValue} label="P99 percentile" />
     </aside>
   );
 }
 
-export function AssetAnalyticsReport({ lot, layers, score }: AssetAnalyticsReportProps) {
+export function AssetAnalyticsReport({
+  lot,
+  layers,
+  score,
+}: AssetAnalyticsReportProps) {
   const counts = layerStatusCounts(layers);
   const layerTotal = layers.length || 1;
   const goodPct = Math.round((counts.good / layerTotal) * 100);

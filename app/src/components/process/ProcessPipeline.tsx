@@ -8,12 +8,18 @@ type ProcessPipelineStripProps = {
   activeStep: number;
 };
 
-export function ProcessPipelineStrip({ activeStep }: ProcessPipelineStripProps) {
+export function ProcessPipelineStrip({
+  activeStep,
+}: ProcessPipelineStripProps) {
   return (
     <ol className="process-pipeline" aria-label="Batch pipeline">
       {STEPS.map((label, index) => {
         const state =
-          index < activeStep ? "done" : index === activeStep ? "active" : "pending";
+          index < activeStep
+            ? "done"
+            : index === activeStep
+              ? "active"
+              : "pending";
         return (
           <li
             key={label}
@@ -33,25 +39,38 @@ type ProcessStickySummaryProps = {
   total: number;
 };
 
-export function ProcessStickySummary({ summary, total }: ProcessStickySummaryProps) {
+export function ProcessStickySummary({
+  summary,
+  total,
+}: ProcessStickySummaryProps) {
   return (
     <div className="process-sticky-summary" role="status">
       <div className="process-sticky-summary__copy">
         <p className="process-sticky-summary__text">
-          <strong>{total} processed</strong> · {summary.tokenizable} tokenizable ·{" "}
-          {summary.rejected} rejected · {summary.escalated} escalated
+          <strong>{total} processed</strong> · {summary.tokenizable} tokenizable
+          · {summary.rejected} rejected · {summary.escalated} escalated
         </p>
         <p className="process-sticky-summary__note">
-          The agent chose each action. The seal decided each verdict. Invalid rows are permanent
-          proof — not errors.
+          The agent chose each action. The seal decided each verdict. Invalid
+          rows are permanent proof — not errors.
         </p>
       </div>
       <div className="process-sticky-summary__actions">
-        <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/audit">
+        <ActionLink
+          variant="secondary"
+          size="md"
+          className="route-cta route-cta--ghost"
+          to="/audit"
+        >
           Open audit log
         </ActionLink>
         {summary.tokenizable > 0 ? (
-          <ActionLink variant="primary" size="md" className="route-cta" to="/marketplace">
+          <ActionLink
+            variant="primary"
+            size="md"
+            className="route-cta"
+            to="/marketplace"
+          >
             Claim demo representation
           </ActionLink>
         ) : null}

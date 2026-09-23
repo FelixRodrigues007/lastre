@@ -4,11 +4,17 @@
   height: fit-content;
   padding: 1.1rem 1.15rem 1.15rem;
   border-radius: 1.125rem;
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 65%, transparent);
-  background: color-mix(in srgb, var(--lastre-bg-surface) 94%, var(--lastre-bg-canvas));
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-border-subtle) 65%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--lastre-bg-surface) 94%,
+    var(--lastre-bg-canvas)
+  );
   backdrop-filter: blur(20px) saturate(1.2);
   box-shadow:
-    0 0 0 0.5px color-mix(in srgb, var(--lastre-text-primary) 6%, transparent) inset,
+    0 0 0 0.5px color-mix(in srgb, var(--lastre-text-primary) 6%, transparent)
+      inset,
     0 12px 40px rgba(0, 0, 0, 0.14);
   transition:
     border-color var(--dur-normal) var(--ease-out),
@@ -22,12 +28,11 @@
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  background:
-    radial-gradient(
-      ellipse 120% 80% at 50% 100%,
-      color-mix(in srgb, var(--lastre-link) 22%, transparent) 0%,
-      transparent 62%
-    );
+  background: radial-gradient(
+    ellipse 120% 80% at 50% 100%,
+    color-mix(in srgb, var(--lastre-link) 22%, transparent) 0%,
+    transparent 62%
+  );
   transition: opacity var(--dur-normal) var(--ease-out);
 }
 

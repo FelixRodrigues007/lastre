@@ -1,5 +1,7 @@
 .audit-card {
   display: grid;
+  min-width: 0;
+  overflow-wrap: anywhere;
   gap: 1rem;
 }
 
@@ -9,6 +11,7 @@
 
 .audit-card__head {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;

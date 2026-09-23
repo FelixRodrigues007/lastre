@@ -15,7 +15,7 @@ export function BtnIcon({ icon, children, size = 15 }: BtnIconProps) {
       <span className="btn-icon__glyph" aria-hidden="true">
         <Icon name={icon} size={size} />
       </span>
-      {children}
+      <span className="btn-icon__label">{children}</span>
     </span>
   );
 }

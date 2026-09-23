@@ -10,7 +10,7 @@
 }
 
 .nav-item--sidebar {
-  min-height: 2rem;
+  min-height: var(--lastre-control-sm);
   padding: 0.375rem 0.5rem;
   border-radius: 8px;
   font-size: 0.8125rem;

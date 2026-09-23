@@ -25,7 +25,9 @@ export function CopyBlock({ label, value }: CopyBlockProps) {
       <span className="copy-block__label">{label}</span>
       <div className="copy-block__row">
         <code className="copy-block__value">{value}</code>
-        <Button variant="secondary" size="md"
+        <Button
+          variant="secondary"
+          size="md"
           type="button"
           className={`copy-block__btn${copied ? " copy-block__btn--done" : ""}`}
           onClick={copy}

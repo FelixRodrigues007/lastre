@@ -33,7 +33,10 @@ export function ChainTimelineItem({ entry }: ChainTimelineItemProps) {
       className={`chain-list__row chain-list__row--${isValid ? "valid" : "invalid"}`}
     >
       <div className="chain-list__primary">
-        <Link className="chain-list__asset" to={`/lots/${encodeURIComponent(entry.assetId)}`}>
+        <Link
+          className="chain-list__asset"
+          to={`/lots/${encodeURIComponent(entry.assetId)}`}
+        >
           {entry.assetId}
         </Link>
         <VerdictBadge verdict={entry.verdict} size="sm" />
@@ -44,7 +47,9 @@ export function ChainTimelineItem({ entry }: ChainTimelineItemProps) {
           <span className="mono-label">{t("chain.timeline.seal")}</span>
           <div className="chain-list__seal-row">
             <code>{shortHash(entry.providedSeal, 10, 6)}</code>
-            <Button variant="ghost" size="sm"
+            <Button
+              variant="ghost"
+              size="sm"
               type="button"
               className={`chain-list__copy${copied ? " chain-list__copy--done" : ""}`}
               onClick={copySeal}

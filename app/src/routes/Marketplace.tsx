@@ -1,10 +1,22 @@
+import { MARKETPLACE_MAP_OCEAN } from "../lib/mapConfig";
+import { MARKETPLACE_MAP_STATUS } from "../lib/mapConfig";
 import { Button } from "../components/ui/Button";
-import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { Map as MapboxMap } from "mapbox-gl";
 import { CaptureWizardTrigger } from "../components/capture/CaptureWizardTrigger";
-import { FullDemoModal, type FullDemoStep } from "../components/demo/FullDemoModal";
+import {
+  FullDemoModal,
+  type FullDemoStep,
+} from "../components/demo/FullDemoModal";
 import { MarketMapDrawer } from "../components/marketplace/MarketMapDrawer";
 import { MarketplaceAssetBadge } from "../components/marketplace/MarketplaceAssetBadge";
 import { MarketplaceFilters } from "../components/marketplace/MarketplaceFilters";
@@ -38,15 +50,27 @@ import {
   enrichMarketplaceAsset,
   mergeMarketplaceAssets,
 } from "../lib/marketplaceAssets";
-import { resolveMapCredentials, applyMarketplaceMapAppearance, type MapCredentials } from "../lib/mapConfig";
+import {
+  resolveMapCredentials,
+  applyMarketplaceMapAppearance,
+  type MapCredentials,
+} from "../lib/mapConfig";
 import { MARKETPLACE_COVER_FALLBACK } from "../lib/marketplaceCovers";
-import type { EnrichedAsset, MapPoint, MarketplacePersona } from "../lib/marketplaceTypes";
+import type {
+  EnrichedAsset,
+  MapPoint,
+  MarketplacePersona,
+} from "../lib/marketplaceTypes";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./marketplace.css";
 
 const DEMO_PERSONA_STORAGE_KEY = "casper-demo-persona";
 const MARKETPLACE_PAGE_SIZE = 5;
-const MARKETPLACE_ANCHOR = { label: "Casper Testnet anchor", lat: 37.7749, lng: -122.4194 };
+const MARKETPLACE_ANCHOR = {
+  label: "Casper Testnet anchor",
+  lat: 37.7749,
+  lng: -122.4194,
+};
 const MARKETPLACE_MAP_CONFIG = resolveMapCredentials();
 const EMPTY_LOTS: never[] = [];
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -54,11 +78,13 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const MARKETPLACE_DEMO_STEPS: FullDemoStep[] = [
   {
     label: "Capture + proof preset",
-    detail: "Load the fictional VCS Amazonia carbon proof and confirm the proof-before-token payload.",
+    detail:
+      "Load the fictional VCS Amazonia carbon proof and confirm the proof-before-token payload.",
   },
   {
     label: "Agent processing",
-    detail: "Run the Lastre agent path so the action is decided before the deterministic seal verdict.",
+    detail:
+      "Run the Lastre agent path so the action is decided before the deterministic seal verdict.",
   },
   {
     label: "Paid x402 query (mock)",
@@ -100,7 +126,8 @@ function buildCachedDemoAgentQuery(
       assetId,
       category: "carbon_credit",
       seal: "2e9feed35f5d887adf94819553cce0b559df2efab8c3a3dfd83c585f813a1d57",
-      referenceSeal: "2e9feed35f5d887adf94819553cce0b559df2efab8c3a3dfd83c585f813a1d57",
+      referenceSeal:
+        "2e9feed35f5d887adf94819553cce0b559df2efab8c3a3dfd83c585f813a1d57",
       sealMatch: true,
       verdict: "Valid",
       attested: true,
@@ -115,7 +142,8 @@ function buildCachedDemoAgentQuery(
         verifier: "Verra",
         carbonImpactScore: 92,
       },
-      packageHash: "hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
+      packageHash:
+        "hash-b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
       csprLinks: {
         package:
           "https://testnet.cspr.live/contract-package/b8b505fe96c183de157beda5f2233903aa7805208b428c668d191c83f2590561",
@@ -152,7 +180,10 @@ function writeDemoStorage(key: string, value: string | null): void {
 
 function readStoredPersona(): MarketplacePersona {
   const stored = readDemoStorage(DEMO_PERSONA_STORAGE_KEY);
-  return stored === "public" || stored === "buyer" || stored === "defi" || stored === "operator"
+  return stored === "public" ||
+    stored === "buyer" ||
+    stored === "defi" ||
+    stored === "operator"
     ? stored
     : "buyer";
 }
@@ -164,13 +195,19 @@ export function Marketplace() {
   const lotsData = useAsyncData(getLots);
   const { completeStep } = useOnboarding();
   const [search, setSearch] = useState("");
-  const [catFilter, setCatFilter] = useState<"all" | "mineral" | "carbon_credit">("all");
+  const [catFilter, setCatFilter] = useState<
+    "all" | "mineral" | "carbon_credit"
+  >("all");
   const [creditFilter, setCreditFilter] = useState<string>("all");
-  const [statusFilter, setStatusFilter] = useState<"all" | "proven" | "minted" | "available">("all");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "proven" | "minted" | "available"
+  >("all");
   const [page, setPage] = useState(1);
   const [hoveredAssetId, setHoveredAssetId] = useState<string | null>(null);
   const [previewAsset, setPreviewAsset] = useState<EnrichedAsset | null>(null);
-  const [persona, setPersona] = useState<MarketplacePersona>(() => readStoredPersona());
+  const [persona, setPersona] = useState<MarketplacePersona>(() =>
+    readStoredPersona(),
+  );
   const [mintSummary, setMintSummary] = useState<MintSummary | null>(null);
   const [mintSummaryError, setMintSummaryError] = useState<string | null>(null);
   const [agentQuery, setAgentQuery] = useState<{
@@ -200,10 +237,13 @@ export function Marketplace() {
 
   useEffect(() => {
     const state = readFullDemoState();
-    const shouldRun = searchParams.get("demo") === "full" || state?.stage === "marketplace";
+    const shouldRun =
+      searchParams.get("demo") === "full" || state?.stage === "marketplace";
     if (!shouldRun || fullDemoStartedRef.current) return;
     fullDemoStartedRef.current = true;
-    void runMarketplaceFullDemo(searchParams.get("assetId") || state?.assetId || FULL_DEMO_ASSET_ID);
+    void runMarketplaceFullDemo(
+      searchParams.get("assetId") || state?.assetId || FULL_DEMO_ASSET_ID,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
@@ -216,7 +256,9 @@ export function Marketplace() {
       setMintSummaryError(null);
       setMintSummary(await getMintSummary());
     } catch (error) {
-      setMintSummaryError(error instanceof Error ? error.message : "Mint summary unavailable");
+      setMintSummaryError(
+        error instanceof Error ? error.message : "Mint summary unavailable",
+      );
     }
   }
 
@@ -232,11 +274,17 @@ export function Marketplace() {
   useEffect(() => {
     if (searchParams.get("rail") !== "1") return;
     updatePersona("defi");
-    railAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    railAnchorRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function runAgentQuery(assetId: string, from = "agent-casper-demo"): Promise<AgentQueryResult | null> {
+  async function runAgentQuery(
+    assetId: string,
+    from = "agent-casper-demo",
+  ): Promise<AgentQueryResult | null> {
     setAgentQuery({ assetId, loading: true, result: null });
     setPayloadCopied(false);
     try {
@@ -246,7 +294,11 @@ export function Marketplace() {
       return result;
     } catch (error) {
       const reason = error instanceof Error ? error.message : "query_failed";
-      const result = buildCachedDemoAgentQuery(assetId, reason, mintSummary?.paidX402Queries ?? 0);
+      const result = buildCachedDemoAgentQuery(
+        assetId,
+        reason,
+        mintSummary?.paidX402Queries ?? 0,
+      );
       setAgentQuery({ assetId, loading: false, result });
       return result;
     }
@@ -262,8 +314,12 @@ export function Marketplace() {
     }
 
     const llmBatch = await processBatch([assetId], "llm");
-    const llmRecord = llmBatch.records?.find((record) => record.assetId === assetId) ?? llmBatch.records?.[0] ?? null;
-    const llmVerdict = llmRecord?.verification?.verdict ?? llmRecord?.onChain?.verdict ?? null;
+    const llmRecord =
+      llmBatch.records?.find((record) => record.assetId === assetId) ??
+      llmBatch.records?.[0] ??
+      null;
+    const llmVerdict =
+      llmRecord?.verification?.verdict ?? llmRecord?.onChain?.verdict ?? null;
 
     if (llmVerdict !== "Valid") {
       await processBatch([assetId], "rule");
@@ -274,7 +330,9 @@ export function Marketplace() {
     setFullDemoOpen(true);
     setFullDemoMint(null);
     setFullDemoStep(0);
-    setFullDemoStatus("Preparing the fictional carbon proof and focusing the Marketplace…");
+    setFullDemoStatus(
+      "Preparing the fictional carbon proof and focusing the Marketplace…",
+    );
     writeFullDemoState(createFullDemoState("marketplace", new Date(), assetId));
     setSearch(assetId);
     setCatFilter("carbon_credit");
@@ -285,7 +343,9 @@ export function Marketplace() {
 
     try {
       setFullDemoStep(1);
-      setFullDemoStatus("Running the agent path. The agent decides action; SHA-256 decides verdict.");
+      setFullDemoStatus(
+        "Running the agent path. The agent decides action; SHA-256 decides verdict.",
+      );
       await ensureValidProof(assetId);
       lotsData.reload();
       await delay(700);
@@ -311,7 +371,10 @@ export function Marketplace() {
       } catch (error) {
         const message = error instanceof Error ? error.message : "";
         if (message.includes("Already minted")) addDemoMint(assetId);
-        setFullDemoMint({ assetId, alreadyMinted: message.includes("Already minted") });
+        setFullDemoMint({
+          assetId,
+          alreadyMinted: message.includes("Already minted"),
+        });
         setFullDemoStatus(
           message.includes("Already minted")
             ? "MintGate demo event already existed for this runtime…"
@@ -328,7 +391,9 @@ export function Marketplace() {
       );
       writeFullDemoState(createFullDemoState("complete", new Date(), assetId));
     } catch (error) {
-      setFullDemoStatus(`Demo stopped: ${error instanceof Error ? error.message : "unknown error"}`);
+      setFullDemoStatus(
+        `Demo stopped: ${error instanceof Error ? error.message : "unknown error"}`,
+      );
     }
   }
 
@@ -341,7 +406,9 @@ export function Marketplace() {
 
   async function copyAgentPayload() {
     if (!agentQuery?.result || !navigator.clipboard) return;
-    await navigator.clipboard.writeText(JSON.stringify(agentQuery.result, null, 2));
+    await navigator.clipboard.writeText(
+      JSON.stringify(agentQuery.result, null, 2),
+    );
     setPayloadCopied(true);
     setTimeout(() => setPayloadCopied(false), 1600);
   }
@@ -356,10 +423,12 @@ export function Marketplace() {
       all: merged.length,
       mineral: merged.filter(
         (a: Record<string, unknown>) =>
-          (a.category || (!a.creditType ? "mineral" : "carbon_credit")) === "mineral",
+          (a.category || (!a.creditType ? "mineral" : "carbon_credit")) ===
+          "mineral",
       ).length,
       carbon: merged.filter(
-        (a: Record<string, unknown>) => a.category === "carbon_credit" || Boolean(a.creditType),
+        (a: Record<string, unknown>) =>
+          a.category === "carbon_credit" || Boolean(a.creditType),
       ).length,
     }),
     [merged],
@@ -367,17 +436,23 @@ export function Marketplace() {
 
   const visible = useMemo(() => {
     return merged.filter((a: any) => {
-      const matchesSearch = !search || `${a.assetId} ${a.operator || ""} ${a.name || ""}`.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch =
+        !search ||
+        `${a.assetId} ${a.operator || ""} ${a.name || ""}`
+          .toLowerCase()
+          .includes(search.toLowerCase());
       const cat = a.category || (a.creditType ? "carbon_credit" : "mineral");
       const matchesCat = catFilter === "all" || cat === catFilter;
-      const matchesCredit = creditFilter === "all" || a.creditType === creditFilter;
+      const matchesCredit =
+        creditFilter === "all" || a.creditType === creditFilter;
 
       const lot = lotMap.get(a.assetId);
       const isInvalidProof =
         lot?.latestVerdict === "Invalid" || lot?.sealMatchesReference === false;
       const isValidProof =
         !isInvalidProof &&
-        (lot?.latestVerdict === "Valid" || (a.expectedOnChain === "Valid" && !lot));
+        (lot?.latestVerdict === "Valid" ||
+          (a.expectedOnChain === "Valid" && !lot));
       const isMinted = !!lot?.isMinted || !!a.isMinted;
       const matchesStatus =
         statusFilter === "all" ||
@@ -387,12 +462,26 @@ export function Marketplace() {
 
       // provenance score (demo, deterministic-ish on attestation + seal)
       const score = lot
-        ? Math.min(99, 68 + (lot.attested ? 18 : 0) + (lot.sealMatchesReference ? 8 : 0) + (lot.latestVerdict === "Valid" ? 5 : 0))
-        : (a.expectedOnChain === "Valid" ? 91 : 62);
+        ? Math.min(
+            99,
+            68 +
+              (lot.attested ? 18 : 0) +
+              (lot.sealMatchesReference ? 8 : 0) +
+              (lot.latestVerdict === "Valid" ? 5 : 0),
+          )
+        : a.expectedOnChain === "Valid"
+          ? 91
+          : 62;
 
       const matchesScore = score >= 60; // simple baseline; could be user filter
 
-      return matchesSearch && matchesCat && matchesCredit && matchesStatus && matchesScore;
+      return (
+        matchesSearch &&
+        matchesCat &&
+        matchesCredit &&
+        matchesStatus &&
+        matchesScore
+      );
     });
   }, [merged, search, catFilter, creditFilter, statusFilter, lotMap]);
 
@@ -402,11 +491,15 @@ export function Marketplace() {
   );
 
   const enrichedAssets = useMemo(
-    () => visible.map((asset) => enrichMarketplaceAsset(asset, lotMap, mapPoints)),
+    () =>
+      visible.map((asset) => enrichMarketplaceAsset(asset, lotMap, mapPoints)),
     [visible, lotMap, mapPoints],
   );
 
-  const pageCount = Math.max(1, Math.ceil(enrichedAssets.length / MARKETPLACE_PAGE_SIZE));
+  const pageCount = Math.max(
+    1,
+    Math.ceil(enrichedAssets.length / MARKETPLACE_PAGE_SIZE),
+  );
   const currentPage = Math.min(page, pageCount);
   const pagedAssets = useMemo(() => {
     const start = (currentPage - 1) * MARKETPLACE_PAGE_SIZE;
@@ -422,164 +515,213 @@ export function Marketplace() {
 
   const handleSelectMapPoint = useCallback(
     (point: MapPoint) => {
-      const asset = enrichedAssets.find((item) => String(item.asset.assetId) === point.assetId);
+      const asset = enrichedAssets.find(
+        (item) => String(item.asset.assetId) === point.assetId,
+      );
       if (asset) setPreviewAsset(asset);
     },
     [enrichedAssets],
   );
 
-  const selectedMapAssetId = previewAsset ? String(previewAsset.asset.assetId) : null;
-  const visiblePaidQueries = mintSummary?.paidX402Queries ?? agentQuery?.result?.totalPaidQueries ?? 0;
+  const selectedMapAssetId = previewAsset
+    ? String(previewAsset.asset.assetId)
+    : null;
+  const visiblePaidQueries =
+    mintSummary?.paidX402Queries ?? agentQuery?.result?.totalPaidQueries ?? 0;
 
   return (
     <div className="page market-page">
       <div className="market-page__left">
         <div className="market-page__intro">
-        <PageHeader
-          kicker="Marketplace"
-          title="Provenance Marketplace"
-          lead="Browse verified assets on the map. Select a lot to inspect origin, proof status, and claim options (demo)."
-          actions={
-            <CaptureWizardTrigger className="route-cta">Capture New</CaptureWizardTrigger>
-          }
-        />
-
-        <div ref={railAnchorRef}>
-          <SealedMarketRail persona={persona} onPersonaChange={updatePersona} />
-        </div>
-
-        <FullDemoModal
-          open={fullDemoOpen}
-          assetId={FULL_DEMO_ASSET_ID}
-          steps={MARKETPLACE_DEMO_STEPS}
-          activeStep={fullDemoStep}
-          status={fullDemoStatus}
-          primaryAction={
-            fullDemoStep >= 3
-              ? { label: "View in MyAssets", to: buildMyAssetsUrl(FULL_DEMO_ASSET_ID) }
-              : undefined
-          }
-          onClose={() => {
-            setFullDemoOpen(false);
-            clearFullDemoState();
-          }}
-        />
-
-        <section className="market-demo-banner" aria-label="Full end-to-end demo">
-          <div>
-            <span className="eyebrow">Judge-ready flow</span>
-            <h3>Run Full End-to-End Demo</h3>
-            <p>
-              Capture preset → agent decision → paid x402 proof query → MintGate demo claim,
-              ending with the agent payload visible for judges.
-            </p>
-          </div>
-          <Button variant="primary" size="md" type="button" className="route-cta" onClick={() => void runMarketplaceFullDemo()}>
-            Run Demo
-          </Button>
-        </section>
-      </div>
-
-      <aside className="market-list" aria-label="Marketplace assets">
-        <section className="market-agent-card" aria-label="Agent integration">
-          <div className="market-agent-card__copy">
-            <span className="mono-label">x402 provider</span>
-            <strong>Agents pay Lastre before touching RWA/carbon data.</strong>
-            <p>
-              Query verdict, seal match, carbon score, and Casper links before any downstream action.
-            </p>
-          </div>
-          <Button variant="ghost" size="sm" type="button" className="market-agent-card__copy-btn" onClick={() => void copyAgentSnippet()}>
-            {snippetCopied ? "Copied ✓" : "Copy snippet"}
-          </Button>
-          <Link className="market-agent-card__copy-btn" to="/agents">
-            Open /agents
-          </Link>
-        </section>
-
-        <section className="market-mint-summary" aria-label="MintGate summary">
-          <span>
-            <strong>{mintSummary?.onChain?.source === "live" ? "Live testnet" : "Fallback snapshot"}</strong>
-            ProofOfOrigin
-          </span>
-          <span>
-            <strong>{mintSummary?.onChain?.proofOfOriginAccepted ?? "—"}</strong>
-            Accepted
-          </span>
-          <span>
-            <strong>{mintSummary?.onChain?.proofOfOriginRejected ?? "—"}</strong>
-            Rejected
-          </span>
-          <span>
-            <strong>Demo simulated</strong>
-            MintGate
-          </span>
-          <span>
-            <strong>{mintSummary?.paidX402Queries ?? 0}</strong>
-            x402 paid queries
-          </span>
-          <span>
-            <strong>{mintSummary?.mintCount ?? "—"}</strong>
-            Demo LotMinted
-          </span>
-          <p className="market-mint-summary__note">
-            Live query reads ProofOfOrigin attestations. MintGate events are demo-only for this hackathon.
-            Honesty freeze: Run Demo / x402 simulate = mock facilitator (no CSPR moved). Real testnet CSPR
-            settles only via production API settle path (facilitatorMode=casper) — not this UI button.
-            Proof before token and before finance.
-          </p>
-          {mintSummaryError ? <em>{mintSummaryError}</em> : null}
-        </section>
-
-        <div className="market-list__search">
-          <SearchInput
-            value={search}
-            onChange={setSearch}
-            placeholder="Search assets…"
-            ariaLabel="Search marketplace assets"
+          <PageHeader
+            kicker="Marketplace"
+            title="Provenance Marketplace"
+            lead="Browse verified assets on the map. Select a lot to inspect origin, proof status, and claim options (demo)."
+            actions={
+              <CaptureWizardTrigger className="route-cta">
+                Capture New
+              </CaptureWizardTrigger>
+            }
           />
-        </div>
 
-        <MarketplaceFilters
-          category={catFilter}
-          status={statusFilter}
-          creditType={creditFilter}
-          persona={persona}
-          totals={categoryTotals}
-          onCategoryChange={setCatFilter}
-          onStatusChange={setStatusFilter}
-          onCreditTypeChange={setCreditFilter}
-          onPersonaChange={updatePersona}
-        />
+          <div ref={railAnchorRef}>
+            <SealedMarketRail
+              persona={persona}
+              onPersonaChange={updatePersona}
+            />
+          </div>
 
-        <div className="market-list__scroll">
-          {enrichedAssets.length === 0 ? (
-            <p className="market-list__empty muted">No matching assets. Try clearing filters.</p>
-          ) : (
-            pagedAssets.map((item) => {
-              const assetId = String(item.asset.assetId);
-              return (
-                <MarketListItem
-                  key={assetId}
-                  item={item}
-                  isHovered={hoveredAssetId === assetId}
-                  isSelected={selectedMapAssetId === assetId}
-                  onSelect={() => openAsset(assetId)}
-                  onHover={(hover) => setHoveredAssetId(hover ? assetId : null)}
-                />
-              );
-            })
-          )}
-        </div>
-
-        {enrichedAssets.length > MARKETPLACE_PAGE_SIZE ? (
-          <MarketListPagination
-            page={currentPage}
-            pageCount={pageCount}
-            onPageChange={setPage}
+          <FullDemoModal
+            open={fullDemoOpen}
+            assetId={FULL_DEMO_ASSET_ID}
+            steps={MARKETPLACE_DEMO_STEPS}
+            activeStep={fullDemoStep}
+            status={fullDemoStatus}
+            primaryAction={
+              fullDemoStep >= 3
+                ? {
+                    label: "View in MyAssets",
+                    to: buildMyAssetsUrl(FULL_DEMO_ASSET_ID),
+                  }
+                : undefined
+            }
+            onClose={() => {
+              setFullDemoOpen(false);
+              clearFullDemoState();
+            }}
           />
-        ) : null}
-      </aside>
+
+          <section
+            className="market-demo-banner"
+            aria-label="Full end-to-end demo"
+          >
+            <div>
+              <span className="eyebrow">Judge-ready flow</span>
+              <h3>Run Full End-to-End Demo</h3>
+              <p>
+                Capture preset → agent decision → paid x402 proof query →
+                MintGate demo claim, ending with the agent payload visible for
+                judges.
+              </p>
+            </div>
+            <Button
+              variant="primary"
+              size="md"
+              type="button"
+              className="route-cta"
+              onClick={() => void runMarketplaceFullDemo()}
+            >
+              Run Demo
+            </Button>
+          </section>
+        </div>
+
+        <aside className="market-list" aria-label="Marketplace assets">
+          <section className="market-agent-card" aria-label="Agent integration">
+            <div className="market-agent-card__copy">
+              <span className="mono-label">x402 provider</span>
+              <strong>
+                Agents pay Lastre before touching RWA/carbon data.
+              </strong>
+              <p>
+                Query verdict, seal match, carbon score, and Casper links before
+                any downstream action.
+              </p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              type="button"
+              className="market-agent-card__copy-btn"
+              onClick={() => void copyAgentSnippet()}
+            >
+              {snippetCopied ? "Copied ✓" : "Copy snippet"}
+            </Button>
+            <Link className="market-agent-card__copy-btn" to="/agents">
+              Open /agents
+            </Link>
+          </section>
+
+          <section
+            className="market-mint-summary"
+            aria-label="MintGate summary"
+          >
+            <span>
+              <strong>
+                {mintSummary?.onChain?.source === "live"
+                  ? "Live testnet"
+                  : "Fallback snapshot"}
+              </strong>
+              ProofOfOrigin
+            </span>
+            <span>
+              <strong>
+                {mintSummary?.onChain?.proofOfOriginAccepted ?? "—"}
+              </strong>
+              Accepted
+            </span>
+            <span>
+              <strong>
+                {mintSummary?.onChain?.proofOfOriginRejected ?? "—"}
+              </strong>
+              Rejected
+            </span>
+            <span>
+              <strong>Demo simulated</strong>
+              MintGate
+            </span>
+            <span>
+              <strong>{mintSummary?.paidX402Queries ?? 0}</strong>
+              x402 paid queries
+            </span>
+            <span>
+              <strong>{mintSummary?.mintCount ?? "—"}</strong>
+              Demo LotMinted
+            </span>
+            <p className="market-mint-summary__note">
+              Live query reads ProofOfOrigin attestations. MintGate events are
+              demo-only for this hackathon. Honesty freeze: Run Demo / x402
+              simulate = mock facilitator (no CSPR moved). Real testnet CSPR
+              settles only via production API settle path
+              (facilitatorMode=casper) — not this UI button. Proof before token
+              and before finance.
+            </p>
+            {mintSummaryError ? <em>{mintSummaryError}</em> : null}
+          </section>
+
+          <div className="market-list__search">
+            <SearchInput
+              value={search}
+              onChange={setSearch}
+              placeholder="Search assets…"
+              ariaLabel="Search marketplace assets"
+            />
+          </div>
+
+          <MarketplaceFilters
+            category={catFilter}
+            status={statusFilter}
+            creditType={creditFilter}
+            persona={persona}
+            totals={categoryTotals}
+            onCategoryChange={setCatFilter}
+            onStatusChange={setStatusFilter}
+            onCreditTypeChange={setCreditFilter}
+            onPersonaChange={updatePersona}
+          />
+
+          <div className="market-list__scroll">
+            {enrichedAssets.length === 0 ? (
+              <p className="market-list__empty muted">
+                No matching assets. Try clearing filters.
+              </p>
+            ) : (
+              pagedAssets.map((item) => {
+                const assetId = String(item.asset.assetId);
+                return (
+                  <MarketListItem
+                    key={assetId}
+                    item={item}
+                    isHovered={hoveredAssetId === assetId}
+                    isSelected={selectedMapAssetId === assetId}
+                    onSelect={() => openAsset(assetId)}
+                    onHover={(hover) =>
+                      setHoveredAssetId(hover ? assetId : null)
+                    }
+                  />
+                );
+              })
+            )}
+          </div>
+
+          {enrichedAssets.length > MARKETPLACE_PAGE_SIZE ? (
+            <MarketListPagination
+              page={currentPage}
+              pageCount={pageCount}
+              onPageChange={setPage}
+            />
+          ) : null}
+        </aside>
       </div>
 
       <div className="market-map" aria-label="Global Mundi provenance map">
@@ -596,19 +738,28 @@ export function Marketplace() {
 
       {agentQuery ? (
         <div className="modal-overlay" onClick={() => setAgentQuery(null)}>
-          <div className="buy-modal agent-query-modal" onClick={(event) => event.stopPropagation()}>
+          <div
+            className="buy-modal agent-query-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="agent-query-modal__head">
               <div>
                 <span className="mono-label">x402 provenance read</span>
                 <h3>Agent Query via x402 (Demo)</h3>
               </div>
-              <span className="agent-query-counter">x402 query #{visiblePaidQueries}</span>
+              <span className="agent-query-counter">
+                x402 query #{visiblePaidQueries}
+              </span>
             </div>
             <div className="agent-query-asset">
               Asset: <strong>{agentQuery.assetId}</strong>
             </div>
             {agentQuery.loading ? (
-              <div className="agent-query-loading" role="status" aria-live="polite">
+              <div
+                className="agent-query-loading"
+                role="status"
+                aria-live="polite"
+              >
                 <span>Requesting x402 quote…</span>
                 <span>Mock payment submitted (facilitator: mock)…</span>
                 <span>Reading provenance payload from Lastre…</span>
@@ -618,14 +769,16 @@ export function Marketplace() {
                 <div className="sig-sim">
                   {agentQuery.result.fallback ? (
                     <>
-                      Could not reach provenance service right now. Using cached demo payload.
+                      Could not reach provenance service right now. Using cached
+                      demo payload.
                       <br />
                       Original error: <code>{agentQuery.result.reason}</code>
                     </>
                   ) : (
                     <>
-                      External agent paid <strong>{agentQuery.result.amountCspr}</strong> CSPR via x402
-                      (mock settlement) to read this proof.
+                      External agent paid{" "}
+                      <strong>{agentQuery.result.amountCspr}</strong> CSPR via
+                      x402 (mock settlement) to read this proof.
                       <br />
                       Facilitator: {agentQuery.result.facilitatorMode}
                       <br />
@@ -641,19 +794,33 @@ export function Marketplace() {
                     </div>
                     <div className="agent-proof__kpi">
                       <span>Seal match</span>
-                      <strong>{String(agentQuery.result.provenance.sealMatch)}</strong>
+                      <strong>
+                        {String(agentQuery.result.provenance.sealMatch)}
+                      </strong>
                     </div>
                     {agentQuery.result.provenance.carbonDetails ? (
                       <div className="agent-proof__kpi">
                         <span>Carbon impact score</span>
-                        <strong>{agentQuery.result.provenance.carbonDetails.carbonImpactScore}</strong>
+                        <strong>
+                          {
+                            agentQuery.result.provenance.carbonDetails
+                              .carbonImpactScore
+                          }
+                        </strong>
                       </div>
                     ) : null}
                   </div>
                   <div className="agent-proof__line">
-                    Mint status: <strong>{agentQuery.result.provenance.mintStatus}</strong>{" "}
-                    <span className="agent-proof__badge">x402 query #{visiblePaidQueries}</span>
-                    {agentQuery.result.fallback ? <span className="agent-proof__badge">Cached demo fallback</span> : null}
+                    Mint status:{" "}
+                    <strong>{agentQuery.result.provenance.mintStatus}</strong>{" "}
+                    <span className="agent-proof__badge">
+                      x402 query #{visiblePaidQueries}
+                    </span>
+                    {agentQuery.result.fallback ? (
+                      <span className="agent-proof__badge">
+                        Cached demo fallback
+                      </span>
+                    ) : null}
                   </div>
                   <div className="agent-evidence-badges">
                     <a
@@ -669,12 +836,15 @@ export function Marketplace() {
                     </span>
                   </div>
                   <p className="agent-proof__note">
-                    This proof is anchored to a Casper package. Mint event is simulated for this demo.
+                    This proof is anchored to a Casper package. Mint event is
+                    simulated for this demo.
                   </p>
                   <div className="agent-proof__actions">
                     {agentQuery.result.provenance.csprLinks?.attestation ? (
                       <a
-                        href={agentQuery.result.provenance.csprLinks.attestation}
+                        href={
+                          agentQuery.result.provenance.csprLinks.attestation
+                        }
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn small primary"
@@ -694,8 +864,9 @@ export function Marketplace() {
                     ) : null}
                     {!agentQuery.result.provenance.csprLinks?.attestation ? (
                       <span className="agent-proof__session">
-                        Session attestation is a demo receipt — not on Casper. See the canonical
-                        Invalid/Valid samples on the Agents page.
+                        Session attestation is a demo receipt — not on Casper.
+                        See the canonical Invalid/Valid samples on the Agents
+                        page.
                       </span>
                     ) : null}
                   </div>
@@ -710,27 +881,45 @@ export function Marketplace() {
                   </div>
                 ) : null}
                 <p className="small muted">
-                  This is what an external agent would see before deciding whether to act.
-                  Total paid queries this session: {visiblePaidQueries}.
+                  This is what an external agent would see before deciding
+                  whether to act. Total paid queries this session:{" "}
+                  {visiblePaidQueries}.
                 </p>
                 <div className="payload-toolbar">
                   <strong>Complete proof payload</strong>
-                  <Button variant="secondary" size="md" type="button" className="btn small ghost" onClick={() => void copyAgentPayload()}>
+                  <Button
+                    variant="secondary"
+                    size="md"
+                    type="button"
+                    className="btn small ghost"
+                    onClick={() => void copyAgentPayload()}
+                  >
                     {payloadCopied ? "Copied ✓" : "Copy JSON"}
                   </Button>
                 </div>
-                <pre className="agent-payload-json">{JSON.stringify(agentQuery.result, null, 2)}</pre>
+                <pre className="agent-payload-json">
+                  {JSON.stringify(agentQuery.result, null, 2)}
+                </pre>
               </>
             ) : (
-              <p className="small">Query failed: {agentQuery.result?.reason ?? "unknown"}</p>
+              <p className="small">
+                Query failed: {agentQuery.result?.reason ?? "unknown"}
+              </p>
             )}
             <div className="actions">
-              <Button variant="primary" size="md" type="button" className="btn" onClick={() => setAgentQuery(null)}>
+              <Button
+                variant="primary"
+                size="md"
+                type="button"
+                className="btn"
+                onClick={() => setAgentQuery(null)}
+              >
                 Close
               </Button>
             </div>
             <div className="demo-disclaimer">
-              DEMO ONLY. Mock x402 facilitator; no real CSPR moves. Structure mirrors a real Casper x402 settlement seam.
+              DEMO ONLY. Mock x402 facilitator; no real CSPR moves. Structure
+              mirrors a real Casper x402 settlement seam.
             </div>
           </div>
         </div>
@@ -752,7 +941,9 @@ function MarketListPagination({
 
   return (
     <nav className="market-list__pagination" aria-label="Asset list pages">
-      <Button variant="ghost" size="sm"
+      <Button
+        variant="ghost"
+        size="sm"
         type="button"
         className="market-list__page-btn"
         disabled={page <= 1}
@@ -761,7 +952,11 @@ function MarketListPagination({
       >
         ←
       </Button>
-      <div className="market-list__page-numbers" role="group" aria-label="Page numbers">
+      <div
+        className="market-list__page-numbers"
+        role="group"
+        aria-label="Page numbers"
+      >
         {pages.map((pageNumber) => (
           <button
             key={pageNumber}
@@ -774,7 +969,9 @@ function MarketListPagination({
           </button>
         ))}
       </div>
-      <Button variant="ghost" size="sm"
+      <Button
+        variant="ghost"
+        size="sm"
         type="button"
         className="market-list__page-btn"
         disabled={page >= pageCount}
@@ -801,10 +998,13 @@ function MarketListItem({
   onHover: (hover: boolean) => void;
 }) {
   const assetId = String(item.asset.assetId);
-  const origin = item.asset.origin as { site?: string; label?: string } | undefined;
+  const origin = item.asset.origin as
+    { site?: string; label?: string } | undefined;
   const location = origin?.site || origin?.label;
   const stats = [
-    item.isCarbon ? String(item.asset.creditType || "Carbon") : String(item.asset.mineral || item.asset.mineralType || "Mineral"),
+    item.isCarbon
+      ? String(item.asset.creditType || "Carbon")
+      : String(item.asset.mineral || item.asset.mineralType || "Mineral"),
     item.quantity ? `${item.quantity.toLocaleString()} ${item.unit}` : null,
     `Score ${item.provScore}`,
   ]
@@ -839,7 +1039,11 @@ function MarketListItem({
         />
       </span>
       <span className="market-list-item__body">
-        <MarketplaceAssetBadge item={item} size="sm" className="market-list-item__status" />
+        <MarketplaceAssetBadge
+          item={item}
+          size="sm"
+          className="market-list-item__status"
+        />
         <strong className="market-list-item__title">{item.label}</strong>
         <span className="market-list-item__stats">{stats}</span>
         <span className="market-list-item__foot">
@@ -883,7 +1087,10 @@ function MarketMapPanel({
       <div className="market-map-legend" aria-label="Map legend">
         <div className="market-map-legend__items">
           <span>
-            <i className="mundi-legend-dot mundi-legend-dot--origin mineral" aria-hidden="true" />
+            <i
+              className="mundi-legend-dot mundi-legend-dot--origin mineral"
+              aria-hidden="true"
+            />
             Declared origin <em>(fictional)</em>
           </span>
           <span>
@@ -896,7 +1103,8 @@ function MarketMapPanel({
           </span>
         </div>
         <p className="market-map-legend__note">
-          Origins are operator-declared demo coordinates — not GPS tracking or real custody.
+          Origins are operator-declared demo coordinates — not GPS tracking or
+          real custody.
         </p>
       </div>
 
@@ -923,7 +1131,9 @@ function createMarkerElement(
   point: MapPoint,
   markerElsRef: MutableRefObject<Map<string, HTMLDivElement>>,
   onSelectPointRef: MutableRefObject<((point: MapPoint) => void) | undefined>,
-  onHoverPointRef: MutableRefObject<((assetId: string | null) => void) | undefined>,
+  onHoverPointRef: MutableRefObject<
+    ((assetId: string | null) => void) | undefined
+  >,
 ): HTMLDivElement {
   const markerEl = document.createElement("div");
   updateMarkerClasses(markerEl, point, null, null);
@@ -943,8 +1153,12 @@ function createMarkerElement(
       onSelectPointRef.current?.(point);
     }
   });
-  markerEl.addEventListener("mouseenter", () => onHoverPointRef.current?.(point.assetId));
-  markerEl.addEventListener("mouseleave", () => onHoverPointRef.current?.(null));
+  markerEl.addEventListener("mouseenter", () =>
+    onHoverPointRef.current?.(point.assetId),
+  );
+  markerEl.addEventListener("mouseleave", () =>
+    onHoverPointRef.current?.(null),
+  );
 
   return markerEl;
 }
@@ -973,9 +1187,9 @@ function MundiMapCanvas({
   const mapReadyRef = useRef(false);
   const onSelectPointRef = useLatest(onSelectPoint);
   const onHoverPointRef = useLatest(onHoverPoint);
-  const [mapStatus, setMapStatus] = useState<"fallback" | "loading" | "ready" | "error">(
-    mapConfig.ready ? "loading" : "fallback",
-  );
+  const [mapStatus, setMapStatus] = useState<
+    "fallback" | "loading" | "ready" | "error"
+  >(mapConfig.ready ? "loading" : "fallback");
 
   const clearMarkers = useCallback(() => {
     markersRef.current.forEach((marker) => marker.remove());
@@ -1048,7 +1262,10 @@ function MundiMapCanvas({
             cooperativeGestures: true,
           });
 
-          map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
+          map.addControl(
+            new mapboxgl.NavigationControl({ showCompass: false }),
+            "top-right",
+          );
           bindMap(map);
           return;
         }
@@ -1065,7 +1282,10 @@ function MundiMapCanvas({
           cooperativeGestures: true,
         });
 
-        map.addControl(new maplibre.NavigationControl({ showCompass: false }), "top-right");
+        map.addControl(
+          new maplibre.NavigationControl({ showCompass: false }),
+          "top-right",
+        );
         bindMap(map);
       } catch {
         if (!cancelled) setMapStatus("error");
@@ -1078,7 +1298,13 @@ function MundiMapCanvas({
       cancelled = true;
       cleanup();
     };
-  }, [clearMarkers, mapConfig.provider, mapConfig.ready, mapConfig.styleUrl, mapConfig.token]);
+  }, [
+    clearMarkers,
+    mapConfig.provider,
+    mapConfig.ready,
+    mapConfig.styleUrl,
+    mapConfig.token,
+  ]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -1096,12 +1322,20 @@ function MundiMapCanvas({
         const mapboxMap = map as MapboxMap;
         markersRef.current = [
           ...points.map((point) => {
-            const markerEl = createMarkerElement(point, markerElsRef, onSelectPointRef, onHoverPointRef);
+            const markerEl = createMarkerElement(
+              point,
+              markerElsRef,
+              onSelectPointRef,
+              onHoverPointRef,
+            );
             return new mapboxgl.Marker({ element: markerEl, anchor: "center" })
               .setLngLat([point.lng, point.lat])
               .addTo(mapboxMap);
           }),
-          new mapboxgl.Marker({ element: createAnchorMarkerElement(anchor.label), anchor: "center" })
+          new mapboxgl.Marker({
+            element: createAnchorMarkerElement(anchor.label),
+            anchor: "center",
+          })
             .setLngLat([anchor.lng, anchor.lat])
             .addTo(mapboxMap),
         ];
@@ -1112,12 +1346,20 @@ function MundiMapCanvas({
         const maplibreMap = map as MapLibreMap;
         markersRef.current = [
           ...points.map((point) => {
-            const markerEl = createMarkerElement(point, markerElsRef, onSelectPointRef, onHoverPointRef);
+            const markerEl = createMarkerElement(
+              point,
+              markerElsRef,
+              onSelectPointRef,
+              onHoverPointRef,
+            );
             return new maplibre.Marker({ element: markerEl, anchor: "center" })
               .setLngLat([point.lng, point.lat])
               .addTo(maplibreMap);
           }),
-          new maplibre.Marker({ element: createAnchorMarkerElement(anchor.label), anchor: "center" })
+          new maplibre.Marker({
+            element: createAnchorMarkerElement(anchor.label),
+            anchor: "center",
+          })
             .setLngLat([anchor.lng, anchor.lat])
             .addTo(maplibreMap),
         ];
@@ -1137,7 +1379,8 @@ function MundiMapCanvas({
   useEffect(() => {
     markerElsRef.current.forEach((el, assetId) => {
       const point = points.find((p) => p.assetId === assetId);
-      if (point) updateMarkerClasses(el, point, selectedAssetId, hoveredAssetId);
+      if (point)
+        updateMarkerClasses(el, point, selectedAssetId, hoveredAssetId);
     });
   }, [hoveredAssetId, points, selectedAssetId]);
 
@@ -1169,9 +1412,15 @@ function MundiMapCanvas({
 
   return (
     <div className="mundi-maplibre-shell market-map-canvas">
-      <div ref={containerRef} className="mundi-maplibre-canvas" aria-label="Interactive provenance map" />
+      <div
+        ref={containerRef}
+        className="mundi-maplibre-canvas"
+        aria-label="Interactive provenance map"
+      />
       {mapStatus === "loading" ? (
-        <div className="mundi-map-loading" role="status">Loading map…</div>
+        <div className="mundi-map-loading" role="status">
+          Loading map…
+        </div>
       ) : null}
     </div>
   );
@@ -1183,13 +1432,21 @@ function updateMarkerClasses(
   selectedAssetId?: string | null,
   hoveredAssetId?: string | null,
 ) {
-  const classes = ["mundi-maplibre-marker", "mundi-maplibre-marker--origin", point.category, point.status];
+  const classes = [
+    "mundi-maplibre-marker",
+    "mundi-maplibre-marker--origin",
+    point.category,
+    point.status,
+  ];
   if (selectedAssetId === point.assetId) classes.push("selected");
   if (hoveredAssetId === point.assetId) classes.push("hovered");
   el.className = classes.join(" ");
 }
 
-function buildMundiRouteGeoJson(points: MapPoint[], anchor: { lat: number; lng: number }) {
+function buildMundiRouteGeoJson(
+  points: MapPoint[],
+  anchor: { lat: number; lng: number },
+) {
   return {
     type: "FeatureCollection" as const,
     features: points.map((point) => ({
@@ -1212,7 +1469,8 @@ function updateMundiRouteLayer(
   anchor: { lat: number; lng: number },
 ) {
   const data = buildMundiRouteGeoJson(points, anchor);
-  const source = (map as MapboxMap).getSource("mundi-routes") as { setData?: (next: typeof data) => void } | undefined;
+  const source = (map as MapboxMap).getSource("mundi-routes") as
+    { setData?: (next: typeof data) => void } | undefined;
 
   if (source?.setData) {
     source.setData(data);
@@ -1237,7 +1495,15 @@ function addMundiRouteLayer(
     type: "line",
     source: "mundi-routes",
     paint: {
-      "line-color": ["match", ["get", "status"], "minted", "#6b9b5c", "proven", "#7a9aab", "#8a9aab"],
+      "line-color": [
+        "match",
+        ["get", "status"],
+        "minted",
+        MARKETPLACE_MAP_STATUS.minted,
+        "proven",
+        MARKETPLACE_MAP_STATUS.proven,
+        MARKETPLACE_MAP_STATUS.pending,
+      ],
       "line-dasharray": [3, 3],
       "line-opacity": 0.72,
       "line-width": 1.4,
@@ -1250,7 +1516,10 @@ function fitMundiBounds(
   points: MapPoint[],
   anchor: { lat: number; lng: number },
 ) {
-  const coordinates = [...points.map((point) => [point.lng, point.lat] as const), [anchor.lng, anchor.lat] as const];
+  const coordinates = [
+    ...points.map((point) => [point.lng, point.lat] as const),
+    [anchor.lng, anchor.lat] as const,
+  ];
   const lngs = coordinates.map(([lng]) => lng);
   const lats = coordinates.map(([, lat]) => lat);
   const minLng = Math.min(...lngs);
@@ -1286,18 +1555,45 @@ function MundiSvgFallback({
 }) {
   return (
     <div className="mundi-canvas market-map-canvas">
-      <svg viewBox="0 0 1000 520" role="img" aria-label="World map with provenance origin points">
-        <rect width="1000" height="520" fill="#aadaff" />
+      <svg
+        viewBox="0 0 1000 520"
+        role="img"
+        aria-label="World map with provenance origin points"
+      >
+        <rect width="1000" height="520" fill={MARKETPLACE_MAP_OCEAN} />
         {[-120, -60, 0, 60, 120].map((lng) => (
-          <line key={`lng-${lng}`} x1={project(lng, 85).x} x2={project(lng, -85).x} y1="42" y2="478" className="mundi-gridline" />
+          <line
+            key={`lng-${lng}`}
+            x1={project(lng, 85).x}
+            x2={project(lng, -85).x}
+            y1="42"
+            y2="478"
+            className="mundi-gridline"
+          />
         ))}
         {[-60, -30, 0, 30, 60].map((lat) => (
-          <line key={`lat-${lat}`} x1="70" x2="930" y1={project(0, lat).y} y2={project(0, lat).y} className="mundi-gridline" />
+          <line
+            key={`lat-${lat}`}
+            x1="70"
+            x2="930"
+            y1={project(0, lat).y}
+            y2={project(0, lat).y}
+            className="mundi-gridline"
+          />
         ))}
 
-        <path className="mundi-land" d="M178 177c42-35 117-52 164-17 34 25 15 71 56 85 35 12 62-19 91 2 33 24 8 73-27 89-53 24-135 2-188-29-44-26-132-84-96-130Z" />
-        <path className="mundi-land" d="M416 124c66-44 204-42 272-8 50 25 78 72 52 106-34 45-126 14-168 45-35 26-4 79-54 97-56 20-136-39-148-100-9-46-24-103 46-140Z" />
-        <path className="mundi-land" d="M666 298c56-19 129-7 164 36 31 38 3 91-53 104-69 16-165-25-171-78-4-30 20-49 60-62Z" />
+        <path
+          className="mundi-land"
+          d="M178 177c42-35 117-52 164-17 34 25 15 71 56 85 35 12 62-19 91 2 33 24 8 73-27 89-53 24-135 2-188-29-44-26-132-84-96-130Z"
+        />
+        <path
+          className="mundi-land"
+          d="M416 124c66-44 204-42 272-8 50 25 78 72 52 106-34 45-126 14-168 45-35 26-4 79-54 97-56 20-136-39-148-100-9-46-24-103 46-140Z"
+        />
+        <path
+          className="mundi-land"
+          d="M666 298c56-19 129-7 164 36 31 38 3 91-53 104-69 16-165-25-171-78-4-30 20-49 60-62Z"
+        />
 
         {points.map((point) => {
           const origin = project(point.lng, point.lat);
@@ -1322,8 +1618,19 @@ function MundiSvgFallback({
                 }
               }}
             >
-              <line x1={origin.x} y1={origin.y} x2={target.x} y2={target.y} className={`mundi-route ${point.status}`} />
-              <circle cx={origin.x} cy={origin.y} r="7" className={`mundi-dot mundi-dot--origin ${point.category} ${point.status}`} />
+              <line
+                x1={origin.x}
+                y1={origin.y}
+                x2={target.x}
+                y2={target.y}
+                className={`mundi-route ${point.status}`}
+              />
+              <circle
+                cx={origin.x}
+                cy={origin.y}
+                r="7"
+                className={`mundi-dot mundi-dot--origin ${point.category} ${point.status}`}
+              />
               <title>{`${point.label} · ${point.detail} · ${point.status}`}</title>
             </g>
           );
@@ -1340,7 +1647,11 @@ function MundiSvgFallback({
             points={`${project(anchor.lng, anchor.lat).x},${project(anchor.lng, anchor.lat).y - 12} ${project(anchor.lng, anchor.lat).x + 10},${project(anchor.lng, anchor.lat).y} ${project(anchor.lng, anchor.lat).x},${project(anchor.lng, anchor.lat).y + 12} ${project(anchor.lng, anchor.lat).x - 10},${project(anchor.lng, anchor.lat).y}`}
             className="mundi-anchor-shape"
           />
-          <text x={project(anchor.lng, anchor.lat).x + 18} y={project(anchor.lng, anchor.lat).y + 5} className="mundi-anchor-label">
+          <text
+            x={project(anchor.lng, anchor.lat).x + 18}
+            y={project(anchor.lng, anchor.lat).y + 5}
+            className="mundi-anchor-label"
+          >
             Casper anchor
           </text>
         </g>

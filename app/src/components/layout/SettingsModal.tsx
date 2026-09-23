@@ -1,3 +1,5 @@
+import { useDialogFocus } from "../../hooks/useDialogFocus";
+import { InlineNotice } from "../ui/InlineNotice";
 import { Button } from "../ui/Button";
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
@@ -37,10 +39,12 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
   const [decider, setDecider] = useState<DeciderMode>("rule");
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState(false);
 
   const languageGroupId = useId();
   const themeGroupId = useId();
   const titleId = useId();
+  const dialogRef = useDialogFocus(open);
 
   useEffect(() => {
     if (settings.data) {
@@ -71,11 +75,13 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
     setDecider(next);
     setSaving(true);
     setSaveMessage(null);
+    setSaveError(false);
     try {
       await updateSettings(next);
       setSaveMessage(t("settings.decider.saved"));
       settings.reload();
     } catch {
+      setSaveError(true);
       setSaveMessage(t("settings.decider.saveError"));
     } finally {
       setSaving(false);
@@ -92,6 +98,8 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
     >
       <div
         className="settings-modal"
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -104,7 +112,10 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
             </h2>
             <p className="settings-modal__lead">{t("settings.lead")}</p>
           </div>
-          <Button variant="ghost" size="sm" iconOnly
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
             type="button"
             className="settings-modal__close"
             onClick={onClose}
@@ -287,7 +298,11 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
                         </label>
                       </div>
                       {saveMessage ? (
-                        <p className="settings-card__status">{saveMessage}</p>
+                        <InlineNotice
+                          tone={saveError ? "danger" : "success"}
+                          title={saveMessage}
+                          live
+                        />
                       ) : null}
                     </section>
                   ) : null}

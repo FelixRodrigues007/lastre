@@ -19,7 +19,12 @@
   height: 100%;
   min-height: 0;
   background: var(--lastre-bg-elevated);
-  border-inline-start: 0.5px solid color-mix(in srgb, var(--lastre-border-trust) 40%, var(--lastre-border-subtle));
+  border-inline-start: 0.5px solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-trust) 40%,
+      var(--lastre-border-subtle)
+    );
   box-shadow: var(--app-shadow-float);
 }
 
@@ -97,11 +102,19 @@
 }
 
 .lot-drawer--valid .lot-drawer__status {
-  color: color-mix(in srgb, var(--lastre-success) 80%, var(--lastre-text-secondary));
+  color: color-mix(
+    in srgb,
+    var(--lastre-success) 80%,
+    var(--lastre-text-secondary)
+  );
 }
 
 .lot-drawer--invalid .lot-drawer__status {
-  color: color-mix(in srgb, var(--lastre-danger) 85%, var(--lastre-text-secondary));
+  color: color-mix(
+    in srgb,
+    var(--lastre-danger) 85%,
+    var(--lastre-text-secondary)
+  );
 }
 
 .lot-drawer__meta-line {

@@ -9,7 +9,8 @@
   gap: 0.5rem;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
-  border-bottom: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 55%, transparent);
+  border-bottom: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-border-subtle) 55%, transparent);
 }
 
 .process-config__section:last-of-type {
@@ -27,7 +28,8 @@
   gap: 0.35rem;
   padding-bottom: 0.85rem;
   margin-bottom: 0.15rem;
-  border-bottom: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 45%, transparent);
+  border-bottom: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-border-subtle) 45%, transparent);
 }
 
 .process-config__kicker {
@@ -115,7 +117,8 @@
   border-radius: 0.625rem;
   overflow: hidden;
   background: color-mix(in srgb, var(--lastre-bg-canvas) 40%, transparent);
-  box-shadow: 0 0 0 var(--lastre-stroke-hairline) color-mix(in srgb, var(--lastre-border-subtle) 70%, transparent);
+  box-shadow: 0 0 0 var(--lastre-stroke-hairline)
+    color-mix(in srgb, var(--lastre-border-subtle) 70%, transparent);
 }
 
 .process-config-lot-input {
@@ -129,7 +132,8 @@
 }
 
 .process-config-group > li + li .process-config-lot {
-  border-top: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 50%, transparent);
+  border-top: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-border-subtle) 50%, transparent);
 }
 
 .process-config-lot {

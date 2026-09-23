@@ -10,10 +10,14 @@ type LotProofStatusProps = {
   variant?: "default" | "drawer";
 };
 
-export function LotProofStatus({ lot, variant = "default" }: LotProofStatusProps) {
+export function LotProofStatus({
+  lot,
+  variant = "default",
+}: LotProofStatusProps) {
   const inDrawer = variant === "drawer";
   const proofStep = proofStepFromLot(lot);
-  const isValid = lot.latestVerdict === "Valid" || lot.sealMatchesReference === true;
+  const isValid =
+    lot.latestVerdict === "Valid" || lot.sealMatchesReference === true;
   const isTokenizable = lot.auditRecord?.outcome === "tokenizable";
   const hasAudit = Boolean(lot.auditRecord);
 
@@ -55,9 +59,15 @@ export function LotProofStatus({ lot, variant = "default" }: LotProofStatusProps
         </div>
       ) : null}
 
-      {!inDrawer ? <p className="lot-proof-status__role">{lot.demoRole}</p> : null}
+      {!inDrawer ? (
+        <p className="lot-proof-status__role">{lot.demoRole}</p>
+      ) : null}
 
-      <dl className={inDrawer ? "lot-proof-status__group" : "lot-proof-status__facts"}>
+      <dl
+        className={
+          inDrawer ? "lot-proof-status__group" : "lot-proof-status__facts"
+        }
+      >
         <div>
           <dt>Quantity</dt>
           <dd>{quantity}</dd>
@@ -77,17 +87,32 @@ export function LotProofStatus({ lot, variant = "default" }: LotProofStatusProps
       </dl>
 
       <div className="lot-proof-status__rail">
-        {!inDrawer ? <p className="lot-proof-status__rail-label">Chain of proof</p> : null}
-        {inDrawer ? <p className="lot-proof-status__section-label">Chain of proof</p> : null}
-        <ProofRail activeStep={proofStep} verdict={lot.latestVerdict} layout={inDrawer ? "vertical" : "auto"} />
+        {!inDrawer ? (
+          <p className="lot-proof-status__rail-label">Chain of proof</p>
+        ) : null}
+        {inDrawer ? (
+          <p className="lot-proof-status__section-label">Chain of proof</p>
+        ) : null}
+        <ProofRail
+          activeStep={proofStep}
+          verdict={lot.latestVerdict}
+          layout={inDrawer ? "vertical" : "auto"}
+        />
       </div>
 
       <div className="lot-proof-status__actions">
-        <ActionLink variant="primary" size="md" className="route-cta" to={primaryTo}>
+        <ActionLink
+          variant="primary"
+          size="md"
+          className="route-cta"
+          to={primaryTo}
+        >
           <BtnIcon icon={primaryIcon}>{primaryLabel}</BtnIcon>
         </ActionLink>
         {hasAudit ? (
-          <ActionLink variant="secondary" size="md"
+          <ActionLink
+            variant="secondary"
+            size="md"
             className="route-cta route-cta--ghost"
             to={`/audit/${encodeURIComponent(lot.artifact.assetId)}`}
           >
@@ -95,12 +120,22 @@ export function LotProofStatus({ lot, variant = "default" }: LotProofStatusProps
           </ActionLink>
         ) : null}
         {isValid && isTokenizable && primaryTo !== "/marketplace" ? (
-          <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace">
+          <ActionLink
+            variant="secondary"
+            size="md"
+            className="route-cta route-cta--ghost"
+            to="/marketplace"
+          >
             Marketplace (demo)
           </ActionLink>
         ) : null}
         {!inDrawer ? (
-          <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/lots">
+          <ActionLink
+            variant="secondary"
+            size="md"
+            className="route-cta route-cta--ghost"
+            to="/lots"
+          >
             Back to catalog
           </ActionLink>
         ) : null}

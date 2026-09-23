@@ -122,7 +122,8 @@
   padding: 0.5rem 0.65rem;
   border-radius: var(--lastre-radius-sm);
   background: color-mix(in srgb, var(--lastre-link) 8%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 20%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-link) 20%, transparent);
 }
 
 .escalation-queue-item__error {
@@ -131,7 +132,8 @@
   padding: 0.5rem 0.65rem;
   border-radius: var(--lastre-radius-sm);
   background: color-mix(in srgb, var(--lastre-danger) 12%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 30%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-danger) 30%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

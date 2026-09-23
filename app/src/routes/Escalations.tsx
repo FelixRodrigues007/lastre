@@ -32,7 +32,8 @@ export function Escalations() {
   const settings = useAsyncData(getSettings);
   const [resolvedIds, setResolvedIds] = useState<Set<string>>(new Set());
   const [kindFilter, setKindFilter] = useState<EscalationKindFilter>("all");
-  const [deciderFilter, setDeciderFilter] = useState<EscalationDeciderFilter>("all");
+  const [deciderFilter, setDeciderFilter] =
+    useState<EscalationDeciderFilter>("all");
 
   const selectedCaseId = searchParams.get("case");
 
@@ -53,13 +54,17 @@ export function Escalations() {
 
   const artifactById = useMemo(() => {
     const map = new Map<string, import("../lib/types").ProvenanceArtifact>();
-    lots.data?.lots.forEach((lot) => map.set(lot.artifact.assetId, lot.artifact));
+    lots.data?.lots.forEach((lot) =>
+      map.set(lot.artifact.assetId, lot.artifact),
+    );
     return map;
   }, [lots.data]);
 
   const loading = escalations.loading || lots.loading || settings.loading;
   const error = escalations.error ?? lots.error ?? settings.error;
-  const allRecords = (escalations.data?.records ?? []).filter((r) => !resolvedIds.has(r.assetId));
+  const allRecords = (escalations.data?.records ?? []).filter(
+    (r) => !resolvedIds.has(r.assetId),
+  );
   const records = useMemo(
     () => filterEscalationRecords(allRecords, kindFilter, deciderFilter),
     [allRecords, kindFilter, deciderFilter],
@@ -97,7 +102,9 @@ export function Escalations() {
       }
 
       event.preventDefault();
-      const currentIndex = records.findIndex((record) => record.assetId === effectiveCaseId);
+      const currentIndex = records.findIndex(
+        (record) => record.assetId === effectiveCaseId,
+      );
       const nextIndex =
         event.key === "ArrowDown" || event.key === "j"
           ? Math.min(currentIndex + 1, records.length - 1)
@@ -123,7 +130,9 @@ export function Escalations() {
     return map;
   }, [allRecords]);
 
-  const selectedIndex = selectedRecord ? (queueIndexById.get(selectedRecord.assetId) ?? 0) : 0;
+  const selectedIndex = selectedRecord
+    ? (queueIndexById.get(selectedRecord.assetId) ?? 0)
+    : 0;
 
   function handleResolved(result: EscalationActionResult) {
     if (!result.requeuedEscalated) {
@@ -152,14 +161,24 @@ export function Escalations() {
         lead={t("escalations.lead")}
       />
 
-      <StatePanel loading={loading} error={error} skeleton="split" onRetry={handleRetry}>
+      <StatePanel
+        loading={loading}
+        error={error}
+        skeleton="split"
+        onRetry={handleRetry}
+      >
         {count === 0 ? (
           <EmptyState
             icon="escalations"
             title={t("escalations.empty.title")}
             hint={t("escalations.empty.hint")}
             action={
-              <ActionLink variant="primary" size="md" className="route-cta" to="/process">
+              <ActionLink
+                variant="primary"
+                size="md"
+                className="route-cta"
+                to="/process"
+              >
                 {t("escalations.empty.cta")}
               </ActionLink>
             }
@@ -181,7 +200,10 @@ export function Escalations() {
                 aside={
                   visibleCount === count
                     ? `${count}`
-                    : t("escalations.filters.shown", { visible: visibleCount, total: count })
+                    : t("escalations.filters.shown", {
+                        visible: visibleCount,
+                        total: count,
+                      })
                 }
               />
 

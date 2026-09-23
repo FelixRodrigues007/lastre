@@ -130,10 +130,13 @@
 
 .escalation-geo__compare-row--flag {
   background: color-mix(in srgb, var(--lastre-danger) 6%, transparent);
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastre-danger) 55%, transparent);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--lastre-danger) 55%, transparent);
 }
 
-.escalation-geo__compare-row--flag .escalation-geo__compare-declared .escalation-geo__mono {
+.escalation-geo__compare-row--flag
+  .escalation-geo__compare-declared
+  .escalation-geo__mono {
   color: var(--lastre-link);
 }
 

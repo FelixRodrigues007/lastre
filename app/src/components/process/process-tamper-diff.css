@@ -4,7 +4,8 @@
   margin-top: 0.65rem;
   padding: 0.65rem 0.75rem;
   border-radius: var(--lastre-radius-sm);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 28%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-danger) 28%, transparent);
   background: color-mix(in srgb, var(--lastre-danger) 5%, transparent);
 }
 

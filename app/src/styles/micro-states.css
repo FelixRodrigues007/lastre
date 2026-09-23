@@ -9,7 +9,9 @@
 /* Map markers — success lime */
 .mundi-svg-point:focus-visible .mundi-dot {
   outline: none;
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--lastre-success) 55%, transparent));
+  filter: drop-shadow(
+    0 0 6px color-mix(in srgb, var(--lastre-success) 55%, transparent)
+  );
 }
 
 /* Map markers — success lime */
@@ -84,10 +86,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .verdict-hero,
-.evidence-kpi,
-.status-badge,
-.ratio-bar__segment,
-.lot-list-row::before {
+  .evidence-kpi,
+  .status-badge,
+  .ratio-bar__segment,
+  .lot-list-row::before {
     transition-duration: 0.01ms;
   }
 

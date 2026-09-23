@@ -28,8 +28,10 @@ export function filterEscalationRecords(
   decider: EscalationDeciderFilter,
 ): AuditRecord[] {
   return records.filter((record) => {
-    if (kind !== "all" && getEscalationKind(record.decision.reasoning) !== kind) return false;
-    if (decider !== "all" && record.decision.decidedBy !== decider) return false;
+    if (kind !== "all" && getEscalationKind(record.decision.reasoning) !== kind)
+      return false;
+    if (decider !== "all" && record.decision.decidedBy !== decider)
+      return false;
     return true;
   });
 }
@@ -46,7 +48,9 @@ export function EscalationFilters({
 
   const kindCounts = KIND_OPTIONS.reduce(
     (acc, option) => {
-      acc[option] = records.filter((r) => getEscalationKind(r.decision.reasoning) === option).length;
+      acc[option] = records.filter(
+        (r) => getEscalationKind(r.decision.reasoning) === option,
+      ).length;
       return acc;
     },
     {} as Record<EscalationKind, number>,
@@ -58,7 +62,11 @@ export function EscalationFilters({
       role="group"
       aria-label={t("escalations.filters.label")}
     >
-      <div className="escalation-filters__chips" role="toolbar" aria-label={t("escalations.filters.kind")}>
+      <div
+        className="escalation-filters__chips"
+        role="toolbar"
+        aria-label={t("escalations.filters.kind")}
+      >
         <button
           type="button"
           className={`escalation-filters__chip${kind === "all" ? " escalation-filters__chip--active" : ""}`}
@@ -86,19 +94,25 @@ export function EscalationFilters({
         })}
       </div>
 
-      <SelectField label={t("escalations.filters.decider")} className="escalation-filters__field"
-value={decider}
-onChange={(event) => onDeciderChange(event.target.value as EscalationDeciderFilter)}
-aria-label={t("escalations.filters.decider")}>
-          <option value="all">{t("escalations.filters.deciderAll")}</option>
-          <option value="rule">
-            {t("audit.evidence.owner.rule")} (
-            {records.filter((r) => r.decision.decidedBy === "rule").length})
-          </option>
-          <option value="llm">
-            {t("audit.evidence.owner.llm")} ({records.filter((r) => r.decision.decidedBy === "llm").length})
-          </option>
-        </SelectField>
+      <SelectField
+        label={t("escalations.filters.decider")}
+        className="escalation-filters__field"
+        value={decider}
+        onChange={(event) =>
+          onDeciderChange(event.target.value as EscalationDeciderFilter)
+        }
+        aria-label={t("escalations.filters.decider")}
+      >
+        <option value="all">{t("escalations.filters.deciderAll")}</option>
+        <option value="rule">
+          {t("audit.evidence.owner.rule")} (
+          {records.filter((r) => r.decision.decidedBy === "rule").length})
+        </option>
+        <option value="llm">
+          {t("audit.evidence.owner.llm")} (
+          {records.filter((r) => r.decision.decidedBy === "llm").length})
+        </option>
+      </SelectField>
     </div>
   );
 }

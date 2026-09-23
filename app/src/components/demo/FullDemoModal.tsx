@@ -1,3 +1,4 @@
+import { useDialogFocus } from "../../hooks/useDialogFocus";
 import { ActionLink } from "../ui/ActionLink";
 import { Button } from "../ui/Button";
 
@@ -32,21 +33,36 @@ export function FullDemoModal({
   primaryAction,
   onClose,
 }: FullDemoModalProps) {
+  const dialogRef = useDialogFocus(open);
   if (!open) return null;
 
   return (
-    <div className="modal-overlay full-demo-overlay" role="dialog" aria-modal="true" aria-label={title}>
+    <div
+      className="modal-overlay full-demo-overlay"
+      ref={dialogRef}
+      tabIndex={-1}
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+    >
       <div className="full-demo-modal">
         <div className="full-demo-modal__head">
           <div>
             <span className="eyebrow">Demo Killer · &lt;90s path</span>
             <h3>{title}</h3>
             <p className="small muted">
-              Asset: <code>{assetId}</code>. Fictional data only — proof before token.
+              Asset: <code>{assetId}</code>. Fictional data only — proof before
+              token.
             </p>
           </div>
           {onClose ? (
-            <Button variant="secondary" size="md" type="button" className="btn small ghost" onClick={onClose}>
+            <Button
+              variant="secondary"
+              size="md"
+              type="button"
+              className="btn small ghost"
+              onClick={onClose}
+            >
               Hide
             </Button>
           ) : null}
@@ -54,10 +70,20 @@ export function FullDemoModal({
 
         <ol className="full-demo-steps">
           {steps.map((step, index) => {
-            const state = index < activeStep ? "done" : index === activeStep ? "active" : "queued";
+            const state =
+              index < activeStep
+                ? "done"
+                : index === activeStep
+                  ? "active"
+                  : "queued";
             return (
-              <li key={step.label} className={`full-demo-step full-demo-step--${state}`}>
-                <span className="full-demo-step__marker">{index < activeStep ? "✓" : index + 1}</span>
+              <li
+                key={step.label}
+                className={`full-demo-step full-demo-step--${state}`}
+              >
+                <span className="full-demo-step__marker">
+                  {index < activeStep ? "✓" : index + 1}
+                </span>
                 <div>
                   <strong>{step.label}</strong>
                   <p>{step.detail}</p>
@@ -76,7 +102,12 @@ export function FullDemoModal({
 
         {primaryAction ? (
           <div className="full-demo-actions">
-            <ActionLink variant="primary" size="md" className="route-cta" to={primaryAction.to}>
+            <ActionLink
+              variant="primary"
+              size="md"
+              className="route-cta"
+              to={primaryAction.to}
+            >
               {primaryAction.label}
             </ActionLink>
           </div>

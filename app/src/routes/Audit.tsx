@@ -1,3 +1,4 @@
+import { InlineNotice } from "../components/ui/InlineNotice";
 import { ActionLink } from "../components/ui/ActionLink";
 import { Button } from "../components/ui/Button";
 import { useMemo, useState } from "react";
@@ -73,25 +74,32 @@ export function Audit() {
         actions={
           <>
             {records.length > 0 ? (
-              <Button variant="secondary" size="md"
+              <Button
+                variant="secondary"
+                size="md"
                 type="button"
                 className="route-cta route-cta--ghost"
-                disabled={exporting}
+                loading={exporting}
                 onClick={handleExport}
               >
-                <BtnIcon icon="download">
-                  {exporting ? t("audit.evidence.exporting") : t("audit.evidence.export")}
-                </BtnIcon>
+                <BtnIcon icon="download">{t("audit.evidence.export")}</BtnIcon>
               </Button>
             ) : null}
-            <ActionLink variant="primary" size="md" className="route-cta" to="/process">
+            <ActionLink
+              variant="primary"
+              size="md"
+              className="route-cta"
+              to="/process"
+            >
               <BtnIcon icon="process">{t("common.runDemoBatch")}</BtnIcon>
             </ActionLink>
           </>
         }
       />
 
-      {exportError ? <p className="audit-export-error">{exportError}</p> : null}
+      {exportError ? (
+        <InlineNotice tone="danger" live title={exportError} />
+      ) : null}
 
       <StatePanel
         loading={loading}
@@ -109,7 +117,12 @@ export function Audit() {
                 <CaptureWizardTrigger className="route-cta">
                   {t("audit.evidence.emptyCapture")}
                 </CaptureWizardTrigger>
-                <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/process">
+                <ActionLink
+                  variant="secondary"
+                  size="md"
+                  className="route-cta route-cta--ghost"
+                  to="/process"
+                >
                   {t("audit.evidence.emptyProcess")}
                 </ActionLink>
               </div>
@@ -139,7 +152,11 @@ export function Audit() {
                   value={statusFilter}
                   onChange={setStatusFilter}
                   options={[
-                    { value: "all", label: t("audit.evidence.filter.all"), count: statusCounts.all },
+                    {
+                      value: "all",
+                      label: t("audit.evidence.filter.all"),
+                      count: statusCounts.all,
+                    },
                     {
                       value: "not_ready",
                       label: t("audit.evidence.status.notReady"),
@@ -164,12 +181,18 @@ export function Audit() {
               <p className="audit-no-match">{t("audit.evidence.noMatch")}</p>
             ) : (
               <>
-                <div className="audit-table-wrap panel" role="region" aria-label={t("audit.evidence.title")}>
+                <div
+                  className="audit-table-wrap panel"
+                  role="region"
+                  aria-label={t("audit.evidence.title")}
+                >
                   <table className="audit-table">
                     <thead>
                       <tr>
                         <th scope="col">{t("audit.evidence.col.evidence")}</th>
-                        <th scope="col">{t("audit.evidence.col.assessment")}</th>
+                        <th scope="col">
+                          {t("audit.evidence.col.assessment")}
+                        </th>
                         <th scope="col">{t("audit.evidence.col.onChain")}</th>
                       </tr>
                     </thead>
@@ -193,11 +216,17 @@ export function Audit() {
                             }}
                           >
                             <td className="audit-table__evidence">
-                              <span className="audit-table__evidence-id">{record.assetId}</span>
-                              <p className="audit-table__evidence-sub">{evidenceSubtitle(record)}</p>
+                              <span className="audit-table__evidence-id">
+                                {record.assetId}
+                              </span>
+                              <p className="audit-table__evidence-sub">
+                                {evidenceSubtitle(record)}
+                              </p>
                             </td>
                             <td>
-                              <EvidenceStatusBadge status={getEvidenceStatus(record)} />
+                              <EvidenceStatusBadge
+                                status={getEvidenceStatus(record)}
+                              />
                             </td>
                             <td>
                               <AuditOnChainCell record={record} />

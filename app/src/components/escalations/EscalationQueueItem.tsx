@@ -1,3 +1,4 @@
+import { InlineNotice } from "../ui/InlineNotice";
 import { Button } from "../ui/Button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -13,7 +14,12 @@ import {
   getEscalationKind,
   isGeoEscalation,
 } from "../../lib/escalations";
-import type { AppSettings, AuditRecord, EscalationActionResult, ProvenanceArtifact } from "../../lib/types";
+import type {
+  AppSettings,
+  AuditRecord,
+  EscalationActionResult,
+  ProvenanceArtifact,
+} from "../../lib/types";
 import { ActionBadge } from "../proof/Badges";
 import { BtnIcon } from "../ui/BtnIcon";
 import { ArtifactPanel, escalationHighlights } from "../lots/ArtifactPanel";
@@ -28,7 +34,8 @@ type EscalationQueueItemProps = {
   onResolved: (result: EscalationActionResult) => void;
 };
 
-type PendingAction = "requeue" | "discard" | "override-pay" | "override-skip" | null;
+type PendingAction =
+  "requeue" | "discard" | "override-pay" | "override-skip" | null;
 
 export function EscalationQueueItem({
   record,
@@ -45,13 +52,18 @@ export function EscalationQueueItem({
 
   const kind = getEscalationKind(record.decision.reasoning);
   const highlights = escalationHighlights(record.decision.reasoning);
-  const showGeo = artifact && settings && isGeoEscalation(record.decision.reasoning);
+  const showGeo =
+    artifact && settings && isGeoEscalation(record.decision.reasoning);
   const busy = pending != null;
 
   async function runAction(
     action: PendingAction,
     runner: () => Promise<EscalationActionResult>,
-    successKey: "escalations.feedback.requeued" | "escalations.feedback.discarded" | "escalations.feedback.overriddenPay" | "escalations.feedback.overriddenSkip",
+    successKey:
+      | "escalations.feedback.requeued"
+      | "escalations.feedback.discarded"
+      | "escalations.feedback.overriddenPay"
+      | "escalations.feedback.overriddenSkip",
   ) {
     if (busy) return;
     setPending(action);
@@ -64,29 +76,48 @@ export function EscalationQueueItem({
       onResolved(result);
 
       if (result.requeuedEscalated) {
-        setFeedback(t("escalations.feedback.requeuedStillEscalated", { assetId: record.assetId }));
+        setFeedback(
+          t("escalations.feedback.requeuedStillEscalated", {
+            assetId: record.assetId,
+          }),
+        );
       } else {
-        setFeedback(t(successKey, { assetId: record.assetId, outcome: result.record.outcome }));
+        setFeedback(
+          t(successKey, {
+            assetId: record.assetId,
+            outcome: result.record.outcome,
+          }),
+        );
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("escalations.feedback.error"));
+      setError(
+        err instanceof Error ? err.message : t("escalations.feedback.error"),
+      );
     } finally {
       setPending(null);
     }
   }
 
   return (
-    <article className="panel escalation-queue-item" aria-labelledby={`escalation-${record.assetId}`}>
+    <article
+      className="panel escalation-queue-item"
+      aria-labelledby={`escalation-${record.assetId}`}
+    >
       <header className="escalation-queue-item__head">
         <div className="escalation-queue-item__title-block">
-          <p className="mono-label">
-            {t("escalations.item.label", { index })}
-          </p>
-          <h2 className="escalation-queue-item__title" id={`escalation-${record.assetId}`}>
-            <Link to={`/lots/${encodeURIComponent(record.assetId)}`}>{record.assetId}</Link>
+          <p className="mono-label">{t("escalations.item.label", { index })}</p>
+          <h2
+            className="escalation-queue-item__title"
+            id={`escalation-${record.assetId}`}
+          >
+            <Link to={`/lots/${encodeURIComponent(record.assetId)}`}>
+              {record.assetId}
+            </Link>
           </h2>
         </div>
-        <span className="escalation-queue-item__kind">{t(ESCALATION_KIND_LABEL_KEYS[kind])}</span>
+        <span className="escalation-queue-item__kind">
+          {t(ESCALATION_KIND_LABEL_KEYS[kind])}
+        </span>
       </header>
 
       <div className="escalation-queue-item__agent-note">
@@ -118,22 +149,34 @@ export function EscalationQueueItem({
       ) : null}
 
       <footer className="escalation-queue-item__foot">
-        <p className="escalation-queue-item__actions-label mono-label">{t("escalations.item.actions")}</p>
+        <p className="escalation-queue-item__actions-label mono-label">
+          {t("escalations.item.actions")}
+        </p>
         <div className="escalation-queue-item__actions">
-          <Button variant="primary" size="md"
+          <Button
+            variant="primary"
+            size="md"
             type="button"
             className="route-cta"
             disabled={busy}
             loading={pending === "requeue"}
             onClick={() =>
-              runAction("requeue", () => requeueEscalation(record.assetId), "escalations.feedback.requeued")
+              runAction(
+                "requeue",
+                () => requeueEscalation(record.assetId),
+                "escalations.feedback.requeued",
+              )
             }
           >
             <BtnIcon icon="process">
-              {pending === "requeue" ? t("escalations.action.requeuing") : t("escalations.action.ackRequeue")}
+              {pending === "requeue"
+                ? t("escalations.action.requeuing")
+                : t("escalations.action.ackRequeue")}
             </BtnIcon>
           </Button>
-          <Button variant="secondary" size="md"
+          <Button
+            variant="secondary"
+            size="md"
             type="button"
             className="route-cta route-cta--ghost"
             disabled={busy}
@@ -150,7 +193,9 @@ export function EscalationQueueItem({
               ? t("escalations.action.overriding")
               : t("escalations.action.overridePay")}
           </Button>
-          <Button variant="secondary" size="md"
+          <Button
+            variant="secondary"
+            size="md"
             type="button"
             className="route-cta route-cta--ghost"
             disabled={busy}
@@ -167,35 +212,38 @@ export function EscalationQueueItem({
               ? t("escalations.action.overriding")
               : t("escalations.action.overrideSkip")}
           </Button>
-          <Button variant="danger" size="md"
+          <Button
+            variant="danger"
+            size="md"
             type="button"
             className="escalation-queue-item__discard"
             disabled={busy}
             loading={pending === "discard"}
             onClick={() =>
-              runAction("discard", () => discardEscalation(record.assetId), "escalations.feedback.discarded")
+              runAction(
+                "discard",
+                () => discardEscalation(record.assetId),
+                "escalations.feedback.discarded",
+              )
             }
           >
-            {pending === "discard" ? t("escalations.action.discarding") : t("escalations.action.discard")}
+            {pending === "discard"
+              ? t("escalations.action.discarding")
+              : t("escalations.action.discard")}
           </Button>
         </div>
 
         <div className="escalation-queue-item__links">
-          <Link className="escalation-queue-item__link" to={`/audit/${encodeURIComponent(record.assetId)}`}>
+          <Link
+            className="escalation-queue-item__link"
+            to={`/audit/${encodeURIComponent(record.assetId)}`}
+          >
             {t("escalations.item.viewAudit")}
           </Link>
         </div>
 
-        {feedback ? (
-          <p className="escalation-queue-item__feedback" role="status">
-            {feedback}
-          </p>
-        ) : null}
-        {error ? (
-          <p className="escalation-queue-item__error" role="alert">
-            {error}
-          </p>
-        ) : null}
+        {feedback ? <InlineNotice tone="info" live title={feedback} /> : null}
+        {error ? <InlineNotice tone="danger" live title={error} /> : null}
       </footer>
     </article>
   );

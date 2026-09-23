@@ -115,7 +115,8 @@
 .my-assets-page__banner {
   padding: 0.75rem 1rem;
   border-radius: var(--lastre-radius-sm);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 22%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-link) 22%, transparent);
   background: color-mix(in srgb, var(--lastre-link) 8%, transparent);
   font-size: var(--text-small);
   color: var(--lastre-text-secondary);

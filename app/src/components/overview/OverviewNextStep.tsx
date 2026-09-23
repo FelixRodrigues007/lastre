@@ -2,7 +2,10 @@ import { ActionLink } from "../ui/ActionLink";
 import type { AuditSummary } from "../../lib/types";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { BtnIcon } from "../ui/BtnIcon";
-import { OverviewNextStepHero, type NextStepHeroVariant } from "./OverviewNextStepHero";
+import {
+  OverviewNextStepHero,
+  type NextStepHeroVariant,
+} from "./OverviewNextStepHero";
 import "./overview-next-step.css";
 
 type OverviewNextStepProps = {
@@ -63,12 +66,17 @@ export function OverviewNextStep({ audit, lotCount }: OverviewNextStepProps) {
   } else if (audit.tokenizable > 0) {
     copy = {
       title: t("overview.next.tokenizable.title"),
-      leadStat: t("overview.next.tokenizable.leadStat", { count: audit.tokenizable }),
+      leadStat: t("overview.next.tokenizable.leadStat", {
+        count: audit.tokenizable,
+      }),
       leadHint: t("overview.next.tokenizable.leadHint"),
       ctaTo: "/marketplace",
       ctaLabel: t("overview.next.tokenizable.cta"),
       ctaIcon: "globe",
-      secondary: { to: "/my-assets", label: t("overview.next.tokenizable.secondary") },
+      secondary: {
+        to: "/my-assets",
+        label: t("overview.next.tokenizable.secondary"),
+      },
       heroVariant: "tokenizable",
       heroCount: audit.tokenizable,
     };
@@ -83,15 +91,27 @@ export function OverviewNextStep({ audit, lotCount }: OverviewNextStepProps) {
         <div className="overview-next__content">
           <p className="overview-next__kicker">{t("overview.next.kicker")}</p>
           <h2 className="overview-next__title">{copy.title}</h2>
-          {copy.leadStat ? <p className="overview-next__lead-stat">{copy.leadStat}</p> : null}
+          {copy.leadStat ? (
+            <p className="overview-next__lead-stat">{copy.leadStat}</p>
+          ) : null}
           <p className="overview-next__lead-hint">{copy.leadHint}</p>
         </div>
         <div className="overview-next__actions">
-          <ActionLink variant="primary" size="md" className="route-cta" to={copy.ctaTo}>
+          <ActionLink
+            variant="primary"
+            size="md"
+            className="route-cta"
+            to={copy.ctaTo}
+          >
             <BtnIcon icon={copy.ctaIcon}>{copy.ctaLabel}</BtnIcon>
           </ActionLink>
           {copy.secondary ? (
-            <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={copy.secondary.to}>
+            <ActionLink
+              variant="secondary"
+              size="md"
+              className="route-cta route-cta--ghost"
+              to={copy.secondary.to}
+            >
               {copy.secondary.label}
             </ActionLink>
           ) : null}
@@ -107,7 +127,11 @@ export function OverviewNextStep({ audit, lotCount }: OverviewNextStepProps) {
           <span className="overview-next__orb overview-next__orb--d" />
         </div>
         <div className="overview-next__visual-content" aria-hidden="true">
-          <OverviewNextStepHero variant={copy.heroVariant} count={copy.heroCount} banner />
+          <OverviewNextStepHero
+            variant={copy.heroVariant}
+            count={copy.heroCount}
+            banner
+          />
         </div>
       </div>
     </section>

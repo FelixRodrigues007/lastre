@@ -31,7 +31,9 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <CaptureWizardProvider>
-      <a className="app-skip" href="#app-main">{t("common.skipContent")}</a>
+      <a className="app-skip" href="#app-main">
+        {t("common.skipContent")}
+      </a>
       <div
         className="app-shell"
         data-sidebar-collapsed={sidebarCollapsed ? "true" : "false"}
@@ -41,16 +43,26 @@ export function AppShell({ children }: AppShellProps) {
 
           <div className="app-content">
             <header className="app-topbar">
-              <NavLink className="app-topbar__brand" to="/" aria-label={`${t("brand.console")} — home`}>
+              <NavLink
+                className="app-topbar__brand"
+                to="/"
+                aria-label={`${t("brand.console")} — home`}
+              >
                 <SealMark size={24} live />
                 <LastreWordmark className="app-topbar__wordmark" />
               </NavLink>
               <div className="app-topbar__end">
                 <AuthLangToggle className="app-topbar__locale" />
-                <CaptureWizardTrigger className="app-topbar__capture route-cta route-cta--ghost" icon>
+                <CaptureWizardTrigger
+                  className="app-topbar__capture route-cta route-cta--ghost"
+                  icon
+                >
                   {t("capture.wizard.trigger")}
                 </CaptureWizardTrigger>
-                <Button variant="ghost" size="sm" iconOnly
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  iconOnly
                   type="button"
                   className="app-topbar__cmd"
                   onClick={() => setOpen(true)}
@@ -58,28 +70,28 @@ export function AppShell({ children }: AppShellProps) {
                 >
                   <kbd>⌘K</kbd>
                 </Button>
-              <a
-                className="app-topbar__status"
-                href={CSPR_PACKAGE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="app-topbar__dot" aria-hidden="true" />
-                {t("status.testnet")}
-              </a>
-            </div>
-          </header>
+                <a
+                  className="app-topbar__status"
+                  href={CSPR_PACKAGE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="app-topbar__dot" aria-hidden="true" />
+                  {t("status.testnet")}
+                </a>
+              </div>
+            </header>
 
-          <main
-            id="app-main"
-            tabIndex={-1}
-            className={`app-main${revealed ? " app-main--revealed" : ""}`}
-            data-screen={screen}
-          >
-            <div className="shell">{children}</div>
-          </main>
+            <main
+              id="app-main"
+              tabIndex={-1}
+              className={`app-main${revealed ? " app-main--revealed" : ""}`}
+              data-screen={screen}
+            >
+              <div className="shell">{children}</div>
+            </main>
 
-          <MobileTabBar />
+            <MobileTabBar />
           </div>
         </div>
 

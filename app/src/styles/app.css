@@ -1,4 +1,4 @@
-/* Lastro App — base styles. Tokens from @design-system/tokens/lastro.css */
+/* Lastre App — base styles. Tokens from @design-system/tokens/lastre.css */
 
 :root {
   --app-shell-max: 1180px;
@@ -10,8 +10,7 @@
   --app-radius-pill: var(--lastre-radius-pill);
 
   --app-bg-canvas: var(--lastre-bg-canvas);
-  --app-bg-sidebar:
-    var(--lastre-bg-surface);
+  --app-bg-sidebar: var(--lastre-bg-surface);
   --app-bg-sidebar-fill: var(--lastre-bg-surface);
   --app-stroke-divider: var(--lastre-border-subtle);
   --app-stroke-active: var(--lastre-border-brand);
@@ -21,15 +20,14 @@
   --app-fill-brand: var(--lastre-fill-brand);
   --app-fill-trust: var(--lastre-fill-trust);
 
-  --app-shadow-panel: var(--lastre-surface-shadow);
-  --app-shadow-elevated: var(--lastre-surface-shadow);
-  --app-shadow-float: var(--lastre-surface-shadow);
+  --app-shadow-panel: var(--lastre-panel-shadow);
+  --app-shadow-elevated: var(--lastre-surface-edge), var(--lastre-elevation-3);
+  --app-shadow-float: var(--lastre-dialog-shadow);
 
   /* Floating surfaces — must read above sidebar + charts */
   --app-surface-popover: var(--lastre-bg-surface);
   --app-border-popover: var(--lastre-border-strong);
-  --app-shadow-popover:
-    var(--lastre-surface-shadow);
+  --app-shadow-popover: var(--lastre-popover-shadow);
 
   --text-page-title: clamp(1.75rem, 1.1rem + 1.8vw, var(--lastre-text-title));
   --text-section: 1.125rem;
@@ -61,8 +59,7 @@
 
   --segment-active-shadow:
     inset 0 0 0 0.5px var(--lastre-border-subtle),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 1px 2px rgba(0, 0, 0, 0.1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 *,
@@ -84,7 +81,11 @@ body {
   font-size: 0.9375rem;
   line-height: 1.5;
   letter-spacing: -0.011em;
-  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1;
+  font-feature-settings:
+    "cv02" 1,
+    "cv03" 1,
+    "cv04" 1,
+    "cv11" 1;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -113,7 +114,9 @@ button {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--lastre-text-muted);
-  font-feature-settings: "zero" 1, "ss01" 1;
+  font-feature-settings:
+    "zero" 1,
+    "ss01" 1;
   font-variant-numeric: tabular-nums;
 }
 
@@ -204,7 +207,12 @@ button {
 
 .surface-float {
   background: var(--lastre-bg-elevated);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-trust) 45%, var(--lastre-border-subtle));
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-trust) 45%,
+      var(--lastre-border-subtle)
+    );
   box-shadow: var(--app-shadow-float);
   backdrop-filter: blur(24px) saturate(1.18);
   -webkit-backdrop-filter: blur(24px) saturate(1.18);
@@ -212,7 +220,12 @@ button {
 
 .surface-glass {
   background: color-mix(in srgb, var(--lastre-bg-surface) 62%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-trust) 40%, var(--lastre-border-subtle));
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-trust) 40%,
+      var(--lastre-border-subtle)
+    );
   box-shadow: var(--app-shadow-panel);
   backdrop-filter: blur(20px) saturate(1.15);
   -webkit-backdrop-filter: blur(20px) saturate(1.15);
@@ -285,13 +298,11 @@ button {
   --app-bg-canvas: var(--lastre-bg-canvas);
   --app-surface-popover: var(--lastre-bg-surface);
   --app-border-popover: var(--lastre-border-strong);
-  --app-shadow-popover:
-    var(--lastre-surface-shadow);
-  --app-bg-sidebar:
-    var(--lastre-bg-surface);
+  --app-shadow-popover: var(--lastre-popover-shadow);
+  --app-bg-sidebar: var(--lastre-bg-surface);
   --app-bg-sidebar-fill: var(--lastre-bg-surface);
-  --app-shadow-panel: var(--lastre-surface-shadow);
-  --app-shadow-elevated: var(--lastre-surface-shadow);
+  --app-shadow-panel: var(--lastre-panel-shadow);
+  --app-shadow-elevated: var(--lastre-surface-edge), var(--lastre-elevation-3);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -299,6 +310,7 @@ button {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;

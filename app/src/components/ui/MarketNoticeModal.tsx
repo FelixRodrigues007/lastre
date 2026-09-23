@@ -1,3 +1,4 @@
+import { useDialogFocus } from "../../hooks/useDialogFocus";
 import { Button } from "./Button";
 import { useEffect, useId } from "react";
 import { createPortal } from "react-dom";
@@ -17,6 +18,7 @@ export function MarketNoticeModal({
   onClose,
 }: MarketNoticeModalProps) {
   const titleId = useId();
+  const dialogRef = useDialogFocus(true);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -34,9 +36,15 @@ export function MarketNoticeModal({
   }, [onClose]);
 
   return createPortal(
-    <div className="market-notice-overlay" onClick={onClose} role="presentation">
+    <div
+      className="market-notice-overlay"
+      onClick={onClose}
+      role="presentation"
+    >
       <div
         className={`market-notice market-notice--${tone}`}
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -47,7 +55,13 @@ export function MarketNoticeModal({
         </h3>
         <p className="market-notice__message">{message}</p>
         <div className="market-notice__actions">
-          <Button variant="primary" size="md" type="button" className="route-cta" onClick={onClose}>
+          <Button
+            variant="primary"
+            size="md"
+            type="button"
+            className="route-cta"
+            onClick={onClose}
+          >
             OK
           </Button>
         </div>

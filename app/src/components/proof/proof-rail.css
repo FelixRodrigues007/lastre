@@ -105,7 +105,8 @@
 
 .proof-rail__step--failed .proof-rail__node {
   background: var(--lastre-danger);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastre-danger) 20%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--lastre-danger) 20%, transparent);
 }
 
 [data-theme="light"] .proof-rail__step--failed {
@@ -114,7 +115,8 @@
 
 [data-theme="light"] .proof-rail__step--failed .proof-rail__node {
   background: var(--lastre-danger);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastre-danger) 20%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--lastre-danger) 20%, transparent);
 }
 
 .proof-rail__step--blocked {
@@ -147,7 +149,11 @@
 
 .proof-rail--vertical .proof-rail__step--failed::before,
 .proof-rail--vertical .proof-rail__step--blocked::before {
-  background: color-mix(in srgb, var(--lastre-danger) 25%, var(--lastre-border-subtle));
+  background: color-mix(
+    in srgb,
+    var(--lastre-danger) 25%,
+    var(--lastre-border-subtle)
+  );
 }
 
 /* Vertical timeline — drawer / narrow surfaces */
@@ -180,7 +186,11 @@
 }
 
 .proof-rail--vertical .proof-rail__step--done::before {
-  background: color-mix(in srgb, var(--lastre-success) 45%, var(--lastre-border-subtle));
+  background: color-mix(
+    in srgb,
+    var(--lastre-success) 45%,
+    var(--lastre-border-subtle)
+  );
 }
 
 .proof-rail--vertical .proof-rail__node {
@@ -276,7 +286,10 @@
   border-color: transparent;
 }
 
-[data-theme="light"] .proof-rail--track .proof-rail__step--failed .proof-rail__node {
+[data-theme="light"]
+  .proof-rail--track
+  .proof-rail__step--failed
+  .proof-rail__node {
   background: var(--lastre-danger);
 }
 

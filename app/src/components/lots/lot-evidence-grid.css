@@ -40,7 +40,8 @@
 }
 
 .lot-evidence__cell--agent {
-  border-top: 2px solid color-mix(in srgb, var(--lastre-action-primary) 55%, transparent);
+  border-top: 2px solid
+    color-mix(in srgb, var(--lastre-action-primary) 55%, transparent);
 }
 
 .lot-evidence__cell--seal {

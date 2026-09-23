@@ -7,8 +7,12 @@
 .proof-report-preview__ghost {
   position: absolute;
   inset: 0.65rem -0.35rem -0.35rem 0.65rem;
-  border-radius: 14px;
-  background: color-mix(in srgb, #fff 88%, var(--lastre-color-mirage-50));
+  border-radius: var(--lastre-radius-md);
+  background: color-mix(
+    in srgb,
+    var(--lastre-bg-surface) 88%,
+    var(--lastre-bg-elevated)
+  );
   box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.45);
   transform: rotate(4deg);
   opacity: 0.45;
@@ -18,9 +22,14 @@
   position: relative;
   z-index: 1;
   padding: 1rem 1.05rem 0.9rem;
-  border-radius: 14px;
-  border: 1px solid color-mix(in srgb, #fff 70%, var(--lastre-color-mirage-100));
-  background: #fff;
+  border-radius: var(--lastre-radius-md);
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--lastre-bg-surface) 70%,
+      var(--lastre-border-subtle)
+    );
+  background: var(--lastre-bg-surface);
   color: var(--lastre-text-secondary);
   box-shadow:
     0 1px 2px rgba(10, 23, 19, 0.05),
@@ -68,15 +77,20 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--lastre-success);
-  background: color-mix(in srgb, var(--lastre-success) 12%, #fff);
-  border: 1px solid color-mix(in srgb, var(--lastre-success) 24%, #fff);
+  background: color-mix(
+    in srgb,
+    var(--lastre-success) 12%,
+    var(--lastre-bg-surface)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--lastre-success) 24%, var(--lastre-bg-surface));
 }
 
 .proof-report-preview__subtitle {
   margin: 0.55rem 0 0;
   font-size: 0.6875rem;
   line-height: 1.4;
-  color: color-mix(in srgb, var(--lastre-color-mirage-600) 75%, #fff);
+  color: var(--lastre-text-muted);
 }
 
 .proof-report-preview__checks {
@@ -105,7 +119,11 @@
   border-radius: 50%;
   flex-shrink: 0;
   color: var(--lastre-success);
-  background: color-mix(in srgb, var(--lastre-success) 14%, #fff);
+  background: color-mix(
+    in srgb,
+    var(--lastre-success) 14%,
+    var(--lastre-bg-surface)
+  );
 }
 
 .proof-report-preview__foot {
@@ -114,7 +132,12 @@
   gap: 0.35rem;
   margin-top: 0.8rem;
   padding-top: 0.7rem;
-  border-top: 1px solid color-mix(in srgb, var(--lastre-color-mirage-500) 12%, #fff);
+  border-top: 1px solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-control) 12%,
+      var(--lastre-bg-surface)
+    );
 }
 
 .proof-report-preview__doc-pill {
@@ -125,8 +148,13 @@
   border-radius: var(--app-radius-pill);
   font-size: 0.6875rem;
   color: var(--lastre-text-secondary);
-  background: var(--lastre-color-mirage-50);
-  border: 1px solid color-mix(in srgb, var(--lastre-color-mirage-500) 14%, #fff);
+  background: var(--lastre-bg-elevated);
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-control) 14%,
+      var(--lastre-bg-surface)
+    );
 }
 
 /* Banner slot — stacked sheets, bottom-right anchor */
@@ -144,9 +172,18 @@
 
 .proof-report-preview__sheet {
   position: absolute;
-  border-radius: 10px;
-  border: 0.75px solid color-mix(in srgb, var(--lastre-color-mirage-500) 14%, #fff);
-  background: color-mix(in srgb, #fff 92%, var(--lastre-color-mirage-50));
+  border-radius: var(--lastre-radius-md);
+  border: 0.75px solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-control) 14%,
+      var(--lastre-bg-surface)
+    );
+  background: color-mix(
+    in srgb,
+    var(--lastre-bg-surface) 92%,
+    var(--lastre-bg-elevated)
+  );
   box-shadow: 0 8px 20px -14px rgba(0, 0, 0, 0.35);
   pointer-events: none;
 }
@@ -177,10 +214,15 @@
   display: grid;
   gap: 0.45rem;
   padding: 0.7rem 0.75rem 0.65rem;
-  border-radius: 10px;
-  border: 0.75px solid color-mix(in srgb, #fff 78%, var(--lastre-color-mirage-100));
+  border-radius: var(--lastre-radius-md);
+  border: 0.75px solid
+    color-mix(
+      in srgb,
+      var(--lastre-bg-surface) 78%,
+      var(--lastre-border-subtle)
+    );
   box-shadow:
-    0 1px 0 color-mix(in srgb, #fff 90%, transparent),
+    0 1px 0 color-mix(in srgb, var(--lastre-bg-surface) 90%, transparent),
     0 14px 32px -18px rgba(0, 0, 0, 0.45);
 }
 
@@ -222,7 +264,12 @@
   margin: 0;
   gap: 0.3rem;
   padding-top: 0.35rem;
-  border-top: 0.75px solid color-mix(in srgb, var(--lastre-color-mirage-500) 10%, #fff);
+  border-top: 0.75px solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-control) 10%,
+      var(--lastre-bg-surface)
+    );
 }
 
 .proof-report-preview--banner .proof-report-preview__check {

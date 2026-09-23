@@ -2,20 +2,22 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 2.125rem;
+  min-height: var(--lastre-field-height);
   padding: 0.35rem 0.75rem;
-  border-radius: var(--app-radius-control);
-  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
-  background: color-mix(in srgb, var(--lastre-bg-canvas) 35%, transparent);
+  border-radius: var(--lastre-field-radius);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-field-border);
+  background: var(--lastre-field-bg);
+  box-shadow: var(--lastre-field-shadow);
   transition:
     border-color var(--dur-fast) var(--ease-out),
     box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .search-input:focus-within {
-  border-color: color-mix(in srgb, var(--lastre-info) 40%, var(--lastre-border-subtle));
-  box-shadow: var(--focus-glow-trust, var(--lastre-focus-shadow));
-  outline: none;
+  border-color: var(--lastre-focus);
+  box-shadow: var(--lastre-focus-shadow), var(--lastre-field-shadow);
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: var(--lastre-focus-offset);
 }
 
 .search-input__icon {
@@ -29,7 +31,7 @@
   border: none;
   background: transparent;
   color: var(--lastre-text-primary);
-  font-size: 0.8125rem;
+  font-size: var(--lastre-text-label);
   outline: none;
 }
 

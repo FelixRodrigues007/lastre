@@ -1,3 +1,4 @@
+import { InlineNotice } from "../ui/InlineNotice";
 import { Button } from "../ui/Button";
 import type { DeciderMode } from "../../lib/types";
 import { useLocaleContext } from "../../context/LocaleContext";
@@ -49,7 +50,11 @@ export function ProcessBatchToolbar({
       <div className="process-toolbar__decider">
         <p className="process-toolbar__step mono-label">{t("process.step2")}</p>
         <p className="process-toolbar__label">{t("process.decider.label")}</p>
-        <div className="process-decider-toggle view-toggle" role="radiogroup" aria-label={t("process.decider.label")}>
+        <div
+          className="process-decider-toggle view-toggle"
+          role="radiogroup"
+          aria-label={t("process.decider.label")}
+        >
           <button
             type="button"
             role="radio"
@@ -75,12 +80,22 @@ export function ProcessBatchToolbar({
 
       <div className="process-toolbar__actions">
         {phase === "error" ? (
-          <div className="process-toolbar__error" role="alert">
-            <p className="process-toolbar__error-msg">{runError}</p>
-            <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={onRetry}>
-              {t("process.retry")}
-            </Button>
-          </div>
+          <InlineNotice
+            tone="danger"
+            title={runError ?? t("common.loadError")}
+            live
+            action={
+              <Button
+                variant="secondary"
+                size="md"
+                type="button"
+                className="route-cta route-cta--ghost"
+                onClick={onRetry}
+              >
+                {t("process.retry")}
+              </Button>
+            }
+          />
         ) : null}
 
         {running ? (
@@ -92,21 +107,34 @@ export function ProcessBatchToolbar({
             aria-valuemax={100}
           >
             <div className="process-toolbar__progress-track">
-              <span className="process-toolbar__progress-fill" style={{ width: `${progress}%` }} />
+              <span
+                className="process-toolbar__progress-fill"
+                style={{ width: `${progress}%` }}
+              />
             </div>
             <p className="process-toolbar__progress-label">
-              {fetchingBatch ? t("process.pipeline.fetching") : `${t("process.running")} · ${progress}%`}
+              {fetchingBatch
+                ? t("process.pipeline.fetching")
+                : `${t("process.running")} · ${progress}%`}
             </p>
           </div>
         ) : null}
 
         {phase === "completed" ? (
-          <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost process-toolbar__repeat" onClick={onRepeat}>
+          <Button
+            variant="secondary"
+            size="md"
+            type="button"
+            className="route-cta route-cta--ghost process-toolbar__repeat"
+            onClick={onRepeat}
+          >
             {t("process.repeat")}
           </Button>
         ) : null}
 
-        <Button variant="primary" size="md"
+        <Button
+          variant="primary"
+          size="md"
           type="button"
           className="route-cta process-toolbar__run"
           disabled={running || selectedCount === 0}

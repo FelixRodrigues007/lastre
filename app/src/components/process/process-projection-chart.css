@@ -1,6 +1,10 @@
 .process-projection {
   --projection-seal: var(--lastre-link);
-  --projection-seal-deep: color-mix(in srgb, var(--lastre-link) 72%, var(--lastre-bg-canvas));
+  --projection-seal-deep: color-mix(
+    in srgb,
+    var(--lastre-link) 72%,
+    var(--lastre-bg-canvas)
+  );
   --projection-grey: var(--lastre-text-muted);
   --projection-valid: var(--lastre-success);
 
@@ -42,7 +46,8 @@
   height: 0.6rem;
   border-radius: 3px;
   flex-shrink: 0;
-  border: 1px solid color-mix(in srgb, var(--lastre-border-subtle) 80%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--lastre-border-subtle) 80%, transparent);
 }
 
 .process-projection__legend-swatch--high {
@@ -147,7 +152,9 @@
 .process-projection__line--live {
   stroke: var(--projection-valid);
   stroke-width: 2.5;
-  filter: drop-shadow(0 1px 2px color-mix(in srgb, var(--projection-valid) 25%, transparent));
+  filter: drop-shadow(
+    0 1px 2px color-mix(in srgb, var(--projection-valid) 25%, transparent)
+  );
 }
 
 .process-projection__marker {

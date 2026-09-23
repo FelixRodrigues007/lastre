@@ -26,15 +26,27 @@
 }
 
 .overview-chart__bar--muted {
-  fill: color-mix(in srgb, var(--lastre-text-muted) 42%, var(--lastre-color-mirage-700));
+  fill: color-mix(
+    in srgb,
+    var(--lastre-text-muted) 42%,
+    var(--lastre-color-mirage-700)
+  );
 }
 
 .overview-chart__bar--seal {
-  fill: color-mix(in srgb, var(--lastre-link) 88%, var(--lastre-color-mirage-700));
+  fill: color-mix(
+    in srgb,
+    var(--lastre-link) 88%,
+    var(--lastre-color-mirage-700)
+  );
 }
 
 .overview-chart__bar--accent {
-  fill: color-mix(in srgb, var(--lastre-action-primary) 80%, var(--lastre-bg-surface));
+  fill: color-mix(
+    in srgb,
+    var(--lastre-action-primary) 80%,
+    var(--lastre-bg-surface)
+  );
 }
 
 .overview-chart__bar--valid {
@@ -321,7 +333,11 @@
 }
 
 .overview-chart__swatch--muted {
-  background: color-mix(in srgb, var(--lastre-text-muted) 55%, var(--lastre-bg-surface));
+  background: color-mix(
+    in srgb,
+    var(--lastre-text-muted) 55%,
+    var(--lastre-bg-surface)
+  );
 }
 
 .overview-chart__swatch--seal {
@@ -453,7 +469,11 @@
 }
 
 .overview-trust__slice--muted {
-  fill: color-mix(in srgb, var(--lastre-text-muted) 38%, var(--lastre-color-mirage-700));
+  fill: color-mix(
+    in srgb,
+    var(--lastre-text-muted) 38%,
+    var(--lastre-color-mirage-700)
+  );
 }
 
 .overview-trust__slice--accent {
@@ -538,7 +558,8 @@
   .overview-aside .overview-card--trust .overview-card__head {
     align-items: flex-start;
     padding-bottom: 0.5rem;
-    border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+    border-bottom: var(--lastre-stroke-hairline) solid
+      var(--lastre-border-subtle);
   }
 
   .overview-aside .overview-card--trust .overview-card__title {

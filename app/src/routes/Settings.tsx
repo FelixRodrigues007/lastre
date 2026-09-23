@@ -1,3 +1,4 @@
+import { InlineNotice } from "../components/ui/InlineNotice";
 import { useEffect, useState } from "react";
 import { PageHeader } from "../components/layout/PageHeader";
 import { StatePanel } from "../components/layout/StatePanel";
@@ -26,6 +27,7 @@ export function Settings() {
   const [decider, setDecider] = useState<DeciderMode>("rule");
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState(false);
 
   useEffect(() => {
     if (settings.data) {
@@ -37,11 +39,13 @@ export function Settings() {
     setDecider(next);
     setSaving(true);
     setSaveMessage(null);
+    setSaveError(false);
     try {
       await updateSettings(next);
       setSaveMessage("Saved to API server for this session.");
       settings.reload();
     } catch {
+      setSaveError(true);
       setSaveMessage("Could not save decider preference.");
     } finally {
       setSaving(false);
@@ -58,7 +62,12 @@ export function Settings() {
         lead="Theme, decider mode, and operational limits. Audit data resets when the API server restarts."
       />
 
-      <StatePanel loading={settings.loading} error={settings.error} skeleton="detail" onRetry={settings.reload}>
+      <StatePanel
+        loading={settings.loading}
+        error={settings.error}
+        skeleton="detail"
+        onRetry={settings.reload}
+      >
         {settings.data ? (
           <div className="settings-layout">
             <div className="settings-status-row">
@@ -67,15 +76,26 @@ export function Settings() {
               >
                 LLM {settings.data.llmConfigured ? "connected" : "fallback"}
               </span>
-              <span className="settings-pill">Decider: {decider === "rule" ? "Rule" : "LLM"}</span>
-              <span className="settings-pill">Persistence: {settings.data.persistence}</span>
+              <span className="settings-pill">
+                Decider: {decider === "rule" ? "Rule" : "LLM"}
+              </span>
+              <span className="settings-pill">
+                Persistence: {settings.data.persistence}
+              </span>
             </div>
 
-            <Tabs tabs={TABS} active={tab} onChange={setTab} ariaLabel="Settings sections">
+            <Tabs
+              tabs={TABS}
+              active={tab}
+              onChange={setTab}
+              ariaLabel="Settings sections"
+            >
               {tab === "general" ? (
                 <section className="panel settings-card">
                   <h2 className="settings-card__title">Theme</h2>
-                  <p className="settings-card__hint">Mirage, Blue and Gold · light and dark</p>
+                  <p className="settings-card__hint">
+                    Mirage, Blue and Gold · light and dark
+                  </p>
                   <div className="settings-card__row">
                     <label className="settings-radio">
                       <input
@@ -129,14 +149,22 @@ export function Settings() {
                       LlmDecider
                     </label>
                   </div>
-                  {saveMessage ? <p className="settings-card__status">{saveMessage}</p> : null}
+                  {saveMessage ? (
+                    <InlineNotice
+                      tone={saveError ? "danger" : "success"}
+                      title={saveMessage}
+                      live
+                    />
+                  ) : null}
                 </section>
               ) : null}
 
               {tab === "limits" ? (
                 <section className="panel settings-card">
                   <h2 className="settings-card__title">Known limits</h2>
-                  <p className="settings-card__hint">Used by RuleDecider / LLM triage before payment</p>
+                  <p className="settings-card__hint">
+                    Used by RuleDecider / LLM triage before payment
+                  </p>
                   {limits ? (
                     <table className="settings-limits-table">
                       <thead>
@@ -149,13 +177,15 @@ export function Settings() {
                         <tr>
                           <td>Mine perimeter (lat)</td>
                           <td>
-                            {limits.minePerimeter.minLat} … {limits.minePerimeter.maxLat}
+                            {limits.minePerimeter.minLat} …{" "}
+                            {limits.minePerimeter.maxLat}
                           </td>
                         </tr>
                         <tr>
                           <td>Mine perimeter (lng)</td>
                           <td>
-                            {limits.minePerimeter.minLng} … {limits.minePerimeter.maxLng}
+                            {limits.minePerimeter.minLng} …{" "}
+                            {limits.minePerimeter.maxLng}
                           </td>
                         </tr>
                         <tr>
@@ -173,12 +203,18 @@ export function Settings() {
 
               {tab === "persistence" ? (
                 <section className="panel settings-card">
-                  <h2 className="settings-card__title">Persistence & package</h2>
+                  <h2 className="settings-card__title">
+                    Persistence & package
+                  </h2>
                   <p className="settings-card__hint">
-                    Audit log and mock on-chain state live in API memory only. Restart the server
-                    to reset. Export JSON from Audit before restarting.
+                    Audit log and mock on-chain state live in API memory only.
+                    Restart the server to reset. Export JSON from Audit before
+                    restarting.
                   </p>
-                  <CopyBlock label="Casper package URL" value={CSPR_PACKAGE_URL} />
+                  <CopyBlock
+                    label="Casper package URL"
+                    value={CSPR_PACKAGE_URL}
+                  />
                 </section>
               ) : null}
             </Tabs>

@@ -1,3 +1,5 @@
+import { useDialogFocus } from "../../hooks/useDialogFocus";
+import { InlineNotice, type NoticeTone } from "../ui/InlineNotice";
 import { TextField } from "../ui/TextField";
 import { SelectField } from "../ui/SelectField";
 import { Button } from "../ui/Button";
@@ -16,8 +18,15 @@ import {
   validateCaptureStep1,
   type CaptureFormState,
 } from "../../lib/captureForm";
-import { computeSealForArtifact, createArtifact, processBatch } from "../../lib/api";
-import { formatArtifactFieldValue, getSealFieldDefs } from "../../lib/artifactFields";
+import {
+  computeSealForArtifact,
+  createArtifact,
+  processBatch,
+} from "../../lib/api";
+import {
+  formatArtifactFieldValue,
+  getSealFieldDefs,
+} from "../../lib/artifactFields";
 import type { ProvenanceArtifact } from "../../lib/types";
 import { BtnIcon } from "../ui/BtnIcon";
 import { Icon } from "../ui/Icon";
@@ -43,9 +52,13 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
   const navigate = useNavigate();
   const isOperatorDemo = persona === "operator";
   const titleId = useId();
+  const dialogRef = useDialogFocus(open);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [step, setStep] = useState<WizardStep>(1);
-  const [form, setForm] = useState<CaptureFormState>(() => defaultCaptureForm(isOperatorDemo));
+  const [form, setForm] = useState<CaptureFormState>(() =>
+    defaultCaptureForm(isOperatorDemo),
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [photoDataUrl, setPhotoDataUrl] = useState<string | null>(null);
   const [frameHash, setFrameHash] = useState("");
@@ -53,6 +66,11 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
   const [sealResult, setSealResult] = useState<SealResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageTone, setMessageTone] = useState<NoticeTone>("info");
+  function showMessage(text: string, tone: NoticeTone = "info") {
+    setMessage(text);
+    setMessageTone(tone);
+  }
   const [submittedAssetId, setSubmittedAssetId] = useState<string | null>(null);
   const [autoProcess, setAutoProcess] = useState(true);
 
@@ -68,7 +86,7 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
     setCameraActive(false);
     setSealResult(null);
     setLoading(false);
-    setMessage("");
+    showMessage("");
     setSubmittedAssetId(null);
     setAutoProcess(true);
     if (streamRef.current) {
@@ -128,9 +146,9 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
         streamRef.current = stream;
         setCameraActive(true);
       }
-      setMessage(t("capture.wizard.cameraActive"));
+      showMessage(t("capture.wizard.cameraActive"));
     } catch {
-      setMessage(t("capture.wizard.cameraDenied"));
+      showMessage(t("capture.wizard.cameraDenied"), "danger");
     }
   }
 
@@ -157,7 +175,7 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
     setPhotoDataUrl(dataUrl);
     setFrameHash(await hashCaptureFrame(dataUrl));
     stopCamera();
-    setMessage(t("capture.wizard.photoCaptured"));
+    showMessage(t("capture.wizard.photoCaptured"), "success");
   }
 
   async function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
@@ -168,25 +186,31 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
       const dataUrl = ev.target?.result as string;
       setPhotoDataUrl(dataUrl);
       setFrameHash(await hashCaptureFrame(dataUrl));
-      setMessage(t("capture.wizard.documentUploaded"));
+      showMessage(t("capture.wizard.documentUploaded"), "success");
     };
     reader.readAsDataURL(file);
   }
 
   async function generatePassport() {
     setLoading(true);
-    setMessage("");
+    showMessage("");
     setSealResult(null);
 
     const artifact = buildArtifactFromForm(form, frameHash);
 
     try {
       const res = await computeSealForArtifact(artifact);
-      setSealResult({ artifact: artifact as ProvenanceArtifact, seal: res.seal });
-      setMessage(t("capture.wizard.passportReady"));
+      setSealResult({
+        artifact: artifact as ProvenanceArtifact,
+        seal: res.seal,
+      });
+      showMessage(t("capture.wizard.passportReady"), "success");
     } catch (e: unknown) {
       const err = e as { message?: string };
-      setMessage(t("capture.wizard.sealError", { message: err.message ?? String(e) }));
+      showMessage(
+        t("capture.wizard.sealError", { message: err.message ?? String(e) }),
+        "danger",
+      );
     } finally {
       setLoading(false);
     }
@@ -207,29 +231,29 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
         return;
       }
       setStep(2);
-      setMessage("");
+      showMessage("");
       return;
     }
 
     if (step === 2) {
       if (!photoDataUrl && !frameHash) {
-        setMessage(t("capture.wizard.needDocument"));
+        showMessage(t("capture.wizard.needDocument"), "warning");
         return;
       }
       setStep(3);
-      setMessage("");
+      showMessage("");
     }
   }
 
   function goBack() {
     if (step === 2) setStep(1);
     if (step === 3) setStep(2);
-    setMessage("");
+    showMessage("");
   }
 
   async function submitToApp() {
     if (!sealResult) {
-      setMessage(t("capture.wizard.generateFirst"));
+      showMessage(t("capture.wizard.generateFirst"), "warning");
       return;
     }
     setLoading(true);
@@ -244,10 +268,13 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
       }
       setSubmittedAssetId(sealResult.artifact.assetId);
       setStep("success");
-      setMessage("");
+      showMessage("");
     } catch (e: unknown) {
       const err = e as { message?: string };
-      setMessage(t("capture.wizard.submitError", { message: err.message ?? String(e) }));
+      showMessage(
+        t("capture.wizard.submitError", { message: err.message ?? String(e) }),
+        "danger",
+      );
     } finally {
       setLoading(false);
     }
@@ -282,9 +309,15 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
   }
 
   return createPortal(
-    <div className="capture-wizard-overlay" onClick={handleClose} role="presentation">
+    <div
+      className="capture-wizard-overlay"
+      onClick={handleClose}
+      role="presentation"
+    >
       <div
         className="capture-wizard"
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -292,12 +325,17 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
       >
         <header className="capture-wizard__header">
           <div className="capture-wizard__intro">
-            <p className="capture-wizard__kicker mono-label">{t("capture.wizard.kicker")}</p>
+            <p className="capture-wizard__kicker mono-label">
+              {t("capture.wizard.kicker")}
+            </p>
             <h2 className="capture-wizard__title" id={titleId}>
               {t("capture.wizard.title")}
             </h2>
           </div>
-          <Button variant="ghost" size="sm" iconOnly
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
             type="button"
             className="capture-wizard__close"
             onClick={handleClose}
@@ -307,9 +345,14 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
           </Button>
         </header>
 
-        <div className={`capture-wizard__shell${step === "success" ? " capture-wizard__shell--success" : ""}`}>
+        <div
+          className={`capture-wizard__shell${step === "success" ? " capture-wizard__shell--success" : ""}`}
+        >
           {step !== "success" ? (
-            <nav className="capture-wizard__rail" aria-label={t("capture.wizard.stepperAria")}>
+            <nav
+              className="capture-wizard__rail"
+              aria-label={t("capture.wizard.stepperAria")}
+            >
               <ol className="capture-wizard__stepper">
                 {STEPS.map((n, index) => {
                   const done = stepIndex > n;
@@ -321,7 +364,10 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                       aria-current={active ? "step" : undefined}
                     >
                       <div className="capture-wizard__step-track">
-                        <span className="capture-wizard__step-marker" aria-hidden="true">
+                        <span
+                          className="capture-wizard__step-marker"
+                          aria-hidden="true"
+                        >
                           {done ? <Icon name="check" size={12} /> : n}
                         </span>
                         {index < STEPS.length - 1 ? (
@@ -332,7 +378,9 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                         ) : null}
                       </div>
                       <span className="capture-wizard__step-copy">
-                        <span className="capture-wizard__step-label">{stepLabel(n)}</span>
+                        <span className="capture-wizard__step-label">
+                          {stepLabel(n)}
+                        </span>
                       </span>
                     </li>
                   );
@@ -343,352 +391,566 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
 
           <div className="capture-wizard__main">
             <div className="capture-wizard__body">
-          {step !== "success" ? (
-            <header className="capture-wizard__step-hero">
-              <p className="capture-wizard__step-eyebrow mono-label">
-                {t("capture.wizard.progress", { current: stepIndex, total: 3 })}
-              </p>
-              <h3 className="capture-wizard__step-title">
-                {stepIndex === 1
-                  ? t("capture.wizard.step1.heading")
-                  : stepIndex === 2
-                    ? t("capture.wizard.step2.heading")
-                    : t("capture.wizard.step3.heading")}
-              </h3>
-              <p className="capture-wizard__step-lead">
-                {stepIndex === 1
-                  ? t("capture.wizard.step1.hint")
-                  : stepIndex === 2
-                    ? t("capture.wizard.step2.hint")
-                    : t("capture.wizard.step3.hint")}
-              </p>
-            </header>
-          ) : null}
-          {step === 1 ? (
-            <section className="capture-wizard__panel" aria-labelledby="capture-step-1">
-              <div className="capture-wizard__section capture-wizard__section--accent">
-                <header className="capture-wizard__section-head">
-                  <h4 id="capture-step-1" className="capture-wizard__section-title">
-                    {t("capture.wizard.section.quickStart")}
-                  </h4>
-                  <p className="capture-wizard__section-hint">
-                    {t("capture.wizard.section.quickStartHint")}
+              {step !== "success" ? (
+                <header className="capture-wizard__step-hero">
+                  <p className="capture-wizard__step-eyebrow mono-label">
+                    {t("capture.wizard.progress", {
+                      current: stepIndex,
+                      total: 3,
+                    })}
+                  </p>
+                  <h3 className="capture-wizard__step-title">
+                    {stepIndex === 1
+                      ? t("capture.wizard.step1.heading")
+                      : stepIndex === 2
+                        ? t("capture.wizard.step2.heading")
+                        : t("capture.wizard.step3.heading")}
+                  </h3>
+                  <p className="capture-wizard__step-lead">
+                    {stepIndex === 1
+                      ? t("capture.wizard.step1.hint")
+                      : stepIndex === 2
+                        ? t("capture.wizard.step2.hint")
+                        : t("capture.wizard.step3.hint")}
                   </p>
                 </header>
-                <div className="capture-wizard__presets">
-                  <Button variant="secondary" size="md"
-                    type="button"
-                    className="capture-wizard__preset"
-                    onClick={() => update(DEMO_VALID_CARBON_PATCH)}
-                  >
-                    {t("capture.wizard.presetValid")}
-                  </Button>
-                  <Button variant="secondary" size="md"
-                    type="button"
-                    className="capture-wizard__preset capture-wizard__preset--warn"
-                    onClick={() => update(DEMO_INVALID_CARBON_PATCH)}
-                  >
-                    {t("capture.wizard.presetInvalid")}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="capture-wizard__section">
-                <header className="capture-wizard__section-head">
-                  <h4 className="capture-wizard__section-title">{t("capture.wizard.section.identity")}</h4>
-                  <p className="capture-wizard__section-hint">{t("capture.wizard.section.identityHint")}</p>
-                </header>
-                <div className="capture-wizard__fields capture-wizard__fields--2">
-                  <SelectField label={t("capture.wizard.field.category")}
-value={form.category}
-onChange={(e) =>
-                        update({ category: e.target.value as CaptureFormState["category"] })
-                      }>
-                      <option value="mineral">{t("capture.wizard.category.mineral")}</option>
-                      <option value="carbon_credit">{t("capture.wizard.category.carbon")}</option>
-                    </SelectField>
-
-                  <TextField label={t("capture.wizard.field.assetId")} className="capture-wizard__field--wide" error={fieldError("assetId") ?? undefined}
-value={form.assetId}
-onChange={(e) => update({ assetId: e.target.value })} />
-
-                  <TextField label={t("capture.wizard.field.operator")} className="capture-wizard__field--wide" error={fieldError("operator") ?? undefined}
-value={form.operator}
-onChange={(e) => update({ operator: e.target.value })} />
-                </div>
-              </div>
-
-              <div className="capture-wizard__section">
-                <header className="capture-wizard__section-head">
-                  <h4 className="capture-wizard__section-title">{t("capture.wizard.section.origin")}</h4>
-                  <p className="capture-wizard__section-hint">{t("capture.wizard.section.originHint")}</p>
-                </header>
-                <div className="capture-wizard__fields capture-wizard__fields--2">
-                  <TextField label={t("capture.wizard.field.site")} className="capture-wizard__field--wide" error={fieldError("site") ?? undefined}
-value={form.site}
-onChange={(e) => update({ site: e.target.value })} />
-
-                  <TextField label={t("capture.wizard.field.lat")} error={fieldError("lat") ?? undefined}
-type="number"
-step="0.000001"
-value={form.lat}
-onChange={(e) => update({ lat: parseFloat(e.target.value) })} />
-
-                  <TextField label={t("capture.wizard.field.lng")} error={fieldError("lng") ?? undefined}
-type="number"
-step="0.000001"
-value={form.lng}
-onChange={(e) => update({ lng: parseFloat(e.target.value) })} />
-
-                  <TextField label={t("capture.wizard.field.capturedAt")}
-value={form.capturedAtISO}
-onChange={(e) => update({ capturedAtISO: e.target.value })} />
-                </div>
-              </div>
-
-              <div className="capture-wizard__section">
-                <header className="capture-wizard__section-head">
-                  <h4 className="capture-wizard__section-title">{t("capture.wizard.section.asset")}</h4>
-                  <p className="capture-wizard__section-hint">{t("capture.wizard.section.assetHint")}</p>
-                </header>
-                <div className="capture-wizard__fields capture-wizard__fields--2">
-                {form.category === "mineral" ? (
-                  <>
-                    <TextField label={t("capture.wizard.field.massGrams")} error={fieldError("massGrams") ?? undefined}
-type="number"
-value={form.massGrams ?? 100000}
-onChange={(e) => update({ massGrams: parseInt(e.target.value, 10) })} />
-                    <TextField label={t("capture.wizard.field.mineral")}
-value={form.mineral ?? ""}
-onChange={(e) => update({ mineral: e.target.value })} />
-                  </>
-                ) : (
-                  <>
-                    <TextField label={t("capture.wizard.field.tonnes")} error={fieldError("tonnesCO2e") ?? undefined}
-type="number"
-value={form.tonnesCO2e ?? 45000}
-onChange={(e) => update({ tonnesCO2e: parseInt(e.target.value, 10) })} />
-                    <SelectField label={t("capture.wizard.field.creditType")}
-value={form.creditType}
-onChange={(e) =>
-                          update({
-                            creditType: e.target.value as CaptureFormState["creditType"],
-                          })
-                        }>
-                        {CARBON_TYPES.map((type) => (
-                          <option key={type} value={type}>
-                            {type}
-                          </option>
-                        ))}
-                      </SelectField>
-                    <TextField label={t("capture.wizard.field.vintage")}
-value={form.vintage ?? ""}
-onChange={(e) => update({ vintage: e.target.value })} />
-                    <TextField label={t("capture.wizard.field.methodology")}
-value={form.methodology ?? ""}
-onChange={(e) => update({ methodology: e.target.value })} />
-                    <TextField label={t("capture.wizard.field.verifier")} className="capture-wizard__field--wide"
-value={form.verifier ?? ""}
-onChange={(e) => update({ verifier: e.target.value })} />
-                  </>
-                )}
-                </div>
-              </div>
-            </section>
-          ) : null}
-
-          {step === 2 ? (
-            <section className="capture-wizard__panel" aria-labelledby="capture-step-2">
-              <div className="capture-wizard__section">
-                <header className="capture-wizard__section-head">
-                  <h4 id="capture-step-2" className="capture-wizard__section-title">
-                    {t("capture.wizard.section.document")}
-                  </h4>
-                </header>
-
-                <div className="capture-wizard__media-toolbar">
-                  <Button variant="secondary" size="md" type="button" className="capture-wizard__tool" onClick={startCamera}>
-                    <Icon name="capture" size={14} />
-                    {t("capture.wizard.startCamera")}
-                  </Button>
-                  <Button variant="secondary" size="md"
-                    type="button"
-                    className="capture-wizard__tool"
-                    onClick={capturePhoto}
-                    disabled={!cameraActive}
-                  >
-                    {t("capture.wizard.capturePhoto")}
-                  </Button>
-                  <label className="capture-wizard__tool capture-wizard__tool--upload">
-                    <Icon name="download" size={14} />
-                    {t("capture.wizard.uploadFile")}
-                    <input type="file" accept="image/*,.pdf" onChange={handleFile} />
-                  </label>
-                  {cameraActive ? (
-                    <Button variant="secondary" size="md" type="button" className="capture-wizard__tool capture-wizard__tool--ghost" onClick={stopCamera}>
-                      {t("capture.wizard.stopCamera")}
-                    </Button>
-                  ) : null}
-                </div>
-
-                <div
-                  className={`capture-wizard__media-preview${photoDataUrl || cameraActive ? "" : " capture-wizard__media-preview--empty"}`}
+              ) : null}
+              {step === 1 ? (
+                <section
+                  className="capture-wizard__panel"
+                  aria-labelledby="capture-step-1"
                 >
-                  {photoDataUrl ? (
-                    <img src={photoDataUrl} alt="" className="capture-wizard__preview-img" />
-                  ) : cameraActive ? (
-                    <video
-                      ref={videoRef}
-                      autoPlay
-                      playsInline
-                      className="capture-wizard__preview-video"
-                    />
-                  ) : (
-                    <div className="capture-wizard__media-empty">
-                      <Icon name="capture" size={24} />
-                      <p>{t("capture.wizard.mediaEmpty")}</p>
+                  <div className="capture-wizard__section capture-wizard__section--accent">
+                    <header className="capture-wizard__section-head">
+                      <h4
+                        id="capture-step-1"
+                        className="capture-wizard__section-title"
+                      >
+                        {t("capture.wizard.section.quickStart")}
+                      </h4>
+                      <p className="capture-wizard__section-hint">
+                        {t("capture.wizard.section.quickStartHint")}
+                      </p>
+                    </header>
+                    <div className="capture-wizard__presets">
+                      <Button
+                        variant="secondary"
+                        size="md"
+                        type="button"
+                        className="capture-wizard__preset"
+                        onClick={() => update(DEMO_VALID_CARBON_PATCH)}
+                      >
+                        {t("capture.wizard.presetValid")}
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="md"
+                        type="button"
+                        className="capture-wizard__preset capture-wizard__preset--warn"
+                        onClick={() => update(DEMO_INVALID_CARBON_PATCH)}
+                      >
+                        {t("capture.wizard.presetInvalid")}
+                      </Button>
                     </div>
-                  )}
-                </div>
-
-                {frameHash ? (
-                  <p className="capture-wizard__frame-hash mono small">
-                    {t("capture.wizard.frameHash", { hash: frameHash.slice(0, 16) })}
-                  </p>
-                ) : null}
-              </div>
-            </section>
-          ) : null}
-
-          {step === 3 && sealResult ? (
-            <section className="capture-wizard__panel" aria-labelledby="capture-step-3">
-              <div className="capture-wizard__passport capture-wizard__passport--hero">
-                <div className="capture-wizard__passport-head">
-                  <div>
-                    <p className="capture-wizard__passport-kicker mono-label">
-                      {t("capture.wizard.passportTitle")}
-                    </p>
-                    <p className="capture-wizard__passport-id">{sealResult.artifact.assetId}</p>
                   </div>
-                  <span className="capture-wizard__passport-badge">{sealResult.artifact.category}</span>
-                </div>
-                <div className="capture-wizard__passport-seal-block">
-                  <span className="capture-wizard__label">{t("capture.wizard.sealLabel")}</span>
-                  <code className="capture-wizard__seal">{sealResult.seal}</code>
-                </div>
-                <p className="capture-wizard__passport-foot">{t("capture.wizard.passportFoot")}</p>
-              </div>
 
-              <div className="capture-wizard__compare">
-                <article className="capture-wizard__compare-card">
-                  <header className="capture-wizard__compare-head">
-                    <h4 id="capture-step-3" className="capture-wizard__compare-title">
-                      {t("capture.wizard.documentCol")}
-                    </h4>
-                    <p className="capture-wizard__compare-note">{t("capture.wizard.notInSeal")}</p>
-                  </header>
-                  {photoDataUrl ? (
-                    <img src={photoDataUrl} alt="" className="capture-wizard__compare-img" />
-                  ) : (
-                    <div className="capture-wizard__compare-empty">{t("capture.wizard.noPhoto")}</div>
-                  )}
-                </article>
-                <article className="capture-wizard__compare-card capture-wizard__compare-card--seal">
-                  <header className="capture-wizard__compare-head">
-                    <h4 className="capture-wizard__compare-title">{t("capture.wizard.sealCol")}</h4>
-                  </header>
-                  <ul className="capture-wizard__seal-fields">
-                    {sealFields
-                      .filter((f) => f.sealRelevant)
-                      .map((field) => (
-                        <li key={field.key}>
-                          <span>{field.label}</span>
-                          <code>{formatArtifactFieldValue(sealResult.artifact, field.key)}</code>
-                        </li>
-                      ))}
-                  </ul>
-                </article>
-              </div>
+                  <div className="capture-wizard__section">
+                    <header className="capture-wizard__section-head">
+                      <h4 className="capture-wizard__section-title">
+                        {t("capture.wizard.section.identity")}
+                      </h4>
+                      <p className="capture-wizard__section-hint">
+                        {t("capture.wizard.section.identityHint")}
+                      </p>
+                    </header>
+                    <div className="capture-wizard__fields capture-wizard__fields--2">
+                      <SelectField
+                        label={t("capture.wizard.field.category")}
+                        value={form.category}
+                        onChange={(e) =>
+                          update({
+                            category: e.target
+                              .value as CaptureFormState["category"],
+                          })
+                        }
+                      >
+                        <option value="mineral">
+                          {t("capture.wizard.category.mineral")}
+                        </option>
+                        <option value="carbon_credit">
+                          {t("capture.wizard.category.carbon")}
+                        </option>
+                      </SelectField>
 
-              <label className="capture-wizard__checkbox">
-                <input
-                  type="checkbox"
-                  checked={autoProcess}
-                  onChange={(e) => setAutoProcess(e.target.checked)}
-                />
-                {t("capture.wizard.autoProcess")}
-              </label>
-            </section>
-          ) : null}
+                      <TextField
+                        label={t("capture.wizard.field.assetId")}
+                        className="capture-wizard__field--wide"
+                        error={fieldError("assetId") ?? undefined}
+                        value={form.assetId}
+                        onChange={(e) => update({ assetId: e.target.value })}
+                      />
 
-          {step === 3 && !sealResult && loading ? (
-            <div className="capture-wizard__loading">{t("capture.wizard.generating")}</div>
-          ) : null}
+                      <TextField
+                        label={t("capture.wizard.field.operator")}
+                        className="capture-wizard__field--wide"
+                        error={fieldError("operator") ?? undefined}
+                        value={form.operator}
+                        onChange={(e) => update({ operator: e.target.value })}
+                      />
+                    </div>
+                  </div>
 
-          {step === "success" && submittedAssetId ? (
-            <section className="capture-wizard__success" aria-labelledby="capture-success">
-              <div className="capture-wizard__success-icon" aria-hidden="true">
-                <Icon name="shield" size={28} />
-              </div>
-              <h3 id="capture-success" className="capture-wizard__success-title">
-                {t("capture.wizard.success.title")}
-              </h3>
-              <p className="capture-wizard__success-lead">{t("capture.wizard.success.lead")}</p>
-              <div className="capture-wizard__success-actions">
-                <Button variant="primary" size="md" type="button" className="route-cta" onClick={openLotDetail}>
-                  <BtnIcon icon="lots">{t("capture.wizard.success.lot")}</BtnIcon>
-                </Button>
-                <Button variant="secondary" size="md"
-                  type="button"
-                  className="route-cta route-cta--ghost"
-                  onClick={() => {
-                    handleClose();
-                    navigate("/process");
-                  }}
+                  <div className="capture-wizard__section">
+                    <header className="capture-wizard__section-head">
+                      <h4 className="capture-wizard__section-title">
+                        {t("capture.wizard.section.origin")}
+                      </h4>
+                      <p className="capture-wizard__section-hint">
+                        {t("capture.wizard.section.originHint")}
+                      </p>
+                    </header>
+                    <div className="capture-wizard__fields capture-wizard__fields--2">
+                      <TextField
+                        label={t("capture.wizard.field.site")}
+                        className="capture-wizard__field--wide"
+                        error={fieldError("site") ?? undefined}
+                        value={form.site}
+                        onChange={(e) => update({ site: e.target.value })}
+                      />
+
+                      <TextField
+                        label={t("capture.wizard.field.lat")}
+                        error={fieldError("lat") ?? undefined}
+                        type="number"
+                        step="0.000001"
+                        value={Number.isNaN(form.lat) ? "" : form.lat}
+                        onChange={(e) =>
+                          update({ lat: parseFloat(e.target.value) })
+                        }
+                      />
+
+                      <TextField
+                        label={t("capture.wizard.field.lng")}
+                        error={fieldError("lng") ?? undefined}
+                        type="number"
+                        step="0.000001"
+                        value={Number.isNaN(form.lng) ? "" : form.lng}
+                        onChange={(e) =>
+                          update({ lng: parseFloat(e.target.value) })
+                        }
+                      />
+
+                      <TextField
+                        label={t("capture.wizard.field.capturedAt")}
+                        error={fieldError("capturedAtISO") ?? undefined}
+                        value={form.capturedAtISO}
+                        onChange={(e) =>
+                          update({ capturedAtISO: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="capture-wizard__section">
+                    <header className="capture-wizard__section-head">
+                      <h4 className="capture-wizard__section-title">
+                        {t("capture.wizard.section.asset")}
+                      </h4>
+                      <p className="capture-wizard__section-hint">
+                        {t("capture.wizard.section.assetHint")}
+                      </p>
+                    </header>
+                    <div className="capture-wizard__fields capture-wizard__fields--2">
+                      {form.category === "mineral" ? (
+                        <>
+                          <TextField
+                            label={t("capture.wizard.field.massGrams")}
+                            error={fieldError("massGrams") ?? undefined}
+                            type="number"
+                            value={
+                              Number.isNaN(form.massGrams)
+                                ? ""
+                                : (form.massGrams ?? 100000)
+                            }
+                            onChange={(e) =>
+                              update({
+                                massGrams: parseInt(e.target.value, 10),
+                              })
+                            }
+                          />
+                          <TextField
+                            label={t("capture.wizard.field.mineral")}
+                            value={form.mineral ?? ""}
+                            onChange={(e) =>
+                              update({ mineral: e.target.value })
+                            }
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <TextField
+                            label={t("capture.wizard.field.tonnes")}
+                            error={fieldError("tonnesCO2e") ?? undefined}
+                            type="number"
+                            value={
+                              Number.isNaN(form.tonnesCO2e)
+                                ? ""
+                                : (form.tonnesCO2e ?? 45000)
+                            }
+                            onChange={(e) =>
+                              update({
+                                tonnesCO2e: parseInt(e.target.value, 10),
+                              })
+                            }
+                          />
+                          <SelectField
+                            label={t("capture.wizard.field.creditType")}
+                            value={form.creditType}
+                            onChange={(e) =>
+                              update({
+                                creditType: e.target
+                                  .value as CaptureFormState["creditType"],
+                              })
+                            }
+                          >
+                            {CARBON_TYPES.map((type) => (
+                              <option key={type} value={type}>
+                                {type}
+                              </option>
+                            ))}
+                          </SelectField>
+                          <TextField
+                            label={t("capture.wizard.field.vintage")}
+                            value={form.vintage ?? ""}
+                            onChange={(e) =>
+                              update({ vintage: e.target.value })
+                            }
+                          />
+                          <TextField
+                            label={t("capture.wizard.field.methodology")}
+                            value={form.methodology ?? ""}
+                            onChange={(e) =>
+                              update({ methodology: e.target.value })
+                            }
+                          />
+                          <TextField
+                            label={t("capture.wizard.field.verifier")}
+                            className="capture-wizard__field--wide"
+                            value={form.verifier ?? ""}
+                            onChange={(e) =>
+                              update({ verifier: e.target.value })
+                            }
+                          />
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </section>
+              ) : null}
+
+              {step === 2 ? (
+                <section
+                  className="capture-wizard__panel"
+                  aria-labelledby="capture-step-2"
                 >
-                  {t("capture.wizard.success.process")}
-                </Button>
-                <Button variant="secondary" size="md"
-                  type="button"
-                  className="route-cta route-cta--ghost"
-                  onClick={() => {
-                    handleClose();
-                    navigate("/audit");
-                  }}
-                >
-                  {t("capture.wizard.success.audit")}
-                </Button>
-              </div>
-            </section>
-          ) : null}
+                  <div className="capture-wizard__section">
+                    <header className="capture-wizard__section-head">
+                      <h4
+                        id="capture-step-2"
+                        className="capture-wizard__section-title"
+                      >
+                        {t("capture.wizard.section.document")}
+                      </h4>
+                    </header>
 
-          {message ? <p className="capture-wizard__message">{message}</p> : null}
+                    <div className="capture-wizard__media-toolbar">
+                      <Button
+                        variant="secondary"
+                        size="md"
+                        type="button"
+                        className="capture-wizard__tool"
+                        onClick={startCamera}
+                      >
+                        <Icon name="capture" size={14} />
+                        {t("capture.wizard.startCamera")}
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="md"
+                        type="button"
+                        className="capture-wizard__tool"
+                        onClick={capturePhoto}
+                        disabled={!cameraActive}
+                      >
+                        {t("capture.wizard.capturePhoto")}
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        startIcon={<Icon name="download" size={16} />}
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        {t("capture.wizard.uploadFile")}
+                      </Button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        hidden
+                        accept="image/*,.pdf"
+                        onChange={handleFile}
+                      />
+                      {cameraActive ? (
+                        <Button
+                          variant="secondary"
+                          size="md"
+                          type="button"
+                          className="capture-wizard__tool capture-wizard__tool--ghost"
+                          onClick={stopCamera}
+                        >
+                          {t("capture.wizard.stopCamera")}
+                        </Button>
+                      ) : null}
+                    </div>
+
+                    <div
+                      className={`capture-wizard__media-preview${photoDataUrl || cameraActive ? "" : " capture-wizard__media-preview--empty"}`}
+                    >
+                      {photoDataUrl ? (
+                        <img
+                          src={photoDataUrl}
+                          alt=""
+                          className="capture-wizard__preview-img"
+                        />
+                      ) : cameraActive ? (
+                        <video
+                          ref={videoRef}
+                          autoPlay
+                          playsInline
+                          className="capture-wizard__preview-video"
+                        />
+                      ) : (
+                        <div className="capture-wizard__media-empty">
+                          <Icon name="capture" size={24} />
+                          <p>{t("capture.wizard.mediaEmpty")}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {frameHash ? (
+                      <p className="capture-wizard__frame-hash mono small">
+                        {t("capture.wizard.frameHash", {
+                          hash: frameHash.slice(0, 16),
+                        })}
+                      </p>
+                    ) : null}
+                  </div>
+                </section>
+              ) : null}
+
+              {step === 3 && sealResult ? (
+                <section
+                  className="capture-wizard__panel"
+                  aria-labelledby="capture-step-3"
+                >
+                  <div className="capture-wizard__passport capture-wizard__passport--hero">
+                    <div className="capture-wizard__passport-head">
+                      <div>
+                        <p className="capture-wizard__passport-kicker mono-label">
+                          {t("capture.wizard.passportTitle")}
+                        </p>
+                        <p className="capture-wizard__passport-id">
+                          {sealResult.artifact.assetId}
+                        </p>
+                      </div>
+                      <span className="capture-wizard__passport-badge">
+                        {sealResult.artifact.category}
+                      </span>
+                    </div>
+                    <div className="capture-wizard__passport-seal-block">
+                      <span className="capture-wizard__label">
+                        {t("capture.wizard.sealLabel")}
+                      </span>
+                      <code className="capture-wizard__seal">
+                        {sealResult.seal}
+                      </code>
+                    </div>
+                    <p className="capture-wizard__passport-foot">
+                      {t("capture.wizard.passportFoot")}
+                    </p>
+                  </div>
+
+                  <div className="capture-wizard__compare">
+                    <article className="capture-wizard__compare-card">
+                      <header className="capture-wizard__compare-head">
+                        <h4
+                          id="capture-step-3"
+                          className="capture-wizard__compare-title"
+                        >
+                          {t("capture.wizard.documentCol")}
+                        </h4>
+                        <p className="capture-wizard__compare-note">
+                          {t("capture.wizard.notInSeal")}
+                        </p>
+                      </header>
+                      {photoDataUrl ? (
+                        <img
+                          src={photoDataUrl}
+                          alt=""
+                          className="capture-wizard__compare-img"
+                        />
+                      ) : (
+                        <div className="capture-wizard__compare-empty">
+                          {t("capture.wizard.noPhoto")}
+                        </div>
+                      )}
+                    </article>
+                    <article className="capture-wizard__compare-card capture-wizard__compare-card--seal">
+                      <header className="capture-wizard__compare-head">
+                        <h4 className="capture-wizard__compare-title">
+                          {t("capture.wizard.sealCol")}
+                        </h4>
+                      </header>
+                      <ul className="capture-wizard__seal-fields">
+                        {sealFields
+                          .filter((f) => f.sealRelevant)
+                          .map((field) => (
+                            <li key={field.key}>
+                              <span>{field.label}</span>
+                              <code>
+                                {formatArtifactFieldValue(
+                                  sealResult.artifact,
+                                  field.key,
+                                )}
+                              </code>
+                            </li>
+                          ))}
+                      </ul>
+                    </article>
+                  </div>
+
+                  <label className="capture-wizard__checkbox">
+                    <input
+                      type="checkbox"
+                      checked={autoProcess}
+                      onChange={(e) => setAutoProcess(e.target.checked)}
+                    />
+                    {t("capture.wizard.autoProcess")}
+                  </label>
+                </section>
+              ) : null}
+
+              {step === 3 && !sealResult && loading ? (
+                <div className="capture-wizard__loading">
+                  {t("capture.wizard.generating")}
+                </div>
+              ) : null}
+
+              {step === "success" && submittedAssetId ? (
+                <section
+                  className="capture-wizard__success"
+                  aria-labelledby="capture-success"
+                >
+                  <div
+                    className="capture-wizard__success-icon"
+                    aria-hidden="true"
+                  >
+                    <Icon name="shield" size={28} />
+                  </div>
+                  <h3
+                    id="capture-success"
+                    className="capture-wizard__success-title"
+                  >
+                    {t("capture.wizard.success.title")}
+                  </h3>
+                  <p className="capture-wizard__success-lead">
+                    {t("capture.wizard.success.lead")}
+                  </p>
+                  <div className="capture-wizard__success-actions">
+                    <Button
+                      variant="primary"
+                      size="md"
+                      type="button"
+                      className="route-cta"
+                      onClick={openLotDetail}
+                    >
+                      <BtnIcon icon="lots">
+                        {t("capture.wizard.success.lot")}
+                      </BtnIcon>
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      type="button"
+                      className="route-cta route-cta--ghost"
+                      onClick={() => {
+                        handleClose();
+                        navigate("/process");
+                      }}
+                    >
+                      {t("capture.wizard.success.process")}
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      type="button"
+                      className="route-cta route-cta--ghost"
+                      onClick={() => {
+                        handleClose();
+                        navigate("/audit");
+                      }}
+                    >
+                      {t("capture.wizard.success.audit")}
+                    </Button>
+                  </div>
+                </section>
+              ) : null}
+
+              {message ? (
+                <InlineNotice tone={messageTone} title={message} live />
+              ) : null}
             </div>
 
             {step !== "success" ? (
               <footer className="capture-wizard__footer">
                 <div className="capture-wizard__footer-start">
                   {step !== 1 ? (
-                    <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={goBack}>
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      type="button"
+                      className="route-cta route-cta--ghost"
+                      onClick={goBack}
+                    >
                       {t("capture.wizard.back")}
                     </Button>
                   ) : null}
                 </div>
                 <p className="capture-wizard__footer-progress mono-label">
-                  {t("capture.wizard.progress", { current: stepIndex, total: 3 })}
+                  {t("capture.wizard.progress", {
+                    current: stepIndex,
+                    total: 3,
+                  })}
                 </p>
                 <div className="capture-wizard__footer-end">
                   {step === 3 ? (
-                    <Button variant="primary" size="md"
+                    <Button
+                      variant="primary"
+                      size="md"
                       type="button"
                       className="route-cta"
                       onClick={submitToApp}
-                      disabled={loading || !sealResult}
+                      loading={loading}
+                      disabled={!sealResult}
                     >
                       {t("capture.wizard.submit")}
                     </Button>
                   ) : (
-                    <Button variant="primary" size="md" type="button" className="route-cta" onClick={goNext}>
+                    <Button
+                      variant="primary"
+                      size="md"
+                      type="button"
+                      className="route-cta"
+                      onClick={goNext}
+                    >
                       {t("capture.wizard.next")}
                     </Button>
                   )}

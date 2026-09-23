@@ -1,3 +1,4 @@
+import { useDialogFocus } from "../../hooks/useDialogFocus";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "../ui/Icon";
@@ -14,6 +15,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   const navigate = useNavigate();
   const { t } = useLocaleContext();
   const [query, setQuery] = useState("");
+  const dialogRef = useDialogFocus(open);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const filtered = useMemo(() => {
@@ -70,8 +72,19 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
 
   return (
     <>
-      <div className="command-palette__backdrop" onClick={onClose} aria-hidden="true" />
-      <div className="command-palette" role="dialog" aria-label="Command palette">
+      <div
+        className="command-palette__backdrop"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div
+        className="command-palette"
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
+      >
         <div className="command-palette__input-wrap">
           <Icon name="search" size={16} />
           <input
@@ -79,7 +92,6 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Jump to page or action…"
-            autoFocus
             aria-label="Command search"
           />
           <span className="command-palette__hint">
@@ -105,7 +117,9 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                   <span className="command-palette__item-label">
                     {item.labelKey ? t(item.labelKey) : item.label}
                   </span>
-                  <span className="command-palette__item-meta">{item.path}</span>
+                  <span className="command-palette__item-meta">
+                    {item.path}
+                  </span>
                 </button>
               </li>
             ))

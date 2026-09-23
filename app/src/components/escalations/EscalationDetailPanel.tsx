@@ -1,18 +1,21 @@
+import { InlineNotice } from "../ui/InlineNotice";
 import { Button } from "../ui/Button";
 import { Link } from "react-router-dom";
 import { useEffect, useId, useMemo, useState } from "react";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { useNavCounts } from "../../context/NavCountsContext";
-import {
-  overrideEscalation,
-  requeueEscalation,
-} from "../../lib/api";
+import { overrideEscalation, requeueEscalation } from "../../lib/api";
 import {
   ESCALATION_KIND_LABEL_KEYS,
   getEscalationKind,
   isGeoEscalation,
 } from "../../lib/escalations";
-import type { AppSettings, AuditRecord, EscalationActionResult, ProvenanceArtifact } from "../../lib/types";
+import type {
+  AppSettings,
+  AuditRecord,
+  EscalationActionResult,
+  ProvenanceArtifact,
+} from "../../lib/types";
 import { ActionBadge } from "../proof/Badges";
 import { BtnIcon } from "../ui/BtnIcon";
 import { StatusBadge } from "../ui/StatusBadge";
@@ -29,7 +32,8 @@ type EscalationDetailPanelProps = {
   onResolved: (result: EscalationActionResult) => void;
 };
 
-type PendingAction = "requeue" | "discard" | "override-pay" | "override-skip" | null;
+type PendingAction =
+  "requeue" | "discard" | "override-pay" | "override-skip" | null;
 type DetailTab = "summary" | "fields" | "geo";
 
 const KIND_BADGE: Record<
@@ -60,14 +64,17 @@ export function EscalationDetailPanel({
   const kind = getEscalationKind(record.decision.reasoning);
   const kindStyle = KIND_BADGE[kind];
   const highlights = escalationHighlights(record.decision.reasoning);
-  const showGeo = Boolean(artifact && settings && isGeoEscalation(record.decision.reasoning));
+  const showGeo = Boolean(
+    artifact && settings && isGeoEscalation(record.decision.reasoning),
+  );
   const busy = pending != null;
 
   const tabs = useMemo(() => {
     const items: { id: DetailTab; label: string }[] = [
       { id: "summary", label: t("escalations.tabs.summary") },
     ];
-    if (artifact) items.push({ id: "fields", label: t("escalations.tabs.fields") });
+    if (artifact)
+      items.push({ id: "fields", label: t("escalations.tabs.fields") });
     if (showGeo) items.push({ id: "geo", label: t("escalations.tabs.geo") });
     return items;
   }, [artifact, showGeo, t]);
@@ -104,24 +111,45 @@ export function EscalationDetailPanel({
       onResolved(result);
 
       if (result.requeuedEscalated) {
-        setFeedback(t("escalations.feedback.requeuedStillEscalated", { assetId: record.assetId }));
+        setFeedback(
+          t("escalations.feedback.requeuedStillEscalated", {
+            assetId: record.assetId,
+          }),
+        );
       } else {
-        setFeedback(t(successKey, { assetId: record.assetId, outcome: result.record.outcome }));
+        setFeedback(
+          t(successKey, {
+            assetId: record.assetId,
+            outcome: result.record.outcome,
+          }),
+        );
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("escalations.feedback.error"));
+      setError(
+        err instanceof Error ? err.message : t("escalations.feedback.error"),
+      );
     } finally {
       setPending(null);
     }
   }
 
   return (
-    <aside className="escalation-detail" aria-labelledby={titleId} key={record.assetId}>
+    <aside
+      className="escalation-detail"
+      aria-labelledby={titleId}
+      key={record.assetId}
+    >
       <header className="escalation-detail__head">
         <div className="escalation-detail__head-top">
           <div className="escalation-detail__intro">
-            <p className="escalation-detail__kicker">{t("escalations.item.label", { index })}</p>
-            <h2 className="escalation-detail__title" id={titleId} title={record.assetId}>
+            <p className="escalation-detail__kicker">
+              {t("escalations.item.label", { index })}
+            </p>
+            <h2
+              className="escalation-detail__title"
+              id={titleId}
+              title={record.assetId}
+            >
               {record.assetId}
             </h2>
             {artifact ? (
@@ -155,7 +183,11 @@ export function EscalationDetailPanel({
         </div>
 
         <div className="escalation-detail__toolbar">
-          <nav className="evidence-room-tabs" role="tablist" aria-label={t("escalations.detail.section")}>
+          <nav
+            className="evidence-room-tabs"
+            role="tablist"
+            aria-label={t("escalations.detail.section")}
+          >
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -174,20 +206,30 @@ export function EscalationDetailPanel({
           </nav>
 
           <div className="escalation-detail__actions">
-            <Button variant="primary" size="md"
+            <Button
+              variant="primary"
+              size="md"
               type="button"
               className="route-cta"
               disabled={busy}
               loading={pending === "requeue"}
               onClick={() =>
-                runAction("requeue", () => requeueEscalation(record.assetId), "escalations.feedback.requeued")
+                runAction(
+                  "requeue",
+                  () => requeueEscalation(record.assetId),
+                  "escalations.feedback.requeued",
+                )
               }
             >
               <BtnIcon icon="process">
-                {pending === "requeue" ? t("escalations.action.requeuing") : t("escalations.action.ackRequeue")}
+                {pending === "requeue"
+                  ? t("escalations.action.requeuing")
+                  : t("escalations.action.ackRequeue")}
               </BtnIcon>
             </Button>
-            <Button variant="secondary" size="md"
+            <Button
+              variant="secondary"
+              size="md"
               type="button"
               className="route-cta route-cta--ghost"
               disabled={busy}
@@ -207,16 +249,8 @@ export function EscalationDetailPanel({
           </div>
         </div>
 
-        {feedback ? (
-          <p className="escalation-detail__feedback" role="status">
-            {feedback}
-          </p>
-        ) : null}
-        {error ? (
-          <p className="escalation-detail__error" role="alert">
-            {error}
-          </p>
-        ) : null}
+        {feedback ? <InlineNotice tone="info" live title={feedback} /> : null}
+        {error ? <InlineNotice tone="danger" live title={error} /> : null}
       </header>
 
       <div className="escalation-detail__scroll">
@@ -229,10 +263,14 @@ export function EscalationDetailPanel({
             aria-labelledby="escalation-tab-summary"
           >
             <blockquote className="escalation-detail__reason">
-              <p className="escalation-detail__section-label mono-label">{t("escalations.item.reason")}</p>
+              <p className="escalation-detail__section-label mono-label">
+                {t("escalations.item.reason")}
+              </p>
               <p>{record.decision.reasoning}</p>
             </blockquote>
-            <p className="escalation-detail__agent-note">{t("escalations.item.agentNote")}</p>
+            <p className="escalation-detail__agent-note">
+              {t("escalations.item.agentNote")}
+            </p>
           </div>
         ) : null}
 
@@ -244,7 +282,9 @@ export function EscalationDetailPanel({
             id="escalation-panel-fields"
             aria-labelledby="escalation-tab-fields"
           >
-            <p className="escalation-detail__section-label mono-label">{t("escalations.item.triggerFields")}</p>
+            <p className="escalation-detail__section-label mono-label">
+              {t("escalations.item.triggerFields")}
+            </p>
             <ArtifactPanel artifact={artifact} highlightFields={highlights} />
           </div>
         ) : null}
@@ -257,7 +297,10 @@ export function EscalationDetailPanel({
             id="escalation-panel-geo"
             aria-labelledby="escalation-tab-geo"
           >
-            <EscalationGeoEvidence artifact={artifact} limits={settings.limits} />
+            <EscalationGeoEvidence
+              artifact={artifact}
+              limits={settings.limits}
+            />
           </div>
         ) : null}
       </div>
@@ -273,8 +316,12 @@ export function EscalationDetailEmpty() {
       <div className="escalation-detail__empty-icon" aria-hidden="true">
         <span className="escalation-detail__empty-ring" />
       </div>
-      <p className="escalation-detail__empty-title">{t("escalations.detail.empty")}</p>
-      <p className="escalation-detail__empty-hint">{t("escalations.filters.emptyHint")}</p>
+      <p className="escalation-detail__empty-title">
+        {t("escalations.detail.empty")}
+      </p>
+      <p className="escalation-detail__empty-hint">
+        {t("escalations.filters.emptyHint")}
+      </p>
     </div>
   );
 }

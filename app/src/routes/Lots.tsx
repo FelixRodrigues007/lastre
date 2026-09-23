@@ -25,7 +25,8 @@ type SortKey = "assetId" | "quantity" | "verdict" | "attested";
 type ViewMode = "list" | "cards";
 
 function lotTone(lot: LotListItem): "valid" | "invalid" | "pending" {
-  if (lot.latestVerdict === "Invalid" || lot.sealMatchesReference === false) return "invalid";
+  if (lot.latestVerdict === "Invalid" || lot.sealMatchesReference === false)
+    return "invalid";
   if (lot.latestVerdict === "Valid" || lot.attested) return "valid";
   return "pending";
 }
@@ -72,7 +73,10 @@ export function Lots() {
     );
   }, [setSearchParams]);
 
-  const outcomes = useMemo(() => countLotOutcomes(lots.data?.lots ?? []), [lots.data]);
+  const outcomes = useMemo(
+    () => countLotOutcomes(lots.data?.lots ?? []),
+    [lots.data],
+  );
 
   const visible = useMemo(() => {
     const items = lots.data?.lots ?? [];
@@ -96,13 +100,32 @@ export function Lots() {
             <CaptureWizardTrigger className="route-cta route-cta--ghost">
               Capture / New
             </CaptureWizardTrigger>
-            <ActionLink variant="primary" size="md" className="route-cta" to="/process">Run batch</ActionLink>
-            <ActionLink variant="primary" size="md" className="route-cta" to="/marketplace">Marketplace</ActionLink>
+            <ActionLink
+              variant="primary"
+              size="md"
+              className="route-cta"
+              to="/process"
+            >
+              Run batch
+            </ActionLink>
+            <ActionLink
+              variant="secondary"
+              size="md"
+              className="route-cta"
+              to="/marketplace"
+            >
+              Marketplace
+            </ActionLink>
           </>
         }
       />
 
-      <StatePanel loading={lots.loading} error={lots.error} skeleton="table" onRetry={lots.reload}>
+      <StatePanel
+        loading={lots.loading}
+        error={lots.error}
+        skeleton="table"
+        onRetry={lots.reload}
+      >
         {lots.data ? (
           <>
             <div className="lots-outcomes">
@@ -127,7 +150,8 @@ export function Lots() {
               actions={
                 <>
                   <SelectField
-                    label="Sort lots" hideLabel
+                    label="Sort lots"
+                    hideLabel
                     className="sort-select"
                     value={sort}
                     onChange={(e) => setSort(e.target.value as SortKey)}
@@ -179,7 +203,10 @@ export function Lots() {
                               : lot.artifact.massGrams != null
                                 ? lot.artifact.massGrams.toLocaleString()
                                 : "—"}
-                            <span className="lot-card__unit"> {lot.artifact.tonnesCO2e != null ? "tCO₂e" : "g"}</span>
+                            <span className="lot-card__unit">
+                              {" "}
+                              {lot.artifact.tonnesCO2e != null ? "tCO₂e" : "g"}
+                            </span>
                           </p>
                           <h2 className="lot-card__title">
                             <Link to={lotHref(assetId)}>{assetId}</Link>
@@ -202,7 +229,10 @@ export function Lots() {
                           <dd className="lot-card__seal">
                             {shortHash(lot.computedSeal, 10, 6)}
                             {lot.sealMatchesReference === false ? (
-                              <span className="lot-card__mismatch"> mismatch</span>
+                              <span className="lot-card__mismatch">
+                                {" "}
+                                mismatch
+                              </span>
                             ) : null}
                           </dd>
                         </div>
@@ -220,7 +250,9 @@ export function Lots() {
         ) : null}
       </StatePanel>
 
-      {selectedLotId ? <LotDrawer assetId={selectedLotId} onClose={closeDrawer} /> : null}
+      {selectedLotId ? (
+        <LotDrawer assetId={selectedLotId} onClose={closeDrawer} />
+      ) : null}
     </div>
   );
 }

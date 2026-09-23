@@ -5,19 +5,10 @@
   padding: 1.125rem 1.25rem 1.25rem;
   border-radius: var(--panel-radius);
   border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
-  background: var(--lastre-bg-surface);
+  background: var(--lastre-material-matte);
   box-shadow: var(--app-shadow-panel);
   min-height: 280px;
   position: relative;
-}
-
-.overview-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--lastre-glass-highlight);
-  pointer-events: none;
 }
 
 .overview-card__head {

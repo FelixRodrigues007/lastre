@@ -3,17 +3,31 @@ import type { Locale } from "../../lib/locale";
 import "./auth-lang.css";
 
 export function AuthLangToggle({ className }: { className?: string }) {
-  const { locale, setLocale } = useLocaleContext();
+  const { locale, setLocale, t } = useLocaleContext();
 
   return (
     <div
       className={className ? `auth-lang ${className}` : "auth-lang"}
       role="group"
-      aria-label="Language"
+      aria-label={t("prefs.language")}
     >
+      <select
+        className="auth-lang__select"
+        aria-label={t("prefs.language")}
+        value={locale}
+        onChange={(e) => setLocale(e.target.value as Locale)}
+      >
+        <option value="en">EN</option>
+        <option value="pt">PT</option>
+        <option value="es">ES</option>
+      </select>
       {(["en", "pt", "es"] as Locale[]).map((value, index) => (
         <span key={value} style={{ display: "contents" }}>
-          {index > 0 ? <span className="auth-lang__sep" aria-hidden="true">·</span> : null}
+          {index > 0 ? (
+            <span className="auth-lang__sep" aria-hidden="true">
+              ·
+            </span>
+          ) : null}
           <button
             type="button"
             className={`auth-lang__btn${locale === value ? " auth-lang__btn--active" : ""}`}

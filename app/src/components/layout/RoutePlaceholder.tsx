@@ -6,7 +6,11 @@ type RoutePlaceholderProps = {
   cta?: { label: string; to: string };
 };
 
-export function RoutePlaceholder({ phase, blocks, cta }: RoutePlaceholderProps) {
+export function RoutePlaceholder({
+  phase,
+  blocks,
+  cta,
+}: RoutePlaceholderProps) {
   return (
     <>
       <p className="mono-label" style={{ marginBottom: "1rem" }}>
@@ -27,7 +31,12 @@ export function RoutePlaceholder({ phase, blocks, cta }: RoutePlaceholderProps) 
 
       {cta ? (
         <p style={{ marginTop: "1.5rem" }}>
-          <ActionLink variant="primary" size="md" className="route-cta" to={cta.to}>
+          <ActionLink
+            variant="primary"
+            size="md"
+            className="route-cta"
+            to={cta.to}
+          >
             {cta.label}
           </ActionLink>
         </p>

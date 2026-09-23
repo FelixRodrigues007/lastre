@@ -1,3 +1,4 @@
+import { InlineNotice } from "../components/ui/InlineNotice";
 import { ActionLink } from "../components/ui/ActionLink";
 import { Button } from "../components/ui/Button";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -44,7 +45,9 @@ const DEMO_LOCKS_KEY_PREFIX = "casper-demo-collateral-locks";
 
 function readDemoAccount(): string {
   if (typeof localStorage === "undefined") return "casper-demo-account-preview";
-  return localStorage.getItem(DEMO_ACCOUNT_KEY) || "casper-demo-account-preview";
+  return (
+    localStorage.getItem(DEMO_ACCOUNT_KEY) || "casper-demo-account-preview"
+  );
 }
 
 function locksKey(owner: string) {
@@ -54,7 +57,10 @@ function locksKey(owner: string) {
 function readDemoLocks(owner: string): Record<string, string> {
   if (typeof localStorage === "undefined") return {};
   try {
-    return JSON.parse(localStorage.getItem(locksKey(owner)) || "{}") as Record<string, string>;
+    return JSON.parse(localStorage.getItem(locksKey(owner)) || "{}") as Record<
+      string,
+      string
+    >;
   } catch {
     return {};
   }
@@ -66,7 +72,9 @@ function writeDemoLocks(owner: string, locks: Record<string, string>): void {
 }
 
 function mergeMintedLots(lots: LotListItem[]): LotListItem[] {
-  const apiMinted = lots.filter((lot) => lot.isMinted).map((lot) => applyDemoMint(lot));
+  const apiMinted = lots
+    .filter((lot) => lot.isMinted)
+    .map((lot) => applyDemoMint(lot));
   const seen = new Set(apiMinted.map((lot) => lot.artifact.assetId));
 
   const demoOnly = readDemoMintIds()
@@ -81,9 +89,12 @@ export function MyAssets() {
   const { t } = useLocaleContext();
   const lotsData = useAsyncData(getLots);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [connectedAccount, setConnectedAccount] = useState<string | null>(readDemoAccount);
+  const [connectedAccount, setConnectedAccount] = useState<string | null>(
+    readDemoAccount,
+  );
   const [demoMintTick, setDemoMintTick] = useState(0);
-  const [collateralFilter, setCollateralFilter] = useState<CollateralFilter>("all");
+  const [collateralFilter, setCollateralFilter] =
+    useState<CollateralFilter>("all");
   const [lockedMap, setLockedMap] = useState<Record<string, string>>(() =>
     readDemoLocks(readDemoAccount()),
   );
@@ -103,14 +114,18 @@ export function MyAssets() {
   const visibleMinted = useMemo(
     () =>
       myMinted.filter((lot) =>
-        filterAssetByCollateralStatus(collateralFilter, Boolean(lockedMap[lot.artifact.assetId])),
+        filterAssetByCollateralStatus(
+          collateralFilter,
+          Boolean(lockedMap[lot.artifact.assetId]),
+        ),
       ),
     [myMinted, collateralFilter, lockedMap],
   );
 
   const selectedAssetId = searchParams.get("asset");
   const selectedInCollection =
-    selectedAssetId != null && myMinted.some((lot) => lot.artifact.assetId === selectedAssetId);
+    selectedAssetId != null &&
+    myMinted.some((lot) => lot.artifact.assetId === selectedAssetId);
   // While the API collection is still loading, honor a deep-linked ?asset= (e.g.
   // the Marketplace rail handoff to a freshly-locked Valid lot) instead of
   // clobbering it with the first demo-seeded lot — the target usually arrives
@@ -119,7 +134,9 @@ export function MyAssets() {
     ? selectedAssetId
     : selectedAssetId && lotsData.loading
       ? selectedAssetId
-      : visibleMinted[0]?.artifact.assetId ?? myMinted[0]?.artifact.assetId ?? null;
+      : (visibleMinted[0]?.artifact.assetId ??
+        myMinted[0]?.artifact.assetId ??
+        null);
 
   const lotLoader = useCallback(
     () => (effectiveAssetId ? getLot(effectiveAssetId) : Promise.resolve(null)),
@@ -130,7 +147,9 @@ export function MyAssets() {
   const lot = lotState.data;
   const layers = useMemo(() => (lot ? buildProofLayers(lot) : []), [lot]);
   const score = lot ? computeProvScore(lot) : 0;
-  const selectedLockedAt = lot ? lockedMap[lot.artifact.assetId] ?? null : null;
+  const selectedLockedAt = lot
+    ? (lockedMap[lot.artifact.assetId] ?? null)
+    : null;
   const selectedCollateralValue = lot
     ? estimateDemoCollateralCspr({
         category: lot.artifact.category,
@@ -138,7 +157,9 @@ export function MyAssets() {
         massGrams: lot.artifact.massGrams,
       })
     : 0;
-  const lockedCount = myMinted.filter((item) => lockedMap[item.artifact.assetId]).length;
+  const lockedCount = myMinted.filter(
+    (item) => lockedMap[item.artifact.assetId],
+  ).length;
 
   const selectAsset = useCallback(
     (assetId: string) => {
@@ -174,7 +195,10 @@ export function MyAssets() {
     getLockedCollateral(connectedAccount)
       .then((result) => {
         const apiLocks = Object.fromEntries(
-          result.positions.map((position) => [position.assetId, position.lockedAt]),
+          result.positions.map((position) => [
+            position.assetId,
+            position.lockedAt,
+          ]),
         );
         const merged = { ...localLocks, ...apiLocks };
         setLockedMap(merged);
@@ -227,7 +251,9 @@ export function MyAssets() {
     } catch (error) {
       const message = error instanceof Error ? error.message : "";
       if (!message.includes("Already locked")) {
-        setCollateralMessage(`Runtime lock unavailable; keeping a local demo lock. Reason: ${message || "demo fallback"}`);
+        setCollateralMessage(
+          `Runtime lock unavailable; keeping a local demo lock. Reason: ${message || "demo fallback"}`,
+        );
       }
     } finally {
       const next = { ...lockedMap, [assetId]: new Date().toISOString() };
@@ -267,13 +293,33 @@ export function MyAssets() {
           hint={t("myassets.empty.noAccount.hint")}
           action={
             <div className="my-assets-empty__actions">
-              <Button variant="primary" size="md" type="button" onClick={connectDemo} className="route-cta">
-                <BtnIcon icon="chain">{t("myassets.empty.noAccount.connectCta")}</BtnIcon>
+              <Button
+                variant="primary"
+                size="md"
+                type="button"
+                onClick={connectDemo}
+                className="route-cta"
+              >
+                <BtnIcon icon="chain">
+                  {t("myassets.empty.noAccount.connectCta")}
+                </BtnIcon>
               </Button>
-              <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace">
-                <BtnIcon icon="globe">{t("myassets.empty.noAccount.marketplaceCta")}</BtnIcon>
+              <ActionLink
+                variant="secondary"
+                size="md"
+                className="route-cta route-cta--ghost"
+                to="/marketplace"
+              >
+                <BtnIcon icon="globe">
+                  {t("myassets.empty.noAccount.marketplaceCta")}
+                </BtnIcon>
               </ActionLink>
-              <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={buildMarketplaceDemoUrl()}>
+              <ActionLink
+                variant="secondary"
+                size="md"
+                className="route-cta route-cta--ghost"
+                to={buildMarketplaceDemoUrl()}
+              >
                 <BtnIcon icon="process">Run full demo</BtnIcon>
               </ActionLink>
             </div>
@@ -293,13 +339,33 @@ export function MyAssets() {
           hint={t("myassets.empty.noAssets.hint")}
           action={
             <div className="my-assets-empty__actions">
-              <Button variant="primary" size="md" type="button" onClick={loadDemoCollection} className="route-cta">
-                <BtnIcon icon="shield">{t("myassets.empty.noAssets.loadCta")}</BtnIcon>
+              <Button
+                variant="primary"
+                size="md"
+                type="button"
+                onClick={loadDemoCollection}
+                className="route-cta"
+              >
+                <BtnIcon icon="shield">
+                  {t("myassets.empty.noAssets.loadCta")}
+                </BtnIcon>
               </Button>
-              <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace">
-                <BtnIcon icon="globe">{t("myassets.empty.noAssets.marketplaceCta")}</BtnIcon>
+              <ActionLink
+                variant="secondary"
+                size="md"
+                className="route-cta route-cta--ghost"
+                to="/marketplace"
+              >
+                <BtnIcon icon="globe">
+                  {t("myassets.empty.noAssets.marketplaceCta")}
+                </BtnIcon>
               </ActionLink>
-              <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={buildMarketplaceDemoUrl()}>
+              <ActionLink
+                variant="secondary"
+                size="md"
+                className="route-cta route-cta--ghost"
+                to={buildMarketplaceDemoUrl()}
+              >
                 <BtnIcon icon="process">Run full demo</BtnIcon>
               </ActionLink>
             </div>
@@ -310,15 +376,22 @@ export function MyAssets() {
           <header className="my-assets-summary panel">
             <div>
               <span className="mono-label">My Proven Assets</span>
-              <h2>{myMinted.length} claimed • {lockedCount} locked</h2>
+              <h2>
+                {myMinted.length} claimed • {lockedCount} locked
+              </h2>
               <p>
-                Provenance NFT representations only. Collateral values are simulated for demo UX.
+                Provenance NFT representations only. Collateral values are
+                simulated for demo UX.
                 {mintSummary?.paidX402Queries != null
                   ? ` Paid x402 queries this runtime: ${mintSummary.paidX402Queries}.`
                   : ""}
               </p>
             </div>
-            <div className="my-assets-filter" role="group" aria-label="Filter collateral status">
+            <div
+              className="my-assets-filter"
+              role="group"
+              aria-label="Filter collateral status"
+            >
               {(["all", "available", "locked"] as const).map((filter) => (
                 <button
                   key={filter}
@@ -326,7 +399,11 @@ export function MyAssets() {
                   className={filter === collateralFilter ? "is-active" : ""}
                   onClick={() => setCollateralFilter(filter)}
                 >
-                  {filter === "all" ? "All" : filter === "available" ? "Available" : "Locked"}
+                  {filter === "all"
+                    ? "All"
+                    : filter === "available"
+                      ? "Available"
+                      : "Locked"}
                 </button>
               ))}
             </div>
@@ -349,17 +426,25 @@ export function MyAssets() {
             >
               {lot ? (
                 <div className="my-assets-detail-stack">
-                  <section className="my-assets-collateral panel" aria-label="Collateral status">
+                  <section
+                    className="my-assets-collateral panel"
+                    aria-label="Collateral status"
+                  >
                     <div className="my-assets-collateral__main">
-                      <span className={`my-assets-collateral__badge${selectedLockedAt ? " is-locked" : ""}`}>
-                        {selectedLockedAt ? "Locked as Collateral" : "Available for Collateral"}
+                      <span
+                        className={`my-assets-collateral__badge${selectedLockedAt ? " is-locked" : ""}`}
+                      >
+                        {selectedLockedAt
+                          ? "Locked as Collateral"
+                          : "Available for Collateral"}
                       </span>
-                      <h3>{formatDemoCollateralValue(selectedCollateralValue)}</h3>
+                      <h3>
+                        {formatDemoCollateralValue(selectedCollateralValue)}
+                      </h3>
                       <p>
                         {lot.artifact.category === "carbon_credit"
                           ? `${lot.artifact.tonnesCO2e?.toLocaleString() ?? "—"} tCO₂e • ${lot.artifact.creditType ?? "carbon"} • ${lot.artifact.vintage ?? "demo vintage"}`
-                          : `${lot.artifact.massGrams?.toLocaleString() ?? "—"} g • ${lot.artifact.mineral ?? "mineral"}`
-                        }
+                          : `${lot.artifact.massGrams?.toLocaleString() ?? "—"} g • ${lot.artifact.mineral ?? "mineral"}`}
                       </p>
                       <dl>
                         <div>
@@ -368,51 +453,77 @@ export function MyAssets() {
                         </div>
                         <div>
                           <dt>Seal</dt>
-                          <dd><code>{lot.computedSeal.slice(0, 12)}…</code></dd>
+                          <dd>
+                            <code>{lot.computedSeal.slice(0, 12)}…</code>
+                          </dd>
                         </div>
                         <div>
                           <dt>On-chain mode</dt>
-                          <dd>{mintSummary?.onChain?.source === "live" ? "Live ProofOfOrigin" : "Hybrid demo"}</dd>
+                          <dd>
+                            {mintSummary?.onChain?.source === "live"
+                              ? "Live ProofOfOrigin"
+                              : "Hybrid demo"}
+                          </dd>
                         </div>
                       </dl>
                     </div>
                     <div className="my-assets-collateral__actions">
                       {selectedLockedAt ? (
-                        <Button variant="secondary" size="md"
+                        <Button
+                          variant="secondary"
+                          size="md"
                           type="button"
                           className="route-cta route-cta--ghost"
-                          disabled={collateralBusy === lot.artifact.assetId}
+                          loading={collateralBusy === lot.artifact.assetId}
                           onClick={handleReleaseSelected}
                         >
                           Release Collateral
                         </Button>
                       ) : (
-                        <Button variant="primary" size="md"
+                        <Button
+                          variant="primary"
+                          size="md"
                           type="button"
                           className="route-cta"
-                          disabled={collateralBusy === lot.artifact.assetId}
+                          loading={collateralBusy === lot.artifact.assetId}
                           onClick={handleLockSelected}
                         >
                           Lock as Collateral
                         </Button>
                       )}
-                      <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={`/marketplace/${encodeURIComponent(lot.artifact.assetId)}`}>
+                      <ActionLink
+                        variant="secondary"
+                        size="md"
+                        className="route-cta route-cta--ghost"
+                        to={`/marketplace/${encodeURIComponent(lot.artifact.assetId)}`}
+                      >
                         View Marketplace Card
                       </ActionLink>
                     </div>
-                    {collateralMessage ? <p className="my-assets-collateral__message">{collateralMessage}</p> : null}
+                    {collateralMessage ? (
+                      <InlineNotice
+                        tone="info"
+                        live
+                        title={collateralMessage}
+                      />
+                    ) : null}
                   </section>
 
-                  <AssetAnalyticsReport lot={lot} layers={layers} score={score} />
+                  <AssetAnalyticsReport
+                    lot={lot}
+                    layers={layers}
+                    score={score}
+                  />
                 </div>
               ) : (
-                <p className="my-assets-page__detail-empty panel">{t("myassets.detail.selectPrompt")}</p>
+                <p className="my-assets-page__detail-empty panel">
+                  {t("myassets.detail.selectPrompt")}
+                </p>
               )}
             </StatePanel>
           </div>
         </div>
       )}
-
     </div>
   );
 }

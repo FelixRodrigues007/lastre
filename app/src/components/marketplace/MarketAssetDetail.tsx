@@ -4,16 +4,25 @@ import { MarketSiteDashboard } from "./MarketSiteDashboard";
 import { MarketplaceAssetBadge } from "./MarketplaceAssetBadge";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { shortHash } from "../../lib/format";
-import { resolveMapCredentials, MAPBOX_MARKETPLACE_STYLE } from "../../lib/mapConfig";
+import {
+  resolveMapCredentials,
+  MAPBOX_MARKETPLACE_STYLE,
+} from "../../lib/mapConfig";
 import { getSiteCameras } from "../../lib/siteCameras";
-import type { EnrichedAsset, MarketplacePersona } from "../../lib/marketplaceTypes";
+import type {
+  EnrichedAsset,
+  MarketplacePersona,
+} from "../../lib/marketplaceTypes";
 import "./market-asset-detail.css";
 
 function staticMapUrl(lat: number, lng: number): string | null {
   const mapbox = resolveMapCredentials();
   if (mapbox.provider !== "mapbox" || !mapbox.token) return null;
   const pin = `pin-s+72c458(${lng},${lat})`;
-  const styleId = MAPBOX_MARKETPLACE_STYLE.replace("mapbox://styles/mapbox/", "");
+  const styleId = MAPBOX_MARKETPLACE_STYLE.replace(
+    "mapbox://styles/mapbox/",
+    "",
+  );
   return `https://api.mapbox.com/styles/v1/mapbox/${styleId}/static/${pin}/${lng},${lat},10,0/520x280@2x?access_token=${encodeURIComponent(mapbox.token)}`;
 }
 
@@ -62,7 +71,15 @@ export function MarketAssetDetail({
     >
       <header className="market-detail__head">
         {layout === "page" ? null : (
-          <Button variant="ghost" size="sm" iconOnly type="button" className="market-detail__close" onClick={onClose} aria-label="Close detail">
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
+            type="button"
+            className="market-detail__close"
+            onClick={onClose}
+            aria-label="Close detail"
+          >
             ×
           </Button>
         )}
@@ -75,20 +92,35 @@ export function MarketAssetDetail({
             <h1 className="market-detail__title">
               {siteTitle}
               {siteDisclaimer ? (
-                <span className="market-detail__title-disclaimer"> — {siteDisclaimer}</span>
+                <span className="market-detail__title-disclaimer">
+                  {" "}
+                  — {siteDisclaimer}
+                </span>
               ) : null}
             </h1>
             <p className="market-detail__id mono-label">{assetId}</p>
           </header>
 
-          <section className="market-detail__section market-detail__section--cams" aria-label="Site monitoring">
-            <MarketSiteDashboard asset={asset} cameras={cameras} siteName={siteName} />
+          <section
+            className="market-detail__section market-detail__section--cams"
+            aria-label="Site monitoring"
+          >
+            <MarketSiteDashboard
+              asset={asset}
+              cameras={cameras}
+              siteName={siteName}
+            />
           </section>
         </div>
 
         <aside className="market-detail__rail">
-          <section className="market-detail__section market-detail__section--prov" aria-labelledby="market-prov-title">
-            <h3 id="market-prov-title" className="market-detail__section-label">Provenance</h3>
+          <section
+            className="market-detail__section market-detail__section--prov"
+            aria-labelledby="market-prov-title"
+          >
+            <h3 id="market-prov-title" className="market-detail__section-label">
+              Provenance
+            </h3>
             <dl className="market-detail-metrics">
               <div>
                 <dt>Score</dt>
@@ -100,7 +132,9 @@ export function MarketAssetDetail({
               </div>
               <div>
                 <dt>Seal</dt>
-                <dd><code>{shortHash(asset.computedSeal, 8, 6)}</code></dd>
+                <dd>
+                  <code>{shortHash(asset.computedSeal, 8, 6)}</code>
+                </dd>
               </div>
               <div>
                 <dt>Volume</dt>
@@ -113,55 +147,109 @@ export function MarketAssetDetail({
             </dl>
           </section>
 
-          <section className="market-detail__section" aria-labelledby="market-origin-title">
-            <h3 id="market-origin-title" className="market-detail__section-label">Origin</h3>
+          <section
+            className="market-detail__section"
+            aria-labelledby="market-origin-title"
+          >
+            <h3
+              id="market-origin-title"
+              className="market-detail__section-label"
+            >
+              Origin
+            </h3>
             <p className="market-detail__coords">
-              {origin ? `${origin.lat.toFixed(4)}, ${origin.lng.toFixed(4)}` : "No coordinates"}
+              {origin
+                ? `${origin.lat.toFixed(4)}, ${origin.lng.toFixed(4)}`
+                : "No coordinates"}
             </p>
             {mapPreview ? (
-              <img className="market-detail-map" src={mapPreview} alt={`Map preview for ${asset.label}`} />
+              <img
+                className="market-detail-map"
+                src={mapPreview}
+                alt={`Map preview for ${asset.label}`}
+              />
             ) : (
-              <div className="market-detail-map market-detail-map--empty">Map preview unavailable</div>
+              <div className="market-detail-map market-detail-map--empty">
+                Map preview unavailable
+              </div>
             )}
           </section>
 
-          <section className="market-detail__section market-detail__section--actions" aria-labelledby="market-actions-title">
-            <h3 id="market-actions-title" className="market-detail__section-label">Next steps</h3>
-            <p className="market-detail__hint">Symbolic demo — no real ownership transfer.</p>
+          <section
+            className="market-detail__section market-detail__section--actions"
+            aria-labelledby="market-actions-title"
+          >
+            <h3
+              id="market-actions-title"
+              className="market-detail__section-label"
+            >
+              Next steps
+            </h3>
+            <p className="market-detail__hint">
+              Symbolic demo — no real ownership transfer.
+            </p>
             <div className="market-detail__actions">
-              <ActionLink variant="primary" size="md" className="route-cta" to={`/lots?lot=${encodeURIComponent(assetId)}`}>
+              <ActionLink
+                variant="primary"
+                size="md"
+                className="route-cta"
+                to={`/lots?lot=${encodeURIComponent(assetId)}`}
+              >
                 Open evidence room
               </ActionLink>
               {asset.isValidProof && !asset.isMinted ? (
-                <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={onClaim}>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  type="button"
+                  className="route-cta route-cta--ghost"
+                  onClick={onClaim}
+                >
                   Claim (demo)
                 </Button>
               ) : null}
-              {asset.isMinted && (persona === "defi" || persona === "buyer") && !locked ? (
+              {asset.isMinted &&
+              (persona === "defi" || persona === "buyer") &&
+              !locked ? (
                 <>
-                  <Button variant="secondary" size="md"
+                  <Button
+                    variant="secondary"
+                    size="md"
                     type="button"
                     className="route-cta route-cta--ghost"
                     onClick={onLock}
                     disabled={!asset.isValidProof}
-                    aria-describedby={!asset.isValidProof ? lockReasonId : undefined}
+                    aria-describedby={
+                      !asset.isValidProof ? lockReasonId : undefined
+                    }
                   >
                     {t("myassets.rail.lockCta")}
                   </Button>
                   {!asset.isValidProof ? (
-                    <p id={lockReasonId} className="market-detail__hint market-detail__hint--danger">
+                    <p
+                      id={lockReasonId}
+                      className="market-detail__hint market-detail__hint--danger"
+                    >
                       {t("myassets.rail.lockDisabledReason")}
                     </p>
                   ) : null}
                 </>
               ) : null}
               {asset.isMinted && locked ? (
-                <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={onRelease}>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  type="button"
+                  className="route-cta route-cta--ghost"
+                  onClick={onRelease}
+                >
                   {t("myassets.rail.releaseCta")}
                 </Button>
               ) : null}
             </div>
-            <p className="market-detail__hint">{t("myassets.rail.collateralHonesty")}</p>
+            <p className="market-detail__hint">
+              {t("myassets.rail.collateralHonesty")}
+            </p>
           </section>
         </aside>
       </div>

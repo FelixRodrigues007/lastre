@@ -41,7 +41,8 @@
 
 .chain-panel__source--fallback {
   color: var(--lastre-warning);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-warning) 35%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-warning) 35%, transparent);
   background: var(--lastre-fill-warn);
 }
 

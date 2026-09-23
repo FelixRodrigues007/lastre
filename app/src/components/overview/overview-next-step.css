@@ -15,13 +15,26 @@
   padding: 0;
   overflow: hidden;
   border-radius: var(--panel-radius);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-brand) 45%, var(--lastre-border-subtle));
-  background: color-mix(in srgb, var(--lastre-bg-surface) 98%, var(--lastre-color-mirage-900));
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-brand) 45%,
+      var(--lastre-border-subtle)
+    );
+  background: color-mix(
+    in srgb,
+    var(--lastre-bg-surface) 98%,
+    var(--lastre-color-mirage-900)
+  );
   box-shadow: var(--app-shadow-panel);
 }
 
 .overview-next--tokenizable {
-  border-color: color-mix(in srgb, var(--lastre-success) 24%, var(--lastre-border-subtle));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-success) 24%,
+    var(--lastre-border-subtle)
+  );
   box-shadow:
     var(--app-shadow-panel),
     inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent);
@@ -78,9 +91,24 @@
     var(--lastre-ambient),
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--lastre-color-blue-600) 28%, var(--lastre-bg-surface)) 0%,
-      color-mix(in srgb, var(--lastre-color-mirage-800) 55%, var(--lastre-bg-surface)) 38%,
-      color-mix(in srgb, var(--lastre-color-blue-600) 42%, var(--lastre-bg-surface)) 100%
+      color-mix(
+          in srgb,
+          var(--lastre-color-blue-600) 28%,
+          var(--lastre-bg-surface)
+        )
+        0%,
+      color-mix(
+          in srgb,
+          var(--lastre-color-mirage-800) 55%,
+          var(--lastre-bg-surface)
+        )
+        38%,
+      color-mix(
+          in srgb,
+          var(--lastre-color-blue-600) 42%,
+          var(--lastre-bg-surface)
+        )
+        100%
     );
 }
 
@@ -104,9 +132,20 @@
     var(--lastre-ambient),
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--lastre-color-blue-600) 32%, var(--lastre-bg-surface)) 0%,
-      color-mix(in srgb, var(--lastre-color-mirage-800) 52%, var(--lastre-bg-surface)) 35%,
-      color-mix(in srgb, var(--lastre-success) 38%, var(--lastre-bg-surface)) 100%
+      color-mix(
+          in srgb,
+          var(--lastre-color-blue-600) 32%,
+          var(--lastre-bg-surface)
+        )
+        0%,
+      color-mix(
+          in srgb,
+          var(--lastre-color-mirage-800) 52%,
+          var(--lastre-bg-surface)
+        )
+        35%,
+      color-mix(in srgb, var(--lastre-success) 38%, var(--lastre-bg-surface))
+        100%
     );
 }
 
@@ -114,13 +153,12 @@
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, #fff 11%, transparent) 0%,
-      transparent 28%,
-      color-mix(in srgb, var(--lastre-bg-surface) 12%, transparent) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, #fff 11%, transparent) 0%,
+    transparent 28%,
+    color-mix(in srgb, var(--lastre-bg-surface) 12%, transparent) 100%
+  );
 }
 
 .overview-next__orb {
@@ -205,7 +243,11 @@
   font-weight: var(--lastre-weight-medium, 500);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--lastre-text-secondary) 92%, var(--lastre-info));
+  color: color-mix(
+    in srgb,
+    var(--lastre-text-secondary) 92%,
+    var(--lastre-info)
+  );
 }
 
 .overview-next__title {
@@ -232,7 +274,11 @@
   font-size: 0.8125rem;
   font-weight: var(--lastre-weight-regular, 400);
   line-height: 1.5;
-  color: color-mix(in srgb, var(--lastre-text-secondary) 88%, var(--lastre-text-muted));
+  color: color-mix(
+    in srgb,
+    var(--lastre-text-secondary) 88%,
+    var(--lastre-text-muted)
+  );
 }
 
 .overview-next__actions {
@@ -252,10 +298,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  padding:
-    calc(var(--banner-visual-pad) * 0.65)
-    var(--banner-visual-pad)
-    0
+  padding: calc(var(--banner-visual-pad) * 0.65) var(--banner-visual-pad) 0
     calc(var(--banner-visual-pad) * 0.35);
 }
 

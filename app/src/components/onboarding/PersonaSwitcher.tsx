@@ -21,15 +21,18 @@ export function PersonaSwitcher() {
   }
 
   return (
-    <SelectField label={t("onboarding.persona.label")} className="persona-switcher"
-value={persona}
-onChange={(e) => handleChange(e.target.value as OnboardingPersona)}
-title={t("onboarding.persona.label")}>
-        {PERSONAS.map((value) => (
-          <option key={value} value={value}>
-            {t(`onboarding.persona.${value}` as const)}
-          </option>
-        ))}
-      </SelectField>
+    <SelectField
+      label={t("onboarding.persona.label")}
+      className="persona-switcher"
+      value={persona}
+      onChange={(e) => handleChange(e.target.value as OnboardingPersona)}
+      title={t("onboarding.persona.label")}
+    >
+      {PERSONAS.map((value) => (
+        <option key={value} value={value}>
+          {t(`onboarding.persona.${value}` as const)}
+        </option>
+      ))}
+    </SelectField>
   );
 }

@@ -1,3 +1,4 @@
+import { useDialogFocus } from "../../hooks/useDialogFocus";
 import { Button } from "../ui/Button";
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
@@ -35,6 +36,7 @@ function lotMetaLine(lot: LotDetail): string {
 
 export function LotDrawer({ assetId, onClose }: LotDrawerProps) {
   const titleId = useId();
+  const dialogRef = useDialogFocus<HTMLElement>(true);
   const loader = useCallback(() => getLot(assetId), [assetId]);
   const lot = useAsyncData(loader, [assetId]);
 
@@ -74,6 +76,8 @@ export function LotDrawer({ assetId, onClose }: LotDrawerProps) {
     <div className="lot-drawer-overlay" onClick={onClose} role="presentation">
       <aside
         className={`lot-drawer lot-drawer--${tone}`}
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -82,13 +86,21 @@ export function LotDrawer({ assetId, onClose }: LotDrawerProps) {
         <header className="lot-drawer__head">
           <div className="lot-drawer__head-top">
             <p className="lot-drawer__kicker">Evidence room</p>
-            <Button variant="ghost" size="sm" iconOnly
+            <Button
+              variant="ghost"
+              size="sm"
+              iconOnly
               type="button"
               className="lot-drawer__close"
               onClick={onClose}
               aria-label="Close evidence room"
             >
-              <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                aria-hidden="true"
+              >
                 <path
                   d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5"
                   stroke="currentColor"
@@ -105,10 +117,14 @@ export function LotDrawer({ assetId, onClose }: LotDrawerProps) {
                 <h2 className="lot-drawer__title" id={titleId} title={assetId}>
                   {assetId}
                 </h2>
-                {lot.data ? <VerdictBadge verdict={lot.data.latestVerdict} /> : null}
+                {lot.data ? (
+                  <VerdictBadge verdict={lot.data.latestVerdict} />
+                ) : null}
               </div>
               {lot.data ? (
-                <p className="lot-drawer__status">{drawerStatusLine(lot.data, tone)}</p>
+                <p className="lot-drawer__status">
+                  {drawerStatusLine(lot.data, tone)}
+                </p>
               ) : null}
               {lot.data ? (
                 <p className="lot-drawer__meta-line">{lotMetaLine(lot.data)}</p>
@@ -132,7 +148,9 @@ export function LotDrawer({ assetId, onClose }: LotDrawerProps) {
             skeleton="detail"
             onRetry={lot.reload}
           >
-            {lot.data ? <LotDetailContent data={lot.data} compact activeTab={activeTab} /> : null}
+            {lot.data ? (
+              <LotDetailContent data={lot.data} compact activeTab={activeTab} />
+            ) : null}
           </StatePanel>
         </div>
       </aside>

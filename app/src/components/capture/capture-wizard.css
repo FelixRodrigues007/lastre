@@ -18,7 +18,12 @@
   max-height: min(94vh, 48rem);
   border-radius: 18px;
   background: var(--lastre-bg-elevated);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-trust) 45%, var(--lastre-border-subtle));
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(
+      in srgb,
+      var(--lastre-border-trust) 45%,
+      var(--lastre-border-subtle)
+    );
   box-shadow: var(--app-shadow-float);
   overflow: hidden;
   position: relative;
@@ -248,7 +253,11 @@
 }
 
 .capture-wizard__connector--done {
-  background: color-mix(in srgb, var(--lastre-link) 50%, var(--lastre-border-subtle));
+  background: color-mix(
+    in srgb,
+    var(--lastre-link) 50%,
+    var(--lastre-border-subtle)
+  );
 }
 
 /* ── Body ── */
@@ -307,8 +316,16 @@
 }
 
 .capture-wizard__section--accent {
-  border-color: color-mix(in srgb, var(--lastre-link) 22%, var(--lastre-border-subtle));
-  background: color-mix(in srgb, var(--lastre-link) 5%, var(--lastre-bg-surface));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-link) 22%,
+    var(--lastre-border-subtle)
+  );
+  background: color-mix(
+    in srgb,
+    var(--lastre-link) 5%,
+    var(--lastre-bg-surface)
+  );
 }
 
 .capture-wizard__section-head {
@@ -335,7 +352,8 @@
 .capture-wizard__tip {
   padding: 0.75rem 0.9rem;
   border-radius: 10px;
-  border: 1px dashed color-mix(in srgb, var(--lastre-link) 35%, var(--lastre-border-subtle));
+  border: 1px dashed
+    color-mix(in srgb, var(--lastre-link) 35%, var(--lastre-border-subtle));
   background: color-mix(in srgb, var(--lastre-link) 6%, transparent);
   font-size: 0.8125rem;
   line-height: 1.45;
@@ -567,7 +585,11 @@
 }
 
 .capture-wizard__compare-card--seal {
-  border-color: color-mix(in srgb, var(--lastre-link) 20%, var(--lastre-border-subtle));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-link) 20%,
+    var(--lastre-border-subtle)
+  );
 }
 
 .capture-wizard__compare-head {

@@ -565,12 +565,14 @@
   border-radius: 50%;
   background: color-mix(in srgb, var(--lastre-text-muted) 40%, transparent);
   border: 2px solid var(--lastre-bg-surface);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--lastre-text-muted) 30%, transparent);
+  box-shadow: 0 0 0 1px
+    color-mix(in srgb, var(--lastre-text-muted) 30%, transparent);
 }
 
 .prov-timeline__item--good .prov-timeline__marker {
   background: var(--lastre-success);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--lastre-success) 40%, transparent);
+  box-shadow: 0 0 0 1px
+    color-mix(in srgb, var(--lastre-success) 40%, transparent);
 }
 
 .prov-timeline__item--partial .prov-timeline__marker {

@@ -3,13 +3,13 @@
   gap: 1rem;
   padding: 1.25rem 1.375rem;
   border-radius: var(--panel-radius);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 28%, transparent);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--lastre-link) 4%, transparent),
-      color-mix(in srgb, var(--lastre-bg-surface) 96%, #000)
-    );
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-link) 28%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--lastre-link) 4%, transparent),
+    color-mix(in srgb, var(--lastre-bg-surface) 96%, #000)
+  );
 }
 
 .proof-journey__head {

@@ -6,7 +6,10 @@ import { Icon } from "../ui/Icon";
 import { Tabs } from "../ui/Tabs";
 import { shortHash } from "../../lib/format";
 import type { LotDetail } from "../../lib/types";
-import { explorerUrlFromTx, resolveAttestationUrl } from "../../lib/chainTimeline";
+import {
+  explorerUrlFromTx,
+  resolveAttestationUrl,
+} from "../../lib/chainTimeline";
 import {
   buildScoreComponents,
   buildTimeline,
@@ -50,7 +53,9 @@ function DistributionColumn({
   return (
     <div className="prov-dist__col">
       <span className="prov-dist__label">{label}</span>
-      <span className={`prov-dist__value prov-dist__value--${tone}`}>{percent}%</span>
+      <span className={`prov-dist__value prov-dist__value--${tone}`}>
+        {percent}%
+      </span>
       <div className="prov-dist__track" aria-hidden="true">
         <span
           className={`prov-dist__fill prov-dist__fill--${tone}`}
@@ -62,11 +67,17 @@ function DistributionColumn({
 }
 
 function ScoreBreakdownBar({ components }: { components: ScoreComponent[] }) {
-  const earnedTotal = components.filter((c) => c.earned).reduce((sum, c) => sum + c.points, 0);
+  const earnedTotal = components
+    .filter((c) => c.earned)
+    .reduce((sum, c) => sum + c.points, 0);
 
   return (
     <div className="prov-breakdown">
-      <div className="prov-breakdown__track" role="img" aria-label="Score component breakdown">
+      <div
+        className="prov-breakdown__track"
+        role="img"
+        aria-label="Score component breakdown"
+      >
         {components
           .filter((c) => c.earned)
           .map((component) => (
@@ -90,13 +101,18 @@ function ComponentGrid({ components }: { components: ScoreComponent[] }) {
   return (
     <div className="prov-components">
       {components.map((component, index) => (
-        <div key={component.id} className={`prov-component${component.earned ? " prov-component--earned" : ""}`}>
+        <div
+          key={component.id}
+          className={`prov-component${component.earned ? " prov-component--earned" : ""}`}
+        >
           <span
             className={`prov-component__dot prov-component__dot--${LAYER_KPI_TONES[index] ?? component.id}`}
             aria-hidden="true"
           />
           <span className="prov-component__label">{component.label}</span>
-          <span className="prov-component__points">{component.earned ? `+${component.points}` : "—"}</span>
+          <span className="prov-component__points">
+            {component.earned ? `+${component.points}` : "—"}
+          </span>
         </div>
       ))}
     </div>
@@ -109,10 +125,16 @@ function LayerStackBar({ layers }: { layers: ProofLayer[] }) {
   return (
     <div className="prov-stack">
       <div className="prov-stack__head">
-        <span className="prov-stack__path">{layers[0]?.label ?? "Proof layers"}</span>
+        <span className="prov-stack__path">
+          {layers[0]?.label ?? "Proof layers"}
+        </span>
         <span className="prov-stack__count">{layers.length} layers</span>
       </div>
-      <div className="prov-stack__track" role="img" aria-label="Layer status distribution bar">
+      <div
+        className="prov-stack__track"
+        role="img"
+        aria-label="Layer status distribution bar"
+      >
         {layers.map((layer) => (
           <span
             key={layer.id}
@@ -123,9 +145,15 @@ function LayerStackBar({ layers }: { layers: ProofLayer[] }) {
         ))}
       </div>
       <div className="prov-stack__legend" aria-hidden="true">
-        <span><i className="prov-stack__dot prov-stack__dot--good" /> Good</span>
-        <span><i className="prov-stack__dot prov-stack__dot--partial" /> Partial</span>
-        <span><i className="prov-stack__dot prov-stack__dot--poor" /> Poor</span>
+        <span>
+          <i className="prov-stack__dot prov-stack__dot--good" /> Good
+        </span>
+        <span>
+          <i className="prov-stack__dot prov-stack__dot--partial" /> Partial
+        </span>
+        <span>
+          <i className="prov-stack__dot prov-stack__dot--poor" /> Poor
+        </span>
       </div>
     </div>
   );
@@ -134,16 +162,34 @@ function LayerStackBar({ layers }: { layers: ProofLayer[] }) {
 function LayerKPIs({ layers, score }: { layers: ProofLayer[]; score: number }) {
   const kpis = [
     { label: "Score · P50", value: score, tone: "base" },
-    { label: "Layers · P75", value: layers.filter((l) => l.status === "good").length, tone: "attested" },
-    { label: "Attested · P90", value: layers.filter((l) => l.status !== "poor").length, tone: "seal" },
-    { label: "Mint · P99", value: layers.find((l) => l.id === "mint")?.status === "good" ? score : score - 12, tone: "verdict" },
+    {
+      label: "Layers · P75",
+      value: layers.filter((l) => l.status === "good").length,
+      tone: "attested",
+    },
+    {
+      label: "Attested · P90",
+      value: layers.filter((l) => l.status !== "poor").length,
+      tone: "seal",
+    },
+    {
+      label: "Mint · P99",
+      value:
+        layers.find((l) => l.id === "mint")?.status === "good"
+          ? score
+          : score - 12,
+      tone: "verdict",
+    },
   ];
 
   return (
     <div className="prov-kpis">
       {kpis.map((kpi) => (
         <div key={kpi.label} className="prov-kpi">
-          <span className={`prov-kpi__dot prov-kpi__dot--${kpi.tone}`} aria-hidden="true" />
+          <span
+            className={`prov-kpi__dot prov-kpi__dot--${kpi.tone}`}
+            aria-hidden="true"
+          />
           <span className="prov-kpi__label">{kpi.label}</span>
           <span className="prov-kpi__value">{kpi.value}</span>
         </div>
@@ -152,11 +198,19 @@ function LayerKPIs({ layers, score }: { layers: ProofLayer[]; score: number }) {
   );
 }
 
-function ProvenanceTrendChart({ score, assetId }: { score: number; assetId: string }) {
+function ProvenanceTrendChart({
+  score,
+  assetId,
+}: {
+  score: number;
+  assetId: string;
+}) {
   const points = useMemo(() => {
-    const seed = assetId.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    const seed = assetId
+      .split("")
+      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
     return Array.from({ length: 12 }, (_, i) => {
-      const wave = Math.sin((i + seed % 7) * 0.55) * 6;
+      const wave = Math.sin((i + (seed % 7)) * 0.55) * 6;
       const drift = i * 1.2;
       return Math.max(52, Math.min(99, Math.round(score - 14 + drift + wave)));
     });
@@ -180,24 +234,52 @@ function ProvenanceTrendChart({ score, assetId }: { score: number; assetId: stri
   return (
     <div className="prov-trend">
       <p className="prov-trend__title">Provenance score trend (demo)</p>
-      <svg className="prov-trend__svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Provenance score trend">
+      <svg
+        className="prov-trend__svg"
+        viewBox={`0 0 ${W} ${H}`}
+        role="img"
+        aria-label="Provenance score trend"
+      >
         {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
           const y = PAD.top + plotH * (1 - ratio);
           const tick = Math.round(min + range * ratio);
           return (
             <g key={ratio}>
-              <line className="prov-trend__grid" x1={PAD.left} y1={y} x2={PAD.left + plotW} y2={y} />
-              <text className="prov-trend__tick" x={PAD.left - 6} y={y + 4} textAnchor="end">
+              <line
+                className="prov-trend__grid"
+                x1={PAD.left}
+                y1={y}
+                x2={PAD.left + plotW}
+                y2={y}
+              />
+              <text
+                className="prov-trend__tick"
+                x={PAD.left - 6}
+                y={y + 4}
+                textAnchor="end"
+              >
                 {tick}
               </text>
             </g>
           );
         })}
-        <polyline className="prov-trend__line" points={coords.join(" ")} fill="none" />
+        <polyline
+          className="prov-trend__line"
+          points={coords.join(" ")}
+          fill="none"
+        />
         {points.map((value, index) => {
           const x = PAD.left + (index / (points.length - 1)) * plotW;
           const y = PAD.top + plotH - ((value - min) / range) * plotH;
-          return <circle key={index} className="prov-trend__point" cx={x} cy={y} r={3} />;
+          return (
+            <circle
+              key={index}
+              className="prov-trend__point"
+              cx={x}
+              cy={y}
+              r={3}
+            />
+          );
         })}
       </svg>
     </div>
@@ -208,15 +290,33 @@ function PanelToolbar() {
   return (
     <div className="prov-toolbar">
       <div className="prov-toolbar__left">
-        <Button variant="secondary" size="md" type="button" className="prov-toolbar__btn" disabled>
+        <Button
+          variant="secondary"
+          size="md"
+          type="button"
+          className="prov-toolbar__btn"
+          disabled
+        >
           <Icon name="search" /> Add filter
         </Button>
       </div>
       <div className="prov-toolbar__right">
-        <Button variant="secondary" size="md" type="button" className="prov-toolbar__btn prov-toolbar__btn--ghost" disabled>
+        <Button
+          variant="secondary"
+          size="md"
+          type="button"
+          className="prov-toolbar__btn prov-toolbar__btn--ghost"
+          disabled
+        >
           <Icon name="download" /> Print report
         </Button>
-        <Button variant="secondary" size="md" type="button" className="prov-toolbar__range" disabled>
+        <Button
+          variant="secondary"
+          size="md"
+          type="button"
+          className="prov-toolbar__range"
+          disabled
+        >
           Last 30 days (demo) <Icon name="chevron-down" />
         </Button>
       </div>
@@ -269,20 +369,32 @@ function TimelineTab({ lot }: { lot: LotDetail }) {
   return (
     <ol className="prov-timeline">
       {events.map((event, index) => (
-        <li key={event.id} className={`prov-timeline__item prov-timeline__item--${event.status}`}>
+        <li
+          key={event.id}
+          className={`prov-timeline__item prov-timeline__item--${event.status}`}
+        >
           <span className="prov-timeline__marker" aria-hidden="true" />
           <div className="prov-timeline__body">
             <div className="prov-timeline__row">
               <span className="prov-timeline__label">{event.label}</span>
-              <span className="prov-timeline__date">{formatTimelineDate(event.timestamp)}</span>
+              <span className="prov-timeline__date">
+                {formatTimelineDate(event.timestamp)}
+              </span>
             </div>
             {event.href ? (
-              <a className="prov-timeline__link" href={event.href} target="_blank" rel="noopener noreferrer">
+              <a
+                className="prov-timeline__link"
+                href={event.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 View on explorer ↗
               </a>
             ) : null}
           </div>
-          {index < events.length - 1 ? <span className="prov-timeline__line" aria-hidden="true" /> : null}
+          {index < events.length - 1 ? (
+            <span className="prov-timeline__line" aria-hidden="true" />
+          ) : null}
         </li>
       ))}
     </ol>
@@ -334,13 +446,21 @@ function ChainTab({ lot }: { lot: LotDetail }) {
             <dt>Testnet attester</dt>
             <dd>{attestation.attester}</dd>
           </div>
-          {resolveAttestationUrl(lot.artifact.assetId, attestation.explorerUrl, attestation.verdict) ? (
+          {resolveAttestationUrl(
+            lot.artifact.assetId,
+            attestation.explorerUrl,
+            attestation.verdict,
+          ) ? (
             <div>
               <dt>Explorer</dt>
               <dd>
                 <a
                   href={
-                    resolveAttestationUrl(lot.artifact.assetId, attestation.explorerUrl, attestation.verdict) as string
+                    resolveAttestationUrl(
+                      lot.artifact.assetId,
+                      attestation.explorerUrl,
+                      attestation.verdict,
+                    ) as string
                   }
                   target="_blank"
                   rel="noopener noreferrer"
@@ -366,7 +486,8 @@ function ChainTab({ lot }: { lot: LotDetail }) {
               </a>
             ) : (
               <span title={lot.mintTx}>
-                {shortHash(lot.mintTx, 10, 8)} · demo/session receipt — not on Casper
+                {shortHash(lot.mintTx, 10, 8)} · demo/session receipt — not on
+                Casper
               </span>
             )}
           </dd>
@@ -376,7 +497,12 @@ function ChainTab({ lot }: { lot: LotDetail }) {
   );
 }
 
-export function ProvenanceScorePanel({ lot, layers, score, embedded = false }: ProvenanceScorePanelProps) {
+export function ProvenanceScorePanel({
+  lot,
+  layers,
+  score,
+  embedded = false,
+}: ProvenanceScorePanelProps) {
   const [tab, setTab] = useState<DetailTab>("layers");
   const tier = scoreTier(score);
   const components = useMemo(() => buildScoreComponents(lot), [lot]);
@@ -385,11 +511,15 @@ export function ProvenanceScorePanel({ lot, layers, score, embedded = false }: P
   const goodPct = Math.round((counts.good / layerTotal) * 100);
   const partialPct = Math.round((counts.partial / layerTotal) * 100);
   const poorPct = Math.round((counts.poor / layerTotal) * 100);
-  const isCarbon = lot.artifact.category === "carbon_credit" || Boolean(lot.artifact.creditType);
+  const isCarbon =
+    lot.artifact.category === "carbon_credit" ||
+    Boolean(lot.artifact.creditType);
   const reportLabel = isCarbon ? "Carbon provenance" : "Mineral provenance";
 
   return (
-    <section className={`prov-score-panel panel${embedded ? " prov-score-panel--embedded" : ""}`}>
+    <section
+      className={`prov-score-panel panel${embedded ? " prov-score-panel--embedded" : ""}`}
+    >
       <header className="prov-score-panel__head">
         <div className="prov-score-panel__head-main">
           <p className="mono-label">{reportLabel}</p>
@@ -404,10 +534,12 @@ export function ProvenanceScorePanel({ lot, layers, score, embedded = false }: P
             </Link>
           </h2>
           <p className="prov-score-panel__lead">
-            Layer health across capture, seal, verification, Casper, and mint. Symbolic demo — no real
-            ownership or investment value.
+            Layer health across capture, seal, verification, Casper, and mint.
+            Symbolic demo — no real ownership or investment value.
           </p>
-          <span className={`prov-score-panel__tier prov-score-panel__tier--${tier}`}>
+          <span
+            className={`prov-score-panel__tier prov-score-panel__tier--${tier}`}
+          >
             {score} · {scoreTierLabel(tier)} (demo)
           </span>
         </div>
@@ -423,12 +555,21 @@ export function ProvenanceScorePanel({ lot, layers, score, embedded = false }: P
       </div>
 
       <p id="layers-about" className="prov-section-head__desc">
-        Distribution of proof layers by status — good layers contribute fully to the provenance score.
+        Distribution of proof layers by status — good layers contribute fully to
+        the provenance score.
       </p>
 
-      <div className="prov-dist" role="group" aria-label="Layer status distribution">
+      <div
+        className="prov-dist"
+        role="group"
+        aria-label="Layer status distribution"
+      >
         <DistributionColumn label="Good" percent={goodPct} tone="good" />
-        <DistributionColumn label="Partial" percent={partialPct} tone="partial" />
+        <DistributionColumn
+          label="Partial"
+          percent={partialPct}
+          tone="partial"
+        />
         <DistributionColumn label="Poor" percent={poorPct} tone="poor" />
       </div>
 
@@ -438,15 +579,25 @@ export function ProvenanceScorePanel({ lot, layers, score, embedded = false }: P
       <ScoreBreakdownBar components={components} />
       <ComponentGrid components={components} />
 
-      <Tabs tabs={TABS} active={tab} onChange={setTab} ariaLabel="Asset detail views">
+      <Tabs
+        tabs={TABS}
+        active={tab}
+        onChange={setTab}
+        ariaLabel="Asset detail views"
+      >
         {tab === "layers" ? (
           <ul className="prov-layers-list">
             {layers.map((layer) => (
-              <li key={layer.id} className={`prov-layers-list__item prov-layers-list__item--${layer.status}`}>
+              <li
+                key={layer.id}
+                className={`prov-layers-list__item prov-layers-list__item--${layer.status}`}
+              >
                 <div className="prov-layers-list__row">
                   <span className="prov-layers-list__name">{layer.label}</span>
                   {layer.scoreContribution > 0 ? (
-                    <span className="prov-layers-list__pts">+{layer.scoreContribution}</span>
+                    <span className="prov-layers-list__pts">
+                      +{layer.scoreContribution}
+                    </span>
                   ) : null}
                 </div>
                 <p className="prov-layers-list__detail">{layer.detail}</p>
@@ -462,10 +613,20 @@ export function ProvenanceScorePanel({ lot, layers, score, embedded = false }: P
       <ProvenanceTrendChart score={score} assetId={lot.artifact.assetId} />
 
       <footer className="prov-score-panel__actions">
-        <ActionLink variant="primary" size="md" className="route-cta" to={`/lots?lot=${encodeURIComponent(lot.artifact.assetId)}`}>
+        <ActionLink
+          variant="primary"
+          size="md"
+          className="route-cta"
+          to={`/lots?lot=${encodeURIComponent(lot.artifact.assetId)}`}
+        >
           Open evidence room
         </ActionLink>
-        <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace">
+        <ActionLink
+          variant="secondary"
+          size="md"
+          className="route-cta route-cta--ghost"
+          to="/marketplace"
+        >
           DeFi / Collateral
         </ActionLink>
       </footer>

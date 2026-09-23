@@ -11,7 +11,11 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   iconOnly?: boolean;
 };
 
-export function buttonClassName({ variant = "primary", size = "md", className = "" }: Pick<ButtonProps, "variant" | "size" | "className">) {
+export function buttonClassName({
+  variant = "primary",
+  size = "md",
+  className = "",
+}: Pick<ButtonProps, "variant" | "size" | "className">) {
   return `lastre-button lastre-button--${variant} lastre-button--${size} ${className}`.trim();
 }
 
@@ -39,7 +43,7 @@ export function Button({
       data-icon-only={iconOnly || undefined}
       data-start-icon={Boolean(startIcon) || undefined}
       data-end-icon={Boolean(endIcon) || undefined}
-      className={buttonClassName({variant, size, className})}
+      className={buttonClassName({ variant, size, className })}
     >
       <span className="lastre-button__content">
         {startIcon && (

@@ -15,7 +15,8 @@
 
 .artifact-panel__row--highlight {
   background: color-mix(in srgb, var(--lastre-danger) 10%, transparent);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 28%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-danger) 28%, transparent);
 }
 
 .artifact-panel__row dt {

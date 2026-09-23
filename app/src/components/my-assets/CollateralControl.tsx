@@ -1,3 +1,4 @@
+import { InlineNotice } from "../ui/InlineNotice";
 import { Button } from "../ui/Button";
 import { useState } from "react";
 import { useLocaleContext } from "../../context/LocaleContext";
@@ -18,7 +19,12 @@ type CollateralControlProps = {
  * Assets. Locked state is tracked optimistically in the parent's local state
  * — there is no server read endpoint for collateral status (demo limitation).
  */
-export function CollateralControl({ lot, account, locked, onLockedChange }: CollateralControlProps) {
+export function CollateralControl({
+  lot,
+  account,
+  locked,
+  onLockedChange,
+}: CollateralControlProps) {
   const { t } = useLocaleContext();
   const assetId = lot.artifact.assetId;
   const isValidProof = resolveVerdictTone(lot) === "valid";
@@ -37,7 +43,9 @@ export function CollateralControl({ lot, account, locked, onLockedChange }: Coll
       if (res.success) onLockedChange(assetId, true);
       else setError(res.error ?? t("myassets.rail.lockError"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("myassets.rail.lockError"));
+      setError(
+        err instanceof Error ? err.message : t("myassets.rail.lockError"),
+      );
     } finally {
       setBusy(false);
     }
@@ -52,7 +60,9 @@ export function CollateralControl({ lot, account, locked, onLockedChange }: Coll
       if (res.success) onLockedChange(assetId, false);
       else setError(res.error ?? t("myassets.rail.releaseError"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("myassets.rail.releaseError"));
+      setError(
+        err instanceof Error ? err.message : t("myassets.rail.releaseError"),
+      );
     } finally {
       setBusy(false);
     }
@@ -66,20 +76,27 @@ export function CollateralControl({ lot, account, locked, onLockedChange }: Coll
         </span>
 
         {locked ? (
-          <Button variant="secondary" size="md"
+          <Button
+            variant="secondary"
+            size="md"
             type="button"
             className="route-cta route-cta--ghost"
             onClick={handleRelease}
-            disabled={busy}
+            loading={busy}
           >
-            {busy ? t("myassets.rail.releasing") : t("myassets.rail.releaseCta")}
+            {busy
+              ? t("myassets.rail.releasing")
+              : t("myassets.rail.releaseCta")}
           </Button>
         ) : (
-          <Button variant="secondary" size="md"
+          <Button
+            variant="secondary"
+            size="md"
             type="button"
             className="route-cta route-cta--ghost"
             onClick={handleLock}
-            disabled={!canLock || busy}
+            loading={busy}
+            disabled={!canLock}
             aria-describedby={!canLock ? lockReasonId : undefined}
           >
             {busy ? t("myassets.rail.locking") : t("myassets.rail.lockCta")}
@@ -93,9 +110,11 @@ export function CollateralControl({ lot, account, locked, onLockedChange }: Coll
         </p>
       ) : null}
 
-      {error ? <p className="my-assets-collateral__error">{error}</p> : null}
+      {error ? <InlineNotice tone="danger" live title={error} /> : null}
 
-      <p className="my-assets-collateral__honesty">{t("myassets.rail.collateralHonesty")}</p>
+      <p className="my-assets-collateral__honesty">
+        {t("myassets.rail.collateralHonesty")}
+      </p>
     </div>
   );
 }

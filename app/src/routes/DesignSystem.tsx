@@ -3,6 +3,7 @@ import tokens from "@design-system/tokens/lastre.tokens.json";
 import tokensUrl from "@design-system/tokens/lastre.tokens.json?url";
 import { Button } from "../components/ui/Button";
 import { TextField } from "../components/ui/TextField";
+import { SelectField } from "../components/ui/SelectField";
 import { LastreWordmark } from "../components/ui/LastreWordmark";
 import { StatusBadge } from "../components/ui/StatusBadge";
 import { InlineNotice } from "../components/ui/InlineNotice";
@@ -10,15 +11,27 @@ import { TokenInspector } from "../components/design-system/TokenInspector";
 import { ButtonPlayground } from "../components/design-system/ButtonPlayground";
 import { ProductPreview } from "../components/design-system/ProductPreview";
 import { SearchInput } from "../components/ui/SearchInput";
-import { applyTheme, getStoredTheme } from "../lib/theme";
+import { useTheme } from "../hooks/useTheme";
+import { DepthShowcase } from "../components/design-system/DepthShowcase";
+import {
+  ElevationLab,
+  MaterialGallery,
+} from "../components/design-system/SurfaceLab";
+import { MotionLab } from "../components/design-system/MotionLab";
+import { IconLibrary } from "../components/design-system/IconLibrary";
 import "./design-system.css";
+import "../components/design-system/ds-depth.css";
 
 const sections = [
   ["overview", "Visão geral"],
+  ["elevation", "Sombras e elevação"],
+  ["materials", "Luz e materiais"],
   ["colors", "Cores"],
   ["tokens", "Tokens semânticos"],
   ["type", "Tipografia"],
   ["space", "Espaçamento"],
+  ["motion", "Movimento"],
+  ["icons", "Iconografia"],
   ["components", "Componentes"],
   ["patterns", "Em contexto"],
   ["guidelines", "Critérios de uso"],
@@ -61,13 +74,11 @@ function onColor(hex: string) {
 }
 function Section({
   id,
-  number,
   title,
   description,
   children,
 }: {
   id: string;
-  number: string;
   title: string;
   description: string;
   children: ReactNode;
@@ -75,7 +86,12 @@ function Section({
   return (
     <section id={id} className="ds-section" aria-labelledby={`${id}-heading`}>
       <div className="ds-section__heading">
-        <span className="ds-index">{number}</span>
+        <span className="ds-index">
+          {String(sections.findIndex(([key]) => key === id) + 1).padStart(
+            2,
+            "0",
+          )}
+        </span>
         <div>
           <h2 id={`${id}-heading`}>{title}</h2>
           <p>{description}</p>
@@ -87,7 +103,7 @@ function Section({
 }
 
 export function DesignSystem() {
-  const [theme, setTheme] = useState(getStoredTheme);
+  const { theme, toggleTheme } = useTheme();
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
   const [activeSection, setActiveSection] = useState("overview");
@@ -160,7 +176,7 @@ export function DesignSystem() {
               href={`#${id}`}
               aria-current={activeSection === id ? "location" : undefined}
             >
-              <span>0{i + 1}</span>
+              <span>{String(i + 1).padStart(2, "0")}</span>
               {label}
             </a>
           ))}
@@ -183,11 +199,7 @@ export function DesignSystem() {
             variant="secondary"
             size="sm"
             aria-label={`Ativar tema ${theme === "dark" ? "claro" : "escuro"}`}
-            onClick={() => {
-              const next = theme === "dark" ? "light" : "dark";
-              applyTheme(next);
-              setTheme(next);
-            }}
+            onClick={toggleTheme}
           >
             <span aria-hidden="true">{theme === "dark" ? "☀" : "◐"}</span> Tema{" "}
             {theme === "dark" ? "claro" : "escuro"}
@@ -199,43 +211,48 @@ export function DesignSystem() {
               <span className="ds-live-dot" /> LASTRE DESIGN SYSTEM{" "}
               <span>V{version} / 2026</span>
             </div>
-            <h1 id="ds-title">
-              Clareza em cada
-              <br />
-              <em className="lastre-gold-text">ponto de contato.</em>
-            </h1>
-            <div className="ds-hero__bottom">
-              <p>
-                A linguagem visual da Lastre. Cores, tipografia e componentes
-                para transformar informação complexa em experiências de
-                confiança.
-              </p>
-              <a
-                className="lastre-button lastre-button--secondary"
-                href={tokensUrl}
-                download="lastre.tokens.json"
-              >
-                Baixar tokens <span aria-hidden="true">↓</span>
-              </a>
-            </div>
-            <div className="ds-quick-links" aria-label="Atalhos da biblioteca">
-              <a href="#tokens">
-                Explorar tokens <span aria-hidden="true">↗</span>
-              </a>
-              <a href="#components">
-                Testar componentes <span aria-hidden="true">↗</span>
-              </a>
-              <a href="#patterns">
-                Ver estados de tela <span aria-hidden="true">↗</span>
-              </a>
+            <div className="ds-hero__layout">
+              <div className="ds-hero__copy">
+                <h1 id="ds-title">
+                  Precisão que se vê.
+                  <br />
+                  <em className="lastre-gold-text">
+                    Profundidade
+                    <br />
+                    que se sente.
+                  </em>
+                </h1>
+                <p className="ds-hero__description">
+                  Uma linguagem feita de luz, matéria e intenção. Explore cada
+                  camada da experiência Lastre — da primeira impressão ao menor
+                  detalhe.
+                </p>
+                <div className="ds-hero__actions">
+                  <a
+                    className="lastre-button lastre-button--primary"
+                    href="#elevation"
+                  >
+                    Explorar o sistema <span aria-hidden="true">↗</span>
+                  </a>
+                  <a
+                    className="ds-download-link"
+                    href={tokensUrl}
+                    download="lastre.tokens.json"
+                  >
+                    Baixar tokens <span aria-hidden="true">↓</span>
+                  </a>
+                </div>
+                <div className="ds-hero__edition">
+                  <span /> Edição {version} <i /> Construído para sentir a
+                  diferença.
+                </div>
+              </div>
+              <DepthShowcase />
             </div>
             <div className="ds-brand-board">
               <div className="ds-wordmark-stage">
                 <LastreWordmark />
-                <div>
-                  <span>PROOF BEFORE TOKEN.</span>
-                  <span>IDENTIDADE / 01</span>
-                </div>
+                <span>A matéria-prima da nossa identidade.</span>
               </div>
               <div
                 className="ds-role"
@@ -281,22 +298,35 @@ export function DesignSystem() {
             </div>
             <div className="ds-facts">
               <span>
-                <b>03</b> famílias de cor
+                <b>06</b> níveis de elevação
               </span>
               <span>
-                <b>33</b> cores de referência
+                <b>04</b> materiais
               </span>
               <span>
-                <b>02</b> temas
+                <b>02</b> temas completos
               </span>
               <span>
-                <b>01</b> linguagem compartilhada
+                <b>33</b> cores da marca
               </span>
             </div>
           </section>
           <Section
+            id="elevation"
+            title="Uma nova dimensão."
+            description="Seis níveis de elevação. Sombras de contato, luz de borda e difusão criam uma hierarquia que você percebe antes de ler."
+          >
+            <ElevationLab onCopy={copy} />
+          </Section>
+          <Section
+            id="materials"
+            title="Superfícies com personalidade."
+            description="O mesmo sistema, diferentes sensações. Cada material responde a uma função, com acabamento próprio nos dois temas."
+          >
+            <MaterialGallery onCopy={copy} />
+          </Section>
+          <Section
             id="colors"
-            number="02"
             title="Uma paleta com função."
             description="Valores originais do Figma. Clique em uma amostra para copiar seu hexadecimal."
           >
@@ -392,7 +422,6 @@ export function DesignSystem() {
           </Section>
           <Section
             id="tokens"
-            number="03"
             title="A intenção antes da cor."
             description="Escolha pelo papel na interface. Clique para copiar a variável CSS e compare os valores nos dois temas."
           >
@@ -400,7 +429,6 @@ export function DesignSystem() {
           </Section>
           <Section
             id="type"
-            number="04"
             title="Personalidade. Legibilidade."
             description="Manrope nos títulos. Inter nos textos e controles. A personalidade do logotipo fica na marca."
           >
@@ -466,7 +494,6 @@ export function DesignSystem() {
           </Section>
           <Section
             id="space"
-            number="05"
             title="Ritmo e estrutura."
             description="Uma escala de 4px organiza distâncias. Controles e superfícies têm geometria consistente."
           >
@@ -502,8 +529,21 @@ export function DesignSystem() {
             </div>
           </Section>
           <Section
+            id="motion"
+            title="O jeito como tudo responde."
+            description="Ritmo, direção e resposta. Três curvas para transformar mudanças de estado em interações que parecem naturais."
+          >
+            <MotionLab onCopy={copy} />
+          </Section>
+          <Section
+            id="icons"
+            title="Pequenos sinais. Leitura imediata."
+            description="Uma família de ícones com o mesmo traço e vocabulário. Experimente os tamanhos e copie o componente."
+          >
+            <IconLibrary onCopy={copy} />
+          </Section>
+          <Section
             id="components"
-            number="06"
             title="Feitos para trabalhar juntos."
             description="Componentes reais da aplicação, com estados, hierarquia e foco visível."
           >
@@ -571,7 +611,7 @@ export function DesignSystem() {
             <div className="ds-component-block">
               <div className="ds-component-label">
                 <h3>Campos</h3>
-                <code>TextField</code>
+                <code>TextField · SelectField</code>
               </div>
               <form
                 className="ds-component-content"
@@ -586,6 +626,14 @@ export function DesignSystem() {
                 }}
               >
                 <div className="ds-fields">
+                  <SelectField
+                    label="Tipo de ativo"
+                    defaultValue="mineral"
+                    hint="O seletor mantém o comportamento nativo por teclado."
+                  >
+                    <option value="mineral">Mineral</option>
+                    <option value="carbon">Crédito de carbono</option>
+                  </SelectField>
                   <TextField
                     label="Nome do ativo"
                     placeholder="Ex.: Lote Serra Azul"
@@ -672,7 +720,6 @@ export function DesignSystem() {
           </Section>
           <Section
             id="patterns"
-            number="07"
             title="Da base para a experiência."
             description="Uma composição com os mesmos componentes usados no produto. Dados fictícios para demonstração."
           >
@@ -706,7 +753,6 @@ export function DesignSystem() {
           </Section>
           <Section
             id="guidelines"
-            number="08"
             title="Consistência é uma decisão."
             description="Critérios para criar novas telas e evoluir a biblioteca sem perder a identidade."
           >
@@ -755,8 +801,8 @@ export function DesignSystem() {
               <div>
                 <strong>Base de produto · v{version}</strong>
                 <p>
-                  Tokens validados, controles reutilizáveis e padrões
-                  interativos. A adoção em telas existentes é progressiva; os
+                  Sombras em seis níveis, materiais, movimento e controles
+                  reutilizáveis. A adoção em telas existentes é progressiva; os
                   aliases preservam os contratos legados.
                 </p>
               </div>

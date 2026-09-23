@@ -1,3 +1,4 @@
+import { InlineNotice } from "../ui/InlineNotice";
 import { Button } from "../ui/Button";
 import type { DeciderMode, LotListItem } from "../../lib/types";
 import { LotPreviewThumb } from "../lots/LotPreviewThumb";
@@ -57,9 +58,15 @@ function ConfigLotRow({
         htmlFor={inputId}
         className={`process-config-lot${checked ? " process-config-lot--selected" : ""}${disabled ? " process-config-lot--disabled" : ""}`}
       >
-        <LotPreviewThumb artifact={lot.artifact} size="sm" className="process-config-lot__thumb" />
+        <LotPreviewThumb
+          artifact={lot.artifact}
+          size="sm"
+          className="process-config-lot__thumb"
+        />
         <span className="process-config-lot__content">
-          <span className="process-config-lot__name">{t(lotShortNameKey(lot))}</span>
+          <span className="process-config-lot__name">
+            {t(lotShortNameKey(lot))}
+          </span>
           {expectedKey ? (
             <span className="process-config-lot__sub">{t(expectedKey)}</span>
           ) : null}
@@ -95,16 +102,28 @@ export function ProcessConfigCard({
 
   return (
     <article className="process-config" aria-label={t("process.config")}>
-      <section className="process-config__section process-config__section--decider" aria-labelledby="process-config-decider">
+      <section
+        className="process-config__section process-config__section--decider"
+        aria-labelledby="process-config-decider"
+      >
         <div className="process-config__intro">
-          <p className="process-config__kicker mono-label">{t("nav.process")}</p>
+          <p className="process-config__kicker mono-label">
+            {t("nav.process")}
+          </p>
           <h1 className="process-config__title">{t("process.title")}</h1>
           <p className="process-config__lead">{t("process.leadShort")}</p>
         </div>
-        <p id="process-config-decider" className="process-config__section-title">
+        <p
+          id="process-config-decider"
+          className="process-config__section-title"
+        >
           {t("process.decider.label")}
         </p>
-        <div className="process-config-segment" role="radiogroup" aria-label={t("process.decider.label")}>
+        <div
+          className="process-config-segment"
+          role="radiogroup"
+          aria-label={t("process.decider.label")}
+        >
           <button
             type="button"
             role="radio"
@@ -128,7 +147,10 @@ export function ProcessConfigCard({
         </div>
       </section>
 
-      <section className="process-config__section process-config__section--lots" aria-labelledby="process-config-lots">
+      <section
+        className="process-config__section process-config__section--lots"
+        aria-labelledby="process-config-lots"
+      >
         <p id="process-config-lots" className="process-config__section-title">
           {t("process.lotsInBatch")}
         </p>
@@ -146,12 +168,22 @@ export function ProcessConfigCard({
       </section>
 
       {phase === "error" ? (
-        <div className="process-config__error" role="alert">
-          <p>{runError}</p>
-          <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={onRetry}>
-            {t("process.retry")}
-          </Button>
-        </div>
+        <InlineNotice
+          tone="danger"
+          title={runError ?? t("common.loadError")}
+          live
+          action={
+            <Button
+              variant="secondary"
+              size="md"
+              type="button"
+              className="route-cta route-cta--ghost"
+              onClick={onRetry}
+            >
+              {t("process.retry")}
+            </Button>
+          }
+        />
       ) : null}
 
       <div className="process-config__action" aria-live="polite">
@@ -164,15 +196,22 @@ export function ProcessConfigCard({
             aria-valuemax={100}
           >
             <div className="process-config__progress-track">
-              <span className="process-config__progress-fill" style={{ width: `${progress}%` }} />
+              <span
+                className="process-config__progress-fill"
+                style={{ width: `${progress}%` }}
+              />
             </div>
             <p className="process-config__progress-label">
-              {fetchingBatch ? t("process.pipeline.fetching") : `${t("process.running")} · ${progress}%`}
+              {fetchingBatch
+                ? t("process.pipeline.fetching")
+                : `${t("process.running")} · ${progress}%`}
             </p>
           </div>
         ) : (
           <div className="process-config__footer">
-            <Button variant="primary" size="md"
+            <Button
+              variant="primary"
+              size="md"
               type="button"
               className="route-cta process-config__run"
               disabled={running || selected.length === 0}
@@ -180,7 +219,9 @@ export function ProcessConfigCard({
             >
               {t("process.run")}
             </Button>
-            <p className="process-config__footnote">{t("process.config.llmFootnote")}</p>
+            <p className="process-config__footnote">
+              {t("process.config.llmFootnote")}
+            </p>
           </div>
         )}
       </div>

@@ -57,7 +57,11 @@ export function Welcome() {
           <p className="path-select__sub">{t("onboarding.welcome.subtitle")}</p>
         </header>
 
-        <div className="path-select__list entry-card" role="group" aria-label={t("onboarding.welcome.aria")}>
+        <div
+          className="path-select__list entry-card"
+          role="group"
+          aria-label={t("onboarding.welcome.aria")}
+        >
           <PathOption
             icon="process"
             title={t("onboarding.welcome.judge.title")}
@@ -73,7 +77,13 @@ export function Welcome() {
           />
         </div>
 
-        <Button variant="ghost" size="md" type="button" className="path-select__skip" onClick={() => choose("explorer", "/")}>
+        <Button
+          variant="ghost"
+          size="md"
+          type="button"
+          className="path-select__skip"
+          onClick={() => choose("explorer", "/")}
+        >
           {t("onboarding.welcome.explore")}
         </Button>
       </section>

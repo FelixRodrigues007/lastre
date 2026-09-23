@@ -16,32 +16,34 @@
 
 .verdict-hero--valid {
   border-color: var(--lastre-border-success);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--lastre-fill-success) 90%, var(--lastre-bg-surface)) 0%,
-      var(--lastre-bg-surface) 58%
-    );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--lastre-fill-success) 90%, var(--lastre-bg-surface))
+      0%,
+    var(--lastre-bg-surface) 58%
+  );
 }
 
 .verdict-hero--invalid {
-  border-color: color-mix(in srgb, var(--lastre-danger) 32%, var(--lastre-border-subtle));
-  background:
-    linear-gradient(
-      135deg,
-      var(--lastre-fill-danger),
-      var(--lastre-bg-surface) 55%
-    );
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-danger) 32%,
+    var(--lastre-border-subtle)
+  );
+  background: linear-gradient(
+    135deg,
+    var(--lastre-fill-danger),
+    var(--lastre-bg-surface) 55%
+  );
 }
 
 .verdict-hero--pending {
   border-color: var(--lastre-border-trust);
-  background:
-    linear-gradient(
-      135deg,
-      var(--lastre-fill-trust),
-      var(--lastre-bg-surface) 55%
-    );
+  background: linear-gradient(
+    135deg,
+    var(--lastre-fill-trust),
+    var(--lastre-bg-surface) 55%
+  );
 }
 
 .verdict-hero__main {
@@ -70,7 +72,8 @@
 .verdict-hero__icon--invalid {
   color: var(--lastre-danger);
   background: var(--lastre-fill-danger);
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 30%, transparent);
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-danger) 30%, transparent);
 }
 
 .verdict-hero__icon--pending {

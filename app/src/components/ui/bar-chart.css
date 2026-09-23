@@ -94,7 +94,9 @@
   height: 100%;
   border-radius: inherit;
   min-width: 2px;
-  transition: width var(--dur-data) var(--ease-out), height var(--dur-data) var(--ease-out);
+  transition:
+    width var(--dur-data) var(--ease-out),
+    height var(--dur-data) var(--ease-out);
 }
 
 .bar-chart--vertical .bar-chart__fill {
@@ -107,7 +109,11 @@
 }
 
 .bar-chart__fill--invalid {
-  background: linear-gradient(90deg, var(--lastre-danger), var(--lastre-danger));
+  background: linear-gradient(
+    90deg,
+    var(--lastre-danger),
+    var(--lastre-danger)
+  );
 }
 
 .bar-chart__fill--accent {
@@ -123,7 +129,11 @@
 }
 
 .bar-chart__fill--muted {
-  background: color-mix(in srgb, var(--lastre-text-muted) 70%, var(--lastre-link));
+  background: color-mix(
+    in srgb,
+    var(--lastre-text-muted) 70%,
+    var(--lastre-link)
+  );
 }
 
 .bar-chart__hint {

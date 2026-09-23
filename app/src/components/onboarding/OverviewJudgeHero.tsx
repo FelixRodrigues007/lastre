@@ -14,7 +14,12 @@ export function OverviewJudgeHero() {
         </h2>
         <p className="judge-hero__lead">{t("onboarding.judge.lead")}</p>
       </div>
-      <ActionLink variant="primary" size="md" className="route-cta judge-hero__cta" to="/process">
+      <ActionLink
+        variant="primary"
+        size="md"
+        className="route-cta judge-hero__cta"
+        to="/process"
+      >
         <BtnIcon icon="process">{t("onboarding.judge.cta")}</BtnIcon>
       </ActionLink>
     </section>

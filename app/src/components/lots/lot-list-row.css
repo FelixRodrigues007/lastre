@@ -48,12 +48,11 @@
 }
 
 .lot-list-row:hover {
-  background:
-    linear-gradient(
-      90deg,
-      var(--lastre-fill-trust) 0%,
-      color-mix(in srgb, var(--app-fill-hover) 85%, transparent) 100%
-    );
+  background: linear-gradient(
+    90deg,
+    var(--lastre-fill-trust) 0%,
+    color-mix(in srgb, var(--app-fill-hover) 85%, transparent) 100%
+  );
 }
 
 .lot-list-row:active {
@@ -66,7 +65,11 @@
 }
 
 .lot-list-row--selected:hover {
-  background: color-mix(in srgb, var(--lastre-fill-brand) 85%, var(--lastre-fill-trust));
+  background: color-mix(
+    in srgb,
+    var(--lastre-fill-brand) 85%,
+    var(--lastre-fill-trust)
+  );
 }
 
 .lot-list-row__thumb {

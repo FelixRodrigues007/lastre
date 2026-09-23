@@ -147,7 +147,7 @@
 
 .audit-cards {
   display: none;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.875rem;
   width: 100%;
 }
@@ -157,7 +157,9 @@
   color: inherit;
   text-decoration: none;
   border-radius: var(--panel-radius);
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .audit-cards__link:hover {
@@ -186,6 +188,14 @@
   font-size: 0.8125rem;
   line-height: 1.45;
   color: var(--lastre-text-secondary);
-  border-color: color-mix(in srgb, var(--lastre-link) 28%, var(--lastre-border-subtle));
-  background: color-mix(in srgb, var(--lastre-link) 6%, var(--lastre-bg-surface));
+  border-color: color-mix(
+    in srgb,
+    var(--lastre-link) 28%,
+    var(--lastre-border-subtle)
+  );
+  background: color-mix(
+    in srgb,
+    var(--lastre-link) 6%,
+    var(--lastre-bg-surface)
+  );
 }

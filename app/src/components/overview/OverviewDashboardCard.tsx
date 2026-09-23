@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
+import { Surface } from "../ui/Surface";
 import "./overview-dashboard-card.css";
 
 type OverviewDashboardCardProps = {
@@ -21,11 +22,18 @@ export function OverviewDashboardCard({
   className = "",
 }: OverviewDashboardCardProps) {
   return (
-    <section className={`overview-card ${className}`.trim()} aria-label={title}>
+    <Surface
+      as="section"
+      elevation={2}
+      className={`overview-card ${className}`.trim()}
+      aria-label={title}
+    >
       <header className="overview-card__head">
         <div className="overview-card__titles">
           <h2 className="overview-card__title">{title}</h2>
-          {subtitle ? <p className="overview-card__subtitle">{subtitle}</p> : null}
+          {subtitle ? (
+            <p className="overview-card__subtitle">{subtitle}</p>
+          ) : null}
         </div>
         {linkTo ? (
           <Link
@@ -38,6 +46,6 @@ export function OverviewDashboardCard({
         ) : null}
       </header>
       <div className="overview-card__body">{children}</div>
-    </section>
+    </Surface>
   );
 }

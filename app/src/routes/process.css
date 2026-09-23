@@ -107,9 +107,19 @@
     ),
     linear-gradient(
       155deg,
-      color-mix(in srgb, var(--lastre-color-blue-700) 42%, var(--lastre-bg-canvas)) 0%,
+      color-mix(
+          in srgb,
+          var(--lastre-color-blue-700) 42%,
+          var(--lastre-bg-canvas)
+        )
+        0%,
       var(--lastre-bg-canvas) 42%,
-      color-mix(in srgb, var(--lastre-color-mirage-900) 65%, var(--lastre-bg-canvas)) 100%
+      color-mix(
+          in srgb,
+          var(--lastre-color-mirage-900) 65%,
+          var(--lastre-bg-canvas)
+        )
+        100%
     );
   animation: process-mesh-base-drift 11s ease-in-out infinite;
 }
@@ -245,13 +255,13 @@
   width: 100%;
   padding: 1rem 1.1rem 1.15rem;
   border-radius: 1.125rem;
-  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-trust) 55%, transparent);
-  background:
-    linear-gradient(
-      165deg,
-      color-mix(in srgb, var(--lastre-bg-surface) 68%, transparent) 0%,
-      color-mix(in srgb, var(--lastre-bg-elevated) 52%, transparent) 100%
-    );
+  border: var(--lastre-stroke-hairline) solid
+    color-mix(in srgb, var(--lastre-border-trust) 55%, transparent);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--lastre-bg-surface) 68%, transparent) 0%,
+    color-mix(in srgb, var(--lastre-bg-elevated) 52%, transparent) 100%
+  );
   backdrop-filter: blur(20px) saturate(1.15);
   box-shadow: var(--app-shadow-elevated);
 }

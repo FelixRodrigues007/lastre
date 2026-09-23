@@ -28,7 +28,11 @@
 }
 
 .session-menu--open .session-menu__trigger {
-  background: color-mix(in srgb, var(--app-surface-popover) 88%, var(--lastre-bg-surface));
+  background: color-mix(
+    in srgb,
+    var(--app-surface-popover) 88%,
+    var(--lastre-bg-surface)
+  );
   border-color: var(--app-border-popover);
   color: var(--lastre-text-primary);
 }
@@ -156,7 +160,11 @@
 
 .session-menu__persona--active {
   color: var(--lastre-text-primary);
-  background: color-mix(in srgb, var(--lastre-fill-brand) 75%, var(--app-fill-active));
+  background: color-mix(
+    in srgb,
+    var(--lastre-fill-brand) 75%,
+    var(--app-fill-active)
+  );
 }
 
 .session-menu__persona-radio {

@@ -66,12 +66,11 @@
 
 @media (hover: hover) and (pointer: fine) {
   .path-option:hover {
-    background:
-      linear-gradient(
-        95deg,
-        var(--lastre-fill-trust) 0%,
-        color-mix(in srgb, var(--lastre-fill-brand) 45%, transparent) 100%
-      );
+    background: linear-gradient(
+      95deg,
+      var(--lastre-fill-trust) 0%,
+      color-mix(in srgb, var(--lastre-fill-brand) 45%, transparent) 100%
+    );
     transform: translateX(4px);
     box-shadow: inset 0 0 0 0.5px var(--lastre-border-trust);
   }
@@ -128,7 +127,9 @@
 .path-option__chev {
   color: var(--lastre-text-muted);
   flex-shrink: 0;
-  transition: transform var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {

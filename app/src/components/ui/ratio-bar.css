@@ -21,7 +21,11 @@
 }
 
 .ratio-bar__segment--invalid {
-  background: linear-gradient(90deg, var(--lastre-danger), var(--lastre-danger));
+  background: linear-gradient(
+    90deg,
+    var(--lastre-danger),
+    var(--lastre-danger)
+  );
 }
 
 .ratio-bar__segment--accent {
