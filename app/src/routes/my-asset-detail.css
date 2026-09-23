@@ -38,12 +38,12 @@
 .my-assets-page .market-card--link:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 0 0 0.5px color-mix(in srgb, var(--lastro-brand-seal) 24%, transparent),
+    0 0 0 0.5px color-mix(in srgb, var(--lastre-link) 24%, transparent),
     0 8px 24px -12px rgba(0, 0, 0, 0.45);
 }
 
 .my-assets-page .market-card__cta-hint {
   margin-top: 0.65rem;
   font-size: var(--text-small);
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }

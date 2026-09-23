@@ -30,10 +30,10 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-color: var(--lastro-bg-primary);
+  background-color: var(--lastre-bg-canvas);
   background-image: radial-gradient(
     circle at center,
-    color-mix(in srgb, var(--lastro-text-muted) 14%, transparent) 0.55px,
+    color-mix(in srgb, var(--lastre-text-muted) 14%, transparent) 0.55px,
     transparent 0.56px
   );
   background-size: 1.375rem 1.375rem;
@@ -83,7 +83,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: var(--lastro-bg-primary);
+  background: var(--lastre-bg-canvas);
 }
 
 .process-page__mesh-base {
@@ -92,24 +92,24 @@
   background:
     radial-gradient(
       ellipse 85% 70% at 18% 42%,
-      color-mix(in srgb, var(--lastro-color-jade-500) 42%, transparent),
+      color-mix(in srgb, var(--lastre-color-blue-500) 42%, transparent),
       transparent 58%
     ),
     radial-gradient(
       ellipse 75% 65% at 82% 28%,
-      color-mix(in srgb, var(--lastro-color-seal-500) 34%, transparent),
+      color-mix(in srgb, var(--lastre-color-blue-500) 34%, transparent),
       transparent 55%
     ),
     radial-gradient(
       ellipse 90% 80% at 55% 92%,
-      color-mix(in srgb, var(--lastro-color-olive-800) 58%, transparent),
+      color-mix(in srgb, var(--lastre-color-mirage-800) 58%, transparent),
       transparent 62%
     ),
     linear-gradient(
       155deg,
-      color-mix(in srgb, var(--lastro-color-jade-700) 42%, var(--lastro-bg-primary)) 0%,
-      var(--lastro-bg-primary) 42%,
-      color-mix(in srgb, var(--lastro-color-olive-900) 65%, var(--lastro-bg-primary)) 100%
+      color-mix(in srgb, var(--lastre-color-blue-700) 42%, var(--lastre-bg-canvas)) 0%,
+      var(--lastre-bg-canvas) 42%,
+      color-mix(in srgb, var(--lastre-color-mirage-900) 65%, var(--lastre-bg-canvas)) 100%
     );
   animation: process-mesh-base-drift 11s ease-in-out infinite;
 }
@@ -129,7 +129,7 @@
   left: 0;
   width: min(52vw, 36rem);
   height: min(52vw, 36rem);
-  background: color-mix(in srgb, var(--lastro-color-lime-400) 58%, transparent);
+  background: color-mix(in srgb, var(--lastre-success) 58%, transparent);
   animation: process-mesh-organic-1 9s ease-in-out infinite;
 }
 
@@ -138,7 +138,7 @@
   right: 0;
   width: min(48vw, 32rem);
   height: min(48vw, 32rem);
-  background: color-mix(in srgb, var(--lastro-color-jade-400) 54%, transparent);
+  background: color-mix(in srgb, var(--lastre-color-blue-300) 54%, transparent);
   animation: process-mesh-organic-2 11s ease-in-out infinite;
   animation-delay: -2s;
 }
@@ -148,7 +148,7 @@
   left: 15%;
   width: min(56vw, 38rem);
   height: min(56vw, 38rem);
-  background: color-mix(in srgb, var(--lastro-color-seal-400) 46%, transparent);
+  background: color-mix(in srgb, var(--lastre-color-blue-300) 46%, transparent);
   animation: process-mesh-organic-3 13s ease-in-out infinite;
   animation-delay: -4s;
 }
@@ -158,7 +158,7 @@
   left: 28%;
   width: min(42vw, 28rem);
   height: min(42vw, 28rem);
-  background: color-mix(in srgb, var(--lastro-color-lime-300) 42%, transparent);
+  background: color-mix(in srgb, var(--lastre-success) 42%, transparent);
   animation: process-mesh-organic-4 10s ease-in-out infinite;
   animation-delay: -1s;
 }
@@ -168,7 +168,7 @@
   right: 18%;
   width: min(46vw, 30rem);
   height: min(46vw, 30rem);
-  background: color-mix(in srgb, var(--lastro-color-jade-300) 40%, transparent);
+  background: color-mix(in srgb, var(--lastre-color-blue-200) 40%, transparent);
   animation: process-mesh-organic-5 12s ease-in-out infinite;
   animation-delay: -3s;
 }
@@ -245,12 +245,12 @@
   width: 100%;
   padding: 1rem 1.1rem 1.15rem;
   border-radius: 1.125rem;
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-trust) 55%, transparent);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-trust) 55%, transparent);
   background:
     linear-gradient(
       165deg,
-      color-mix(in srgb, var(--lastro-bg-panel) 68%, transparent) 0%,
-      color-mix(in srgb, var(--lastro-bg-elevated) 52%, transparent) 100%
+      color-mix(in srgb, var(--lastre-bg-surface) 68%, transparent) 0%,
+      color-mix(in srgb, var(--lastre-bg-elevated) 52%, transparent) 100%
     );
   backdrop-filter: blur(20px) saturate(1.15);
   box-shadow: var(--app-shadow-elevated);

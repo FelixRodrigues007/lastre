@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { VerdictBadge } from "../proof/Badges";
@@ -43,14 +44,14 @@ export function ChainTimelineItem({ entry }: ChainTimelineItemProps) {
           <span className="mono-label">{t("chain.timeline.seal")}</span>
           <div className="chain-list__seal-row">
             <code>{shortHash(entry.providedSeal, 10, 6)}</code>
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               className={`chain-list__copy${copied ? " chain-list__copy--done" : ""}`}
               onClick={copySeal}
               aria-label={t("chain.timeline.copySeal")}
             >
               {copied ? t("chain.timeline.copied") : t("chain.timeline.copy")}
-            </button>
+            </Button>
           </div>
         </div>
       ) : null}

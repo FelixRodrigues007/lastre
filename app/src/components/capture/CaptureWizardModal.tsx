@@ -1,3 +1,6 @@
+import { TextField } from "../ui/TextField";
+import { SelectField } from "../ui/SelectField";
+import { Button } from "../ui/Button";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
@@ -294,14 +297,14 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
               {t("capture.wizard.title")}
             </h2>
           </div>
-          <button
+          <Button variant="ghost" size="sm" iconOnly
             type="button"
             className="capture-wizard__close"
             onClick={handleClose}
             aria-label={t("capture.wizard.close")}
           >
             ×
-          </button>
+          </Button>
         </header>
 
         <div className={`capture-wizard__shell${step === "success" ? " capture-wizard__shell--success" : ""}`}>
@@ -373,20 +376,20 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                   </p>
                 </header>
                 <div className="capture-wizard__presets">
-                  <button
+                  <Button variant="secondary" size="md"
                     type="button"
                     className="capture-wizard__preset"
                     onClick={() => update(DEMO_VALID_CARBON_PATCH)}
                   >
                     {t("capture.wizard.presetValid")}
-                  </button>
-                  <button
+                  </Button>
+                  <Button variant="secondary" size="md"
                     type="button"
                     className="capture-wizard__preset capture-wizard__preset--warn"
                     onClick={() => update(DEMO_INVALID_CARBON_PATCH)}
                   >
                     {t("capture.wizard.presetInvalid")}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -396,34 +399,22 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                   <p className="capture-wizard__section-hint">{t("capture.wizard.section.identityHint")}</p>
                 </header>
                 <div className="capture-wizard__fields capture-wizard__fields--2">
-                  <label className={errors.category ? "has-error" : undefined}>
-                    <span className="capture-wizard__label">{t("capture.wizard.field.category")}</span>
-                    <select
-                      value={form.category}
-                      onChange={(e) =>
+                  <SelectField label={t("capture.wizard.field.category")}
+value={form.category}
+onChange={(e) =>
                         update({ category: e.target.value as CaptureFormState["category"] })
-                      }
-                    >
+                      }>
                       <option value="mineral">{t("capture.wizard.category.mineral")}</option>
                       <option value="carbon_credit">{t("capture.wizard.category.carbon")}</option>
-                    </select>
-                  </label>
+                    </SelectField>
 
-                  <label className={`capture-wizard__field--wide${errors.assetId ? " has-error" : ""}`}>
-                    <span className="capture-wizard__label">{t("capture.wizard.field.assetId")}</span>
-                    <input value={form.assetId} onChange={(e) => update({ assetId: e.target.value })} />
-                    {fieldError("assetId") ? (
-                      <span className="capture-wizard__error">{fieldError("assetId")}</span>
-                    ) : null}
-                  </label>
+                  <TextField label={t("capture.wizard.field.assetId")} className="capture-wizard__field--wide" error={fieldError("assetId") ?? undefined}
+value={form.assetId}
+onChange={(e) => update({ assetId: e.target.value })} />
 
-                  <label className={`capture-wizard__field--wide${errors.operator ? " has-error" : ""}`}>
-                    <span className="capture-wizard__label">{t("capture.wizard.field.operator")}</span>
-                    <input value={form.operator} onChange={(e) => update({ operator: e.target.value })} />
-                    {fieldError("operator") ? (
-                      <span className="capture-wizard__error">{fieldError("operator")}</span>
-                    ) : null}
-                  </label>
+                  <TextField label={t("capture.wizard.field.operator")} className="capture-wizard__field--wide" error={fieldError("operator") ?? undefined}
+value={form.operator}
+onChange={(e) => update({ operator: e.target.value })} />
                 </div>
               </div>
 
@@ -433,47 +424,25 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                   <p className="capture-wizard__section-hint">{t("capture.wizard.section.originHint")}</p>
                 </header>
                 <div className="capture-wizard__fields capture-wizard__fields--2">
-                  <label className={`capture-wizard__field--wide${errors.site ? " has-error" : ""}`}>
-                    <span className="capture-wizard__label">{t("capture.wizard.field.site")}</span>
-                    <input value={form.site} onChange={(e) => update({ site: e.target.value })} />
-                    {fieldError("site") ? (
-                      <span className="capture-wizard__error">{fieldError("site")}</span>
-                    ) : null}
-                  </label>
+                  <TextField label={t("capture.wizard.field.site")} className="capture-wizard__field--wide" error={fieldError("site") ?? undefined}
+value={form.site}
+onChange={(e) => update({ site: e.target.value })} />
 
-                  <label className={errors.lat ? "has-error" : undefined}>
-                    <span className="capture-wizard__label">{t("capture.wizard.field.lat")}</span>
-                    <input
-                      type="number"
-                      step="0.000001"
-                      value={form.lat}
-                      onChange={(e) => update({ lat: parseFloat(e.target.value) })}
-                    />
-                    {fieldError("lat") ? (
-                      <span className="capture-wizard__error">{fieldError("lat")}</span>
-                    ) : null}
-                  </label>
+                  <TextField label={t("capture.wizard.field.lat")} error={fieldError("lat") ?? undefined}
+type="number"
+step="0.000001"
+value={form.lat}
+onChange={(e) => update({ lat: parseFloat(e.target.value) })} />
 
-                  <label className={errors.lng ? "has-error" : undefined}>
-                    <span className="capture-wizard__label">{t("capture.wizard.field.lng")}</span>
-                    <input
-                      type="number"
-                      step="0.000001"
-                      value={form.lng}
-                      onChange={(e) => update({ lng: parseFloat(e.target.value) })}
-                    />
-                    {fieldError("lng") ? (
-                      <span className="capture-wizard__error">{fieldError("lng")}</span>
-                    ) : null}
-                  </label>
+                  <TextField label={t("capture.wizard.field.lng")} error={fieldError("lng") ?? undefined}
+type="number"
+step="0.000001"
+value={form.lng}
+onChange={(e) => update({ lng: parseFloat(e.target.value) })} />
 
-                  <label className={errors.capturedAtISO ? "has-error" : undefined}>
-                    <span className="capture-wizard__label">{t("capture.wizard.field.capturedAt")}</span>
-                    <input
-                      value={form.capturedAtISO}
-                      onChange={(e) => update({ capturedAtISO: e.target.value })}
-                    />
-                  </label>
+                  <TextField label={t("capture.wizard.field.capturedAt")}
+value={form.capturedAtISO}
+onChange={(e) => update({ capturedAtISO: e.target.value })} />
                 </div>
               </div>
 
@@ -485,76 +454,42 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                 <div className="capture-wizard__fields capture-wizard__fields--2">
                 {form.category === "mineral" ? (
                   <>
-                    <label className={errors.massGrams ? "has-error" : undefined}>
-                      <span className="capture-wizard__label">{t("capture.wizard.field.massGrams")}</span>
-                      <input
-                        type="number"
-                        value={form.massGrams ?? 100000}
-                        onChange={(e) => update({ massGrams: parseInt(e.target.value, 10) })}
-                      />
-                      {fieldError("massGrams") ? (
-                        <span className="capture-wizard__error">{fieldError("massGrams")}</span>
-                      ) : null}
-                    </label>
-                    <label>
-                      <span className="capture-wizard__label">{t("capture.wizard.field.mineral")}</span>
-                      <input
-                        value={form.mineral ?? ""}
-                        onChange={(e) => update({ mineral: e.target.value })}
-                      />
-                    </label>
+                    <TextField label={t("capture.wizard.field.massGrams")} error={fieldError("massGrams") ?? undefined}
+type="number"
+value={form.massGrams ?? 100000}
+onChange={(e) => update({ massGrams: parseInt(e.target.value, 10) })} />
+                    <TextField label={t("capture.wizard.field.mineral")}
+value={form.mineral ?? ""}
+onChange={(e) => update({ mineral: e.target.value })} />
                   </>
                 ) : (
                   <>
-                    <label className={errors.tonnesCO2e ? "has-error" : undefined}>
-                      <span className="capture-wizard__label">{t("capture.wizard.field.tonnes")}</span>
-                      <input
-                        type="number"
-                        value={form.tonnesCO2e ?? 45000}
-                        onChange={(e) => update({ tonnesCO2e: parseInt(e.target.value, 10) })}
-                      />
-                      {fieldError("tonnesCO2e") ? (
-                        <span className="capture-wizard__error">{fieldError("tonnesCO2e")}</span>
-                      ) : null}
-                    </label>
-                    <label>
-                      <span className="capture-wizard__label">{t("capture.wizard.field.creditType")}</span>
-                      <select
-                        value={form.creditType}
-                        onChange={(e) =>
+                    <TextField label={t("capture.wizard.field.tonnes")} error={fieldError("tonnesCO2e") ?? undefined}
+type="number"
+value={form.tonnesCO2e ?? 45000}
+onChange={(e) => update({ tonnesCO2e: parseInt(e.target.value, 10) })} />
+                    <SelectField label={t("capture.wizard.field.creditType")}
+value={form.creditType}
+onChange={(e) =>
                           update({
                             creditType: e.target.value as CaptureFormState["creditType"],
                           })
-                        }
-                      >
+                        }>
                         {CARBON_TYPES.map((type) => (
                           <option key={type} value={type}>
                             {type}
                           </option>
                         ))}
-                      </select>
-                    </label>
-                    <label>
-                      <span className="capture-wizard__label">{t("capture.wizard.field.vintage")}</span>
-                      <input
-                        value={form.vintage ?? ""}
-                        onChange={(e) => update({ vintage: e.target.value })}
-                      />
-                    </label>
-                    <label>
-                      <span className="capture-wizard__label">{t("capture.wizard.field.methodology")}</span>
-                      <input
-                        value={form.methodology ?? ""}
-                        onChange={(e) => update({ methodology: e.target.value })}
-                      />
-                    </label>
-                    <label className="capture-wizard__field--wide">
-                      <span className="capture-wizard__label">{t("capture.wizard.field.verifier")}</span>
-                      <input
-                        value={form.verifier ?? ""}
-                        onChange={(e) => update({ verifier: e.target.value })}
-                      />
-                    </label>
+                      </SelectField>
+                    <TextField label={t("capture.wizard.field.vintage")}
+value={form.vintage ?? ""}
+onChange={(e) => update({ vintage: e.target.value })} />
+                    <TextField label={t("capture.wizard.field.methodology")}
+value={form.methodology ?? ""}
+onChange={(e) => update({ methodology: e.target.value })} />
+                    <TextField label={t("capture.wizard.field.verifier")} className="capture-wizard__field--wide"
+value={form.verifier ?? ""}
+onChange={(e) => update({ verifier: e.target.value })} />
                   </>
                 )}
                 </div>
@@ -572,27 +507,27 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                 </header>
 
                 <div className="capture-wizard__media-toolbar">
-                  <button type="button" className="capture-wizard__tool" onClick={startCamera}>
+                  <Button variant="secondary" size="md" type="button" className="capture-wizard__tool" onClick={startCamera}>
                     <Icon name="capture" size={14} />
                     {t("capture.wizard.startCamera")}
-                  </button>
-                  <button
+                  </Button>
+                  <Button variant="secondary" size="md"
                     type="button"
                     className="capture-wizard__tool"
                     onClick={capturePhoto}
                     disabled={!cameraActive}
                   >
                     {t("capture.wizard.capturePhoto")}
-                  </button>
+                  </Button>
                   <label className="capture-wizard__tool capture-wizard__tool--upload">
                     <Icon name="download" size={14} />
                     {t("capture.wizard.uploadFile")}
                     <input type="file" accept="image/*,.pdf" onChange={handleFile} />
                   </label>
                   {cameraActive ? (
-                    <button type="button" className="capture-wizard__tool capture-wizard__tool--ghost" onClick={stopCamera}>
+                    <Button variant="secondary" size="md" type="button" className="capture-wizard__tool capture-wizard__tool--ghost" onClick={stopCamera}>
                       {t("capture.wizard.stopCamera")}
-                    </button>
+                    </Button>
                   ) : null}
                 </div>
 
@@ -700,10 +635,10 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
               </h3>
               <p className="capture-wizard__success-lead">{t("capture.wizard.success.lead")}</p>
               <div className="capture-wizard__success-actions">
-                <button type="button" className="route-cta" onClick={openLotDetail}>
+                <Button variant="primary" size="md" type="button" className="route-cta" onClick={openLotDetail}>
                   <BtnIcon icon="lots">{t("capture.wizard.success.lot")}</BtnIcon>
-                </button>
-                <button
+                </Button>
+                <Button variant="secondary" size="md"
                   type="button"
                   className="route-cta route-cta--ghost"
                   onClick={() => {
@@ -712,8 +647,8 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                   }}
                 >
                   {t("capture.wizard.success.process")}
-                </button>
-                <button
+                </Button>
+                <Button variant="secondary" size="md"
                   type="button"
                   className="route-cta route-cta--ghost"
                   onClick={() => {
@@ -722,7 +657,7 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                   }}
                 >
                   {t("capture.wizard.success.audit")}
-                </button>
+                </Button>
               </div>
             </section>
           ) : null}
@@ -734,9 +669,9 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
               <footer className="capture-wizard__footer">
                 <div className="capture-wizard__footer-start">
                   {step !== 1 ? (
-                    <button type="button" className="route-cta route-cta--ghost" onClick={goBack}>
+                    <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={goBack}>
                       {t("capture.wizard.back")}
-                    </button>
+                    </Button>
                   ) : null}
                 </div>
                 <p className="capture-wizard__footer-progress mono-label">
@@ -744,18 +679,18 @@ export function CaptureWizardModal({ open, onClose }: CaptureWizardModalProps) {
                 </p>
                 <div className="capture-wizard__footer-end">
                   {step === 3 ? (
-                    <button
+                    <Button variant="primary" size="md"
                       type="button"
                       className="route-cta"
                       onClick={submitToApp}
                       disabled={loading || !sealResult}
                     >
                       {t("capture.wizard.submit")}
-                    </button>
+                    </Button>
                   ) : (
-                    <button type="button" className="route-cta" onClick={goNext}>
+                    <Button variant="primary" size="md" type="button" className="route-cta" onClick={goNext}>
                       {t("capture.wizard.next")}
-                    </button>
+                    </Button>
                   )}
                 </div>
               </footer>

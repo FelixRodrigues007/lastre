@@ -9,8 +9,8 @@
   display: grid;
   gap: 0.875rem;
   padding: 1rem 1.125rem;
-  background: color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-surface) 88%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-bottom: none;
 }
 
@@ -22,17 +22,17 @@
 }
 
 .outcome-breakdown__total {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.125rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
 }
 
 .outcome-breakdown__kpis {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  background: color-mix(in srgb, var(--lastro-bg-panel) 88%, transparent);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-surface) 88%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-top: 0.5px solid var(--app-stroke-divider);
 }
 
@@ -68,25 +68,25 @@
 }
 
 .outcome-breakdown__kpi-label {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .outcome-breakdown__kpi-value {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.25rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
 }
 
 .outcome-breakdown__kpi--valid .outcome-breakdown__kpi-value {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .outcome-breakdown__kpi--invalid .outcome-breakdown__kpi-value {
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
 }

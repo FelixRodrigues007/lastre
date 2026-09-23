@@ -12,7 +12,7 @@
   border: 0.5px solid transparent;
   border-radius: 8px;
   background: transparent;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-family: inherit;
   text-align: left;
   cursor: pointer;
@@ -24,13 +24,13 @@
 
 .session-menu__trigger:hover {
   background: var(--app-fill-hover);
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .session-menu--open .session-menu__trigger {
-  background: color-mix(in srgb, var(--app-surface-popover) 88%, var(--lastro-bg-panel));
+  background: color-mix(in srgb, var(--app-surface-popover) 88%, var(--lastre-bg-surface));
   border-color: var(--app-border-popover);
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .session-menu__avatar {
@@ -53,17 +53,17 @@
 
 .session-menu__trigger-title {
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: -0.015em;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .session-menu__trigger-meta {
-  font-size: 0.625rem;
-  color: var(--lastro-text-secondary);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -112,12 +112,12 @@
 }
 
 .session-menu__field-label {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   padding-inline: 0.125rem;
 }
 
@@ -125,9 +125,9 @@
   display: grid;
   gap: 0.125rem;
   padding: 0.15rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 55%, transparent);
-  box-shadow: inset 0 0 0 0.5px var(--lastro-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 55%, transparent);
+  box-shadow: inset 0 0 0 0.5px var(--lastre-border-subtle);
 }
 
 .session-menu__persona {
@@ -137,9 +137,9 @@
   gap: 0.5rem;
   padding: 0.45rem 0.5rem;
   border: none;
-  border-radius: calc(var(--lastro-radius-sm) - 2px);
+  border-radius: calc(var(--lastre-radius-sm) - 2px);
   background: transparent;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-family: inherit;
   font-size: 0.8125rem;
   text-align: left;
@@ -151,12 +151,12 @@
 
 .session-menu__persona:hover {
   background: var(--app-fill-hover);
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .session-menu__persona--active {
-  color: var(--lastro-text-primary);
-  background: color-mix(in srgb, var(--lastro-fill-brand) 75%, var(--app-fill-active));
+  color: var(--lastre-text-primary);
+  background: color-mix(in srgb, var(--lastre-fill-brand) 75%, var(--app-fill-active));
 }
 
 .session-menu__persona-radio {
@@ -166,7 +166,7 @@
   width: 1rem;
   height: 1rem;
   border-radius: 999px;
-  border: 1px solid var(--lastro-border-strong);
+  border: 1px solid var(--lastre-border-strong);
   color: transparent;
   transition:
     border-color var(--dur-fast) var(--ease-out),
@@ -175,9 +175,9 @@
 }
 
 .session-menu__persona--active .session-menu__persona-radio {
-  border-color: var(--lastro-accent-brand);
-  background: color-mix(in srgb, var(--lastro-accent-brand) 18%, transparent);
-  color: var(--lastro-accent-brand);
+  border-color: var(--lastre-link);
+  background: color-mix(in srgb, var(--lastre-link) 18%, transparent);
+  color: var(--lastre-link);
 }
 
 .session-menu__persona-label {
@@ -192,21 +192,21 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.25rem;
   padding: 0.15rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 55%, transparent);
-  box-shadow: inset 0 0 0 0.5px var(--lastro-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 55%, transparent);
+  box-shadow: inset 0 0 0 0.5px var(--lastre-border-subtle);
 }
 
 .session-menu__segment-btn {
   min-height: 1.625rem;
   padding: 0.25rem 0.4rem;
   border: none;
-  border-radius: calc(var(--lastro-radius-sm) - 2px);
+  border-radius: calc(var(--lastre-radius-sm) - 2px);
   background: transparent;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-family: inherit;
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   cursor: pointer;
   transition:
     background var(--dur-fast) var(--ease-out),
@@ -214,20 +214,20 @@
 }
 
 .session-menu__segment-btn:hover {
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .session-menu__segment-btn--active {
   background: var(--app-surface-popover);
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   box-shadow:
-    inset 0 0 0 0.5px var(--lastro-border-strong),
+    inset 0 0 0 0.5px var(--lastre-border-strong),
     0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
 .session-menu__divider {
   height: 0.5px;
-  background: var(--lastro-border-strong);
+  background: var(--lastre-border-strong);
   opacity: 0.65;
 }
 
@@ -244,12 +244,12 @@
   width: 100%;
   padding: 0.45rem 0.5rem;
   border: none;
-  border-radius: var(--lastro-radius-sm);
+  border-radius: var(--lastre-radius-sm);
   background: transparent;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-family: inherit;
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   text-align: left;
   text-decoration: none;
   cursor: pointer;
@@ -260,7 +260,7 @@
 
 .session-menu__link:hover {
   background: var(--app-fill-hover);
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .session-menu__link-icon {
@@ -270,15 +270,15 @@
   width: 1.375rem;
   height: 1.375rem;
   border-radius: 6px;
-  color: var(--lastro-text-secondary);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 65%, transparent);
-  box-shadow: inset 0 0 0 0.5px var(--lastro-border-subtle);
+  color: var(--lastre-text-secondary);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 65%, transparent);
+  box-shadow: inset 0 0 0 0.5px var(--lastre-border-subtle);
 }
 
 .session-menu__link-icon--live {
-  color: var(--lastro-accent-trust);
-  background: var(--lastro-fill-trust);
-  box-shadow: inset 0 0 0 0.5px var(--lastro-border-trust);
+  color: var(--lastre-info);
+  background: var(--lastre-fill-trust);
+  box-shadow: inset 0 0 0 0.5px var(--lastre-border-trust);
 }
 
 .session-menu__link-copy {
@@ -290,7 +290,7 @@
 
 .session-menu__link-title {
   font-size: 0.8125rem;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -298,7 +298,7 @@
 
 .session-menu__link-meta {
   font-size: 0.6875rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -306,7 +306,7 @@
 
 .session-menu__link-arrow {
   opacity: 0.65;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .session-menu--collapsed .session-menu__trigger {

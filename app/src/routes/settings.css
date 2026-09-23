@@ -15,18 +15,18 @@
   align-items: center;
   min-height: 1.75rem;
   padding: 0.25rem 0.65rem;
-  border-radius: var(--lastro-radius-pill);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  border-radius: var(--lastre-radius-pill);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .settings-pill--valid {
-  border-color: color-mix(in srgb, var(--lastro-status-valid) 35%, transparent);
-  color: var(--lastro-status-valid);
+  border-color: color-mix(in srgb, var(--lastre-success) 35%, transparent);
+  color: var(--lastre-success);
 }
 
 .settings-limits-table {
@@ -40,20 +40,20 @@
 .settings-limits-table td {
   padding: 0.55rem 0.65rem;
   text-align: left;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .settings-limits-table th {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .settings-limits-table td:last-child {
-  font-family: var(--lastro-font-mono);
-  color: var(--lastro-text-secondary);
+  font-family: var(--lastre-font-mono);
+  color: var(--lastre-text-secondary);
 }
 
 .settings-card {
@@ -62,26 +62,26 @@
 }
 
 .settings-card__title {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
 }
 
 .settings-card__hint {
   font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.45;
 }
 
 .settings-card__hint code,
 .settings-card__status {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
 }
 
 .settings-card__status {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .settings-card__row {
@@ -96,18 +96,18 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.75rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   font-size: 0.875rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   cursor: pointer;
   transition: border-color var(--dur-fast) var(--ease-out);
 }
 
 .settings-radio:has(input:checked) {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
-  color: var(--lastro-text-primary);
+  border-color: color-mix(in srgb, var(--lastre-link) 45%, transparent);
+  background: color-mix(in srgb, var(--lastre-link) 8%, transparent);
+  color: var(--lastre-text-primary);
 }
 
 .settings-limits {
@@ -122,7 +122,7 @@
   gap: 0.75rem;
   font-size: var(--text-small);
   padding: 0.5rem 0;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .settings-limits div:last-child {
@@ -130,15 +130,15 @@
 }
 
 .settings-limits dt {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .settings-limits dd {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.8125rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }

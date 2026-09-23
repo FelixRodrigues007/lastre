@@ -1,3 +1,4 @@
+import { Button } from "./Button";
 import { useEffect, useId } from "react";
 import { createPortal } from "react-dom";
 import "./market-notice-modal.css";
@@ -46,9 +47,9 @@ export function MarketNoticeModal({
         </h3>
         <p className="market-notice__message">{message}</p>
         <div className="market-notice__actions">
-          <button type="button" className="route-cta" onClick={onClose}>
+          <Button variant="primary" size="md" type="button" className="route-cta" onClick={onClose}>
             OK
-          </button>
+          </Button>
         </div>
       </div>
     </div>,

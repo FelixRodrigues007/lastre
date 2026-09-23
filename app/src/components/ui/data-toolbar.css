@@ -28,7 +28,7 @@
 .view-toggle {
   display: inline-flex;
   border-radius: var(--app-radius-control);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   overflow: hidden;
 }
 
@@ -37,24 +37,14 @@
   padding: 0.25rem 0.65rem;
   border: none;
   background: transparent;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: 0.75rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   cursor: pointer;
 }
 
 .view-toggle__btn--active {
-  background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
-  color: var(--lastro-text-primary);
+  background: color-mix(in srgb, var(--lastre-link) 10%, transparent);
+  color: var(--lastre-text-primary);
   box-shadow: var(--segment-active-shadow);
-}
-
-.sort-select {
-  min-height: 1.875rem;
-  padding: 0.25rem 0.55rem;
-  border-radius: var(--app-radius-control);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
-  color: var(--lastro-text-secondary);
-  font-size: 0.75rem;
 }

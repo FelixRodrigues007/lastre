@@ -1,5 +1,6 @@
+import { ActionLink } from "../ui/ActionLink";
+import { Button } from "../ui/Button";
 import { useEffect, useId } from "react";
-import { Link } from "react-router-dom";
 import { MarketplaceAssetBadge } from "./MarketplaceAssetBadge";
 import { shortHash } from "../../lib/format";
 import type { EnrichedAsset } from "../../lib/marketplaceTypes";
@@ -51,14 +52,14 @@ export function MarketMapDrawer({ asset, onClose }: MarketMapDrawerProps) {
               <span className="mono-label">{assetId}</span>
             </p>
           </div>
-          <button
+          <Button variant="ghost" size="sm" iconOnly
             type="button"
             className="market-map-drawer__close"
             onClick={onClose}
             aria-label="Close preview"
           >
             ×
-          </button>
+          </Button>
         </header>
 
         <div className="market-map-drawer__seal-row">
@@ -72,12 +73,12 @@ export function MarketMapDrawer({ asset, onClose }: MarketMapDrawerProps) {
         </p>
 
         <div className="market-map-drawer__actions">
-          <Link className="route-cta" to={`/lots?lot=${encodeURIComponent(assetId)}`}>
+          <ActionLink variant="primary" size="md" className="route-cta" to={`/lots?lot=${encodeURIComponent(assetId)}`}>
             Ver evidências
-          </Link>
-          <Link className="route-cta route-cta--ghost" to={`/marketplace/${encodeURIComponent(assetId)}`}>
+          </ActionLink>
+          <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={`/marketplace/${encodeURIComponent(assetId)}`}>
             Open asset page
-          </Link>
+          </ActionLink>
         </div>
       </aside>
     </div>

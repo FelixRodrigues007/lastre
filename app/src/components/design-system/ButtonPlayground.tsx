@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button, type ButtonProps } from "../ui/Button";
 import { TextField } from "../ui/TextField";
 import { Icon } from "../ui/Icon";
@@ -11,6 +11,7 @@ export function ButtonPlayground({
   onCopy: (value: string, label?: string) => void;
   onAction: () => void;
 }) {
+  const id = useId();
   const [variant, setVariant] =
     useState<NonNullable<ButtonProps["variant"]>>("primary");
   const [size, setSize] = useState<NonNullable<ButtonProps["size"]>>("md");
@@ -22,9 +23,10 @@ export function ButtonPlayground({
   return (
     <div className="ds-playground">
       <div className="ds-playground__controls">
-        <label className="ds-select">
-          Hierarquia
+        <div className="ds-select">
+          <label htmlFor={`${id}-variant`}>Hierarquia</label>
           <select
+            id={`${id}-variant`}
             value={variant}
             onChange={(e) => setVariant(e.target.value as typeof variant)}
           >
@@ -33,10 +35,11 @@ export function ButtonPlayground({
             <option value="ghost">Ghost</option>
             <option value="danger">Crítico</option>
           </select>
-        </label>
-        <label className="ds-select">
-          Tamanho
+        </div>
+        <div className="ds-select">
+          <label htmlFor={`${id}-size`}>Tamanho</label>
           <select
+            id={`${id}-size`}
             value={size}
             onChange={(e) => setSize(e.target.value as typeof size)}
           >
@@ -44,15 +47,19 @@ export function ButtonPlayground({
             <option value="md">Padrão · 44px</option>
             <option value="lg">Amplo · 52px</option>
           </select>
-        </label>
-        <label className="ds-select">
-          Estado do botão
-          <select value={state} onChange={(e) => setState(e.target.value)}>
+        </div>
+        <div className="ds-select">
+          <label htmlFor={`${id}-state`}>Estado do botão</label>
+          <select
+            id={`${id}-state`}
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+          >
             <option value="default">Disponível</option>
             <option value="loading">Carregando</option>
             <option value="disabled">Desabilitado</option>
           </select>
-        </label>
+        </div>
         <TextField
           label="Rótulo do botão"
           value={label}

@@ -1,3 +1,5 @@
+import { SelectField } from "../components/ui/SelectField";
+import { ActionLink } from "../components/ui/ActionLink";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCallback, useMemo, useState } from "react";
 import { CaptureWizardTrigger } from "../components/capture/CaptureWizardTrigger";
@@ -94,8 +96,8 @@ export function Lots() {
             <CaptureWizardTrigger className="route-cta route-cta--ghost">
               Capture / New
             </CaptureWizardTrigger>
-            <Link className="route-cta" to="/process">Run batch</Link>
-            <Link className="route-cta" to="/marketplace">Marketplace</Link>
+            <ActionLink variant="primary" size="md" className="route-cta" to="/process">Run batch</ActionLink>
+            <ActionLink variant="primary" size="md" className="route-cta" to="/marketplace">Marketplace</ActionLink>
           </>
         }
       />
@@ -124,7 +126,8 @@ export function Lots() {
               }
               actions={
                 <>
-                  <select
+                  <SelectField
+                    label="Sort lots" hideLabel
                     className="sort-select"
                     value={sort}
                     onChange={(e) => setSort(e.target.value as SortKey)}
@@ -134,7 +137,7 @@ export function Lots() {
                     <option value="quantity">Sort: Quantity</option>
                     <option value="verdict">Sort: Verdict</option>
                     <option value="attested">Sort: Attested</option>
-                  </select>
+                  </SelectField>
                   <ViewToggle value={view} onChange={setView} />
                 </>
               }

@@ -75,7 +75,7 @@ export function Settings() {
               {tab === "general" ? (
                 <section className="panel settings-card">
                   <h2 className="settings-card__title">Theme</h2>
-                  <p className="settings-card__hint">Olive palette · dark default</p>
+                  <p className="settings-card__hint">Mirage, Blue and Gold · light and dark</p>
                   <div className="settings-card__row">
                     <label className="settings-radio">
                       <input

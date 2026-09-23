@@ -4,9 +4,9 @@
   gap: 0.35rem;
   margin-bottom: 1rem;
   padding: 0.65rem 0.75rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 35%, transparent);
 }
 
 .process-pipeline__step {
@@ -14,21 +14,21 @@
   gap: 0.25rem;
   justify-items: center;
   text-align: center;
-  color: var(--lastro-text-muted);
-  font-size: 0.625rem;
-  font-weight: var(--lastro-weight-medium);
+  color: var(--lastre-text-muted);
+  font-size: 0.6875rem;
+  font-weight: var(--lastre-weight-medium);
 }
 
 .process-pipeline__step--active {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-pipeline__step--done {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .process-pipeline__step--pending {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-pipeline__dot {
@@ -50,8 +50,8 @@
   margin-top: 1rem;
   padding: 0.75rem 1rem;
   border-radius: var(--panel-radius);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
-  background: color-mix(in srgb, var(--lastro-bg-panel) 94%, #000);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-surface) 94%, #000);
   box-shadow: var(--app-shadow-panel);
 }
 
@@ -63,7 +63,7 @@
 .process-sticky-summary__note {
   margin: 0;
   font-size: 0.75rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   max-width: 42ch;
 }
 
@@ -76,10 +76,10 @@
 
 .process-sticky-summary__text {
   font-size: 0.8125rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .process-sticky-summary__text strong {
-  color: var(--lastro-text-primary);
-  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastre-text-primary);
+  font-weight: var(--lastre-weight-semibold);
 }

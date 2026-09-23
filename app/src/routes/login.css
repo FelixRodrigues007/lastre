@@ -10,9 +10,9 @@
 
 .login__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.375rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.03em;
   line-height: 1.25;
 }

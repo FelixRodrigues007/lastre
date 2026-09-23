@@ -11,25 +11,25 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .breadcrumbs__item a {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   transition: color var(--dur-fast) var(--ease-out);
 }
 
 .breadcrumbs__item a:hover {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .breadcrumbs__item--current {
-  color: var(--lastro-text-primary);
-  font-family: var(--lastro-font-mono);
+  color: var(--lastre-text-primary);
+  font-family: var(--lastre-font-mono);
   font-size: 0.75rem;
 }
 
 .breadcrumbs__sep {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   opacity: 0.6;
 }

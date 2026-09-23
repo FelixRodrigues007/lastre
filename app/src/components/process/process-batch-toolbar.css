@@ -12,8 +12,8 @@
   gap: 0.75rem;
   margin-top: auto;
   padding: 0.85rem;
-  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-panel) 96%, transparent);
+  border-top: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-surface) 96%, transparent);
 }
 
 .process-toolbar--sidebar .process-toolbar__actions {
@@ -41,14 +41,14 @@
 
 .process-toolbar__step {
   margin: 0;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-toolbar__label {
   margin: 0;
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-primary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-primary);
 }
 
 .process-decider-toggle {
@@ -66,29 +66,6 @@
 
 .process-toolbar__run {
   min-width: 11rem;
-  min-height: 2.5rem;
-  padding-inline: 1.25rem;
-  border: 0;
-  background: var(--lastro-brand-seal);
-  color: var(--lastro-bg-primary, #0a0f0c);
-  font-size: 0.875rem;
-  font-weight: var(--lastro-weight-semibold);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 1px 3px rgba(0, 0, 0, 0.22);
-}
-
-.process-toolbar__run:hover:not(:disabled) {
-  filter: brightness(1.06);
-}
-
-.process-toolbar__run:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.process-toolbar__repeat {
-  min-height: 2.5rem;
 }
 
 .process-toolbar__progress {
@@ -99,8 +76,8 @@
 
 .process-toolbar__progress-track {
   height: 4px;
-  border-radius: var(--lastro-radius-pill);
-  background: color-mix(in srgb, var(--lastro-text-muted) 16%, transparent);
+  border-radius: var(--lastre-radius-pill);
+  background: color-mix(in srgb, var(--lastre-text-muted) 16%, transparent);
   overflow: hidden;
 }
 
@@ -108,7 +85,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--lastro-brand-seal);
+  background: var(--lastre-link);
   transition: width var(--dur-slow) var(--ease-out);
 }
 
@@ -120,7 +97,7 @@
 .process-toolbar__progress-label {
   margin: 0;
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-toolbar__error {
@@ -133,7 +110,7 @@
 .process-toolbar__error-msg {
   margin: 0;
   font-size: 0.75rem;
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
 }
 
 @keyframes process-toolbar-indeterminate {

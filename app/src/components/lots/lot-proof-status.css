@@ -12,7 +12,7 @@
 .lot-proof-status__role {
   margin: 0;
   font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.45;
 }
 
@@ -21,7 +21,7 @@
   gap: 0.45rem;
   margin: 0;
   padding-top: 0.5rem;
-  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-top: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .lot-proof-status__facts div {
@@ -30,33 +30,33 @@
 }
 
 .lot-proof-status__facts dt {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .lot-proof-status__facts dd {
   margin: 0;
   font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .lot-proof-status__rail {
   display: grid;
   gap: 0.5rem;
   padding-top: 0.5rem;
-  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-top: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .lot-proof-status__rail-label {
   margin: 0;
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .lot-proof-status__rail .proof-rail {
@@ -85,9 +85,9 @@
 .lot-proof-status__section-label {
   margin: 0 0 0.5rem;
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.01em;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .lot-proof-status__group {
@@ -95,8 +95,8 @@
   margin: 0;
   border-radius: 12px;
   overflow: hidden;
-  background: color-mix(in srgb, var(--lastro-bg-primary) 55%, transparent);
-  border: 0.5px solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 55%, transparent);
+  border: 0.5px solid var(--lastre-border-subtle);
 }
 
 .lot-proof-status__group > div {
@@ -105,7 +105,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.7rem 1rem;
-  border-bottom: 0.5px solid var(--lastro-border-subtle);
+  border-bottom: 0.5px solid var(--lastre-border-subtle);
 }
 
 .lot-proof-status__group > div:last-child {
@@ -114,12 +114,12 @@
 
 .lot-proof-status__group dt {
   margin: 0;
-  font-family: var(--lastro-font-body);
+  font-family: var(--lastre-font-body);
   font-size: 0.9375rem;
-  font-weight: var(--lastro-weight-regular);
+  font-weight: var(--lastre-weight-regular);
   letter-spacing: -0.01em;
   text-transform: none;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   flex-shrink: 0;
 }
 
@@ -127,7 +127,7 @@
   margin: 0;
   font-size: 0.9375rem;
   letter-spacing: -0.01em;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   text-align: right;
   word-break: break-word;
 }
@@ -145,28 +145,8 @@
 .lot-proof-status--drawer .lot-proof-status__actions .route-cta {
   width: 100%;
   justify-content: center;
-  min-height: 2.75rem;
-  border-radius: 12px;
-  font-size: 0.9375rem;
-}
-
-.lot-proof-status--drawer .lot-proof-status__actions .route-cta:not(.route-cta--ghost) {
-  background: var(--lastro-brand-seal);
-  color: #fff;
-  box-shadow: none;
-}
-
-.lot-proof-status--drawer .lot-proof-status__actions .route-cta--ghost {
-  min-height: auto;
-  padding: 0.35rem 0.5rem;
-  border: none;
-  background: transparent;
-  color: var(--lastro-brand-seal);
-  font-size: 0.875rem;
-  font-weight: var(--lastro-weight-medium);
 }
 
 .lot-proof-status--drawer .lot-proof-status__actions .route-cta--ghost:hover {
-  background: transparent;
   text-decoration: underline;
 }

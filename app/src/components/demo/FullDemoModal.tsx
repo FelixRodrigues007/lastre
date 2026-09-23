@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { ActionLink } from "../ui/ActionLink";
+import { Button } from "../ui/Button";
 
 export type FullDemoStep = {
   label: string;
@@ -45,9 +46,9 @@ export function FullDemoModal({
             </p>
           </div>
           {onClose ? (
-            <button type="button" className="btn small ghost" onClick={onClose}>
+            <Button variant="secondary" size="md" type="button" className="btn small ghost" onClick={onClose}>
               Hide
-            </button>
+            </Button>
           ) : null}
         </div>
 
@@ -75,9 +76,9 @@ export function FullDemoModal({
 
         {primaryAction ? (
           <div className="full-demo-actions">
-            <Link className="route-cta" to={primaryAction.to}>
+            <ActionLink variant="primary" size="md" className="route-cta" to={primaryAction.to}>
               {primaryAction.label}
-            </Link>
+            </ActionLink>
           </div>
         ) : null}
       </div>

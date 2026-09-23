@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { ActionLink } from "../ui/ActionLink";
 import type { AuditSummary } from "../../lib/types";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { BtnIcon } from "../ui/BtnIcon";
@@ -87,13 +87,13 @@ export function OverviewNextStep({ audit, lotCount }: OverviewNextStepProps) {
           <p className="overview-next__lead-hint">{copy.leadHint}</p>
         </div>
         <div className="overview-next__actions">
-          <Link className="route-cta" to={copy.ctaTo}>
+          <ActionLink variant="primary" size="md" className="route-cta" to={copy.ctaTo}>
             <BtnIcon icon={copy.ctaIcon}>{copy.ctaLabel}</BtnIcon>
-          </Link>
+          </ActionLink>
           {copy.secondary ? (
-            <Link className="route-cta route-cta--ghost" to={copy.secondary.to}>
+            <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={copy.secondary.to}>
               {copy.secondary.label}
-            </Link>
+            </ActionLink>
           ) : null}
         </div>
       </div>

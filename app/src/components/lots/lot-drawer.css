@@ -11,28 +11,28 @@
 }
 
 .lot-drawer {
-  --lot-drawer-accent: var(--lastro-text-muted);
+  --lot-drawer-accent: var(--lastre-text-muted);
   display: flex;
   flex-direction: column;
   width: min(26rem, 100vw);
   max-width: 100%;
   height: 100%;
   min-height: 0;
-  background: var(--lastro-gradient-surface-elevated);
-  border-inline-start: 0.5px solid color-mix(in srgb, var(--lastro-border-trust) 40%, var(--lastro-border-subtle));
+  background: var(--lastre-bg-elevated);
+  border-inline-start: 0.5px solid color-mix(in srgb, var(--lastre-border-trust) 40%, var(--lastre-border-subtle));
   box-shadow: var(--app-shadow-float);
 }
 
 .lot-drawer--valid {
-  --lot-drawer-accent: var(--lastro-accent-success);
+  --lot-drawer-accent: var(--lastre-success);
 }
 
 .lot-drawer--invalid {
-  --lot-drawer-accent: var(--lastro-accent-danger);
+  --lot-drawer-accent: var(--lastre-danger);
 }
 
 .lot-drawer--pending {
-  --lot-drawer-accent: var(--lastro-accent-trust);
+  --lot-drawer-accent: var(--lastre-info);
 }
 
 .lot-drawer__head {
@@ -40,8 +40,8 @@
   gap: 0.875rem;
   flex-shrink: 0;
   padding: 1rem 1.25rem 1.125rem;
-  border-bottom: 0.5px solid var(--lastro-border-subtle);
-  background: var(--lastro-gradient-surface-panel);
+  border-bottom: 0.5px solid var(--lastre-border-subtle);
+  background: var(--lastre-bg-surface);
 }
 
 .lot-drawer__head-top {
@@ -64,10 +64,10 @@
 .lot-drawer__kicker {
   margin: 0;
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .lot-drawer__title-row {
@@ -79,12 +79,12 @@
 
 .lot-drawer__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.125rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.03em;
   line-height: 1.2;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   word-break: break-word;
 }
 
@@ -93,15 +93,15 @@
   font-size: 0.875rem;
   line-height: 1.45;
   letter-spacing: -0.01em;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .lot-drawer--valid .lot-drawer__status {
-  color: color-mix(in srgb, var(--lastro-accent-success) 80%, var(--lastro-text-secondary));
+  color: color-mix(in srgb, var(--lastre-success) 80%, var(--lastre-text-secondary));
 }
 
 .lot-drawer--invalid .lot-drawer__status {
-  color: color-mix(in srgb, var(--lastro-accent-danger) 85%, var(--lastro-text-secondary));
+  color: color-mix(in srgb, var(--lastre-danger) 85%, var(--lastre-text-secondary));
 }
 
 .lot-drawer__meta-line {
@@ -109,7 +109,7 @@
   font-size: 0.8125rem;
   line-height: 1.4;
   letter-spacing: -0.01em;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .lot-drawer__close {
@@ -117,26 +117,7 @@
   align-items: center;
   justify-content: center;
   width: 1.875rem;
-  height: 1.875rem;
   flex-shrink: 0;
-  border: none;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--lastro-text-muted) 16%, transparent);
-  color: var(--lastro-text-secondary);
-  cursor: pointer;
-  transition:
-    background var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
-}
-
-.lot-drawer__close:hover {
-  background: color-mix(in srgb, var(--lastro-text-muted) 24%, transparent);
-  color: var(--lastro-text-primary);
-}
-
-.lot-drawer__close:active {
-  transform: scale(0.97);
 }
 
 .lot-drawer__body {
@@ -146,7 +127,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 1.125rem 1.25rem 1.75rem;
-  background: var(--lastro-bg-elevated);
+  background: var(--lastre-bg-elevated);
   scrollbar-gutter: stable;
 }
 
@@ -161,7 +142,7 @@
   font-size: 0.875rem;
   line-height: 1.5;
   letter-spacing: -0.01em;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 /* Flat panels in comparison / technical */
@@ -188,7 +169,7 @@
 }
 
 .lot-drawer .field-diff__table-wrap {
-  border: 0.5px solid var(--lastro-border-subtle);
+  border: 0.5px solid var(--lastre-border-subtle);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -204,10 +185,10 @@
 
 .lot-drawer .evidence-section .section-head .mono-label {
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.01em;
   text-transform: none;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .lot-drawer .evidence-section__lead {
@@ -215,21 +196,21 @@
   font-size: 0.8125rem;
   line-height: 1.45;
   letter-spacing: -0.01em;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .lot-drawer .artifact-panel {
   gap: 0;
   border-radius: 12px;
   overflow: hidden;
-  border: 0.5px solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 55%, transparent);
+  border: 0.5px solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 55%, transparent);
 }
 
 .lot-drawer .artifact-panel__row {
   padding: 0.7rem 1rem;
   border-radius: 0;
-  border-bottom: 0.5px solid var(--lastro-border-subtle);
+  border-bottom: 0.5px solid var(--lastre-border-subtle);
   grid-template-columns: 6.5rem 1fr;
 }
 
@@ -238,11 +219,11 @@
 }
 
 .lot-drawer .artifact-panel__row dt {
-  font-family: var(--lastro-font-body);
+  font-family: var(--lastre-font-body);
   font-size: 0.875rem;
   text-transform: none;
   letter-spacing: -0.01em;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .lot-drawer .artifact-panel__row dd {
@@ -253,7 +234,7 @@
 .lot-drawer .artifact-panel__row--highlight {
   margin: 0;
   padding-inline: 1rem;
-  background: color-mix(in srgb, var(--lastro-status-invalid) 8%, transparent);
+  background: color-mix(in srgb, var(--lastre-danger) 8%, transparent);
 }
 
 .lot-drawer .copy-block__row {

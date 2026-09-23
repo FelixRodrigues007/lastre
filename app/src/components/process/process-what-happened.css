@@ -3,7 +3,7 @@
   gap: 0.85rem;
   margin-top: 1rem;
   padding: 1rem 1.125rem;
-  border-color: color-mix(in srgb, var(--lastro-status-valid) 25%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-success) 25%, transparent);
 }
 
 .process-what-happened__head {
@@ -13,18 +13,18 @@
 
 .process-what-happened__kicker {
   margin: 0;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-what-happened__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .process-what-happened__steps {
@@ -33,18 +33,18 @@
   display: grid;
   gap: 0.4rem;
   font-size: 0.8125rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.45;
 }
 
 .process-what-happened__steps strong {
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .process-what-happened__north-star {
   margin: 0;
   padding-top: 0.35rem;
-  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-top: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   font-size: 0.75rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }

@@ -1,7 +1,7 @@
 /* ClickUp-style: colored circle + label, no pill chrome */
 
 .status-badge {
-  --status-fg: var(--lastro-text-secondary);
+  --status-fg: var(--lastre-text-secondary);
 
   display: inline-flex;
   align-items: center;
@@ -9,7 +9,7 @@
   max-width: 100%;
   color: var(--status-fg);
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: -0.01em;
   line-height: 1.25;
   white-space: nowrap;
@@ -54,37 +54,37 @@
 }
 
 .status-badge--success {
-  --status-fg: var(--lastro-accent-success);
+  --status-fg: var(--lastre-success);
 }
 
 .status-badge--warning {
-  --status-fg: var(--lastro-accent-warn);
+  --status-fg: var(--lastre-warning);
 }
 
 .status-badge--info {
-  --status-fg: var(--lastro-accent-info);
+  --status-fg: var(--lastre-info);
 }
 
 .status-badge--danger {
-  --status-fg: var(--lastro-accent-danger);
+  --status-fg: var(--lastre-danger);
 }
 
 .status-badge--neutral {
-  --status-fg: var(--lastro-text-muted);
+  --status-fg: var(--lastre-text-muted);
 }
 
 [data-theme="light"] .status-badge--success {
-  --status-fg: var(--lastro-accent-success);
+  --status-fg: var(--lastre-success);
 }
 
 [data-theme="light"] .status-badge--warning {
-  --status-fg: var(--lastro-accent-warn);
+  --status-fg: var(--lastre-warning);
 }
 
 [data-theme="light"] .status-badge--info {
-  --status-fg: var(--lastro-accent-info);
+  --status-fg: var(--lastre-info);
 }
 
 [data-theme="light"] .status-badge--danger {
-  --status-fg: var(--lastro-accent-danger);
+  --status-fg: var(--lastre-danger);
 }

@@ -46,28 +46,28 @@
   inset-block: 0;
   inset-inline-start: 0;
   width: 3px;
-  background: color-mix(in srgb, var(--lastro-text-muted) 40%, transparent);
+  background: color-mix(in srgb, var(--lastre-text-muted) 40%, transparent);
 }
 
 .lot-card--valid::before {
-  background: var(--lastro-status-valid);
+  background: var(--lastre-success);
 }
 
 .lot-card--invalid::before {
-  background: var(--lastro-status-invalid);
+  background: var(--lastre-danger);
 }
 
 .lot-card--pending::before {
-  background: color-mix(in srgb, var(--lastro-brand-seal) 55%, transparent);
+  background: color-mix(in srgb, var(--lastre-link) 55%, transparent);
 }
 
 .lot-card:hover {
-  border-color: var(--lastro-border-strong);
+  border-color: var(--lastre-border-strong);
 }
 
 .lot-card--selected {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, var(--lastro-border-strong));
-  background: color-mix(in srgb, var(--lastro-brand-seal) 6%, var(--lastro-bg-panel));
+  border-color: color-mix(in srgb, var(--lastre-link) 45%, var(--lastre-border-strong));
+  background: color-mix(in srgb, var(--lastre-link) 6%, var(--lastre-bg-surface));
 }
 
 .lot-card__head {
@@ -78,9 +78,9 @@
 }
 
 .lot-card__mass {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.375rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.03em;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
@@ -88,24 +88,24 @@
 
 .lot-card__unit {
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-muted);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-muted);
 }
 
 .lot-card__title {
   margin-top: 0.2rem;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.75rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
 }
 
 .lot-card__title a:hover {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .lot-card__role {
   font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.45;
 }
 
@@ -113,7 +113,7 @@
   display: grid;
   gap: 0.4rem;
   padding-top: 0.35rem;
-  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-top: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .lot-card__meta div {
@@ -124,25 +124,25 @@
 }
 
 .lot-card__meta dt {
-  color: var(--lastro-text-muted);
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  color: var(--lastre-text-muted);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .lot-card__meta dd {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .lot-card__seal {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .lot-card__mismatch {
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
 }
 
 .lots-list {
@@ -158,5 +158,5 @@
   padding: 2rem 1rem;
   text-align: center;
   font-size: var(--text-small);
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }

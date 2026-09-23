@@ -3,8 +3,8 @@
   gap: 0.875rem;
   padding: 1rem 1.125rem;
   border-radius: var(--panel-radius);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: var(--lastro-gradient-surface-panel);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: var(--lastre-bg-surface);
   box-shadow: var(--app-shadow-panel);
 }
 
@@ -19,16 +19,16 @@
   margin: 0.2rem 0 0;
   font-size: 0.75rem;
   line-height: 1.4;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   max-width: 36ch;
 }
 
 .bar-chart__total {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.25rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   font-variant-numeric: tabular-nums;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .bar-chart__empty {
@@ -36,7 +36,7 @@
   padding: 1.25rem 0;
   text-align: center;
   font-size: var(--text-small);
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .bar-chart__list {
@@ -65,21 +65,21 @@
 
 .bar-chart__label {
   font-size: 0.75rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-secondary);
 }
 
 .bar-chart__value {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-variant-numeric: tabular-nums;
 }
 
 .bar-chart__track {
   height: 8px;
-  border-radius: var(--lastro-radius-pill);
-  background: color-mix(in srgb, var(--lastro-text-muted) 18%, transparent);
+  border-radius: var(--lastre-radius-pill);
+  background: color-mix(in srgb, var(--lastre-text-muted) 18%, transparent);
   overflow: hidden;
 }
 
@@ -103,33 +103,33 @@
 }
 
 .bar-chart__fill--valid {
-  background: var(--lastro-gradient-lime-shine);
+  background: var(--lastre-gradient-success);
 }
 
 .bar-chart__fill--invalid {
-  background: linear-gradient(90deg, var(--lastro-color-coral-500), var(--lastro-color-coral-400));
+  background: linear-gradient(90deg, var(--lastre-danger), var(--lastre-danger));
 }
 
 .bar-chart__fill--accent {
-  background: var(--lastro-gradient-cta);
+  background: var(--lastre-action-primary);
 }
 
 .bar-chart__fill--seal {
-  background: var(--lastro-gradient-seal-shine);
+  background: var(--lastre-gradient-accent-text);
 }
 
 .bar-chart__fill--trust {
-  background: var(--lastro-gradient-jade-shine);
+  background: var(--lastre-gradient-info);
 }
 
 .bar-chart__fill--muted {
-  background: color-mix(in srgb, var(--lastro-text-muted) 70%, var(--lastro-brand-seal));
+  background: color-mix(in srgb, var(--lastre-text-muted) 70%, var(--lastre-link));
 }
 
 .bar-chart__hint {
   margin: 0;
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
   line-height: 1.35;
 }
 

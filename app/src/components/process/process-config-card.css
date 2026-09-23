@@ -9,7 +9,7 @@
   gap: 0.5rem;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
-  border-bottom: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-subtle) 55%, transparent);
+  border-bottom: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 55%, transparent);
 }
 
 .process-config__section:last-of-type {
@@ -27,24 +27,24 @@
   gap: 0.35rem;
   padding-bottom: 0.85rem;
   margin-bottom: 0.15rem;
-  border-bottom: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-subtle) 45%, transparent);
+  border-bottom: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 45%, transparent);
 }
 
 .process-config__kicker {
   margin: 0;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.08em;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-config__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.625rem);
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.035em;
   line-height: 1.12;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .process-config__lead {
@@ -52,16 +52,16 @@
   font-size: 0.8125rem;
   line-height: 1.5;
   letter-spacing: -0.01em;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .process-config__section-title {
   margin: 0;
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 /* iOS segmented control */
@@ -71,7 +71,7 @@
   gap: 2px;
   padding: 2px;
   border-radius: 0.5rem;
-  background: color-mix(in srgb, var(--lastro-bg-primary) 65%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 65%, transparent);
 }
 
 .process-config-segment__btn {
@@ -80,9 +80,9 @@
   border: none;
   border-radius: calc(0.5rem - 2px);
   background: transparent;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   cursor: pointer;
   transition:
     background 180ms var(--ease-out),
@@ -91,15 +91,15 @@
 }
 
 .process-config-segment__btn:hover:not(:disabled) {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .process-config-segment__btn--active {
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 94%, transparent);
-  color: var(--lastro-text-primary);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 94%, transparent);
+  color: var(--lastre-text-primary);
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.14),
-    0 0 0 0.5px color-mix(in srgb, var(--lastro-text-primary) 8%, transparent);
+    0 0 0 0.5px color-mix(in srgb, var(--lastre-text-primary) 8%, transparent);
 }
 
 .process-config-segment__btn:disabled {
@@ -114,8 +114,8 @@
   padding: 0;
   border-radius: 0.625rem;
   overflow: hidden;
-  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
-  box-shadow: 0 0 0 var(--lastro-stroke-hairline) color-mix(in srgb, var(--lastro-border-subtle) 70%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 40%, transparent);
+  box-shadow: 0 0 0 var(--lastre-stroke-hairline) color-mix(in srgb, var(--lastre-border-subtle) 70%, transparent);
 }
 
 .process-config-lot-input {
@@ -129,7 +129,7 @@
 }
 
 .process-config-group > li + li .process-config-lot {
-  border-top: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-subtle) 50%, transparent);
+  border-top: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 50%, transparent);
 }
 
 .process-config-lot {
@@ -147,11 +147,11 @@
 }
 
 .process-config-lot:hover:not(.process-config-lot--disabled) {
-  background: color-mix(in srgb, var(--lastro-text-primary) 4%, transparent);
+  background: color-mix(in srgb, var(--lastre-text-primary) 4%, transparent);
 }
 
 .process-config-lot--selected {
-  background: color-mix(in srgb, var(--lastro-text-primary) 3%, transparent);
+  background: color-mix(in srgb, var(--lastre-text-primary) 3%, transparent);
 }
 
 .process-config-lot--disabled {
@@ -172,14 +172,14 @@
 
 .process-config-lot__name {
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: -0.015em;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .process-config-lot__sub {
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-config-lot__switch {
@@ -190,14 +190,14 @@
   display: block;
   width: 2.375rem;
   height: 1.375rem;
-  border-radius: var(--lastro-radius-pill);
-  background: color-mix(in srgb, var(--lastro-text-muted) 22%, transparent);
+  border-radius: var(--lastre-radius-pill);
+  background: color-mix(in srgb, var(--lastre-text-muted) 22%, transparent);
   padding: 2px;
   transition: background 200ms var(--ease-out);
 }
 
 .process-config-lot--selected .process-config-lot__switch-track {
-  background: var(--lastro-brand-seal);
+  background: var(--lastre-link);
 }
 
 .process-config-lot__switch-thumb {
@@ -231,55 +231,20 @@
 
 .process-config__progress-track {
   height: 3px;
-  border-radius: var(--lastro-radius-pill);
-  background: color-mix(in srgb, var(--lastro-text-muted) 14%, transparent);
+  border-radius: var(--lastre-radius-pill);
+  background: color-mix(in srgb, var(--lastre-text-muted) 14%, transparent);
   overflow: hidden;
 }
 
 .process-config__run {
   width: 100%;
-  min-height: 2.625rem;
-  border-radius: 0.625rem;
-  border: none;
-  font-size: 0.875rem;
-  font-weight: var(--lastro-weight-semibold);
-  letter-spacing: -0.01em;
-  background: var(--lastro-text-primary);
-  color: var(--lastro-bg-primary, #0a0f0c);
-  box-shadow: none;
-  transition:
-    transform var(--dur-fast) var(--ease-out),
-    filter var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-normal) var(--ease-out);
-}
-
-.process-config__run:not(:disabled) {
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.12),
-    0 0 0 0 color-mix(in srgb, var(--lastro-brand-seal) 0%, transparent);
-}
-
-.process-config__run:not(:disabled):hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-  box-shadow:
-    0 4px 14px -4px rgba(0, 0, 0, 0.35),
-    0 0 24px -8px color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
-}
-
-.process-config__run:not(:disabled):active {
-  transform: translateY(0);
-}
-
-.process-config__run:disabled {
-  opacity: 0.35;
 }
 
 .process-config__footnote {
   margin: 0;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   line-height: 1.45;
-  color: color-mix(in srgb, var(--lastro-text-muted) 85%, transparent);
+  color: color-mix(in srgb, var(--lastre-text-muted) 85%, transparent);
 }
 
 .process-config__error {
@@ -288,13 +253,13 @@
   padding: 0.65rem 0.75rem;
   margin-top: 0.85rem;
   border-radius: 0.625rem;
-  background: color-mix(in srgb, var(--lastro-status-invalid) 10%, transparent);
+  background: color-mix(in srgb, var(--lastre-danger) 10%, transparent);
 }
 
 .process-config__error p {
   margin: 0;
   font-size: 0.75rem;
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
 }
 
 .process-config__progress-fill {
@@ -303,9 +268,9 @@
   border-radius: inherit;
   background: linear-gradient(
     90deg,
-    var(--lastro-brand-seal) 0%,
-    color-mix(in srgb, var(--lastro-accent-brand) 88%, var(--lastro-brand-seal)) 50%,
-    var(--lastro-brand-seal) 100%
+    var(--lastre-link) 0%,
+    color-mix(in srgb, var(--lastre-link) 88%, var(--lastre-link)) 50%,
+    var(--lastre-link) 100%
   );
   background-size: 200% 100%;
   transition: width var(--dur-slow) var(--ease-out);
@@ -320,7 +285,7 @@
 .process-config__progress-label {
   margin: 0;
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 @keyframes process-config-indeterminate {
@@ -347,10 +312,6 @@
   .process-config__progress-fill {
     transition: none;
     animation: none;
-  }
-
-  .process-config__run:not(:disabled):hover {
-    transform: none;
   }
 
   .process-config__progress--indeterminate .process-config__progress-fill {

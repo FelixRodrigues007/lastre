@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { ActionLink } from "../ui/ActionLink";
 import type { BatchSummary } from "../../lib/types";
 import "./process-pipeline.css";
 
@@ -47,13 +47,13 @@ export function ProcessStickySummary({ summary, total }: ProcessStickySummaryPro
         </p>
       </div>
       <div className="process-sticky-summary__actions">
-        <Link className="route-cta route-cta--ghost" to="/audit">
+        <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/audit">
           Open audit log
-        </Link>
+        </ActionLink>
         {summary.tokenizable > 0 ? (
-          <Link className="route-cta" to="/marketplace">
+          <ActionLink variant="primary" size="md" className="route-cta" to="/marketplace">
             Claim demo representation
-          </Link>
+          </ActionLink>
         ) : null}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { ActionLink } from "../ui/ActionLink";
 
 type RoutePlaceholderProps = {
   phase: string;
@@ -27,9 +27,9 @@ export function RoutePlaceholder({ phase, blocks, cta }: RoutePlaceholderProps) 
 
       {cta ? (
         <p style={{ marginTop: "1.5rem" }}>
-          <Link className="route-cta" to={cta.to}>
+          <ActionLink variant="primary" size="md" className="route-cta" to={cta.to}>
             {cta.label}
-          </Link>
+          </ActionLink>
         </p>
       ) : null}
     </>

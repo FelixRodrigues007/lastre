@@ -17,9 +17,9 @@
 
 .judge-hero__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.125rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
 }
 
@@ -27,7 +27,7 @@
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .judge-hero__cta {

@@ -1,3 +1,5 @@
+import { Button } from "../ui/Button";
+import { InlineNotice } from "../ui/InlineNotice";
 import type { ReactNode } from "react";
 import { useLocaleContext } from "../../context/LocaleContext";
 import {
@@ -46,14 +48,13 @@ export function StatePanel({
 
   if (error) {
     return (
-      <div className="panel state-panel state-panel--error">
-        <p className="state-panel__text">{error}</p>
-        {onRetry ? (
-          <button type="button" className="route-cta" onClick={onRetry}>
+      <InlineNotice tone="danger" live title={t("common.loadError")} action={onRetry ? (
+          <Button variant="secondary" onClick={onRetry}>
             {t("common.retry")}
-          </button>
-        ) : null}
-      </div>
+          </Button>
+        ) : undefined}>
+        {error}
+      </InlineNotice>
     );
   }
 

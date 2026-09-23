@@ -20,8 +20,8 @@ export function avatarUrlForProfile(name: string, email: string): string {
   const params = new URLSearchParams({
     name,
     size: "64",
-    background: "3f6212",
-    color: "e2e8d8",
+    background: "1b1d24",
+    color: "f0f1f3",
     bold: "true",
   });
   params.set("email", email);

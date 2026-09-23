@@ -6,9 +6,9 @@
 .ratio-bar__track {
   display: flex;
   height: 6px;
-  border-radius: var(--lastro-radius-pill);
+  border-radius: var(--lastre-radius-pill);
   overflow: hidden;
-  background: color-mix(in srgb, var(--lastro-text-muted) 18%, transparent);
+  background: color-mix(in srgb, var(--lastre-text-muted) 18%, transparent);
 }
 
 .ratio-bar__segment {
@@ -17,19 +17,19 @@
 }
 
 .ratio-bar__segment--valid {
-  background: var(--lastro-gradient-lime-shine);
+  background: var(--lastre-gradient-success);
 }
 
 .ratio-bar__segment--invalid {
-  background: linear-gradient(90deg, var(--lastro-color-coral-500), var(--lastro-color-coral-400));
+  background: linear-gradient(90deg, var(--lastre-danger), var(--lastre-danger));
 }
 
 .ratio-bar__segment--accent {
-  background: var(--lastro-gradient-jade-shine);
+  background: var(--lastre-gradient-info);
 }
 
 .ratio-bar__segment--muted {
-  background: color-mix(in srgb, var(--lastro-text-muted) 55%, transparent);
+  background: color-mix(in srgb, var(--lastre-text-muted) 55%, transparent);
 }
 
 .ratio-bar__legend {
@@ -43,7 +43,7 @@
   align-items: center;
   gap: 0.4rem;
   font-size: 0.75rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .ratio-bar__dot {
@@ -54,25 +54,25 @@
 }
 
 .ratio-bar__dot--valid {
-  background: var(--lastro-accent-success);
+  background: var(--lastre-success);
 }
 
 .ratio-bar__dot--invalid {
-  background: var(--lastro-accent-danger);
+  background: var(--lastre-danger);
 }
 
 .ratio-bar__dot--accent {
-  background: var(--lastro-accent-trust);
+  background: var(--lastre-info);
 }
 
 .ratio-bar__dot--muted {
-  background: color-mix(in srgb, var(--lastro-text-muted) 55%, transparent);
+  background: color-mix(in srgb, var(--lastre-text-muted) 55%, transparent);
 }
 
 .ratio-bar__legend-value {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-semibold);
-  color: var(--lastro-text-primary);
+  font-weight: var(--lastre-weight-semibold);
+  color: var(--lastre-text-primary);
   margin-left: 0.15rem;
 }

@@ -11,13 +11,13 @@
 }
 
 .process-record__title {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .process-record__title a:hover {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-record__grid {
@@ -37,44 +37,44 @@
   gap: 0.45rem;
   align-content: start;
   padding: 0.75rem 0.8rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 35%, transparent);
 }
 
 .process-record__cell--agent {
-  border-top: 2px solid color-mix(in srgb, var(--lastro-status-accent, #8ba4c7) 55%, transparent);
+  border-top: 2px solid color-mix(in srgb, var(--lastre-info) 55%, transparent);
 }
 
 .process-record__cell--seal {
-  border-top: 2px solid var(--lastro-brand-seal);
+  border-top: 2px solid var(--lastre-link);
 }
 
 .process-record__cell--verdict {
-  border-top: 2px solid var(--lastro-status-valid);
+  border-top: 2px solid var(--lastre-success);
 }
 
 .process-record__cell--verdict:has([data-tone="danger"]) {
-  border-top-color: var(--lastro-status-invalid);
+  border-top-color: var(--lastre-danger);
 }
 
 .process-record__cell--casper {
-  border-top: 2px solid #6ea8d8;
+  border-top: 2px solid var(--lastre-info);
 }
 
 .process-record__label {
   margin: 0;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .process-record__sublabel {
   margin: -0.2rem 0 0;
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
   line-height: 1.35;
 }
 
@@ -90,15 +90,15 @@
 }
 
 .process-record__meta {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-record__detail {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .process-record__empty {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-record__seals {
@@ -107,43 +107,43 @@
 }
 
 .process-record__match--valid {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .process-record__match--invalid {
-  color: var(--lastro-status-invalid);
-  font-weight: var(--lastro-weight-medium);
+  color: var(--lastre-danger);
+  font-weight: var(--lastre-weight-medium);
 }
 
 .process-record__invalid-note {
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
   font-size: 0.6875rem;
 }
 
 .process-record__valid-note {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: 0.6875rem;
 }
 
 .process-record__tx {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .process-record__link {
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-secondary);
 }
 
 .process-record__link:hover {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-record__session {
   font-size: 0.75rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-style: italic;
   margin: 0.25rem 0;
 }

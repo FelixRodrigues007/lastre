@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { LastreWordmark } from "../ui/LastreWordmark";
 import type { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
@@ -30,6 +31,7 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <CaptureWizardProvider>
+      <a className="app-skip" href="#app-main">{t("common.skipContent")}</a>
       <div
         className="app-shell"
         data-sidebar-collapsed={sidebarCollapsed ? "true" : "false"}
@@ -48,14 +50,14 @@ export function AppShell({ children }: AppShellProps) {
                 <CaptureWizardTrigger className="app-topbar__capture route-cta route-cta--ghost" icon>
                   {t("capture.wizard.trigger")}
                 </CaptureWizardTrigger>
-                <button
+                <Button variant="ghost" size="sm" iconOnly
                   type="button"
                   className="app-topbar__cmd"
                   onClick={() => setOpen(true)}
                   aria-label="Open command palette"
                 >
                   <kbd>⌘K</kbd>
-                </button>
+                </Button>
               <a
                 className="app-topbar__status"
                 href={CSPR_PACKAGE_URL}
@@ -69,6 +71,8 @@ export function AppShell({ children }: AppShellProps) {
           </header>
 
           <main
+            id="app-main"
+            tabIndex={-1}
             className={`app-main${revealed ? " app-main--revealed" : ""}`}
             data-screen={screen}
           >

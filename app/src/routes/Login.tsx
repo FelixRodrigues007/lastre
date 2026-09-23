@@ -1,3 +1,5 @@
+import { TextField } from "../components/ui/TextField";
+import { Button } from "../components/ui/Button";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../components/onboarding/AuthLayout";
@@ -34,23 +36,23 @@ export function Login() {
         </header>
 
         <div className="login__actions">
-          <button type="button" className="entry-btn entry-btn--primary" onClick={() => finishAuth()}>
+          <Button variant="primary" size="md" type="button" className="entry-btn entry-btn--primary" onClick={() => finishAuth()}>
             <GoogleIcon size={18} />
             {t("onboarding.auth.google")}
-          </button>
+          </Button>
 
           <div className="entry-divider" aria-hidden="true">
             <span>{t("onboarding.auth.dividerOr")}</span>
           </div>
 
           {!showEmail ? (
-            <button
+            <Button variant="secondary" size="md"
               type="button"
               className="entry-btn entry-btn--ghost"
               onClick={() => setShowEmail(true)}
             >
               {t("onboarding.auth.emailLink")}
-            </button>
+            </Button>
           ) : (
             <form
               className="login__email"
@@ -64,19 +66,15 @@ export function Login() {
                 );
               }}
             >
-              <label className="entry-field">
-                {t("onboarding.auth.emailPlaceholder")}
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                />
-              </label>
-              <button type="submit" className="entry-btn entry-btn--primary">
+              <TextField label={t("onboarding.auth.emailPlaceholder")} className="entry-field"
+type="email"
+value={email}
+onChange={(e) => setEmail(e.target.value)}
+placeholder="you@example.com"
+autoComplete="email" />
+              <Button variant="primary" size="md" type="submit" className="entry-btn entry-btn--primary">
                 {t("onboarding.auth.emailSubmit")}
-              </button>
+              </Button>
             </form>
           )}
         </div>

@@ -65,7 +65,7 @@
     min-width: 0;
     padding: 0.375rem 0.5rem;
     border-radius: var(--app-radius-control);
-    color: var(--lastro-text-primary);
+    color: var(--lastre-text-primary);
     text-decoration: none;
     transition:
       opacity var(--dur-fast) var(--ease-out),
@@ -93,7 +93,7 @@
     border: none;
     border-radius: 7px;
     background: transparent;
-    color: var(--lastro-text-muted);
+    color: var(--lastre-text-muted);
     cursor: pointer;
     transition:
       background var(--dur-fast) var(--ease-out),
@@ -102,7 +102,7 @@
 
   .app-sidebar__collapse:hover {
     background: var(--app-fill-hover);
-    color: var(--lastro-text-primary);
+    color: var(--lastre-text-primary);
   }
 
   .app-sidebar--collapsed .app-sidebar__collapse {
@@ -111,12 +111,12 @@
   }
 
   .app-sidebar__name {
-    font-family: var(--lastro-font-display);
+    font-family: var(--lastre-font-display);
     font-size: 1.25rem;
-    font-weight: var(--lastro-weight-semibold);
+    font-weight: var(--lastre-weight-semibold);
     letter-spacing: -0.035em;
     line-height: 1;
-    color: var(--lastro-text-primary);
+    color: var(--lastre-text-primary);
     white-space: nowrap;
     overflow: hidden;
     opacity: 1;
@@ -149,7 +149,7 @@
     border: 0.5px solid var(--app-stroke-divider);
     border-radius: 9px;
     background: color-mix(in srgb, var(--app-fill-hover) 45%, transparent);
-    color: var(--lastro-text-muted);
+    color: var(--lastre-text-muted);
     font-family: inherit;
     font-size: 0.8125rem;
     text-align: left;
@@ -169,7 +169,7 @@
   .app-sidebar__search:hover {
     border-color: color-mix(in srgb, #fff 12%, transparent);
     background: var(--app-fill-hover);
-    color: var(--lastro-text-secondary);
+    color: var(--lastre-text-secondary);
   }
 
   .app-sidebar__search:focus-visible {

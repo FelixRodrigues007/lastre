@@ -6,15 +6,5 @@
 
 .persona-switcher__label {
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
-}
-
-.persona-switcher__select {
-  width: 100%;
-  padding: 0.4rem 0.5rem;
-  border: 1px solid var(--lastro-border-subtle);
-  border-radius: 6px;
-  font-size: 0.75rem;
-  color: var(--lastro-text-secondary);
-  background: var(--lastro-bg-primary);
+  color: var(--lastre-text-muted);
 }

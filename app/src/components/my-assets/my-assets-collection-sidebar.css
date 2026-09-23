@@ -13,17 +13,17 @@
 }
 
 .my-assets-sidebar__score {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.75rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   font-variant-numeric: tabular-nums;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
   letter-spacing: -0.03em;
 }
 
 .my-assets-sidebar__hint {
   font-size: var(--text-small);
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   margin-top: -0.35rem;
 }
 
@@ -38,14 +38,14 @@
 .my-assets-sidebar__stat-label {
   display: block;
   font-size: var(--text-small);
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   margin-bottom: 0.2rem;
 }
 
 .my-assets-sidebar__stat-value {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.125rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   font-variant-numeric: tabular-nums;
 }
 
@@ -53,7 +53,7 @@
   height: 6px;
   margin-top: 0.35rem;
   border-radius: var(--app-radius-pill);
-  background: color-mix(in srgb, var(--lastro-text-muted) 16%, transparent);
+  background: color-mix(in srgb, var(--lastre-text-muted) 16%, transparent);
   overflow: hidden;
 }
 
@@ -64,33 +64,33 @@
 }
 
 .my-assets-sidebar__fill--minted {
-  background: var(--lastro-brand-seal);
+  background: var(--lastre-link);
 }
 
 .my-assets-sidebar__fill--attested {
-  background: var(--lastro-status-valid);
+  background: var(--lastre-success);
 }
 
 .my-assets-sidebar__fill--carbon {
-  background: #4a7fd4;
+  background: var(--lastre-info);
 }
 
 .my-assets-sidebar__fill--mineral {
-  background: #c97a2e;
+  background: var(--lastre-warning);
 }
 
 .my-assets-sidebar__foot {
   display: grid;
   gap: 0.2rem;
   padding-top: 0.65rem;
-  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-top: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .my-assets-sidebar__account,
 .my-assets-sidebar__network {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .my-assets-page__layout {
@@ -114,13 +114,13 @@
 
 .my-assets-page__banner {
   padding: 0.75rem 1rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 22%, transparent);
+  background: color-mix(in srgb, var(--lastre-link) 8%, transparent);
   font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .my-assets-page__banner strong {
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }

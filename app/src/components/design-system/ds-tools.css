@@ -55,6 +55,9 @@
   outline: var(--lastre-focus-width) solid var(--lastre-focus);
   outline-offset: var(--lastre-focus-offset);
 }
+.ds .ds-choice input:focus-visible {
+  outline: none;
+}
 .ds-inspector__body {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(240px, 1fr);
@@ -110,9 +113,10 @@
 .ds-token-value small {
   font: 11px var(--lastre-font-mono);
 }
-.ds-token-row > svg {
+.ds-token-copy {
   flex-shrink: 0;
   color: var(--lastre-text-muted);
+  font-size: 11px;
 }
 .ds-token-preview {
   display: grid;
@@ -365,7 +369,7 @@
   .ds-token-value small {
     margin: 0;
   }
-  .ds-token-row > svg {
+  .ds-token-copy {
     display: none;
   }
   .ds-token-preview {

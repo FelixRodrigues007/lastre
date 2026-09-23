@@ -16,15 +16,15 @@
   height: 8px;
   margin-top: 1.35rem;
   border-radius: 50%;
-  background: var(--lastro-text-muted);
+  background: var(--lastre-text-muted);
 }
 
 .batch-stepper__item--done .batch-stepper__marker {
-  background: var(--lastro-status-valid);
+  background: var(--lastre-success);
 }
 
 .batch-stepper__item--running .batch-stepper__marker {
-  background: var(--lastro-brand-seal);
+  background: var(--lastre-link);
   animation: stepper-pulse 1.4s ease-in-out infinite;
 }
 
@@ -32,13 +32,13 @@
   padding: 2.5rem 1.5rem;
   text-align: center;
   border-style: dashed;
-  background: color-mix(in srgb, var(--lastro-bg-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 30%, transparent);
 }
 
 .batch-stepper__empty-title {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
 }
 
@@ -46,14 +46,14 @@
   margin-top: 0.45rem;
   max-width: 36ch;
   margin-inline: auto;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: var(--text-small);
   line-height: 1.5;
 }
 
 .batch-stepper__loading {
   padding: 1.25rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: var(--text-small);
 }
 

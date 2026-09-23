@@ -7,7 +7,7 @@
   padding: 0.95rem 0.65rem;
   margin: 0;
   border: 0;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-radius: 0;
   background: transparent;
   color: inherit;
@@ -36,22 +36,22 @@
 }
 
 .lot-list-row--valid::before {
-  background: var(--lastro-accent-success);
+  background: var(--lastre-success);
 }
 
 .lot-list-row--invalid::before {
-  background: var(--lastro-accent-danger);
+  background: var(--lastre-danger);
 }
 
 .lot-list-row--pending::before {
-  background: var(--lastro-accent-trust);
+  background: var(--lastre-info);
 }
 
 .lot-list-row:hover {
   background:
     linear-gradient(
       90deg,
-      var(--lastro-fill-trust) 0%,
+      var(--lastre-fill-trust) 0%,
       color-mix(in srgb, var(--app-fill-hover) 85%, transparent) 100%
     );
 }
@@ -61,12 +61,12 @@
 }
 
 .lot-list-row--selected {
-  background: var(--lastro-fill-brand);
-  box-shadow: inset 0 0 0 0.5px var(--lastro-border-brand);
+  background: var(--lastre-fill-brand);
+  box-shadow: inset 0 0 0 0.5px var(--lastre-border-brand);
 }
 
 .lot-list-row--selected:hover {
-  background: color-mix(in srgb, var(--lastro-fill-brand) 85%, var(--lastro-fill-trust));
+  background: color-mix(in srgb, var(--lastre-fill-brand) 85%, var(--lastre-fill-trust));
 }
 
 .lot-list-row__thumb {
@@ -77,9 +77,9 @@
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  background: var(--lastro-bg-elevated);
+  background: var(--lastre-bg-elevated);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, #fff 8%, var(--lastro-border-subtle)),
+    inset 0 0 0 1px color-mix(in srgb, #fff 8%, var(--lastre-border-subtle)),
     0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
@@ -110,15 +110,15 @@
 }
 
 .lot-list-row__tone--valid {
-  background: var(--lastro-status-valid);
+  background: var(--lastre-success);
 }
 
 .lot-list-row__tone--invalid {
-  background: var(--lastro-status-invalid);
+  background: var(--lastre-danger);
 }
 
 .lot-list-row__tone--pending {
-  background: color-mix(in srgb, var(--lastro-brand-seal) 75%, #fff);
+  background: color-mix(in srgb, var(--lastre-link) 75%, #fff);
 }
 
 .lot-list-row__body {
@@ -130,8 +130,8 @@
 
 .lot-list-row__title {
   font-size: 0.9375rem;
-  font-weight: var(--lastro-weight-semibold);
-  color: var(--lastro-text-primary);
+  font-weight: var(--lastre-weight-semibold);
+  color: var(--lastre-text-primary);
   line-height: 1.35;
   letter-spacing: -0.025em;
   display: -webkit-box;
@@ -142,7 +142,7 @@
 
 .lot-list-row__stats {
   font-size: 0.75rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.45;
   font-variant-numeric: tabular-nums;
   display: -webkit-box;
@@ -157,7 +157,7 @@
   gap: 0.35rem;
   min-width: 0;
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   line-height: 1.4;
 }
 
@@ -190,7 +190,7 @@
 }
 
 .lot-list-row__chevron {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   opacity: 0.28;
   flex-shrink: 0;
   transition:

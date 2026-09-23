@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { ActionLink } from "../ui/ActionLink";
+import { Button } from "../ui/Button";
 import { MarketSiteDashboard } from "./MarketSiteDashboard";
 import { MarketplaceAssetBadge } from "./MarketplaceAssetBadge";
 import { useLocaleContext } from "../../context/LocaleContext";
@@ -61,9 +62,9 @@ export function MarketAssetDetail({
     >
       <header className="market-detail__head">
         {layout === "page" ? null : (
-          <button type="button" className="market-detail__close" onClick={onClose} aria-label="Close detail">
+          <Button variant="ghost" size="sm" iconOnly type="button" className="market-detail__close" onClick={onClose} aria-label="Close detail">
             ×
-          </button>
+          </Button>
         )}
       </header>
 
@@ -128,17 +129,17 @@ export function MarketAssetDetail({
             <h3 id="market-actions-title" className="market-detail__section-label">Next steps</h3>
             <p className="market-detail__hint">Symbolic demo — no real ownership transfer.</p>
             <div className="market-detail__actions">
-              <Link className="route-cta" to={`/lots?lot=${encodeURIComponent(assetId)}`}>
+              <ActionLink variant="primary" size="md" className="route-cta" to={`/lots?lot=${encodeURIComponent(assetId)}`}>
                 Open evidence room
-              </Link>
+              </ActionLink>
               {asset.isValidProof && !asset.isMinted ? (
-                <button type="button" className="route-cta route-cta--ghost" onClick={onClaim}>
+                <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={onClaim}>
                   Claim (demo)
-                </button>
+                </Button>
               ) : null}
               {asset.isMinted && (persona === "defi" || persona === "buyer") && !locked ? (
                 <>
-                  <button
+                  <Button variant="secondary" size="md"
                     type="button"
                     className="route-cta route-cta--ghost"
                     onClick={onLock}
@@ -146,7 +147,7 @@ export function MarketAssetDetail({
                     aria-describedby={!asset.isValidProof ? lockReasonId : undefined}
                   >
                     {t("myassets.rail.lockCta")}
-                  </button>
+                  </Button>
                   {!asset.isValidProof ? (
                     <p id={lockReasonId} className="market-detail__hint market-detail__hint--danger">
                       {t("myassets.rail.lockDisabledReason")}
@@ -155,9 +156,9 @@ export function MarketAssetDetail({
                 </>
               ) : null}
               {asset.isMinted && locked ? (
-                <button type="button" className="route-cta route-cta--ghost" onClick={onRelease}>
+                <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={onRelease}>
                   {t("myassets.rail.releaseCta")}
-                </button>
+                </Button>
               ) : null}
             </div>
             <p className="market-detail__hint">{t("myassets.rail.collateralHonesty")}</p>

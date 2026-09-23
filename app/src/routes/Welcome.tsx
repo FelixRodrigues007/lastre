@@ -1,3 +1,4 @@
+import { Button } from "../components/ui/Button";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../components/onboarding/AuthLayout";
 import { Icon } from "../components/ui/Icon";
@@ -72,9 +73,9 @@ export function Welcome() {
           />
         </div>
 
-        <button type="button" className="path-select__skip" onClick={() => choose("explorer", "/")}>
+        <Button variant="ghost" size="md" type="button" className="path-select__skip" onClick={() => choose("explorer", "/")}>
           {t("onboarding.welcome.explore")}
-        </button>
+        </Button>
       </section>
     </AuthLayout>
   );

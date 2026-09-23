@@ -2,7 +2,7 @@
   position: relative;
   display: none;
   overflow: hidden;
-  background: var(--lastro-color-olive-900);
+  background: var(--lastre-color-mirage-900);
 }
 
 @media (min-width: 900px) {
@@ -27,13 +27,13 @@
   background:
     linear-gradient(
       90deg,
-      var(--lastro-bg-primary) 0%,
-      color-mix(in srgb, var(--lastro-bg-primary) 55%, transparent) 22%,
+      var(--lastre-bg-canvas) 0%,
+      color-mix(in srgb, var(--lastre-bg-canvas) 55%, transparent) 22%,
       transparent 55%
     ),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--lastro-bg-primary) 30%, transparent) 0%,
+      color-mix(in srgb, var(--lastre-bg-canvas) 30%, transparent) 0%,
       transparent 35%,
       color-mix(in srgb, #000 55%, transparent) 100%
     );
@@ -51,20 +51,20 @@
 
 .entry-visual__eyebrow {
   margin: 0;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--lastro-color-cream-200) 75%, transparent);
+  color: color-mix(in srgb, var(--lastre-color-mirage-100) 75%, transparent);
 }
 
 .entry-visual__quote {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: -0.02em;
   line-height: 1.35;
-  color: var(--lastro-color-cream-50);
+  color: var(--lastre-color-mirage-50);
   text-wrap: balance;
 }

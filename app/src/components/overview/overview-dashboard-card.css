@@ -4,8 +4,8 @@
   gap: 1rem;
   padding: 1.125rem 1.25rem 1.25rem;
   border-radius: var(--panel-radius);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: var(--lastro-gradient-surface-panel);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: var(--lastre-bg-surface);
   box-shadow: var(--app-shadow-panel);
   min-height: 280px;
   position: relative;
@@ -16,7 +16,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: var(--lastro-gradient-glass-highlight);
+  background: var(--lastre-glass-highlight);
   pointer-events: none;
 }
 
@@ -35,19 +35,19 @@
 
 .overview-card__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 0.9375rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
   line-height: 1.25;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .overview-card__subtitle {
   margin: 0;
   font-size: 0.75rem;
   line-height: 1.4;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   max-width: 42ch;
 }
 
@@ -59,7 +59,7 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 6px;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   transition:
     transform var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out),
@@ -67,8 +67,8 @@
 }
 
 .overview-card__link:hover {
-  color: var(--lastro-accent-trust);
-  background: var(--lastro-fill-trust);
+  color: var(--lastre-info);
+  background: var(--lastre-fill-trust);
 }
 
 .overview-card__body {

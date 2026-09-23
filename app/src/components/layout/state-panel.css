@@ -6,10 +6,10 @@
 }
 
 .state-panel--error {
-  border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-danger) 35%, transparent);
 }
 
 .state-panel__text {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: var(--text-small);
 }

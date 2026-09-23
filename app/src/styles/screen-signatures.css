@@ -17,7 +17,7 @@
 
 @keyframes live-ring {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lastro-accent-success) 45%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lastre-success) 45%, transparent);
   }
 
   70% {
@@ -157,7 +157,7 @@
 @keyframes map-breathe {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lastro-accent-brand) 35%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--lastre-link) 35%, transparent);
   }
 
   50% {
@@ -351,7 +351,7 @@
 
 [data-screen="lots"] .lot-list-row--selected::before {
   width: 4px;
-  box-shadow: 0 0 12px color-mix(in srgb, var(--lastro-brand-seal) 40%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--lastre-link) 40%, transparent);
 }
 
 [data-screen="lots"] .lot-card {
@@ -404,7 +404,7 @@
 [data-screen="process"] .process-chamber__queue-item--agent,
 [data-screen="process"] .process-chamber__queue-item--seal,
 [data-screen="process"] .process-chamber__queue-item--prepare {
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--lastro-brand-seal) 14%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--lastre-link) 14%, transparent);
 }
 
 [data-screen="process"] .process-pipeline--embedded {
@@ -479,8 +479,8 @@
 
 [data-screen="escalations"] .escalation-table__row--selected td:first-child {
   box-shadow:
-    inset 3px 0 0 color-mix(in srgb, var(--lastro-status-warning, #c9a227) 85%, transparent),
-    0 0 14px color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent);
+    inset 3px 0 0 color-mix(in srgb, var(--lastre-warning) 85%, transparent),
+    0 0 14px color-mix(in srgb, var(--lastre-link) 22%, transparent);
 }
 
 [data-screen="escalations"] .escalations-split__detail {
@@ -493,7 +493,7 @@
 }
 
 [data-screen="escalations"] .escalation-filters__chip--active {
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--lastro-brand-seal) 30%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--lastre-link) 30%, transparent);
 }
 
 /* ── Marketplace — "Live earth" ── */

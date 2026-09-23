@@ -3,12 +3,12 @@
   gap: 1rem;
   padding: 1.25rem 1.375rem;
   border-radius: var(--panel-radius);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 28%, transparent);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 28%, transparent);
   background:
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--lastro-brand-seal) 4%, transparent),
-      color-mix(in srgb, var(--lastro-bg-panel) 96%, #000)
+      color-mix(in srgb, var(--lastre-link) 4%, transparent),
+      color-mix(in srgb, var(--lastre-bg-surface) 96%, #000)
     );
 }
 
@@ -19,12 +19,12 @@
 
 .proof-journey__kicker {
   margin: 0;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .proof-journey__lead {
@@ -32,7 +32,7 @@
   max-width: 52ch;
   font-size: 0.875rem;
   line-height: 1.45;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .proof-journey__steps {
@@ -57,10 +57,10 @@
   gap: 0.5rem;
   min-width: 7.5rem;
   padding: 0.55rem 0.65rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 45%, transparent);
-  color: var(--lastro-text-secondary);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 45%, transparent);
+  color: var(--lastre-text-secondary);
   text-decoration: none;
   font: inherit;
   text-align: left;
@@ -76,20 +76,20 @@ button.proof-journey__step {
 }
 
 .proof-journey__step:hover {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 45%, transparent);
-  color: var(--lastro-text-primary);
+  border-color: color-mix(in srgb, var(--lastre-link) 45%, transparent);
+  color: var(--lastre-text-primary);
 }
 
 .proof-journey__step--active {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 55%, transparent);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
-  color: var(--lastro-text-primary);
+  border-color: color-mix(in srgb, var(--lastre-link) 55%, transparent);
+  background: color-mix(in srgb, var(--lastre-link) 10%, transparent);
+  color: var(--lastre-text-primary);
 }
 
 .proof-journey__icon {
   display: inline-flex;
   margin-top: 0.1rem;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .proof-journey__copy {
@@ -99,18 +99,18 @@ button.proof-journey__step {
 
 .proof-journey__label {
   font-size: 0.75rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .proof-journey__hint {
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
   line-height: 1.3;
 }
 
 .proof-journey__chevron {
   flex-shrink: 0;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   opacity: 0.65;
 }
 

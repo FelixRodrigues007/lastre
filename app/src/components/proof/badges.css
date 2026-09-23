@@ -3,55 +3,55 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.2rem 0.55rem;
-  border-radius: var(--lastro-radius-pill);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  font-family: var(--lastro-font-mono);
+  border-radius: var(--lastre-radius-pill);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .badge--muted {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .badge--verdict-valid {
-  color: var(--lastro-status-valid);
-  border-color: color-mix(in srgb, var(--lastro-status-valid) 35%, transparent);
-  background: color-mix(in srgb, var(--lastro-status-valid) 12%, transparent);
+  color: var(--lastre-success);
+  border-color: color-mix(in srgb, var(--lastre-success) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-success) 12%, transparent);
 }
 
 .badge--verdict-invalid {
   /* lighter than status-invalid (#d9603f) so the label clears WCAG AA
      (~5:1) on the tinted badge fill; #d9603f sat at 4.32. */
-  color: #e0714f;
-  border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, transparent);
-  background: color-mix(in srgb, var(--lastro-status-invalid) 12%, transparent);
+  color: var(--lastre-danger);
+  border-color: color-mix(in srgb, var(--lastre-danger) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-danger) 12%, transparent);
 }
 
 .badge--action-pay {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .badge--action-skip {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .badge--action-escalate {
-  color: var(--lastro-color-sage-400);
+  color: var(--lastre-text-secondary);
 }
 
 .badge--outcome-tokenizable {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .badge--outcome-rejected {
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
 }
 
 .badge--outcome-skipped,
 .badge--outcome-escalated {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }

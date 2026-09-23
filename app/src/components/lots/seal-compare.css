@@ -4,11 +4,11 @@
 }
 
 .seal-compare--mismatch {
-  border-color: color-mix(in srgb, var(--lastro-status-invalid) 30%, var(--lastro-border-subtle));
+  border-color: color-mix(in srgb, var(--lastre-danger) 30%, var(--lastre-border-subtle));
 }
 
 .seal-compare--match {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 28%, var(--lastro-border-subtle));
+  border-color: color-mix(in srgb, var(--lastre-link) 28%, var(--lastre-border-subtle));
 }
 
 .seal-compare__head {
@@ -21,7 +21,7 @@
 .seal-compare__lead {
   margin: 0.2rem 0 0;
   font-size: 0.75rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   line-height: 1.4;
 }
 
@@ -30,22 +30,22 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.85rem 1rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .seal-compare__verdict--match {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-link) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-link) 8%, transparent);
 }
 
 .seal-compare__verdict--mismatch {
-  border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, transparent);
-  background: color-mix(in srgb, var(--lastro-status-invalid) 7%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-danger) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-danger) 7%, transparent);
 }
 
 .seal-compare__verdict--pending {
-  background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 35%, transparent);
 }
 
 .seal-compare__verdict-icon {
@@ -54,28 +54,28 @@
   justify-content: center;
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: var(--lastro-radius-pill);
-  font-family: var(--lastro-font-mono);
+  border-radius: var(--lastre-radius-pill);
+  font-family: var(--lastre-font-mono);
   font-size: 0.875rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   flex-shrink: 0;
 }
 
 .seal-compare__verdict--match .seal-compare__verdict-icon {
-  color: var(--lastro-brand-seal);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 16%, transparent);
+  color: var(--lastre-link);
+  background: color-mix(in srgb, var(--lastre-link) 16%, transparent);
 }
 
 .seal-compare__verdict--mismatch .seal-compare__verdict-icon {
-  color: var(--lastro-status-invalid);
-  background: color-mix(in srgb, var(--lastro-status-invalid) 14%, transparent);
+  color: var(--lastre-danger);
+  background: color-mix(in srgb, var(--lastre-danger) 14%, transparent);
 }
 
 .seal-compare__verdict-title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 0.9375rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.01em;
 }
 
@@ -83,32 +83,32 @@
   margin: 0.2rem 0 0;
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .seal-compare__callout {
   margin: 0;
   padding: 0.65rem 0.75rem;
-  border-radius: var(--lastro-radius-sm);
+  border-radius: var(--lastre-radius-sm);
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--lastro-text-secondary);
-  background: color-mix(in srgb, var(--lastro-status-invalid) 6%, transparent);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-status-invalid) 18%, transparent);
+  color: var(--lastre-text-secondary);
+  background: color-mix(in srgb, var(--lastre-danger) 6%, transparent);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 18%, transparent);
 }
 
 .seal-compare__technical {
-  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-top: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   padding-top: 0.65rem;
 }
 
 .seal-compare__technical-summary {
   cursor: pointer;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
   list-style: none;
 }
 
@@ -117,7 +117,7 @@
 }
 
 .seal-compare__technical-summary:hover {
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .seal-compare__technical-body {

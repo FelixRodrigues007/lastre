@@ -1,3 +1,4 @@
+import { Button } from "../components/ui/Button";
 import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import type { Map as MapLibreMap } from "maplibre-gl";
@@ -473,9 +474,9 @@ export function Marketplace() {
               ending with the agent payload visible for judges.
             </p>
           </div>
-          <button type="button" className="route-cta" onClick={() => void runMarketplaceFullDemo()}>
+          <Button variant="primary" size="md" type="button" className="route-cta" onClick={() => void runMarketplaceFullDemo()}>
             Run Demo
-          </button>
+          </Button>
         </section>
       </div>
 
@@ -488,9 +489,9 @@ export function Marketplace() {
               Query verdict, seal match, carbon score, and Casper links before any downstream action.
             </p>
           </div>
-          <button type="button" className="market-agent-card__copy-btn" onClick={() => void copyAgentSnippet()}>
+          <Button variant="ghost" size="sm" type="button" className="market-agent-card__copy-btn" onClick={() => void copyAgentSnippet()}>
             {snippetCopied ? "Copied ✓" : "Copy snippet"}
-          </button>
+          </Button>
           <Link className="market-agent-card__copy-btn" to="/agents">
             Open /agents
           </Link>
@@ -714,9 +715,9 @@ export function Marketplace() {
                 </p>
                 <div className="payload-toolbar">
                   <strong>Complete proof payload</strong>
-                  <button type="button" className="btn small ghost" onClick={() => void copyAgentPayload()}>
+                  <Button variant="secondary" size="md" type="button" className="btn small ghost" onClick={() => void copyAgentPayload()}>
                     {payloadCopied ? "Copied ✓" : "Copy JSON"}
-                  </button>
+                  </Button>
                 </div>
                 <pre className="agent-payload-json">{JSON.stringify(agentQuery.result, null, 2)}</pre>
               </>
@@ -724,9 +725,9 @@ export function Marketplace() {
               <p className="small">Query failed: {agentQuery.result?.reason ?? "unknown"}</p>
             )}
             <div className="actions">
-              <button type="button" className="btn" onClick={() => setAgentQuery(null)}>
+              <Button variant="primary" size="md" type="button" className="btn" onClick={() => setAgentQuery(null)}>
                 Close
-              </button>
+              </Button>
             </div>
             <div className="demo-disclaimer">
               DEMO ONLY. Mock x402 facilitator; no real CSPR moves. Structure mirrors a real Casper x402 settlement seam.
@@ -751,7 +752,7 @@ function MarketListPagination({
 
   return (
     <nav className="market-list__pagination" aria-label="Asset list pages">
-      <button
+      <Button variant="ghost" size="sm"
         type="button"
         className="market-list__page-btn"
         disabled={page <= 1}
@@ -759,7 +760,7 @@ function MarketListPagination({
         aria-label="Previous page"
       >
         ←
-      </button>
+      </Button>
       <div className="market-list__page-numbers" role="group" aria-label="Page numbers">
         {pages.map((pageNumber) => (
           <button
@@ -773,7 +774,7 @@ function MarketListPagination({
           </button>
         ))}
       </div>
-      <button
+      <Button variant="ghost" size="sm"
         type="button"
         className="market-list__page-btn"
         disabled={page >= pageCount}
@@ -781,7 +782,7 @@ function MarketListPagination({
         aria-label="Next page"
       >
         →
-      </button>
+      </Button>
     </nav>
   );
 }

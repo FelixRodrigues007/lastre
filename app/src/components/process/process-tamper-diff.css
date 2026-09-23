@@ -3,9 +3,9 @@
   gap: 0.45rem;
   margin-top: 0.65rem;
   padding: 0.65rem 0.75rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-status-invalid) 28%, transparent);
-  background: color-mix(in srgb, var(--lastro-status-invalid) 5%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 28%, transparent);
+  background: color-mix(in srgb, var(--lastre-danger) 5%, transparent);
 }
 
 .process-tamper-diff__kicker {
@@ -27,8 +27,8 @@
 
 .process-tamper-diff__field {
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-secondary);
 }
 
 .process-tamper-diff__values {
@@ -36,27 +36,27 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.35rem 0.5rem;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.75rem;
 }
 
 .process-tamper-diff__ref {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-tamper-diff__arrow {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: 0.6875rem;
 }
 
 .process-tamper-diff__cur {
-  color: var(--lastro-status-invalid);
-  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastre-danger);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .process-tamper-diff__note {
   margin: 0;
   font-size: 0.6875rem;
   line-height: 1.45;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }

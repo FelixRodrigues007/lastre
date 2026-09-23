@@ -1,5 +1,7 @@
+import { Button } from "../components/ui/Button";
+import { ActionLink } from "../components/ui/ActionLink";
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MarketAssetDetail } from "../components/marketplace/MarketAssetDetail";
 import { MarketNoticeModal } from "../components/ui/MarketNoticeModal";
 import { Breadcrumbs } from "../components/ui/Breadcrumbs";
@@ -166,9 +168,9 @@ export function MarketplaceAssetDetail() {
             title="Asset not found"
             hint="This catalog entry may have been filtered out or removed from the demo set."
             action={
-              <Link className="route-cta" to="/marketplace">
+              <ActionLink variant="primary" size="md" className="route-cta" to="/marketplace">
                 Back to Marketplace
-              </Link>
+              </ActionLink>
             }
           />
         ) : (
@@ -198,12 +200,12 @@ export function MarketplaceAssetDetail() {
               Action: MintGate.record_mint (simulated Casper signature)
             </div>
             <div className="actions">
-              <button onClick={confirmSimulatedClaim} disabled={isSigning} className="btn primary">
+              <Button variant="primary" size="md" onClick={confirmSimulatedClaim} disabled={isSigning} className="btn primary">
                 {isSigning ? "Signing with Casper account..." : "Sign & Claim (simulated)"}
-              </button>
-              <button onClick={() => setClaimConfirm(null)} className="btn" disabled={isSigning}>
+              </Button>
+              <Button variant="primary" size="md" onClick={() => setClaimConfirm(null)} className="btn" disabled={isSigning}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </div>

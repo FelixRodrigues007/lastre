@@ -1,5 +1,6 @@
+import { Button } from "../components/ui/Button";
+import { ActionLink } from "../components/ui/ActionLink";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { PageHeader } from "../components/layout/PageHeader";
 import { BtnIcon } from "../components/ui/BtnIcon";
 import { FULL_DEMO_ASSET_ID } from "../lib/fullDemo";
@@ -146,12 +147,12 @@ export function Agents() {
         lead="Agents pay via x402 to read a proof payload — verdict, seal match, carbon score, Casper links, and live-RPC chain evidence — before touching a fictional RWA/carbon workflow."
         actions={
           <>
-            <Link className="route-cta" to={`/marketplace?demo=full&assetId=${encodeURIComponent(FULL_DEMO_ASSET_ID)}`}>
+            <ActionLink variant="primary" size="md" className="route-cta" to={`/marketplace?demo=full&assetId=${encodeURIComponent(FULL_DEMO_ASSET_ID)}`}>
               <BtnIcon icon="process">Run Valid demo</BtnIcon>
-            </Link>
-            <Link className="route-cta route-cta--ghost" to="/marketplace/MINA-VALEDOURO-LOTE-001">
+            </ActionLink>
+            <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace/MINA-VALEDOURO-LOTE-001">
               <BtnIcon icon="audit">Open Invalid sample lot</BtnIcon>
-            </Link>
+            </ActionLink>
           </>
         }
       />
@@ -186,9 +187,9 @@ export function Agents() {
               <span className="mono-label">Integration example</span>
               <h3>Quote → X-PAYMENT → proof + chainEvidence</h3>
             </div>
-            <button type="button" className="route-cta route-cta--ghost" onClick={copySnippet}>
+            <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={copySnippet}>
               {copied ? "Copied ✓" : "Copy code"}
-            </button>
+            </Button>
           </div>
           <pre className="agents-code"><code>{AGENT_SNIPPET}</code></pre>
         </article>

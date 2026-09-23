@@ -27,14 +27,14 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .command-palette__input {
   flex: 1;
   border: none;
   background: transparent;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   font-size: 0.9375rem;
   outline: none;
 }
@@ -64,7 +64,7 @@
   border: none;
   border-radius: 8px;
   background: transparent;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   font-size: 0.8125rem;
   text-align: left;
   cursor: pointer;
@@ -78,25 +78,25 @@
 }
 
 .command-palette__item--active {
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 88%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 88%, transparent);
   box-shadow:
-    inset 0 0 0 0.5px var(--lastro-border-subtle),
-    inset 2px 0 0 var(--lastro-accent-brand);
+    inset 0 0 0 0.5px var(--lastre-border-subtle),
+    inset 2px 0 0 var(--lastre-link);
 }
 
 .command-palette__item-label {
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
 }
 
 .command-palette__item-meta {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
 }
 
 .command-palette__empty {
   padding: 1.25rem;
   text-align: center;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: 0.8125rem;
 }

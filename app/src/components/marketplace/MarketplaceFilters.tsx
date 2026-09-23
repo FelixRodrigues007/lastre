@@ -1,3 +1,4 @@
+import { SelectField } from "../ui/SelectField";
 import type { MarketplacePersona } from "../../lib/marketplaceTypes";
 import "./marketplace-filters.css";
 
@@ -53,72 +54,52 @@ export function MarketplaceFilters({
 
   return (
     <div className="marketplace-filters" role="group" aria-label="Marketplace filters">
-      <label className="marketplace-filters__field">
-        <span className="marketplace-filters__label">Category</span>
-        <select
-          className="marketplace-filters__select"
-          value={category}
-          onChange={(event) => {
+      <SelectField label="Category" className="marketplace-filters__field"
+value={category}
+onChange={(event) => {
             const next = event.target.value as MarketplaceCategoryFilter;
             onCategoryChange(next);
             if (next === "mineral") onCreditTypeChange("all");
           }}
-          aria-label="Filter by category"
-        >
+aria-label="Filter by category">
           <option value="all">All ({totals.all})</option>
           <option value="mineral">Minerals ({totals.mineral})</option>
           <option value="carbon_credit">Carbon ({totals.carbon})</option>
-        </select>
-      </label>
+        </SelectField>
 
-      <label className="marketplace-filters__field">
-        <span className="marketplace-filters__label">Status</span>
-        <select
-          className="marketplace-filters__select"
-          value={status}
-          onChange={(event) => onStatusChange(event.target.value as MarketplaceStatusFilter)}
-          aria-label="Filter by status"
-        >
+      <SelectField label="Status" className="marketplace-filters__field"
+value={status}
+onChange={(event) => onStatusChange(event.target.value as MarketplaceStatusFilter)}
+aria-label="Filter by status">
           <option value="all">All statuses</option>
           <option value="proven">Proven</option>
           <option value="minted">Minted</option>
           <option value="available">Claimable</option>
-        </select>
-      </label>
+        </SelectField>
 
-      <label className="marketplace-filters__field">
-        <span className="marketplace-filters__label">Credit type</span>
-        <select
-          className="marketplace-filters__select"
-          value={creditType}
-          disabled={creditDisabled}
-          onChange={(event) => onCreditTypeChange(event.target.value)}
-          aria-label="Filter by carbon credit type"
-        >
+      <SelectField label="Credit type" className="marketplace-filters__field"
+value={creditType}
+disabled={creditDisabled}
+onChange={(event) => onCreditTypeChange(event.target.value)}
+aria-label="Filter by carbon credit type">
           <option value="all">All credits</option>
           {MARKETPLACE_CARBON_TYPES.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>
           ))}
-        </select>
-      </label>
+        </SelectField>
 
-      <label className="marketplace-filters__field">
-        <span className="marketplace-filters__label">Buyer role</span>
-        <select
-          className="marketplace-filters__select"
-          value={persona}
-          onChange={(event) => onPersonaChange(event.target.value as MarketplacePersona)}
-          aria-label="Demo buyer role"
-        >
+      <SelectField label="Buyer role" className="marketplace-filters__field"
+value={persona}
+onChange={(event) => onPersonaChange(event.target.value as MarketplacePersona)}
+aria-label="Demo buyer role">
           {PERSONA_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
-        </select>
-      </label>
+        </SelectField>
     </div>
   );
 }

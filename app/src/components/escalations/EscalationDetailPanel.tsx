@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { Link } from "react-router-dom";
 import { useEffect, useId, useMemo, useState } from "react";
 import { useLocaleContext } from "../../context/LocaleContext";
@@ -173,11 +174,11 @@ export function EscalationDetailPanel({
           </nav>
 
           <div className="escalation-detail__actions">
-            <button
+            <Button variant="primary" size="md"
               type="button"
               className="route-cta"
               disabled={busy}
-              aria-busy={pending === "requeue"}
+              loading={pending === "requeue"}
               onClick={() =>
                 runAction("requeue", () => requeueEscalation(record.assetId), "escalations.feedback.requeued")
               }
@@ -185,12 +186,12 @@ export function EscalationDetailPanel({
               <BtnIcon icon="process">
                 {pending === "requeue" ? t("escalations.action.requeuing") : t("escalations.action.ackRequeue")}
               </BtnIcon>
-            </button>
-            <button
+            </Button>
+            <Button variant="secondary" size="md"
               type="button"
               className="route-cta route-cta--ghost"
               disabled={busy}
-              aria-busy={pending === "override-skip"}
+              loading={pending === "override-skip"}
               onClick={() =>
                 runAction(
                   "override-skip",
@@ -202,7 +203,7 @@ export function EscalationDetailPanel({
               {pending === "override-skip"
                 ? t("escalations.action.overriding")
                 : t("escalations.action.overrideSkip")}
-            </button>
+            </Button>
           </div>
         </div>
 

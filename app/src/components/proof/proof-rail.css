@@ -19,17 +19,17 @@
     text-align: center;
     gap: 0.4rem;
     padding: 0.65rem 0.35rem;
-    border-radius: var(--lastro-radius-sm);
-    border: var(--lastro-stroke-hairline) solid transparent;
+    border-radius: var(--lastre-radius-sm);
+    border: var(--lastre-stroke-hairline) solid transparent;
   }
 
   .proof-rail__step--active {
-    border-color: var(--lastro-border-brand);
-    background: var(--lastro-fill-brand);
+    border-color: var(--lastre-border-brand);
+    background: var(--lastre-fill-brand);
   }
 
   .proof-rail__step--done {
-    border-color: var(--lastro-border-success);
+    border-color: var(--lastre-border-success);
   }
 }
 
@@ -38,92 +38,92 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.65rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: 0.8125rem;
 }
 
 .proof-rail__step--done {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .proof-rail__step--active {
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .proof-rail__node {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: var(--lastro-text-muted);
+  background: var(--lastre-text-muted);
 }
 
 .proof-rail__step--done .proof-rail__node {
-  background: var(--lastro-accent-success);
+  background: var(--lastre-success);
 }
 
 .proof-rail__step--active .proof-rail__node {
-  background: var(--lastro-gradient-seal-shine);
-  box-shadow: var(--lastro-glow-seal);
+  background: var(--lastre-gradient-accent-text);
+  box-shadow: var(--lastre-focus-shadow);
 }
 
 .proof-rail__label {
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   line-height: 1.35;
 }
 
 .proof-rail__verdict {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .proof-rail__verdict--valid {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .proof-rail__verdict--invalid {
-  /* --lastro-status-invalid (coral-400/600) dips below 4.5:1 against this
+  /* --lastre-danger (coral-400/600) dips below 4.5:1 against this
      step's own --fill-danger background in both themes — bumped to the
      brighter/darker ends of the same coral scale to hold AA. */
-  color: var(--lastro-color-coral-300);
+  color: var(--lastre-danger);
 }
 
 [data-theme="light"] .proof-rail__verdict--invalid {
-  color: var(--lastro-color-coral-700);
+  color: var(--lastre-danger);
 }
 
 /* Failed / blocked steps — Invalid origin seal cuts the rail short */
 .proof-rail__step--failed {
-  /* Same AA fix as .proof-rail__verdict--invalid above: --lastro-accent-danger
+  /* Same AA fix as .proof-rail__verdict--invalid above: --lastre-danger
      (coral-400/600) dips below 4.5:1 against this step's own --fill-danger
      background in both themes — bumped to the same brighter/darker coral
      scale ends to hold AA, consistently. */
-  color: var(--lastro-color-coral-300);
+  color: var(--lastre-danger);
 }
 
 .proof-rail__step--failed .proof-rail__node {
-  background: var(--lastro-color-coral-300);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastro-color-coral-300) 20%, transparent);
+  background: var(--lastre-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastre-danger) 20%, transparent);
 }
 
 [data-theme="light"] .proof-rail__step--failed {
-  color: var(--lastro-color-coral-700);
+  color: var(--lastre-danger);
 }
 
 [data-theme="light"] .proof-rail__step--failed .proof-rail__node {
-  background: var(--lastro-color-coral-700);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastro-color-coral-700) 20%, transparent);
+  background: var(--lastre-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lastre-danger) 20%, transparent);
 }
 
 .proof-rail__step--blocked {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   opacity: 0.45;
 }
 
 .proof-rail__step--blocked .proof-rail__node {
-  background: var(--lastro-text-muted);
+  background: var(--lastre-text-muted);
 }
 
 .proof-rail .sr-only {
@@ -140,14 +140,14 @@
 
 @media (min-width: 768px) {
   .proof-rail__step--failed {
-    border-color: color-mix(in srgb, var(--lastro-accent-danger) 45%, transparent);
-    background: var(--lastro-fill-danger);
+    border-color: color-mix(in srgb, var(--lastre-danger) 45%, transparent);
+    background: var(--lastre-fill-danger);
   }
 }
 
 .proof-rail--vertical .proof-rail__step--failed::before,
 .proof-rail--vertical .proof-rail__step--blocked::before {
-  background: color-mix(in srgb, var(--lastro-accent-danger) 25%, var(--lastro-border-subtle));
+  background: color-mix(in srgb, var(--lastre-danger) 25%, var(--lastre-border-subtle));
 }
 
 /* Vertical timeline — drawer / narrow surfaces */
@@ -176,32 +176,32 @@
   top: 1.35rem;
   bottom: -0.55rem;
   width: 1px;
-  background: var(--lastro-border-subtle);
+  background: var(--lastre-border-subtle);
 }
 
 .proof-rail--vertical .proof-rail__step--done::before {
-  background: color-mix(in srgb, var(--lastro-accent-success) 45%, var(--lastro-border-subtle));
+  background: color-mix(in srgb, var(--lastre-success) 45%, var(--lastre-border-subtle));
 }
 
 .proof-rail--vertical .proof-rail__node {
   width: 0.625rem;
   height: 0.625rem;
-  box-shadow: 0 0 0 2px var(--lastro-bg-panel);
+  box-shadow: 0 0 0 2px var(--lastre-bg-surface);
 }
 
 .proof-rail--vertical .proof-rail__label {
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-regular);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-regular);
+  color: var(--lastre-text-secondary);
 }
 
 .proof-rail--vertical .proof-rail__step--active .proof-rail__label {
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-primary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-primary);
 }
 
 .proof-rail--vertical .proof-rail__step--done .proof-rail__label {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .proof-rail--vertical .proof-rail__verdict {
@@ -232,7 +232,7 @@
   bottom: 0.35rem;
   left: calc(var(--node-size) / 2 - 0.5px);
   width: 1px;
-  background: var(--lastro-border-subtle);
+  background: var(--lastre-border-subtle);
 }
 
 .proof-rail--track .proof-rail__step {
@@ -256,33 +256,33 @@
   width: var(--node-size);
   height: var(--node-size);
   border-radius: 50%;
-  background: var(--lastro-bg-elevated);
-  border: 1.5px solid var(--lastro-border-strong);
+  background: var(--lastre-bg-elevated);
+  border: 1.5px solid var(--lastre-border-strong);
 }
 
 .proof-rail--track .proof-rail__step--done .proof-rail__node {
-  background: var(--lastro-accent-success);
-  border-color: var(--lastro-accent-success);
+  background: var(--lastre-success);
+  border-color: var(--lastre-success);
 }
 
 .proof-rail--track .proof-rail__step--active .proof-rail__node {
-  background: var(--lastro-gradient-seal-shine);
+  background: var(--lastre-gradient-accent-text);
   border-color: transparent;
-  box-shadow: var(--lastro-glow-seal);
+  box-shadow: var(--lastre-focus-shadow);
 }
 
 .proof-rail--track .proof-rail__step--failed .proof-rail__node {
-  background: var(--lastro-color-coral-300);
+  background: var(--lastre-danger);
   border-color: transparent;
 }
 
 [data-theme="light"] .proof-rail--track .proof-rail__step--failed .proof-rail__node {
-  background: var(--lastro-color-coral-700);
+  background: var(--lastre-danger);
 }
 
 .proof-rail--track .proof-rail__step--blocked .proof-rail__node {
   background: transparent;
-  border-color: var(--lastro-border-subtle);
+  border-color: var(--lastre-border-subtle);
 }
 
 /* Split badge — number cell + label cell. */
@@ -291,9 +291,9 @@
   align-items: stretch;
   max-width: 100%;
   overflow: hidden;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in oklab, var(--lastro-bg-panel) 55%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in oklab, var(--lastre-bg-surface) 55%, transparent);
 }
 
 .proof-rail--track .proof-rail__badge-n {
@@ -301,36 +301,36 @@
   display: inline-flex;
   align-items: center;
   padding: 0.28rem 0.5rem;
-  border-right: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  color: var(--lastro-text-muted);
-  font-family: var(--lastro-font-mono);
+  border-right: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  color: var(--lastre-text-muted);
+  font-family: var(--lastre-font-mono);
   font-size: 0.75rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
 }
 
 .proof-rail--track .proof-rail__badge-label {
   min-width: 0;
   padding: 0.28rem 0.6rem;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .proof-rail--track .proof-rail__step--active .proof-rail__badge {
-  border-color: var(--lastro-border-brand);
+  border-color: var(--lastre-border-brand);
 }
 
 .proof-rail--track .proof-rail__step--active .proof-rail__badge-n {
-  color: var(--lastro-text-primary);
-  background: var(--lastro-fill-brand);
-  border-right-color: var(--lastro-border-brand);
+  color: var(--lastre-text-primary);
+  background: var(--lastre-fill-brand);
+  border-right-color: var(--lastre-border-brand);
 }
 
 .proof-rail--track .proof-rail__step--done .proof-rail__badge-n {
-  color: var(--lastro-accent-success);
+  color: var(--lastre-success);
 }
 
 .proof-rail--track .proof-rail__step--blocked {
@@ -339,11 +339,11 @@
 
 /* Meta line — the demo/mock status pulled out of the label parenthetical. */
 .proof-rail--track .proof-rail__meta {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-accent-warn, var(--lastro-text-muted));
+  color: var(--lastre-warning, var(--lastre-text-muted));
 }
 
 /* Wide surfaces — the rail turns horizontal: nodes on a line, columns below.

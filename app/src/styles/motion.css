@@ -113,8 +113,6 @@
 /* ── Press feedback — buttons must feel responsive ── */
 
 /* Shared transition baseline for pressable controls */
-.route-cta,
-.entry-btn,
 .tab,
 .filter-pill,
 .nav-item--sidebar,
@@ -128,13 +126,9 @@ button:not(:disabled) {
     box-shadow var(--dur-fast) var(--ease-out),
     filter var(--dur-fast) var(--ease-out);
 }
-.route-cta:not(:disabled):active,
-.entry-btn--primary:active,
 .tab:active,
 .filter-pill:active,
 .path-option:active,
-.settings-modal__close:active,
-.capture-wizard__close:active,
 .command-palette__item:active,
 .nav-item--sidebar:active {
   transform: scale(0.97);
@@ -231,12 +225,11 @@ button:not(:disabled) {
   }
 
   button:not(:disabled):active,
-  [role="button"]:not([aria-disabled="true"]):active,
-  .route-cta:active,
-  .tab:active,
-  .lot-list-row:active,
-  .market-lot-card:active,
-  .my-assets-strip__card:active {
+[role="button"]:not([aria-disabled="true"]):active,
+.tab:active,
+.lot-list-row:active,
+.market-lot-card:active,
+.my-assets-strip__card:active {
     transform: none;
   }
 

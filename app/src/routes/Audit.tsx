@@ -1,3 +1,5 @@
+import { ActionLink } from "../components/ui/ActionLink";
+import { Button } from "../components/ui/Button";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CaptureWizardTrigger } from "../components/capture/CaptureWizardTrigger";
@@ -71,7 +73,7 @@ export function Audit() {
         actions={
           <>
             {records.length > 0 ? (
-              <button
+              <Button variant="secondary" size="md"
                 type="button"
                 className="route-cta route-cta--ghost"
                 disabled={exporting}
@@ -80,11 +82,11 @@ export function Audit() {
                 <BtnIcon icon="download">
                   {exporting ? t("audit.evidence.exporting") : t("audit.evidence.export")}
                 </BtnIcon>
-              </button>
+              </Button>
             ) : null}
-            <Link className="route-cta" to="/process">
+            <ActionLink variant="primary" size="md" className="route-cta" to="/process">
               <BtnIcon icon="process">{t("common.runDemoBatch")}</BtnIcon>
-            </Link>
+            </ActionLink>
           </>
         }
       />
@@ -107,9 +109,9 @@ export function Audit() {
                 <CaptureWizardTrigger className="route-cta">
                   {t("audit.evidence.emptyCapture")}
                 </CaptureWizardTrigger>
-                <Link className="route-cta route-cta--ghost" to="/process">
+                <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/process">
                   {t("audit.evidence.emptyProcess")}
-                </Link>
+                </ActionLink>
               </div>
             }
           />

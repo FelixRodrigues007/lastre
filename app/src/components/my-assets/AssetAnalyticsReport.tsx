@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
@@ -258,12 +259,12 @@ function ProofTrafficPanel({
           </Link>
         </h2>
         <div className="aar__control-actions">
-          <button type="button" className="aar__range" disabled>
+          <Button variant="secondary" size="md" type="button" className="aar__range" disabled>
             Last 24 hours (GMT-3) <Icon name="chevron-down" size={14} />
-          </button>
-          <button type="button" className="aar__print" disabled>
+          </Button>
+          <Button variant="secondary" size="md" type="button" className="aar__print" disabled>
             <Icon name="download" size={16} /> Print report
-          </button>
+          </Button>
         </div>
       </header>
 

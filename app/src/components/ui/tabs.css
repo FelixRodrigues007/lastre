@@ -4,8 +4,8 @@
   gap: 0.25rem;
   padding: 0.2rem;
   border-radius: var(--app-radius-control);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 40%, transparent);
   width: fit-content;
   max-width: 100%;
 }
@@ -16,9 +16,9 @@
   border: none;
   border-radius: calc(var(--app-radius-control) - 2px);
   background: transparent;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   cursor: pointer;
   transition:
     background var(--dur-fast) var(--ease-out),
@@ -26,13 +26,13 @@
 }
 
 .tab:hover {
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .tab--active {
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 90%, transparent);
-  color: var(--lastro-text-primary);
-  box-shadow: inset 0 0 0 0.5px var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 90%, transparent);
+  color: var(--lastre-text-primary);
+  box-shadow: inset 0 0 0 0.5px var(--lastre-border-subtle);
 }
 
 .tabs-panel {

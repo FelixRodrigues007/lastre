@@ -11,7 +11,7 @@
   inset-block: 0;
   inset-inline-start: 0;
   width: 3px;
-  background: color-mix(in srgb, var(--lastro-brand-seal) 55%, transparent);
+  background: color-mix(in srgb, var(--lastre-link) 55%, transparent);
 }
 
 .escalation-card__head {
@@ -23,13 +23,13 @@
 
 .escalation-card__title {
   margin-top: 0.15rem;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
 }
 
 .escalation-card__title a:hover {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .escalation-card__badges {
@@ -40,18 +40,18 @@
 }
 
 .escalation-card__meta {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .escalation-card__reason {
   padding: 0.75rem 0.875rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 45%, transparent);
-  border-left: 3px solid color-mix(in srgb, var(--lastro-brand-seal) 50%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 45%, transparent);
+  border-left: 3px solid color-mix(in srgb, var(--lastre-link) 50%, transparent);
   font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.5;
 }
 
@@ -59,7 +59,7 @@
   display: grid;
   gap: 0.65rem;
   padding-top: 0.75rem;
-  border-top: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-top: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .escalation-card__foot {
@@ -68,10 +68,10 @@
 
 .escalation-card__link {
   font-size: var(--text-small);
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-secondary);
 }
 
 .escalation-card__link:hover {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }

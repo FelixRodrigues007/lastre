@@ -1,21 +1,21 @@
 /* Display type utilities — no grain, no ambient blurs */
 
 .text-gradient-brand {
-  background: var(--lastro-gradient-seal-shine);
+  background: var(--lastre-gradient-accent-text);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
 }
 
 .text-gradient-trust {
-  background: var(--lastro-gradient-jade-shine);
+  background: var(--lastre-gradient-info);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
 }
 
 .text-gradient-valid {
-  background: var(--lastro-gradient-lime-shine);
+  background: var(--lastre-gradient-success);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -24,10 +24,10 @@
 .text-gradient-display {
   background: linear-gradient(
     128deg,
-    var(--lastro-color-cream-200) 0%,
-    var(--lastro-color-seal-300) 38%,
-    var(--lastro-color-jade-300) 72%,
-    var(--lastro-color-cream-100) 100%
+    var(--lastre-color-mirage-100) 0%,
+    var(--lastre-color-blue-200) 38%,
+    var(--lastre-color-blue-200) 72%,
+    var(--lastre-color-mirage-50) 100%
   );
   background-clip: text;
   -webkit-background-clip: text;
@@ -37,9 +37,9 @@
 :root[data-theme="light"] .text-gradient-display {
   background: linear-gradient(
     128deg,
-    var(--lastro-color-olive-950) 0%,
-    var(--lastro-color-seal-700) 42%,
-    var(--lastro-color-jade-600) 100%
+    var(--lastre-color-mirage-950) 0%,
+    var(--lastre-color-blue-700) 42%,
+    var(--lastre-color-blue-600) 100%
   );
   background-clip: text;
   -webkit-background-clip: text;

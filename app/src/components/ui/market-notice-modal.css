@@ -14,30 +14,30 @@
   width: min(100%, 24rem);
   padding: 18px 18px 16px;
   border-radius: 12px;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: var(--lastro-bg-elevated);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: var(--lastre-bg-elevated);
   box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.75);
 }
 
 .market-notice--success {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-link) 35%, transparent);
 }
 
 .market-notice--error {
-  border-color: color-mix(in srgb, var(--lastro-status-invalid) 40%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-danger) 40%, transparent);
 }
 
 .market-notice__title {
   margin: 0 0 8px;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .market-notice__message {
   margin: 0 0 14px;
   font-size: 0.8125rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.45;
 }
 

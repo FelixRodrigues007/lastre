@@ -13,9 +13,9 @@
 
 .path-select__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.625rem);
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.035em;
   line-height: 1.15;
 }
@@ -24,7 +24,7 @@
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.55;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   max-width: 44ch;
 }
 
@@ -40,8 +40,8 @@
   background: linear-gradient(
     90deg,
     transparent,
-    var(--lastro-border-subtle) 20%,
-    var(--lastro-border-subtle) 80%,
+    var(--lastre-border-subtle) 20%,
+    var(--lastre-border-subtle) 80%,
     transparent
   );
 }
@@ -69,17 +69,17 @@
     background:
       linear-gradient(
         95deg,
-        var(--lastro-fill-trust) 0%,
-        color-mix(in srgb, var(--lastro-fill-brand) 45%, transparent) 100%
+        var(--lastre-fill-trust) 0%,
+        color-mix(in srgb, var(--lastre-fill-brand) 45%, transparent) 100%
       );
     transform: translateX(4px);
-    box-shadow: inset 0 0 0 0.5px var(--lastro-border-trust);
+    box-shadow: inset 0 0 0 0.5px var(--lastre-border-trust);
   }
 
   .path-option:hover .path-option__icon {
-    color: var(--lastro-accent-trust);
-    border-color: var(--lastro-border-trust);
-    background: var(--lastro-fill-trust);
+    color: var(--lastre-info);
+    border-color: var(--lastre-border-trust);
+    background: var(--lastre-fill-trust);
     box-shadow: none;
   }
 }
@@ -95,9 +95,9 @@
   width: 2rem;
   height: 2rem;
   border-radius: 9px;
-  color: var(--lastro-text-secondary);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 65%, transparent);
-  border: 1px solid var(--lastro-border-subtle);
+  color: var(--lastre-text-secondary);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 65%, transparent);
+  border: 1px solid var(--lastre-border-subtle);
   transition:
     transform var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out),
@@ -114,7 +114,7 @@
 
 .path-option__title {
   font-size: 0.9375rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: -0.01em;
   line-height: 1.3;
 }
@@ -122,37 +122,27 @@
 .path-option__lead {
   font-size: 0.8125rem;
   line-height: 1.4;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .path-option__chev {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   flex-shrink: 0;
   transition: transform var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .path-option:hover .path-option__chev {
-    color: var(--lastro-accent-trust);
+    color: var(--lastre-info);
     transform: translateX(3px);
   }
 }
 
 .path-select__skip {
   justify-self: center;
-  padding: 0.35rem 0.5rem;
-  border: none;
-  font-size: 0.8125rem;
-  color: var(--lastro-text-muted);
-  background: transparent;
 }
 
 .path-select__skip:hover {
-  color: var(--lastro-text-secondary);
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-
-.path-select__skip:focus-visible {
-  outline: none;
 }

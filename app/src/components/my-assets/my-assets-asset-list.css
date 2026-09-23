@@ -27,8 +27,8 @@
 .my-assets-strip__hint {
   margin: 0;
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-muted);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-muted);
   letter-spacing: 0.01em;
 }
 
@@ -58,8 +58,8 @@
   font: inherit;
   color: inherit;
   border-radius: 10px;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-panel) 55%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-surface) 55%, transparent);
   cursor: pointer;
   transition:
     border-color var(--dur-fast) var(--ease-out),
@@ -69,11 +69,11 @@
 }
 
 .my-assets-strip__card .my-assets-strip__label {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .my-assets-strip__card .my-assets-strip__score {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .my-assets-strip__card .my-assets-strip__photo {
@@ -83,12 +83,12 @@
 
 @media (hover: hover) and (pointer: fine) {
   .my-assets-strip__card:hover:not(.my-assets-strip__card--selected) {
-    background: color-mix(in srgb, var(--lastro-bg-panel) 78%, transparent);
-    border-color: color-mix(in srgb, var(--lastro-text-muted) 22%, var(--lastro-border-subtle));
+    background: color-mix(in srgb, var(--lastre-bg-surface) 78%, transparent);
+    border-color: color-mix(in srgb, var(--lastre-text-muted) 22%, var(--lastre-border-subtle));
   }
 
   .my-assets-strip__card:hover:not(.my-assets-strip__card--selected) .my-assets-strip__label {
-    color: var(--lastro-text-primary);
+    color: var(--lastre-text-primary);
   }
 
   .my-assets-strip__card:hover:not(.my-assets-strip__card--selected) .my-assets-strip__photo {
@@ -97,23 +97,23 @@
 }
 
 .my-assets-strip__card--selected {
-  border-color: #4a7fd4;
+  border-color: var(--lastre-info);
   border-left-width: 3px;
   padding-left: 10px;
-  background: var(--lastro-bg-panel);
+  background: var(--lastre-bg-surface);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, #4a7fd4 40%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--lastre-info) 40%, transparent),
     var(--app-shadow-panel);
 }
 
 .my-assets-strip__card--selected .my-assets-strip__label {
-  color: var(--lastro-text-primary);
-  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastre-text-primary);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .my-assets-strip__card--selected .my-assets-strip__score {
-  color: #6b9de8;
-  font-weight: var(--lastro-weight-medium);
+  color: var(--lastre-link);
+  font-weight: var(--lastre-weight-medium);
 }
 
 .my-assets-strip__card--selected .my-assets-strip__photo {
@@ -122,13 +122,13 @@
 
 .my-assets-strip__card--selected .my-assets-strip__thumb {
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, #4a7fd4 30%, transparent),
-    0 0 0 2px color-mix(in srgb, #4a7fd4 18%, transparent);
+    inset 0 0 0 1px color-mix(in srgb, var(--lastre-info) 30%, transparent),
+    0 0 0 2px color-mix(in srgb, var(--lastre-info) 18%, transparent);
 }
 
 .my-assets-strip__card--selected:hover {
-  border-color: #5a8ee0;
-  background: color-mix(in srgb, #4a7fd4 6%, var(--lastro-bg-panel));
+  border-color: var(--lastre-focus);
+  background: color-mix(in srgb, var(--lastre-info) 6%, var(--lastre-bg-surface));
 }
 
 .my-assets-strip__thumb {
@@ -139,8 +139,8 @@
   border-radius: 10px;
   overflow: hidden;
   flex-shrink: 0;
-  background: var(--lastro-bg-elevated);
-  box-shadow: inset 0 0 0 1px var(--lastro-border-subtle);
+  background: var(--lastre-bg-elevated);
+  box-shadow: inset 0 0 0 1px var(--lastre-border-subtle);
 }
 
 .my-assets-strip__photo {
@@ -159,9 +159,9 @@
 
 .my-assets-strip__label {
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   line-height: 1.35;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -169,7 +169,7 @@
 
 .my-assets-strip__score {
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -178,7 +178,7 @@
   place-items: center;
   min-height: 320px;
   padding: 2rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: var(--text-small);
 }
 
@@ -195,11 +195,11 @@
   top: 8px;
   padding: 3px 7px;
   border-radius: 999px;
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-status-valid) 42%, var(--lastro-border-subtle));
-  background: color-mix(in srgb, var(--lastro-status-valid) 10%, transparent);
-  color: var(--lastro-status-valid);
-  font-size: 0.62rem;
-  font-weight: var(--lastro-weight-semibold);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-success) 42%, var(--lastre-border-subtle));
+  background: color-mix(in srgb, var(--lastre-success) 10%, transparent);
+  color: var(--lastre-success);
+  font-size: 0.6875rem;
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .my-assets-strip__card {
@@ -222,7 +222,7 @@
 .my-assets-summary p {
   margin: 0;
   max-width: 72ch;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: 0.82rem;
   line-height: 1.45;
 }
@@ -232,26 +232,26 @@
   flex-wrap: wrap;
   gap: 5px;
   padding: 4px;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-radius: 999px;
-  background: var(--lastro-bg-elevated);
+  background: var(--lastre-bg-elevated);
 }
 
 .my-assets-filter button {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   cursor: pointer;
   font: inherit;
   font-size: 0.75rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   padding: 6px 10px;
 }
 
 .my-assets-filter button.is-active {
-  background: var(--lastro-fill-trust);
-  color: var(--lastro-text-primary);
+  background: var(--lastre-fill-trust);
+  color: var(--lastre-text-primary);
 }
 
 .my-assets-detail-stack {
@@ -277,16 +277,16 @@
   width: fit-content;
   padding: 4px 9px;
   border-radius: 999px;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  color: var(--lastro-text-secondary);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  color: var(--lastre-text-secondary);
   font-size: 0.7rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .my-assets-collateral__badge.is-locked {
-  border-color: color-mix(in srgb, var(--lastro-status-valid) 42%, var(--lastro-border-subtle));
-  background: color-mix(in srgb, var(--lastro-status-valid) 10%, transparent);
-  color: var(--lastro-status-valid);
+  border-color: color-mix(in srgb, var(--lastre-success) 42%, var(--lastre-border-subtle));
+  background: color-mix(in srgb, var(--lastre-success) 10%, transparent);
+  color: var(--lastre-success);
 }
 
 .my-assets-collateral h3 {
@@ -296,7 +296,7 @@
 
 .my-assets-collateral p {
   margin: 0;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: 0.82rem;
 }
 
@@ -308,15 +308,15 @@
 }
 
 .my-assets-collateral dt {
-  color: var(--lastro-text-muted);
-  font-size: 0.68rem;
+  color: var(--lastre-text-muted);
+  font-size: 0.6875rem;
 }
 
 .my-assets-collateral dd {
   margin: 0.12rem 0 0;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   font-size: 0.78rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
 }
 
 .my-assets-collateral__actions {
@@ -337,8 +337,8 @@
   margin: 0;
   padding: 0.65rem 0.75rem;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--lastro-accent-warn) 12%, transparent);
-  color: var(--lastro-accent-warn);
+  background: color-mix(in srgb, var(--lastre-warning) 12%, transparent);
+  color: var(--lastre-warning);
   font-size: 0.76rem;
 }
 

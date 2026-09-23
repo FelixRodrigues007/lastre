@@ -193,7 +193,7 @@ export function DesignSystem() {
             {theme === "dark" ? "claro" : "escuro"}
           </Button>
         </header>
-        <main id="ds-main" className="ds-main">
+        <main id="ds-main" className="ds-main" tabIndex={-1}>
           <section id="overview" className="ds-hero" aria-labelledby="ds-title">
             <div className="ds-eyebrow">
               <span className="ds-live-dot" /> LASTRE DESIGN SYSTEM{" "}

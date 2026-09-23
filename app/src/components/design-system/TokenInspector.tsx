@@ -83,7 +83,9 @@ export function TokenInspector({
                   <code>{primitives[alias].$value}</code>
                   <small>{alias.replace("color-", "")}</small>
                 </span>
-                <Icon name="capture" size={16} />
+                <span className="ds-token-copy" aria-hidden="true">
+                  Copiar
+                </span>
               </button>
             );
           })}

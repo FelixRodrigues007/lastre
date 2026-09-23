@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { StatePanel } from "../layout/StatePanel";
@@ -81,7 +82,7 @@ export function LotDrawer({ assetId, onClose }: LotDrawerProps) {
         <header className="lot-drawer__head">
           <div className="lot-drawer__head-top">
             <p className="lot-drawer__kicker">Evidence room</p>
-            <button
+            <Button variant="ghost" size="sm" iconOnly
               type="button"
               className="lot-drawer__close"
               onClick={onClose}
@@ -95,7 +96,7 @@ export function LotDrawer({ assetId, onClose }: LotDrawerProps) {
                   strokeLinecap="round"
                 />
               </svg>
-            </button>
+            </Button>
           </div>
 
           <div className="lot-drawer__head-main">

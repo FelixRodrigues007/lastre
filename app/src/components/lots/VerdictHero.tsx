@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { ActionLink } from "../ui/ActionLink";
 import { BtnIcon } from "../ui/BtnIcon";
 import { Icon } from "../ui/Icon";
 import "./verdict-hero.css";
@@ -94,9 +94,9 @@ export function VerdictHero({ tone, attested, showMarketplaceCta = false }: Verd
 
       {showMarketplaceCta ? (
         <div className="verdict-hero__actions">
-          <Link className="route-cta" to="/marketplace">
+          <ActionLink variant="primary" size="md" className="route-cta" to="/marketplace">
             <BtnIcon icon="globe">Marketplace (demo)</BtnIcon>
-          </Link>
+          </ActionLink>
         </div>
       ) : null}
     </section>

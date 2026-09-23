@@ -71,7 +71,7 @@
 }
 
 .escalations-split__list .escalation-filters__chip--active {
-  background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
+  background: color-mix(in srgb, var(--lastre-link) 10%, transparent);
 }
 
 .escalations-split__list .escalation-filters__select {
@@ -90,16 +90,16 @@
 }
 
 .escalations-split__list .escalation-table__row:hover {
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 28%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 28%, transparent);
 }
 
 .escalations-split__list .escalation-table__row--selected {
-  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
-  box-shadow: inset 2px 0 0 var(--lastro-brand-seal);
+  background: color-mix(in srgb, var(--lastre-link) 8%, transparent);
+  box-shadow: inset 2px 0 0 var(--lastre-link);
 }
 
 .escalations-split__list .escalation-table__row--selected:hover {
-  background: color-mix(in srgb, var(--lastro-brand-seal) 12%, transparent);
+  background: color-mix(in srgb, var(--lastre-link) 12%, transparent);
 }
 
 .escalations-split__detail {
@@ -110,8 +110,8 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: var(--lastro-bg-panel);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  background: var(--lastre-bg-surface);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-radius: var(--panel-radius);
   box-shadow: var(--app-shadow-panel);
 }

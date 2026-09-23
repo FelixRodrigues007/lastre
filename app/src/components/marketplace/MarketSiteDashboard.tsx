@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { LiveValue } from "../motion/LiveValue";
@@ -390,14 +391,14 @@ function CameraModal({ cameras, siteName, activeId, clock, onSelect, onClose }: 
             </span>
             <span className="market-cam-modal__clock mono-label">{clock} UTC-3</span>
           </div>
-          <button
+          <Button variant="ghost" size="sm" iconOnly
             type="button"
             className="market-cam-modal__close"
             onClick={onClose}
             aria-label="Close camera"
           >
             ×
-          </button>
+          </Button>
         </header>
 
         <div className="market-cam-modal__main">

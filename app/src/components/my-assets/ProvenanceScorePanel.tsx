@@ -1,3 +1,5 @@
+import { ActionLink } from "../ui/ActionLink";
+import { Button } from "../ui/Button";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "../ui/Icon";
@@ -206,17 +208,17 @@ function PanelToolbar() {
   return (
     <div className="prov-toolbar">
       <div className="prov-toolbar__left">
-        <button type="button" className="prov-toolbar__btn" disabled>
+        <Button variant="secondary" size="md" type="button" className="prov-toolbar__btn" disabled>
           <Icon name="search" /> Add filter
-        </button>
+        </Button>
       </div>
       <div className="prov-toolbar__right">
-        <button type="button" className="prov-toolbar__btn prov-toolbar__btn--ghost" disabled>
+        <Button variant="secondary" size="md" type="button" className="prov-toolbar__btn prov-toolbar__btn--ghost" disabled>
           <Icon name="download" /> Print report
-        </button>
-        <button type="button" className="prov-toolbar__range" disabled>
+        </Button>
+        <Button variant="secondary" size="md" type="button" className="prov-toolbar__range" disabled>
           Last 30 days (demo) <Icon name="chevron-down" />
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -460,12 +462,12 @@ export function ProvenanceScorePanel({ lot, layers, score, embedded = false }: P
       <ProvenanceTrendChart score={score} assetId={lot.artifact.assetId} />
 
       <footer className="prov-score-panel__actions">
-        <Link className="route-cta" to={`/lots?lot=${encodeURIComponent(lot.artifact.assetId)}`}>
+        <ActionLink variant="primary" size="md" className="route-cta" to={`/lots?lot=${encodeURIComponent(lot.artifact.assetId)}`}>
           Open evidence room
-        </Link>
-        <Link className="route-cta route-cta--ghost" to="/marketplace">
+        </ActionLink>
+        <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace">
           DeFi / Collateral
-        </Link>
+        </ActionLink>
       </footer>
     </section>
   );

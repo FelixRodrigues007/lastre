@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { ActionLink } from "../ui/ActionLink";
 import type { LotDetail } from "../../lib/types";
 import { VerdictBadge } from "../proof/Badges";
 import { ProofRail, proofStepFromLot } from "../proof/ProofRail";
@@ -83,26 +83,26 @@ export function LotProofStatus({ lot, variant = "default" }: LotProofStatusProps
       </div>
 
       <div className="lot-proof-status__actions">
-        <Link className="route-cta" to={primaryTo}>
+        <ActionLink variant="primary" size="md" className="route-cta" to={primaryTo}>
           <BtnIcon icon={primaryIcon}>{primaryLabel}</BtnIcon>
-        </Link>
+        </ActionLink>
         {hasAudit ? (
-          <Link
+          <ActionLink variant="secondary" size="md"
             className="route-cta route-cta--ghost"
             to={`/audit/${encodeURIComponent(lot.artifact.assetId)}`}
           >
             View audit record
-          </Link>
+          </ActionLink>
         ) : null}
         {isValid && isTokenizable && primaryTo !== "/marketplace" ? (
-          <Link className="route-cta route-cta--ghost" to="/marketplace">
+          <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace">
             Marketplace (demo)
-          </Link>
+          </ActionLink>
         ) : null}
         {!inDrawer ? (
-          <Link className="route-cta route-cta--ghost" to="/lots">
+          <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/lots">
             Back to catalog
-          </Link>
+          </ActionLink>
         ) : null}
       </div>
     </aside>

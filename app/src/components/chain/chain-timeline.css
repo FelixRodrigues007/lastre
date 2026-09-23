@@ -21,18 +21,18 @@
 
 .chain-timeline-group__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 0.875rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .chain-timeline-group__hint {
   margin: 0;
   font-size: 0.75rem;
   line-height: 1.45;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .chain-timeline-group__empty {
@@ -40,10 +40,10 @@
   padding: 0.85rem 1rem;
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: var(--lastro-text-muted);
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) dashed var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 30%, transparent);
+  color: var(--lastre-text-muted);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) dashed var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 30%, transparent);
 }
 
 .chain-timeline-divider {
@@ -56,5 +56,5 @@
 .chain-timeline-divider__line {
   flex: 1;
   height: 1px;
-  background: var(--lastro-border-subtle);
+  background: var(--lastre-border-subtle);
 }

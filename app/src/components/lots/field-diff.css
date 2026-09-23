@@ -15,7 +15,7 @@
   margin: 0.2rem 0 0;
   font-size: 0.75rem;
   line-height: 1.45;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   max-width: 52ch;
 }
 
@@ -25,12 +25,12 @@
   gap: 0.35rem;
   flex-shrink: 0;
   padding: 0.35rem 0.65rem;
-  border-radius: var(--lastro-radius-pill);
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  border-radius: var(--lastre-radius-pill);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  border: var(--lastro-stroke-hairline) solid transparent;
+  border: var(--lastre-stroke-hairline) solid transparent;
 }
 
 .field-diff__stamp-icon {
@@ -39,21 +39,21 @@
 }
 
 .field-diff__stamp--match {
-  color: var(--lastro-status-valid);
-  border-color: color-mix(in srgb, var(--lastro-status-valid) 35%, transparent);
-  background: color-mix(in srgb, var(--lastro-status-valid) 8%, transparent);
+  color: var(--lastre-success);
+  border-color: color-mix(in srgb, var(--lastre-success) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-success) 8%, transparent);
 }
 
 .field-diff__stamp--mismatch {
-  color: var(--lastro-status-invalid);
-  border-color: color-mix(in srgb, var(--lastro-status-invalid) 35%, transparent);
-  background: color-mix(in srgb, var(--lastro-status-invalid) 8%, transparent);
+  color: var(--lastre-danger);
+  border-color: color-mix(in srgb, var(--lastre-danger) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-danger) 8%, transparent);
 }
 
 .field-diff__table-wrap {
   overflow-x: auto;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .field-diff__table {
@@ -65,45 +65,45 @@
 .field-diff__table thead th {
   padding: 0.55rem 0.75rem;
   text-align: left;
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  color: var(--lastre-text-muted);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 40%, transparent);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .field-diff__table tbody th,
 .field-diff__table tbody td {
   padding: 0.5rem 0.75rem;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   vertical-align: top;
 }
 
 .field-diff__table tbody th {
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-secondary);
   white-space: nowrap;
 }
 
 .field-diff__mono {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.75rem;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .field-diff__row--diverge {
-  background: color-mix(in srgb, var(--lastro-status-invalid) 7%, transparent);
+  background: color-mix(in srgb, var(--lastre-danger) 7%, transparent);
 }
 
 .field-diff__row--diverge .field-diff__mono:last-child {
-  color: var(--lastro-status-invalid);
-  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastre-danger);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .field-diff__row--diverge td:last-child {
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastro-status-invalid) 70%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastre-danger) 70%, transparent);
 }
 
 .field-diff__footer {
@@ -113,9 +113,9 @@
 }
 
 .field-diff__footer--match {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .field-diff__footer--mismatch {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }

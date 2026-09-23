@@ -12,14 +12,14 @@
   gap: 6px;
   font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .market-cams__live-dot {
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: #e24b4b;
+  background: var(--lastre-danger);
   animation: market-cam-pulse 1.6s ease-in-out infinite;
 }
 
@@ -35,8 +35,8 @@
 
 .market-cams__clock {
   margin-left: auto;
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
 }
 
 .market-cams__grid {
@@ -63,7 +63,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-  background: var(--lastro-bg-elevated);
+  background: var(--lastre-bg-elevated);
   aspect-ratio: 16 / 10;
 }
 
@@ -93,7 +93,7 @@
   top: 5px;
   left: 5px;
   padding: 1px 4px;
-  font-size: 0.5rem;
+  font-size: 0.6875rem;
 }
 
 .market-cam-feed__compact-label {
@@ -104,8 +104,8 @@
   z-index: 1;
   padding: 14px 6px 5px;
   background: linear-gradient(180deg, transparent, rgba(10, 23, 19, 0.9));
-  color: var(--lastro-text-primary);
-  font-size: 0.5625rem;
+  color: var(--lastre-text-primary);
+  font-size: 0.6875rem;
   font-weight: 600;
   text-align: left;
   white-space: nowrap;
@@ -134,7 +134,7 @@
   max-height: min(92vh, 720px);
   padding: 14px 14px 12px;
   border-radius: 14px;
-  background: var(--lastro-bg-elevated);
+  background: var(--lastre-bg-elevated);
   box-shadow:
     inset 0 0 0 0.5px var(--app-stroke-divider),
     0 28px 56px -20px rgba(0, 0, 0, 0.75);
@@ -157,13 +157,13 @@
   font-size: 0.9375rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .market-cam-modal__zone {
   margin: 2px 0 0;
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .market-cam-modal__meta {
@@ -174,26 +174,12 @@
 }
 
 .market-cam-modal__clock {
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
 }
 
 .market-cam-modal__close {
   width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--app-fill-hover);
-  color: var(--lastro-text-secondary);
-  font-size: 1.25rem;
-  line-height: 1;
-  cursor: pointer;
-  transition: background var(--dur-fast) var(--ease-out);
-}
-
-.market-cam-modal__close:hover {
-  background: var(--app-fill-active);
-  color: var(--lastro-text-primary);
 }
 
 .market-cam-modal__main {
@@ -213,7 +199,7 @@
   border-radius: 8px;
   cursor: pointer;
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px var(--lastro-border-subtle);
+  box-shadow: inset 0 0 0 1px var(--lastre-border-subtle);
   transition:
     box-shadow var(--dur-fast) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
@@ -225,14 +211,14 @@
 
 .market-cam-modal__thumb--active {
   box-shadow:
-    inset 0 0 0 2px var(--lastro-brand-seal),
-    0 0 0 1px color-mix(in srgb, var(--lastro-brand-seal) 35%, transparent);
+    inset 0 0 0 2px var(--lastre-link),
+    0 0 0 1px color-mix(in srgb, var(--lastre-link) 35%, transparent);
 }
 
 .market-cam-modal__disclaimer {
   margin: 0;
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 @media (max-width: 640px) {
@@ -290,7 +276,7 @@
   border-radius: 4px;
   background: rgba(226, 75, 75, 0.9);
   color: #fff;
-  font-size: 0.5625rem;
+  font-size: 0.6875rem;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -303,7 +289,7 @@
   z-index: 1;
   padding: 20px 10px 8px;
   background: linear-gradient(180deg, transparent, rgba(10, 23, 19, 0.85));
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .market-cam-feed__meta strong {
@@ -313,7 +299,7 @@
 }
 
 .market-cam-feed__meta span {
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
 }
 

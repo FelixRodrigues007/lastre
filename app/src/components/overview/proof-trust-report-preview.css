@@ -8,7 +8,7 @@
   position: absolute;
   inset: 0.65rem -0.35rem -0.35rem 0.65rem;
   border-radius: 14px;
-  background: color-mix(in srgb, #fff 88%, var(--lastro-color-cream-100));
+  background: color-mix(in srgb, #fff 88%, var(--lastre-color-mirage-50));
   box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.45);
   transform: rotate(4deg);
   opacity: 0.45;
@@ -19,9 +19,9 @@
   z-index: 1;
   padding: 1rem 1.05rem 0.9rem;
   border-radius: 14px;
-  border: 1px solid color-mix(in srgb, #fff 70%, var(--lastro-color-cream-200));
+  border: 1px solid color-mix(in srgb, #fff 70%, var(--lastre-color-mirage-100));
   background: #fff;
-  color: var(--lastro-color-olive-900);
+  color: var(--lastre-text-secondary);
   box-shadow:
     0 1px 2px rgba(10, 23, 19, 0.05),
     0 16px 44px -18px rgba(0, 0, 0, 0.38);
@@ -43,18 +43,18 @@
 
 .proof-report-preview__brand-name {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
-  color: var(--lastro-color-olive-800);
+  color: var(--lastre-text-secondary);
 }
 
 .proof-report-preview__title {
   margin: 0.1rem 0 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 0.9375rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.03em;
   line-height: 1.15;
 }
@@ -63,20 +63,20 @@
   flex-shrink: 0;
   padding: 0.2rem 0.5rem;
   border-radius: var(--app-radius-pill);
-  font-family: var(--lastro-font-mono);
-  font-size: 0.5625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--lastro-color-valid-600);
-  background: color-mix(in srgb, var(--lastro-color-valid-500) 12%, #fff);
-  border: 1px solid color-mix(in srgb, var(--lastro-color-valid-500) 24%, #fff);
+  color: var(--lastre-success);
+  background: color-mix(in srgb, var(--lastre-success) 12%, #fff);
+  border: 1px solid color-mix(in srgb, var(--lastre-success) 24%, #fff);
 }
 
 .proof-report-preview__subtitle {
   margin: 0.55rem 0 0;
   font-size: 0.6875rem;
   line-height: 1.4;
-  color: color-mix(in srgb, var(--lastro-color-olive-600) 75%, #fff);
+  color: color-mix(in srgb, var(--lastre-color-mirage-600) 75%, #fff);
 }
 
 .proof-report-preview__checks {
@@ -93,7 +93,7 @@
   gap: 0.45rem;
   font-size: 0.6875rem;
   line-height: 1.3;
-  color: var(--lastro-color-olive-800);
+  color: var(--lastre-text-secondary);
 }
 
 .proof-report-preview__check-mark {
@@ -104,8 +104,8 @@
   height: 1.125rem;
   border-radius: 50%;
   flex-shrink: 0;
-  color: var(--lastro-color-valid-600);
-  background: color-mix(in srgb, var(--lastro-color-valid-500) 14%, #fff);
+  color: var(--lastre-success);
+  background: color-mix(in srgb, var(--lastre-success) 14%, #fff);
 }
 
 .proof-report-preview__foot {
@@ -114,7 +114,7 @@
   gap: 0.35rem;
   margin-top: 0.8rem;
   padding-top: 0.7rem;
-  border-top: 1px solid color-mix(in srgb, var(--lastro-color-olive-500) 12%, #fff);
+  border-top: 1px solid color-mix(in srgb, var(--lastre-color-mirage-500) 12%, #fff);
 }
 
 .proof-report-preview__doc-pill {
@@ -123,10 +123,10 @@
   gap: 0.3rem;
   padding: 0.22rem 0.45rem;
   border-radius: var(--app-radius-pill);
-  font-size: 0.625rem;
-  color: var(--lastro-color-olive-700);
-  background: var(--lastro-color-cream-100);
-  border: 1px solid color-mix(in srgb, var(--lastro-color-olive-500) 14%, #fff);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-secondary);
+  background: var(--lastre-color-mirage-50);
+  border: 1px solid color-mix(in srgb, var(--lastre-color-mirage-500) 14%, #fff);
 }
 
 /* Banner slot — stacked sheets, bottom-right anchor */
@@ -145,8 +145,8 @@
 .proof-report-preview__sheet {
   position: absolute;
   border-radius: 10px;
-  border: 0.75px solid color-mix(in srgb, var(--lastro-color-olive-500) 14%, #fff);
-  background: color-mix(in srgb, #fff 92%, var(--lastro-color-cream-100));
+  border: 0.75px solid color-mix(in srgb, var(--lastre-color-mirage-500) 14%, #fff);
+  background: color-mix(in srgb, #fff 92%, var(--lastre-color-mirage-50));
   box-shadow: 0 8px 20px -14px rgba(0, 0, 0, 0.35);
   pointer-events: none;
 }
@@ -178,7 +178,7 @@
   gap: 0.45rem;
   padding: 0.7rem 0.75rem 0.65rem;
   border-radius: 10px;
-  border: 0.75px solid color-mix(in srgb, #fff 78%, var(--lastro-color-cream-200));
+  border: 0.75px solid color-mix(in srgb, #fff 78%, var(--lastre-color-mirage-100));
   box-shadow:
     0 1px 0 color-mix(in srgb, #fff 90%, transparent),
     0 14px 32px -18px rgba(0, 0, 0, 0.45);
@@ -200,7 +200,7 @@
 }
 
 .proof-report-preview--banner .proof-report-preview__brand-name {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   line-height: 1.2;
 }
 
@@ -214,7 +214,7 @@
 .proof-report-preview__badge--banner {
   align-self: flex-start;
   padding: 0.2rem 0.45rem;
-  font-size: 0.5625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.04em;
 }
 
@@ -222,12 +222,12 @@
   margin: 0;
   gap: 0.3rem;
   padding-top: 0.35rem;
-  border-top: 0.75px solid color-mix(in srgb, var(--lastro-color-olive-500) 10%, #fff);
+  border-top: 0.75px solid color-mix(in srgb, var(--lastre-color-mirage-500) 10%, #fff);
 }
 
 .proof-report-preview--banner .proof-report-preview__check {
   gap: 0.35rem;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   line-height: 1.25;
 }
 
@@ -258,6 +258,6 @@
   }
 
   .overview-aside .proof-report-preview--banner .proof-report-preview__check {
-    font-size: 0.5625rem;
+    font-size: 0.6875rem;
   }
 }

@@ -22,7 +22,7 @@
 .process-pipeline--embedded .process-queue {
   padding: 0.65rem 0.75rem;
   border-style: solid;
-  background: color-mix(in srgb, var(--lastro-bg-primary) 14%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 14%, transparent);
 }
 
 .process-pipeline--embedded .process-pipeline__summary {
@@ -39,14 +39,14 @@
 
 .process-pipeline__step {
   margin: 0 0 0.15rem;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-pipeline__lead {
   margin: 0.35rem 0 0;
   font-size: 0.8125rem;
   line-height: 1.5;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   max-width: 48ch;
 }
 
@@ -54,16 +54,16 @@
   display: grid;
   gap: 0.75rem;
   padding: 0.85rem 1rem;
-  border-radius: var(--lastro-radius-md);
-  border: var(--lastro-stroke-hairline) dashed color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 22%, transparent);
+  border-radius: var(--lastre-radius-md);
+  border: var(--lastre-stroke-hairline) dashed color-mix(in srgb, var(--lastre-link) 22%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 22%, transparent);
 }
 
 .process-queue__title {
   margin: 0;
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-secondary);
 }
 
 .process-queue__list {
@@ -80,26 +80,26 @@
   gap: 0.65rem;
   align-items: center;
   padding: 0.5rem 0.65rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-bg-panel) 70%, transparent);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-bg-surface) 70%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .process-queue__index {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-queue__name {
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-primary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-primary);
 }
 
 .process-queue__status {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-ledger__row--queued {
@@ -108,31 +108,31 @@
 
 .process-pipeline__title {
   margin: 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 0.9375rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .process-pipeline__status {
   margin: 0;
   flex-shrink: 0;
   padding: 0.28rem 0.5rem;
-  border-radius: var(--lastro-radius-pill);
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  border-radius: var(--lastre-radius-pill);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--lastro-brand-seal);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 10%, transparent);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 25%, transparent);
+  color: var(--lastre-link);
+  background: color-mix(in srgb, var(--lastre-link) 10%, transparent);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 25%, transparent);
 }
 
 .process-pipeline__status--idle {
-  color: var(--lastro-text-muted);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
-  border-color: var(--lastro-border-subtle);
+  color: var(--lastre-text-muted);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 40%, transparent);
+  border-color: var(--lastre-border-subtle);
 }
 
 .process-pipeline__principle {
@@ -141,9 +141,9 @@
   align-items: center;
   gap: 0.45rem 0.65rem;
   padding: 0.5rem 0.7rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 5%, var(--lastro-bg-primary));
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 18%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-link) 5%, var(--lastre-bg-canvas));
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 18%, transparent);
 }
 
 .process-pipeline__principle-col {
@@ -151,19 +151,19 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.6875rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .process-pipeline__principle-col strong {
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .process-pipeline__principle-col--seal {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-pipeline__principle-arrow {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   opacity: 0.5;
   font-size: 0.75rem;
 }
@@ -174,9 +174,9 @@
   text-align: center;
   font-size: 0.8125rem;
   line-height: 1.55;
-  color: var(--lastro-text-muted);
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) dashed var(--lastro-border-subtle);
+  color: var(--lastre-text-muted);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) dashed var(--lastre-border-subtle);
 }
 
 .process-ledger-wrap {
@@ -192,20 +192,20 @@
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.8125rem;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  border-radius: var(--lastro-radius-sm);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  border-radius: var(--lastre-radius-sm);
   overflow: hidden;
 }
 
 .process-ledger thead th {
   padding: 0.45rem 0.75rem;
   text-align: left;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 55%, transparent);
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  color: var(--lastre-text-muted);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 55%, transparent);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .process-ledger thead th:nth-child(1) {
@@ -219,7 +219,7 @@
 .process-ledger tbody td,
 .process-ledger tbody th {
   padding: 0.55rem 0.75rem;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   vertical-align: top;
 }
 
@@ -229,16 +229,16 @@
 }
 
 .process-ledger tbody tr:nth-child(even):not(.process-ledger__row--running):not(.process-ledger__row--proof-invalid) {
-  background: color-mix(in srgb, var(--lastro-bg-primary) 18%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 18%, transparent);
 }
 
 .process-pipeline__idle {
   display: grid;
   gap: 0.55rem;
   padding: 0.65rem 0.75rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 28%, transparent);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 28%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .process-pipeline__steps {
@@ -252,11 +252,11 @@
 }
 
 .process-pipeline__steps li {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-pipeline__steps li + li::before {
@@ -271,7 +271,7 @@
   gap: 0.35rem;
   margin: 0;
   font-size: 0.75rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .process-pipeline__summary {
@@ -282,9 +282,9 @@
   gap: 0.6rem;
   margin-top: auto;
   padding: 0.75rem 0.85rem;
-  border-radius: var(--lastro-radius-md);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 96%, transparent);
+  border-radius: var(--lastre-radius-md);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 96%, transparent);
   box-shadow: var(--app-shadow-panel);
 }
 
@@ -314,43 +314,43 @@
   display: grid;
   gap: 0.08rem;
   padding: 0.4rem 0.5rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 30%, transparent);
-  border-left: 2px solid var(--lastro-border-subtle);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 30%, transparent);
+  border-left: 2px solid var(--lastre-border-subtle);
 }
 
 .process-pipeline__score--tokenizable {
-  border-left-color: var(--lastro-status-valid);
+  border-left-color: var(--lastre-success);
 }
 
 .process-pipeline__score--rejected {
-  border-left-color: var(--lastro-status-invalid);
+  border-left-color: var(--lastre-danger);
 }
 
 .process-pipeline__score--skipped {
-  border-left-color: var(--lastro-text-muted);
+  border-left-color: var(--lastre-text-muted);
 }
 
 .process-pipeline__score--escalated {
-  border-left-color: var(--lastro-status-warning, #c9a227);
+  border-left-color: var(--lastre-warning);
 }
 
 .process-pipeline__scoreboard dt {
   margin: 0;
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .process-pipeline__scoreboard dd {
   margin: 0;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 1rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   font-variant-numeric: tabular-nums;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .process-pipeline__summary-actions {

@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocaleContext } from "../../context/LocaleContext";
@@ -103,14 +104,14 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
             </h2>
             <p className="settings-modal__lead">{t("settings.lead")}</p>
           </div>
-          <button
+          <Button variant="ghost" size="sm" iconOnly
             type="button"
             className="settings-modal__close"
             onClick={onClose}
             aria-label={t("settings.close")}
           >
             ×
-          </button>
+          </Button>
         </header>
 
         <div className="settings-modal__shell">

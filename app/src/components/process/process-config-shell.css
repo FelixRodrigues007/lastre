@@ -4,11 +4,11 @@
   height: fit-content;
   padding: 1.1rem 1.15rem 1.15rem;
   border-radius: 1.125rem;
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-border-subtle) 65%, transparent);
-  background: color-mix(in srgb, var(--lastro-bg-panel) 94%, var(--lastro-bg-primary));
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-border-subtle) 65%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-surface) 94%, var(--lastre-bg-canvas));
   backdrop-filter: blur(20px) saturate(1.2);
   box-shadow:
-    0 0 0 0.5px color-mix(in srgb, var(--lastro-text-primary) 6%, transparent) inset,
+    0 0 0 0.5px color-mix(in srgb, var(--lastre-text-primary) 6%, transparent) inset,
     0 12px 40px rgba(0, 0, 0, 0.14);
   transition:
     border-color var(--dur-normal) var(--ease-out),
@@ -25,18 +25,18 @@
   background:
     radial-gradient(
       ellipse 120% 80% at 50% 100%,
-      color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent) 0%,
+      color-mix(in srgb, var(--lastre-link) 22%, transparent) 0%,
       transparent 62%
     );
   transition: opacity var(--dur-normal) var(--ease-out);
 }
 
 .process-config-shell--running {
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 38%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-link) 38%, transparent);
   box-shadow:
-    0 0 0 0.5px color-mix(in srgb, var(--lastro-brand-seal) 12%, transparent) inset,
+    0 0 0 0.5px color-mix(in srgb, var(--lastre-link) 12%, transparent) inset,
     0 12px 40px rgba(0, 0, 0, 0.14),
-    0 0 32px -12px color-mix(in srgb, var(--lastro-brand-seal) 28%, transparent);
+    0 0 32px -12px color-mix(in srgb, var(--lastre-link) 28%, transparent);
 }
 
 .process-config-shell--running .process-config-shell__glow {

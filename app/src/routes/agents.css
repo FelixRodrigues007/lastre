@@ -8,8 +8,8 @@
   gap: 1rem;
   padding: clamp(1rem, 0.8rem + 1vw, 1.5rem);
   background:
-    radial-gradient(circle at 12% 12%, color-mix(in srgb, var(--lastro-accent-brand) 16%, transparent), transparent 34%),
-    var(--lastro-bg-panel);
+    radial-gradient(circle at 12% 12%, color-mix(in srgb, var(--lastre-link) 16%, transparent), transparent 34%),
+    var(--lastre-bg-surface);
 }
 
 @media (min-width: 900px) {
@@ -30,15 +30,15 @@
 .agents-hero p,
 .agents-win p,
 .agents-card p {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.55;
 }
 
 .agents-hero__thesis {
   margin: 0 0 0.65rem;
-  color: var(--lastro-text-primary) !important;
+  color: var(--lastre-text-primary) !important;
   font-size: clamp(0.98rem, 0.9rem + 0.35vw, 1.15rem);
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .agents-hero__stats {
@@ -49,20 +49,20 @@
 
 .agents-hero__stats div {
   padding: 0.85rem;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-radius: 14px;
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 84%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 84%, transparent);
 }
 
 .agents-hero__stats dt {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: 0.7rem;
 }
 
 .agents-hero__stats dd {
   margin: 0.2rem 0 0;
-  color: var(--lastro-text-primary);
-  font-weight: var(--lastro-weight-semibold);
+  color: var(--lastre-text-primary);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .agents-grid {
@@ -100,10 +100,10 @@
   margin: 1rem 0 0;
   padding: 1rem;
   border-radius: 14px;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: var(--lastro-bg-primary);
-  color: var(--lastro-text-secondary);
-  font-family: var(--lastro-font-mono, ui-monospace, monospace);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: var(--lastre-bg-canvas);
+  color: var(--lastre-text-secondary);
+  font-family: var(--lastre-font-mono, ui-monospace, monospace);
   font-size: 0.78rem;
   line-height: 1.55;
 }
@@ -119,20 +119,20 @@
 .agents-payload-list li,
 .agents-compare__row {
   padding: 0.9rem;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-radius: 14px;
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 76%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 76%, transparent);
 }
 
 .agents-payload-list strong {
   display: block;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .agents-payload-list span {
   display: block;
   margin-top: 0.25rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: 0.82rem;
   line-height: 1.45;
 }
@@ -158,12 +158,12 @@
   display: inline-flex;
   margin-bottom: 0.25rem;
   padding: 4px 8px;
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-accent-brand) 45%, var(--lastro-border-subtle));
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 45%, var(--lastre-border-subtle));
   border-radius: 999px;
-  background: color-mix(in srgb, var(--lastro-accent-brand) 9%, transparent);
-  color: var(--lastro-text-primary);
-  font-family: var(--lastro-font-mono, ui-monospace, monospace);
-  font-size: 0.64rem;
+  background: color-mix(in srgb, var(--lastre-link) 9%, transparent);
+  color: var(--lastre-text-primary);
+  font-family: var(--lastre-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }

@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import type { DeciderMode, LotListItem } from "../../lib/types";
 import { LotPreviewThumb } from "../lots/LotPreviewThumb";
 import { useLocaleContext } from "../../context/LocaleContext";
@@ -147,9 +148,9 @@ export function ProcessConfigCard({
       {phase === "error" ? (
         <div className="process-config__error" role="alert">
           <p>{runError}</p>
-          <button type="button" className="route-cta route-cta--ghost" onClick={onRetry}>
+          <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={onRetry}>
             {t("process.retry")}
-          </button>
+          </Button>
         </div>
       ) : null}
 
@@ -171,14 +172,14 @@ export function ProcessConfigCard({
           </div>
         ) : (
           <div className="process-config__footer">
-            <button
+            <Button variant="primary" size="md"
               type="button"
               className="route-cta process-config__run"
               disabled={running || selected.length === 0}
               onClick={onRun}
             >
               {t("process.run")}
-            </button>
+            </Button>
             <p className="process-config__footnote">{t("process.config.llmFootnote")}</p>
           </div>
         )}

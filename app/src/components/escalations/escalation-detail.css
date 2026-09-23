@@ -6,7 +6,7 @@
   max-height: 100%;
   padding: 0;
   overflow: hidden;
-  background: var(--lastro-bg-elevated);
+  background: var(--lastre-bg-elevated);
 }
 
 .escalation-detail__head {
@@ -14,7 +14,7 @@
   display: grid;
   gap: 0.875rem;
   padding: 1.25rem 1.25rem 1rem;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
 }
 
 .escalation-detail--empty {
@@ -32,29 +32,29 @@
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 999px;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 40%, transparent);
 }
 
 .escalation-detail__empty-ring {
   position: absolute;
   inset: 0.45rem;
   border-radius: 999px;
-  border: 2px dashed color-mix(in srgb, var(--lastro-status-warning, #c9a227) 45%, transparent);
+  border: 2px dashed color-mix(in srgb, var(--lastre-warning) 45%, transparent);
 }
 
 .escalation-detail__empty-title {
   margin: 0;
   font-size: var(--text-small);
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-secondary);
 }
 
 .escalation-detail__empty-hint {
   margin: 0;
   max-width: 22ch;
   font-size: 0.8125rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   line-height: 1.45;
 }
 
@@ -64,28 +64,28 @@
 
 .escalation-detail__kicker {
   margin: 0;
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .escalation-detail__title {
   margin: 0.35rem 0 0;
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.25rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.03em;
   line-height: 1.2;
   word-break: break-word;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .escalation-detail__subtitle {
   margin: 0.5rem 0 0;
   font-size: 0.8125rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   line-height: 1.5;
 }
 
@@ -98,9 +98,9 @@
 }
 
 .escalation-detail__decider {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   padding-inline-start: 0.125rem;
 }
 
@@ -120,12 +120,12 @@
 .escalation-detail__audit-link {
   flex-shrink: 0;
   font-size: 0.75rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-muted);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-muted);
   white-space: nowrap;
   padding: 0.35rem 0.5rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid transparent;
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid transparent;
   transition:
     color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
@@ -133,8 +133,8 @@
 }
 
 .escalation-detail__audit-link:hover {
-  color: var(--lastro-brand-seal);
-  border-color: var(--lastro-border-subtle);
+  color: var(--lastre-link);
+  border-color: var(--lastre-border-subtle);
   background: var(--app-fill-hover);
 }
 
@@ -198,15 +198,15 @@
 .escalation-detail__reason {
   margin: 0;
   padding: 1rem 1.125rem;
-  border-radius: var(--lastro-radius-sm);
+  border-radius: var(--lastre-radius-sm);
   background:
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--lastro-bg-primary) 52%, transparent) 0%,
-      color-mix(in srgb, var(--lastro-bg-elevated) 40%, transparent) 100%
+      color-mix(in srgb, var(--lastre-bg-canvas) 52%, transparent) 0%,
+      color-mix(in srgb, var(--lastre-bg-elevated) 40%, transparent) 100%
     );
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  border-left: 3px solid color-mix(in srgb, var(--lastro-status-warning, #c9a227) 55%, transparent);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  border-left: 3px solid color-mix(in srgb, var(--lastre-warning) 55%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 4%, transparent);
 }
 
@@ -217,7 +217,7 @@
 .escalation-detail__reason p:last-child {
   margin: 0.5rem 0 0;
   font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.55;
   white-space: pre-wrap;
   word-break: break-word;
@@ -226,7 +226,7 @@
 .escalation-detail__agent-note {
   margin: 0;
   font-size: var(--text-small);
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   line-height: 1.5;
   padding-inline: 0.125rem;
 }
@@ -234,21 +234,21 @@
 .escalation-detail__feedback {
   margin: 0;
   font-size: var(--text-small);
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   padding: 0.625rem 0.75rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, var(--lastro-brand-seal) 8%, transparent);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, var(--lastro-brand-seal) 20%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-link) 8%, transparent);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-link) 20%, transparent);
 }
 
 .escalation-detail__error {
   margin: 0;
   font-size: var(--text-small);
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   padding: 0.625rem 0.75rem;
-  border-radius: var(--lastro-radius-sm);
-  background: color-mix(in srgb, #c44 12%, transparent);
-  border: var(--lastro-stroke-hairline) solid color-mix(in srgb, #c44 30%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  background: color-mix(in srgb, var(--lastre-danger) 12%, transparent);
+  border: var(--lastre-stroke-hairline) solid color-mix(in srgb, var(--lastre-danger) 30%, transparent);
 }
 
 /* Fields tab — lot-drawer style rows */
@@ -257,8 +257,8 @@
   margin: 0;
   border-radius: 10px;
   overflow: hidden;
-  border: 0.5px solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 40%, transparent);
+  border: 0.5px solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 40%, transparent);
 }
 
 .escalation-detail .artifact-panel__row {
@@ -268,7 +268,7 @@
   padding: 0.7rem 1rem;
   border-radius: 0;
   border: none;
-  border-bottom: 0.5px solid var(--lastro-border-subtle);
+  border-bottom: 0.5px solid var(--lastre-border-subtle);
 }
 
 .escalation-detail .artifact-panel__row:last-child {
@@ -276,18 +276,18 @@
 }
 
 .escalation-detail .artifact-panel__row dt {
-  font-family: var(--lastro-font-body);
+  font-family: var(--lastre-font-body);
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: -0.01em;
   text-transform: none;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   line-height: 1.35;
 }
 
 .escalation-detail .artifact-panel__note {
   margin-top: 0.2rem;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   line-height: 1.3;
 }
 
@@ -299,12 +299,12 @@
 }
 
 .escalation-detail .artifact-panel__row--highlight {
-  background: color-mix(in srgb, var(--lastro-status-invalid) 8%, transparent);
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastro-status-invalid) 55%, transparent);
+  background: color-mix(in srgb, var(--lastre-danger) 8%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--lastre-danger) 55%, transparent);
 }
 
 .escalation-detail .artifact-panel__row--highlight + .artifact-panel__row--highlight {
-  border-top: 0.5px solid color-mix(in srgb, var(--lastro-status-invalid) 18%, var(--lastro-border-subtle));
+  border-top: 0.5px solid color-mix(in srgb, var(--lastre-danger) 18%, var(--lastre-border-subtle));
 }
 
 /* Geo tab inside detail panel */

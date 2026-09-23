@@ -13,7 +13,7 @@
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   max-width: 52ch;
 }
 
@@ -29,11 +29,11 @@
 }
 
 .casper-proof__note--valid {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .casper-proof__note--invalid {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .casper-proof__links {
@@ -45,7 +45,7 @@
 
 .casper-proof__link {
   font-size: 0.8125rem;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
   text-decoration: none;
 }
 
@@ -54,12 +54,12 @@
 }
 
 .casper-proof__link--ghost {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .casper-proof__session {
   font-size: 0.8rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-style: italic;
   margin: 0;
 }

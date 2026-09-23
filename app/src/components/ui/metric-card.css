@@ -3,7 +3,7 @@
   gap: 0.35rem;
   padding: 1rem 1.125rem;
   border-radius: var(--panel-radius);
-  background: var(--lastro-gradient-surface-panel);
+  background: var(--lastre-bg-surface);
   box-shadow: var(--app-shadow-panel);
   position: relative;
 }
@@ -13,7 +13,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: var(--lastro-gradient-glass-highlight);
+  background: var(--lastre-glass-highlight);
   pointer-events: none;
 }
 
@@ -21,10 +21,10 @@
   background:
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--lastro-fill-brand) 85%, var(--lastro-bg-panel)) 0%,
-      var(--lastro-gradient-surface-panel) 100%
+      color-mix(in srgb, var(--lastre-fill-brand) 85%, var(--lastre-bg-surface)) 0%,
+      var(--lastre-bg-surface) 100%
     );
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-brand);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-brand);
 }
 
 .metric-card--accent::after {
@@ -39,18 +39,18 @@
 }
 
 .metric-card__label {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .metric-card__value {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.75rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.04em;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -61,15 +61,15 @@
 }
 
 .metric-card__value--valid {
-  color: var(--lastro-accent-success);
+  color: var(--lastre-success);
 }
 
 .metric-card__value--invalid {
-  color: var(--lastro-accent-danger);
+  color: var(--lastre-danger);
 }
 
 .metric-card__value--accent {
-  background: var(--lastro-gradient-seal-shine);
+  background: var(--lastre-gradient-accent-text);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -77,13 +77,13 @@
 
 .metric-card__hint {
   font-size: 0.75rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   line-height: 1.45;
   letter-spacing: -0.01em;
 }
 
 .metric-card__hint a {
-  color: var(--lastro-accent-trust);
+  color: var(--lastre-info);
 }
 
 .metric-card__hint a:hover {

@@ -19,13 +19,13 @@
 }
 
 .audit-empty__title {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 1.0625rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
 }
 
 .audit-empty__hint {
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-size: var(--text-small);
   max-width: 42ch;
   line-height: 1.5;
@@ -40,12 +40,12 @@
 .audit-export-error {
   margin-bottom: 1rem;
   font-size: var(--text-small);
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
 }
 
 .audit-no-match {
   padding: 1rem 0;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: var(--text-small);
 }
 
@@ -65,7 +65,7 @@
 .audit-table td {
   padding: 0.7rem 1rem;
   text-align: left;
-  border-bottom: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border-bottom: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   vertical-align: middle;
 }
 
@@ -75,7 +75,7 @@
 
 .audit-table tbody tr:hover,
 .audit-table__row:focus-visible {
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 35%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 35%, transparent);
 }
 
 .audit-table__row {
@@ -91,15 +91,15 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--lastro-text-muted);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 72%, transparent);
+  color: var(--lastre-text-muted);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 72%, transparent);
   backdrop-filter: blur(8px) saturate(1.1);
   -webkit-backdrop-filter: blur(8px) saturate(1.1);
-  box-shadow: 0 0.5px 0 var(--lastro-border-subtle);
+  box-shadow: 0 0.5px 0 var(--lastre-border-subtle);
 }
 
 .audit-table td:nth-child(2) {
@@ -117,32 +117,32 @@
 
 .audit-table__evidence-id {
   display: inline-block;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-semibold);
-  color: var(--lastro-text-primary);
+  font-weight: var(--lastre-weight-semibold);
+  color: var(--lastre-text-primary);
 }
 
 .audit-table__row:hover .audit-table__evidence-id {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .audit-table__evidence-sub {
   margin: 0.2rem 0 0;
   font-size: 0.75rem;
   line-height: 1.45;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   max-width: 36ch;
 }
 
 .audit-table__type {
   font-size: 0.8125rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .audit-table__owner {
   font-size: 0.8125rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .audit-cards {
@@ -185,7 +185,7 @@
   padding: 0.75rem 1rem;
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--lastro-text-secondary);
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 28%, var(--lastro-border-subtle));
-  background: color-mix(in srgb, var(--lastro-brand-seal) 6%, var(--lastro-bg-panel));
+  color: var(--lastre-text-secondary);
+  border-color: color-mix(in srgb, var(--lastre-link) 28%, var(--lastre-border-subtle));
+  background: color-mix(in srgb, var(--lastre-link) 6%, var(--lastre-bg-surface));
 }

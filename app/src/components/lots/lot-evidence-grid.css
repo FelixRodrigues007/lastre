@@ -13,7 +13,7 @@
 .lot-evidence__lead {
   margin: 0.2rem 0 0;
   font-size: 0.75rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   line-height: 1.4;
 }
 
@@ -34,52 +34,52 @@
   gap: 0.45rem;
   align-content: start;
   padding: 0.75rem 0.8rem;
-  border-radius: var(--lastro-radius-sm);
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
-  background: color-mix(in srgb, var(--lastro-bg-primary) 35%, transparent);
+  border-radius: var(--lastre-radius-sm);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 35%, transparent);
 }
 
 .lot-evidence__cell--agent {
-  border-top: 2px solid color-mix(in srgb, var(--lastro-brand-orange) 55%, transparent);
+  border-top: 2px solid color-mix(in srgb, var(--lastre-action-primary) 55%, transparent);
 }
 
 .lot-evidence__cell--seal {
-  border-top: 2px solid var(--lastro-brand-seal);
+  border-top: 2px solid var(--lastre-link);
 }
 
 .lot-evidence__cell--verdict {
-  border-top: 2px solid var(--lastro-status-valid);
+  border-top: 2px solid var(--lastre-success);
 }
 
 .lot-evidence__cell--verdict:has([data-tone="danger"]) {
-  border-top-color: var(--lastro-status-invalid);
+  border-top-color: var(--lastre-danger);
 }
 
 .lot-evidence__cell--casper {
-  border-top: 2px solid #6ea8d8;
+  border-top: 2px solid var(--lastre-info);
 }
 
 .lot-evidence__label {
   margin: 0;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .lot-evidence__sublabel {
   margin: -0.2rem 0 0;
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
   line-height: 1.35;
 }
 
 .lot-evidence__meta {
   margin: 0;
-  font-size: 0.625rem;
-  font-family: var(--lastro-font-mono);
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  font-family: var(--lastre-font-mono);
+  color: var(--lastre-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -88,21 +88,21 @@
   margin: 0;
   font-size: 0.75rem;
   line-height: 1.45;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .lot-evidence__match {
   margin: 0;
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
 }
 
 .lot-evidence__match--valid {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .lot-evidence__match--invalid {
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
 }
 
 .lot-evidence__note {
@@ -112,32 +112,32 @@
 }
 
 .lot-evidence__note--valid {
-  color: var(--lastro-status-valid);
+  color: var(--lastre-success);
 }
 
 .lot-evidence__note--invalid {
-  color: var(--lastro-status-invalid);
+  color: var(--lastre-danger);
 }
 
 .lot-evidence__tx {
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
 }
 
 .lot-evidence__link {
   font-size: 0.75rem;
-  font-weight: var(--lastro-weight-medium);
-  color: var(--lastro-text-secondary);
+  font-weight: var(--lastre-weight-medium);
+  color: var(--lastre-text-secondary);
 }
 
 .lot-evidence__link:hover {
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .lot-evidence__session {
   font-size: 0.75rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-style: italic;
   margin: 0.25rem 0 0;
 }

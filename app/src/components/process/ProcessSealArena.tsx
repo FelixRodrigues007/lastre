@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Button } from "../ui/Button";
+import { ActionLink } from "../ui/ActionLink";
 import { ProcessLotFlow } from "./ProcessLotFlow";
 import { LiveValue } from "../motion/LiveValue";
 import { Icon } from "../ui/Icon";
@@ -177,19 +178,19 @@ export function ProcessSealArena({
             </div>
           </dl>
           <div className="process-chamber__summary-actions">
-            <Link
+            <ActionLink variant="primary" size="md"
               to="/audit"
               state={{ fromProcess: true, count: records.length }}
               className="route-cta process-chamber__audit-link"
             >
               {t("process.openAudit")}
               <Icon name="chevron-right" size={16} />
-            </Link>
+            </ActionLink>
             {onRepeat ? (
-              <button type="button" className="route-cta route-cta--ghost process-chamber__repeat" onClick={onRepeat}>
+              <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost process-chamber__repeat" onClick={onRepeat}>
                 <Icon name="refresh" size={16} />
                 {t("process.repeat")}
-              </button>
+              </Button>
             ) : null}
           </div>
         </footer>

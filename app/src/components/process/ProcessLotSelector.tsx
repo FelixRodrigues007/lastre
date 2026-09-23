@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import type { LotListItem } from "../../lib/types";
 import { useLocaleContext } from "../../context/LocaleContext";
 import {
@@ -105,12 +106,12 @@ export function ProcessLotSelector({
           </p>
           {!disabled ? (
             <div className="process-lot-selector__bulk">
-              <button type="button" className="process-lot-selector__bulk-btn" onClick={onSelectAll}>
+              <Button variant="ghost" size="sm" type="button" className="process-lot-selector__bulk-btn" onClick={onSelectAll}>
                 {t("process.selectAll")}
-              </button>
-              <button type="button" className="process-lot-selector__bulk-btn" onClick={onSelectNone}>
+              </Button>
+              <Button variant="ghost" size="sm" type="button" className="process-lot-selector__bulk-btn" onClick={onSelectNone}>
                 {t("process.selectNone")}
-              </button>
+              </Button>
             </div>
           ) : null}
         </div>

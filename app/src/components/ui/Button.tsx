@@ -8,7 +8,12 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   static?: boolean;
+  iconOnly?: boolean;
 };
+
+export function buttonClassName({ variant = "primary", size = "md", className = "" }: Pick<ButtonProps, "variant" | "size" | "className">) {
+  return `lastre-button lastre-button--${variant} lastre-button--${size} ${className}`.trim();
+}
 
 export function Button({
   variant = "primary",
@@ -17,6 +22,7 @@ export function Button({
   startIcon,
   endIcon,
   static: staticMotion = false,
+  iconOnly = false,
   disabled,
   children,
   className = "",
@@ -30,9 +36,10 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       data-static={staticMotion || undefined}
+      data-icon-only={iconOnly || undefined}
       data-start-icon={Boolean(startIcon) || undefined}
       data-end-icon={Boolean(endIcon) || undefined}
-      className={`lastre-button lastre-button--${variant} lastre-button--${size} ${className}`}
+      className={buttonClassName({variant, size, className})}
     >
       <span className="lastre-button__content">
         {startIcon && (

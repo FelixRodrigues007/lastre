@@ -3,8 +3,8 @@
   gap: 0.25rem;
   padding: 0.25rem;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--lastro-bg-primary) 72%, transparent);
-  border: 0.5px solid var(--lastro-border-subtle);
+  background: color-mix(in srgb, var(--lastre-bg-canvas) 72%, transparent);
+  border: 0.5px solid var(--lastre-border-subtle);
 }
 
 .evidence-room-tabs__tab {
@@ -20,9 +20,9 @@
   border-radius: 7px;
   background: transparent;
   font-size: 0.8125rem;
-  font-weight: var(--lastro-weight-medium);
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: -0.01em;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   cursor: pointer;
   transition:
     background var(--dur-fast) var(--ease-out),
@@ -31,19 +31,19 @@
 }
 
 .evidence-room-tabs__tab:hover {
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .evidence-room-tabs__tab--active {
-  background: var(--lastro-bg-elevated);
-  color: var(--lastro-text-primary);
+  background: var(--lastre-bg-elevated);
+  color: var(--lastre-text-primary);
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.18),
     inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
 }
 
 .evidence-room-tabs__tab--alert:not(.evidence-room-tabs__tab--active) span:first-child {
-  color: color-mix(in srgb, var(--lastro-status-invalid) 85%, var(--lastro-text-muted));
+  color: color-mix(in srgb, var(--lastre-danger) 85%, var(--lastre-text-muted));
 }
 
 .evidence-room-tabs__badge {
@@ -53,11 +53,11 @@
   min-width: 1rem;
   height: 1rem;
   padding: 0 0.25rem;
-  border-radius: var(--lastro-radius-pill);
-  background: color-mix(in srgb, var(--lastro-status-invalid) 16%, transparent);
-  font-family: var(--lastro-font-mono);
-  font-size: 0.5625rem;
-  font-weight: var(--lastro-weight-semibold);
-  color: var(--lastro-status-invalid);
+  border-radius: var(--lastre-radius-pill);
+  background: color-mix(in srgb, var(--lastre-danger) 16%, transparent);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastre-weight-semibold);
+  color: var(--lastre-danger);
   line-height: 1;
 }

@@ -2,7 +2,7 @@ import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
-import "@design-system/tokens/lastro.css";
+import "@design-system/tokens/lastre.css";
 import { initLocale } from "./lib/locale";
 import { initTheme } from "./lib/theme";
 import { initDemoSession } from "./lib/initDemoSession";
@@ -14,6 +14,7 @@ import "./styles/screen-signatures.css";
 import "./styles/micro-states.css";
 import "./styles/craft.css";
 import "./styles/refine.css";
+import "./styles/lastre-app.css";
 
 initTheme();
 const isDesignSystem =

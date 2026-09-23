@@ -1,5 +1,7 @@
+import { ActionLink } from "../components/ui/ActionLink";
+import { Button } from "../components/ui/Button";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { AssetAnalyticsReport } from "../components/my-assets/AssetAnalyticsReport";
 import { MyAssetsAssetList } from "../components/my-assets/MyAssetsAssetList";
 import { SealedRailBanner } from "../components/my-assets/SealedRailBanner";
@@ -265,15 +267,15 @@ export function MyAssets() {
           hint={t("myassets.empty.noAccount.hint")}
           action={
             <div className="my-assets-empty__actions">
-              <button type="button" onClick={connectDemo} className="route-cta">
+              <Button variant="primary" size="md" type="button" onClick={connectDemo} className="route-cta">
                 <BtnIcon icon="chain">{t("myassets.empty.noAccount.connectCta")}</BtnIcon>
-              </button>
-              <Link className="route-cta route-cta--ghost" to="/marketplace">
+              </Button>
+              <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace">
                 <BtnIcon icon="globe">{t("myassets.empty.noAccount.marketplaceCta")}</BtnIcon>
-              </Link>
-              <Link className="route-cta route-cta--ghost" to={buildMarketplaceDemoUrl()}>
+              </ActionLink>
+              <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={buildMarketplaceDemoUrl()}>
                 <BtnIcon icon="process">Run full demo</BtnIcon>
-              </Link>
+              </ActionLink>
             </div>
           }
         />
@@ -291,15 +293,15 @@ export function MyAssets() {
           hint={t("myassets.empty.noAssets.hint")}
           action={
             <div className="my-assets-empty__actions">
-              <button type="button" onClick={loadDemoCollection} className="route-cta">
+              <Button variant="primary" size="md" type="button" onClick={loadDemoCollection} className="route-cta">
                 <BtnIcon icon="shield">{t("myassets.empty.noAssets.loadCta")}</BtnIcon>
-              </button>
-              <Link className="route-cta route-cta--ghost" to="/marketplace">
+              </Button>
+              <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to="/marketplace">
                 <BtnIcon icon="globe">{t("myassets.empty.noAssets.marketplaceCta")}</BtnIcon>
-              </Link>
-              <Link className="route-cta route-cta--ghost" to={buildMarketplaceDemoUrl()}>
+              </ActionLink>
+              <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={buildMarketplaceDemoUrl()}>
                 <BtnIcon icon="process">Run full demo</BtnIcon>
-              </Link>
+              </ActionLink>
             </div>
           }
         />
@@ -376,27 +378,27 @@ export function MyAssets() {
                     </div>
                     <div className="my-assets-collateral__actions">
                       {selectedLockedAt ? (
-                        <button
+                        <Button variant="secondary" size="md"
                           type="button"
                           className="route-cta route-cta--ghost"
                           disabled={collateralBusy === lot.artifact.assetId}
                           onClick={handleReleaseSelected}
                         >
                           Release Collateral
-                        </button>
+                        </Button>
                       ) : (
-                        <button
+                        <Button variant="primary" size="md"
                           type="button"
                           className="route-cta"
                           disabled={collateralBusy === lot.artifact.assetId}
                           onClick={handleLockSelected}
                         >
                           Lock as Collateral
-                        </button>
+                        </Button>
                       )}
-                      <Link className="route-cta route-cta--ghost" to={`/marketplace/${encodeURIComponent(lot.artifact.assetId)}`}>
+                      <ActionLink variant="secondary" size="md" className="route-cta route-cta--ghost" to={`/marketplace/${encodeURIComponent(lot.artifact.assetId)}`}>
                         View Marketplace Card
-                      </Link>
+                      </ActionLink>
                     </div>
                     {collateralMessage ? <p className="my-assets-collateral__message">{collateralMessage}</p> : null}
                   </section>

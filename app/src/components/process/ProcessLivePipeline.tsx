@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Button } from "../ui/Button";
+import { ActionLink } from "../ui/ActionLink";
 import { useMemo } from "react";
 import { ProcessLotRow, type LotRowPhase } from "./ProcessLotRow";
 import { Icon } from "../ui/Icon";
@@ -193,18 +194,18 @@ export function ProcessLivePipeline({
             </div>
           </dl>
           <div className="process-pipeline__summary-actions">
-            <Link
+            <ActionLink variant="primary" size="md"
               to="/audit"
               state={{ fromProcess: true, count: records.length }}
               className="route-cta process-pipeline__audit-link"
             >
               {t("process.openAudit")}
               <Icon name="chevron-right" size={16} />
-            </Link>
-            <button type="button" className="route-cta route-cta--ghost process-pipeline__repeat" onClick={onRepeat}>
+            </ActionLink>
+            <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost process-pipeline__repeat" onClick={onRepeat}>
               <Icon name="refresh" size={16} />
               {t("process.repeat")}
-            </button>
+            </Button>
           </div>
         </footer>
       ) : null}

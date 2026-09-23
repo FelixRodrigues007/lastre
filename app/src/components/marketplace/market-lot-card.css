@@ -10,9 +10,9 @@
   grid-template-rows: auto 1fr;
   gap: 0;
   padding: 0;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-radius: 10px;
-  background: var(--lastro-gradient-surface-panel);
+  background: var(--lastre-bg-surface);
   box-shadow: var(--app-shadow-panel);
   cursor: pointer;
   text-align: left;
@@ -26,15 +26,15 @@
 @media (hover: hover) and (pointer: fine) {
   .market-lot-card:hover,
   .market-lot-card--hovered {
-    border-color: color-mix(in srgb, var(--lastro-accent-trust) 35%, transparent);
+    border-color: color-mix(in srgb, var(--lastre-info) 35%, transparent);
     box-shadow: var(--app-shadow-elevated);
   }
 }
 
 .market-lot-card--selected {
-  border-color: color-mix(in srgb, var(--lastro-accent-trust) 55%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-info) 55%, transparent);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--lastro-accent-trust) 20%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--lastre-info) 20%, transparent),
     0 10px 24px -16px rgba(0, 0, 0, 0.5);
 }
 
@@ -42,7 +42,7 @@
   display: block;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  background: var(--lastro-bg-panel);
+  background: var(--lastre-bg-surface);
 }
 
 .market-lot-card__cover img {
@@ -69,7 +69,7 @@
 .market-lot-card__score {
   font-size: 0.6875rem;
   font-weight: 700;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   font-variant-numeric: tabular-nums;
 }
 
@@ -78,7 +78,7 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.25;
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -88,13 +88,13 @@
 .market-lot-card__stats,
 .market-lot-card__seal,
 .market-lot-card__foot {
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
   line-height: 1.35;
 }
 
 .market-lot-card__seal {
-  color: var(--lastro-accent-trust);
+  color: var(--lastre-info);
 }
 
 .market-lot-card__foot .mono-label {

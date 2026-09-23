@@ -1,3 +1,4 @@
+import { SelectField } from "../ui/SelectField";
 import { useLocaleContext } from "../../context/LocaleContext";
 import {
   ESCALATION_KIND_LABEL_KEYS,
@@ -85,14 +86,10 @@ export function EscalationFilters({
         })}
       </div>
 
-      <label className="escalation-filters__field">
-        <span className="escalation-filters__field-label">{t("escalations.filters.decider")}</span>
-        <select
-          className="escalation-filters__select"
-          value={decider}
-          onChange={(event) => onDeciderChange(event.target.value as EscalationDeciderFilter)}
-          aria-label={t("escalations.filters.decider")}
-        >
+      <SelectField label={t("escalations.filters.decider")} className="escalation-filters__field"
+value={decider}
+onChange={(event) => onDeciderChange(event.target.value as EscalationDeciderFilter)}
+aria-label={t("escalations.filters.decider")}>
           <option value="all">{t("escalations.filters.deciderAll")}</option>
           <option value="rule">
             {t("audit.evidence.owner.rule")} (
@@ -101,8 +98,7 @@ export function EscalationFilters({
           <option value="llm">
             {t("audit.evidence.owner.llm")} ({records.filter((r) => r.decision.decidedBy === "llm").length})
           </option>
-        </select>
-      </label>
+        </SelectField>
     </div>
   );
 }

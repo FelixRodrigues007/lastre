@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { useState } from "react";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { lockCollateral, releaseCollateral } from "../../lib/api";
@@ -65,16 +66,16 @@ export function CollateralControl({ lot, account, locked, onLockedChange }: Coll
         </span>
 
         {locked ? (
-          <button
+          <Button variant="secondary" size="md"
             type="button"
             className="route-cta route-cta--ghost"
             onClick={handleRelease}
             disabled={busy}
           >
             {busy ? t("myassets.rail.releasing") : t("myassets.rail.releaseCta")}
-          </button>
+          </Button>
         ) : (
-          <button
+          <Button variant="secondary" size="md"
             type="button"
             className="route-cta route-cta--ghost"
             onClick={handleLock}
@@ -82,7 +83,7 @@ export function CollateralControl({ lot, account, locked, onLockedChange }: Coll
             aria-describedby={!canLock ? lockReasonId : undefined}
           >
             {busy ? t("myassets.rail.locking") : t("myassets.rail.lockCta")}
-          </button>
+          </Button>
         )}
       </div>
 

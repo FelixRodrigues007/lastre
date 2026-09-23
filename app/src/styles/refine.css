@@ -5,18 +5,18 @@ html {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--lastro-accent-trust) 28%, transparent);
-  color: var(--lastro-text-primary);
+  background: color-mix(in srgb, var(--lastre-info) 28%, transparent);
+  color: var(--lastre-text-primary);
 }
 
 :root[data-theme="light"] ::selection {
-  background: color-mix(in srgb, var(--lastro-accent-trust) 22%, var(--lastro-color-cream-100));
-  color: var(--lastro-color-olive-950);
+  background: color-mix(in srgb, var(--lastre-info) 22%, var(--lastre-color-mirage-50));
+  color: var(--lastre-text-secondary);
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: color-mix(in srgb, var(--lastro-text-muted) 72%, transparent);
+  color: color-mix(in srgb, var(--lastre-text-muted) 72%, transparent);
   opacity: 1;
 }
 
@@ -29,22 +29,22 @@ kbd {
   padding: 0.1rem 0.35rem;
   border-radius: 5px;
   border: 0.5px solid var(--app-stroke-divider);
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 72%, transparent);
+  background: color-mix(in srgb, var(--lastre-bg-elevated) 72%, transparent);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     0 1px 0 rgba(0, 0, 0, 0.16);
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
-  font-weight: var(--lastro-weight-medium);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--lastre-weight-medium);
   letter-spacing: 0.02em;
   line-height: 1.35;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 /* Whisper scrollbars — visible, not hidden */
 * {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--lastro-text-muted) 32%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--lastre-text-muted) 32%, transparent) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -58,12 +58,12 @@ kbd {
 
 *::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: color-mix(in srgb, var(--lastro-text-muted) 28%, transparent);
+  background: color-mix(in srgb, var(--lastre-text-muted) 28%, transparent);
 }
 
 @media (hover: hover) and (pointer: fine) {
   *::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in srgb, var(--lastro-text-muted) 42%, transparent);
+    background: color-mix(in srgb, var(--lastre-text-muted) 42%, transparent);
   }
 }
 

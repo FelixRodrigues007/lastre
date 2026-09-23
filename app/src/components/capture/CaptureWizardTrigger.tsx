@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import type { ReactNode } from "react";
 import { useCaptureWizard } from "../../context/CaptureWizardContext";
 import { BtnIcon } from "../ui/BtnIcon";
@@ -16,8 +17,8 @@ export function CaptureWizardTrigger({
   const { openCaptureWizard } = useCaptureWizard();
 
   return (
-    <button type="button" className={className} onClick={openCaptureWizard}>
+    <Button variant={className.includes("ghost") ? "secondary" : "primary"} size="md" type="button" className={className} onClick={openCaptureWizard}>
       {icon ? <BtnIcon icon="capture">{children}</BtnIcon> : children}
-    </button>
+    </Button>
   );
 }

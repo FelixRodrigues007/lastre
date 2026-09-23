@@ -3,8 +3,8 @@
 .entry-shell {
   min-height: 100dvh;
   display: grid;
-  background: var(--lastro-bg-primary);
-  color: var(--lastro-text-primary);
+  background: var(--lastre-bg-canvas);
+  color: var(--lastre-text-primary);
 }
 
 @media (min-width: 900px) {
@@ -25,7 +25,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem clamp(1.25rem, 4vw, 2.5rem);
-  border-bottom: 1px solid var(--lastro-border-subtle);
+  border-bottom: 1px solid var(--lastre-border-subtle);
 }
 
 .entry-shell__brand {
@@ -35,9 +35,9 @@
 }
 
 .entry-shell__wordmark {
-  font-family: var(--lastro-font-display);
+  font-family: var(--lastre-font-display);
   font-size: 0.9375rem;
-  font-weight: var(--lastro-weight-semibold);
+  font-weight: var(--lastre-weight-semibold);
   letter-spacing: -0.02em;
 }
 
@@ -59,16 +59,16 @@
   margin: 0 0 1.25rem;
   font-size: 0.75rem;
   line-height: 1.4;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 /* Shared entry card */
 .entry-card {
   width: 100%;
   padding: 1.75rem;
-  border: var(--lastro-stroke-hairline) solid var(--lastro-border-subtle);
+  border: var(--lastre-stroke-hairline) solid var(--lastre-border-subtle);
   border-radius: 12px;
-  background: var(--lastro-gradient-surface-panel);
+  background: var(--lastre-bg-surface);
   box-shadow: var(--app-shadow-panel);
 }
 
@@ -84,12 +84,12 @@
 .entry-divider::after {
   content: "";
   height: 1px;
-  background: var(--lastro-border-subtle);
+  background: var(--lastre-border-subtle);
 }
 
 .entry-divider span {
   font-size: 0.75rem;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 .entry-btn {
@@ -98,66 +98,20 @@
   justify-content: center;
   gap: 0.55rem;
   width: 100%;
-  min-height: 2.5rem;
-  padding: 0.625rem 1rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: var(--lastro-weight-medium);
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.entry-btn:focus-visible {
-  outline: none;
-}
-
-.entry-btn--primary {
-  border: 1px solid var(--lastro-border-strong);
-  color: var(--lastro-text-primary);
-  background: var(--lastro-bg-elevated);
-}
-
-.entry-btn--primary:hover {
-  background: color-mix(in srgb, var(--lastro-bg-elevated) 88%, #fff);
-}
-
-.entry-btn--ghost {
-  border: 1px solid transparent;
-  color: var(--lastro-text-secondary);
-  background: transparent;
-}
-
-.entry-btn--ghost:hover {
-  color: var(--lastro-text-primary);
-  background: color-mix(in srgb, #fff 4%, transparent);
 }
 
 .entry-field {
   display: grid;
   gap: 0.4rem;
   font-size: 0.8125rem;
-  color: var(--lastro-text-secondary);
-}
-
-.entry-field input {
-  min-height: 2.5rem;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--lastro-border-strong);
-  border-radius: 8px;
-  font-size: 0.875rem;
-  color: var(--lastro-text-primary);
-  background: var(--lastro-bg-primary);
-}
-
-.entry-field input:focus-visible {
-  outline: none;
-  border-color: color-mix(in srgb, var(--lastro-accent-trust) 45%, var(--lastro-border-strong));
+  color: var(--lastre-text-secondary);
 }
 
 .entry-footnote {
   margin: 1rem 0 0;
   font-size: 0.75rem;
   line-height: 1.45;
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
 }
 
 @media (min-width: 900px) {

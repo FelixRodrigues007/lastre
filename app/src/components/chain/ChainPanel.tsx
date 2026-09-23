@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { useState } from "react";
 import type { ChainSummary } from "../../lib/types";
 import type { ChainTimelineEntry, VerdictFilter } from "../../lib/chainTimeline";
@@ -49,7 +50,7 @@ export function ChainPanel({ summary, sessionEntries, historyEntries }: ChainPan
       />
 
       <div className="chain-panel__technical">
-        <button
+        <Button variant="secondary" size="md"
           type="button"
           className="chain-panel__technical-toggle"
           aria-expanded={technicalOpen}
@@ -57,7 +58,7 @@ export function ChainPanel({ summary, sessionEntries, historyEntries }: ChainPan
         >
           <Icon name={technicalOpen ? "chevron-down" : "chevron-right"} size={14} />
           {t("chain.technical.toggle")}
-        </button>
+        </Button>
 
         {technicalOpen ? (
           <dl className="chain-panel__technical-body mono-block">

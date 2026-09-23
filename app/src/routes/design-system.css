@@ -22,9 +22,13 @@
   padding: 12px;
   background: var(--lastre-action-primary);
   color: white;
+  opacity: 0;
+  pointer-events: none;
   transform: translateY(-150%);
 }
 .ds-skip:focus {
+  opacity: 1;
+  pointer-events: auto;
   transform: none;
 }
 .ds-sidebar {

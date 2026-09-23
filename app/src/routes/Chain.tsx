@@ -1,5 +1,5 @@
+import { ActionLink } from "../components/ui/ActionLink";
 import { useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
 import { PageHeader } from "../components/layout/PageHeader";
 import { StatePanel } from "../components/layout/StatePanel";
 import { ChainPanel } from "../components/chain/ChainPanel";
@@ -62,9 +62,9 @@ export function Chain() {
                 title={t("chain.empty.title")}
                 hint={t("chain.empty.hint")}
                 action={
-                  <Link className="route-cta" to="/process">
+                  <ActionLink variant="primary" size="md" className="route-cta" to="/process">
                     <BtnIcon icon="process">{t("chain.empty.cta")}</BtnIcon>
-                  </Link>
+                  </ActionLink>
                 }
               />
             ) : (

@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useLocaleContext } from "../../context/LocaleContext";
@@ -119,11 +120,11 @@ export function EscalationQueueItem({
       <footer className="escalation-queue-item__foot">
         <p className="escalation-queue-item__actions-label mono-label">{t("escalations.item.actions")}</p>
         <div className="escalation-queue-item__actions">
-          <button
+          <Button variant="primary" size="md"
             type="button"
             className="route-cta"
             disabled={busy}
-            aria-busy={pending === "requeue"}
+            loading={pending === "requeue"}
             onClick={() =>
               runAction("requeue", () => requeueEscalation(record.assetId), "escalations.feedback.requeued")
             }
@@ -131,12 +132,12 @@ export function EscalationQueueItem({
             <BtnIcon icon="process">
               {pending === "requeue" ? t("escalations.action.requeuing") : t("escalations.action.ackRequeue")}
             </BtnIcon>
-          </button>
-          <button
+          </Button>
+          <Button variant="secondary" size="md"
             type="button"
             className="route-cta route-cta--ghost"
             disabled={busy}
-            aria-busy={pending === "override-pay"}
+            loading={pending === "override-pay"}
             onClick={() =>
               runAction(
                 "override-pay",
@@ -148,12 +149,12 @@ export function EscalationQueueItem({
             {pending === "override-pay"
               ? t("escalations.action.overriding")
               : t("escalations.action.overridePay")}
-          </button>
-          <button
+          </Button>
+          <Button variant="secondary" size="md"
             type="button"
             className="route-cta route-cta--ghost"
             disabled={busy}
-            aria-busy={pending === "override-skip"}
+            loading={pending === "override-skip"}
             onClick={() =>
               runAction(
                 "override-skip",
@@ -165,18 +166,18 @@ export function EscalationQueueItem({
             {pending === "override-skip"
               ? t("escalations.action.overriding")
               : t("escalations.action.overrideSkip")}
-          </button>
-          <button
+          </Button>
+          <Button variant="danger" size="md"
             type="button"
             className="escalation-queue-item__discard"
             disabled={busy}
-            aria-busy={pending === "discard"}
+            loading={pending === "discard"}
             onClick={() =>
               runAction("discard", () => discardEscalation(record.assetId), "escalations.feedback.discarded")
             }
           >
             {pending === "discard" ? t("escalations.action.discarding") : t("escalations.action.discard")}
-          </button>
+          </Button>
         </div>
 
         <div className="escalation-queue-item__links">

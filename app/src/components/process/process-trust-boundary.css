@@ -3,7 +3,7 @@
   gap: 1rem;
   margin-bottom: 1rem;
   padding: 1rem 1.125rem;
-  border-color: color-mix(in srgb, var(--lastro-brand-seal) 22%, transparent);
+  border-color: color-mix(in srgb, var(--lastre-link) 22%, transparent);
 }
 
 .process-trust-boundary__head {
@@ -13,23 +13,23 @@
 
 .process-trust-boundary__kicker {
   margin: 0;
-  font-family: var(--lastro-font-mono);
+  font-family: var(--lastre-font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--lastro-brand-seal);
+  color: var(--lastre-link);
 }
 
 .process-trust-boundary__lead {
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--lastro-text-secondary);
+  color: var(--lastre-text-secondary);
   max-width: 62ch;
 }
 
 .process-trust-boundary__lead strong {
-  color: var(--lastro-text-primary);
+  color: var(--lastre-text-primary);
 }
 
 .process-trust-boundary__rail {
@@ -52,23 +52,23 @@
   height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
-  background: var(--lastro-text-muted);
+  background: var(--lastre-text-muted);
 }
 
 .process-trust-boundary__dot--seal {
-  background: var(--lastro-brand-seal);
+  background: var(--lastre-link);
 }
 
 .process-trust-boundary__dot--agent {
-  background: color-mix(in srgb, var(--lastro-status-accent, #8ba4c7) 80%, #fff);
+  background: color-mix(in srgb, var(--lastre-info) 80%, #fff);
 }
 
 .process-trust-boundary__dot--verdict {
-  background: var(--lastro-status-valid);
+  background: var(--lastre-success);
 }
 
 .process-trust-boundary__dot--casper {
-  background: #6ea8d8;
+  background: var(--lastre-info);
 }
 
 .process-trust-boundary__copy {
@@ -79,23 +79,23 @@
 
 .process-trust-boundary__title {
   font-size: 0.6875rem;
-  font-weight: var(--lastro-weight-semibold);
-  color: var(--lastro-text-primary);
+  font-weight: var(--lastre-weight-semibold);
+  color: var(--lastre-text-primary);
 }
 
 .process-trust-boundary__owner {
-  font-family: var(--lastro-font-mono);
-  font-size: 0.625rem;
-  color: var(--lastro-text-muted);
+  font-family: var(--lastre-font-mono);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-muted);
 }
 
 .process-trust-boundary__note {
-  font-size: 0.625rem;
-  color: var(--lastro-text-secondary);
+  font-size: 0.6875rem;
+  color: var(--lastre-text-secondary);
 }
 
 .process-trust-boundary__arrow {
-  color: var(--lastro-text-muted);
+  color: var(--lastre-text-muted);
   font-size: 0.75rem;
   opacity: 0.7;
   padding-right: 0.15rem;

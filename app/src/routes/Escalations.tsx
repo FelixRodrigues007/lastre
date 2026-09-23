@@ -1,4 +1,5 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { ActionLink } from "../components/ui/ActionLink";
+import { useSearchParams } from "react-router-dom";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   EscalationDetailEmpty,
@@ -158,9 +159,9 @@ export function Escalations() {
             title={t("escalations.empty.title")}
             hint={t("escalations.empty.hint")}
             action={
-              <Link className="route-cta" to="/process">
+              <ActionLink variant="primary" size="md" className="route-cta" to="/process">
                 {t("escalations.empty.cta")}
-              </Link>
+              </ActionLink>
             }
           />
         ) : escalations.data ? (

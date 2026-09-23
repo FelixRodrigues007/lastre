@@ -1,3 +1,4 @@
+import { SelectField } from "../ui/SelectField";
 import { useNavigate } from "react-router-dom";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { useOnboarding } from "../../context/OnboardingContext";
@@ -20,20 +21,15 @@ export function PersonaSwitcher() {
   }
 
   return (
-    <label className="persona-switcher">
-      <span className="persona-switcher__label">{t("onboarding.persona.label")}</span>
-      <select
-        className="persona-switcher__select"
-        value={persona}
-        onChange={(e) => handleChange(e.target.value as OnboardingPersona)}
-        title={t("onboarding.persona.label")}
-      >
+    <SelectField label={t("onboarding.persona.label")} className="persona-switcher"
+value={persona}
+onChange={(e) => handleChange(e.target.value as OnboardingPersona)}
+title={t("onboarding.persona.label")}>
         {PERSONAS.map((value) => (
           <option key={value} value={value}>
             {t(`onboarding.persona.${value}` as const)}
           </option>
         ))}
-      </select>
-    </label>
+      </SelectField>
   );
 }

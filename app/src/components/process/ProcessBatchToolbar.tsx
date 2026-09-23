@@ -1,3 +1,4 @@
+import { Button } from "../ui/Button";
 import type { DeciderMode } from "../../lib/types";
 import { useLocaleContext } from "../../context/LocaleContext";
 import "./process-batch-toolbar.css";
@@ -76,9 +77,9 @@ export function ProcessBatchToolbar({
         {phase === "error" ? (
           <div className="process-toolbar__error" role="alert">
             <p className="process-toolbar__error-msg">{runError}</p>
-            <button type="button" className="route-cta route-cta--ghost" onClick={onRetry}>
+            <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost" onClick={onRetry}>
               {t("process.retry")}
-            </button>
+            </Button>
           </div>
         ) : null}
 
@@ -100,12 +101,12 @@ export function ProcessBatchToolbar({
         ) : null}
 
         {phase === "completed" ? (
-          <button type="button" className="route-cta route-cta--ghost process-toolbar__repeat" onClick={onRepeat}>
+          <Button variant="secondary" size="md" type="button" className="route-cta route-cta--ghost process-toolbar__repeat" onClick={onRepeat}>
             {t("process.repeat")}
-          </button>
+          </Button>
         ) : null}
 
-        <button
+        <Button variant="primary" size="md"
           type="button"
           className="route-cta process-toolbar__run"
           disabled={running || selectedCount === 0}
@@ -116,7 +117,7 @@ export function ProcessBatchToolbar({
             : phase === "completed"
               ? t("process.runAgain")
               : t("process.runWithCount", { count: String(selectedCount) })}
-        </button>
+        </Button>
       </div>
     </section>
   );
