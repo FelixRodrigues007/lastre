@@ -1,3 +1,4 @@
+import { LastreWordmark } from "../ui/LastreWordmark";
 import type { ReactNode } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { CaptureWizardProvider } from "../../context/CaptureWizardContext";
@@ -40,7 +41,7 @@ export function AppShell({ children }: AppShellProps) {
             <header className="app-topbar">
               <NavLink className="app-topbar__brand" to="/" aria-label={`${t("brand.console")} — home`}>
                 <SealMark size={24} live />
-                <span className="app-topbar__wordmark">{t("brand.console")}</span>
+                <LastreWordmark className="app-topbar__wordmark" />
               </NavLink>
               <div className="app-topbar__end">
                 <AuthLangToggle className="app-topbar__locale" />

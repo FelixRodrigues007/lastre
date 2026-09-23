@@ -64,6 +64,9 @@
 }
 
 .preloader__wordmark {
+  width: clamp(180px, 28vw, 300px);
+  height: auto;
+  aspect-ratio: 428.488 / 96.109;
   font-family: var(--lastro-font-display);
   font-weight: var(--lastro-weight-semibold);
   font-size: clamp(2.4rem, 7vw, 4.25rem);

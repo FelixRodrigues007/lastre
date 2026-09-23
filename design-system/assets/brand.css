@@ -1,0 +1,26 @@
+/* Exact wordmark exported from Figma. Typography tokens never alter the logo. */
+.lastre-wordmark {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 112px;
+  height: 25.12px;
+  background: currentColor;
+  mask: url("./lastre-wordmark.svg") center / contain no-repeat;
+  -webkit-mask: url("./lastre-wordmark.svg") center / contain no-repeat;
+}
+
+/* Gold is an accent treatment, separate from blue interactive states. */
+.lastre-gold-text {
+  color: var(--lastre-warning);
+  background: var(--lastre-gradient-accent-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (forced-colors: active) {
+  .lastre-gold-text {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}

@@ -74,7 +74,7 @@ export function Preloader() {
           <CubeField3D />
         </div>
         <div className="preloader__col">
-          <span className="preloader__wordmark">Lastre</span>
+          <span className="lastre-wordmark preloader__wordmark" role="img" aria-label="Lastre" />
           <div className="preloader__bar">
             <div className="preloader__meter">
               <div

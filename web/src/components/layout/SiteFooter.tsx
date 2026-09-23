@@ -124,7 +124,7 @@ export function SiteFooter() {
                 <span className="site-footer__brand-mark" aria-hidden="true">
                   <SealMark size={22} />
                 </span>
-                <span className="site-footer__wordmark">Lastre.</span>
+                <span className="lastre-wordmark site-footer__wordmark" role="img" aria-label="Lastre" />
               </a>
 
               <p className="site-footer__tagline">{f.tagline}</p>

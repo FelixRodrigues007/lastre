@@ -1,5 +1,7 @@
 {
   "scripts": {
+    "tokens:build": "node design-system/scripts/build-tokens.mjs",
+    "tokens:check": "node design-system/scripts/build-tokens.mjs --check && node design-system/scripts/check-contrast.mjs",
     "build": "npm --prefix web ci && npm --prefix web run build",
     "build:web": "npm --prefix web run build",
     "build:app": "npm --prefix app run build",

@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
@@ -16,8 +16,12 @@ import "./styles/craft.css";
 import "./styles/refine.css";
 
 initTheme();
-initLocale();
-initDemoSession();
+const isDesignSystem =
+  window.location.pathname.replace(/\/$/, "") === "/design-system";
+if (!isDesignSystem) {
+  initLocale();
+  initDemoSession();
+}
 
 document.documentElement.dataset.appBuild = APP_BUILD_STAMP;
 
@@ -27,17 +31,27 @@ import { LocaleProvider } from "./context/LocaleContext";
 import { NavCountsProvider } from "./context/NavCountsContext";
 import { OnboardingProvider } from "./context/OnboardingContext";
 
+const DesignSystem = lazy(() =>
+  import("./routes/DesignSystem").then((m) => ({ default: m.DesignSystem })),
+);
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <LocaleProvider>
-        <LanguageGate />
-        <OnboardingProvider>
-          <NavCountsProvider>
-            <App />
-          </NavCountsProvider>
-        </OnboardingProvider>
-      </LocaleProvider>
-    </BrowserRouter>
+    {isDesignSystem ? (
+      <Suspense fallback={<p role="status">Carregando design system…</p>}>
+        <DesignSystem />
+      </Suspense>
+    ) : (
+      <BrowserRouter>
+        <LocaleProvider>
+          <LanguageGate />
+          <OnboardingProvider>
+            <NavCountsProvider>
+              <App />
+            </NavCountsProvider>
+          </OnboardingProvider>
+        </LocaleProvider>
+      </BrowserRouter>
+    )}
   </StrictMode>,
 );

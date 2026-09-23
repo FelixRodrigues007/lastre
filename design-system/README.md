@@ -1,150 +1,136 @@
-# Lastre Advertising Design System
+# Lastre Design System · 1.0
 
-A compact design system for producing Lastre advertising materials: social ads, launch graphics, demo slides, paid media tests, and ecosystem announcements.
+A identidade de produto da Lastre, implementada em React e CSS a partir do [Figma, seção 69:725](https://www.figma.com/design/qs8aJnnERxiPfreitHGkfV/Lastre?node-id=69-725).
 
-> **Core line:** Proof before token — the chain of proof from land to token, verified offline and anchored on Casper.
+## Abrir a biblioteca
 
-## Purpose
-
-This system keeps Lastre materials consistent, technically precise, and safe for public communication. It is built for ads and promo assets, not app UI.
-
-Use it to create:
-- LinkedIn/X launch posts and paid social images.
-- Google/Meta display concepts.
-- Demo thumbnails and slide covers.
-- Hackathon submission graphics.
-- Architecture explainers.
-
-## Non-negotiable messaging guardrails
-
-1. **Do not imply investment returns.** Avoid yield, ROI, profit, appreciation, passive income, or token sale language.
-2. **Use fictional data only.** Demo examples may use fictional names like “Mineradora Vale do Ouro,” but never real companies or people.
-3. **Never say the LLM decides truth.** The deterministic seal decides the verdict; the LLM/agent decides the action.
-4. **Show the rejected path.** Invalid provenance is recorded on-chain as permanent proof, not discarded as an error.
-5. **Be precise about maturity.** Lastre is an early prototype/demo unless the repo status says otherwise.
-
-## Brand idea
-
-Lastre should feel like **forensic infrastructure**: dark, precise, grounded, and trustable. It should avoid generic crypto gradients, speculative hype, and abstract “AI magic.”
-
-### Personality
-
-| Trait | Meaning in design |
-|---|---|
-| Forensic | Structured proof trails, seals, ledgers, coordinates |
-| Grounded | Earth/mineral tones, strong grids, no fantasy visuals |
-| Technical | Monospace annotations, hashes, contract references |
-| Restrained | Short claims, high contrast, plenty of negative space |
-| Accountable | Valid and Invalid outcomes shown side by side |
-
-## System structure
-
-```text
-design-system/
-  product-marketing-context.md      # Positioning/context used by ad work
-  tokens/
-    lastro-ads.tokens.json          # Token source for design tools
-    lastro-ads.css                  # CSS variables for web/SVG assets
-  templates/
-    ad-formats.md                   # Sizes, layouts, placement rules
-    copy-matrix.md                  # Approved angles and sample ad copy
-    composition-rules.md            # Layout system and do/don't rules
-  assets/
-    lastro-mark.svg                 # Provisional vector mark
-  examples/
-    linkedin-proof-before-token.svg # Editable LinkedIn/wide creative
-    square-1080.svg                 # Editable square social creative
-    story-1080x1920.svg             # Editable vertical story creative
-  scripts/
-    render.sh                       # Export SVG templates to PNG/JPG
-    lint.py                         # Guardrail, XML, token, and contrast checks
-  outputs/
-    png/                            # Rendered upload-ready PNG files
+```sh
+npm ci --prefix app
+npm --prefix app run dev:web
 ```
 
-## Visual foundation
+Acesse **http://localhost:5174/design-system**. A biblioteca é pública, não precisa de login, não inicializa sessão de demonstração e não depende do backend. Inclui temas claro/escuro, busca e cópia das cores, download de tokens, tipografia, geometria, botões, campos, estados, métricas e tabela com abas interativas.
 
-### Color roles
+## Fonte de verdade
 
-| Role | Token | Usage |
-|---|---|---|
-| Obsidian | `--lastro-bg-primary` | Main background |
-| Paper | `--lastro-text-primary` | Main text |
-| Provenance green | `--lastro-brand-proof` | Valid proof, chain-of-proof highlights |
-| Seal gold | `--lastro-brand-seal` | SHA-256 seal, proof artifact, hash callouts |
-| Signal red | `--lastro-brand-signal` | Invalid/rejected proof, risk, tamper cue |
-| Network blue | `--lastro-brand-network` | Casper/network anchoring cue |
+Edite `tokens/lastre.tokens.json` e execute:
 
-### Typography
-
-- **Display:** Space Grotesk or a geometric sans fallback. If Space Grotesk is not installed, templates fall back to Inter/system sans and remain usable.
-- **Body:** Inter or system sans.
-- **Technical annotation:** JetBrains Mono / IBM Plex Mono / ui-monospace.
-
-Hierarchy for social ads:
-1. Eyebrow: proof/action/status label.
-2. Headline: one sharp idea, 5–9 words.
-3. Support: one explanatory sentence.
-4. Proof rail: `Offline seal → Casper attest → Valid/Invalid`.
-5. Footer: Lastre mark + category (`RWA provenance trust layer`).
-
-## Recommended ad modules
-
-| Module | Purpose | Example |
-|---|---|---|
-| Proof rail | Shows the pipeline | `Offline SHA-256 seal → Casper attestation → recorded verdict` |
-| Verdict pair | Shows both outcomes | `Valid is proof. Invalid is proof too.` |
-| Hash chip | Makes the proof tactile | `seal: a3f1…ff00` |
-| Guardrail badge | Prevents AI overclaiming | `LLM decides action, not verdict` |
-| Fictional-data note | Compliance safety | `Demo uses fictional data` |
-
-## Production checklist
-
-Before exporting any ad creative:
-
-- [ ] Uses only fictional data or generic technical claims.
-- [ ] No investment/yield/ROI/return wording.
-- [ ] Does not imply a real customer, real mine, or real issuer.
-- [ ] Clearly separates seal verdict from LLM action.
-- [ ] If “Invalid” appears, it is described as recorded proof, not a failed demo.
-- [ ] Text remains legible at mobile feed size.
-- [ ] Contrast meets WCAG AA for main text.
-- [ ] CTA points to repo/demo/docs, not a token sale or investment action.
-
-
-## Render and QA workflow
-
-Render upload-ready PNG files from editable SVG templates:
-
-```bash
-# From repo root
-design-system/scripts/render.sh
-
-# Optional: 2x retina/source export
-SCALE=2 design-system/scripts/render.sh
-
-# Optional: also emit JPG versions
-FORMAT=jpg design-system/scripts/render.sh
+```sh
+npm run tokens:build
+npm run tokens:check
 ```
 
-Run guardrail and quality checks:
+O gerador produz `lastre.css` e `lastre-compat.css`. O segundo comando detecta arquivos desatualizados e verifica 92 combinações de contraste nos dois temas: texto ≥ 4.5:1, foco e contornos de controles ≥ 3:1. Esses testes cobrem os papéis semânticos; não representam uma auditoria de acessibilidade de todas as telas existentes.
 
-```bash
-python3 design-system/scripts/lint.py
+| Camada | Arquivo | Responsabilidade |
+| --- | --- | --- |
+| Fonte | `tokens/lastre.tokens.json` | Primitivos, fundamentos e semânticos dos dois temas |
+| CSS | `tokens/lastre.css` | Variáveis `--lastre-*`, geradas automaticamente |
+| Compatibilidade | `tokens/lastre-compat.css` | Nomes `--lastro-*` existentes apontam para a nova identidade |
+| Entrada compartilhada | `tokens/lastro.css` | Importa definições legadas, nova identidade e compatibilidade |
+| Arquivo histórico | `tokens/lastro-legacy.css`, `tokens/lastro.tokens.json` | Paleta anterior e contratos antigos ainda usados no produto |
+| Marca | `assets/lastre-wordmark.svg` | SVG original exportado do Figma, sem redesenho |
+| Fonte display | `assets/fonts/` | Manrope variável, local, com licença OFL |
+
+O app e a landing já importavam `lastro.css`, por isso recebem a nova base compartilhada. CSS específico de telas com valores literais, gráficos e ilustrações antigos ainda pode conservar escolhas anteriores; sua revisão completa é uma migração separada. Os materiais publicitários históricos permanecem documentados em [ADVERTISING.md](ADVERTISING.md).
+
+## O que veio do Figma
+
+- **Marca:** vetor do nó `69:727`, exportado a partir de `69:726`.
+- **Mirage:** 11 tons, de `50 #F0F1F3` a `950 #0F1116`.
+- **Blue:** 11 tons, com `500 #107CA4` como cor principal.
+- **Gold:** 11 tons, com `200 #FDA82D` como cor secundária.
+- **Tipografia de referência:** o quadro usa Science Gothic e Inter. Por orientação da usuária, o produto adota Manrope nos títulos e Inter nos textos/controles. A tipografia do logotipo permanece no SVG original.
+
+Referências: funções de cor em `69:740`; escalas em `69:757`. O quadro usa Mirage 900 como base escura; a implementação usa esse tom nas superfícies e Mirage 950 no canvas para separar níveis.
+
+São **extensões de implementação**, não especificações presentes no Figma: a escolha de Manrope e os gradientes dourados solicitados pela usuária, os papéis semânticos, os tons de sucesso/erro, a escala de espaçamento, os raios, as alturas de controle, o movimento e os estados dos componentes. JetBrains Mono foi mantida do produto para hashes e IDs.
+
+## Cores por intenção
+
+| Uso | Token | Escuro | Claro |
+| --- | --- | --- | --- |
+| Canvas | `--lastre-bg-canvas` | Mirage 950 | Mirage 50 |
+| Superfície | `--lastre-bg-surface` | Mirage 900 | Branco |
+| Texto principal | `--lastre-text-primary` | Mirage 50 | Mirage 900 |
+| Texto secundário | `--lastre-text-secondary` | Mirage 200 | Mirage 600 |
+| Texto auxiliar | `--lastre-text-muted` | Mirage 300 | Mirage 500 |
+| Ação principal | `--lastre-action-primary` | Blue 500 | Blue 500 |
+| Texto de ação | `--lastre-action-text` | Branco | Branco |
+| Links/foco | `--lastre-link`, `--lastre-focus` | Blue 200 | Blue 600 |
+| Destaque | `--lastre-accent` | Gold 200 | Gold 200 |
+| Texto sobre destaque | `--lastre-accent-text` | Mirage 950 | Mirage 950 |
+| Aviso | `--lastre-warning` | Gold 200 | Gold 700 |
+
+Use tokens semânticos em componentes. Use os primitivos diretamente para a identidade de marca, amostras e ilustrações com cores fixas. Gold não substitui a ação principal. Sucesso e erro recebem cores e rótulos próprios; invalidade permanece um resultado registrado, não uma evidência descartada.
+
+```css
+.evidence-card {
+  color: var(--lastre-text-primary);
+  background: var(--lastre-bg-surface);
+  border: 1px solid var(--lastre-border-subtle);
+  border-radius: var(--lastre-radius-lg);
+  padding: var(--lastre-space-6);
+}
 ```
 
-The linter validates token JSON, SVG XML, banned wording in rendered ad copy, and core color contrast.
+O tema usa `data-theme="dark"` ou `data-theme="light"`; a aplicação mantém a preferência através de `app/src/lib/theme.ts`. Para superfícies aninhadas, defina `data-theme` no container.
 
-## Fast start
+## Tipografia e geometria
 
-1. Pick an angle from `templates/copy-matrix.md`.
-2. Pick a size/layout from `templates/ad-formats.md`.
-3. Use tokens from `tokens/lastro-ads.css`.
-4. Start from `examples/linkedin-proof-before-token.svg` for a feed graphic.
-5. Replace only headline/support/proof chips; keep guardrails intact.
+- **Manrope, 500/600:** títulos do app e do site; display 48–64px, heading 32px, seção 24px. Tracking de −0.025 a −0.04em. O logotipo é um vetor independente, não texto na fonte da interface.
+- **Inter, 400/500/600:** interface 14–16px, linha 1.5. Carregada pelo HTML existente do app/site, com fallback de sistema.
+- **JetBrains Mono:** hashes, IDs e anotações, 12–14px; números tabulares quando útil. Carregada pelo HTML existente.
+- **Espaçamento:** múltiplos de 4px; `space-1` = 4px, `space-6` = 24px, `space-16` = 64px.
+- **Raios:** `sm` 6px, `md` 10px, `lg` 16px, `pill` 999px.
+- **Controles:** 36px compacto, 44px padrão, 52px amplo. Preferir 44px ou mais para interação por toque.
+- **Movimento:** 120/180ms, sem animações essenciais à compreensão. Respeitar `prefers-reduced-motion`.
 
-## Unresolved decisions
+## Gradiente Gold
 
-- The logo/mark in `assets/lastro-mark.svg` is provisional.
-- Typeface choices assume Space Grotesk + Inter; replace with licensed brand fonts if chosen.
-- The palette is a candidate direction; validate against any existing Lastre visual identity before scaling.
+O dourado simula reflexos de metal como acento pontual. `--lastre-gradient-gold` usa Gold 600 → 200 → 50 → 300 → 500; `--lastre-glow-gold` fornece um brilho suave. Use em filetes, selos e superfícies de destaque.
+
+Para texto, use `--lastre-gradient-accent-text` ou `.lastre-gold-text`: o tema claro usa tons mais profundos e o escuro usa tons luminosos. Os stops são verificados contra as três superfícies do sistema. Não colocar texto pequeno diretamente sobre o gradiente decorativo; use uma base sólida para rótulos.
+
+Aplicações: destaque no título da biblioteca, palavra de destaque do hero do site, filete do painel de prova e dos cartões com `accent`. Ações e links permanecem azuis. Sem animação contínua de brilho.
+
+## Componentes React
+
+Componentes em `app/src/components/ui/`. CSS convencional; nenhuma nova biblioteca de interface foi instalada.
+
+```tsx
+import { Button } from "./components/ui/Button";
+import { TextField } from "./components/ui/TextField";
+import { StatusBadge } from "./components/ui/StatusBadge";
+
+<Button variant="primary" loading={isVerifying} onClick={verify}>
+  {isVerifying ? "Verificando…" : "Verificar origem"}
+</Button>
+<TextField label="Nome do ativo" hint="Use um nome fácil de identificar."
+  error={error} required value={name} onChange={e => setName(e.target.value)} />
+<StatusBadge label="Verificado" tone="success" circle="filled" />
+```
+
+| Componente | API principal | Comportamento |
+| --- | --- | --- |
+| `Button` | `variant`, `size`, `loading`, atributos nativos | Primário/secundário/ghost/danger; loading impede clique e expõe `aria-busy`; tipo padrão `button` |
+| `TextField` | `label`, `hint`, `error`, atributos nativos | ID automático, label associado, ajuda/erro descritos, `aria-invalid` |
+| `LastreWordmark` | `className` | Vetor original em máscara CSS; herda a cor; nome acessível Lastre |
+| `StatusBadge` | `label`, `tone`, `circle`, `size` | Componente existente; significado por texto e indicador, além da cor |
+| `MetricCard` | `label`, `value`, `hint`, `tone` | Componente existente; contexto dos indicadores |
+| `SearchInput` | `value`, `onChange`, `ariaLabel` | Componente existente; busca controlada |
+| `Tabs` | `tabs`, `active`, `onChange`, `children` | Componente existente; setas/Home/End, tabulação única, painel associado |
+
+Não usar status visual como substituto de autorização ou validação de dados. Os exemplos da biblioteca são fictícios, locais e não chamam APIs.
+
+## Pen.dev
+
+O CLI foi consultado, mas estava sem autenticação. A pedido da usuária, a entrega seguiu somente no projeto, sem Pen.dev e sem alteração do arquivo do Figma.
+
+## Validação desta entrega
+
+- `npm run tokens:check`: 92 pares de contraste e sincronização JSON/CSS.
+- `npm --prefix app run build` e `npm --prefix web run build`: aprovados.
+- `npm --prefix web run lint`: aprovado.
+- Navegador: temas claro/escuro; 1440, 390 e 320px; cópia de cores; busca; download; campos; estado de carregamento; abas por teclado; preferência de tema; movimento reduzido. Sem erros de JavaScript ou requisições falhas na biblioteca.
+- `npm --prefix app run lint`: frontend aprovado; etapa do servidor bloqueada por artefatos ausentes em `agent/orchestrator/dist`, `agent/sealer/dist` e `agent/x402/dist` no checkout local. O backend não faz parte desta alteração.

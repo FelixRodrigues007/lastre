@@ -23,7 +23,7 @@ export function Hero() {
 
             <h1 className="hero__headline">
               {headlineLead}{" "}
-              <span className="hero__accent">{headlineAccent}</span>
+              <span className="hero__accent lastre-gold-text">{headlineAccent}</span>
             </h1>
 
             <p className="hero__subhead">{t("heroSubShort")}</p>

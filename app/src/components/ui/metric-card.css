@@ -27,6 +27,17 @@
   border: var(--lastro-stroke-hairline) solid var(--lastro-border-brand);
 }
 
+.metric-card--accent::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 1.125rem;
+  height: 1px;
+  background: var(--lastre-gradient-gold);
+  box-shadow: var(--lastre-glow-gold);
+  pointer-events: none;
+}
+
 .metric-card__label {
   font-family: var(--lastro-font-mono);
   font-size: 0.6875rem;

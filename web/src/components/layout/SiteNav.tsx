@@ -152,7 +152,7 @@ export function SiteNav() {
           <div className="site-nav__start">
             <a className="site-nav__brand" href="#top" aria-label="Lastre — home">
               <SealMark size={20} />
-              <span className="site-nav__wordmark">Lastre</span>
+              <span className="lastre-wordmark site-nav__wordmark" role="img" aria-label="Lastre" />
             </a>
 
             <nav className="site-nav__links" aria-label="Primary">

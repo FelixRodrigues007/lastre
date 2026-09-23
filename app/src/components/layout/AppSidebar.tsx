@@ -1,3 +1,4 @@
+import { LastreWordmark } from "../ui/LastreWordmark";
 import { NavLink } from "react-router-dom";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { useNavCounts } from "../../context/NavCountsContext";
@@ -37,7 +38,7 @@ export function AppSidebar({ onOpenSearch }: AppSidebarProps) {
               aria-label={`${t("brand.name")} — home`}
             >
               <SealMark size={collapsed ? 24 : 28} live={!collapsed} />
-              <span className="app-sidebar__name">{t("brand.name")}</span>
+              <LastreWordmark className="app-sidebar__name" />
             </NavLink>
             <button
               type="button"

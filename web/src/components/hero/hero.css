@@ -161,7 +161,9 @@
 }
 
 .hero__accent {
-  color: var(--lastro-brand-seal-text);
+  color: var(--lastre-accent);
+  /* The image-backed hero keeps its dark surface in both site themes. */
+  background-image: linear-gradient(110deg, var(--lastre-color-gold-100), var(--lastre-color-gold-200) 40%, var(--lastre-color-gold-50) 58%, var(--lastre-color-gold-300));
 }
 
 .hero__subhead {

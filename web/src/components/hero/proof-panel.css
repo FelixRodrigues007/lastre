@@ -12,13 +12,9 @@
   inset: 0 var(--lastro-space-8) auto;
   top: -1px;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--lastro-brand-seal),
-    transparent
-  );
-  opacity: 0.6;
+  background: var(--lastre-gradient-gold);
+  box-shadow: var(--lastre-glow-gold);
+  opacity: 0.8;
 }
 
 .proof__head {

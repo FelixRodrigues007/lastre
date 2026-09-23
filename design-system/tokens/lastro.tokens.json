@@ -3,8 +3,8 @@
   "meta": {
     "name": "Lastro Design Tokens",
     "version": "0.4.0",
-    "status": "canonical",
-    "description": "LP + app — forest-mint + jade/lime families, gradients & elevation (v0.4.0). Edit design-system/tokens/lastro.css only."
+    "status": "legacy",
+    "description": "Archived v0.4 palette. Canonical source: lastre.tokens.json."
   },
   "primitive": {
     "color": {

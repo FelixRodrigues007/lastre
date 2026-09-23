@@ -1,4 +1,11 @@
-import { type CSSProperties, type ReactNode, useLayoutEffect, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type ReactNode,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import "./tabs.css";
 
 export type TabItem<T extends string> = {
@@ -27,6 +34,7 @@ export function Tabs<T extends string>({
   ariaLabel = "Sections",
 }: TabsProps<T>) {
   const listRef = useRef<HTMLDivElement>(null);
+  const id = useId();
   const [indicator, setIndicator] = useState<TabIndicator>({ width: 0, x: 0 });
 
   useLayoutEffect(() => {
@@ -62,21 +70,55 @@ export function Tabs<T extends string>({
   return (
     <div className="tabs-root">
       <div className="tabs" ref={listRef} role="tablist" aria-label={ariaLabel}>
-        <span className="tabs__indicator" aria-hidden="true" style={indicatorStyle} />
+        <span
+          className="tabs__indicator"
+          aria-hidden="true"
+          style={indicatorStyle}
+        />
         {tabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
             role="tab"
+            id={`${id}-${tab.id}`}
+            aria-controls={`${id}-panel`}
+            tabIndex={active === tab.id ? 0 : -1}
             aria-selected={active === tab.id}
             className={`tab${active === tab.id ? " tab--active" : ""}`}
             onClick={() => onChange(tab.id)}
+            onKeyDown={(event) => {
+              if (
+                !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)
+              )
+                return;
+              event.preventDefault();
+              const current = tabs.findIndex((item) => item.id === tab.id);
+              const next =
+                event.key === "Home"
+                  ? 0
+                  : event.key === "End"
+                    ? tabs.length - 1
+                    : (current +
+                        (event.key === "ArrowRight" ? 1 : -1) +
+                        tabs.length) %
+                      tabs.length;
+              onChange(tabs[next].id);
+              listRef.current
+                ?.querySelectorAll<HTMLButtonElement>('[role="tab"]')
+                [next]?.focus();
+            }}
           >
             {tab.label}
           </button>
         ))}
       </div>
-      <div className="tabs-panel" role="tabpanel">
+      <div
+        className="tabs-panel"
+        role="tabpanel"
+        id={`${id}-panel`}
+        aria-labelledby={`${id}-${active}`}
+        tabIndex={0}
+      >
         {children}
       </div>
     </div>

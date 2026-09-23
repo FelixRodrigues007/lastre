@@ -1,3 +1,4 @@
+import { LastreWordmark } from "../ui/LastreWordmark";
 import type { ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { SealMark } from "../ui/SealMark";
@@ -24,7 +25,7 @@ export function AuthLayout({ children, wide }: AuthLayoutProps) {
         <header className="entry-shell__bar">
           <div className="entry-shell__brand">
             <SealMark size={28} label={t("brand.name")} />
-            <span className="entry-shell__wordmark">{t("brand.name")}</span>
+            <LastreWordmark className="entry-shell__wordmark" />
           </div>
           <AuthLangToggle />
         </header>
