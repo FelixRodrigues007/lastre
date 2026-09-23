@@ -48,6 +48,10 @@
 }
 
 .site-nav__wordmark {
+  /* Mede o wordmark so aqui; brand.css (112 x 25.12) segue valendo no rodape
+     e no preloader. Proporcao do vetor preservada: 428.488 / 96.1089. */
+  width: 90px;
+  height: 20.19px;
   font-family: var(--lastro-font-display);
   font-size: 0.9375rem;
   font-weight: var(--lastro-weight-semibold);
