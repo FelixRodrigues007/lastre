@@ -1,3 +1,4 @@
+import { adminScreens, adminSurfaces } from "./admin";
 import type { AppId, Screen } from "./types";
 
 function current(
@@ -71,15 +72,15 @@ const assetSources: Record<string, string> = {
 };
 const assetOperations: Record<string, string[]> = {
   "LA-001": ["assets.consultar"],
-  "LA-002": ["assets.consultar"],
+  "LA-002": ["assets.consultar", "assets.salvar"],
   "LA-003": ["assets.salvar"],
-  "LA-004": ["assets.consultar", "lote.importar"],
-  "LA-005": ["assets.salvar", "evidencia.anexar", "dossie.compartilhar"],
+  "LA-004": ["assets.consultar", "assets.salvar", "lote.importar"],
+  "LA-005": ["assets.salvar", "evidencia.anexar", "dossie.compartilhar", "compartilhamento.revogar"],
   "LA-006": ["solicitacao.responder", "evidencia.anexar"],
   "LA-007": ["dossie.compartilhar", "destinatario.conferir"],
   "LA-008": ["assets.consultar"],
   "LA-009": ["assets.salvar"],
-  "LA-010": ["assets.salvar", "evidencia.anexar", "dossie.compartilhar"],
+  "LA-010": ["assets.salvar", "evidencia.anexar", "dossie.compartilhar", "compartilhamento.revogar"],
   "LA-011": ["organizacao.gerir", "organizacao.alternar"],
   "LA-012": ["assets.autenticar"],
   "LA-013": ["organizacao.gerir"],
@@ -114,6 +115,8 @@ function implementedAsset(
 }
 
 export const screens: Screen[] = [
+  ...adminScreens,
+  ...adminSurfaces,
   current(
     "LC-001",
     "console",
@@ -280,7 +283,7 @@ export const screens: Screen[] = [
     "app/src/routes/DesignSystem.tsx",
     "Consultar tokens, componentes e critérios visuais.",
     [],
-    "Entrada especial em main.tsx, fora de App.tsx.",
+    "Entrada especial em main.tsx, fora de App.tsx. A seção Dados e navegação demonstra, com dados fictícios, os componentes compartilhados de lista: DataTable, Tabs sublinhadas, FilterBar, FacetFilter, Select, DropdownMenu, Drawer, Tooltip, Checkbox e Pagination.",
   ),
   current(
     "AD-001",
@@ -288,9 +291,9 @@ export const screens: Screen[] = [
     "Inventário vivo",
     "/admin/inventario",
     "app/src/routes/admin/Inventory.tsx",
-    "Confrontar o produto planejado com as rotas presentes no código.",
+    "Confrontar telas, modais e drawers do produto com as interfaces presentes no código.",
     [],
-    "Página única no Admin, com visões locais por ?view=. Cada ficha abre um drawer com abas: Visão geral, Contrato, Estados, Operações e Fluxos. Seleção por ?screen= e ?tab=. Prévia local, somente leitura, removida do build de produção. Não autentica administradores.",
+    "Destino Inventário no shell administrativo com dez entradas, com visões locais por ?view=. Modais e drawers reúne um índice por tarefa e prévias vivas das 27 interfaces AD-S, com cenários específicos, comparação lado a lado e viewport móvel. Cada ficha abre um drawer com abas: Visão geral, Contrato, Estados, Operações e Fluxos. Seleção por ?screen= e ?tab=; galeria por ?view=superficies, ?formato=, ?buscaSuperficie=, ?preview=, ?cenario=, ?comparar= e ?viewport=. Prévia local, removida do build de produção. Não autentica administradores.",
   ),
   current(
     "LW-001",

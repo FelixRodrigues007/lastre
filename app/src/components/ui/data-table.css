@@ -1,0 +1,604 @@
+/*
+ * DataTable. Solid surface so pinned cells can share the row color; the frame
+ * clips (not scrolls) so the bulk bar can stick to the viewport bottom.
+ */
+.lastre-dt {
+  --dt-bg: var(--lastre-bg-surface);
+  --dt-row-hover: color-mix(in srgb, var(--lastre-text-primary) 3.5%, var(--dt-bg));
+  --dt-row-selected: color-mix(in srgb, var(--lastre-link) 9%, var(--dt-bg));
+  --dt-head-bg: color-mix(in srgb, var(--lastre-bg-canvas) 45%, var(--dt-bg));
+  --dt-pad-y: 13px;
+  --dt-pad-x: 14px;
+  --dt-line: 1px solid var(--lastre-border-subtle);
+  --dt-check: 44px;
+  position: relative;
+  container: lastre-dt / inline-size;
+  min-width: 0;
+  border: var(--dt-line);
+  border-radius: var(--lastre-radius-lg);
+  background: var(--dt-bg);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-1);
+  overflow: clip;
+  font-size: var(--lastre-text-label);
+}
+.lastre-dt[data-density="compact"] {
+  --dt-pad-y: 7px;
+}
+
+/* Bar above the table: summary on the left, view tools on the right. */
+.lastre-dt__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lastre-space-3);
+  min-height: 48px;
+  padding: 7px 10px 7px var(--dt-pad-x);
+  border-bottom: var(--dt-line);
+}
+.lastre-dt__summary {
+  min-width: 0;
+  color: var(--lastre-text-tertiary);
+  font-size: 12.5px;
+}
+.lastre-dt__summary strong {
+  color: var(--lastre-text-primary);
+  font-family: var(--lastre-font-mono);
+  font-size: 12.5px;
+  font-weight: var(--lastre-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.lastre-dt__tools {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+}
+.lastre-dt__view {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--lastre-radius-sm);
+  background: transparent;
+  color: var(--lastre-text-secondary);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: var(--lastre-weight-medium);
+  cursor: pointer;
+  transition:
+    background-color var(--lastre-duration-fast),
+    border-color var(--lastre-duration-fast),
+    color var(--lastre-duration-fast);
+}
+.lastre-dt__view:hover,
+.lastre-dt__view[data-open] {
+  border-color: var(--lastre-border-subtle);
+  background: var(--lastre-bg-elevated);
+  color: var(--lastre-text-primary);
+}
+.lastre-dt__view svg {
+  color: var(--lastre-text-tertiary);
+}
+
+.lastre-dt__scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.lastre-dt__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Header */
+.lastre-dt__table th {
+  height: 38px;
+  padding: 0 var(--dt-pad-x);
+  border-bottom: var(--dt-line);
+  background: var(--dt-head-bg);
+  color: var(--lastre-text-tertiary);
+  font-size: 11.5px;
+  font-weight: var(--lastre-weight-medium);
+  letter-spacing: 0.02em;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.lastre-dt__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 -6px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  transition:
+    background-color var(--lastre-duration-fast),
+    color var(--lastre-duration-fast);
+}
+.lastre-dt__sort svg {
+  opacity: 0.45;
+  transition: opacity var(--lastre-duration-fast);
+}
+.lastre-dt__sort:hover {
+  background: color-mix(in srgb, var(--lastre-text-primary) 6%, transparent);
+  color: var(--lastre-text-primary);
+}
+.lastre-dt__sort:hover svg {
+  opacity: 0.9;
+}
+.lastre-dt__sort[data-sorted] {
+  color: var(--lastre-text-primary);
+}
+.lastre-dt__sort[data-sorted] svg {
+  color: var(--lastre-link);
+  opacity: 1;
+}
+.lastre-dt__sort:focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: 0;
+}
+.lastre-dt__table [data-align="end"] {
+  text-align: right;
+}
+.lastre-dt__table th[data-align="end"] .lastre-dt__sort {
+  flex-direction: row-reverse;
+}
+.lastre-dt__table [data-align="center"] {
+  text-align: center;
+}
+
+/* Body */
+.lastre-dt__table td {
+  padding: var(--dt-pad-y) var(--dt-pad-x);
+  border-bottom: var(--dt-line);
+  background: var(--dt-row, var(--dt-bg));
+  color: var(--lastre-text-secondary);
+  vertical-align: middle;
+  transition: background-color var(--lastre-duration-fast);
+}
+.lastre-dt__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.lastre-dt__table tbody tr:hover {
+  --dt-row: var(--dt-row-hover);
+}
+.lastre-dt__table tbody tr[data-selected] {
+  --dt-row: var(--dt-row-selected);
+}
+.lastre-dt__table tbody tr[data-linked] {
+  cursor: pointer;
+}
+/* Left accent for rows that need attention. */
+.lastre-dt__table tbody tr[data-tone] > td:first-child {
+  box-shadow: inset 2px 0 0 var(--dt-tone);
+}
+.lastre-dt__table tbody tr[data-tone="warning"] {
+  --dt-tone: var(--lastre-warning);
+}
+.lastre-dt__table tbody tr[data-tone="danger"] {
+  --dt-tone: var(--lastre-danger);
+}
+.lastre-dt__table tbody tr[data-tone="success"] {
+  --dt-tone: var(--lastre-success);
+}
+
+/* Secondary columns size to content; the primary column takes the rest. */
+.lastre-dt__table :is(th, td):not([data-primary]) {
+  width: 1%;
+  white-space: nowrap;
+}
+.lastre-dt__table td[data-primary] {
+  min-width: 220px;
+  max-width: 0;
+}
+.lastre-dt__table :is(th, td).lastre-dt__check {
+  width: var(--dt-check);
+  min-width: var(--dt-check);
+  box-sizing: border-box;
+}
+
+/* Lower-priority columns step aside as the table narrows, before it scrolls. */
+@container lastre-dt (max-width: 1040px) {
+  .lastre-dt__table [data-hide="lg"] {
+    display: none;
+  }
+}
+@container lastre-dt (max-width: 860px) {
+  .lastre-dt__table [data-hide="md"] {
+    display: none;
+  }
+}
+/* Long values in a secondary column: one line, ellipsis, full text on hover. */
+.lastre-dt__clip {
+  display: block;
+  max-width: var(--clip, 22ch);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Primary cell: a real link (keyboard, new tab); the row also opens on click. */
+.lastre-dt__table td[data-primary] {
+  color: var(--lastre-text-primary);
+}
+.lastre-dt__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
+.lastre-dt__link:focus-visible {
+  border-radius: 4px;
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: 4px;
+}
+.lastre-dt__table tbody tr:focus-within {
+  --dt-row: var(--dt-row-hover);
+}
+
+/* Selection and action columns. */
+.lastre-dt__check {
+  width: var(--dt-check);
+  padding-right: 0 !important;
+  padding-left: 16px !important;
+}
+.lastre-dt__check .lastre-checkbox {
+  display: grid;
+}
+.lastre-dt__actions {
+  width: 1%;
+  padding-left: 0 !important;
+  padding-right: 10px !important;
+  white-space: nowrap;
+}
+.lastre-dt__actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+}
+@media (hover: hover) {
+  /* Row controls recede until the row is in use. */
+  .lastre-dt__actions-row > * {
+    opacity: 0.55;
+    transition: opacity var(--lastre-duration-fast);
+  }
+  .lastre-dt__actions-row [data-reveal] {
+    opacity: 0;
+  }
+  .lastre-dt__table tbody tr:is(:hover, :focus-within, [data-selected]) .lastre-dt__actions-row > *,
+  .lastre-dt__actions-row > [data-open] {
+    opacity: 1;
+  }
+}
+
+/* Pinned identity while scrolling sideways. */
+.lastre-dt__table :is(th, td).lastre-dt__check {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+.lastre-dt__table :is(th, td)[data-primary] {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+.lastre-dt__table .lastre-dt__check ~ [data-primary] {
+  left: var(--dt-check);
+}
+.lastre-dt__table th.lastre-dt__check,
+.lastre-dt__table th[data-primary] {
+  z-index: 3;
+}
+.lastre-dt__scroll[data-scrolled] [data-primary] {
+  box-shadow: 8px 0 12px -10px rgb(0 0 0 / 0.5);
+}
+
+.lastre-dt__skeleton td {
+  padding-block: calc(var(--dt-pad-y) + 4px);
+}
+
+/* Empty: the caller's EmptyState, inset in the frame. */
+.lastre-dt__empty {
+  padding: var(--lastre-space-4);
+}
+.lastre-dt__empty > * {
+  border-radius: var(--lastre-radius-md);
+}
+
+/* Pagination footer */
+.lastre-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lastre-space-3) var(--lastre-space-6);
+  min-height: 48px;
+  padding: 7px 10px 7px var(--dt-pad-x, 16px);
+  border-top: var(--dt-line, 1px solid var(--lastre-border-subtle));
+  color: var(--lastre-text-tertiary);
+  font-size: 12.5px;
+}
+.lastre-pagination__range {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.lastre-pagination__range strong {
+  color: var(--lastre-text-primary);
+  font-family: var(--lastre-font-mono);
+  font-weight: var(--lastre-weight-medium);
+}
+.lastre-pagination__size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lastre-pagination__size .lastre-select {
+  width: 76px;
+}
+.lastre-pagination__size .lastre-select__trigger {
+  min-height: 30px;
+}
+.lastre-pagination__nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.lastre-pagination__page {
+  margin-right: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.lastre-pagination button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Bulk bar: sticks to the viewport bottom while the table is in view. */
+.lastre-dt__bulk {
+  position: sticky;
+  bottom: calc(var(--lastre-dt-bulk-offset, 20px) + env(safe-area-inset-bottom));
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: var(--lastre-space-3);
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin: 12px auto;
+  padding: 6px 6px 6px 16px;
+  border: 1px solid var(--lastre-border-strong);
+  border-radius: var(--lastre-radius-pill);
+  background: var(--lastre-bg-elevated);
+  box-shadow: var(--lastre-popover-shadow);
+  animation: lastre-dt-bulk-in var(--lastre-duration-slow) var(--lastre-ease-spring) both;
+}
+@keyframes lastre-dt-bulk-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+}
+.lastre-dt__bulk-count {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--lastre-text-secondary);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.lastre-dt__bulk-count strong {
+  color: var(--lastre-text-primary);
+  font-family: var(--lastre-font-mono);
+}
+.lastre-dt__bulk-all {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--lastre-link);
+  font: inherit;
+  font-weight: var(--lastre-weight-medium);
+  cursor: pointer;
+}
+.lastre-dt__bulk-all:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lastre-dt__bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: var(--lastre-space-3);
+  border-left: 1px solid var(--lastre-border-subtle);
+}
+.lastre-dt__bulk-close {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--lastre-text-tertiary);
+  cursor: pointer;
+}
+.lastre-dt__bulk-close:hover {
+  background: color-mix(in srgb, var(--lastre-text-primary) 8%, transparent);
+  color: var(--lastre-text-primary);
+}
+.lastre-dt :is(.lastre-dt__bulk-all, .lastre-dt__bulk-close, .lastre-dt__view):focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: 1px;
+}
+
+/* Bulk action button: compact, readable on the elevated bar. */
+.lastre-bulk-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: var(--lastre-radius-pill);
+  background: transparent;
+  color: var(--lastre-text-primary);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: var(--lastre-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--lastre-duration-fast);
+}
+.lastre-bulk-action svg {
+  color: var(--lastre-text-tertiary);
+}
+.lastre-bulk-action:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--lastre-text-primary) 8%, transparent);
+}
+.lastre-bulk-action[data-danger] {
+  color: var(--lastre-danger);
+}
+.lastre-bulk-action[data-danger] svg {
+  color: currentColor;
+}
+.lastre-bulk-action:disabled {
+  opacity: var(--lastre-opacity-disabled);
+  cursor: not-allowed;
+}
+.lastre-bulk-action:focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: 1px;
+}
+
+/* Rows become cards when the table itself is narrow (drawer, phone). */
+@container lastre-dt (max-width: 640px) {
+  .lastre-dt__table,
+  .lastre-dt__table tbody {
+    display: block;
+  }
+  .lastre-dt__table thead {
+    display: none;
+  }
+  .lastre-dt__table tbody tr {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 12px;
+    padding: 14px 12px 14px 14px;
+    border-bottom: var(--dt-line);
+    background: var(--dt-row, var(--dt-bg));
+  }
+  .lastre-dt__table tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .lastre-dt__table td {
+    display: block;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    white-space: normal;
+    position: static !important;
+    box-shadow: none !important;
+  }
+  .lastre-dt__table td.lastre-dt__check {
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+    padding: 2px 0 0 !important;
+  }
+  .lastre-dt__table td[data-primary] {
+    grid-column: 2;
+    grid-row: 1;
+    margin-bottom: 8px;
+  }
+  .lastre-dt__table td.lastre-dt__actions {
+    grid-column: 3;
+    grid-row: 1;
+    width: auto;
+    padding: 0 !important;
+  }
+  .lastre-dt__actions-row > * {
+    opacity: 1 !important;
+  }
+  .lastre-dt__table td:not([data-primary], .lastre-dt__check, .lastre-dt__actions) {
+    grid-column: 2 / -1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 5px 0;
+    border-top: 1px dashed var(--lastre-border-subtle);
+    font-size: 12.5px;
+    text-align: right;
+  }
+  .lastre-dt__table td:not([data-primary], .lastre-dt__check, .lastre-dt__actions)::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    color: var(--lastre-text-tertiary);
+    text-align: left;
+  }
+  .lastre-dt__table td[data-mobile="hide"] {
+    display: none !important;
+  }
+  /* Width-based hiding is for wide tables; cards keep every labelled value. */
+  .lastre-dt__table td[data-hide]:not([data-mobile="hide"]) {
+    display: flex;
+  }
+  .lastre-dt__table td[data-mobile="meta"] {
+    border-top: 0 !important;
+    padding-top: 0 !important;
+    margin-top: -6px;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+  .lastre-dt__table td[data-mobile="meta"]::before {
+    display: none;
+  }
+  .lastre-dt__table tbody tr:not(:has(.lastre-dt__check)) {
+    grid-template-columns: 0 minmax(0, 1fr) auto;
+    column-gap: 0;
+  }
+  .lastre-dt__table tbody tr:not(:has(.lastre-dt__check)) td.lastre-dt__actions {
+    padding-left: 8px !important;
+  }
+  .lastre-dt__bar {
+    padding-left: 14px;
+  }
+  .lastre-dt__view span {
+    display: none;
+  }
+  .lastre-dt__bulk {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px;
+    border-radius: var(--lastre-radius-lg);
+  }
+  .lastre-dt__bulk-actions {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 6px 0 0;
+    border-top: 1px solid var(--lastre-border-subtle);
+    border-left: 0;
+  }
+  .lastre-pagination__size {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lastre-dt__bulk {
+    animation: none;
+  }
+}

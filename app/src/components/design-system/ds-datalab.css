@@ -1,0 +1,160 @@
+/* Design system: live reference for data and navigation components. */
+.ds-datalab {
+  display: grid;
+  gap: var(--lastre-space-6);
+}
+.ds-datalab__stage {
+  display: grid;
+  gap: var(--lastre-space-4);
+  padding: var(--lastre-space-6);
+  border: 1px solid var(--lastre-border-subtle);
+  border-radius: var(--lastre-radius-xl, 20px);
+  background:
+    radial-gradient(ellipse at 0% 0%, var(--lastre-fill-info), transparent 55%),
+    var(--lastre-bg-canvas);
+}
+.ds-datalab__stage > * {
+  min-width: 0;
+}
+.ds-datalab__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--lastre-space-4);
+}
+.ds-datalab__eyebrow {
+  margin: 0 0 6px;
+  color: var(--lastre-text-tertiary);
+  font-family: var(--lastre-font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ds-datalab h3 {
+  margin: 0;
+  font-family: var(--lastre-font-display);
+  font-size: 1.125rem;
+  font-weight: var(--lastre-weight-semibold);
+  letter-spacing: var(--lastre-tracking-heading);
+}
+.ds-datalab__head p:last-child {
+  max-width: 62ch;
+  margin: 6px 0 0;
+  color: var(--lastre-text-secondary);
+  font-size: var(--lastre-text-label);
+}
+.ds-datalab__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--lastre-space-4);
+}
+.ds-datalab__card {
+  display: grid;
+  align-content: start;
+  gap: var(--lastre-space-4);
+  padding: var(--lastre-space-5);
+  border: 1px solid var(--lastre-border-subtle);
+  border-radius: var(--lastre-radius-lg);
+  background: var(--lastre-bg-surface);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-1);
+}
+.ds-datalab__card .ds-datalab__eyebrow {
+  margin-bottom: -10px;
+}
+.ds-datalab__stack {
+  display: grid;
+  gap: var(--lastre-space-3);
+}
+.ds-datalab__label {
+  margin-bottom: -4px;
+  color: var(--lastre-text-secondary);
+  font-size: var(--lastre-text-label);
+  font-weight: var(--lastre-weight-medium);
+}
+.ds-datalab__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ds-datalab__menu-btn {
+  gap: 6px;
+}
+.ds-datalab__note {
+  margin: 0;
+  color: var(--lastre-text-tertiary);
+  font-size: 12.5px;
+}
+.ds-datalab__checks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.ds-datalab__checks label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lastre-text-secondary);
+  font-size: var(--lastre-text-label);
+}
+.ds-datalab__props {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 10px 12px;
+  margin: 0;
+  font-size: var(--lastre-text-label);
+}
+.ds-datalab__props dt {
+  color: var(--lastre-text-tertiary);
+}
+.ds-datalab__props dd {
+  margin: 0;
+}
+.ds-dt-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ds-dt-name > span:last-child {
+  display: grid;
+  min-width: 0;
+}
+.ds-dt-name strong {
+  overflow: hidden;
+  font-weight: var(--lastre-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ds-dt-name small {
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+.ds-dt-glyph {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--lastre-border-subtle);
+  border-radius: 9px;
+  background: var(--lastre-fill-info);
+  color: var(--lastre-link);
+}
+.ds-dt-glyph--lg {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+.ds-dt-mono {
+  color: var(--lastre-text-primary);
+  font-family: var(--lastre-font-mono);
+  font-size: 12.5px;
+}
+@media (max-width: 720px) {
+  .ds-datalab__stage {
+    padding: var(--lastre-space-4);
+  }
+  .ds-datalab__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

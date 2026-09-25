@@ -62,6 +62,25 @@ conteúdo recupera o resultado anterior. Importar cria rascunhos, sem compartilh
 - `app/test/assets*.test.ts`: testes de domínio, HTTP, isolamento, importação e CSV.
 - `app/test/assetsJourney.browser.py`: jornada de duas organizações e colaborador.
 
+### Componentes compartilhados de lista
+
+As listas de Assets usam componentes de `app/src/components/ui/`, com prefixo
+`lastre-` e somente tokens do design system, para servirem também ao Admin e a
+outras telas. A referência viva fica em `/design-system#data`, com dados fictícios.
+
+| Componente | Uso |
+|---|---|
+| `DataTable` | Ordenação com `aria-sort`, seleção com Shift, barra de ações em lote, menu por linha, colunas e densidade lembradas no navegador, paginação, estados de carregamento e vazio. A linha abre o registro; o nome continua um link real. Vira cartões abaixo de 640 px da própria largura. |
+| `Tabs` (`variant="underline"`) | Navegação de página ou filtro de situação com contagem e indicador deslizante. Sem `children`, controla um painel externo por `panelId`. A variante segmentada original não mudou. |
+| `FilterBar`, `FacetFilter` | Busca, facetas multisseleção com contagem por opção e um único "Limpar". |
+| `Select` | Escolha única em listbox, com ícones, descrições, grupos e busca. Com `name`, envia por campo oculto e participa da validação nativa. |
+| `DropdownMenu` | Menu com setas, Home/End, busca por letra, itens de marcação e escolha única, e item destrutivo. |
+| `Drawer`, `Tooltip`, `Checkbox`, `Pagination` | Painel lateral no `<dialog>` nativo (folha inferior no celular), dica de controle, marcação com estado parcial e rodapé de paginação. |
+
+Camadas flutuantes são renderizadas no `<dialog>` aberto ou no `body`, e
+compensam ancestrais com `transform`. Os componentes funcionam com ou sem
+React Router (`routing.tsx`).
+
 Nenhuma dependência de runtime foi adicionada. A interface reutiliza React,
 React Router, os tokens, a fonte e os símbolos locais existentes. O carregamento
 de Assets não inicializa a sessão fictícia, o onboarding ou os dados do console.

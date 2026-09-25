@@ -1,7 +1,10 @@
+import { adminSpecifications, adminSurfaceSpecifications } from "./admin";
 import type { ScreenSpecification } from "./types";
 
 /** Product contracts to review. They do not certify implemented behavior. */
 export const specifications: ScreenSpecification[] = [
+  ...adminSpecifications,
+  ...adminSurfaceSpecifications,
   {
     screen: "LA-001",
     priority: "P0",
@@ -14,7 +17,9 @@ export const specifications: ScreenSpecification[] = [
     ],
     data: [
       "Contagens derivadas da organização",
-      "Solicitações abertas, rascunhos e versões recebidas",
+      "Solicitações abertas com progresso de requisitos e prazo",
+      "Rascunhos, prontidão da base (prontos / total ativos) e versões recebidas",
+      "Atividade recente da organização",
     ],
     primaryAction: {
       label: "Abrir tarefa",
@@ -38,6 +43,8 @@ export const specifications: ScreenSpecification[] = [
     acceptance: [
       "Indicadores refletem dados reais do workspace ou demonstração explicitamente identificada.",
       "Organização nova apresenta estado vazio com cadastro inicial.",
+      "Shell comum de Assets: busca ⌘K sobre páginas, ações e cadastros; central de notificações; menu Novo (ativo/lote) apenas para papéis que cadastram; troca de organização e tema no menu lateral.",
+      "Em celular, navegação inferior e menu lateral em gaveta, sem rolagem horizontal; nos dois temas.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -55,8 +62,8 @@ export const specifications: ScreenSpecification[] = [
       "Ambiente real local ou demonstração identificada",
     ],
     data: [
-      "Ativos duradouros, categoria, setor, responsável, atualização",
-      "Filtros de nome, setor, situação e modo de visualização na URL",
+      "Ativos duradouros, categoria, setor, responsável, documentos, situação, atualização",
+      "Busca, situação, facetas (setor, tipo, responsável), ordenação e modo de visualização na URL (q, status, setor, tipo, responsavel, sort, view)",
     ],
     primaryAction: {
       label: "Cadastrar ativo",
@@ -80,6 +87,10 @@ export const specifications: ScreenSpecification[] = [
     acceptance: [
       "Pesquisa e filtros sobrevivem ao recarregamento.",
       "Arquivados são consultáveis por filtro; lista funciona no celular.",
+      "Abas de situação (Em uso, Rascunhos, Prontos para revisão, Arquivados, Todos) com contagem que respeita os demais filtros; facetas multisseleção com contagem por opção; alternância tabela/cartões.",
+      "Tabela compartilhada (DataTable): ordenação por coluna com aria-sort, colunas e densidade escolhidas em Exibição e lembradas no navegador, paginação de 25 itens, linha inteira abre o dossiê e o nome permanece um link real para teclado e nova aba; abaixo de 640 px da própria tabela as linhas viram cartões.",
+      "Quem edita (exceto colaborador) seleciona linhas, com Shift para intervalos, e age em lote: marcar prontos somente os rascunhos completos, restaurar, exportar CSV e arquivar após confirmação em diálogo. O servidor valida cada mudança de situação com revisão otimista.",
+      "Visualização rápida em painel lateral (drawer) mostra situação, prontidão, propriedades, documentos e solicitações sem sair da lista; Esc fecha e devolve o foco ao botão que abriu.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -123,6 +134,7 @@ export const specifications: ScreenSpecification[] = [
     acceptance: [
       "Rascunho incompleto é permitido; envio exige os campos do tipo.",
       "Erros preservam campos enquanto o formulário está aberto.",
+      "Formulário em seções com navegação lateral, progresso dos campos essenciais e barra de salvamento fixa que indica alterações não salvas.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -142,7 +154,7 @@ export const specifications: ScreenSpecification[] = [
     ],
     data: [
       "Identificação, material, quantidade com unidade e período",
-      "Situação do cadastro e filtros na URL",
+      "Situação do cadastro, facetas (setor, material, responsável), ordenação e visualização na URL",
     ],
     primaryAction: {
       label: "Cadastrar lote",
@@ -167,6 +179,10 @@ export const specifications: ScreenSpecification[] = [
       "Quantidade nunca aparece sem unidade.",
       "Rascunhos e arquivados podem ser filtrados.",
       "Importação CSV com até 100 lotes valida o lote completo antes de gravar; erro não cria cadastros parciais e repetição não duplica.",
+      "Importação CSV em diálogo com etapas, modelo para download, área de arrastar-e-soltar e prévia das linhas antes de confirmar; resultado permanece na página.",
+      "Mesma lista de LA-002: abas de situação com contagem, facetas, tabela compartilhada (DataTable): ordenação por coluna com aria-sort, colunas e densidade escolhidas em Exibição e lembradas no navegador, paginação de 25 itens, linha inteira abre o dossiê e o nome permanece um link real para teclado e nova aba; abaixo de 640 px da própria tabela as linhas viram cartões.",
+      "Quem edita (exceto colaborador) seleciona linhas, com Shift para intervalos, e age em lote: marcar prontos somente os rascunhos completos, restaurar, exportar CSV e arquivar após confirmação em diálogo. O servidor valida cada mudança de situação com revisão otimista.",
+      "Visualização rápida em painel lateral (drawer) mostra situação, prontidão, propriedades, documentos e solicitações sem sair da lista; Esc fecha e devolve o foco ao botão que abriu.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -214,6 +230,9 @@ export const specifications: ScreenSpecification[] = [
       "Exportação JSON identifica organização, versão, autoria e limites e registra um evento.",
       "Conferência de integridade tem método, versão, momento e limites.",
       "Arquivar mantém histórico e compartilhamentos; revogar é ação separada.",
+      "Abas sincronizadas com ?aba= (resumo, documentos, verificacoes, versoes, historico, acessos); coluna lateral com propriedades, prontidão e atividade; arquivar, remover documento e revogar acesso pedem confirmação em diálogo.",
+      "Abas sublinhadas com contagem (documentos, versões, histórico, acessos); seletor de versão com autoria, data e documentos por versão; Mais ações reúne marcar pronto (desabilitado com a lista do que falta), exportar dados em CSV e arquivar ou restaurar.",
+      "Versões e acessos em tabela com ordenação: menu da versão consulta, compara com a anterior e exporta; menu do acesso ativo revoga após confirmação.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -233,7 +252,8 @@ export const specifications: ScreenSpecification[] = [
     ],
     data: [
       "Organização solicitante, finalidade e prazo",
-      "Requisitos preparados e estado da resposta",
+      "Requisitos preparados, cadastro associado e estado da resposta",
+      "Busca, situação, facetas (organização, cadastro), ordenação e visualização na URL",
     ],
     primaryAction: {
       label: "Responder solicitação",
@@ -257,6 +277,8 @@ export const specifications: ScreenSpecification[] = [
     acceptance: [
       "Resposta enviada não é apresentada como aprovada.",
       "Listagem vazia não fabrica pedidos nem destinatários.",
+      "Detalhe da solicitação em etapas (cadastro associado, requisitos, esclarecimentos) com coluna de contexto e prontidão; uma única ação Revisar envio.",
+      "Lista em tabela (padrão) ou cartões; abas Todas, Aguardando resposta, Vencidas e Respostas enviadas com contagem; prazo vencido destacado na linha; menu da linha abre a solicitação, o cadastro associado ou a revisão de envio conforme o papel.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -301,6 +323,7 @@ export const specifications: ScreenSpecification[] = [
     acceptance: [
       "Período invertido e quantidade inválida são rejeitados no servidor.",
       "Mudança de setor limpa quantidade e explicita unidade; unidade não converte o valor.",
+      "Formulário de lote em seções com navegação lateral, progresso dos campos essenciais e barra de salvamento fixa que indica alterações não salvas.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -344,6 +367,8 @@ export const specifications: ScreenSpecification[] = [
     acceptance: [
       "Cadastro não comprova titularidade.",
       "Leitor não edita; colaborador acessa apenas o objeto atribuído.",
+      "Aba versoes lista snapshots e compara Antes → Depois com documentos adicionados e removidos; exportação por versão.",
+      "Abas sublinhadas com contagem (documentos, versões, histórico, acessos); seletor de versão com autoria, data e documentos por versão; Mais ações reúne marcar pronto (desabilitado com a lista do que falta), exportar dados em CSV e arquivar ou restaurar.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -390,6 +415,9 @@ export const specifications: ScreenSpecification[] = [
       "Revogar convite impede aceitação; encerrar participação impede consultas posteriores.",
       "Link é copiado pelo usuário; nenhum e-mail é enviado.",
       "Alternar organização só aceita uma participação ativa da conta; mantém dados e papéis isolados.",
+      "Abas sincronizadas com ?aba= (geral, equipe, convites, conta); Convites só aparece para administrador e uma aba indisponível volta para Geral.",
+      "Equipe em tabela com busca e faceta de papel; menu da pessoa troca o papel (escolha única) e encerra ou reativa o acesso; matriz de permissões por papel permanece na aba.",
+      "Convidar pessoa abre um painel lateral com e-mail, permissão descrita e cadastro autorizado obrigatório para colaborador; o link gerado é copiado pelo usuário. Convites em tabela com validade e situação; revogar fica no menu do convite pendente.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -436,6 +464,7 @@ export const specifications: ScreenSpecification[] = [
       "Cookie é HttpOnly e SameSite; token da sessão é armazenado como digest.",
       "Demonstração cria organização isolada e identificada.",
       "Produção requer operação de identidade, recuperação e verificação de e-mail antes de uso público.",
+      "Entrada em tela dividida com alternância Entrar/Criar organização e demonstração explícita; painel de marca oculto em telas estreitas.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -477,6 +506,7 @@ export const specifications: ScreenSpecification[] = [
       "Convite expirado, revogado ou utilizado não pode ser aceito.",
       "Uma conta diferente do destinatário não aceita o convite.",
       "O papel e o escopo são conferidos pelo servidor, sem conceder acesso geral a colaborador.",
+      "Convite apresenta organização, papel, escopo, validade e uso único antes da aceitação.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -522,6 +552,7 @@ export const specifications: ScreenSpecification[] = [
       "Acesso expirado ou revogado é negado na API e no arquivo.",
       "Trocar IDs não expõe outra versão ou documento.",
       "A nova versão do remetente não é herdada automaticamente.",
+      "Consulta somente leitura com vigência destacada (aviso a 3 dias do fim), documentos com download apenas quando permitido e alerta para acesso expirado ou revogado.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -567,6 +598,7 @@ export const specifications: ScreenSpecification[] = [
       "Aplicam-se os mesmos controles de versão e idempotência de LA-007.",
       "Campos incompletos e destinatário inexistente impedem envio.",
       "Destinatário com vários vínculos exige escolher a organização que receberá a versão.",
+      "Revisão em seções com resumo fixo e recibo com identificador copiável.",
     ],
     dependencies: [
       "API /api/assets e armazenamento local de instância única",
@@ -660,6 +692,7 @@ export const specifications: ScreenSpecification[] = [
       "Quem não pode enviar não conclui o compartilhamento pela UI ou API.",
       "Correção permanece ligada à pendência e à versão que a originou.",
       "A tarefa funciona pelo celular e por teclado, com erros associados aos campos.",
+      "Lista de solicitações com filtro Todas/Aguardando/Respondidas e busca na URL; cada item mostra solicitante, progresso de requisitos e prazo, com atraso destacado.",
     ],
     dependencies: [
       "Sessão HttpOnly, conta com senha e organização no servidor local",
@@ -707,6 +740,7 @@ export const specifications: ScreenSpecification[] = [
       "A confirmação identifica organização, conteúdo e versão.",
       "Cliques repetidos produzem um único envio.",
       "A versão enviada permanece recuperável após correção.",
+      "Revisão em seções (conteúdo, destinatário, permissões) com resumo fixo, confirmação explícita do destinatário e recibo com identificador copiável.",
     ],
     dependencies: [
       "Compartilhamento por objeto, destinatário e versão no servidor local",
@@ -724,13 +758,16 @@ export const specifications: ScreenSpecification[] = [
       "Área, situação e busca na URL",
       "Ficha selecionada por ID estável",
       "Aba interna do drawer selecionada na URL",
+      "Laboratório visual de modais, drawers e seções na página; busca, formato, interface, cenário, comparação e viewport na URL",
       "Inventário é uma página do Admin; suas visões são abas locais, separadas da navegação administrativa",
       "Snapshot das fontes do projeto",
+      "Shell compartilhado com o Admin refinado: marca, materiais e busca global do DS; conteúdo do inventário permanece somente leitura",
     ],
     data: [
       "Telas existentes e planejadas",
       "Especificações funcionais, operações e jornadas",
       "Relatório gerado e procedimento obrigatório de atualização",
+      "Definições AD-S em índice agrupado por tarefa; prévias vivas das telas e componentes reais, estados disponíveis por interface e comparação independente lado a lado",
     ],
     primaryAction: {
       label: "Abrir ficha",
@@ -739,7 +776,7 @@ export const specifications: ScreenSpecification[] = [
       enabledWhen: "O ID existe no catálogo.",
     },
     permissions: [
-      "Somente leitura; disponível em desenvolvimento.",
+      "Catálogo somente leitura; disponível em desenvolvimento. Exemplos permitem preparação local isolada dos rascunhos das telas operacionais, sem envio de comandos.",
       "A prévia local não implementa autorização administrativa de produção.",
     ],
     recovery: [
@@ -747,9 +784,11 @@ export const specifications: ScreenSpecification[] = [
       "ID desconhecido informa que a ficha não existe e permite fechar o aviso.",
       "Escape fecha a ficha e devolve foco ao acionador.",
       "Aba desconhecida abre Visão geral; fechar limpa a seleção da ficha e da aba, preservando os filtros.",
+      "Galeria sem resultados permite limpar seus filtros; prévia desconhecida informa indisponibilidade e permite fechar o aviso.",
+      "Escape fecha o componente dentro da prévia; reiniciar restaura o cenário. Alterações não salvas bloqueiam troca de interface, cenário ou aba até continuar ou descartar. Falha de carregamento permite tentar novamente.",
     ],
     versioning:
-      "Fontes e relatório são versionados no Git. A exportação JSON identifica o snapshot; não altera registros.",
+      "Fontes e relatório são versionados no Git. A exportação JSON inclui as definições das superfícies e identifica o snapshot; não altera registros. Cenários mantêm alvo e versão fictícios; alterações e salvamentos nas prévias são efêmeros e não sobrescrevem rascunhos operacionais.",
     notifications:
       "Sem notificações externas. Divergências aparecem no relatório e na conferência local/CI.",
     acceptance: [
@@ -757,7 +796,13 @@ export const specifications: ScreenSpecification[] = [
       "Toda ficha, incluindo telas planejadas e atalhos, abre o mesmo drawer com cinco abas internas.",
       "Clicar no nome, descrição, área, rota, status ou espaço da linha abre uma única ficha; o indicador Abrir ficha deixa a ação visível.",
       "Enter e Espaço no botão da ficha abrem o drawer; fechar retorna o foco a esse botão, inclusive após clique em outra célula.",
-      "O menu administrativo tem uma única entrada Inventário. Visão geral, catálogo, fluxos, operações, verificações e regra ficam dentro da página.",
+      "O shell tem dez destinos principais. Inventário conserva uma entrada; visão geral, catálogo, modais e drawers, fluxos, operações, verificações e regra continuam dentro da página.",
+      "O laboratório preserva os IDs AD-S e renderiza as 27 interfaces usando as próprias telas do Admin, sem desenhos esquemáticos ou réplicas de componentes.",
+      "O índice agrupa interfaces por tarefa e a prévia destaca nome, formato, tela de origem, gatilho, dados e acesso à ficha; todos os exemplos abrem no inventário.",
+      "Estados são específicos de cada interface: formulário inicial, preenchido, validação, revisão, confirmação, falha ao salvar e conteúdo extenso; consultas oferecem ausência ou filtros quando implementados. Cenários simulados são explícitos; envio real continua indisponível.",
+      "Busca ignora acentos; interface, formato, cenário, comparação e viewport sobrevivem ao recarregamento e ao histórico. Duas prévias têm navegação e campos independentes.",
+      "Prévia viva e comparação funcionam nos temas claro/escuro, por teclado, com movimento reduzido e no celular; o iframe tem título, carregamento, recuperação e retorno do foco aos controles externos.",
+      "Controles do shell e filtros do inventário usam contornos sutis em repouso; foco por teclado permanece visível com uma única linha fina.",
       "A aba selecionada sobrevive ao recarregamento; outra ficha começa em Visão geral.",
       "Setas esquerda/direita e Home/End navegam nas abas. Tab acessa o painel ativo e o foco permanece no drawer.",
       "Cabeçalho e abas ficam visíveis durante a rolagem do painel, inclusive no celular.",

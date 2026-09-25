@@ -1,0 +1,345 @@
+/* Lists of assets and lots (LA-002, LA-004), their quick look and the CSV import dialog. */
+.assets-listview {
+  display: grid;
+  gap: var(--lastre-space-4);
+  min-width: 0;
+}
+.assets-listview > * {
+  min-width: 0;
+}
+.assets-listview > .tabs-root {
+  margin-top: calc(var(--lastre-space-2) * -1);
+}
+
+/* Cells shared by record tables. */
+.assets-object-name {
+  display: flex;
+  align-items: center;
+  gap: var(--lastre-space-3);
+  min-width: 220px;
+}
+.assets-object-name > span:last-child {
+  display: grid;
+  min-width: 0;
+}
+.assets-object-name strong {
+  overflow: hidden;
+  color: var(--lastre-text-primary);
+  font-weight: var(--lastre-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color var(--lastre-duration-fast);
+}
+.assets-object-name small {
+  overflow: hidden;
+  margin-top: 1px;
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lastre-dt__table tbody tr:hover .assets-object-name strong {
+  color: var(--lastre-link);
+}
+.assets-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lastre-text-primary);
+  white-space: nowrap;
+}
+.assets-person .assets-avatar--sm {
+  width: 22px;
+  height: 22px;
+  font-size: 9.5px;
+}
+.assets-cell-empty {
+  color: var(--lastre-text-tertiary);
+  font-style: italic;
+}
+.assets-cell-strong {
+  color: var(--lastre-text-primary);
+}
+.assets-nowrap {
+  white-space: nowrap;
+}
+.assets-count-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--lastre-text-primary);
+  font-family: var(--lastre-font-mono);
+  font-size: 12.5px;
+}
+.assets-count-cell svg {
+  color: var(--lastre-text-tertiary);
+}
+.assets-count-cell[data-zero] {
+  color: var(--lastre-text-tertiary);
+}
+.assets-sector {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.assets-sector::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--sector, var(--lastre-info));
+}
+.assets-sector[data-sector="energy"] { --sector: var(--lastre-warning); }
+.assets-sector[data-sector="environment"] { --sector: var(--lastre-success); }
+.assets-sector[data-sector="recycling"] { --sector: var(--lastre-chart-4); }
+
+/* Quick look (ObjectPeek) */
+.assets-peek__status {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  color: var(--lastre-text-tertiary);
+  font-size: 12.5px;
+}
+.assets-peek__missing {
+  margin-top: 10px;
+  color: var(--lastre-warning);
+  font-size: 12.5px;
+}
+.assets-peek__origin {
+  margin-top: var(--lastre-space-3);
+}
+.assets-peek__list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.assets-peek__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin: 0 -10px;
+  border-radius: var(--lastre-radius-sm);
+}
+.assets-peek__list li:hover {
+  background: var(--assets-row-hover);
+}
+.assets-peek__list li > svg {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+}
+.assets-peek__list li > :is(span, a) {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.assets-peek__list strong {
+  overflow: hidden;
+  font-size: var(--lastre-text-label);
+  font-weight: var(--lastre-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.assets-peek__list small {
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+
+/* Cards */
+.assets-object-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--lastre-space-4);
+}
+.assets-object-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: inherit;
+}
+.assets-object-card__cover {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--lastre-space-3);
+  padding: var(--lastre-space-5);
+  border-bottom: var(--assets-hairline);
+  background:
+    radial-gradient(ellipse at 0% 0%, var(--lastre-fill-info), transparent 65%),
+    var(--lastre-bg-canvas);
+}
+.assets-object-card__cover[data-sector="energy"] {
+  background:
+    radial-gradient(ellipse at 0% 0%, var(--lastre-fill-warn), transparent 65%),
+    var(--lastre-bg-canvas);
+}
+.assets-object-card__cover[data-sector="environment"],
+.assets-object-card__cover[data-sector="recycling"] {
+  background:
+    radial-gradient(ellipse at 0% 0%, var(--lastre-fill-success), transparent 65%),
+    var(--lastre-bg-canvas);
+}
+.assets-object-card__body {
+  display: grid;
+  gap: 6px;
+  padding: var(--lastre-space-5) var(--lastre-space-5) var(--lastre-space-4);
+}
+.assets-object-card__kind {
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+.assets-object-card h2 {
+  font-size: 1.0625rem;
+  font-weight: var(--lastre-weight-semibold);
+  overflow-wrap: anywhere;
+}
+.assets-object-card__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--lastre-text-secondary);
+  font-size: 12.5px;
+}
+.assets-object-card__meta svg {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+}
+.assets-object-card__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--lastre-space-3);
+  margin-top: auto;
+  padding: var(--lastre-space-3) var(--lastre-space-5);
+  border-top: var(--assets-hairline);
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+.assets-object-card__foot > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.assets-object-card__foot > svg {
+  margin-left: auto;
+  transition: transform var(--lastre-duration-normal) var(--lastre-ease-out);
+}
+.assets-object-card:hover .assets-object-card__foot > svg {
+  color: var(--lastre-link);
+  transform: translateX(3px);
+}
+
+/* Import dialog */
+.assets-import {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: var(--lastre-space-6);
+  align-items: start;
+}
+.assets-import__steps {
+  padding: var(--lastre-space-4);
+  border: var(--assets-hairline);
+  border-radius: var(--lastre-radius-md);
+  background: var(--lastre-bg-canvas);
+}
+.assets-import__steps .assets-text-link {
+  text-align: left;
+}
+.assets-import__steps .assets-stepper li:last-child {
+  padding-bottom: 0;
+}
+.assets-import__main {
+  display: grid;
+  gap: var(--lastre-space-4);
+  min-width: 0;
+}
+.assets-import-preview {
+  overflow: auto;
+  max-height: 280px;
+  border: var(--assets-hairline);
+  border-radius: var(--lastre-radius-md);
+  background: var(--lastre-bg-surface);
+}
+.assets-import-preview .assets-table td {
+  padding: 9px var(--lastre-space-3);
+  color: var(--lastre-text-secondary);
+  white-space: nowrap;
+}
+.assets-import-preview .assets-table th {
+  padding: 8px var(--lastre-space-3);
+}
+.assets-import-preview strong {
+  color: var(--lastre-text-primary);
+  font-weight: var(--lastre-weight-medium);
+}
+.assets-import-preview__more {
+  padding: 10px var(--lastre-space-3);
+  border-top: var(--assets-hairline);
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+
+@media (max-width: 720px) {
+  .assets-import {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .assets-import__steps {
+    padding: var(--lastre-space-3);
+  }
+}
+@media (max-width: 960px) {
+  /* The bulk bar clears the bottom tab bar. */
+  .assets-shell {
+    --lastre-dt-bulk-offset: 84px;
+  }
+}
+
+/* Reference to another record inside a cell. */
+.assets-inline-ref {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  color: var(--lastre-text-secondary);
+}
+.assets-inline-ref > svg {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+}
+.assets-inline-ref[data-tone="warning"] {
+  color: var(--lastre-warning);
+}
+.assets-inline-ref[data-tone="warning"] > svg {
+  color: currentColor;
+}
+
+/* Compact progress for table cells. */
+.assets-meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lastre-text-primary);
+}
+.assets-meter__track {
+  position: relative;
+  width: 64px;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--lastre-text-primary) 10%, transparent);
+}
+.assets-meter__track > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--lastre-warning);
+}
+.assets-meter[data-complete] .assets-meter__track > span {
+  background: var(--lastre-success);
+}

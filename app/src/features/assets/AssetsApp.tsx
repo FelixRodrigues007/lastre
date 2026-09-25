@@ -1,4 +1,6 @@
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Button, buttonClassName } from "../../components/ui/Button";
+import { Icon } from "../../components/ui/Icon";
 import { AssetsProvider, useAssets } from "./context";
 import { ProductError } from "./api";
 import { AssetsShell } from "./AssetsShell";
@@ -54,12 +56,13 @@ function AssetsRoutes() {
         <Notice error>
           {error?.message ?? "Não foi possível carregar a organização."}
         </Notice>
-        <button
-          className="assets-button"
+        <Button
+          variant="secondary"
+          startIcon={<Icon name="refresh" size={16} />}
           onClick={() => void reload().catch(() => {})}
         >
           Tentar novamente
-        </button>
+        </Button>
       </div>
     );
   return (
@@ -69,6 +72,7 @@ function AssetsRoutes() {
           Não foi possível atualizar os dados. Exibindo a última consulta
           confirmada.{" "}
           <button
+            type="button"
             className="assets-text-link"
             onClick={() => void reload().catch(() => {})}
           >
@@ -121,8 +125,14 @@ function AssetsRoutes() {
           path="*"
           element={
             <Empty
+              icon="search"
               title="Esta página não foi encontrada"
-              description="Use a navegação para voltar aos seus cadastros."
+              description="O endereço pode ter mudado ou o cadastro não está disponível para você. Use a navegação para voltar aos seus cadastros."
+              action={
+                <Link className={buttonClassName({ variant: "secondary" })} to="/assets">
+                  Voltar ao início
+                </Link>
+              }
             />
           }
         />

@@ -52,7 +52,7 @@ const AdminPreview = import.meta.env.DEV
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {isAdminPreview && AdminPreview ? (
-      <Suspense fallback={<p role="status">Carregando inventário…</p>}>
+      <Suspense fallback={<p role="status">Carregando Admin…</p>}>
         <AdminPreview />
       </Suspense>
     ) : isDesignSystem ? (

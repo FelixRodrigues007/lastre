@@ -39,6 +39,35 @@ const proposed = (
 /** Observed API functions are NOT shared, validated operation contracts yet. */
 export const operations: Operation[] = [
   {
+    id: "admin.consultarPrevia",
+    name: "Consultar prévia administrativa",
+    status: "observed",
+    transport: "Prévia local DEV /admin/* (sem API)",
+    source: "app/src/routes/admin/AdminPreview.tsx",
+    symbol: "AdminPreview",
+    effects: [
+      "leitura de exemplos locais",
+      "busca por query na URL",
+      "navegação de prioridades e eventos ao contexto canônico",
+      "laboratório AD-S com interfaces reais, cenários, comparação independente e viewports amplo/móvel",
+    ],
+    errors: ["NOT_FOUND"],
+    notes:
+      "Interface local; não representa API administrativa ou acesso a dados de clientes.",
+  },
+  {
+    id: "admin.prepararIntervencao",
+    name: "Preparar revisão administrativa",
+    status: "proposed",
+    transport: null,
+    source: null,
+    symbol: null,
+    effects: ["rascunho local", "revisão de escopo"],
+    errors: ["VALIDATION", "STORAGE_UNAVAILABLE"],
+    notes:
+      "Somente preparação no navegador. Execução, autorização, idempotência e recibo dependem de backend não implementado.",
+  },
+  {
     id: "lote.importar",
     name: "Importar lotes por CSV",
     status: "observed",

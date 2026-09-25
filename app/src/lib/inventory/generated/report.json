@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "sourceHash": "ec2fba2dd054cc7b",
-  "sourceFiles": 529,
+  "sourceHash": "dc45e68adf4551e5",
+  "sourceFiles": 583,
   "freshnessScope": "Assinatura das fontes TS, JS, estilos, JSON, HTML e SVG de app/src, web/src e design-system, mais configurações selecionadas. Atualização não comprova revisão funcional. Assets binários e públicos dependem de revisão manual.",
   "scope": "Rotas JSX de app/src + entrada /design-system em main.tsx. web/ possui fichas de leitura manual, fora da cobertura automática.",
   "routes": [
@@ -122,103 +122,103 @@
     {
       "path": "/",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 22,
+      "line": 24,
       "excluded": null
     },
     {
       "path": "/assets/entrar",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 31,
+      "line": 33,
       "excluded": null
     },
     {
       "path": "/assets/convites/:token",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 32,
+      "line": 34,
       "excluded": null
     },
     {
       "path": "/assets",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 80,
+      "line": 84,
       "excluded": null
     },
     {
       "path": "/assets/ativos",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 81,
+      "line": 85,
       "excluded": null
     },
     {
       "path": "/assets/ativos/novo",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 85,
+      "line": 89,
       "excluded": null
     },
     {
       "path": "/assets/ativos/:ativoId",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 89,
+      "line": 93,
       "excluded": null
     },
     {
       "path": "/assets/ativos/:ativoId/compartilhar",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 93,
+      "line": 97,
       "excluded": null
     },
     {
       "path": "/assets/lotes",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 97,
+      "line": 101,
       "excluded": null
     },
     {
       "path": "/assets/lotes/novo",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 98,
+      "line": 102,
       "excluded": null
     },
     {
       "path": "/assets/lotes/:loteId",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 102,
+      "line": 106,
       "excluded": null
     },
     {
       "path": "/assets/lotes/:loteId/compartilhar",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 106,
+      "line": 110,
       "excluded": null
     },
     {
       "path": "/assets/solicitacoes",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 110,
+      "line": 114,
       "excluded": null
     },
     {
       "path": "/assets/solicitacoes/:solicitacaoId",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 111,
+      "line": 115,
       "excluded": null
     },
     {
       "path": "/assets/organizacao",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 115,
+      "line": 119,
       "excluded": null
     },
     {
       "path": "/assets/recebidos/:shareId",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 119,
+      "line": 123,
       "excluded": null
     },
     {
       "path": "*",
       "file": "app/src/features/assets/AssetsApp.tsx",
-      "line": 120,
+      "line": 124,
       "excluded": "Fallback ou envelope de rotas; não representa uma página."
     },
     {
@@ -228,26 +228,182 @@
       "excluded": null
     },
     {
+      "path": "/admin",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 49,
+      "excluded": null
+    },
+    {
       "path": "/admin/inventario",
       "file": "app/src/routes/admin/AdminPreview.tsx",
-      "line": 10,
+      "line": 50,
+      "excluded": null
+    },
+    {
+      "path": "/admin/fila",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 51,
+      "excluded": null
+    },
+    {
+      "path": "/admin/fila/:ocorrenciaId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 52,
+      "excluded": null
+    },
+    {
+      "path": "/admin/organizacoes",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 53,
+      "excluded": null
+    },
+    {
+      "path": "/admin/organizacoes/:organizacaoId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 54,
+      "excluded": null
+    },
+    {
+      "path": "/admin/registros",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 58,
+      "excluded": null
+    },
+    {
+      "path": "/admin/objetos/:objetoId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 59,
+      "excluded": null
+    },
+    {
+      "path": "/admin/dossies/:dossieId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 60,
+      "excluded": null
+    },
+    {
+      "path": "/admin/analises/:analiseId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 61,
+      "excluded": null
+    },
+    {
+      "path": "/admin/evidencias/:evidenciaId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 62,
+      "excluded": null
+    },
+    {
+      "path": "/admin/comparacoes",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 66,
+      "excluded": null
+    },
+    {
+      "path": "/admin/verificacoes",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 67,
+      "excluded": null
+    },
+    {
+      "path": "/admin/verificacoes/:execucaoId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 68,
+      "excluded": null
+    },
+    {
+      "path": "/admin/modelos",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 72,
+      "excluded": null
+    },
+    {
+      "path": "/admin/modelos/:modeloId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 73,
+      "excluded": null
+    },
+    {
+      "path": "/admin/modelos/:modeloId/editar",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 74,
+      "excluded": null
+    },
+    {
+      "path": "/admin/integracoes",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 78,
+      "excluded": null
+    },
+    {
+      "path": "/admin/integracoes/:integracaoId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 79,
+      "excluded": null
+    },
+    {
+      "path": "/admin/acessos",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 83,
+      "excluded": null
+    },
+    {
+      "path": "/admin/acessos/pessoas/:pessoaId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 84,
+      "excluded": null
+    },
+    {
+      "path": "/admin/acessos/politicas",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 88,
+      "excluded": null
+    },
+    {
+      "path": "/admin/auditoria",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 89,
+      "excluded": null
+    },
+    {
+      "path": "/admin/configuracoes",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 90,
+      "excluded": null
+    },
+    {
+      "path": "/admin/entrar",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 91,
+      "excluded": null
+    },
+    {
+      "path": "/admin/intervencoes/:intervencaoId",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 92,
+      "excluded": null
+    },
+    {
+      "path": "/admin/busca",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 96,
       "excluded": null
     },
     {
       "path": "*",
       "file": "app/src/routes/admin/AdminPreview.tsx",
-      "line": 18,
+      "line": 97,
       "excluded": "Fallback ou envelope de rotas; não representa uma página."
     }
   ],
   "totals": {
-    "appRoutes": 35,
-    "covered": 35,
-    "existingScreens": 37,
+    "appRoutes": 61,
+    "covered": 61,
+    "existingScreens": 90,
     "redirects": 3,
     "planned": 5,
-    "observedOperations": 26,
-    "proposedOperations": 2
+    "observedOperations": 27,
+    "proposedOperations": 3
   },
   "errors": [],
   "checks": [

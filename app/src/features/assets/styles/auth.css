@@ -1,0 +1,400 @@
+/* Entry: sign in, create organization and invite acceptance (LA-012, LA-013). */
+.assets-auth {
+  display: grid;
+  grid-template-columns: minmax(420px, 1fr) minmax(0, 1.12fr);
+  min-height: 100dvh;
+  padding: var(--lastre-space-3);
+  gap: var(--lastre-space-3);
+}
+.assets-auth :where(h1, h2) {
+  margin: 0;
+  font-family: var(--lastre-font-display);
+  letter-spacing: var(--lastre-tracking-heading);
+}
+.assets-auth :where(p) {
+  margin: 0;
+}
+.assets-auth :where(a) {
+  text-decoration: none;
+}
+
+/* Form column */
+.assets-auth__form {
+  display: flex;
+  flex-direction: column;
+  padding: var(--lastre-space-6) clamp(24px, 5vw, 72px);
+}
+.assets-auth__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  color: var(--lastre-text-primary);
+}
+.assets-auth__brand .lastre-wordmark {
+  width: 84px;
+  height: 19px;
+}
+.assets-auth__product {
+  padding: 2px 7px;
+  border: var(--assets-hairline);
+  border-radius: var(--lastre-radius-pill);
+  color: var(--lastre-text-secondary);
+  font-family: var(--lastre-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.assets-auth__body {
+  display: grid;
+  gap: var(--lastre-space-6);
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  padding: var(--lastre-space-10) 0;
+  animation: assets-enter var(--lastre-duration-slow) var(--lastre-ease-emphasized) both;
+}
+.assets-auth__head h1 {
+  font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.25rem);
+  font-weight: var(--lastre-weight-medium);
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+.assets-auth__head > p:last-child {
+  margin-top: var(--lastre-space-2);
+  color: var(--lastre-text-secondary);
+}
+.assets-auth .assets-segmented,
+.assets-auth .assets-segmented__track {
+  width: 100%;
+}
+.assets-auth .assets-segmented label {
+  flex: 1;
+  justify-content: center;
+  min-height: 36px;
+  font-size: var(--lastre-text-label);
+}
+.assets-auth__fields {
+  display: grid;
+  gap: var(--lastre-space-4);
+}
+.assets-auth__fields > .assets-notice {
+  margin: 0;
+}
+.assets-auth__submit {
+  width: 100%;
+  margin-top: var(--lastre-space-2);
+}
+.assets-auth__alt {
+  justify-self: center;
+}
+.assets-auth__divider {
+  display: flex;
+  align-items: center;
+  gap: var(--lastre-space-3);
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+.assets-auth__divider::before,
+.assets-auth__divider::after {
+  content: "";
+  flex: 1;
+  border-top: var(--assets-hairline);
+}
+.assets-auth__demo {
+  display: grid;
+  gap: var(--lastre-space-3);
+}
+.assets-auth__demo .lastre-button {
+  width: 100%;
+}
+.assets-auth__demo p {
+  color: var(--lastre-text-tertiary);
+  font-size: 12.5px;
+  text-align: center;
+}
+.assets-auth__legal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+.assets-auth__loading {
+  display: grid;
+  gap: var(--lastre-space-4);
+}
+
+/* Invite card */
+.assets-auth__invite {
+  display: flex;
+  gap: var(--lastre-space-4);
+  padding: var(--lastre-space-5);
+  border: var(--assets-hairline);
+  border-radius: var(--lastre-radius-lg);
+  background: var(--lastre-material-matte);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-2);
+}
+.assets-auth__invite > div {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  justify-items: start;
+}
+.assets-auth__invite p {
+  font-size: var(--lastre-text-label);
+}
+.assets-auth__invite small {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+
+/* Brand panel */
+.assets-auth__story {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--lastre-space-8);
+  overflow: hidden;
+  padding: clamp(32px, 4vw, 56px);
+  border: var(--assets-hairline);
+  border-radius: var(--lastre-radius-xl);
+  background:
+    radial-gradient(ellipse 80% 60% at 85% 10%, var(--lastre-fill-info), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 10% 100%, color-mix(in srgb, var(--lastre-accent) 10%, transparent), transparent 70%),
+    var(--lastre-bg-surface);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-2);
+}
+.assets-auth__story::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--lastre-border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--lastre-border-subtle) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at 60% 50%, black, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 60% 50%, black, transparent 72%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.assets-auth__story > * {
+  position: relative;
+}
+.assets-auth__story-head h2 {
+  max-width: 16ch;
+  font-size: clamp(2rem, 1.2rem + 2vw, 3rem);
+  font-weight: var(--lastre-weight-medium);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+.assets-auth__story-head > p:last-child {
+  max-width: 44ch;
+  margin-top: var(--lastre-space-4);
+  color: var(--lastre-text-secondary);
+}
+
+.assets-auth__stage {
+  position: relative;
+  height: 300px;
+  perspective: 1400px;
+}
+.assets-auth__card {
+  position: absolute;
+  border: var(--assets-hairline);
+  border-radius: var(--lastre-radius-lg);
+  background: var(--lastre-material-matte), var(--lastre-bg-surface);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-4);
+  transform-style: preserve-3d;
+}
+.assets-auth__card--back {
+  top: 24px;
+  left: 4%;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  width: 44%;
+  height: 210px;
+  padding: 18px;
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-2);
+  transform: rotateY(18deg) rotateZ(-4deg);
+  opacity: 0.8;
+  animation: assets-auth-float 9s var(--lastre-ease-standard) infinite alternate;
+}
+.assets-auth__card--back span {
+  color: var(--lastre-text-tertiary);
+  font-family: var(--lastre-font-mono);
+  font-size: 11px;
+}
+.assets-auth__card--back i {
+  height: 8px;
+  border-radius: var(--lastre-radius-pill);
+  background: var(--lastre-bg-elevated);
+}
+.assets-auth__card--back i:nth-child(3) {
+  width: 70%;
+}
+.assets-auth__card--back i:nth-child(4) {
+  width: 45%;
+}
+.assets-auth__card--main {
+  top: 0;
+  left: 20%;
+  width: 66%;
+  padding: 22px 24px;
+  transform: rotateY(-10deg) rotateX(6deg) rotateZ(-2deg);
+  animation: assets-auth-float 8s var(--lastre-ease-standard) -2s infinite alternate;
+}
+.assets-auth__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--lastre-text-primary);
+}
+.assets-auth__card-top > svg {
+  color: var(--lastre-text-tertiary);
+}
+.assets-auth__card-kicker {
+  margin-top: 26px;
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+.assets-auth__card-title {
+  margin-top: 6px;
+  font-family: var(--lastre-font-display);
+  font-size: 1.375rem;
+  font-weight: var(--lastre-weight-medium);
+  letter-spacing: -0.03em;
+}
+.assets-auth__rule {
+  display: block;
+  height: 1.5px;
+  margin: 18px 0 12px;
+  border-radius: 2px;
+  background: var(--lastre-gradient-gold);
+}
+.assets-auth__card-foot {
+  display: flex;
+  justify-content: space-between;
+  color: var(--lastre-text-tertiary);
+  font-family: var(--lastre-font-mono);
+  font-size: 10.5px;
+}
+.assets-auth__card-foot span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--lastre-success);
+  font-family: var(--lastre-font-body);
+  font-size: 11.5px;
+}
+.assets-auth__card-foot i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.assets-auth__card--glass {
+  right: 2%;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 62%;
+  padding: 16px 18px;
+  border-color: var(--lastre-edge-light);
+  background: var(--lastre-material-glass);
+  backdrop-filter: blur(var(--lastre-blur-glass)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--lastre-blur-glass)) saturate(1.4);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-5);
+  transform: rotateY(-8deg) rotateZ(1deg) translateZ(40px);
+  animation: assets-auth-float 7s var(--lastre-ease-standard) -4s infinite alternate;
+}
+.assets-auth__card--glass > div {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.assets-auth__card--glass strong {
+  font-size: var(--lastre-text-label);
+  font-weight: var(--lastre-weight-semibold);
+}
+.assets-auth__card--glass small {
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+}
+.assets-auth__card--glass > svg {
+  color: var(--lastre-text-secondary);
+}
+.assets-auth__seal {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--lastre-material-metal);
+  box-shadow: var(--lastre-glow-gold), inset 0 1px 0 rgb(255 255 255 / 45%);
+  color: var(--lastre-color-mirage-950);
+}
+@keyframes assets-auth-float {
+  to {
+    translate: 0 -8px;
+  }
+}
+
+.assets-auth__promises {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--lastre-space-4);
+  margin: 0;
+  padding: var(--lastre-space-5) 0 0;
+  border-top: var(--assets-hairline);
+  list-style: none;
+}
+.assets-auth__promises li {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.assets-auth__promises li > svg {
+  color: var(--lastre-link);
+}
+.assets-auth__promises strong {
+  display: block;
+  font-size: var(--lastre-text-label);
+  font-weight: var(--lastre-weight-semibold);
+}
+.assets-auth__promises span {
+  color: var(--lastre-text-tertiary);
+  font-size: 12.5px;
+}
+
+@media (max-width: 1080px) {
+  .assets-auth {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0;
+  }
+  .assets-auth__story {
+    display: none;
+  }
+  .assets-auth__form {
+    padding: var(--lastre-space-5) var(--assets-gutter);
+  }
+}
+@media (max-width: 720px) {
+  .assets-auth__body {
+    max-width: none;
+    padding: var(--lastre-space-8) 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .assets-auth__card {
+    animation: none !important;
+  }
+}

@@ -12,13 +12,52 @@ npm --prefix app run dev:web
 ```
 
 Abrir `http://localhost:5174/admin/inventario`. Há entradas pelo console e pelo
-design system em desenvolvimento. A tela é somente leitura; editar as fontes
+design system em desenvolvimento. O inventário é somente leitura; editar as fontes
 abaixo mantém revisão e histórico no Git, sem depender do navegador de alguém.
 
 Inventário é uma única página na navegação administrativa. O layout compartilhado
-`AdminLayout.tsx` acomoda as próximas páginas do Admin. Visão geral, catálogo,
-fluxos, operações, verificações e regra são abas locais do inventário, sem criar
+`AdminLayout.tsx` reúne dez destinos principais e Configurações no rodapé. As 27 telas canônicas do Admin estão disponíveis como prévia local; os dados operacionais são fictícios e o envio de comandos reais permanece indisponível. Visão geral, catálogo,
+modais e drawers, fluxos, operações, verificações e regra são abas locais do inventário, sem criar
 itens adicionais no menu administrativo.
+
+A aba **Modais e drawers** (`/admin/inventario?view=superficies`) reúne as
+27 interfaces AD-S em um índice por tarefa e uma área de prévia viva. As próprias
+telas do Admin são carregadas em frames identificados: nenhum componente é
+redesenhado como miniatura. Todos os exemplos, inclusive busca, notificações,
+filtros, exportações e revisão na página, são exploráveis sem sair do inventário.
+
+Os estados disponíveis dependem do componente. Os formulários oferecem estado
+inicial, campos preenchidos, validação, revisão, confirmação local, falha ao salvar
+e conteúdo extenso. Consultas incluem exemplos ausentes, filtros ou busca sem
+resultados quando aplicável. São cenários demonstrativos, não execução de backend.
+**Comparar estados** abre duas instâncias independentes; os viewports de 720 e
+390 px usam os breakpoints reais. **Ampliar prévia** cede o espaço do índice ao
+componente. A busca e o seletor de interfaces permanecem acessíveis no celular.
+
+Busca, formato, seleção, estado, comparação e viewport vivem na URL:
+`buscaSuperficie`, `formato`, `preview`, `cenario`, `comparar` e `viewport`.
+Exemplo: `/admin/inventario?view=superficies&preview=AD-S03&cenario=initial&comparar=review`.
+Escape fecha o componente e retorna o foco a **Reiniciar exemplo**. Campos alterados
+pedem continuar ou descartar antes de trocar interface, cenário, aba ou reiniciar;
+recarregar usa a proteção de saída. Falha no carregamento oferece nova tentativa.
+
+O modo de cenários exige desenvolvimento e um frame. `surface-lab-runtime.ts`
+lê o ID/estado inicial e `SurfaceLabBridge.tsx` comunica prontidão e alterações.
+Mensagens são conferidas por origem, janela emissora e instância. A navegação
+permanece dentro do frame; seguir um link para a galeria não cria frames recursivos.
+Formulários e rascunhos são efêmeros nas prévias, sem gravar preparações operacionais.
+Temas do frame são isolados da preferência global. O uso normal do Admin mantém
+seu comportamento. O bundle público continua excluindo todo o Admin.
+
+Os destinos concretos ficam em `inventory-surface-previews.ts`, e os cenários e
+agrupamentos em `surface-scenarios.ts`. A exportação JSON inclui as definições das
+interfaces. Nenhum comando administrativo é enviado.
+
+Regressão: `python3 app/test/inventorySurfaces.browser.py`. Cobre as 27 interfaces,
+estados, comparação independente, guardas de alterações, URL/histórico, teclado,
+recuperação, temas, isolamento e navegação interna em desktop e celular.
+Fichas afetadas: AD-001 e AD-S01 a AD-S27; jornada JA-08. Os pontos de entrada em
+AD-003, AD-017 e no shell compartilham os mesmos componentes nas prévias.
 
 Cada ficha abre um drawer com as abas **Visão geral**, **Contrato**, **Estados**,
 **Operações** e **Fluxos**. Cabeçalho e abas permanecem visíveis durante a rolagem
@@ -78,4 +117,4 @@ integrado ou que uma jornada foi testada. Também não julga se uma ficha descre
 corretamente o comportamento: essa revisão faz parte da entrega.
 
 A tela administrativa atual é uma prévia de desenvolvimento e não integra o
-build público. Não há autenticação administrativa de produção implementada.
+build público. Não há autenticação administrativa de produção implementada. Preparações e rascunhos da prévia podem ser salvos na sessão do navegador, sem alterar dados de clientes. Referências e limites: [implementação do Admin](LASTRE_ADMIN_IMPLEMENTATION.md) e [Mobbin](LASTRE_ADMIN_MOBBIN_REFERENCES.md).

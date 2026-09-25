@@ -1,0 +1,84 @@
+/* DropdownMenu: menu button and its menu. Layer base lives in floating.css. */
+.lastre-menu-trigger {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--lastre-radius-sm);
+  background: transparent;
+  color: var(--lastre-text-secondary);
+  cursor: pointer;
+  transition:
+    background-color var(--lastre-duration-fast),
+    color var(--lastre-duration-fast),
+    border-color var(--lastre-duration-fast);
+}
+.lastre-menu-trigger:hover,
+.lastre-menu-trigger[data-open] {
+  border-color: var(--lastre-border-subtle);
+  background: var(--lastre-bg-elevated);
+  color: var(--lastre-text-primary);
+}
+.lastre-menu-trigger--sm {
+  width: 28px;
+  height: 28px;
+}
+
+.lastre-menu {
+  min-width: 216px;
+}
+.lastre-menu__item {
+  align-items: flex-start;
+}
+.lastre-menu__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 20px;
+  color: var(--lastre-text-tertiary);
+}
+.lastre-menu__item[aria-checked="true"] .lastre-menu__icon {
+  color: var(--lastre-link);
+}
+.lastre-menu__text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  padding-top: 1px;
+}
+.lastre-menu__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lastre-menu__desc {
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.lastre-menu__trail {
+  margin-top: 2px;
+  color: var(--lastre-text-tertiary);
+}
+.lastre-menu__kbd {
+  margin-top: 1px;
+  padding: 1px 5px;
+  border: 1px solid var(--lastre-border-subtle);
+  border-radius: 4px;
+  color: var(--lastre-text-tertiary);
+  font-family: var(--lastre-font-mono);
+  font-size: 10.5px;
+}
+.lastre-menu__item[data-danger] {
+  color: var(--lastre-danger);
+}
+.lastre-menu__item[data-danger] .lastre-menu__icon {
+  color: currentColor;
+}
+.lastre-menu__item[data-danger][data-active] {
+  background: var(--lastre-fill-danger);
+}

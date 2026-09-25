@@ -6,7 +6,7 @@
 **Versão:** 0.1 — proposta para produto, design, engenharia e operação  
 **Documento de origem:** [Lastre Investors + Lastre Assets](LASTRE_PRODUCT_ARCHITECTURE.md)  
 **Escopo:** administração interna da plataforma e dos dois produtos  
-**Situação:** especificação de futuro. A única tela administrativa identificada na leitura é a prévia local do Inventário, `AD-001`.
+**Situação:** arquitetura de referência. A entrega inicial deste documento encontrou apenas `AD-001`; a implementação posterior acrescentou as 27 telas como prévia local com dados fictícios. Autenticação administrativa e operações de produção continuam pendentes. Ver [implementação e limites](LASTRE_ADMIN_IMPLEMENTATION.md) e [referências Mobbin](LASTRE_ADMIN_MOBBIN_REFERENCES.md).
 
 O Lastre Admin deve permitir que a equipe mantenha o ciclo entre Assets e Investors funcionando: identificar quem precisa de ajuda, localizar o objeto e a versão envolvidos, resolver uma falha dentro de sua autoridade e demonstrar o que aconteceu. Deve também reunir as regras que governam esse ciclo e o inventário que acompanha sua construção.
 
@@ -235,7 +235,7 @@ Os IDs dos exemplos são fictícios. Não incluir tokens, credenciais, motivos s
 
 ## 6. Mapa completo de telas
 
-`AD-001` é um ID existente. `AD-002` a `AD-027` são identificadores **propostos neste documento**, ainda não cadastrados no inventário. Antes de implementar cada tela, confirmar disponibilidade e criar sua ficha planejada. As rotas abaixo são propostas de experiência, sem implicar endpoints ou outro deploy.
+`AD-001` é um ID existente. `AD-002` a `AD-027` foram propostos neste documento, cadastrados inicialmente como planejados e depois associados à implementação da prévia local. As fichas distinguem essa interface dos contratos de produção ainda pendentes. As rotas abaixo são propostas de experiência, sem implicar endpoints ou outro deploy.
 
 **P0:** necessária para o recorte operacional em produção. **P1:** reduz trabalho recorrente depois do ciclo validado. A prioridade recai sobre a função mínima descrita; não obriga entregar todas as tabs avançadas da mesma página.
 
@@ -885,7 +885,7 @@ Metas e prazos partem da operação observada. Segmentar por tipo de ocorrência
 | `docs/FRONTEND_INVENTORY.md` | Fontes versionadas, sincronização e conferências obrigatórias | Cada implementação precisa atualizar as fichas e o relatório |
 | `docs/LASTRE_PRODUCT_ARCHITECTURE.md` | Dois produtos, versões explícitas e decisões atribuídas ao cliente | A operação interna preserva essas fronteiras |
 
-Esta entrega acrescenta documentação e seu link no índice. Não cria rotas, telas, permissões, operações ou fichas implementadas; não altera a prévia local nem o relatório gerado. Os IDs propostos servem ao planejamento até serem registrados conforme a regra do repositório.
+A tabela acima registra a leitura anterior à implementação. A entrega posterior criou as rotas e fichas das 27 telas da prévia, mantendo a exclusão do build público. As superfícies contextuais constam no inventário com hospedeira; formulários preparam revisões locais e não enviam comandos. A implementação de produção continua dependente dos contratos e decisões deste documento.
 
 ### 14.2 Procedimento para cada implementação
 

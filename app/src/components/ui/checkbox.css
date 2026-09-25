@@ -1,0 +1,58 @@
+/* Checkbox: native input, tokenized. Check and dash are drawn with masks. */
+.lastre-checkbox {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 1.5px solid var(--lastre-border-strong);
+  border-radius: 4px;
+  background: var(--lastre-field-bg);
+  cursor: pointer;
+  transition:
+    background-color var(--lastre-duration-fast),
+    border-color var(--lastre-duration-fast),
+    box-shadow var(--lastre-duration-fast);
+}
+.lastre-checkbox::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--lastre-action-text);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--lastre-duration-fast),
+    transform var(--lastre-duration-normal) var(--lastre-ease-spring);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1.8 5.2 4 7.3 8.3 2.8' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1.8 5.2 4 7.3 8.3 2.8' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.lastre-checkbox:indeterminate::after {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2.2 5h5.6' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2.2 5h5.6' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.lastre-checkbox:checked,
+.lastre-checkbox:indeterminate {
+  border-color: var(--lastre-action-primary);
+  background: var(--lastre-action-primary);
+}
+.lastre-checkbox:checked::after,
+.lastre-checkbox:indeterminate::after {
+  opacity: 1;
+  transform: scale(1);
+}
+@media (hover: hover) {
+  .lastre-checkbox:hover:not(:disabled):not(:checked):not(:indeterminate) {
+    border-color: var(--lastre-text-tertiary);
+  }
+}
+.lastre-checkbox:focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: 2px;
+}
+.lastre-checkbox:disabled {
+  opacity: var(--lastre-opacity-disabled);
+  cursor: not-allowed;
+}

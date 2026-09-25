@@ -51,7 +51,9 @@ ownership, or transferable-token product. The deterministic SHA-256 seal decides
 
 ## Documentation map
 
-- [`LASTRE_ADMIN_ARCHITECTURE.md`](LASTRE_ADMIN_ARCHITECTURE.md) — proposed internal administration for Assets and Investors, with a complete screen map, contextual surfaces, operating roles, intervention safeguards, and implementation sequence. Only the local inventory preview exists today.
+- [`LASTRE_ADMIN_MOBBIN_REFERENCES.md`](LASTRE_ADMIN_MOBBIN_REFERENCES.md) — referências consultadas no Mobbin para as 27 telas, padrões aproveitados e limites da adaptação.
+- [`LASTRE_ADMIN_IMPLEMENTATION.md`](LASTRE_ADMIN_IMPLEMENTATION.md) — prévia navegável, superfícies contextuais, validação e contratos ainda pendentes.
+- [`LASTRE_ADMIN_ARCHITECTURE.md`](LASTRE_ADMIN_ARCHITECTURE.md) — proposed internal administration for Assets and Investors, with a complete screen map, contextual surfaces, operating roles, intervention safeguards, and implementation sequence. A development-only preview now covers the 27 canonical screens; production authorization and administrative operations remain pending.
 - [`LASTRE_INVENTARIO_VIVO.md`](LASTRE_INVENTARIO_VIVO.md) — living inventory adapted to Lastre, with a development-only `/admin/inventario` preview, declared catalog, generated route report, and a staged path to shared contracts and protected admin access.
 - [`LASTRE_PRODUCT_ARCHITECTURE.md`](LASTRE_PRODUCT_ARCHITECTURE.md) — proposed product architecture for Lastre Investors and Lastre Assets: naming, questions with recommended answers, audiences, journeys, information architecture, feature priorities, states, authorization, and validation. This describes a future product proposal, not functionality already implemented in the public demo.
 - [`LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md`](LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md) — current all-in-one platform architecture, product explanation, deployment topology, UX guardrails, route/API map, and Laura handoff.

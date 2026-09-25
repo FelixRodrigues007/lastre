@@ -1,0 +1,327 @@
+/*
+ * Admin on the Assets pattern. Loaded after admin.css: same type scale,
+ * headers, panels, badges, avatars, empty states and overlays as Assets.
+ * Shared list components (DataTable, Tabs, FilterBar, Select) carry their
+ * own styles from components/ui.
+ */
+.ad-page {
+  font-size: var(--lastre-text-label);
+  line-height: var(--lastre-line-body);
+}
+
+/* Page header: eyebrow, display title, lead. */
+.ad-heading {
+  margin-bottom: var(--lastre-space-8);
+}
+.ad-heading-row {
+  align-items: flex-end;
+}
+.ad-eyebrow {
+  margin: 0 0 var(--lastre-space-2);
+  color: var(--lastre-text-tertiary);
+  font: var(--lastre-weight-medium) 11px/1.4 var(--lastre-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ad-heading h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+  font-weight: var(--lastre-weight-medium);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+.ad-description {
+  max-width: 64ch;
+  margin-top: var(--lastre-space-2) !important;
+  color: var(--lastre-text-secondary);
+  font-size: var(--lastre-text-body);
+  line-height: var(--lastre-line-body);
+}
+.ad-back {
+  margin-bottom: var(--lastre-space-4);
+  font-size: var(--lastre-text-label);
+  transition:
+    color var(--lastre-duration-fast),
+    transform var(--lastre-duration-normal) var(--lastre-ease-out);
+}
+.ad-back:hover {
+  color: var(--lastre-text-primary) !important;
+  transform: translateX(-2px);
+}
+
+/* Panels */
+.ad-panel {
+  padding: var(--lastre-space-6);
+  border-radius: var(--lastre-radius-lg);
+}
+.ad-panel-heading {
+  margin-bottom: var(--lastre-space-5);
+}
+.ad-panel-heading h2,
+.ad-page .ad-panel-heading h2 {
+  font-size: 1.0625rem;
+  font-weight: var(--lastre-weight-semibold);
+  letter-spacing: var(--lastre-tracking-heading);
+}
+
+/* Status in pill form, as in Assets tables. */
+.ad-badge {
+  padding: 3px 9px 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--status-fg, var(--lastre-text-secondary)) 24%, transparent);
+  border-radius: var(--lastre-radius-pill);
+  background: color-mix(in srgb, var(--status-fg, var(--lastre-text-secondary)) 9%, transparent);
+}
+.lastre-dt__table .ad-badge {
+  white-space: nowrap;
+}
+.ad-badge[data-tone="neutral"] {
+  --status-fg: var(--lastre-text-secondary);
+}
+
+/* People and organizations */
+.ad-entity strong {
+  font-size: var(--lastre-text-label);
+  font-weight: var(--lastre-weight-semibold);
+}
+.ad-entity small {
+  margin-top: 1px;
+  color: var(--lastre-text-tertiary);
+}
+.ad-avatar {
+  --avatar: var(--lastre-chart-1);
+  width: 32px;
+  height: 32px;
+  border: 1px solid color-mix(in srgb, var(--avatar) 38%, transparent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--avatar) 16%, var(--lastre-bg-surface));
+  color: color-mix(in srgb, var(--avatar) 80%, var(--lastre-text-primary));
+  font: var(--lastre-weight-semibold) 11px/1 var(--lastre-font-body);
+  letter-spacing: 0.02em;
+}
+.ad-avatar[data-hue="1"] { --avatar: var(--lastre-chart-2); }
+.ad-avatar[data-hue="2"] { --avatar: var(--lastre-chart-3); }
+.ad-avatar[data-hue="3"] { --avatar: var(--lastre-chart-4); }
+.ad-avatar[data-hue="4"] { --avatar: var(--lastre-chart-5); }
+.ad-avatar[data-hue="5"] { --avatar: var(--lastre-chart-6); }
+.lastre-dt__table tbody tr:hover .ad-entity strong {
+  color: var(--lastre-link);
+}
+.lastre-dt .ad-entity:hover strong {
+  text-decoration: none;
+}
+
+/* Facts: label/value pairs at the Assets properties scale. */
+.ad-facts dt {
+  color: var(--lastre-text-tertiary);
+  font-size: var(--lastre-text-label);
+}
+.ad-facts dd {
+  font-size: var(--lastre-text-label);
+}
+
+/* Notice */
+.ad-notice {
+  border-radius: var(--lastre-radius-md);
+  font-size: var(--lastre-text-label);
+  line-height: var(--lastre-line-body);
+}
+.ad-notice strong {
+  color: var(--lastre-text-primary);
+}
+
+/* Empty state */
+.ad-empty {
+  align-items: center;
+  gap: var(--lastre-space-2);
+  padding: var(--lastre-space-12) var(--lastre-space-6);
+  border: 1px dashed var(--lastre-border-strong);
+  border-radius: var(--lastre-radius-lg);
+  background:
+    radial-gradient(ellipse at 50% 0%, var(--lastre-fill-info), transparent 60%),
+    var(--lastre-bg-canvas);
+  text-align: center;
+}
+.ad-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: var(--lastre-space-2);
+  border: 1px solid var(--lastre-border-subtle);
+  border-radius: 16px;
+  background: var(--lastre-material-matte);
+  box-shadow: var(--lastre-surface-edge), var(--lastre-elevation-2);
+  color: var(--lastre-link);
+}
+.ad-empty h2 {
+  font-size: 1.0625rem !important;
+}
+.ad-empty p {
+  max-width: 44ch;
+  color: var(--lastre-text-secondary);
+  font-size: var(--lastre-text-label);
+}
+.ad-empty > .ad-button,
+.ad-empty > .lastre-button,
+.ad-empty > a {
+  margin-top: var(--lastre-space-3);
+}
+.lastre-dt__empty .ad-empty {
+  border-radius: var(--lastre-radius-md);
+}
+
+/* Toolbar: search, filters and clear in one row. */
+.ad-toolbar {
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--lastre-space-4);
+}
+.ad-toolbar .ad-search {
+  flex: 0 1 320px;
+  min-width: 200px;
+}
+.ad-toolbar .ad-filter,
+.ad-filter {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  max-width: 260px;
+}
+.ad-filter .lastre-select__prefix {
+  padding-right: 8px;
+  border-right: 1px solid var(--lastre-border-subtle);
+}
+.ad-tool-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--lastre-border-subtle);
+  border-radius: var(--lastre-field-radius);
+  background: var(--lastre-bg-surface);
+  color: var(--lastre-text-primary);
+  font: inherit;
+  font-size: var(--lastre-text-label);
+  cursor: pointer;
+  transition:
+    background-color var(--lastre-duration-fast),
+    border-color var(--lastre-duration-fast);
+}
+.ad-tool-button svg {
+  color: var(--lastre-text-tertiary);
+}
+.ad-tool-button:hover {
+  border-color: var(--lastre-border-strong);
+  background: var(--lastre-bg-elevated);
+}
+.ad-tool-button[data-active] {
+  border-color: color-mix(in srgb, var(--lastre-link) 45%, var(--lastre-border-subtle));
+  background: color-mix(in srgb, var(--lastre-link) 9%, var(--lastre-bg-surface));
+}
+.ad-tool-button[data-active] svg {
+  color: var(--lastre-link);
+}
+.ad-tool-button .lastre-count {
+  padding-left: 2px;
+  color: var(--lastre-link);
+}
+.ad-toolbar + .lastre-dt,
+.ad-toolbar + .ad-empty {
+  margin-top: 0;
+}
+
+/* Underline tabs inside Admin pages (overrides the older segmented rules). */
+.ad-page > .tabs-root > .tabs--underline {
+  scrollbar-width: none;
+}
+.ad-page > .tabs-root > .tabs--underline .tab {
+  font-size: var(--lastre-text-label);
+}
+.ad-page .tabs-root--underline {
+  margin-bottom: var(--lastre-space-2);
+}
+.ad-page .tabs-root--underline > .tabs-panel {
+  margin-top: var(--lastre-space-6);
+}
+
+/* Overlays: drawer from the kit, and a centered modal variant. */
+.ad-surface.lastre-drawer {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font: var(--lastre-text-label) / var(--lastre-line-body) var(--lastre-font-body);
+}
+.ad-surface.lastre-drawer:not(.ad-modal) {
+  width: min(560px, calc(100vw - 24px));
+}
+.ad-surface.lastre-drawer .lastre-drawer__titles h2 {
+  font-size: 1.1875rem;
+  line-height: 1.25;
+}
+.ad-surface.lastre-drawer .lastre-drawer__titles p:last-child {
+  font-size: var(--lastre-text-label);
+}
+.ad-surface.lastre-drawer .ad-surface-body {
+  padding: 20px 24px 28px;
+  font-size: var(--lastre-text-label);
+}
+.ad-surface.lastre-drawer .ad-form {
+  display: grid;
+  gap: var(--lastre-space-4);
+}
+.ad-surface.ad-modal {
+  inset: 0;
+  width: min(560px, calc(100vw - 32px));
+  height: fit-content;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+}
+.ad-surface.ad-modal .lastre-drawer__panel {
+  height: auto;
+  max-height: calc(100dvh - 32px);
+  border: 1px solid var(--lastre-border-strong);
+  border-radius: var(--lastre-radius-lg);
+  animation-name: ad-modal-in;
+}
+@keyframes ad-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+@media (max-width: 640px) {
+  .ad-surface.ad-modal {
+    inset: auto 0 0 0;
+    width: 100vw;
+    margin: 0;
+  }
+  .ad-surface.ad-modal .lastre-drawer__panel {
+    border-radius: var(--lastre-radius-xl, 20px) var(--lastre-radius-xl, 20px) 0 0;
+    animation-name: lastre-drawer-up;
+  }
+}
+@media (max-width: 720px) {
+  .ad-toolbar .ad-search {
+    flex: 1 1 100%;
+  }
+  .ad-toolbar .ad-filter {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* In secondary columns a person or organization reads as a value, not a title. */
+.lastre-dt__table td:not([data-primary]) .ad-entity strong {
+  font-weight: var(--lastre-weight-medium);
+}
+.lastre-dt__table td:not([data-primary]) .ad-avatar {
+  width: 24px;
+  height: 24px;
+  font-size: 9.5px;
+}
+.ad-tabpanel {
+  display: grid;
+  gap: 0;
+}

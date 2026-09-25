@@ -39,3 +39,145 @@
 .tabs-panel {
   margin-top: 1rem;
 }
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.tab:disabled {
+  opacity: var(--lastre-opacity-disabled);
+  cursor: not-allowed;
+}
+.tab:focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: -2px;
+}
+.tab__icon {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+  transition: color var(--lastre-duration-fast);
+}
+.tab--active .tab__icon {
+  color: var(--lastre-link);
+}
+.tab__count {
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: var(--lastre-radius-pill);
+  background: color-mix(in srgb, var(--lastre-text-primary) 7%, transparent);
+  color: var(--lastre-text-tertiary);
+  font-family: var(--lastre-font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+  text-align: center;
+}
+.tab--active .tab__count {
+  background: var(--lastre-fill-info);
+  color: var(--lastre-link);
+}
+.tab__count[data-attention] {
+  background: var(--lastre-fill-warn);
+  color: var(--lastre-warning);
+}
+
+/* Underline: page and section navigation. */
+.tabs--underline {
+  position: relative;
+  flex-wrap: nowrap;
+  gap: var(--lastre-space-1, 4px);
+  width: 100%;
+  padding: 0;
+  overflow-x: auto;
+  border: 0;
+  border-bottom: 1px solid var(--lastre-border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  scrollbar-width: none;
+}
+.tabs--underline::-webkit-scrollbar,
+.tabs--underline::-webkit-scrollbar-thumb {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+/* Fade the edge that hides more tabs. */
+.tabs--underline[data-more-end] {
+  mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+}
+.tabs--underline[data-more-start] {
+  mask-image: linear-gradient(to left, #000 calc(100% - 40px), transparent);
+}
+.tabs--underline[data-more-start][data-more-end] {
+  mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+}
+.tabs--underline .tab {
+  position: relative;
+  flex-shrink: 0;
+  min-height: 42px;
+  padding: 0 10px;
+  border-radius: var(--lastre-radius-sm) var(--lastre-radius-sm) 0 0;
+  font-size: var(--lastre-text-label);
+}
+.tabs--underline .tab::after {
+  content: "";
+  position: absolute;
+  inset: 7px 2px;
+  z-index: -1;
+  border-radius: var(--lastre-radius-sm);
+  background: transparent;
+  transition: background-color var(--lastre-duration-fast);
+}
+.tabs--underline .tab:hover:not(:disabled)::after {
+  background: color-mix(in srgb, var(--lastre-text-primary) 5%, transparent);
+}
+.tabs--underline .tab {
+  isolation: isolate;
+}
+.tabs--underline .tab--active {
+  background: transparent;
+  box-shadow: none;
+}
+.tabs--underline .tabs__indicator {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--lastre-link);
+  box-shadow: none;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform var(--lastre-duration-normal) var(--lastre-ease-emphasized),
+    width var(--lastre-duration-normal) var(--lastre-ease-emphasized);
+}
+.tabs--underline .tabs__indicator[data-ready] {
+  opacity: 1;
+}
+.tabs-root--underline .tabs-panel {
+  margin-top: var(--lastre-space-6);
+}
+.tabs-panel:focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: 4px;
+  border-radius: var(--lastre-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs--underline .tabs__indicator {
+    transition: none;
+  }
+}
+
+/* Tabs never widen their container; extra tabs scroll. */
+.tabs-root {
+  min-width: 0;
+  max-width: 100%;
+}

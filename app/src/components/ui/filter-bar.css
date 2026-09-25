@@ -1,0 +1,81 @@
+/* FilterBar: search, facet chips and view controls in one row. */
+.lastre-filterbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.lastre-filterbar__search {
+  flex: 0 1 320px;
+  min-width: 200px;
+}
+.lastre-filterbar__search .search-input {
+  min-height: 34px;
+  padding-block: 0;
+  border-color: var(--lastre-border-subtle);
+  background: var(--lastre-bg-surface);
+  box-shadow: none;
+}
+.lastre-filterbar__search .search-input:hover {
+  border-color: var(--lastre-border-strong);
+}
+.lastre-filterbar__search .search-input__field {
+  height: 32px;
+  font-size: 13px;
+}
+.lastre-filterbar__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.lastre-filterbar__clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: var(--lastre-radius-pill);
+  background: transparent;
+  color: var(--lastre-text-secondary);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: var(--lastre-weight-medium);
+  cursor: pointer;
+}
+.lastre-filterbar__clear:hover {
+  background: color-mix(in srgb, var(--lastre-text-primary) 6%, transparent);
+  color: var(--lastre-text-primary);
+}
+.lastre-filterbar__clear:focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: 1px;
+}
+.lastre-filterbar__end {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+@media (max-width: 720px) {
+  .lastre-filterbar__search {
+    flex: 1 1 100%;
+  }
+  .lastre-filterbar__filters {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .lastre-filterbar__filters::-webkit-scrollbar {
+    display: none;
+  }
+  /* Controls keep their size and the row scrolls sideways. */
+  .lastre-filterbar__filters > * {
+    flex-shrink: 0;
+  }
+}

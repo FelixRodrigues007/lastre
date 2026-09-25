@@ -1,10 +1,15 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Icon } from "../../components/ui/Icon";
+import { Select } from "../../components/ui/Select";
+import { Button, buttonClassName } from "../../components/ui/Button";
+import { SealMark } from "../../components/ui/SealMark";
 import {
   api,
   request,
   type DossierObject,
+  type Evidence,
+  type Fields,
   type InformationRequest,
   type Share,
   type Snapshot,
@@ -13,21 +18,129 @@ import {
 import { useWorkspace } from "./context";
 import {
   canSend,
+  categoryLabels,
   dateLabel,
   missingFields,
   objectPath,
+  quantityLabel,
   requirementDone,
+  sectorLabels,
 } from "./model";
-import { ObjectSummary } from "./ObjectDetail";
+import { toast } from "./overlay";
 import {
+  Avatar,
   Badge,
   Empty,
   Feedback,
   Field,
+  Glyph,
   Notice,
   PageHead,
+  Panel,
+  Properties,
+  Stepper,
+  formatBytes,
+  type Step,
   useAction,
 } from "./ui";
+
+/** Read-only field summary of a version or draft. Shared with the received view. */
+export function FieldsSummary({
+  fields,
+  kind,
+}: {
+  fields: Fields;
+  kind: "asset" | "lot";
+}) {
+  const items: { label: string; value: ReactNode; icon?: Parameters<typeof Properties>[0]["items"][number]["icon"] }[] = [
+    { label: "Tipo de cadastro", value: categoryLabels[fields.category], icon: kind === "lot" ? "lots" : "globe" },
+    { label: "Setor", value: sectorLabels[fields.sector], icon: "grid" },
+    { label: "Localização", value: fields.location || "A informar", icon: "pin" },
+    { label: "Responsável", value: fields.responsible || "A informar", icon: "user" },
+  ];
+  if (kind === "lot")
+    items.push(
+      { label: "Material ou produção", value: fields.material || "A informar", icon: "lots" },
+      { label: "Quantidade declarada", value: quantityLabel({ fields }), icon: "compare" },
+      {
+        label: "Período da produção",
+        value: `${dateLabel(fields.periodStart)} — ${dateLabel(fields.periodEnd)}`,
+        icon: "calendar",
+      },
+    );
+  if (fields.area)
+    items.push({
+      label: "Área declarada",
+      value: `${Number(fields.area).toLocaleString("pt-BR")} ha`,
+      icon: "globe",
+    });
+  if (fields.registration)
+    items.push({ label: "Referência declarada", value: fields.registration, icon: "link" });
+  return (
+    <div className="assets-fields-summary">
+      <Properties items={items} columns={2} />
+      {fields.description && (
+        <div className="assets-fields-summary__desc">
+          <p className="assets-eyebrow">Descrição</p>
+          <p>{fields.description}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Compact document row used in review, receipt and received views. */
+export function DocumentRow({
+  evidence: e,
+  aside,
+}: {
+  evidence: Evidence;
+  aside?: ReactNode;
+}) {
+  return (
+    <li className="assets-doc-row">
+      <span className="assets-doc-row__icon" aria-hidden="true">
+        <Icon name="file" size={18} />
+        <span>{e.name.split(".").pop()?.slice(0, 4)}</span>
+      </span>
+      <div className="assets-doc-row__main">
+        <strong>{e.name}</strong>
+        <p>
+          {e.source} · {e.author} · {formatBytes(e.size)}
+          {e.issuedAt && ` · Emitido em ${dateLabel(e.issuedAt)}`}
+        </p>
+        <span className="assets-hash" title={`SHA-256: ${e.digest}`}>
+          SHA-256 {e.digest.slice(0, 12)}…{e.digest.slice(-6)}
+        </span>
+      </div>
+      {aside && <div className="assets-doc-row__aside">{aside}</div>}
+    </li>
+  );
+}
+
+function CopyValue({ value, label }: { value: string; label: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      className="assets-icon-button"
+      aria-label={copied ? `${label} copiado` : `Copiar ${label}`}
+      onClick={() =>
+        void navigator.clipboard
+          .writeText(value)
+          .then(() => {
+            setCopied(true);
+            toast(`${label} copiado.`);
+            window.setTimeout(() => setCopied(false), 2000);
+          })
+          .catch(() => toast("Não foi possível copiar.", "warning"))
+      }
+    >
+      <Icon name={copied ? "check" : "copy"} size={15} />
+    </button>
+  );
+}
+
 export function AssetsShare() {
   const { ativoId, loteId } = useParams();
   const { data } = useWorkspace();
@@ -37,10 +150,11 @@ export function AssetsShare() {
   if (!object)
     return (
       <Empty
+        icon="search"
         title="Cadastro não encontrado"
         description="Volte à lista e confira o cadastro disponível para você."
         action={
-          <Link className="assets-button" to="/assets">
+          <Link className={buttonClassName({ variant: "secondary" })} to="/assets">
             Voltar ao início
           </Link>
         }
@@ -48,14 +162,14 @@ export function AssetsShare() {
     );
   if (!canSend(data.membership.role))
     return (
-      <Notice error>
+      <Notice error title="Compartilhamento indisponível para seu papel">
         Somente o responsável pelo envio ou administrador pode compartilhar. O
         cadastro permanece salvo.
       </Notice>
     );
   if (params.get("solicitacao") && !request)
     return (
-      <Notice error>
+      <Notice error title="Solicitação indisponível">
         Solicitação indisponível. Volte ao dossiê e escolha uma solicitação
         válida.
       </Notice>
@@ -69,6 +183,7 @@ export function AssetsShare() {
     />
   );
 }
+
 function ShareReview({
   object,
   request: solicitation,
@@ -96,6 +211,7 @@ function ShareReview({
   const [allowDownload, setAllowDownload] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const action = useAction();
+  const [checking, setChecking] = useState(false);
   const key = useRef({ fingerprint: "", value: crypto.randomUUID() });
   const [receipt, setReceipt] = useState<{
     share: Share;
@@ -123,6 +239,9 @@ function ShareReview({
     absent.length > 0 ||
     noResponse ||
     object.status === "archived";
+  const recipientName = solicitation
+    ? solicitation.requesterName.replace(" · demonstração", "")
+    : recipients.find((r) => r.id === recipientId)?.name;
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (blocked || !confirmed) return;
@@ -148,71 +267,41 @@ function ShareReview({
       await reload();
     });
   };
+
   if (receipt)
     return (
-      <>
-        <PageHead
-          eyebrow="Recebimento confirmado pelo servidor"
-          title={
-            workspace.organization.demo
-              ? "Versão registrada na demonstração."
-              : "Sua versão foi compartilhada."
-          }
-          back={objectPath(object)}
-        />
-        <div className="assets-panel assets-receipt">
-          <span className="assets-receipt__check">
-            <Icon name="check" size={30} />
-          </span>
-          <h2>
-            Versão {receipt.version.number} · {receipt.version.fields.name}
-          </h2>
-          <p>
-            {receipt.share.recipientName} tem acesso a esta versão até{" "}
-            {dateLabel(receipt.share.expiresAt)}.
-          </p>
-          <dl className="assets-facts">
-            <div>
-              <dt>Quem enviou</dt>
-              <dd>{receipt.version.author}</dd>
-            </div>
-            <div>
-              <dt>Quando</dt>
-              <dd>{dateLabel(receipt.share.createdAt, true)}</dd>
-            </div>
-            <div>
-              <dt>Documentos incluídos</dt>
-              <dd>{receipt.version.evidence.length}</dd>
-            </div>
-            <div>
-              <dt>Finalidade</dt>
-              <dd>{receipt.share.purpose}</dd>
-            </div>
-          </dl>
-          <Notice>
-            A análise é responsabilidade da organização destinatária. A
-            conferência de integridade não comprova origem ou titularidade.
-          </Notice>
-          <small className="assets-receipt-id">
-            Recibo: {receipt.share.receipt}
-          </small>
-          <div className="assets-actions">
-            <Link
-              className="assets-button assets-button--primary"
-              to={`${objectPath(object)}?versao=${receipt.version.id}`}
-            >
-              Consultar versão enviada
-            </Link>
-            <Link
-              className="assets-button"
-              to={`${objectPath(object)}?aba=acessos`}
-            >
-              Gerir acesso
-            </Link>
-          </div>
-        </div>
-      </>
+      <Receipt
+        receipt={receipt}
+        object={object}
+        demo={workspace.organization.demo}
+      />
     );
+
+  const contentOk = !stale && missing.length === 0 && absent.length === 0 && !noResponse && object.status !== "archived";
+  const recipientOk = Boolean(solicitation || recipientId) && Boolean(purpose.trim());
+  const steps: Step[] = [
+    {
+      label: "Conteúdo",
+      description: contentOk ? `Revisão ${review.object.revision} · ${files.length} documento(s)` : "Há pendências no cadastro",
+      state: contentOk ? "done" : "current",
+    },
+    {
+      label: "Destinatário",
+      description: recipientName ?? "Confira o e-mail e a organização",
+      state: recipientOk ? "done" : contentOk ? "current" : "todo",
+    },
+    {
+      label: "Permissões",
+      description: `Até ${dateLabel(expires)} · ${allowDownload ? "com download" : "somente consulta"}`,
+      state: recipientOk ? "done" : "todo",
+    },
+    {
+      label: "Confirmar",
+      description: confirmed ? "Conferência registrada" : "Confirme a conferência",
+      state: confirmed && !blocked ? "done" : recipientOk && contentOk ? "current" : "todo",
+    },
+  ];
+
   return (
     <>
       <PageHead
@@ -225,245 +314,387 @@ function ShareReview({
             : objectPath(object)
         }
       />
-      {stale && (
-        <Notice error>
-          O cadastro mudou durante a revisão.{" "}
-          <button
-            className="assets-text-link"
-            onClick={() => {
-              setReview(structuredClone({ object, solicitation, workspace }));
-              setConfirmed(false);
-            }}
+      {(stale || missing.length > 0 || absent.length > 0 || noResponse || object.status === "archived") && (
+        <div className="assets-stack assets-share-blockers">
+          {stale && (
+            <Notice
+              error
+              title="O cadastro mudou durante a revisão."
+              action={
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  startIcon={<Icon name="refresh" size={15} />}
+                  onClick={() => {
+                    setReview(structuredClone({ object, solicitation, workspace }));
+                    setConfirmed(false);
+                  }}
+                >
+                  Atualizar conteúdo e revisar novamente
+                </Button>
+              }
+            />
+          )}
+          {missing.length > 0 && (
+            <Notice error title="Complete o cadastro antes de enviar">
+              Complete no cadastro: {missing.join(", ")}.{" "}
+              <Link className="assets-text-link" to={objectPath(object)}>
+                Voltar ao cadastro
+              </Link>
+            </Notice>
+          )}
+          {absent.length > 0 && (
+            <Notice error title="Requisitos obrigatórios pendentes">
+              Requisitos pendentes: {absent.map((q) => q.label).join(", ")}.{" "}
+              <Link
+                className="assets-text-link"
+                to={`/assets/solicitacoes/${solicitation!.id}`}
+              >
+                Completar solicitação
+              </Link>
+            </Notice>
+          )}
+          {noResponse && (
+            <Notice error title="Esclarecimentos sem resposta">
+              Responda aos esclarecimentos na solicitação antes de apresentar
+              uma nova versão.
+            </Notice>
+          )}
+          {object.status === "archived" && (
+            <Notice error title="Cadastro arquivado">
+              Restaure o cadastro antes de compartilhar.
+            </Notice>
+          )}
+        </div>
+      )}
+      <form onSubmit={submit} className="assets-split assets-share">
+        <div className="assets-stack assets-stack--lg">
+          <Panel
+            eyebrow="1 · Conteúdo"
+            title={review.object.fields.name || "Cadastro sem identificação"}
+            description="Conteúdo incluído no compartilhamento"
+            action={<Badge tone="info">Revisão {review.object.revision}</Badge>}
           >
-            Atualizar conteúdo e revisar novamente
-          </button>
-        </Notice>
-      )}
-      {missing.length > 0 && (
-        <Notice error>
-          Complete no cadastro: {missing.join(", ")}.{" "}
-          <Link className="assets-text-link" to={objectPath(object)}>
-            Voltar ao cadastro
-          </Link>
-        </Notice>
-      )}
-      {absent.length > 0 && (
-        <Notice error>
-          Requisitos pendentes: {absent.map((q) => q.label).join(", ")}.{" "}
-          <Link
-            className="assets-text-link"
-            to={`/assets/solicitacoes/${solicitation!.id}`}
-          >
-            Completar solicitação
-          </Link>
-        </Notice>
-      )}
-      {noResponse && (
-        <Notice error>
-          Responda aos esclarecimentos na solicitação antes de apresentar uma
-          nova versão.
-        </Notice>
-      )}
-      {object.status === "archived" && (
-        <Notice error>Restaure o cadastro antes de compartilhar.</Notice>
-      )}
-      <form onSubmit={submit} className="assets-detail-grid">
-        <section className="assets-panel">
-          <div className="assets-section-head">
-            <div>
-              <h2>
-                {review.object.fields.name || "Cadastro sem identificação"}
-              </h2>
-              <p>Conteúdo incluído no compartilhamento</p>
+            <FieldsSummary fields={review.object.fields} kind={object.kind} />
+            <div className="assets-share-docs">
+              <h3>
+                {files.length} documento(s) incluído(s)
+              </h3>
+              {files.length ? (
+                <ul className="assets-doc-list">
+                  {files.map((e) => (
+                    <DocumentRow
+                      key={e.id}
+                      evidence={e}
+                      aside={<Icon name="check" size={16} className="assets-doc-row__ok" />}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <p className="assets-muted">
+                  Nenhum arquivo foi anexado. O envio conterá apenas os dados do
+                  cadastro.
+                </p>
+              )}
             </div>
-            <Badge>Revisão {review.object.revision}</Badge>
-          </div>
-          <ObjectSummary fields={review.object.fields} kind={object.kind} />
-          <div className="assets-related">
-            <h3>{files.length} documento(s) incluído(s)</h3>
-            {files.map((e) => (
-              <div key={e.id} className="assets-review-file">
-                <Icon name="audit" />
-                <div>
-                  <strong>{e.name}</strong>
-                  <p>
-                    {e.source} · {e.author}
-                  </p>
-                </div>
-                <Icon name="check" size={16} />
-              </div>
-            ))}
-            {files.length === 0 && (
-              <p>
-                Nenhum arquivo foi anexado. O envio conterá apenas os dados do
-                cadastro.
-              </p>
-            )}
-          </div>
-          {review.solicitation &&
-            Object.entries(review.solicitation.justifications)
-              .filter(([, value]) => value)
-              .map(([id, value]) => (
-                <div key={id} className="assets-review-file">
-                  <div>
-                    <strong>
-                      Justificativa ·{" "}
-                      {
-                        review.solicitation!.requirements.find(
-                          (q) => q.id === id,
-                        )?.label
-                      }
-                    </strong>
-                    <p>{value}</p>
+            {review.solicitation &&
+              Object.entries(review.solicitation.justifications)
+                .filter(([, value]) => value)
+                .map(([id, value]) => (
+                  <div key={id} className="assets-share-justification">
+                    <Icon name="info" size={16} />
+                    <div>
+                      <strong>
+                        Justificativa ·{" "}
+                        {review.solicitation!.requirements.find((q) => q.id === id)?.label}
+                      </strong>
+                      <p>{value}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
-        </section>
-        <aside className="assets-panel assets-stack">
-          <div>
-            <p className="assets-eyebrow">Destino e acesso</p>
-            <h2>Quem poderá consultar?</h2>
-          </div>
-          <Field
-            label="E-mail do destinatário"
-            hint={
+                ))}
+          </Panel>
+
+          <Panel
+            eyebrow="2 · Destinatário"
+            title="Quem poderá consultar?"
+            description={
               solicitation
-                ? solicitation.requesterName
-                : "Uma conta ativa em outra organização Lastre."
+                ? "O destinatário e a finalidade vêm da solicitação e não podem ser alterados."
+                : "O acesso é concedido a uma organização Lastre ativa."
             }
           >
-            <input
-              type="email"
-              value={recipientEmail}
-              onChange={(e) => {
-                setRecipient(e.target.value);
-                setRecipients([]);
-                setRecipientId("");
-              }}
-              readOnly={Boolean(solicitation)}
-              required
-              maxLength={254}
-            />
-          </Field>
-          {!solicitation && (
-            <>
-              <button
-                type="button"
-                className="assets-button"
-                disabled={action.busy || !recipientEmail}
-                onClick={() =>
-                  void action.run(async () => {
-                    const result = await request<
-                      { id: string; name: string }[]
-                    >(
-                      `/recipients?email=${encodeURIComponent(recipientEmail)}`,
-                    );
-                    setRecipients(result);
-                    setRecipientId(result.length === 1 ? result[0].id : "");
-                    if (!result.length)
-                      throw new Error(
-                        "Nenhuma organização destinatária disponível para este e-mail.",
-                      );
-                  })
-                }
-              >
-                Conferir destinatário
-              </button>
-              {recipients.length > 0 && (
-                <Field label="Organização destinatária">
-                  <select
-                    value={recipientId}
-                    onChange={(e) => setRecipientId(e.target.value)}
+            <div className="assets-stack">
+              <div className="assets-recipient-row">
+                <Field
+                  label="E-mail do destinatário"
+                  hint={
+                    solicitation
+                      ? solicitation.requesterName
+                      : "Uma conta ativa em outra organização Lastre."
+                  }
+                >
+                  <input
+                    type="email"
+                    value={recipientEmail}
+                    onChange={(e) => {
+                      setRecipient(e.target.value);
+                      setRecipients([]);
+                      setRecipientId("");
+                    }}
+                    readOnly={Boolean(solicitation)}
                     required
+                    maxLength={254}
+                  />
+                </Field>
+                {!solicitation && (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    loading={checking}
+                    disabled={!recipientEmail || action.busy}
+                    startIcon={<Icon name="search" size={15} />}
+                    onClick={() => {
+                      setChecking(true);
+                      void action.run(async () => {
+                        const result = await request<
+                          { id: string; name: string }[]
+                        >(
+                          `/recipients?email=${encodeURIComponent(recipientEmail)}`,
+                        );
+                        setRecipients(result);
+                        setRecipientId(result.length === 1 ? result[0].id : "");
+                        if (!result.length)
+                          throw new Error(
+                            "Nenhuma organização destinatária disponível para este e-mail.",
+                          );
+                      }).finally(() => setChecking(false));
+                    }}
                   >
-                    <option value="">Selecione a organização</option>
-                    {recipients.map((r) => (
-                      <option key={r.id} value={r.id}>
-                        {r.name}
-                      </option>
-                    ))}
-                  </select>
+                    Conferir destinatário
+                  </Button>
+                )}
+              </div>
+              {!solicitation && recipients.length > 0 && (
+                <Field label="Organização destinatária">
+                  <Select
+                    name="recipientId"
+                    required
+                    value={recipientId}
+                    onChange={setRecipientId}
+                    placeholder="Selecione a organização"
+                    options={recipients.map((r) => ({
+                      value: r.id,
+                      label: r.name,
+                      leading: <Avatar name={r.name} size="sm" square />,
+                    }))}
+                  />
                 </Field>
               )}
-            </>
-          )}
-          <Field label="Finalidade do compartilhamento">
-            <textarea
-              value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}
-              readOnly={Boolean(solicitation)}
-              required
-              rows={4}
-              maxLength={4000}
-            />
-          </Field>
-          <Field
-            label="Acesso até"
-            hint="O acesso termina às 23h59, horário de Brasília."
+              {recipientName && (
+                <div className="assets-recipient-card">
+                  <Glyph icon="users" tone="info" size="sm" />
+                  <div>
+                    <strong>{recipientName}</strong>
+                    <span>{recipientEmail}</span>
+                  </div>
+                  <Badge tone="good">Organização conferida</Badge>
+                </div>
+              )}
+              <Field label="Finalidade do compartilhamento">
+                <textarea
+                  value={purpose}
+                  onChange={(e) => setPurpose(e.target.value)}
+                  readOnly={Boolean(solicitation)}
+                  required
+                  rows={3}
+                  maxLength={4000}
+                />
+              </Field>
+            </div>
+          </Panel>
+
+          <Panel
+            eyebrow="3 · Permissões"
+            title="Por quanto tempo e como?"
+            description="Você pode revogar o acesso a qualquer momento na aba Acessos do cadastro."
           >
-            <input
-              type="date"
-              value={expires}
-              min={new Date().toISOString().slice(0, 10)}
-              onChange={(e) => setExpires(e.target.value)}
-              required
+            <div className="assets-permissions">
+              <div className="assets-permission">
+                <span className="assets-permission__icon" aria-hidden="true">
+                  <Icon name="calendar" size={18} />
+                </span>
+                <div className="assets-permission__copy">
+                  <Field
+                    label="Acesso até"
+                    hint="O acesso termina às 23h59, horário de Brasília."
+                  >
+                    <input
+                      type="date"
+                      value={expires}
+                      min={new Date().toISOString().slice(0, 10)}
+                      onChange={(e) => setExpires(e.target.value)}
+                      required
+                    />
+                  </Field>
+                </div>
+              </div>
+              <label className="assets-permission assets-permission--toggle">
+                <span className="assets-permission__icon" aria-hidden="true">
+                  <Icon name="download" size={18} />
+                </span>
+                <span className="assets-permission__copy">
+                  <strong>Permitir download dos documentos</strong>
+                  <small>
+                    Arquivos já baixados não podem ser apagados remotamente.
+                  </small>
+                </span>
+                <input
+                  type="checkbox"
+                  className="assets-toggle"
+                  checked={allowDownload}
+                  onChange={(e) => setAllowDownload(e.target.checked)}
+                />
+              </label>
+            </div>
+          </Panel>
+        </div>
+
+        <aside className="assets-share-summary">
+          <div className="lastre-surface assets-panel assets-share-summary__card" data-elevation={3} data-material="matte">
+            <p className="assets-eyebrow">4 · Confirmar</p>
+            <h2>Resumo do envio</h2>
+            <Stepper steps={steps} label="Etapas do compartilhamento" />
+            <Properties
+              items={[
+                { label: "Destinatário", value: recipientName ?? "A conferir", icon: "users" },
+                { label: "Vigência", value: `Até ${dateLabel(expires)}`, icon: "clock" },
+                { label: "Download", value: allowDownload ? "Permitido" : "Não permitido", icon: "download" },
+                { label: "Documentos", value: files.length, icon: "file" },
+              ]}
             />
-          </Field>
-          <label className="assets-checkbox">
-            <input
-              type="checkbox"
-              checked={allowDownload}
-              onChange={(e) => setAllowDownload(e.target.checked)}
-            />
-            <span>
-              Permitir download dos documentos
-              <small>
-                Arquivos já baixados não podem ser apagados remotamente.
-              </small>
-            </span>
-          </label>
-          <label className="assets-checkbox">
-            <input
-              type="checkbox"
-              checked={confirmed}
-              onChange={(e) => setConfirmed(e.target.checked)}
-              required
-            />
-            <span>
-              Conferi o destinatário, a finalidade e o conteúdo desta versão.
-            </span>
-          </label>
-          <Feedback error={action.error} />
-          {action.error && (
-            <button
-              type="button"
-              className="assets-text-link"
-              onClick={() => void reload().catch(() => {})}
+            <label className="assets-check assets-share-confirm">
+              <input
+                type="checkbox"
+                checked={confirmed}
+                onChange={(e) => setConfirmed(e.target.checked)}
+                required
+              />
+              <span>
+                Conferi o destinatário, a finalidade e o conteúdo desta versão.
+              </span>
+            </label>
+            <Feedback error={action.error} />
+            {action.error && (
+              <button
+                type="button"
+                className="assets-text-link"
+                onClick={() => void reload().catch(() => {})}
+              >
+                Buscar alterações antes de tentar novamente
+              </button>
+            )}
+            <Button
+              type="submit"
+              size="lg"
+              className="assets-share-submit"
+              loading={action.busy && confirmed}
+              endIcon={<Icon name="send" size={16} />}
+              disabled={
+                action.busy ||
+                blocked ||
+                !confirmed ||
+                (!solicitation && !recipientId)
+              }
             >
-              Buscar alterações antes de tentar novamente
-            </button>
-          )}
-          <button
-            className="assets-button assets-button--primary"
-            disabled={
-              action.busy ||
-              blocked ||
-              !confirmed ||
-              (!solicitation && !recipientId)
-            }
-          >
-            {action.busy
-              ? "Confirmando recebimento…"
-              : solicitation
+              {solicitation
                 ? `Enviar para ${solicitation.requesterName.replace(" · demonstração", "")}`
                 : "Confirmar compartilhamento"}
-          </button>
-          <p className="assets-muted">
-            A confirmação aparecerá após o servidor registrar a versão e o
-            acesso.
-          </p>
+            </Button>
+            <p className="assets-caption" aria-live="polite">
+              {action.busy && confirmed
+                ? "Confirmando recebimento…"
+                : "A confirmação aparecerá após o servidor registrar a versão e o acesso."}
+            </p>
+          </div>
         </aside>
       </form>
+    </>
+  );
+}
+
+function Receipt({
+  receipt,
+  object,
+  demo,
+}: {
+  receipt: { share: Share; version: Snapshot };
+  object: DossierObject;
+  demo: boolean;
+}) {
+  return (
+    <>
+      <PageHead
+        eyebrow="Recebimento confirmado pelo servidor"
+        title={
+          demo
+            ? "Versão registrada na demonstração."
+            : "Sua versão foi compartilhada."
+        }
+        back={objectPath(object)}
+      />
+      <div className="assets-receipt">
+        <div className="lastre-surface assets-receipt__card" data-elevation={3} data-material="matte">
+          <div className="assets-receipt__hero">
+            <div className="assets-receipt__seal">
+              <Glyph icon="check" tone="gold" size="lg" />
+              <span className="assets-receipt__ring" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="assets-eyebrow">Versão {receipt.version.number}</p>
+              <h2>{receipt.version.fields.name}</h2>
+              <p className="assets-muted">
+                {receipt.share.recipientName} tem acesso a esta versão até{" "}
+                {dateLabel(receipt.share.expiresAt)}.
+              </p>
+            </div>
+            <SealMark size={44} label="Selo Lastre" />
+          </div>
+          <Properties
+            columns={2}
+            items={[
+              { label: "Quem enviou", value: receipt.version.author, icon: "user" },
+              { label: "Quando", value: dateLabel(receipt.share.createdAt, true), icon: "clock" },
+              { label: "Destinatário", value: receipt.share.recipientName, icon: "users" },
+              { label: "Documentos incluídos", value: receipt.version.evidence.length, icon: "file" },
+              { label: "Download", value: receipt.share.allowDownload ? "Permitido" : "Não permitido", icon: "download" },
+              { label: "Finalidade", value: receipt.share.purpose, icon: "info" },
+            ]}
+          />
+          <div className="assets-receipt__id">
+            <span className="assets-eyebrow">Recibo</span>
+            <span className="assets-hash">{receipt.share.receipt}</span>
+            <CopyValue value={receipt.share.receipt} label="Recibo" />
+          </div>
+          <Notice tone="info" title="Responsabilidade da análise">
+            A análise é responsabilidade da organização destinatária. A
+            conferência de integridade não comprova origem ou titularidade.
+          </Notice>
+          <div className="assets-actions assets-receipt__actions">
+            <Link
+              className={buttonClassName({})}
+              to={`${objectPath(object)}?versao=${receipt.version.id}`}
+            >
+              Consultar versão enviada
+            </Link>
+            <Link
+              className={buttonClassName({ variant: "secondary" })}
+              to={`${objectPath(object)}?aba=acessos`}
+            >
+              Gerir acesso
+            </Link>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

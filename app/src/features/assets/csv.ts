@@ -103,3 +103,17 @@ export function downloadJson(value: unknown, name: string) {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+/** Spreadsheet-friendly CSV: `;` separator, BOM for accents in Excel, quoted cells. */
+export function downloadCsv(rows: string[][], name: string) {
+  const body = rows
+    .map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(";"))
+    .join("\r\n");
+  const url = URL.createObjectURL(
+    new Blob([`﻿${body}`], { type: "text/csv;charset=utf-8" }),
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}

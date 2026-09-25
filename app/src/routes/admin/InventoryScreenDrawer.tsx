@@ -1,8 +1,10 @@
 import { useLayoutEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { Tabs } from "../../components/ui/Tabs";
 import { apps } from "../../lib/inventory/apps";
 import { flows } from "../../lib/inventory/flows";
 import { operations } from "../../lib/inventory/operations";
+import { adminSurfaceDefinitions } from "../../lib/inventory/admin";
 import type { Screen } from "../../lib/inventory/types";
 import { InventorySpecification } from "./InventorySpecification";
 
@@ -31,6 +33,7 @@ export function InventoryScreenDrawer({
   const active =
     drawerTabs.find((item) => item.id === tab)?.id ?? "visao-geral";
   const app = apps.find((item) => item.id === screen.app)!;
+  const surface = adminSurfaceDefinitions.find((item) => item.id === screen.id);
   const relatedFlows = flows.filter((flow) =>
     flow.steps.some((step) => step.screen === screen.id),
   );
@@ -157,7 +160,7 @@ export function InventoryScreenDrawer({
                   {screen.kind === "redirect"
                     ? "Redirecionamento"
                     : screen.kind === "hosted"
-                      ? "Superfície hospedada"
+                      ? surface?.format ?? "Superfície hospedada"
                       : "Página"}{" "}
                   · origem {screen.route.origin}/
                 </dd>
@@ -173,6 +176,18 @@ export function InventoryScreenDrawer({
                 <dd>{screen.owner}</dd>
               </div>
             </dl>
+            {surface && (
+              <section>
+                <h3>Ver esta interface</h3>
+                <p>Como abrir: {surface.trigger}.</p>
+                <Link
+                  className="iv-text-button"
+                  to={`/admin/inventario?view=superficies&buscaSuperficie=${surface.id}`}
+                >
+                  Ver na galeria de modais e drawers →
+                </Link>
+              </section>
+            )}
             <section>
               <h3>O que sabemos</h3>
               <p>{screen.notes}</p>

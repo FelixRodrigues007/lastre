@@ -1,0 +1,148 @@
+/* Select: field-shaped trigger and listbox layer. */
+.lastre-select {
+  position: relative;
+  min-width: 0;
+}
+.lastre-select__trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--lastre-field-height);
+  padding: 0 10px 0 var(--lastre-field-padding-x);
+  border: 1px solid var(--lastre-field-border);
+  border-radius: var(--lastre-field-radius);
+  background: var(--lastre-field-bg);
+  box-shadow: var(--lastre-field-shadow);
+  color: var(--lastre-field-text);
+  font: inherit;
+  font-size: var(--lastre-text-label);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--lastre-duration-fast),
+    background-color var(--lastre-duration-fast),
+    box-shadow var(--lastre-duration-fast);
+}
+@media (hover: hover) {
+  .lastre-select__trigger:hover:not(:disabled) {
+    border-color: var(--lastre-border-strong);
+  }
+}
+.lastre-select__trigger:focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: var(--lastre-focus-offset);
+}
+.lastre-select[data-open] .lastre-select__trigger {
+  border-color: var(--lastre-field-border-focus);
+  box-shadow: var(--lastre-focus-shadow), var(--lastre-field-shadow);
+}
+.lastre-select__trigger[aria-invalid="true"] {
+  border-color: var(--lastre-field-border-invalid);
+}
+.lastre-select__trigger:disabled {
+  opacity: var(--lastre-opacity-disabled);
+  cursor: not-allowed;
+}
+.lastre-select__prefix {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+}
+.lastre-select__lead {
+  flex-shrink: 0;
+  color: var(--lastre-text-secondary);
+}
+.lastre-select__value {
+  /* Content-based basis: toolbar selects size to their value. */
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lastre-select__value[data-placeholder] {
+  color: var(--lastre-field-text-hint);
+}
+.lastre-select__chevron {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+  transition: transform var(--lastre-duration-normal) var(--lastre-ease-out);
+}
+.lastre-select[data-open] .lastre-select__chevron {
+  transform: rotate(180deg);
+}
+
+/* Compact trigger for toolbars and headers. */
+.lastre-select--sm .lastre-select__trigger {
+  min-height: var(--lastre-control-sm, 32px);
+  padding: 0 8px 0 10px;
+}
+.lastre-select--toolbar .lastre-select__trigger {
+  min-height: 34px;
+  border-color: var(--lastre-border-subtle);
+  background: var(--lastre-bg-surface);
+  box-shadow: none;
+}
+@media (hover: hover) {
+  .lastre-select--toolbar .lastre-select__trigger:hover:not(:disabled) {
+    background: var(--lastre-bg-elevated);
+    border-color: var(--lastre-border-strong);
+  }
+}
+
+/* Hidden input that carries the value into forms and native validation. */
+.lastre-select__native {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Listbox */
+.lastre-listbox-layer {
+  min-width: 200px;
+}
+.lastre-listbox {
+  display: grid;
+  gap: 1px;
+  outline: none;
+}
+.lastre-select__option {
+  padding-right: 8px;
+}
+.lastre-select__opt-icon {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+}
+.lastre-select__opt-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.lastre-select__opt-text > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lastre-select__opt-text small {
+  color: var(--lastre-text-tertiary);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.lastre-select__check {
+  flex-shrink: 0;
+  color: var(--lastre-link);
+  visibility: hidden;
+}
+.lastre-select__option[aria-selected="true"] .lastre-select__check {
+  visibility: visible;
+}
+.lastre-select__option[aria-selected="true"] .lastre-select__opt-text > span {
+  font-weight: var(--lastre-weight-medium);
+}

@@ -1,3 +1,4 @@
+import { Select } from "../../components/ui/Select";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs } from "../../components/ui/Tabs";
@@ -9,6 +10,8 @@ import { specifications } from "../../lib/inventory/specifications";
 import { governance } from "../../lib/inventory/governance";
 import { InventoryScreenDrawer } from "./InventoryScreenDrawer";
 import { InventoryGovernance } from "./InventoryGovernance";
+import { InventorySurfaces } from "./InventorySurfaces";
+import { adminSurfaceDefinitions } from "../../lib/inventory/admin";
 import report from "../../lib/inventory/generated/report.json";
 import type { Screen } from "../../lib/inventory/types";
 import "./inventory.css";
@@ -16,6 +19,7 @@ import "./inventory.css";
 const views = [
   ["mapa", "Visão geral"],
   ["catalogo", "Catálogo de telas"],
+  ["superficies", "Modais e drawers"],
   ["fluxos", "Fluxos"],
   ["operacoes", "Operações"],
   ["qualidade", "Verificações"],
@@ -42,6 +46,7 @@ function exportInventory() {
         {
           apps,
           screens,
+          surfaces: adminSurfaceDefinitions,
           specifications,
           operations,
           flows,
@@ -107,31 +112,37 @@ export function Inventory() {
         <div>
           <p className="iv-eyebrow">O PRODUTO, COM EVIDÊNCIA</p>
           <h1>
-            Inventário vivo<span>.</span>
+            {view === "superficies" ? "Modais e drawers" : "Inventário vivo"}
+            <span>.</span>
           </h1>
           <p className="iv-lead">
-            O que existe, o que está planejado e o que ainda precisa ser
-            provado.
+            {view === "superficies"
+              ? "Interfaces reais, estados e contexto. Uma biblioteca para explorar o Admin."
+              : "O que existe, o que está planejado e o que ainda precisa ser provado."}
           </p>
         </div>
         <button type="button" className="iv-button" onClick={exportInventory}>
           Exportar JSON <span aria-hidden="true">↓</span>
         </button>
       </div>
-      <div className="iv-notice">
-        <span className="iv-notice-dot" aria-hidden="true" />
-        <p>
-          <strong>Primeira leitura do produto.</strong> Rotas do app conferidas
-          no código. Contratos, risco e acesso ainda em avaliação. Esta prévia
-          não é publicada em produção.
-        </p>
-      </div>
+      {view !== "superficies" && (
+        <div className="iv-notice">
+          <span className="iv-notice-dot" aria-hidden="true" />
+          <p>
+            <strong>Primeira leitura do produto.</strong> Rotas do app
+            conferidas no código. Contratos, risco e acesso ainda em avaliação.
+            Esta prévia não é publicada em produção.
+          </p>
+        </div>
+      )}
 
       <div className="iv-page-views">
         <Tabs
           tabs={pageTabs}
           active={view}
-          onChange={(id) => update({ view: id, screen: null, tab: null })}
+          onChange={(id) =>
+            update({ view: id, screen: null, tab: null, preview: null })
+          }
           ariaLabel="Seções do inventário"
         >
           {view === "mapa" && (
@@ -164,6 +175,27 @@ export function Inventory() {
                   </p>
                 </div>
               </div>
+              <button
+                type="button"
+                className="iv-surfaces-entry"
+                onClick={() => update({ view: "superficies" })}
+              >
+                <span className="iv-surfaces-entry-art" aria-hidden="true">
+                  <i />
+                  <b />
+                </span>
+                <span>
+                  <strong>O que abre sobre as telas</strong>
+                  <span>
+                    {adminSurfaceDefinitions.length} interfaces do Admin:
+                    modais, drawers e revisão na página. Veja o formato e
+                    experimente.
+                  </span>
+                </span>
+                <span className="iv-surfaces-entry-link">
+                  Explorar galeria <span aria-hidden="true">→</span>
+                </span>
+              </button>
               <div className="iv-section-heading">
                 <div>
                   <h2>Um produto, experiências distintas</h2>
@@ -242,6 +274,14 @@ export function Inventory() {
             </>
           )}
 
+          {view === "superficies" && (
+            <InventorySurfaces
+              params={params}
+              update={update}
+              onChoose={(id) => choose(byId.get(id)!)}
+            />
+          )}
+
           {view === "catalogo" && (
             <>
               <div className="iv-section-heading">
@@ -267,28 +307,33 @@ export function Inventory() {
                 </label>
                 <label>
                   Área
-                  <select
+                  <Select
+                    variant="toolbar"
+                    aria-label="Área"
                     value={appFilter}
-                    onChange={(event) => update({ app: event.target.value })}
-                  >
-                    <option value="all">Todas as áreas</option>
-                    {apps.map((app) => (
-                      <option key={app.id} value={app.id}>
-                        {app.name}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(next) => update({ app: next })}
+                    options={[
+                      { value: "all", label: "Todas as áreas" },
+                      ...apps.map((app) => ({
+                        value: app.id,
+                        label: app.name,
+                      })),
+                    ]}
+                  />
                 </label>
                 <label>
                   Existência
-                  <select
+                  <Select
+                    variant="toolbar"
+                    aria-label="Existência"
                     value={stateFilter}
-                    onChange={(event) => update({ status: event.target.value })}
-                  >
-                    <option value="all">Existentes e planejadas</option>
-                    <option value="existing">Existentes</option>
-                    <option value="planned">Planejadas</option>
-                  </select>
+                    onChange={(next) => update({ status: next })}
+                    options={[
+                      { value: "all", label: "Existentes e planejadas" },
+                      { value: "existing", label: "Existentes" },
+                      { value: "planned", label: "Planejadas" },
+                    ]}
+                  />
                 </label>
               </div>
               <p className="iv-result-count" role="status">
@@ -355,6 +400,13 @@ export function Inventory() {
                                 Redirecionamento
                               </small>
                             )}
+                            {screen.kind === "hosted" && (
+                              <small className="iv-muted">
+                                {adminSurfaceDefinitions.find(
+                                  (surface) => surface.id === screen.id,
+                                )?.format ?? "Interface na tela"}
+                              </small>
+                            )}
                           </td>
                           <td>
                             <span
@@ -404,7 +456,9 @@ export function Inventory() {
                     <header>
                       <span className="iv-eyebrow">{flow.id}</span>
                       <span className="iv-badge iv-badge--planned">
-                        {flow.status === "implemented" ? "Implementado" : "Proposto"}
+                        {flow.status === "implemented"
+                          ? "Implementado"
+                          : "Proposto"}
                       </span>
                     </header>
                     <h3>{flow.name}</h3>

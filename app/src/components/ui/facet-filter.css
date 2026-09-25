@@ -1,0 +1,123 @@
+/* FacetFilter: chip trigger with optional clear, and a multi-select layer. */
+.lastre-facet {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  height: 34px;
+  border: 1px dashed var(--lastre-border-strong);
+  border-radius: var(--lastre-radius-pill);
+  background: transparent;
+  transition:
+    border-color var(--lastre-duration-fast),
+    background-color var(--lastre-duration-fast);
+}
+.lastre-facet[data-active] {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--lastre-link) 45%, var(--lastre-border-subtle));
+  background: color-mix(in srgb, var(--lastre-link) 9%, var(--lastre-bg-surface));
+}
+.lastre-facet:hover {
+  border-color: var(--lastre-text-tertiary);
+}
+.lastre-facet__trigger,
+.lastre-facet__clear {
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--lastre-text-secondary);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: var(--lastre-weight-medium);
+  cursor: pointer;
+}
+.lastre-facet__trigger {
+  gap: 6px;
+  min-width: 0;
+  padding: 0 12px 0 10px;
+  border-radius: var(--lastre-radius-pill);
+}
+.lastre-facet[data-active] .lastre-facet__trigger {
+  padding-right: 4px;
+  color: var(--lastre-text-primary);
+}
+.lastre-facet__trigger > svg {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+}
+.lastre-facet[data-active] .lastre-facet__trigger > svg {
+  color: var(--lastre-link);
+}
+.lastre-facet__sep {
+  width: 1px;
+  height: 14px;
+  margin: 0 2px;
+  background: var(--lastre-border-strong);
+}
+.lastre-facet__value {
+  max-width: 180px;
+  overflow: hidden;
+  color: var(--lastre-link);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lastre-facet__clear {
+  justify-content: center;
+  width: 28px;
+  margin-right: 2px;
+  border-radius: 50%;
+  color: var(--lastre-text-tertiary);
+}
+.lastre-facet__clear:hover {
+  color: var(--lastre-text-primary);
+}
+.lastre-facet__trigger:focus-visible,
+.lastre-facet__clear:focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: 1px;
+}
+
+.lastre-facet__layer {
+  width: 264px;
+}
+.lastre-facet__option[data-empty] .lastre-facet__opt-label {
+  color: var(--lastre-text-tertiary);
+}
+.lastre-facet__opt-icon {
+  flex-shrink: 0;
+  color: var(--lastre-text-tertiary);
+}
+.lastre-facet__opt-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lastre-facet__reset {
+  justify-content: center;
+  color: var(--lastre-text-secondary);
+  font-size: 12.5px;
+}
+
+/* Visual checkbox for options inside layers (the option carries the state). */
+.lastre-checkmark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--lastre-border-strong);
+  border-radius: 4px;
+  color: transparent;
+  transition:
+    background-color var(--lastre-duration-fast),
+    border-color var(--lastre-duration-fast),
+    color var(--lastre-duration-fast);
+}
+.lastre-checkmark[data-checked] {
+  border-color: var(--lastre-action-primary);
+  background: var(--lastre-action-primary);
+  color: var(--lastre-action-text);
+}

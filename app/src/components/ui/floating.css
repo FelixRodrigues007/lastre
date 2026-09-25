@@ -1,0 +1,185 @@
+/*
+ * Floating layers: menus, listboxes, filters and tooltips. Elevation 4.
+ * They render in a portal, so they carry their own type and color roles.
+ */
+.lastre-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--lastre-layer-popover);
+  box-sizing: border-box;
+  max-width: min(360px, calc(100vw - 16px));
+  padding: 6px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--lastre-border-strong);
+  border-radius: var(--lastre-radius-md);
+  background: var(--lastre-bg-surface);
+  box-shadow: var(--lastre-popover-shadow);
+  color: var(--lastre-text-primary);
+  font-family: var(--lastre-font-body);
+  font-size: var(--lastre-text-label);
+  line-height: var(--lastre-line-body);
+  -webkit-font-smoothing: antialiased;
+  scrollbar-width: thin;
+  transform-origin: top left;
+  animation: lastre-layer-in var(--lastre-duration-normal) var(--lastre-ease-emphasized) both;
+}
+.lastre-layer[data-align="end"] {
+  transform-origin: top right;
+}
+.lastre-layer[data-side="top"] {
+  transform-origin: bottom left;
+  animation-name: lastre-layer-in-up;
+}
+.lastre-layer[data-side="top"][data-align="end"] {
+  transform-origin: bottom right;
+}
+.lastre-layer :where(p, ul, ol) {
+  margin: 0;
+}
+.lastre-layer :where(button, input) {
+  font: inherit;
+  color: inherit;
+}
+.lastre-layer :where(a, [role="menuitem"], [role="option"], button, input):focus-visible {
+  outline: var(--lastre-focus-width) solid var(--lastre-focus);
+  outline-offset: -2px;
+}
+
+@keyframes lastre-layer-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+}
+@keyframes lastre-layer-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.97);
+  }
+}
+
+/* Row inside any layer: menu item, listbox option, facet option. */
+.lastre-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 10px 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--lastre-text-primary);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: background-color var(--lastre-duration-fast);
+}
+.lastre-option[data-active],
+.lastre-option:focus-visible {
+  background: var(--lastre-bg-elevated);
+}
+.lastre-option[aria-disabled="true"] {
+  opacity: var(--lastre-opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* Layer section label and divider. */
+.lastre-layer hr {
+  height: 0;
+  margin: 5px -6px;
+  border: 0;
+  border-top: 1px solid var(--lastre-border-subtle);
+}
+.lastre-layer-label {
+  padding: 8px 10px 4px;
+  color: var(--lastre-text-tertiary);
+  font-family: var(--lastre-font-mono);
+  font-size: 10.5px;
+  font-weight: var(--lastre-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Search box pinned at the top of a searchable layer. */
+.lastre-layer-search {
+  position: sticky;
+  top: -6px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px -6px 6px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--lastre-border-subtle);
+  background: var(--lastre-bg-surface);
+  color: var(--lastre-text-tertiary);
+}
+.lastre-layer-search input {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--lastre-text-primary);
+  outline: none;
+}
+.lastre-layer-search input::placeholder {
+  color: var(--lastre-text-tertiary);
+}
+.lastre-layer-empty {
+  padding: 14px 10px;
+  color: var(--lastre-text-tertiary);
+  text-align: center;
+}
+
+/* Count shown at the trailing edge of an option or trigger. */
+.lastre-count {
+  margin-left: auto;
+  padding-left: 8px;
+  color: var(--lastre-text-tertiary);
+  font-family: var(--lastre-font-mono);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lastre-layer {
+    animation: none;
+  }
+}
+
+/* Tooltip: dense, high-contrast, no pointer interaction. */
+.lastre-tooltip-anchor {
+  display: inline-flex;
+}
+.lastre-tooltip {
+  z-index: var(--lastre-layer-tooltip);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 260px;
+  padding: 5px 9px;
+  overflow: visible;
+  border-color: var(--lastre-border-strong);
+  border-radius: 6px;
+  background: var(--lastre-bg-elevated);
+  color: var(--lastre-text-primary);
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+  animation-duration: var(--lastre-duration-fast);
+}
+.lastre-tooltip kbd {
+  padding: 0 4px;
+  border: 1px solid var(--lastre-border-strong);
+  border-radius: 4px;
+  color: var(--lastre-text-tertiary);
+  font-family: var(--lastre-font-mono);
+  font-size: 10.5px;
+}

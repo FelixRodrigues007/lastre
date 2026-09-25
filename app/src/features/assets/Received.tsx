@@ -1,10 +1,22 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { api, type Share, type Snapshot } from "./api";
+import { Link, useParams } from "react-router-dom";
+import { Icon } from "../../components/ui/Icon";
+import { Button, buttonClassName } from "../../components/ui/Button";
+import { api, downloadEvidence, type Share, type Snapshot } from "./api";
 import { dateLabel } from "./model";
-import { EvidenceList } from "./Documents";
-import { ObjectSummary, VerificationList } from "./ObjectDetail";
-import { Feedback, Loading, Notice, PageHead, useAction } from "./ui";
+import { DocumentRow, FieldsSummary } from "./Share";
+import {
+  Avatar,
+  Badge,
+  Feedback,
+  Glyph,
+  Loading,
+  Notice,
+  PageHead,
+  Panel,
+  useAction,
+} from "./ui";
+
 export function AssetsReceived() {
   const { shareId = "" } = useParams();
   const [value, setValue] = useState<{
@@ -13,6 +25,7 @@ export function AssetsReceived() {
     sender: string;
   } | null>(null);
   const action = useAction();
+  const download = useAction();
   useEffect(() => {
     setValue(null);
     let active = true;
@@ -34,7 +47,13 @@ export function AssetsReceived() {
       active = false;
       document.removeEventListener("visibilitychange", refresh);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shareId]);
+  const daysLeft = value
+    ? Math.ceil(
+        (new Date(value.share.expiresAt).getTime() - Date.now()) / 86400000,
+      )
+    : 0;
   return (
     <>
       <PageHead
@@ -46,71 +65,199 @@ export function AssetsReceived() {
             : undefined
         }
         back="/assets"
+        icon={value ? <Glyph icon="inbox" tone="info" size="lg" /> : undefined}
+        meta={
+          value && (
+            <>
+              <Badge tone="info">Somente leitura</Badge>
+              <span className="assets-received-meta">
+                <Icon name="clock" size={14} /> Acesso até{" "}
+                {dateLabel(value.share.expiresAt)}
+              </span>
+              <span className="assets-received-meta">
+                <Icon name={value.share.allowDownload ? "download" : "eye"} size={14} />
+                {value.share.allowDownload ? "Download permitido" : "Somente consulta"}
+              </span>
+            </>
+          )
+        }
       />
       <Feedback error={action.error} />
-      {!value && !action.error && <Loading />}
+      {!value && !action.error && <Loading label="Carregando versão compartilhada…" />}
       {action.error && (
-        <button
-          className="assets-button"
-          onClick={() =>
-            void action.run(async () => setValue(await api.received(shareId)))
-          }
-        >
-          Tentar novamente
-        </button>
+        <div className="assets-actions assets-received-retry">
+          <Button
+            variant="secondary"
+            startIcon={<Icon name="refresh" size={16} />}
+            onClick={() =>
+              void action.run(async () => setValue(await api.received(shareId)))
+            }
+          >
+            Tentar novamente
+          </Button>
+          <Link className={buttonClassName({ variant: "ghost" })} to="/assets">
+            Voltar ao início
+          </Link>
+        </div>
       )}
       {value && (
-        <div className="assets-stack">
-          <Notice>
-            Acesso à versão {value.version.number} até{" "}
-            {dateLabel(value.share.expiresAt)}. Finalidade:{" "}
-            {value.share.purpose}.{" "}
-            {value.share.allowDownload
-              ? "Download permitido."
-              : "O remetente não autorizou download dos arquivos."}
-          </Notice>
-          <section className="assets-panel">
-            <ObjectSummary
-              fields={value.version.fields}
-              kind={value.version.fields.category === "lot" ? "lot" : "asset"}
-            />
-          </section>
-          <section className="assets-panel">
-            <h2>Documentos compartilhados</h2>
-            <EvidenceList
-              documents={value.version.evidence}
-              readOnly
-              shareId={shareId}
-              allowDownload={value.share.allowDownload}
-            />
-          </section>
-          {value.version.request && (
-            <section className="assets-panel assets-stack">
-              <h2>Requisitos e respostas desta versão</h2>
-              {value.version.request.requirements.map((q) => (
-                <div key={q.id}>
-                  <h3>{q.label}</h3>
-                  <p>
-                    {value.version.request!.justifications[q.id] ||
-                      (value.version.evidence.some(
-                        (e) => e.requirementId === q.id,
-                      )
-                        ? "Documento incluído nesta versão."
-                        : "Sem documento ou justificativa.")}
-                  </p>
+        <div className="assets-split assets-received">
+          <div className="assets-stack assets-stack--lg">
+            <Notice
+              tone={daysLeft <= 3 ? "warning" : "info"}
+              title={`Acesso à versão ${value.version.number} até ${dateLabel(value.share.expiresAt)}`}
+            >
+              Finalidade: {value.share.purpose}.{" "}
+              {value.share.allowDownload
+                ? "Download permitido."
+                : "O remetente não autorizou download dos arquivos."}
+            </Notice>
+            <Panel eyebrow="Dados declarados" title="Informações desta versão">
+              <FieldsSummary
+                fields={value.version.fields}
+                kind={value.version.fields.category === "lot" ? "lot" : "asset"}
+              />
+            </Panel>
+            <Panel
+              eyebrow="Arquivos"
+              title="Documentos compartilhados"
+              description={`${value.version.evidence.length} documento(s) nesta versão.`}
+            >
+              <Feedback error={download.error} />
+              {value.version.evidence.length ? (
+                <ul className="assets-doc-list">
+                  {value.version.evidence.map((e) => (
+                    <DocumentRow
+                      key={e.id}
+                      evidence={e}
+                      aside={
+                        value.share.allowDownload ? (
+                          <button
+                            type="button"
+                            className="assets-icon-button assets-doc-row__download"
+                            disabled={download.busy}
+                            aria-label={`Baixar ${e.name}`}
+                            onClick={() =>
+                              void download.run(() =>
+                                downloadEvidence(e.id, e.name, shareId),
+                              )
+                            }
+                          >
+                            <Icon name="download" size={17} />
+                          </button>
+                        ) : (
+                          <span className="assets-doc-row__locked" title="Download não autorizado pelo remetente">
+                            <Icon name="lock" size={15} />
+                            <span className="assets-sr-only">Download não autorizado</span>
+                          </span>
+                        )
+                      }
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <p className="assets-muted">Nenhum documento incluído nesta versão.</p>
+              )}
+            </Panel>
+            {value.version.request && (
+              <Panel
+                eyebrow="Solicitação"
+                title="Requisitos e respostas desta versão"
+                description={value.version.request.title}
+              >
+                <ul className="assets-received-answers">
+                  {value.version.request.requirements.map((q) => {
+                    const justification = value.version.request!.justifications[q.id];
+                    const hasDoc = value.version.evidence.some(
+                      (e) => e.requirementId === q.id,
+                    );
+                    return (
+                      <li key={q.id}>
+                        <span
+                          className="assets-received-answers__mark"
+                          data-ok={hasDoc || Boolean(justification) || undefined}
+                          aria-hidden="true"
+                        >
+                          <Icon name={hasDoc ? "file" : justification ? "info" : "close"} size={14} />
+                        </span>
+                        <div>
+                          <h3>{q.label}</h3>
+                          <p>
+                            {justification ||
+                              (hasDoc
+                                ? "Documento incluído nesta versão."
+                                : "Sem documento ou justificativa.")}
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                  {value.version.request.clarifications.map((c) => (
+                    <li key={c.id}>
+                      <span className="assets-received-answers__mark" aria-hidden="true">
+                        <Icon name="send" size={14} />
+                      </span>
+                      <div>
+                        <h3>{c.question}</h3>
+                        <p>{c.response || "Sem resposta nesta versão."}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </Panel>
+            )}
+          </div>
+          <aside className="assets-stack">
+            <Panel eyebrow="Remetente" title="Quem compartilhou" elevation={2}>
+              <div className="assets-received-sender">
+                <Avatar name={value.sender} size="lg" square />
+                <div>
+                  <strong>{value.sender}</strong>
+                  <span>
+                    Versão {value.version.number} · {dateLabel(value.version.createdAt, true)}
+                  </span>
                 </div>
-              ))}
-              {value.version.request.clarifications.map((c) => (
-                <div key={c.id}>
-                  <h3>{c.question}</h3>
-                  <p>{c.response || "Sem resposta nesta versão."}</p>
-                </div>
-              ))}
-            </section>
-          )}
-          <section className="assets-panel">
-            <VerificationList version={value.version} />
-          </section>
+              </div>
+            </Panel>
+            <Panel
+              eyebrow="Integridade"
+              title="Verificações disponíveis"
+              description={`Resultados sobre a versão ${value.version.number}, enviada em ${dateLabel(value.version.createdAt)}.`}
+            >
+              <ul className="assets-verifications">
+                {value.version.verifications.map((check) => {
+                  const tone =
+                    check.status === "unavailable"
+                      ? "neutral"
+                      : check.result === "consistent"
+                        ? "good"
+                        : "warning";
+                  return (
+                    <li key={check.id}>
+                      <div className="assets-row">
+                        <strong>{check.method}</strong>
+                        <Badge tone={tone}>
+                          {check.status === "unavailable"
+                            ? "Indisponível"
+                            : check.result === "consistent"
+                              ? "Conferência concluída"
+                              : "Divergência encontrada"}
+                        </Badge>
+                      </div>
+                      <p>{check.scope}</p>
+                      <p className="assets-caption">{check.limitation}</p>
+                      {check.status === "completed" && (
+                        <p className="assets-caption">
+                          Executada em {dateLabel(check.checkedAt, true)} · Método{" "}
+                          {check.methodVersion}
+                        </p>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </Panel>
+          </aside>
         </div>
       )}
     </>

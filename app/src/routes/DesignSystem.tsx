@@ -20,6 +20,7 @@ import {
 } from "../components/design-system/SurfaceLab";
 import { MotionLab } from "../components/design-system/MotionLab";
 import { IconLibrary } from "../components/design-system/IconLibrary";
+import { DataLab } from "../components/design-system/DataLab";
 import "./design-system.css";
 import "../components/design-system/ds-depth.css";
 
@@ -34,6 +35,7 @@ const sections = [
   ["motion", "Movimento"],
   ["icons", "Iconografia"],
   ["components", "Componentes"],
+  ["data", "Dados e navegação"],
   ["patterns", "Em contexto"],
   ["guidelines", "Critérios de uso"],
 ];
@@ -722,6 +724,13 @@ export function DesignSystem() {
                 </InlineNotice>
               </div>
             </div>
+          </Section>
+          <Section
+            id="data"
+            title="Listas que trabalham com você."
+            description="Tabela, abas, filtros, menus, seleção e painel lateral: o conjunto usado nas listas de ativos, lotes, solicitações e equipe. Dados fictícios."
+          >
+            <DataLab onCopy={copy} />
           </Section>
           <Section
             id="patterns"

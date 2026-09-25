@@ -3,6 +3,224 @@ import type { Flow } from "./types";
 /** Declared product journeys. Evidence for implemented Assets flows: app/test/assetsJourney.browser.py. */
 export const flows: Flow[] = [
   {
+    id: "JA-08",
+    name: "Explorar modais e drawers do Admin",
+    status: "implemented",
+    precondition: "Inventário disponível na prévia local de desenvolvimento.",
+    steps: [
+      {
+        screen: "AD-001",
+        action:
+          "Abrir Modais e drawers, buscar pelo nome ou ID e filtrar o formato.",
+      },
+      {
+        screen: "AD-S02",
+        action:
+          "Interagir com Criar ocorrência na prévia viva; alternar formulário, validação, revisão e conteúdo extenso.",
+      },
+      {
+        screen: "AD-S03",
+        action:
+          "Comparar estados do modal Atribuir responsável lado a lado no inventário, em viewport amplo ou móvel.",
+      },
+      {
+        screen: "AD-001",
+        action:
+          "Fechar ou reiniciar a prévia, protegendo campos alterados; retomar o índice com filtros e cenário preservados.",
+      },
+    ],
+    result:
+      "Formato, gatilho e contexto inspecionados. Nenhum comando administrativo enviado; preparação permanece local.",
+  },
+  {
+    id: "JA-07",
+    name: "Encontrar contexto na prévia administrativa",
+    status: "implemented",
+    precondition:
+      "Prévia local de desenvolvimento; não requer nem cria sessão administrativa.",
+    steps: [
+      {
+        screen: "AD-002",
+        action:
+          "Acionar a busca global pelo campo, ícone compacto ou Cmd/Ctrl+K.",
+      },
+      {
+        screen: "AD-S27",
+        action:
+          "No shell compacto, digitar nome ou ID no modal; no desktop usar o campo da barra. Escape fecha sem navegar e devolve foco.",
+      },
+      {
+        screen: "AD-027",
+        action:
+          "Enviar a consulta; revisar resultados agrupados e abrir o registro pelo ID canônico.",
+      },
+    ],
+    result:
+      "Consulta recuperável por URL e navegação para contexto de demonstração. Nenhuma escrita de API ou autorização de produção.",
+  },
+  {
+    id: "JA-01",
+    name: "Recuperar falha de processamento",
+    status: "proposed",
+    precondition:
+      "Autoridade e contratos de backend definidos; prévia permite apenas inspecionar a jornada.",
+    steps: [
+      {
+        screen: "AD-002",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-004",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-014",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-019",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-026",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+    ],
+    result:
+      "Tentativa confirmada ligada à versão e evidência de recuperação. Backend ainda não implementado.",
+  },
+  {
+    id: "JA-02",
+    name: "Diagnosticar acesso a documento",
+    status: "proposed",
+    precondition:
+      "Autoridade e contratos de backend definidos; prévia permite apenas inspecionar a jornada.",
+    steps: [
+      {
+        screen: "AD-005",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-021",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-010",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-011",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+    ],
+    result:
+      "Causa identificada e concessão validada pelo servidor. Backend ainda não implementado.",
+  },
+  {
+    id: "JA-03",
+    name: "Ativar organização",
+    status: "proposed",
+    precondition:
+      "Autoridade e contratos de backend definidos; prévia permite apenas inspecionar a jornada.",
+    steps: [
+      {
+        screen: "AD-005",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-006",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-020",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+    ],
+    result:
+      "Convite e vínculo confirmados no contexto correto. Backend ainda não implementado.",
+  },
+  {
+    id: "JA-04",
+    name: "Publicar requisitos",
+    status: "proposed",
+    precondition:
+      "Autoridade e contratos de backend definidos; prévia permite apenas inspecionar a jornada.",
+    steps: [
+      {
+        screen: "AD-015",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-016",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-017",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-026",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+    ],
+    result:
+      "Publicação versionada sem alterar casos enviados. Backend ainda não implementado.",
+  },
+  {
+    id: "JA-05",
+    name: "Revogar acesso comprometido",
+    status: "proposed",
+    precondition:
+      "Autoridade e contratos de backend definidos; prévia permite apenas inspecionar a jornada.",
+    steps: [
+      {
+        screen: "AD-003",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-021",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-019",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-023",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+    ],
+    result:
+      "Revogação delimitada confirmada e auditada. Backend ainda não implementado.",
+  },
+  {
+    id: "JA-06",
+    name: "Atender pedido de dados",
+    status: "proposed",
+    precondition:
+      "Autoridade e contratos de backend definidos; prévia permite apenas inspecionar a jornada.",
+    steps: [
+      {
+        screen: "AD-004",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-024",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-026",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+      {
+        screen: "AD-023",
+        action: "Consultar contexto e revisar a etapa na prévia local.",
+      },
+    ],
+    result:
+      "Recibo por conjunto e impedimentos de retenção identificados. Backend ainda não implementado.",
+  },
+  {
     id: "FL-004",
     name: "Preparar e compartilhar sem convite",
     status: "implemented",
