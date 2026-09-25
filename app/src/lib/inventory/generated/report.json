@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "sourceHash": "ec2fba2dd054cc7b",
+  "sourceFiles": 529,
+  "freshnessScope": "Assinatura das fontes TS, JS, estilos, JSON, HTML e SVG de app/src, web/src e design-system, mais configurações selecionadas. Atualização não comprova revisão funcional. Assets binários e públicos dependem de revisão manual.",
+  "scope": "Rotas JSX de app/src + entrada /design-system em main.tsx. web/ possui fichas de leitura manual, fora da cobertura automática.",
+  "routes": [
+    {
+      "path": "/console",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 57,
+      "excluded": null
+    },
+    {
+      "path": "/lots",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 58,
+      "excluded": null
+    },
+    {
+      "path": "/lots/:assetId",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 59,
+      "excluded": null
+    },
+    {
+      "path": "/process",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 60,
+      "excluded": null
+    },
+    {
+      "path": "/audit",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 61,
+      "excluded": null
+    },
+    {
+      "path": "/audit/:assetId",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 62,
+      "excluded": null
+    },
+    {
+      "path": "/chain",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 63,
+      "excluded": null
+    },
+    {
+      "path": "/escalations",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 64,
+      "excluded": null
+    },
+    {
+      "path": "/settings",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 65,
+      "excluded": null
+    },
+    {
+      "path": "/capture",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 66,
+      "excluded": null
+    },
+    {
+      "path": "/marketplace",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 67,
+      "excluded": null
+    },
+    {
+      "path": "/marketplace/:assetId",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 68,
+      "excluded": null
+    },
+    {
+      "path": "/my-assets",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 72,
+      "excluded": null
+    },
+    {
+      "path": "/my-assets/:assetId",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 73,
+      "excluded": null
+    },
+    {
+      "path": "/agents",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 74,
+      "excluded": null
+    },
+    {
+      "path": "*",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 75,
+      "excluded": "Fallback ou envelope de rotas; não representa uma página."
+    },
+    {
+      "path": "/login",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 85,
+      "excluded": null
+    },
+    {
+      "path": "/welcome",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 86,
+      "excluded": null
+    },
+    {
+      "path": "/*",
+      "file": "app/src/LegacyApp.tsx",
+      "line": 87,
+      "excluded": "Fallback ou envelope de rotas; não representa uma página."
+    },
+    {
+      "path": "/",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 22,
+      "excluded": null
+    },
+    {
+      "path": "/assets/entrar",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 31,
+      "excluded": null
+    },
+    {
+      "path": "/assets/convites/:token",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 32,
+      "excluded": null
+    },
+    {
+      "path": "/assets",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 80,
+      "excluded": null
+    },
+    {
+      "path": "/assets/ativos",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 81,
+      "excluded": null
+    },
+    {
+      "path": "/assets/ativos/novo",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 85,
+      "excluded": null
+    },
+    {
+      "path": "/assets/ativos/:ativoId",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 89,
+      "excluded": null
+    },
+    {
+      "path": "/assets/ativos/:ativoId/compartilhar",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 93,
+      "excluded": null
+    },
+    {
+      "path": "/assets/lotes",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 97,
+      "excluded": null
+    },
+    {
+      "path": "/assets/lotes/novo",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 98,
+      "excluded": null
+    },
+    {
+      "path": "/assets/lotes/:loteId",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 102,
+      "excluded": null
+    },
+    {
+      "path": "/assets/lotes/:loteId/compartilhar",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 106,
+      "excluded": null
+    },
+    {
+      "path": "/assets/solicitacoes",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 110,
+      "excluded": null
+    },
+    {
+      "path": "/assets/solicitacoes/:solicitacaoId",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 111,
+      "excluded": null
+    },
+    {
+      "path": "/assets/organizacao",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 115,
+      "excluded": null
+    },
+    {
+      "path": "/assets/recebidos/:shareId",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 119,
+      "excluded": null
+    },
+    {
+      "path": "*",
+      "file": "app/src/features/assets/AssetsApp.tsx",
+      "line": 120,
+      "excluded": "Fallback ou envelope de rotas; não representa uma página."
+    },
+    {
+      "path": "/design-system",
+      "file": "app/src/main.tsx",
+      "line": 23,
+      "excluded": null
+    },
+    {
+      "path": "/admin/inventario",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 10,
+      "excluded": null
+    },
+    {
+      "path": "*",
+      "file": "app/src/routes/admin/AdminPreview.tsx",
+      "line": 18,
+      "excluded": "Fallback ou envelope de rotas; não representa uma página."
+    }
+  ],
+  "totals": {
+    "appRoutes": 35,
+    "covered": 35,
+    "existingScreens": 37,
+    "redirects": 3,
+    "planned": 5,
+    "observedOperations": 26,
+    "proposedOperations": 2
+  },
+  "errors": [],
+  "checks": [
+    {
+      "id": "G1",
+      "name": "Rotas do app reconciliadas",
+      "status": "passou",
+      "detail": "Inclui redirecionamentos e prévia local. Site possui adaptador pendente. Não confere o componente montado em cada rota."
+    },
+    {
+      "id": "G2",
+      "name": "Referências do catálogo",
+      "status": "passou",
+      "detail": "IDs únicos; operações, contratos funcionais e passos apontam para registros existentes. Contratos declarados têm os campos obrigatórios preenchidos."
+    },
+    {
+      "id": "G9",
+      "name": "Arquivos e funções citados",
+      "status": "passou",
+      "detail": "Confere existência de arquivos e declarações de função. Não é selo de evidência nem teste de comportamento."
+    },
+    {
+      "id": "G3–G5",
+      "name": "Contratos e estados de erro",
+      "status": "pendente",
+      "detail": "Mapeamento inicial é parcial e declarado. Ainda não cruza chamadas, handlers, schemas ou erros com a UI."
+    },
+    {
+      "id": "G6",
+      "name": "Fluxos executáveis",
+      "status": "pendente",
+      "detail": "Jornadas propostas. Grafo, trocas de ator e testes ponta a ponta ainda não implementados."
+    },
+    {
+      "id": "G7",
+      "name": "Autorização por papel e organização",
+      "status": "pendente",
+      "detail": "A sessão atual é demonstrativa. Prévia do admin não é publicada no build de produção."
+    },
+    {
+      "id": "G8/G10/G11",
+      "name": "Dados pessoais, evidência e risco",
+      "status": "pendente",
+      "detail": "Sem classificação automática de risco. Falta de evidência nunca é exibida como baixo risco."
+    },
+    {
+      "id": "G13–G15",
+      "name": "Eventos, linguagem e identidade histórica",
+      "status": "pendente",
+      "detail": "Não há registro completo de eventos, análise de copy ou comparação de lápides entre commits."
+    }
+  ]
+}

@@ -42,6 +42,16 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: npm run build
 
+      - name: Check living inventory
+        if: ${{ matrix.project == 'app' }}
+        run: |
+          npm run inventory:test
+          npm run inventory:check
+
+      - name: Test Assets domain and authorization
+        if: ${{ matrix.project == 'app' }}
+        run: npm --prefix app run test:assets
+
       - name: Build app server dependencies
         if: ${{ matrix.project == 'app' }}
         run: |

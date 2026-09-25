@@ -10,8 +10,13 @@ and **lastro** as a legacy internal namespace until the migration plan is execut
 
 ## Start here
 
+Mudanças estruturais do frontend devem passar pelo [inventário do Admin](FRONTEND_INVENTORY.md), conforme [AGENTS.md](../AGENTS.md). A tela local fica em `/admin/inventario`.
+
 | Audience | Read first | Then read |
 |---|---|---|
+| Product architecture / UX | [`LASTRE_PRODUCT_ARCHITECTURE.md`](LASTRE_PRODUCT_ARCHITECTURE.md) | Proposed Investors + Assets experiences, answered discovery questions, journeys, features, permissions, and acceptance criteria |
+| Admin architecture / operations | [`LASTRE_ADMIN_ARCHITECTURE.md`](LASTRE_ADMIN_ARCHITECTURE.md) | Proposed internal admin: navigation, screen specifications, tabs, drawers, modals, permissions, recovery journeys, and delivery priorities |
+| Product inventory / admin | [`LASTRE_INVENTARIO_VIVO.md`](LASTRE_INVENTARIO_VIVO.md) | Lastre-specific inventory method, local admin preview, route checks, operation contracts, evidence, access, and adoption stages |
 | Laura / frontend design | [`LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md`](LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md) | [`LAURA_DESIGN_SUPER_PROMPT.md`](LAURA_DESIGN_SUPER_PROMPT.md), [`LAURA_FRONTEND_SYSTEM_DESIGN.md`](LAURA_FRONTEND_SYSTEM_DESIGN.md), [`FRONTEND_ROUTES.md`](FRONTEND_ROUTES.md) |
 | Frontend engineer | [`FRONTEND_ROUTES.md`](FRONTEND_ROUTES.md) | [`API_CONTRACT.md`](API_CONTRACT.md), [`QUALITY_CHECKLIST.md`](QUALITY_CHECKLIST.md) |
 | Backend/deploy operator | [`DEPLOYMENT_RUNBOOK.md`](DEPLOYMENT_RUNBOOK.md) | [`API_CONTRACT.md`](API_CONTRACT.md), [`ARCHITECTURE_FLOWCHARTS.md`](ARCHITECTURE_FLOWCHARTS.md) |
@@ -46,6 +51,9 @@ ownership, or transferable-token product. The deterministic SHA-256 seal decides
 
 ## Documentation map
 
+- [`LASTRE_ADMIN_ARCHITECTURE.md`](LASTRE_ADMIN_ARCHITECTURE.md) — proposed internal administration for Assets and Investors, with a complete screen map, contextual surfaces, operating roles, intervention safeguards, and implementation sequence. Only the local inventory preview exists today.
+- [`LASTRE_INVENTARIO_VIVO.md`](LASTRE_INVENTARIO_VIVO.md) — living inventory adapted to Lastre, with a development-only `/admin/inventario` preview, declared catalog, generated route report, and a staged path to shared contracts and protected admin access.
+- [`LASTRE_PRODUCT_ARCHITECTURE.md`](LASTRE_PRODUCT_ARCHITECTURE.md) — proposed product architecture for Lastre Investors and Lastre Assets: naming, questions with recommended answers, audiences, journeys, information architecture, feature priorities, states, authorization, and validation. This describes a future product proposal, not functionality already implemented in the public demo.
 - [`LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md`](LAURA_PLATFORM_ARCHITECTURE_SUPER_FILE.md) — current all-in-one platform architecture, product explanation, deployment topology, UX guardrails, route/API map, and Laura handoff.
 - [`LASTRE_BRAND_AND_DOMAIN.md`](LASTRE_BRAND_AND_DOMAIN.md) — rebrand, domain,
   DNS, naming, and migration rules.
@@ -69,3 +77,5 @@ ownership, or transferable-token product. The deterministic SHA-256 seal decides
   prompt for Laura to design/build the public experience.
 - [`LANDING_PAGE_CREATIVE_SPEC.md`](LANDING_PAGE_CREATIVE_SPEC.md) — polished
   landing-page copy, motion, and section-by-section creative direction.
+
+- [`LASTRE_ASSETS_IMPLEMENTATION.md`](LASTRE_ASSETS_IMPLEMENTATION.md) — implementação local de Lastre Assets, jornadas, API, persistência, testes e limites operacionais.

@@ -1,11 +1,11 @@
 import { LastreWordmark } from "../ui/LastreWordmark";
+import { LastreIcon } from "../ui/LastreIcon";
 import { NavLink } from "react-router-dom";
 import { useLocaleContext } from "../../context/LocaleContext";
 import { useNavCounts } from "../../context/NavCountsContext";
 import { useSidebarCollapsed } from "../../hooks/useSidebarCollapsed";
 import { WORKSPACE_NAV } from "../../lib/navigation";
 import { Icon } from "../ui/Icon";
-import { SealMark } from "../ui/SealMark";
 import { OnboardingChecklist } from "../onboarding/OnboardingChecklist";
 import { SidebarPreferencesMenu } from "./AppPreferencesMenu";
 import { NavItem } from "./NavItem";
@@ -30,6 +30,7 @@ export function AppSidebar({ onOpenSearch }: AppSidebarProps) {
       data-collapsed={collapsed ? "true" : "false"}
     >
       <div className="app-sidebar__inner">
+        <a href="/assets" className="assets-console-return">← Lastre Assets</a>
         <div className="app-sidebar__head">
           <div className="app-sidebar__brand-row">
             <NavLink
@@ -37,7 +38,10 @@ export function AppSidebar({ onOpenSearch }: AppSidebarProps) {
               to="/"
               aria-label={`${t("brand.name")} — home`}
             >
-              <SealMark size={collapsed ? 24 : 28} live={!collapsed} />
+              <LastreIcon
+                size={collapsed ? 24 : 28}
+                className={collapsed ? undefined : "seal-mark--live"}
+              />
               <LastreWordmark className="app-sidebar__name" />
             </NavLink>
             <button
@@ -64,7 +68,11 @@ export function AppSidebar({ onOpenSearch }: AppSidebarProps) {
             onClick={onOpenSearch}
             aria-label={t("sidebar.search.label")}
           >
-            <Icon name="search" size={15} className="app-sidebar__search-icon" />
+            <Icon
+              name="search"
+              size={15}
+              className="app-sidebar__search-icon"
+            />
             <span className="app-sidebar__search-placeholder">
               {t("sidebar.search.placeholder")}
             </span>
@@ -96,6 +104,19 @@ export function AppSidebar({ onOpenSearch }: AppSidebarProps) {
         </nav>
 
         <div className="app-sidebar__bottom">
+          {import.meta.env.DEV && (
+            <a
+              href="/admin/inventario"
+              className={`nav-item nav-item--sidebar${collapsed ? " nav-item--collapsed" : ""}`}
+              title="Inventário do frontend"
+              aria-label="Inventário do frontend"
+            >
+              <span className="nav-item__icon-wrap" aria-hidden="true">
+                <Icon name="overview" size={16} />
+              </span>
+              <span className="nav-item__label">Inventário</span>
+            </a>
+          )}
           <OnboardingChecklist inSidebar />
 
           <footer className="app-sidebar__foot">

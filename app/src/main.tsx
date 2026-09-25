@@ -17,9 +17,13 @@ import "./styles/refine.css";
 import "./styles/lastre-app.css";
 
 initTheme();
+const initialPath = window.location.pathname;
+const isAssets = initialPath === "/" || /^\/assets(?:\/|$)/.test(initialPath);
 const isDesignSystem =
   window.location.pathname.replace(/\/$/, "") === "/design-system";
-if (!isDesignSystem) {
+const isAdminPreview =
+  import.meta.env.DEV && /^\/admin(?:\/|$)/.test(window.location.pathname);
+if (!isAssets && !isDesignSystem && !isAdminPreview) {
   initLocale();
   initDemoSession();
 }
@@ -36,12 +40,29 @@ const DesignSystem = lazy(() =>
   import("./routes/DesignSystem").then((m) => ({ default: m.DesignSystem })),
 );
 
+// Vite eliminates the import and the inventory data from production builds.
+const AdminPreview = import.meta.env.DEV
+  ? lazy(() =>
+      import("./routes/admin/AdminPreview").then((m) => ({
+        default: m.AdminPreview,
+      })),
+    )
+  : null;
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {isDesignSystem ? (
+    {isAdminPreview && AdminPreview ? (
+      <Suspense fallback={<p role="status">Carregando inventário…</p>}>
+        <AdminPreview />
+      </Suspense>
+    ) : isDesignSystem ? (
       <Suspense fallback={<p role="status">Carregando design system…</p>}>
         <DesignSystem />
       </Suspense>
+    ) : isAssets ? (
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     ) : (
       <BrowserRouter>
         <LocaleProvider>

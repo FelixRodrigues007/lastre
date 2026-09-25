@@ -1,3 +1,21 @@
+# Lastre Assets e console técnico
+
+A entrada principal agora é `/assets`. Para iniciar somente o produto:
+
+```sh
+npm run dev:assets
+```
+
+Interface: `http://localhost:5174/assets`. API: `http://127.0.0.1:3001/api/assets`.
+Crie uma organização vazia ou escolha **Explorar demonstração** para dados fictícios.
+Dados confirmados ficam em `.lastre/assets.json`, fora do Git.
+
+Ver [implementação, testes e limites operacionais](../docs/LASTRE_ASSETS_IMPLEMENTATION.md).
+O console anterior permanece em `/console`; as instruções técnicas abaixo continuam
+válidas para iniciar sua API completa, que também atende o produto Assets.
+
+---
+
 # Lastro App
 
 Product console for the Lastro provenance workflow — separate from the marketing landing in `web/`.

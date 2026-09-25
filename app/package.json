@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "prebuild": "npm --prefix .. run inventory:check",
     "dev:api": "tsx server/index.ts",
     "dev:web": "vite",
     "dev": "concurrently -k -n api,web -c blue,green \"npm run dev:api\" \"npm run dev:web\"",
@@ -11,7 +12,9 @@
     "build:api": "tsc -p server/tsconfig.build.json",
     "preview": "vite preview",
     "start:api": "node server-dist/index.js",
-    "lint": "tsc --noEmit && tsc -p server/tsconfig.json --noEmit"
+    "lint": "tsc --noEmit && tsc -p server/tsconfig.json --noEmit",
+    "dev:assets": "concurrently -k -n api,web -c blue,green \"tsx server/assets-server.ts\" \"vite\"",
+    "test:assets": "tsx --test test/assets*.test.ts"
   },
   "dependencies": {
     "mapbox-gl": "^3.25.0",

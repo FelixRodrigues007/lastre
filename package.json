@@ -1,5 +1,8 @@
 {
   "scripts": {
+    "inventory:sync": "app/node_modules/.bin/tsx scripts/inventory.ts",
+    "inventory:check": "app/node_modules/.bin/tsx scripts/inventory.ts --check",
+    "inventory:test": "app/node_modules/.bin/tsx --test scripts/inventory.test.ts",
     "tokens:build": "node design-system/scripts/build-tokens.mjs",
     "tokens:check": "node design-system/scripts/build-tokens.mjs --check && node design-system/scripts/check-contrast.mjs",
     "symbol:build": "node design-system/scripts/build-symbol.mjs",
@@ -9,7 +12,9 @@
     "build:app": "npm --prefix app run build",
     "lint": "npm --prefix web run lint && npm --prefix app run lint",
     "lint:web": "npm --prefix web run lint",
-    "lint:app": "npm --prefix app run lint"
+    "lint:app": "npm --prefix app run lint",
+    "dev:assets": "npm --prefix app run dev:assets",
+    "test:assets": "npm --prefix app run test:assets"
   },
   "devDependencies": {
     "shadcn": "^4.12.0"

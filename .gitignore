@@ -36,3 +36,7 @@ web/relogio-*.png
 # Cloudflare Pages — estado local do wrangler
 .wrangler/
 **/.wrangler/
+
+# Local Assets database and uploaded documents
+.lastre/
+app/.lastre/

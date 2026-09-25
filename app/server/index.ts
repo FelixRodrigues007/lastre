@@ -1,3 +1,4 @@
+import { handleAssetsRequest } from "./assets/http.js";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { URL } from "node:url";
 import {
@@ -25,6 +26,7 @@ function ensureDemoSeeded(): Promise<void> {
 
 export function createAppServer() {
   return createServer(async (req, res) => {
+    if (await handleAssetsRequest(req, res)) return;
     applyCorsHeaders(req, res);
 
     try {

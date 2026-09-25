@@ -5,6 +5,7 @@ import { Button } from "../components/ui/Button";
 import { TextField } from "../components/ui/TextField";
 import { SelectField } from "../components/ui/SelectField";
 import { LastreWordmark } from "../components/ui/LastreWordmark";
+import { LastreIcon } from "../components/ui/LastreIcon";
 import { StatusBadge } from "../components/ui/StatusBadge";
 import { InlineNotice } from "../components/ui/InlineNotice";
 import { TokenInspector } from "../components/design-system/TokenInspector";
@@ -164,6 +165,7 @@ export function DesignSystem() {
           className="ds-brand"
           aria-label="Lastre — início do design system"
         >
+          <LastreIcon size={22} />
           <LastreWordmark />
         </a>
         <p className="ds-sidebar__label">
@@ -182,6 +184,9 @@ export function DesignSystem() {
           ))}
         </nav>
         <div className="ds-sidebar__foot">
+          {import.meta.env.DEV && (
+            <a href="/admin/inventario">Inventário do frontend ↗</a>
+          )}
           <span className="ds-live-dot" /> Uma base compartilhada.
           <p>Da origem à prova.</p>
           <a href={tokens.meta.source} target="_blank" rel="noreferrer">
@@ -262,7 +267,7 @@ export function DesignSystem() {
                 }}
               >
                 <span>01 / BASE LIGHT</span>
-                <strong>Mirage</strong>
+                <strong>Cloud</strong>
                 <code>#F0F1F3</code>
               </div>
               <div

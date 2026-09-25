@@ -21,6 +21,11 @@
 
 ## Verification
 
+- [ ] Mudanças estruturais do frontend refletidas no inventário do Admin, na mesma entrega.
+- [ ] `npm run inventory:sync`, `inventory:check` e `inventory:test` executados quando o frontend mudou.
+
+<!-- IDs de telas/fluxos afetados, alterações em componentes compartilhados e motivo de remoções. Para ajuste só visual, registrar que o contrato funcional foi revisado. -->
+
 Paste commands and outputs:
 
 ```text
